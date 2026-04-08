@@ -204,13 +204,11 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// RisksTable is the table that holds the risks relation/edge.
-	RisksTable = "risks"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "review_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// RisksColumn is the table column denoting the risks relation/edge.
-	RisksColumn = "review_risks"
 	// ProgramsTable is the table that holds the programs relation/edge.
 	ProgramsTable = "programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -327,6 +325,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"review_id", "subcontrol_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"review_id", "risk_id"}
 	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
 	// primary key for the internal_policies relation (M2M).
 	InternalPoliciesPrimaryKey = []string{"review_id", "internal_policy_id"}
@@ -903,7 +904,7 @@ func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

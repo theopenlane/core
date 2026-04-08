@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -466,6 +468,104 @@ func (_c *RiskCreate) SetNillableDelegateID(v *string) *RiskCreate {
 	return _c
 }
 
+// SetMitigatedAt sets the "mitigated_at" field.
+func (_c *RiskCreate) SetMitigatedAt(v models.DateTime) *RiskCreate {
+	_c.mutation.SetMitigatedAt(v)
+	return _c
+}
+
+// SetNillableMitigatedAt sets the "mitigated_at" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableMitigatedAt(v *models.DateTime) *RiskCreate {
+	if v != nil {
+		_c.SetMitigatedAt(*v)
+	}
+	return _c
+}
+
+// SetReviewRequired sets the "review_required" field.
+func (_c *RiskCreate) SetReviewRequired(v bool) *RiskCreate {
+	_c.mutation.SetReviewRequired(v)
+	return _c
+}
+
+// SetNillableReviewRequired sets the "review_required" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableReviewRequired(v *bool) *RiskCreate {
+	if v != nil {
+		_c.SetReviewRequired(*v)
+	}
+	return _c
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_c *RiskCreate) SetLastReviewedAt(v models.DateTime) *RiskCreate {
+	_c.mutation.SetLastReviewedAt(v)
+	return _c
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableLastReviewedAt(v *models.DateTime) *RiskCreate {
+	if v != nil {
+		_c.SetLastReviewedAt(*v)
+	}
+	return _c
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *RiskCreate) SetReviewFrequency(v enums.Frequency) *RiskCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableReviewFrequency(v *enums.Frequency) *RiskCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
+// SetNextReviewDueAt sets the "next_review_due_at" field.
+func (_c *RiskCreate) SetNextReviewDueAt(v models.DateTime) *RiskCreate {
+	_c.mutation.SetNextReviewDueAt(v)
+	return _c
+}
+
+// SetNillableNextReviewDueAt sets the "next_review_due_at" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableNextReviewDueAt(v *models.DateTime) *RiskCreate {
+	if v != nil {
+		_c.SetNextReviewDueAt(*v)
+	}
+	return _c
+}
+
+// SetResidualScore sets the "residual_score" field.
+func (_c *RiskCreate) SetResidualScore(v int) *RiskCreate {
+	_c.mutation.SetResidualScore(v)
+	return _c
+}
+
+// SetNillableResidualScore sets the "residual_score" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableResidualScore(v *int) *RiskCreate {
+	if v != nil {
+		_c.SetResidualScore(*v)
+	}
+	return _c
+}
+
+// SetRiskDecision sets the "risk_decision" field.
+func (_c *RiskCreate) SetRiskDecision(v enums.RiskDecision) *RiskCreate {
+	_c.mutation.SetRiskDecision(v)
+	return _c
+}
+
+// SetNillableRiskDecision sets the "risk_decision" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableRiskDecision(v *enums.RiskDecision) *RiskCreate {
+	if v != nil {
+		_c.SetRiskDecision(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *RiskCreate) SetID(v string) *RiskCreate {
 	_c.mutation.SetID(v)
@@ -755,6 +855,36 @@ func (_c *RiskCreate) AddDiscussions(v ...*Discussion) *RiskCreate {
 	return _c.AddDiscussionIDs(ids...)
 }
 
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *RiskCreate) AddReviewIDs(ids ...string) *RiskCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *RiskCreate) AddReviews(v ...*Review) *RiskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *RiskCreate) AddRemediationIDs(ids ...string) *RiskCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *RiskCreate) AddRemediations(v ...*Remediation) *RiskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_c *RiskCreate) Mutation() *RiskMutation {
 	return _c.mutation
@@ -822,6 +952,18 @@ func (_c *RiskCreate) defaults() error {
 		v := risk.DefaultLikelihood
 		_c.mutation.SetLikelihood(v)
 	}
+	if _, ok := _c.mutation.ReviewRequired(); !ok {
+		v := risk.DefaultReviewRequired
+		_c.mutation.SetReviewRequired(v)
+	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := risk.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := _c.mutation.RiskDecision(); !ok {
+		v := risk.DefaultRiskDecision
+		_c.mutation.SetRiskDecision(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if risk.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized risk.DefaultID (forgotten import generated/runtime?)")
@@ -868,6 +1010,16 @@ func (_c *RiskCreate) check() error {
 	if v, ok := _c.mutation.Likelihood(); ok {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := risk.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Risk.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.RiskDecision(); ok {
+		if err := risk.RiskDecisionValidator(v); err != nil {
+			return &ValidationError{Name: "risk_decision", err: fmt.Errorf(`generated: validator failed for field "Risk.risk_decision": %w`, err)}
 		}
 	}
 	return nil
@@ -1013,6 +1165,34 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.BusinessCostsJSON(); ok {
 		_spec.SetField(risk.FieldBusinessCostsJSON, field.TypeJSON, value)
 		_node.BusinessCostsJSON = value
+	}
+	if value, ok := _c.mutation.MitigatedAt(); ok {
+		_spec.SetField(risk.FieldMitigatedAt, field.TypeTime, value)
+		_node.MitigatedAt = &value
+	}
+	if value, ok := _c.mutation.ReviewRequired(); ok {
+		_spec.SetField(risk.FieldReviewRequired, field.TypeBool, value)
+		_node.ReviewRequired = value
+	}
+	if value, ok := _c.mutation.LastReviewedAt(); ok {
+		_spec.SetField(risk.FieldLastReviewedAt, field.TypeTime, value)
+		_node.LastReviewedAt = &value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(risk.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.NextReviewDueAt(); ok {
+		_spec.SetField(risk.FieldNextReviewDueAt, field.TypeTime, value)
+		_node.NextReviewDueAt = &value
+	}
+	if value, ok := _c.mutation.ResidualScore(); ok {
+		_spec.SetField(risk.FieldResidualScore, field.TypeInt, value)
+		_node.ResidualScore = value
+	}
+	if value, ok := _c.mutation.RiskDecision(); ok {
+		_spec.SetField(risk.FieldRiskDecision, field.TypeEnum, value)
+		_node.RiskDecision = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1407,6 +1587,40 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

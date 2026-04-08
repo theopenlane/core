@@ -2183,6 +2183,7 @@ var (
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "IN_PROGRESS"},
 		{Name: "state", Type: field.TypeString, Nullable: true},
 		{Name: "intent", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2306,6 +2307,13 @@ var (
 		{Name: "business_costs_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "stakeholder_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "mitigated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "review_required", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "last_reviewed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
+		{Name: "next_review_due_at", Type: field.TypeTime, Nullable: true},
+		{Name: "residual_score", Type: field.TypeInt, Nullable: true},
+		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE"}, Default: " NONE"},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -66,6 +67,14 @@ func (Remediation) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("title"),
+			),
+		field.Enum("status").
+			Comment("status of the remediation, such as pending, in_progress, or completed").
+			GoType(enums.RemediationStatus("")).
+			Default(enums.RemediationStatusInProgress.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("status"),
 			),
 		field.String("state").
 			Comment("state of the remediation, such as pending or completed").

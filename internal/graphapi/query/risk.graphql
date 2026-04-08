@@ -16,14 +16,21 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			id
 			impact
 			integrationID
+			lastReviewedAt
 			likelihood
+			mitigatedAt
 			mitigation
 			mitigationJSON
 			name
+			nextReviewDueAt
 			observedAt
 			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
 			riskCategoryID
 			riskCategoryName
+			riskDecision
 			riskKindID
 			riskKindName
 			scopeID
@@ -63,14 +70,21 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			id
 			impact
 			integrationID
+			lastReviewedAt
 			likelihood
+			mitigatedAt
 			mitigation
 			mitigationJSON
 			name
+			nextReviewDueAt
 			observedAt
 			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
 			riskCategoryID
 			riskCategoryName
+			riskDecision
 			riskKindID
 			riskKindName
 			scopeID
@@ -110,14 +124,21 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			id
 			impact
 			integrationID
+			lastReviewedAt
 			likelihood
+			mitigatedAt
 			mitigation
 			mitigationJSON
 			name
+			nextReviewDueAt
 			observedAt
 			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
 			riskCategoryID
 			riskCategoryName
+			riskDecision
 			riskKindID
 			riskKindName
 			scopeID
@@ -202,14 +223,21 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				id
 				impact
 				integrationID
+				lastReviewedAt
 				likelihood
+				mitigatedAt
 				mitigation
 				mitigationJSON
 				name
+				nextReviewDueAt
 				observedAt
 				ownerID
+				residualScore
+				reviewFrequency
+				reviewRequired
 				riskCategoryID
 				riskCategoryName
+				riskDecision
 				riskKindID
 				riskKindName
 				scopeID
@@ -281,14 +309,21 @@ query GetRiskByID ($riskId: ID!) {
 		id
 		impact
 		integrationID
+		lastReviewedAt
 		likelihood
+		mitigatedAt
 		mitigation
 		mitigationJSON
 		name
+		nextReviewDueAt
 		observedAt
 		ownerID
+		residualScore
+		reviewFrequency
+		reviewRequired
 		riskCategoryID
 		riskCategoryName
+		riskDecision
 		riskKindID
 		riskKindName
 		scopeID
@@ -367,14 +402,21 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				id
 				impact
 				integrationID
+				lastReviewedAt
 				likelihood
+				mitigatedAt
 				mitigation
 				mitigationJSON
 				name
+				nextReviewDueAt
 				observedAt
 				ownerID
+				residualScore
+				reviewFrequency
+				reviewRequired
 				riskCategoryID
 				riskCategoryName
+				riskDecision
 				riskKindID
 				riskKindName
 				scopeID
@@ -447,14 +489,21 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			id
 			impact
 			integrationID
+			lastReviewedAt
 			likelihood
+			mitigatedAt
 			mitigation
 			mitigationJSON
 			name
+			nextReviewDueAt
 			observedAt
 			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
 			riskCategoryID
 			riskCategoryName
+			riskDecision
 			riskKindID
 			riskKindName
 			scopeID
@@ -495,14 +544,21 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			id
 			impact
 			integrationID
+			lastReviewedAt
 			likelihood
+			mitigatedAt
 			mitigation
 			mitigationJSON
 			name
+			nextReviewDueAt
 			observedAt
 			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
 			riskCategoryID
 			riskCategoryName
+			riskDecision
 			riskKindID
 			riskKindName
 			scopeID

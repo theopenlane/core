@@ -5237,6 +5237,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
@@ -5407,19 +5408,28 @@ type ComplexityRoot struct {
 		Impact            func(childComplexity int) int
 		IntegrationID     func(childComplexity int) int
 		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		LastReviewedAt    func(childComplexity int) int
 		Likelihood        func(childComplexity int) int
+		MitigatedAt       func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		NextReviewDueAt   func(childComplexity int) int
 		ObservedAt        func(childComplexity int) int
 		Owner             func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Platforms         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ResidualScore     func(childComplexity int) int
+		ReviewFrequency   func(childComplexity int) int
+		ReviewRequired    func(childComplexity int) int
+		Reviews           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskCategory      func(childComplexity int) int
 		RiskCategoryID    func(childComplexity int) int
 		RiskCategoryName  func(childComplexity int) int
+		RiskDecision      func(childComplexity int) int
 		RiskKind          func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
@@ -40403,6 +40413,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Remediation.State(childComplexity), true
 
+	case "Remediation.status":
+		if e.ComplexityRoot.Remediation.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Remediation.Status(childComplexity), true
+
 	case "Remediation.subcontrols":
 		if e.ComplexityRoot.Remediation.Subcontrols == nil {
 			break
@@ -41370,12 +41387,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Risk.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 
+	case "Risk.lastReviewedAt":
+		if e.ComplexityRoot.Risk.LastReviewedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.LastReviewedAt(childComplexity), true
+
 	case "Risk.likelihood":
 		if e.ComplexityRoot.Risk.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.Risk.Likelihood(childComplexity), true
+
+	case "Risk.mitigatedAt":
+		if e.ComplexityRoot.Risk.MitigatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.MitigatedAt(childComplexity), true
 
 	case "Risk.mitigation":
 		if e.ComplexityRoot.Risk.Mitigation == nil {
@@ -41397,6 +41428,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.Name(childComplexity), true
+
+	case "Risk.nextReviewDueAt":
+		if e.ComplexityRoot.Risk.NextReviewDueAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.NextReviewDueAt(childComplexity), true
 
 	case "Risk.observedAt":
 		if e.ComplexityRoot.Risk.ObservedAt == nil {
@@ -41455,6 +41493,51 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Risk.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
+	case "Risk.remediations":
+		if e.ComplexityRoot.Risk.Remediations == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_remediations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Risk.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+
+	case "Risk.residualScore":
+		if e.ComplexityRoot.Risk.ResidualScore == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ResidualScore(childComplexity), true
+
+	case "Risk.reviewFrequency":
+		if e.ComplexityRoot.Risk.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ReviewFrequency(childComplexity), true
+
+	case "Risk.reviewRequired":
+		if e.ComplexityRoot.Risk.ReviewRequired == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.ReviewRequired(childComplexity), true
+
+	case "Risk.reviews":
+		if e.ComplexityRoot.Risk.Reviews == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_reviews_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Risk.Reviews(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReviewOrder), args["where"].(*generated.ReviewWhereInput)), true
+
 	case "Risk.riskCategory":
 		if e.ComplexityRoot.Risk.RiskCategory == nil {
 			break
@@ -41475,6 +41558,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.RiskCategoryName(childComplexity), true
+
+	case "Risk.riskDecision":
+		if e.ComplexityRoot.Risk.RiskDecision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.RiskDecision(childComplexity), true
 
 	case "Risk.riskKind":
 		if e.ComplexityRoot.Risk.RiskKind == nil {
@@ -70018,6 +70108,10 @@ input CreateRemediationInput {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -70304,6 +70398,31 @@ input CreateRiskInput {
   structured details of the business costs in JSON format
   """
   businessCostsJSON: [Any!]
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -70327,6 +70446,8 @@ input CreateRiskInput {
   delegateID: ID
   commentIDs: [ID!]
   discussionIDs: [ID!]
+  reviewIDs: [ID!]
+  remediationIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -111094,6 +111215,10 @@ type Remediation implements Node {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -111771,7 +111896,18 @@ enum RemediationOrderField {
   external_id
   external_owner_id
   title
+  status
   state
+}
+"""
+RemediationRemediationStatus is enum for the field status
+"""
+enum RemediationRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 RemediationWhereInput is used for filtering Remediation objects.
@@ -112059,6 +112195,15 @@ input RemediationWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  status field predicates
+  """
+  status: RemediationRemediationStatus
+  statusNEQ: RemediationRemediationStatus
+  statusIn: [RemediationRemediationStatus!]
+  statusNotIn: [RemediationRemediationStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   state field predicates
   """
@@ -113867,6 +114012,31 @@ type Risk implements Node {
   the id of the group responsible for risk oversight on behalf of the stakeholder
   """
   delegateID: ID
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
   owner: Organization
   blockedGroups(
     """
@@ -114376,6 +114546,68 @@ type Risk implements Node {
     """
     where: DiscussionWhereInput
   ): DiscussionConnection!
+  reviews(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reviews returned from the connection.
+    """
+    orderBy: [ReviewOrder!]
+
+    """
+    Filtering options for Reviews returned from the connection.
+    """
+    where: ReviewWhereInput
+  ): ReviewConnection!
+  remediations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Remediations returned from the connection.
+    """
+    orderBy: [RemediationOrder!]
+
+    """
+    Filtering options for Remediations returned from the connection.
+    """
+    where: RemediationWhereInput
+  ): RemediationConnection!
 }
 """
 A connection to a list of items.
@@ -114408,6 +114640,16 @@ type RiskEdge {
   cursor: Cursor!
 }
 """
+RiskFrequency is enum for the field review_frequency
+"""
+enum RiskFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Risk connections
 """
 input RiskOrder {
@@ -114434,6 +114676,23 @@ enum RiskOrderField {
   LIKELIHOOD
   score
   business_costs
+  mitigated_at
+  review_required
+  last_reviewed_at
+  review_frequency
+  next_review_due_at
+  residual_score
+  risk_decision
+}
+"""
+RiskRiskDecision is enum for the field risk_decision
+"""
+enum RiskRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+  AVOID
+  MITIGATE
+  ACCEPT
+  TRANSFER
+  NONE
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -114941,6 +115200,83 @@ input RiskWhereInput {
   delegateIDEqualFold: ID
   delegateIDContainsFold: ID
   """
+  mitigated_at field predicates
+  """
+  mitigatedAt: DateTime
+  mitigatedAtNEQ: DateTime
+  mitigatedAtIn: [DateTime!]
+  mitigatedAtNotIn: [DateTime!]
+  mitigatedAtGT: DateTime
+  mitigatedAtGTE: DateTime
+  mitigatedAtLT: DateTime
+  mitigatedAtLTE: DateTime
+  mitigatedAtIsNil: Boolean
+  mitigatedAtNotNil: Boolean
+  """
+  review_required field predicates
+  """
+  reviewRequired: Boolean
+  reviewRequiredNEQ: Boolean
+  reviewRequiredIsNil: Boolean
+  reviewRequiredNotNil: Boolean
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: RiskFrequency
+  reviewFrequencyNEQ: RiskFrequency
+  reviewFrequencyIn: [RiskFrequency!]
+  reviewFrequencyNotIn: [RiskFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_due_at field predicates
+  """
+  nextReviewDueAt: DateTime
+  nextReviewDueAtNEQ: DateTime
+  nextReviewDueAtIn: [DateTime!]
+  nextReviewDueAtNotIn: [DateTime!]
+  nextReviewDueAtGT: DateTime
+  nextReviewDueAtGTE: DateTime
+  nextReviewDueAtLT: DateTime
+  nextReviewDueAtLTE: DateTime
+  nextReviewDueAtIsNil: Boolean
+  nextReviewDueAtNotNil: Boolean
+  """
+  residual_score field predicates
+  """
+  residualScore: Int
+  residualScoreNEQ: Int
+  residualScoreIn: [Int!]
+  residualScoreNotIn: [Int!]
+  residualScoreGT: Int
+  residualScoreGTE: Int
+  residualScoreLT: Int
+  residualScoreLTE: Int
+  residualScoreIsNil: Boolean
+  residualScoreNotNil: Boolean
+  """
+  risk_decision field predicates
+  """
+  riskDecision: RiskRiskDecision
+  riskDecisionNEQ: RiskRiskDecision
+  riskDecisionIn: [RiskRiskDecision!]
+  riskDecisionNotIn: [RiskRiskDecision!]
+  riskDecisionIsNil: Boolean
+  riskDecisionNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -115055,6 +115391,16 @@ input RiskWhereInput {
   """
   hasDiscussions: Boolean
   hasDiscussionsWith: [DiscussionWhereInput!]
+  """
+  reviews edge predicates
+  """
+  hasReviews: Boolean
+  hasReviewsWith: [ReviewWhereInput!]
+  """
+  remediations edge predicates
+  """
+  hasRemediations: Boolean
+  hasRemediationsWith: [RemediationWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -132701,6 +133047,11 @@ input UpdateRemediationInput {
   title: String
   clearTitle: Boolean
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationRemediationStatus
+  clearStatus: Boolean
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -133123,6 +133474,38 @@ input UpdateRiskInput {
   businessCostsJSON: [Any!]
   appendBusinessCostsJSON: [Any!]
   clearBusinessCostsJSON: Boolean
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  clearMitigatedAt: Boolean
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  clearReviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  clearLastReviewedAt: Boolean
+  reviewFrequency: RiskFrequency
+  clearReviewFrequency: Boolean
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  clearNextReviewDueAt: Boolean
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  clearResidualScore: Boolean
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskRiskDecision
+  clearRiskDecision: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -133183,6 +133566,12 @@ input UpdateRiskInput {
   addDiscussionIDs: [ID!]
   removeDiscussionIDs: [ID!]
   clearDiscussions: Boolean
+  addReviewIDs: [ID!]
+  removeReviewIDs: [ID!]
+  clearReviews: Boolean
+  addRemediationIDs: [ID!]
+  removeRemediationIDs: [ID!]
+  clearRemediations: Boolean
 }
 """
 UpdateSLADefinitionInput is used for update SLADefinition object.
@@ -137572,7 +137961,7 @@ type Vulnerability implements Node {
   """
   externalOwnerID: String
   """
-  lifecycle status of the vulnerability
+  security level of the vulnerability
   """
   securityLevel: VulnerabilitySecurityLevel
   """

@@ -2610,11 +2610,11 @@ func HasRisks() predicate.Review {
 	return predicate.Review(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ReviewRisks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2625,7 +2625,7 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Review {
 		step := newRisksStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ReviewRisks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

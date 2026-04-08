@@ -77,6 +77,7 @@ var (
 		{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'security_advisory' in payload && 'summary' in payload.security_advisory ? payload.security_advisory.summary : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'security_advisory' in payload && 'description' in payload.security_advisory ? payload.security_advisory.description : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCveID, Expr: `'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityScore, Expr: `'security_advisory' in payload && 'cvss' in payload.security_advisory && 'score' in payload.security_advisory.cvss ? payload.security_advisory.cvss.score : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityVector, Expr: `'security_advisory' in payload && 'cvss' in payload.security_advisory && 'vector_string' in payload.security_advisory.cvss ? payload.security_advisory.cvss.vector_string : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCweIds, Expr: `'security_advisory' in payload && 'cwes' in payload.security_advisory ? payload.security_advisory.cwes.map(c, c.cwe_id) : []`},
@@ -87,6 +88,11 @@ var (
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityPackageEcosystem, Expr: `'security_vulnerability' in payload && 'package' in payload.security_vulnerability && 'ecosystem' in payload.security_vulnerability.package ? payload.security_vulnerability.package.ecosystem : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityManifestPath, Expr: `'dependency' in payload && 'manifest_path' in payload.dependency ? payload.dependency.manifest_path : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDependencyScope, Expr: `'dependency' in payload && 'scope' in payload.dependency ? payload.dependency.scope : ""`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'security_advisory' in payload && 'state' in payload && payload.state == 'OPEN' ? true : false`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'security_advisory' in payload && 'state' in payload ? payload.state : ""`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedAt, Expr: `'dismissed_at' in payload ? payload.dismissed_at : null`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedReason, Expr: `'dismissed_reason' in payload ? payload.dismissed_reason : null`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedComment, Expr: `'dismissed_comment' in payload ? payload.dismissed_comment : null`},
 	},
 	)
 	// mapExprDependabotPoll is the CEL mapping expression for Dependabot alerts collected via GraphQL poll
@@ -127,6 +133,7 @@ var (
 var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingAssetSourceIdentifier, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: "payload.NameWithOwner"},
+	{Key: integrationgenerated.IntegrationMappingAssetName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"REPOSITORY"`},
 	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"github"`},
 	{Key: integrationgenerated.IntegrationMappingAssetWebsite, Expr: "payload.URL"},

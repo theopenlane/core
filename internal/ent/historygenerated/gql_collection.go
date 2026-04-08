@@ -10459,6 +10459,11 @@ func (_q *RemediationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, remediationhistory.FieldTitle)
 				fieldSeen[remediationhistory.FieldTitle] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[remediationhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, remediationhistory.FieldStatus)
+				fieldSeen[remediationhistory.FieldStatus] = struct{}{}
+			}
 		case "state":
 			if _, ok := fieldSeen[remediationhistory.FieldState]; !ok {
 				selectedFields = append(selectedFields, remediationhistory.FieldState)
@@ -11051,6 +11056,41 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDelegateID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDelegateID)
 				fieldSeen[riskhistory.FieldDelegateID] = struct{}{}
+			}
+		case "mitigatedAt":
+			if _, ok := fieldSeen[riskhistory.FieldMitigatedAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldMitigatedAt)
+				fieldSeen[riskhistory.FieldMitigatedAt] = struct{}{}
+			}
+		case "reviewRequired":
+			if _, ok := fieldSeen[riskhistory.FieldReviewRequired]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldReviewRequired)
+				fieldSeen[riskhistory.FieldReviewRequired] = struct{}{}
+			}
+		case "lastReviewedAt":
+			if _, ok := fieldSeen[riskhistory.FieldLastReviewedAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldLastReviewedAt)
+				fieldSeen[riskhistory.FieldLastReviewedAt] = struct{}{}
+			}
+		case "reviewFrequency":
+			if _, ok := fieldSeen[riskhistory.FieldReviewFrequency]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldReviewFrequency)
+				fieldSeen[riskhistory.FieldReviewFrequency] = struct{}{}
+			}
+		case "nextReviewDueAt":
+			if _, ok := fieldSeen[riskhistory.FieldNextReviewDueAt]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldNextReviewDueAt)
+				fieldSeen[riskhistory.FieldNextReviewDueAt] = struct{}{}
+			}
+		case "residualScore":
+			if _, ok := fieldSeen[riskhistory.FieldResidualScore]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldResidualScore)
+				fieldSeen[riskhistory.FieldResidualScore] = struct{}{}
+			}
+		case "riskDecision":
+			if _, ok := fieldSeen[riskhistory.FieldRiskDecision]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldRiskDecision)
+				fieldSeen[riskhistory.FieldRiskDecision] = struct{}{}
 			}
 		case "id":
 		case "__typename":

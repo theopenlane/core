@@ -6,24 +6,25 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
+
 // IntegrationMappingField describes an integration mapping target field
 type IntegrationMappingField struct {
-	InputKey  string
-	GoField   string
-	EntField  string
-	Type      string
-	Required  bool
+	InputKey string
+	GoField string
+	EntField string
+	Type string
+	Required bool
 	UpsertKey bool
 	LookupKey bool
 }
 
 // IntegrationMappingSchema describes a schema with integration mapping fields
 type IntegrationMappingSchema struct {
-	Name         string
-	Fields       []IntegrationMappingField
-	AllowedKeys  map[string]struct{}
+	Name string
+	Fields []IntegrationMappingField
+	AllowedKeys map[string]struct{}
 	RequiredKeys []string
-	UpsertKeys   []string
+	UpsertKeys []string
 	StockPersist bool
 }
 
@@ -32,45 +33,45 @@ type IntegrationIngestSource string
 
 const (
 	IntegrationIngestSourceOperation IntegrationIngestSource = "operation"
-	IntegrationIngestSourceWorkflow  IntegrationIngestSource = "workflow"
-	IntegrationIngestSourceWebhook   IntegrationIngestSource = "webhook"
-	IntegrationIngestSourceDirect    IntegrationIngestSource = "direct"
+	IntegrationIngestSourceWorkflow IntegrationIngestSource = "workflow"
+	IntegrationIngestSourceWebhook IntegrationIngestSource = "webhook"
+	IntegrationIngestSourceDirect IntegrationIngestSource = "direct"
 )
 
 // IntegrationIngestMetadata captures source-agnostic execution context for second-stage ingest handlers
 type IntegrationIngestMetadata struct {
-	IntegrationID       string                  `json:"integrationId"`
-	DefinitionID        string                  `json:"definitionId,omitempty"`
-	Operation           string                  `json:"operation,omitempty"`
-	Variant             string                  `json:"variant,omitempty"`
-	Source              IntegrationIngestSource `json:"source,omitempty"`
-	RunID               string                  `json:"runId,omitempty"`
-	Webhook             string                  `json:"webhook,omitempty"`
-	WebhookEvent        string                  `json:"webhookEvent,omitempty"`
-	DeliveryID          string                  `json:"deliveryId,omitempty"`
-	WorkflowInstanceID  string                  `json:"workflowInstanceId,omitempty"`
-	WorkflowActionKey   string                  `json:"workflowActionKey,omitempty"`
-	WorkflowActionIndex int                     `json:"workflowActionIndex,omitempty"`
-	WorkflowObjectID    string                  `json:"workflowObjectId,omitempty"`
-	WorkflowObjectType  string                  `json:"workflowObjectType,omitempty"`
+	IntegrationID string `json:"integrationId"`
+	DefinitionID string `json:"definitionId,omitempty"`
+	Operation string `json:"operation,omitempty"`
+	Variant string `json:"variant,omitempty"`
+	Source IntegrationIngestSource `json:"source,omitempty"`
+	RunID string `json:"runId,omitempty"`
+	Webhook string `json:"webhook,omitempty"`
+	WebhookEvent string `json:"webhookEvent,omitempty"`
+	DeliveryID string `json:"deliveryId,omitempty"`
+	WorkflowInstanceID string `json:"workflowInstanceId,omitempty"`
+	WorkflowActionKey string `json:"workflowActionKey,omitempty"`
+	WorkflowActionIndex int `json:"workflowActionIndex,omitempty"`
+	WorkflowObjectID string `json:"workflowObjectId,omitempty"`
+	WorkflowObjectType string `json:"workflowObjectType,omitempty"`
 }
 
 const (
-	IntegrationMappingSchemaAsset               = "Asset"
-	IntegrationMappingSchemaContact             = "Contact"
-	IntegrationMappingSchemaDirectoryAccount    = "DirectoryAccount"
-	IntegrationMappingSchemaDirectoryGroup      = "DirectoryGroup"
+	IntegrationMappingSchemaAsset = "Asset"
+	IntegrationMappingSchemaContact = "Contact"
+	IntegrationMappingSchemaDirectoryAccount = "DirectoryAccount"
+	IntegrationMappingSchemaDirectoryGroup = "DirectoryGroup"
 	IntegrationMappingSchemaDirectoryMembership = "DirectoryMembership"
-	IntegrationMappingSchemaEntity              = "Entity"
-	IntegrationMappingSchemaFinding             = "Finding"
-	IntegrationMappingSchemaRisk                = "Risk"
-	IntegrationMappingSchemaVulnerability       = "Vulnerability"
+	IntegrationMappingSchemaEntity = "Entity"
+	IntegrationMappingSchemaFinding = "Finding"
+	IntegrationMappingSchemaRisk = "Risk"
+	IntegrationMappingSchemaVulnerability = "Vulnerability"
 )
 
 // IntegrationIngestAssetRequested is the typed second-stage ingest contract for Asset records
 type IntegrationIngestAssetRequested struct {
-	Metadata IntegrationIngestMetadata  `json:"metadata"`
-	Input    generated.CreateAssetInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateAssetInput `json:"input"`
 }
 
 // IntegrationIngestAssetRequestedTopic is the typed Gala topic for Asset ingest requests
@@ -80,8 +81,8 @@ var IntegrationIngestAssetRequestedTopic = gala.Topic[IntegrationIngestAssetRequ
 
 // IntegrationIngestContactRequested is the typed second-stage ingest contract for Contact records
 type IntegrationIngestContactRequested struct {
-	Metadata IntegrationIngestMetadata    `json:"metadata"`
-	Input    generated.CreateContactInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateContactInput `json:"input"`
 }
 
 // IntegrationIngestContactRequestedTopic is the typed Gala topic for Contact ingest requests
@@ -91,8 +92,8 @@ var IntegrationIngestContactRequestedTopic = gala.Topic[IntegrationIngestContact
 
 // IntegrationIngestDirectoryAccountRequested is the typed second-stage ingest contract for DirectoryAccount records
 type IntegrationIngestDirectoryAccountRequested struct {
-	Metadata IntegrationIngestMetadata             `json:"metadata"`
-	Input    generated.CreateDirectoryAccountInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateDirectoryAccountInput `json:"input"`
 }
 
 // IntegrationIngestDirectoryAccountRequestedTopic is the typed Gala topic for DirectoryAccount ingest requests
@@ -102,8 +103,8 @@ var IntegrationIngestDirectoryAccountRequestedTopic = gala.Topic[IntegrationInge
 
 // IntegrationIngestDirectoryGroupRequested is the typed second-stage ingest contract for DirectoryGroup records
 type IntegrationIngestDirectoryGroupRequested struct {
-	Metadata IntegrationIngestMetadata           `json:"metadata"`
-	Input    generated.CreateDirectoryGroupInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateDirectoryGroupInput `json:"input"`
 }
 
 // IntegrationIngestDirectoryGroupRequestedTopic is the typed Gala topic for DirectoryGroup ingest requests
@@ -113,8 +114,8 @@ var IntegrationIngestDirectoryGroupRequestedTopic = gala.Topic[IntegrationIngest
 
 // IntegrationIngestDirectoryMembershipRequested is the typed second-stage ingest contract for DirectoryMembership records
 type IntegrationIngestDirectoryMembershipRequested struct {
-	Metadata IntegrationIngestMetadata                `json:"metadata"`
-	Input    generated.CreateDirectoryMembershipInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateDirectoryMembershipInput `json:"input"`
 }
 
 // IntegrationIngestDirectoryMembershipRequestedTopic is the typed Gala topic for DirectoryMembership ingest requests
@@ -124,8 +125,8 @@ var IntegrationIngestDirectoryMembershipRequestedTopic = gala.Topic[IntegrationI
 
 // IntegrationIngestEntityRequested is the typed second-stage ingest contract for Entity records
 type IntegrationIngestEntityRequested struct {
-	Metadata IntegrationIngestMetadata   `json:"metadata"`
-	Input    generated.CreateEntityInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateEntityInput `json:"input"`
 }
 
 // IntegrationIngestEntityRequestedTopic is the typed Gala topic for Entity ingest requests
@@ -135,8 +136,8 @@ var IntegrationIngestEntityRequestedTopic = gala.Topic[IntegrationIngestEntityRe
 
 // IntegrationIngestFindingRequested is the typed second-stage ingest contract for Finding records
 type IntegrationIngestFindingRequested struct {
-	Metadata IntegrationIngestMetadata    `json:"metadata"`
-	Input    generated.CreateFindingInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateFindingInput `json:"input"`
 }
 
 // IntegrationIngestFindingRequestedTopic is the typed Gala topic for Finding ingest requests
@@ -147,7 +148,7 @@ var IntegrationIngestFindingRequestedTopic = gala.Topic[IntegrationIngestFinding
 // IntegrationIngestRiskRequested is the typed second-stage ingest contract for Risk records
 type IntegrationIngestRiskRequested struct {
 	Metadata IntegrationIngestMetadata `json:"metadata"`
-	Input    generated.CreateRiskInput `json:"input"`
+	Input generated.CreateRiskInput `json:"input"`
 }
 
 // IntegrationIngestRiskRequestedTopic is the typed Gala topic for Risk ingest requests
@@ -157,8 +158,8 @@ var IntegrationIngestRiskRequestedTopic = gala.Topic[IntegrationIngestRiskReques
 
 // IntegrationIngestVulnerabilityRequested is the typed second-stage ingest contract for Vulnerability records
 type IntegrationIngestVulnerabilityRequested struct {
-	Metadata IntegrationIngestMetadata          `json:"metadata"`
-	Input    generated.CreateVulnerabilityInput `json:"input"`
+	Metadata IntegrationIngestMetadata `json:"metadata"`
+	Input generated.CreateVulnerabilityInput `json:"input"`
 }
 
 // IntegrationIngestVulnerabilityRequestedTopic is the typed Gala topic for Vulnerability ingest requests
@@ -168,342 +169,349 @@ var IntegrationIngestVulnerabilityRequestedTopic = gala.Topic[IntegrationIngestV
 
 // Integration mapping keys for Asset.
 const (
-	IntegrationMappingAssetAccessModelID               = "accessModelID"
-	IntegrationMappingAssetAccessModelName             = "accessModelName"
-	IntegrationMappingAssetAssetDataClassificationID   = "assetDataClassificationID"
+	IntegrationMappingAssetAccessModelID = "accessModelID"
+	IntegrationMappingAssetAccessModelName = "accessModelName"
+	IntegrationMappingAssetAssetDataClassificationID = "assetDataClassificationID"
 	IntegrationMappingAssetAssetDataClassificationName = "assetDataClassificationName"
-	IntegrationMappingAssetAssetSubtypeID              = "assetSubtypeID"
-	IntegrationMappingAssetAssetSubtypeName            = "assetSubtypeName"
-	IntegrationMappingAssetAssetType                   = "assetType"
-	IntegrationMappingAssetCategories                  = "categories"
-	IntegrationMappingAssetContainsPii                 = "containsPii"
-	IntegrationMappingAssetCostCenter                  = "costCenter"
-	IntegrationMappingAssetCriticalityID               = "criticalityID"
-	IntegrationMappingAssetCriticalityName             = "criticalityName"
-	IntegrationMappingAssetDescription                 = "description"
-	IntegrationMappingAssetDisplayName                 = "displayName"
-	IntegrationMappingAssetEncryptionStatusID          = "encryptionStatusID"
-	IntegrationMappingAssetEncryptionStatusName        = "encryptionStatusName"
-	IntegrationMappingAssetEnvironmentID               = "environmentID"
-	IntegrationMappingAssetEnvironmentName             = "environmentName"
-	IntegrationMappingAssetEstimatedMonthlyCost        = "estimatedMonthlyCost"
-	IntegrationMappingAssetIdentifier                  = "identifier"
-	IntegrationMappingAssetIntegrationID               = "integrationID"
-	IntegrationMappingAssetInternalNotes               = "internalNotes"
-	IntegrationMappingAssetInternalOwner               = "internalOwner"
-	IntegrationMappingAssetInternalOwnerGroupID        = "internalOwnerGroupID"
-	IntegrationMappingAssetInternalOwnerUserID         = "internalOwnerUserID"
-	IntegrationMappingAssetName                        = "name"
-	IntegrationMappingAssetObservedAt                  = "observedAt"
-	IntegrationMappingAssetOwnerID                     = "ownerID"
-	IntegrationMappingAssetPhysicalLocation            = "physicalLocation"
-	IntegrationMappingAssetPurchaseDate                = "purchaseDate"
-	IntegrationMappingAssetRegion                      = "region"
-	IntegrationMappingAssetScopeID                     = "scopeID"
-	IntegrationMappingAssetScopeName                   = "scopeName"
-	IntegrationMappingAssetSecurityTierID              = "securityTierID"
-	IntegrationMappingAssetSecurityTierName            = "securityTierName"
-	IntegrationMappingAssetSourceIdentifier            = "sourceIdentifier"
-	IntegrationMappingAssetSourceType                  = "sourceType"
-	IntegrationMappingAssetSystemInternalID            = "systemInternalID"
-	IntegrationMappingAssetTags                        = "tags"
-	IntegrationMappingAssetWebsite                     = "website"
+	IntegrationMappingAssetAssetSubtypeID = "assetSubtypeID"
+	IntegrationMappingAssetAssetSubtypeName = "assetSubtypeName"
+	IntegrationMappingAssetAssetType = "assetType"
+	IntegrationMappingAssetCategories = "categories"
+	IntegrationMappingAssetContainsPii = "containsPii"
+	IntegrationMappingAssetCostCenter = "costCenter"
+	IntegrationMappingAssetCriticalityID = "criticalityID"
+	IntegrationMappingAssetCriticalityName = "criticalityName"
+	IntegrationMappingAssetDescription = "description"
+	IntegrationMappingAssetDisplayName = "displayName"
+	IntegrationMappingAssetEncryptionStatusID = "encryptionStatusID"
+	IntegrationMappingAssetEncryptionStatusName = "encryptionStatusName"
+	IntegrationMappingAssetEnvironmentID = "environmentID"
+	IntegrationMappingAssetEnvironmentName = "environmentName"
+	IntegrationMappingAssetEstimatedMonthlyCost = "estimatedMonthlyCost"
+	IntegrationMappingAssetIdentifier = "identifier"
+	IntegrationMappingAssetIntegrationID = "integrationID"
+	IntegrationMappingAssetInternalNotes = "internalNotes"
+	IntegrationMappingAssetInternalOwner = "internalOwner"
+	IntegrationMappingAssetInternalOwnerGroupID = "internalOwnerGroupID"
+	IntegrationMappingAssetInternalOwnerUserID = "internalOwnerUserID"
+	IntegrationMappingAssetName = "name"
+	IntegrationMappingAssetObservedAt = "observedAt"
+	IntegrationMappingAssetOwnerID = "ownerID"
+	IntegrationMappingAssetPhysicalLocation = "physicalLocation"
+	IntegrationMappingAssetPurchaseDate = "purchaseDate"
+	IntegrationMappingAssetRegion = "region"
+	IntegrationMappingAssetScopeID = "scopeID"
+	IntegrationMappingAssetScopeName = "scopeName"
+	IntegrationMappingAssetSecurityTierID = "securityTierID"
+	IntegrationMappingAssetSecurityTierName = "securityTierName"
+	IntegrationMappingAssetSourceIdentifier = "sourceIdentifier"
+	IntegrationMappingAssetSourceType = "sourceType"
+	IntegrationMappingAssetSystemInternalID = "systemInternalID"
+	IntegrationMappingAssetTags = "tags"
+	IntegrationMappingAssetWebsite = "website"
 )
 
 // Integration mapping keys for Contact.
 const (
-	IntegrationMappingContactAddress       = "address"
-	IntegrationMappingContactCompany       = "company"
-	IntegrationMappingContactEmail         = "email"
-	IntegrationMappingContactExternalID    = "externalID"
-	IntegrationMappingContactFullName      = "fullName"
+	IntegrationMappingContactAddress = "address"
+	IntegrationMappingContactCompany = "company"
+	IntegrationMappingContactEmail = "email"
+	IntegrationMappingContactExternalID = "externalID"
+	IntegrationMappingContactFullName = "fullName"
 	IntegrationMappingContactIntegrationID = "integrationID"
-	IntegrationMappingContactObservedAt    = "observedAt"
-	IntegrationMappingContactPhoneNumber   = "phoneNumber"
-	IntegrationMappingContactStatus        = "status"
-	IntegrationMappingContactTags          = "tags"
-	IntegrationMappingContactTitle         = "title"
+	IntegrationMappingContactObservedAt = "observedAt"
+	IntegrationMappingContactPhoneNumber = "phoneNumber"
+	IntegrationMappingContactStatus = "status"
+	IntegrationMappingContactTags = "tags"
+	IntegrationMappingContactTitle = "title"
 )
 
 // Integration mapping keys for DirectoryAccount.
 const (
-	IntegrationMappingDirectoryAccountAccountType         = "accountType"
-	IntegrationMappingDirectoryAccountAddedAt             = "addedAt"
-	IntegrationMappingDirectoryAccountAvatarRemoteURL     = "avatarRemoteURL"
-	IntegrationMappingDirectoryAccountAvatarUpdatedAt     = "avatarUpdatedAt"
-	IntegrationMappingDirectoryAccountCanonicalEmail      = "canonicalEmail"
-	IntegrationMappingDirectoryAccountDepartment          = "department"
+	IntegrationMappingDirectoryAccountAccountType = "accountType"
+	IntegrationMappingDirectoryAccountAddedAt = "addedAt"
+	IntegrationMappingDirectoryAccountAvatarRemoteURL = "avatarRemoteURL"
+	IntegrationMappingDirectoryAccountAvatarUpdatedAt = "avatarUpdatedAt"
+	IntegrationMappingDirectoryAccountCanonicalEmail = "canonicalEmail"
+	IntegrationMappingDirectoryAccountDepartment = "department"
 	IntegrationMappingDirectoryAccountDirectoryInstanceID = "directoryInstanceID"
-	IntegrationMappingDirectoryAccountDirectoryName       = "directoryName"
-	IntegrationMappingDirectoryAccountDirectorySyncRunID  = "directorySyncRunID"
-	IntegrationMappingDirectoryAccountDisplayName         = "displayName"
-	IntegrationMappingDirectoryAccountEnvironmentID       = "environmentID"
-	IntegrationMappingDirectoryAccountEnvironmentName     = "environmentName"
-	IntegrationMappingDirectoryAccountExternalID          = "externalID"
-	IntegrationMappingDirectoryAccountFamilyName          = "familyName"
-	IntegrationMappingDirectoryAccountFirstSeenAt         = "firstSeenAt"
-	IntegrationMappingDirectoryAccountGivenName           = "givenName"
-	IntegrationMappingDirectoryAccountIdentityHolderID    = "identityHolderID"
-	IntegrationMappingDirectoryAccountIntegrationID       = "integrationID"
-	IntegrationMappingDirectoryAccountJobTitle            = "jobTitle"
-	IntegrationMappingDirectoryAccountLastLoginAt         = "lastLoginAt"
-	IntegrationMappingDirectoryAccountLastSeenAt          = "lastSeenAt"
-	IntegrationMappingDirectoryAccountLastSeenIP          = "lastSeenIP"
-	IntegrationMappingDirectoryAccountMetadata            = "metadata"
-	IntegrationMappingDirectoryAccountMfaState            = "mfaState"
-	IntegrationMappingDirectoryAccountObservedAt          = "observedAt"
-	IntegrationMappingDirectoryAccountOrganizationUnit    = "organizationUnit"
-	IntegrationMappingDirectoryAccountPlatformID          = "platformID"
-	IntegrationMappingDirectoryAccountPrimarySource       = "primarySource"
-	IntegrationMappingDirectoryAccountProfile             = "profile"
-	IntegrationMappingDirectoryAccountProfileHash         = "profileHash"
-	IntegrationMappingDirectoryAccountRemovedAt           = "removedAt"
-	IntegrationMappingDirectoryAccountScopeID             = "scopeID"
-	IntegrationMappingDirectoryAccountScopeName           = "scopeName"
-	IntegrationMappingDirectoryAccountSecondaryKey        = "secondaryKey"
-	IntegrationMappingDirectoryAccountSourceVersion       = "sourceVersion"
-	IntegrationMappingDirectoryAccountStatus              = "status"
-	IntegrationMappingDirectoryAccountTags                = "tags"
+	IntegrationMappingDirectoryAccountDirectoryName = "directoryName"
+	IntegrationMappingDirectoryAccountDirectorySyncRunID = "directorySyncRunID"
+	IntegrationMappingDirectoryAccountDisplayName = "displayName"
+	IntegrationMappingDirectoryAccountEnvironmentID = "environmentID"
+	IntegrationMappingDirectoryAccountEnvironmentName = "environmentName"
+	IntegrationMappingDirectoryAccountExternalID = "externalID"
+	IntegrationMappingDirectoryAccountFamilyName = "familyName"
+	IntegrationMappingDirectoryAccountFirstSeenAt = "firstSeenAt"
+	IntegrationMappingDirectoryAccountGivenName = "givenName"
+	IntegrationMappingDirectoryAccountIdentityHolderID = "identityHolderID"
+	IntegrationMappingDirectoryAccountIntegrationID = "integrationID"
+	IntegrationMappingDirectoryAccountJobTitle = "jobTitle"
+	IntegrationMappingDirectoryAccountLastLoginAt = "lastLoginAt"
+	IntegrationMappingDirectoryAccountLastSeenAt = "lastSeenAt"
+	IntegrationMappingDirectoryAccountLastSeenIP = "lastSeenIP"
+	IntegrationMappingDirectoryAccountMetadata = "metadata"
+	IntegrationMappingDirectoryAccountMfaState = "mfaState"
+	IntegrationMappingDirectoryAccountObservedAt = "observedAt"
+	IntegrationMappingDirectoryAccountOrganizationUnit = "organizationUnit"
+	IntegrationMappingDirectoryAccountPlatformID = "platformID"
+	IntegrationMappingDirectoryAccountPrimarySource = "primarySource"
+	IntegrationMappingDirectoryAccountProfile = "profile"
+	IntegrationMappingDirectoryAccountProfileHash = "profileHash"
+	IntegrationMappingDirectoryAccountRemovedAt = "removedAt"
+	IntegrationMappingDirectoryAccountScopeID = "scopeID"
+	IntegrationMappingDirectoryAccountScopeName = "scopeName"
+	IntegrationMappingDirectoryAccountSecondaryKey = "secondaryKey"
+	IntegrationMappingDirectoryAccountSourceVersion = "sourceVersion"
+	IntegrationMappingDirectoryAccountStatus = "status"
+	IntegrationMappingDirectoryAccountTags = "tags"
 )
 
 // Integration mapping keys for DirectoryGroup.
 const (
-	IntegrationMappingDirectoryGroupAddedAt                = "addedAt"
-	IntegrationMappingDirectoryGroupClassification         = "classification"
-	IntegrationMappingDirectoryGroupDirectoryInstanceID    = "directoryInstanceID"
-	IntegrationMappingDirectoryGroupDirectorySyncRunID     = "directorySyncRunID"
-	IntegrationMappingDirectoryGroupDisplayName            = "displayName"
-	IntegrationMappingDirectoryGroupEmail                  = "email"
-	IntegrationMappingDirectoryGroupEnvironmentID          = "environmentID"
-	IntegrationMappingDirectoryGroupEnvironmentName        = "environmentName"
-	IntegrationMappingDirectoryGroupExternalID             = "externalID"
+	IntegrationMappingDirectoryGroupAddedAt = "addedAt"
+	IntegrationMappingDirectoryGroupClassification = "classification"
+	IntegrationMappingDirectoryGroupDirectoryInstanceID = "directoryInstanceID"
+	IntegrationMappingDirectoryGroupDirectorySyncRunID = "directorySyncRunID"
+	IntegrationMappingDirectoryGroupDisplayName = "displayName"
+	IntegrationMappingDirectoryGroupEmail = "email"
+	IntegrationMappingDirectoryGroupEnvironmentID = "environmentID"
+	IntegrationMappingDirectoryGroupEnvironmentName = "environmentName"
+	IntegrationMappingDirectoryGroupExternalID = "externalID"
 	IntegrationMappingDirectoryGroupExternalSharingAllowed = "externalSharingAllowed"
-	IntegrationMappingDirectoryGroupFirstSeenAt            = "firstSeenAt"
-	IntegrationMappingDirectoryGroupIntegrationID          = "integrationID"
-	IntegrationMappingDirectoryGroupLastSeenAt             = "lastSeenAt"
-	IntegrationMappingDirectoryGroupMemberCount            = "memberCount"
-	IntegrationMappingDirectoryGroupMetadata               = "metadata"
-	IntegrationMappingDirectoryGroupObservedAt             = "observedAt"
-	IntegrationMappingDirectoryGroupPlatformID             = "platformID"
-	IntegrationMappingDirectoryGroupProfile                = "profile"
-	IntegrationMappingDirectoryGroupProfileHash            = "profileHash"
-	IntegrationMappingDirectoryGroupRemovedAt              = "removedAt"
-	IntegrationMappingDirectoryGroupScopeID                = "scopeID"
-	IntegrationMappingDirectoryGroupScopeName              = "scopeName"
-	IntegrationMappingDirectoryGroupSourceVersion          = "sourceVersion"
-	IntegrationMappingDirectoryGroupStatus                 = "status"
-	IntegrationMappingDirectoryGroupTags                   = "tags"
+	IntegrationMappingDirectoryGroupFirstSeenAt = "firstSeenAt"
+	IntegrationMappingDirectoryGroupIntegrationID = "integrationID"
+	IntegrationMappingDirectoryGroupLastSeenAt = "lastSeenAt"
+	IntegrationMappingDirectoryGroupMemberCount = "memberCount"
+	IntegrationMappingDirectoryGroupMetadata = "metadata"
+	IntegrationMappingDirectoryGroupObservedAt = "observedAt"
+	IntegrationMappingDirectoryGroupPlatformID = "platformID"
+	IntegrationMappingDirectoryGroupProfile = "profile"
+	IntegrationMappingDirectoryGroupProfileHash = "profileHash"
+	IntegrationMappingDirectoryGroupRemovedAt = "removedAt"
+	IntegrationMappingDirectoryGroupScopeID = "scopeID"
+	IntegrationMappingDirectoryGroupScopeName = "scopeName"
+	IntegrationMappingDirectoryGroupSourceVersion = "sourceVersion"
+	IntegrationMappingDirectoryGroupStatus = "status"
+	IntegrationMappingDirectoryGroupTags = "tags"
 )
 
 // Integration mapping keys for DirectoryMembership.
 const (
-	IntegrationMappingDirectoryMembershipAddedAt             = "addedAt"
-	IntegrationMappingDirectoryMembershipDirectoryAccountID  = "directoryAccountID"
-	IntegrationMappingDirectoryMembershipDirectoryGroupID    = "directoryGroupID"
+	IntegrationMappingDirectoryMembershipAddedAt = "addedAt"
+	IntegrationMappingDirectoryMembershipDirectoryAccountID = "directoryAccountID"
+	IntegrationMappingDirectoryMembershipDirectoryGroupID = "directoryGroupID"
 	IntegrationMappingDirectoryMembershipDirectoryInstanceID = "directoryInstanceID"
-	IntegrationMappingDirectoryMembershipDirectorySyncRunID  = "directorySyncRunID"
-	IntegrationMappingDirectoryMembershipEnvironmentID       = "environmentID"
-	IntegrationMappingDirectoryMembershipEnvironmentName     = "environmentName"
-	IntegrationMappingDirectoryMembershipFirstSeenAt         = "firstSeenAt"
-	IntegrationMappingDirectoryMembershipIntegrationID       = "integrationID"
-	IntegrationMappingDirectoryMembershipLastConfirmedRunID  = "lastConfirmedRunID"
-	IntegrationMappingDirectoryMembershipLastSeenAt          = "lastSeenAt"
-	IntegrationMappingDirectoryMembershipMetadata            = "metadata"
-	IntegrationMappingDirectoryMembershipObservedAt          = "observedAt"
-	IntegrationMappingDirectoryMembershipPlatformID          = "platformID"
-	IntegrationMappingDirectoryMembershipRemovedAt           = "removedAt"
-	IntegrationMappingDirectoryMembershipRole                = "role"
-	IntegrationMappingDirectoryMembershipScopeID             = "scopeID"
-	IntegrationMappingDirectoryMembershipScopeName           = "scopeName"
-	IntegrationMappingDirectoryMembershipSource              = "source"
+	IntegrationMappingDirectoryMembershipDirectorySyncRunID = "directorySyncRunID"
+	IntegrationMappingDirectoryMembershipEnvironmentID = "environmentID"
+	IntegrationMappingDirectoryMembershipEnvironmentName = "environmentName"
+	IntegrationMappingDirectoryMembershipFirstSeenAt = "firstSeenAt"
+	IntegrationMappingDirectoryMembershipIntegrationID = "integrationID"
+	IntegrationMappingDirectoryMembershipLastConfirmedRunID = "lastConfirmedRunID"
+	IntegrationMappingDirectoryMembershipLastSeenAt = "lastSeenAt"
+	IntegrationMappingDirectoryMembershipMetadata = "metadata"
+	IntegrationMappingDirectoryMembershipObservedAt = "observedAt"
+	IntegrationMappingDirectoryMembershipPlatformID = "platformID"
+	IntegrationMappingDirectoryMembershipRemovedAt = "removedAt"
+	IntegrationMappingDirectoryMembershipRole = "role"
+	IntegrationMappingDirectoryMembershipScopeID = "scopeID"
+	IntegrationMappingDirectoryMembershipScopeName = "scopeName"
+	IntegrationMappingDirectoryMembershipSource = "source"
 )
 
 // Integration mapping keys for Entity.
 const (
-	IntegrationMappingEntityAnnualSpend                           = "annualSpend"
-	IntegrationMappingEntityApprovedForUse                        = "approvedForUse"
-	IntegrationMappingEntityAutoRenews                            = "autoRenews"
-	IntegrationMappingEntityBillingModel                          = "billingModel"
-	IntegrationMappingEntityContractEndDate                       = "contractEndDate"
-	IntegrationMappingEntityContractRenewalAt                     = "contractRenewalAt"
-	IntegrationMappingEntityContractStartDate                     = "contractStartDate"
-	IntegrationMappingEntityDisplayName                           = "displayName"
-	IntegrationMappingEntityDomains                               = "domains"
-	IntegrationMappingEntityEntityRelationshipStateID             = "entityRelationshipStateID"
-	IntegrationMappingEntityEntityRelationshipStateName           = "entityRelationshipStateName"
-	IntegrationMappingEntityEntitySecurityQuestionnaireStatusID   = "entitySecurityQuestionnaireStatusID"
+	IntegrationMappingEntityAnnualSpend = "annualSpend"
+	IntegrationMappingEntityApprovedForUse = "approvedForUse"
+	IntegrationMappingEntityAutoRenews = "autoRenews"
+	IntegrationMappingEntityBillingModel = "billingModel"
+	IntegrationMappingEntityContractEndDate = "contractEndDate"
+	IntegrationMappingEntityContractRenewalAt = "contractRenewalAt"
+	IntegrationMappingEntityContractStartDate = "contractStartDate"
+	IntegrationMappingEntityDisplayName = "displayName"
+	IntegrationMappingEntityDomains = "domains"
+	IntegrationMappingEntityEntityRelationshipStateID = "entityRelationshipStateID"
+	IntegrationMappingEntityEntityRelationshipStateName = "entityRelationshipStateName"
+	IntegrationMappingEntityEntitySecurityQuestionnaireStatusID = "entitySecurityQuestionnaireStatusID"
 	IntegrationMappingEntityEntitySecurityQuestionnaireStatusName = "entitySecurityQuestionnaireStatusName"
-	IntegrationMappingEntityEntitySourceTypeID                    = "entitySourceTypeID"
-	IntegrationMappingEntityEntitySourceTypeName                  = "entitySourceTypeName"
-	IntegrationMappingEntityEnvironmentID                         = "environmentID"
-	IntegrationMappingEntityEnvironmentName                       = "environmentName"
-	IntegrationMappingEntityExternalID                            = "externalID"
-	IntegrationMappingEntityHasSoc2                               = "hasSoc2"
-	IntegrationMappingEntityInternalNotes                         = "internalNotes"
-	IntegrationMappingEntityInternalOwner                         = "internalOwner"
-	IntegrationMappingEntityInternalOwnerGroupID                  = "internalOwnerGroupID"
-	IntegrationMappingEntityInternalOwnerUserID                   = "internalOwnerUserID"
-	IntegrationMappingEntityLastReviewedAt                        = "lastReviewedAt"
-	IntegrationMappingEntityLinks                                 = "links"
-	IntegrationMappingEntityMfaEnforced                           = "mfaEnforced"
-	IntegrationMappingEntityMfaSupported                          = "mfaSupported"
-	IntegrationMappingEntityName                                  = "name"
-	IntegrationMappingEntityNextReviewAt                          = "nextReviewAt"
-	IntegrationMappingEntityObservedAt                            = "observedAt"
-	IntegrationMappingEntityOwnerID                               = "ownerID"
-	IntegrationMappingEntityProvidedServices                      = "providedServices"
-	IntegrationMappingEntityRenewalRisk                           = "renewalRisk"
-	IntegrationMappingEntityReviewFrequency                       = "reviewFrequency"
-	IntegrationMappingEntityReviewedBy                            = "reviewedBy"
-	IntegrationMappingEntityReviewedByGroupID                     = "reviewedByGroupID"
-	IntegrationMappingEntityReviewedByUserID                      = "reviewedByUserID"
-	IntegrationMappingEntityRiskRating                            = "riskRating"
-	IntegrationMappingEntityRiskScore                             = "riskScore"
-	IntegrationMappingEntityScopeID                               = "scopeID"
-	IntegrationMappingEntityScopeName                             = "scopeName"
-	IntegrationMappingEntitySoc2PeriodEnd                         = "soc2PeriodEnd"
-	IntegrationMappingEntitySpendCurrency                         = "spendCurrency"
-	IntegrationMappingEntitySsoEnforced                           = "ssoEnforced"
-	IntegrationMappingEntityStatus                                = "status"
-	IntegrationMappingEntityStatusPageURL                         = "statusPageURL"
-	IntegrationMappingEntitySystemInternalID                      = "systemInternalID"
-	IntegrationMappingEntityTags                                  = "tags"
-	IntegrationMappingEntityTerminationNoticeDays                 = "terminationNoticeDays"
-	IntegrationMappingEntityTier                                  = "tier"
-	IntegrationMappingEntityVendorMetadata                        = "vendorMetadata"
+	IntegrationMappingEntityEntitySourceTypeID = "entitySourceTypeID"
+	IntegrationMappingEntityEntitySourceTypeName = "entitySourceTypeName"
+	IntegrationMappingEntityEnvironmentID = "environmentID"
+	IntegrationMappingEntityEnvironmentName = "environmentName"
+	IntegrationMappingEntityExternalID = "externalID"
+	IntegrationMappingEntityHasSoc2 = "hasSoc2"
+	IntegrationMappingEntityInternalNotes = "internalNotes"
+	IntegrationMappingEntityInternalOwner = "internalOwner"
+	IntegrationMappingEntityInternalOwnerGroupID = "internalOwnerGroupID"
+	IntegrationMappingEntityInternalOwnerUserID = "internalOwnerUserID"
+	IntegrationMappingEntityLastReviewedAt = "lastReviewedAt"
+	IntegrationMappingEntityLinks = "links"
+	IntegrationMappingEntityMfaEnforced = "mfaEnforced"
+	IntegrationMappingEntityMfaSupported = "mfaSupported"
+	IntegrationMappingEntityName = "name"
+	IntegrationMappingEntityNextReviewAt = "nextReviewAt"
+	IntegrationMappingEntityObservedAt = "observedAt"
+	IntegrationMappingEntityOwnerID = "ownerID"
+	IntegrationMappingEntityProvidedServices = "providedServices"
+	IntegrationMappingEntityRenewalRisk = "renewalRisk"
+	IntegrationMappingEntityReviewFrequency = "reviewFrequency"
+	IntegrationMappingEntityReviewedBy = "reviewedBy"
+	IntegrationMappingEntityReviewedByGroupID = "reviewedByGroupID"
+	IntegrationMappingEntityReviewedByUserID = "reviewedByUserID"
+	IntegrationMappingEntityRiskRating = "riskRating"
+	IntegrationMappingEntityRiskScore = "riskScore"
+	IntegrationMappingEntityScopeID = "scopeID"
+	IntegrationMappingEntityScopeName = "scopeName"
+	IntegrationMappingEntitySoc2PeriodEnd = "soc2PeriodEnd"
+	IntegrationMappingEntitySpendCurrency = "spendCurrency"
+	IntegrationMappingEntitySsoEnforced = "ssoEnforced"
+	IntegrationMappingEntityStatus = "status"
+	IntegrationMappingEntityStatusPageURL = "statusPageURL"
+	IntegrationMappingEntitySystemInternalID = "systemInternalID"
+	IntegrationMappingEntityTags = "tags"
+	IntegrationMappingEntityTerminationNoticeDays = "terminationNoticeDays"
+	IntegrationMappingEntityTier = "tier"
+	IntegrationMappingEntityVendorMetadata = "vendorMetadata"
 )
 
 // Integration mapping keys for Finding.
 const (
-	IntegrationMappingFindingAssessmentID       = "assessmentID"
-	IntegrationMappingFindingBlocksProduction   = "blocksProduction"
-	IntegrationMappingFindingCategories         = "categories"
-	IntegrationMappingFindingCategory           = "category"
-	IntegrationMappingFindingDescription        = "description"
-	IntegrationMappingFindingDisplayName        = "displayName"
-	IntegrationMappingFindingEnvironmentID      = "environmentID"
-	IntegrationMappingFindingEnvironmentName    = "environmentName"
-	IntegrationMappingFindingEventTime          = "eventTime"
-	IntegrationMappingFindingExploitability     = "exploitability"
-	IntegrationMappingFindingExternalID         = "externalID"
-	IntegrationMappingFindingExternalOwnerID    = "externalOwnerID"
-	IntegrationMappingFindingExternalURI        = "externalURI"
-	IntegrationMappingFindingFindingClass       = "findingClass"
-	IntegrationMappingFindingFindingStatusID    = "findingStatusID"
-	IntegrationMappingFindingFindingStatusName  = "findingStatusName"
-	IntegrationMappingFindingImpact             = "impact"
-	IntegrationMappingFindingInternalNotes      = "internalNotes"
-	IntegrationMappingFindingMetadata           = "metadata"
-	IntegrationMappingFindingNumericSeverity    = "numericSeverity"
-	IntegrationMappingFindingOpen               = "open"
-	IntegrationMappingFindingOwnerID            = "ownerID"
-	IntegrationMappingFindingPriority           = "priority"
-	IntegrationMappingFindingProduction         = "production"
-	IntegrationMappingFindingPublic             = "public"
-	IntegrationMappingFindingRawPayload         = "rawPayload"
-	IntegrationMappingFindingRecommendation     = "recommendation"
+	IntegrationMappingFindingAssessmentID = "assessmentID"
+	IntegrationMappingFindingBlocksProduction = "blocksProduction"
+	IntegrationMappingFindingCategories = "categories"
+	IntegrationMappingFindingCategory = "category"
+	IntegrationMappingFindingDescription = "description"
+	IntegrationMappingFindingDisplayName = "displayName"
+	IntegrationMappingFindingEnvironmentID = "environmentID"
+	IntegrationMappingFindingEnvironmentName = "environmentName"
+	IntegrationMappingFindingEventTime = "eventTime"
+	IntegrationMappingFindingExploitability = "exploitability"
+	IntegrationMappingFindingExternalID = "externalID"
+	IntegrationMappingFindingExternalOwnerID = "externalOwnerID"
+	IntegrationMappingFindingExternalURI = "externalURI"
+	IntegrationMappingFindingFindingClass = "findingClass"
+	IntegrationMappingFindingFindingStatusID = "findingStatusID"
+	IntegrationMappingFindingFindingStatusName = "findingStatusName"
+	IntegrationMappingFindingImpact = "impact"
+	IntegrationMappingFindingInternalNotes = "internalNotes"
+	IntegrationMappingFindingMetadata = "metadata"
+	IntegrationMappingFindingNumericSeverity = "numericSeverity"
+	IntegrationMappingFindingOpen = "open"
+	IntegrationMappingFindingOwnerID = "ownerID"
+	IntegrationMappingFindingPriority = "priority"
+	IntegrationMappingFindingProduction = "production"
+	IntegrationMappingFindingPublic = "public"
+	IntegrationMappingFindingRawPayload = "rawPayload"
+	IntegrationMappingFindingRecommendation = "recommendation"
 	IntegrationMappingFindingRecommendedActions = "recommendedActions"
-	IntegrationMappingFindingReferences         = "references"
-	IntegrationMappingFindingRemediationSLA     = "remediationSLA"
-	IntegrationMappingFindingReportedAt         = "reportedAt"
-	IntegrationMappingFindingResourceName       = "resourceName"
-	IntegrationMappingFindingScopeID            = "scopeID"
-	IntegrationMappingFindingScopeName          = "scopeName"
-	IntegrationMappingFindingScore              = "score"
-	IntegrationMappingFindingSeverity           = "severity"
-	IntegrationMappingFindingSource             = "source"
-	IntegrationMappingFindingSourceUpdatedAt    = "sourceUpdatedAt"
-	IntegrationMappingFindingState              = "state"
-	IntegrationMappingFindingStepsToReproduce   = "stepsToReproduce"
-	IntegrationMappingFindingSystemInternalID   = "systemInternalID"
-	IntegrationMappingFindingTags               = "tags"
-	IntegrationMappingFindingTargetDetails      = "targetDetails"
-	IntegrationMappingFindingTargets            = "targets"
-	IntegrationMappingFindingValidated          = "validated"
-	IntegrationMappingFindingVector             = "vector"
+	IntegrationMappingFindingReferences = "references"
+	IntegrationMappingFindingRemediationSLA = "remediationSLA"
+	IntegrationMappingFindingReportedAt = "reportedAt"
+	IntegrationMappingFindingResourceName = "resourceName"
+	IntegrationMappingFindingScopeID = "scopeID"
+	IntegrationMappingFindingScopeName = "scopeName"
+	IntegrationMappingFindingScore = "score"
+	IntegrationMappingFindingSeverity = "severity"
+	IntegrationMappingFindingSource = "source"
+	IntegrationMappingFindingSourceUpdatedAt = "sourceUpdatedAt"
+	IntegrationMappingFindingState = "state"
+	IntegrationMappingFindingStepsToReproduce = "stepsToReproduce"
+	IntegrationMappingFindingSystemInternalID = "systemInternalID"
+	IntegrationMappingFindingTags = "tags"
+	IntegrationMappingFindingTargetDetails = "targetDetails"
+	IntegrationMappingFindingTargets = "targets"
+	IntegrationMappingFindingValidated = "validated"
+	IntegrationMappingFindingVector = "vector"
 )
 
 // Integration mapping keys for Risk.
 const (
-	IntegrationMappingRiskBusinessCosts     = "businessCosts"
+	IntegrationMappingRiskBusinessCosts = "businessCosts"
 	IntegrationMappingRiskBusinessCostsJSON = "businessCostsJSON"
-	IntegrationMappingRiskDetails           = "details"
-	IntegrationMappingRiskDetailsJSON       = "detailsJSON"
-	IntegrationMappingRiskEnvironmentID     = "environmentID"
-	IntegrationMappingRiskEnvironmentName   = "environmentName"
-	IntegrationMappingRiskExternalID        = "externalID"
-	IntegrationMappingRiskExternalUUID      = "externalUUID"
-	IntegrationMappingRiskImpact            = "impact"
-	IntegrationMappingRiskIntegrationID     = "integrationID"
-	IntegrationMappingRiskLikelihood        = "likelihood"
-	IntegrationMappingRiskMitigation        = "mitigation"
-	IntegrationMappingRiskMitigationJSON    = "mitigationJSON"
-	IntegrationMappingRiskName              = "name"
-	IntegrationMappingRiskObservedAt        = "observedAt"
-	IntegrationMappingRiskOwnerID           = "ownerID"
-	IntegrationMappingRiskRiskCategoryID    = "riskCategoryID"
-	IntegrationMappingRiskRiskCategoryName  = "riskCategoryName"
-	IntegrationMappingRiskRiskKindID        = "riskKindID"
-	IntegrationMappingRiskRiskKindName      = "riskKindName"
-	IntegrationMappingRiskScopeID           = "scopeID"
-	IntegrationMappingRiskScopeName         = "scopeName"
-	IntegrationMappingRiskScore             = "score"
-	IntegrationMappingRiskStatus            = "status"
-	IntegrationMappingRiskTags              = "tags"
+	IntegrationMappingRiskDetails = "details"
+	IntegrationMappingRiskDetailsJSON = "detailsJSON"
+	IntegrationMappingRiskEnvironmentID = "environmentID"
+	IntegrationMappingRiskEnvironmentName = "environmentName"
+	IntegrationMappingRiskExternalID = "externalID"
+	IntegrationMappingRiskExternalUUID = "externalUUID"
+	IntegrationMappingRiskImpact = "impact"
+	IntegrationMappingRiskIntegrationID = "integrationID"
+	IntegrationMappingRiskLastReviewedAt = "lastReviewedAt"
+	IntegrationMappingRiskLikelihood = "likelihood"
+	IntegrationMappingRiskMitigatedAt = "mitigatedAt"
+	IntegrationMappingRiskMitigation = "mitigation"
+	IntegrationMappingRiskMitigationJSON = "mitigationJSON"
+	IntegrationMappingRiskName = "name"
+	IntegrationMappingRiskNextReviewDueAt = "nextReviewDueAt"
+	IntegrationMappingRiskObservedAt = "observedAt"
+	IntegrationMappingRiskOwnerID = "ownerID"
+	IntegrationMappingRiskResidualScore = "residualScore"
+	IntegrationMappingRiskReviewFrequency = "reviewFrequency"
+	IntegrationMappingRiskReviewRequired = "reviewRequired"
+	IntegrationMappingRiskRiskCategoryID = "riskCategoryID"
+	IntegrationMappingRiskRiskCategoryName = "riskCategoryName"
+	IntegrationMappingRiskRiskDecision = "riskDecision"
+	IntegrationMappingRiskRiskKindID = "riskKindID"
+	IntegrationMappingRiskRiskKindName = "riskKindName"
+	IntegrationMappingRiskScopeID = "scopeID"
+	IntegrationMappingRiskScopeName = "scopeName"
+	IntegrationMappingRiskScore = "score"
+	IntegrationMappingRiskStatus = "status"
+	IntegrationMappingRiskTags = "tags"
 )
 
 // Integration mapping keys for Vulnerability.
 const (
-	IntegrationMappingVulnerabilityAutoDismissedAt         = "autoDismissedAt"
-	IntegrationMappingVulnerabilityBlocking                = "blocking"
-	IntegrationMappingVulnerabilityCategory                = "category"
-	IntegrationMappingVulnerabilityCveID                   = "cveID"
-	IntegrationMappingVulnerabilityCweIds                  = "cweIds"
-	IntegrationMappingVulnerabilityDependencyScope         = "dependencyScope"
-	IntegrationMappingVulnerabilityDescription             = "description"
-	IntegrationMappingVulnerabilityDiscoveredAt            = "discoveredAt"
-	IntegrationMappingVulnerabilityDismissedAt             = "dismissedAt"
-	IntegrationMappingVulnerabilityDismissedComment        = "dismissedComment"
-	IntegrationMappingVulnerabilityDismissedReason         = "dismissedReason"
-	IntegrationMappingVulnerabilityDisplayName             = "displayName"
-	IntegrationMappingVulnerabilityEnvironmentID           = "environmentID"
-	IntegrationMappingVulnerabilityEnvironmentName         = "environmentName"
-	IntegrationMappingVulnerabilityExploitability          = "exploitability"
-	IntegrationMappingVulnerabilityExternalID              = "externalID"
-	IntegrationMappingVulnerabilityExternalOwnerID         = "externalOwnerID"
-	IntegrationMappingVulnerabilityExternalURI             = "externalURI"
-	IntegrationMappingVulnerabilityFirstPatchedVersion     = "firstPatchedVersion"
-	IntegrationMappingVulnerabilityFixedAt                 = "fixedAt"
-	IntegrationMappingVulnerabilityImpact                  = "impact"
-	IntegrationMappingVulnerabilityImpacts                 = "impacts"
-	IntegrationMappingVulnerabilityInternalNotes           = "internalNotes"
-	IntegrationMappingVulnerabilityManifestPath            = "manifestPath"
-	IntegrationMappingVulnerabilityMetadata                = "metadata"
-	IntegrationMappingVulnerabilityOpen                    = "open"
-	IntegrationMappingVulnerabilityOwnerID                 = "ownerID"
-	IntegrationMappingVulnerabilityPackageEcosystem        = "packageEcosystem"
-	IntegrationMappingVulnerabilityPackageName             = "packageName"
-	IntegrationMappingVulnerabilityPriority                = "priority"
-	IntegrationMappingVulnerabilityProduction              = "production"
-	IntegrationMappingVulnerabilityPublic                  = "public"
-	IntegrationMappingVulnerabilityPublishedAt             = "publishedAt"
-	IntegrationMappingVulnerabilityRawPayload              = "rawPayload"
-	IntegrationMappingVulnerabilityReferences              = "references"
-	IntegrationMappingVulnerabilityRemediationSLA          = "remediationSLA"
-	IntegrationMappingVulnerabilityScopeID                 = "scopeID"
-	IntegrationMappingVulnerabilityScopeName               = "scopeName"
-	IntegrationMappingVulnerabilityScore                   = "score"
-	IntegrationMappingVulnerabilitySeverity                = "severity"
-	IntegrationMappingVulnerabilitySource                  = "source"
-	IntegrationMappingVulnerabilitySourceUpdatedAt         = "sourceUpdatedAt"
-	IntegrationMappingVulnerabilitySummary                 = "summary"
-	IntegrationMappingVulnerabilitySystemInternalID        = "systemInternalID"
-	IntegrationMappingVulnerabilityTags                    = "tags"
-	IntegrationMappingVulnerabilityValidated               = "validated"
-	IntegrationMappingVulnerabilityVector                  = "vector"
-	IntegrationMappingVulnerabilityVulnerabilityStatusID   = "vulnerabilityStatusID"
+	IntegrationMappingVulnerabilityAutoDismissedAt = "autoDismissedAt"
+	IntegrationMappingVulnerabilityBlocking = "blocking"
+	IntegrationMappingVulnerabilityCategory = "category"
+	IntegrationMappingVulnerabilityCveID = "cveID"
+	IntegrationMappingVulnerabilityCweIds = "cweIds"
+	IntegrationMappingVulnerabilityDependencyScope = "dependencyScope"
+	IntegrationMappingVulnerabilityDescription = "description"
+	IntegrationMappingVulnerabilityDiscoveredAt = "discoveredAt"
+	IntegrationMappingVulnerabilityDismissedAt = "dismissedAt"
+	IntegrationMappingVulnerabilityDismissedComment = "dismissedComment"
+	IntegrationMappingVulnerabilityDismissedReason = "dismissedReason"
+	IntegrationMappingVulnerabilityDisplayName = "displayName"
+	IntegrationMappingVulnerabilityEnvironmentID = "environmentID"
+	IntegrationMappingVulnerabilityEnvironmentName = "environmentName"
+	IntegrationMappingVulnerabilityExploitability = "exploitability"
+	IntegrationMappingVulnerabilityExternalID = "externalID"
+	IntegrationMappingVulnerabilityExternalOwnerID = "externalOwnerID"
+	IntegrationMappingVulnerabilityExternalURI = "externalURI"
+	IntegrationMappingVulnerabilityFirstPatchedVersion = "firstPatchedVersion"
+	IntegrationMappingVulnerabilityFixedAt = "fixedAt"
+	IntegrationMappingVulnerabilityImpact = "impact"
+	IntegrationMappingVulnerabilityImpacts = "impacts"
+	IntegrationMappingVulnerabilityInternalNotes = "internalNotes"
+	IntegrationMappingVulnerabilityManifestPath = "manifestPath"
+	IntegrationMappingVulnerabilityMetadata = "metadata"
+	IntegrationMappingVulnerabilityOpen = "open"
+	IntegrationMappingVulnerabilityOwnerID = "ownerID"
+	IntegrationMappingVulnerabilityPackageEcosystem = "packageEcosystem"
+	IntegrationMappingVulnerabilityPackageName = "packageName"
+	IntegrationMappingVulnerabilityPriority = "priority"
+	IntegrationMappingVulnerabilityProduction = "production"
+	IntegrationMappingVulnerabilityPublic = "public"
+	IntegrationMappingVulnerabilityPublishedAt = "publishedAt"
+	IntegrationMappingVulnerabilityRawPayload = "rawPayload"
+	IntegrationMappingVulnerabilityReferences = "references"
+	IntegrationMappingVulnerabilityRemediationSLA = "remediationSLA"
+	IntegrationMappingVulnerabilityScopeID = "scopeID"
+	IntegrationMappingVulnerabilityScopeName = "scopeName"
+	IntegrationMappingVulnerabilityScore = "score"
+	IntegrationMappingVulnerabilitySeverity = "severity"
+	IntegrationMappingVulnerabilitySource = "source"
+	IntegrationMappingVulnerabilitySourceUpdatedAt = "sourceUpdatedAt"
+	IntegrationMappingVulnerabilitySummary = "summary"
+	IntegrationMappingVulnerabilitySystemInternalID = "systemInternalID"
+	IntegrationMappingVulnerabilityTags = "tags"
+	IntegrationMappingVulnerabilityValidated = "validated"
+	IntegrationMappingVulnerabilityVector = "vector"
+	IntegrationMappingVulnerabilityVulnerabilityStatusID = "vulnerabilityStatusID"
 	IntegrationMappingVulnerabilityVulnerabilityStatusName = "vulnerabilityStatusName"
-	IntegrationMappingVulnerabilityVulnerableVersionRange  = "vulnerableVersionRange"
+	IntegrationMappingVulnerabilityVulnerableVersionRange = "vulnerableVersionRange"
 )
 
 // IntegrationMappingSchemas maps schema names to their mapping metadata
@@ -512,407 +520,407 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Asset",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "accessModelID",
-				GoField:   "AccessModelID",
-				EntField:  "access_model_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "accessModelID",
+				GoField: "AccessModelID",
+				EntField: "access_model_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "accessModelName",
-				GoField:   "AccessModelName",
-				EntField:  "access_model_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "accessModelName",
+				GoField: "AccessModelName",
+				EntField: "access_model_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "assetDataClassificationID",
-				GoField:   "AssetDataClassificationID",
-				EntField:  "asset_data_classification_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "assetDataClassificationID",
+				GoField: "AssetDataClassificationID",
+				EntField: "asset_data_classification_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "assetDataClassificationName",
-				GoField:   "AssetDataClassificationName",
-				EntField:  "asset_data_classification_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "assetDataClassificationName",
+				GoField: "AssetDataClassificationName",
+				EntField: "asset_data_classification_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "assetSubtypeID",
-				GoField:   "AssetSubtypeID",
-				EntField:  "asset_subtype_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "assetSubtypeID",
+				GoField: "AssetSubtypeID",
+				EntField: "asset_subtype_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "assetSubtypeName",
-				GoField:   "AssetSubtypeName",
-				EntField:  "asset_subtype_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "assetSubtypeName",
+				GoField: "AssetSubtypeName",
+				EntField: "asset_subtype_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "assetType",
-				GoField:   "AssetType",
-				EntField:  "asset_type",
-				Type:      "string",
-				Required:  true,
+				InputKey: "assetType",
+				GoField: "AssetType",
+				EntField: "asset_type",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "categories",
-				GoField:   "Categories",
-				EntField:  "categories",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "categories",
+				GoField: "Categories",
+				EntField: "categories",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "containsPii",
-				GoField:   "ContainsPii",
-				EntField:  "contains_pii",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "containsPii",
+				GoField: "ContainsPii",
+				EntField: "contains_pii",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "costCenter",
-				GoField:   "CostCenter",
-				EntField:  "cost_center",
-				Type:      "string",
-				Required:  false,
+				InputKey: "costCenter",
+				GoField: "CostCenter",
+				EntField: "cost_center",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "criticalityID",
-				GoField:   "CriticalityID",
-				EntField:  "criticality_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "criticalityID",
+				GoField: "CriticalityID",
+				EntField: "criticality_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "criticalityName",
-				GoField:   "CriticalityName",
-				EntField:  "criticality_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "criticalityName",
+				GoField: "CriticalityName",
+				EntField: "criticality_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "description",
-				GoField:   "Description",
-				EntField:  "description",
-				Type:      "string",
-				Required:  false,
+				InputKey: "description",
+				GoField: "Description",
+				EntField: "description",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "encryptionStatusID",
-				GoField:   "EncryptionStatusID",
-				EntField:  "encryption_status_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "encryptionStatusID",
+				GoField: "EncryptionStatusID",
+				EntField: "encryption_status_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "encryptionStatusName",
-				GoField:   "EncryptionStatusName",
-				EntField:  "encryption_status_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "encryptionStatusName",
+				GoField: "EncryptionStatusName",
+				EntField: "encryption_status_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "estimatedMonthlyCost",
-				GoField:   "EstimatedMonthlyCost",
-				EntField:  "estimated_monthly_cost",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "estimatedMonthlyCost",
+				GoField: "EstimatedMonthlyCost",
+				EntField: "estimated_monthly_cost",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "identifier",
-				GoField:   "Identifier",
-				EntField:  "identifier",
-				Type:      "string",
-				Required:  false,
+				InputKey: "identifier",
+				GoField: "Identifier",
+				EntField: "identifier",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalNotes",
-				GoField:   "InternalNotes",
-				EntField:  "internal_notes",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalNotes",
+				GoField: "InternalNotes",
+				EntField: "internal_notes",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwner",
-				GoField:   "InternalOwner",
-				EntField:  "internal_owner",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwner",
+				GoField: "InternalOwner",
+				EntField: "internal_owner",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwnerGroupID",
-				GoField:   "InternalOwnerGroupID",
-				EntField:  "internal_owner_group_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwnerGroupID",
+				GoField: "InternalOwnerGroupID",
+				EntField: "internal_owner_group_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwnerUserID",
-				GoField:   "InternalOwnerUserID",
-				EntField:  "internal_owner_user_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwnerUserID",
+				GoField: "InternalOwnerUserID",
+				EntField: "internal_owner_user_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "name",
-				GoField:   "Name",
-				EntField:  "name",
-				Type:      "string",
-				Required:  true,
+				InputKey: "name",
+				GoField: "Name",
+				EntField: "name",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ownerID",
-				GoField:   "OwnerID",
-				EntField:  "owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "ownerID",
+				GoField: "OwnerID",
+				EntField: "owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "physicalLocation",
-				GoField:   "PhysicalLocation",
-				EntField:  "physical_location",
-				Type:      "string",
-				Required:  false,
+				InputKey: "physicalLocation",
+				GoField: "PhysicalLocation",
+				EntField: "physical_location",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "purchaseDate",
-				GoField:   "PurchaseDate",
-				EntField:  "purchase_date",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "purchaseDate",
+				GoField: "PurchaseDate",
+				EntField: "purchase_date",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "region",
-				GoField:   "Region",
-				EntField:  "region",
-				Type:      "string",
-				Required:  false,
+				InputKey: "region",
+				GoField: "Region",
+				EntField: "region",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "securityTierID",
-				GoField:   "SecurityTierID",
-				EntField:  "security_tier_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "securityTierID",
+				GoField: "SecurityTierID",
+				EntField: "security_tier_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "securityTierName",
-				GoField:   "SecurityTierName",
-				EntField:  "security_tier_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "securityTierName",
+				GoField: "SecurityTierName",
+				EntField: "security_tier_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "sourceIdentifier",
-				GoField:   "SourceIdentifier",
-				EntField:  "source_identifier",
-				Type:      "string",
-				Required:  false,
+				InputKey: "sourceIdentifier",
+				GoField: "SourceIdentifier",
+				EntField: "source_identifier",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "sourceType",
-				GoField:   "SourceType",
-				EntField:  "source_type",
-				Type:      "string",
-				Required:  true,
+				InputKey: "sourceType",
+				GoField: "SourceType",
+				EntField: "source_type",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "systemInternalID",
-				GoField:   "SystemInternalID",
-				EntField:  "system_internal_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "systemInternalID",
+				GoField: "SystemInternalID",
+				EntField: "system_internal_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "website",
-				GoField:   "Website",
-				EntField:  "website",
-				Type:      "string",
-				Required:  false,
+				InputKey: "website",
+				GoField: "Website",
+				EntField: "website",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"accessModelID":               {},
-			"accessModelName":             {},
-			"assetDataClassificationID":   {},
+			"accessModelID": {},
+			"accessModelName": {},
+			"assetDataClassificationID": {},
 			"assetDataClassificationName": {},
-			"assetSubtypeID":              {},
-			"assetSubtypeName":            {},
-			"assetType":                   {},
-			"categories":                  {},
-			"containsPii":                 {},
-			"costCenter":                  {},
-			"criticalityID":               {},
-			"criticalityName":             {},
-			"description":                 {},
-			"displayName":                 {},
-			"encryptionStatusID":          {},
-			"encryptionStatusName":        {},
-			"environmentID":               {},
-			"environmentName":             {},
-			"estimatedMonthlyCost":        {},
-			"identifier":                  {},
-			"integrationID":               {},
-			"internalNotes":               {},
-			"internalOwner":               {},
-			"internalOwnerGroupID":        {},
-			"internalOwnerUserID":         {},
-			"name":                        {},
-			"observedAt":                  {},
-			"ownerID":                     {},
-			"physicalLocation":            {},
-			"purchaseDate":                {},
-			"region":                      {},
-			"scopeID":                     {},
-			"scopeName":                   {},
-			"securityTierID":              {},
-			"securityTierName":            {},
-			"sourceIdentifier":            {},
-			"sourceType":                  {},
-			"systemInternalID":            {},
-			"tags":                        {},
-			"website":                     {},
+			"assetSubtypeID": {},
+			"assetSubtypeName": {},
+			"assetType": {},
+			"categories": {},
+			"containsPii": {},
+			"costCenter": {},
+			"criticalityID": {},
+			"criticalityName": {},
+			"description": {},
+			"displayName": {},
+			"encryptionStatusID": {},
+			"encryptionStatusName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"estimatedMonthlyCost": {},
+			"identifier": {},
+			"integrationID": {},
+			"internalNotes": {},
+			"internalOwner": {},
+			"internalOwnerGroupID": {},
+			"internalOwnerUserID": {},
+			"name": {},
+			"observedAt": {},
+			"ownerID": {},
+			"physicalLocation": {},
+			"purchaseDate": {},
+			"region": {},
+			"scopeID": {},
+			"scopeName": {},
+			"securityTierID": {},
+			"securityTierName": {},
+			"sourceIdentifier": {},
+			"sourceType": {},
+			"systemInternalID": {},
+			"tags": {},
+			"website": {},
 		},
 		RequiredKeys: []string{
 			"assetType",
@@ -928,117 +936,117 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Contact",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "address",
-				GoField:   "Address",
-				EntField:  "address",
-				Type:      "string",
-				Required:  false,
+				InputKey: "address",
+				GoField: "Address",
+				EntField: "address",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "company",
-				GoField:   "Company",
-				EntField:  "company",
-				Type:      "string",
-				Required:  false,
+				InputKey: "company",
+				GoField: "Company",
+				EntField: "company",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "email",
-				GoField:   "Email",
-				EntField:  "email",
-				Type:      "string",
-				Required:  false,
+				InputKey: "email",
+				GoField: "Email",
+				EntField: "email",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "fullName",
-				GoField:   "FullName",
-				EntField:  "full_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "fullName",
+				GoField: "FullName",
+				EntField: "full_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "phoneNumber",
-				GoField:   "PhoneNumber",
-				EntField:  "phone_number",
-				Type:      "string",
-				Required:  false,
+				InputKey: "phoneNumber",
+				GoField: "PhoneNumber",
+				EntField: "phone_number",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  true,
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "title",
-				GoField:   "Title",
-				EntField:  "title",
-				Type:      "string",
-				Required:  false,
+				InputKey: "title",
+				GoField: "Title",
+				EntField: "title",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"address":       {},
-			"company":       {},
-			"email":         {},
-			"externalID":    {},
-			"fullName":      {},
+			"address": {},
+			"company": {},
+			"email": {},
+			"externalID": {},
+			"fullName": {},
 			"integrationID": {},
-			"observedAt":    {},
-			"phoneNumber":   {},
-			"status":        {},
-			"tags":          {},
-			"title":         {},
+			"observedAt": {},
+			"phoneNumber": {},
+			"status": {},
+			"tags": {},
+			"title": {},
 		},
 		RequiredKeys: []string{
 			"status",
@@ -1053,377 +1061,377 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "DirectoryAccount",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "accountType",
-				GoField:   "AccountType",
-				EntField:  "account_type",
-				Type:      "string",
-				Required:  false,
+				InputKey: "accountType",
+				GoField: "AccountType",
+				EntField: "account_type",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "addedAt",
-				GoField:   "AddedAt",
-				EntField:  "added_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "addedAt",
+				GoField: "AddedAt",
+				EntField: "added_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "avatarRemoteURL",
-				GoField:   "AvatarRemoteURL",
-				EntField:  "avatar_remote_url",
-				Type:      "string",
-				Required:  false,
+				InputKey: "avatarRemoteURL",
+				GoField: "AvatarRemoteURL",
+				EntField: "avatar_remote_url",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "avatarUpdatedAt",
-				GoField:   "AvatarUpdatedAt",
-				EntField:  "avatar_updated_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "avatarUpdatedAt",
+				GoField: "AvatarUpdatedAt",
+				EntField: "avatar_updated_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "canonicalEmail",
-				GoField:   "CanonicalEmail",
-				EntField:  "canonical_email",
-				Type:      "string",
-				Required:  false,
+				InputKey: "canonicalEmail",
+				GoField: "CanonicalEmail",
+				EntField: "canonical_email",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "department",
-				GoField:   "Department",
-				EntField:  "department",
-				Type:      "string",
-				Required:  false,
+				InputKey: "department",
+				GoField: "Department",
+				EntField: "department",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directoryInstanceID",
-				GoField:   "DirectoryInstanceID",
-				EntField:  "directory_instance_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "directoryInstanceID",
+				GoField: "DirectoryInstanceID",
+				EntField: "directory_instance_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directoryName",
-				GoField:   "DirectoryName",
-				EntField:  "directory_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "directoryName",
+				GoField: "DirectoryName",
+				EntField: "directory_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directorySyncRunID",
-				GoField:   "DirectorySyncRunID",
-				EntField:  "directory_sync_run_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "directorySyncRunID",
+				GoField: "DirectorySyncRunID",
+				EntField: "directory_sync_run_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "familyName",
-				GoField:   "FamilyName",
-				EntField:  "family_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "familyName",
+				GoField: "FamilyName",
+				EntField: "family_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "firstSeenAt",
-				GoField:   "FirstSeenAt",
-				EntField:  "first_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "firstSeenAt",
+				GoField: "FirstSeenAt",
+				EntField: "first_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "givenName",
-				GoField:   "GivenName",
-				EntField:  "given_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "givenName",
+				GoField: "GivenName",
+				EntField: "given_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "identityHolderID",
-				GoField:   "IdentityHolderID",
-				EntField:  "identity_holder_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "identityHolderID",
+				GoField: "IdentityHolderID",
+				EntField: "identity_holder_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "jobTitle",
-				GoField:   "JobTitle",
-				EntField:  "job_title",
-				Type:      "string",
-				Required:  false,
+				InputKey: "jobTitle",
+				GoField: "JobTitle",
+				EntField: "job_title",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastLoginAt",
-				GoField:   "LastLoginAt",
-				EntField:  "last_login_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "lastLoginAt",
+				GoField: "LastLoginAt",
+				EntField: "last_login_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastSeenAt",
-				GoField:   "LastSeenAt",
-				EntField:  "last_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "lastSeenAt",
+				GoField: "LastSeenAt",
+				EntField: "last_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastSeenIP",
-				GoField:   "LastSeenIP",
-				EntField:  "last_seen_ip",
-				Type:      "string",
-				Required:  false,
+				InputKey: "lastSeenIP",
+				GoField: "LastSeenIP",
+				EntField: "last_seen_ip",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "metadata",
-				GoField:   "Metadata",
-				EntField:  "metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "metadata",
+				GoField: "Metadata",
+				EntField: "metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "mfaState",
-				GoField:   "MfaState",
-				EntField:  "mfa_state",
-				Type:      "string",
-				Required:  true,
+				InputKey: "mfaState",
+				GoField: "MfaState",
+				EntField: "mfa_state",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  true,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "organizationUnit",
-				GoField:   "OrganizationUnit",
-				EntField:  "organization_unit",
-				Type:      "string",
-				Required:  false,
+				InputKey: "organizationUnit",
+				GoField: "OrganizationUnit",
+				EntField: "organization_unit",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "platformID",
-				GoField:   "PlatformID",
-				EntField:  "platform_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "platformID",
+				GoField: "PlatformID",
+				EntField: "platform_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "primarySource",
-				GoField:   "PrimarySource",
-				EntField:  "primary_source",
-				Type:      "bool",
-				Required:  true,
+				InputKey: "primarySource",
+				GoField: "PrimarySource",
+				EntField: "primary_source",
+				Type: "bool",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "profile",
-				GoField:   "Profile",
-				EntField:  "profile",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "profile",
+				GoField: "Profile",
+				EntField: "profile",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "profileHash",
-				GoField:   "ProfileHash",
-				EntField:  "profile_hash",
-				Type:      "string",
-				Required:  true,
+				InputKey: "profileHash",
+				GoField: "ProfileHash",
+				EntField: "profile_hash",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "removedAt",
-				GoField:   "RemovedAt",
-				EntField:  "removed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "removedAt",
+				GoField: "RemovedAt",
+				EntField: "removed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "secondaryKey",
-				GoField:   "SecondaryKey",
-				EntField:  "secondary_key",
-				Type:      "string",
-				Required:  false,
+				InputKey: "secondaryKey",
+				GoField: "SecondaryKey",
+				EntField: "secondary_key",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "sourceVersion",
-				GoField:   "SourceVersion",
-				EntField:  "source_version",
-				Type:      "string",
-				Required:  false,
+				InputKey: "sourceVersion",
+				GoField: "SourceVersion",
+				EntField: "source_version",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  true,
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"accountType":         {},
-			"addedAt":             {},
-			"avatarRemoteURL":     {},
-			"avatarUpdatedAt":     {},
-			"canonicalEmail":      {},
-			"department":          {},
+			"accountType": {},
+			"addedAt": {},
+			"avatarRemoteURL": {},
+			"avatarUpdatedAt": {},
+			"canonicalEmail": {},
+			"department": {},
 			"directoryInstanceID": {},
-			"directoryName":       {},
-			"directorySyncRunID":  {},
-			"displayName":         {},
-			"environmentID":       {},
-			"environmentName":     {},
-			"externalID":          {},
-			"familyName":          {},
-			"firstSeenAt":         {},
-			"givenName":           {},
-			"identityHolderID":    {},
-			"integrationID":       {},
-			"jobTitle":            {},
-			"lastLoginAt":         {},
-			"lastSeenAt":          {},
-			"lastSeenIP":          {},
-			"metadata":            {},
-			"mfaState":            {},
-			"observedAt":          {},
-			"organizationUnit":    {},
-			"platformID":          {},
-			"primarySource":       {},
-			"profile":             {},
-			"profileHash":         {},
-			"removedAt":           {},
-			"scopeID":             {},
-			"scopeName":           {},
-			"secondaryKey":        {},
-			"sourceVersion":       {},
-			"status":              {},
-			"tags":                {},
+			"directoryName": {},
+			"directorySyncRunID": {},
+			"displayName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
+			"familyName": {},
+			"firstSeenAt": {},
+			"givenName": {},
+			"identityHolderID": {},
+			"integrationID": {},
+			"jobTitle": {},
+			"lastLoginAt": {},
+			"lastSeenAt": {},
+			"lastSeenIP": {},
+			"metadata": {},
+			"mfaState": {},
+			"observedAt": {},
+			"organizationUnit": {},
+			"platformID": {},
+			"primarySource": {},
+			"profile": {},
+			"profileHash": {},
+			"removedAt": {},
+			"scopeID": {},
+			"scopeName": {},
+			"secondaryKey": {},
+			"sourceVersion": {},
+			"status": {},
+			"tags": {},
 		},
 		RequiredKeys: []string{
 			"externalID",
@@ -1445,257 +1453,257 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "DirectoryGroup",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "addedAt",
-				GoField:   "AddedAt",
-				EntField:  "added_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "addedAt",
+				GoField: "AddedAt",
+				EntField: "added_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "classification",
-				GoField:   "Classification",
-				EntField:  "classification",
-				Type:      "string",
-				Required:  true,
+				InputKey: "classification",
+				GoField: "Classification",
+				EntField: "classification",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directoryInstanceID",
-				GoField:   "DirectoryInstanceID",
-				EntField:  "directory_instance_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "directoryInstanceID",
+				GoField: "DirectoryInstanceID",
+				EntField: "directory_instance_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directorySyncRunID",
-				GoField:   "DirectorySyncRunID",
-				EntField:  "directory_sync_run_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "directorySyncRunID",
+				GoField: "DirectorySyncRunID",
+				EntField: "directory_sync_run_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "email",
-				GoField:   "Email",
-				EntField:  "email",
-				Type:      "string",
-				Required:  false,
+				InputKey: "email",
+				GoField: "Email",
+				EntField: "email",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "externalSharingAllowed",
-				GoField:   "ExternalSharingAllowed",
-				EntField:  "external_sharing_allowed",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "externalSharingAllowed",
+				GoField: "ExternalSharingAllowed",
+				EntField: "external_sharing_allowed",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "firstSeenAt",
-				GoField:   "FirstSeenAt",
-				EntField:  "first_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "firstSeenAt",
+				GoField: "FirstSeenAt",
+				EntField: "first_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastSeenAt",
-				GoField:   "LastSeenAt",
-				EntField:  "last_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "lastSeenAt",
+				GoField: "LastSeenAt",
+				EntField: "last_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "memberCount",
-				GoField:   "MemberCount",
-				EntField:  "member_count",
-				Type:      "int",
-				Required:  false,
+				InputKey: "memberCount",
+				GoField: "MemberCount",
+				EntField: "member_count",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "metadata",
-				GoField:   "Metadata",
-				EntField:  "metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "metadata",
+				GoField: "Metadata",
+				EntField: "metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  true,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "platformID",
-				GoField:   "PlatformID",
-				EntField:  "platform_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "platformID",
+				GoField: "PlatformID",
+				EntField: "platform_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "profile",
-				GoField:   "Profile",
-				EntField:  "profile",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "profile",
+				GoField: "Profile",
+				EntField: "profile",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "profileHash",
-				GoField:   "ProfileHash",
-				EntField:  "profile_hash",
-				Type:      "string",
-				Required:  true,
+				InputKey: "profileHash",
+				GoField: "ProfileHash",
+				EntField: "profile_hash",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "removedAt",
-				GoField:   "RemovedAt",
-				EntField:  "removed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "removedAt",
+				GoField: "RemovedAt",
+				EntField: "removed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "sourceVersion",
-				GoField:   "SourceVersion",
-				EntField:  "source_version",
-				Type:      "string",
-				Required:  false,
+				InputKey: "sourceVersion",
+				GoField: "SourceVersion",
+				EntField: "source_version",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  true,
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"addedAt":                {},
-			"classification":         {},
-			"directoryInstanceID":    {},
-			"directorySyncRunID":     {},
-			"displayName":            {},
-			"email":                  {},
-			"environmentID":          {},
-			"environmentName":        {},
-			"externalID":             {},
+			"addedAt": {},
+			"classification": {},
+			"directoryInstanceID": {},
+			"directorySyncRunID": {},
+			"displayName": {},
+			"email": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
 			"externalSharingAllowed": {},
-			"firstSeenAt":            {},
-			"integrationID":          {},
-			"lastSeenAt":             {},
-			"memberCount":            {},
-			"metadata":               {},
-			"observedAt":             {},
-			"platformID":             {},
-			"profile":                {},
-			"profileHash":            {},
-			"removedAt":              {},
-			"scopeID":                {},
-			"scopeName":              {},
-			"sourceVersion":          {},
-			"status":                 {},
-			"tags":                   {},
+			"firstSeenAt": {},
+			"integrationID": {},
+			"lastSeenAt": {},
+			"memberCount": {},
+			"metadata": {},
+			"observedAt": {},
+			"platformID": {},
+			"profile": {},
+			"profileHash": {},
+			"removedAt": {},
+			"scopeID": {},
+			"scopeName": {},
+			"sourceVersion": {},
+			"status": {},
+			"tags": {},
 		},
 		RequiredKeys: []string{
 			"classification",
@@ -1716,197 +1724,197 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "DirectoryMembership",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "addedAt",
-				GoField:   "AddedAt",
-				EntField:  "added_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "addedAt",
+				GoField: "AddedAt",
+				EntField: "added_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directoryAccountID",
-				GoField:   "DirectoryAccountID",
-				EntField:  "directory_account_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "directoryAccountID",
+				GoField: "DirectoryAccountID",
+				EntField: "directory_account_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "directoryGroupID",
-				GoField:   "DirectoryGroupID",
-				EntField:  "directory_group_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "directoryGroupID",
+				GoField: "DirectoryGroupID",
+				EntField: "directory_group_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "directoryInstanceID",
-				GoField:   "DirectoryInstanceID",
-				EntField:  "directory_instance_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "directoryInstanceID",
+				GoField: "DirectoryInstanceID",
+				EntField: "directory_instance_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "directorySyncRunID",
-				GoField:   "DirectorySyncRunID",
-				EntField:  "directory_sync_run_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "directorySyncRunID",
+				GoField: "DirectorySyncRunID",
+				EntField: "directory_sync_run_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "firstSeenAt",
-				GoField:   "FirstSeenAt",
-				EntField:  "first_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "firstSeenAt",
+				GoField: "FirstSeenAt",
+				EntField: "first_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastConfirmedRunID",
-				GoField:   "LastConfirmedRunID",
-				EntField:  "last_confirmed_run_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "lastConfirmedRunID",
+				GoField: "LastConfirmedRunID",
+				EntField: "last_confirmed_run_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastSeenAt",
-				GoField:   "LastSeenAt",
-				EntField:  "last_seen_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "lastSeenAt",
+				GoField: "LastSeenAt",
+				EntField: "last_seen_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "metadata",
-				GoField:   "Metadata",
-				EntField:  "metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "metadata",
+				GoField: "Metadata",
+				EntField: "metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  true,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: true,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "platformID",
-				GoField:   "PlatformID",
-				EntField:  "platform_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "platformID",
+				GoField: "PlatformID",
+				EntField: "platform_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "removedAt",
-				GoField:   "RemovedAt",
-				EntField:  "removed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "removedAt",
+				GoField: "RemovedAt",
+				EntField: "removed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "role",
-				GoField:   "Role",
-				EntField:  "role",
-				Type:      "string",
-				Required:  false,
+				InputKey: "role",
+				GoField: "Role",
+				EntField: "role",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "source",
-				GoField:   "Source",
-				EntField:  "source",
-				Type:      "string",
-				Required:  false,
+				InputKey: "source",
+				GoField: "Source",
+				EntField: "source",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"addedAt":             {},
-			"directoryAccountID":  {},
-			"directoryGroupID":    {},
+			"addedAt": {},
+			"directoryAccountID": {},
+			"directoryGroupID": {},
 			"directoryInstanceID": {},
-			"directorySyncRunID":  {},
-			"environmentID":       {},
-			"environmentName":     {},
-			"firstSeenAt":         {},
-			"integrationID":       {},
-			"lastConfirmedRunID":  {},
-			"lastSeenAt":          {},
-			"metadata":            {},
-			"observedAt":          {},
-			"platformID":          {},
-			"removedAt":           {},
-			"role":                {},
-			"scopeID":             {},
-			"scopeName":           {},
-			"source":              {},
+			"directorySyncRunID": {},
+			"environmentID": {},
+			"environmentName": {},
+			"firstSeenAt": {},
+			"integrationID": {},
+			"lastConfirmedRunID": {},
+			"lastSeenAt": {},
+			"metadata": {},
+			"observedAt": {},
+			"platformID": {},
+			"removedAt": {},
+			"role": {},
+			"scopeID": {},
+			"scopeName": {},
+			"source": {},
 		},
 		RequiredKeys: []string{
 			"directoryAccountID",
@@ -1927,519 +1935,520 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Entity",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "annualSpend",
-				GoField:   "AnnualSpend",
-				EntField:  "annual_spend",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "annualSpend",
+				GoField: "AnnualSpend",
+				EntField: "annual_spend",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "approvedForUse",
-				GoField:   "ApprovedForUse",
-				EntField:  "approved_for_use",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "approvedForUse",
+				GoField: "ApprovedForUse",
+				EntField: "approved_for_use",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "autoRenews",
-				GoField:   "AutoRenews",
-				EntField:  "auto_renews",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "autoRenews",
+				GoField: "AutoRenews",
+				EntField: "auto_renews",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "billingModel",
-				GoField:   "BillingModel",
-				EntField:  "billing_model",
-				Type:      "string",
-				Required:  false,
+				InputKey: "billingModel",
+				GoField: "BillingModel",
+				EntField: "billing_model",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "contractEndDate",
-				GoField:   "ContractEndDate",
-				EntField:  "contract_end_date",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "contractEndDate",
+				GoField: "ContractEndDate",
+				EntField: "contract_end_date",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "contractRenewalAt",
-				GoField:   "ContractRenewalAt",
-				EntField:  "contract_renewal_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "contractRenewalAt",
+				GoField: "ContractRenewalAt",
+				EntField: "contract_renewal_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "contractStartDate",
-				GoField:   "ContractStartDate",
-				EntField:  "contract_start_date",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "contractStartDate",
+				GoField: "ContractStartDate",
+				EntField: "contract_start_date",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "domains",
-				GoField:   "Domains",
-				EntField:  "domains",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "domains",
+				GoField: "Domains",
+				EntField: "domains",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entityRelationshipStateID",
-				GoField:   "EntityRelationshipStateID",
-				EntField:  "entity_relationship_state_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entityRelationshipStateID",
+				GoField: "EntityRelationshipStateID",
+				EntField: "entity_relationship_state_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entityRelationshipStateName",
-				GoField:   "EntityRelationshipStateName",
-				EntField:  "entity_relationship_state_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entityRelationshipStateName",
+				GoField: "EntityRelationshipStateName",
+				EntField: "entity_relationship_state_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entitySecurityQuestionnaireStatusID",
-				GoField:   "EntitySecurityQuestionnaireStatusID",
-				EntField:  "entity_security_questionnaire_status_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entitySecurityQuestionnaireStatusID",
+				GoField: "EntitySecurityQuestionnaireStatusID",
+				EntField: "entity_security_questionnaire_status_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entitySecurityQuestionnaireStatusName",
-				GoField:   "EntitySecurityQuestionnaireStatusName",
-				EntField:  "entity_security_questionnaire_status_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entitySecurityQuestionnaireStatusName",
+				GoField: "EntitySecurityQuestionnaireStatusName",
+				EntField: "entity_security_questionnaire_status_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entitySourceTypeID",
-				GoField:   "EntitySourceTypeID",
-				EntField:  "entity_source_type_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entitySourceTypeID",
+				GoField: "EntitySourceTypeID",
+				EntField: "entity_source_type_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "entitySourceTypeName",
-				GoField:   "EntitySourceTypeName",
-				EntField:  "entity_source_type_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "entitySourceTypeName",
+				GoField: "EntitySourceTypeName",
+				EntField: "entity_source_type_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "hasSoc2",
-				GoField:   "HasSoc2",
-				EntField:  "has_soc2",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "hasSoc2",
+				GoField: "HasSoc2",
+				EntField: "has_soc2",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalNotes",
-				GoField:   "InternalNotes",
-				EntField:  "internal_notes",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalNotes",
+				GoField: "InternalNotes",
+				EntField: "internal_notes",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwner",
-				GoField:   "InternalOwner",
-				EntField:  "internal_owner",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwner",
+				GoField: "InternalOwner",
+				EntField: "internal_owner",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwnerGroupID",
-				GoField:   "InternalOwnerGroupID",
-				EntField:  "internal_owner_group_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwnerGroupID",
+				GoField: "InternalOwnerGroupID",
+				EntField: "internal_owner_group_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalOwnerUserID",
-				GoField:   "InternalOwnerUserID",
-				EntField:  "internal_owner_user_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalOwnerUserID",
+				GoField: "InternalOwnerUserID",
+				EntField: "internal_owner_user_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "lastReviewedAt",
-				GoField:   "LastReviewedAt",
-				EntField:  "last_reviewed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "lastReviewedAt",
+				GoField: "LastReviewedAt",
+				EntField: "last_reviewed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "links",
-				GoField:   "Links",
-				EntField:  "links",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "links",
+				GoField: "Links",
+				EntField: "links",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "mfaEnforced",
-				GoField:   "MfaEnforced",
-				EntField:  "mfa_enforced",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "mfaEnforced",
+				GoField: "MfaEnforced",
+				EntField: "mfa_enforced",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "mfaSupported",
-				GoField:   "MfaSupported",
-				EntField:  "mfa_supported",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "mfaSupported",
+				GoField: "MfaSupported",
+				EntField: "mfa_supported",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "name",
-				GoField:   "Name",
-				EntField:  "name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "name",
+				GoField: "Name",
+				EntField: "name",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "nextReviewAt",
-				GoField:   "NextReviewAt",
-				EntField:  "next_review_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "nextReviewAt",
+				GoField: "NextReviewAt",
+				EntField: "next_review_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ownerID",
-				GoField:   "OwnerID",
-				EntField:  "owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "ownerID",
+				GoField: "OwnerID",
+				EntField: "owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "providedServices",
-				GoField:   "ProvidedServices",
-				EntField:  "provided_services",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "providedServices",
+				GoField: "ProvidedServices",
+				EntField: "provided_services",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "renewalRisk",
-				GoField:   "RenewalRisk",
-				EntField:  "renewal_risk",
-				Type:      "string",
-				Required:  false,
+				InputKey: "renewalRisk",
+				GoField: "RenewalRisk",
+				EntField: "renewal_risk",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "reviewFrequency",
-				GoField:   "ReviewFrequency",
-				EntField:  "review_frequency",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewFrequency",
+				GoField: "ReviewFrequency",
+				EntField: "review_frequency",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "reviewedBy",
-				GoField:   "ReviewedBy",
-				EntField:  "reviewed_by",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewedBy",
+				GoField: "ReviewedBy",
+				EntField: "reviewed_by",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "reviewedByGroupID",
-				GoField:   "ReviewedByGroupID",
-				EntField:  "reviewed_by_group_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewedByGroupID",
+				GoField: "ReviewedByGroupID",
+				EntField: "reviewed_by_group_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "reviewedByUserID",
-				GoField:   "ReviewedByUserID",
-				EntField:  "reviewed_by_user_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewedByUserID",
+				GoField: "ReviewedByUserID",
+				EntField: "reviewed_by_user_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskRating",
-				GoField:   "RiskRating",
-				EntField:  "risk_rating",
-				Type:      "string",
-				Required:  false,
+				InputKey: "riskRating",
+				GoField: "RiskRating",
+				EntField: "risk_rating",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskScore",
-				GoField:   "RiskScore",
-				EntField:  "risk_score",
-				Type:      "int",
-				Required:  false,
+				InputKey: "riskScore",
+				GoField: "RiskScore",
+				EntField: "risk_score",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "soc2PeriodEnd",
-				GoField:   "Soc2PeriodEnd",
-				EntField:  "soc2_period_end",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "soc2PeriodEnd",
+				GoField: "Soc2PeriodEnd",
+				EntField: "soc2_period_end",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "spendCurrency",
-				GoField:   "SpendCurrency",
-				EntField:  "spend_currency",
-				Type:      "string",
-				Required:  false,
+				InputKey: "spendCurrency",
+				GoField: "SpendCurrency",
+				EntField: "spend_currency",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ssoEnforced",
-				GoField:   "SsoEnforced",
-				EntField:  "sso_enforced",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "ssoEnforced",
+				GoField: "SsoEnforced",
+				EntField: "sso_enforced",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  false,
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "statusPageURL",
-				GoField:   "StatusPageURL",
-				EntField:  "status_page_url",
-				Type:      "string",
-				Required:  false,
+				InputKey: "statusPageURL",
+				GoField: "StatusPageURL",
+				EntField: "status_page_url",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "systemInternalID",
-				GoField:   "SystemInternalID",
-				EntField:  "system_internal_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "systemInternalID",
+				GoField: "SystemInternalID",
+				EntField: "system_internal_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "terminationNoticeDays",
-				GoField:   "TerminationNoticeDays",
-				EntField:  "termination_notice_days",
-				Type:      "int",
-				Required:  false,
+				InputKey: "terminationNoticeDays",
+				GoField: "TerminationNoticeDays",
+				EntField: "termination_notice_days",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tier",
-				GoField:   "Tier",
-				EntField:  "tier",
-				Type:      "string",
-				Required:  false,
+				InputKey: "tier",
+				GoField: "Tier",
+				EntField: "tier",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vendorMetadata",
-				GoField:   "VendorMetadata",
-				EntField:  "vendor_metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "vendorMetadata",
+				GoField: "VendorMetadata",
+				EntField: "vendor_metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"annualSpend":                           {},
-			"approvedForUse":                        {},
-			"autoRenews":                            {},
-			"billingModel":                          {},
-			"contractEndDate":                       {},
-			"contractRenewalAt":                     {},
-			"contractStartDate":                     {},
-			"displayName":                           {},
-			"domains":                               {},
-			"entityRelationshipStateID":             {},
-			"entityRelationshipStateName":           {},
-			"entitySecurityQuestionnaireStatusID":   {},
+			"annualSpend": {},
+			"approvedForUse": {},
+			"autoRenews": {},
+			"billingModel": {},
+			"contractEndDate": {},
+			"contractRenewalAt": {},
+			"contractStartDate": {},
+			"displayName": {},
+			"domains": {},
+			"entityRelationshipStateID": {},
+			"entityRelationshipStateName": {},
+			"entitySecurityQuestionnaireStatusID": {},
 			"entitySecurityQuestionnaireStatusName": {},
-			"entitySourceTypeID":                    {},
-			"entitySourceTypeName":                  {},
-			"environmentID":                         {},
-			"environmentName":                       {},
-			"externalID":                            {},
-			"hasSoc2":                               {},
-			"internalNotes":                         {},
-			"internalOwner":                         {},
-			"internalOwnerGroupID":                  {},
-			"internalOwnerUserID":                   {},
-			"lastReviewedAt":                        {},
-			"links":                                 {},
-			"mfaEnforced":                           {},
-			"mfaSupported":                          {},
-			"name":                                  {},
-			"nextReviewAt":                          {},
-			"observedAt":                            {},
-			"ownerID":                               {},
-			"providedServices":                      {},
-			"renewalRisk":                           {},
-			"reviewFrequency":                       {},
-			"reviewedBy":                            {},
-			"reviewedByGroupID":                     {},
-			"reviewedByUserID":                      {},
-			"riskRating":                            {},
-			"riskScore":                             {},
-			"scopeID":                               {},
-			"scopeName":                             {},
-			"soc2PeriodEnd":                         {},
-			"spendCurrency":                         {},
-			"ssoEnforced":                           {},
-			"status":                                {},
-			"statusPageURL":                         {},
-			"systemInternalID":                      {},
-			"tags":                                  {},
-			"terminationNoticeDays":                 {},
-			"tier":                                  {},
-			"vendorMetadata":                        {},
+			"entitySourceTypeID": {},
+			"entitySourceTypeName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
+			"hasSoc2": {},
+			"internalNotes": {},
+			"internalOwner": {},
+			"internalOwnerGroupID": {},
+			"internalOwnerUserID": {},
+			"lastReviewedAt": {},
+			"links": {},
+			"mfaEnforced": {},
+			"mfaSupported": {},
+			"name": {},
+			"nextReviewAt": {},
+			"observedAt": {},
+			"ownerID": {},
+			"providedServices": {},
+			"renewalRisk": {},
+			"reviewFrequency": {},
+			"reviewedBy": {},
+			"reviewedByGroupID": {},
+			"reviewedByUserID": {},
+			"riskRating": {},
+			"riskScore": {},
+			"scopeID": {},
+			"scopeName": {},
+			"soc2PeriodEnd": {},
+			"spendCurrency": {},
+			"ssoEnforced": {},
+			"status": {},
+			"statusPageURL": {},
+			"systemInternalID": {},
+			"tags": {},
+			"terminationNoticeDays": {},
+			"tier": {},
+			"vendorMetadata": {},
 		},
-		RequiredKeys: []string{},
+		RequiredKeys: []string{
+		},
 		UpsertKeys: []string{
 			"externalID",
 			"name",
@@ -2450,469 +2459,470 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Finding",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "assessmentID",
-				GoField:   "AssessmentID",
-				EntField:  "assessment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "assessmentID",
+				GoField: "AssessmentID",
+				EntField: "assessment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "blocksProduction",
-				GoField:   "BlocksProduction",
-				EntField:  "blocks_production",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "blocksProduction",
+				GoField: "BlocksProduction",
+				EntField: "blocks_production",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "categories",
-				GoField:   "Categories",
-				EntField:  "categories",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "categories",
+				GoField: "Categories",
+				EntField: "categories",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "category",
-				GoField:   "Category",
-				EntField:  "category",
-				Type:      "string",
-				Required:  false,
+				InputKey: "category",
+				GoField: "Category",
+				EntField: "category",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "description",
-				GoField:   "Description",
-				EntField:  "description",
-				Type:      "string",
-				Required:  false,
+				InputKey: "description",
+				GoField: "Description",
+				EntField: "description",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "eventTime",
-				GoField:   "EventTime",
-				EntField:  "event_time",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "eventTime",
+				GoField: "EventTime",
+				EntField: "event_time",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "exploitability",
-				GoField:   "Exploitability",
-				EntField:  "exploitability",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "exploitability",
+				GoField: "Exploitability",
+				EntField: "exploitability",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "externalOwnerID",
-				GoField:   "ExternalOwnerID",
-				EntField:  "external_owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalOwnerID",
+				GoField: "ExternalOwnerID",
+				EntField: "external_owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalURI",
-				GoField:   "ExternalURI",
-				EntField:  "external_uri",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalURI",
+				GoField: "ExternalURI",
+				EntField: "external_uri",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "findingClass",
-				GoField:   "FindingClass",
-				EntField:  "finding_class",
-				Type:      "string",
-				Required:  false,
+				InputKey: "findingClass",
+				GoField: "FindingClass",
+				EntField: "finding_class",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "findingStatusID",
-				GoField:   "FindingStatusID",
-				EntField:  "finding_status_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "findingStatusID",
+				GoField: "FindingStatusID",
+				EntField: "finding_status_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "findingStatusName",
-				GoField:   "FindingStatusName",
-				EntField:  "finding_status_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "findingStatusName",
+				GoField: "FindingStatusName",
+				EntField: "finding_status_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "impact",
-				GoField:   "Impact",
-				EntField:  "impact",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "impact",
+				GoField: "Impact",
+				EntField: "impact",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalNotes",
-				GoField:   "InternalNotes",
-				EntField:  "internal_notes",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalNotes",
+				GoField: "InternalNotes",
+				EntField: "internal_notes",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "metadata",
-				GoField:   "Metadata",
-				EntField:  "metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "metadata",
+				GoField: "Metadata",
+				EntField: "metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "numericSeverity",
-				GoField:   "NumericSeverity",
-				EntField:  "numeric_severity",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "numericSeverity",
+				GoField: "NumericSeverity",
+				EntField: "numeric_severity",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "open",
-				GoField:   "Open",
-				EntField:  "open",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "open",
+				GoField: "Open",
+				EntField: "open",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ownerID",
-				GoField:   "OwnerID",
-				EntField:  "owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "ownerID",
+				GoField: "OwnerID",
+				EntField: "owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "priority",
-				GoField:   "Priority",
-				EntField:  "priority",
-				Type:      "string",
-				Required:  false,
+				InputKey: "priority",
+				GoField: "Priority",
+				EntField: "priority",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "production",
-				GoField:   "Production",
-				EntField:  "production",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "production",
+				GoField: "Production",
+				EntField: "production",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "public",
-				GoField:   "Public",
-				EntField:  "public",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "public",
+				GoField: "Public",
+				EntField: "public",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "rawPayload",
-				GoField:   "RawPayload",
-				EntField:  "raw_payload",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "rawPayload",
+				GoField: "RawPayload",
+				EntField: "raw_payload",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "recommendation",
-				GoField:   "Recommendation",
-				EntField:  "recommendation",
-				Type:      "string",
-				Required:  false,
+				InputKey: "recommendation",
+				GoField: "Recommendation",
+				EntField: "recommendation",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "recommendedActions",
-				GoField:   "RecommendedActions",
-				EntField:  "recommended_actions",
-				Type:      "string",
-				Required:  false,
+				InputKey: "recommendedActions",
+				GoField: "RecommendedActions",
+				EntField: "recommended_actions",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "references",
-				GoField:   "References",
-				EntField:  "references",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "references",
+				GoField: "References",
+				EntField: "references",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "remediationSLA",
-				GoField:   "RemediationSLA",
-				EntField:  "remediation_sla",
-				Type:      "int",
-				Required:  false,
+				InputKey: "remediationSLA",
+				GoField: "RemediationSLA",
+				EntField: "remediation_sla",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "reportedAt",
-				GoField:   "ReportedAt",
-				EntField:  "reported_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "reportedAt",
+				GoField: "ReportedAt",
+				EntField: "reported_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "resourceName",
-				GoField:   "ResourceName",
-				EntField:  "resource_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "resourceName",
+				GoField: "ResourceName",
+				EntField: "resource_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "score",
-				GoField:   "Score",
-				EntField:  "score",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "score",
+				GoField: "Score",
+				EntField: "score",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "severity",
-				GoField:   "Severity",
-				EntField:  "severity",
-				Type:      "string",
-				Required:  false,
+				InputKey: "severity",
+				GoField: "Severity",
+				EntField: "severity",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "source",
-				GoField:   "Source",
-				EntField:  "source",
-				Type:      "string",
-				Required:  false,
+				InputKey: "source",
+				GoField: "Source",
+				EntField: "source",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "sourceUpdatedAt",
-				GoField:   "SourceUpdatedAt",
-				EntField:  "source_updated_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "sourceUpdatedAt",
+				GoField: "SourceUpdatedAt",
+				EntField: "source_updated_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "state",
-				GoField:   "State",
-				EntField:  "state",
-				Type:      "string",
-				Required:  false,
+				InputKey: "state",
+				GoField: "State",
+				EntField: "state",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "stepsToReproduce",
-				GoField:   "StepsToReproduce",
-				EntField:  "steps_to_reproduce",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "stepsToReproduce",
+				GoField: "StepsToReproduce",
+				EntField: "steps_to_reproduce",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "systemInternalID",
-				GoField:   "SystemInternalID",
-				EntField:  "system_internal_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "systemInternalID",
+				GoField: "SystemInternalID",
+				EntField: "system_internal_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "targetDetails",
-				GoField:   "TargetDetails",
-				EntField:  "target_details",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "targetDetails",
+				GoField: "TargetDetails",
+				EntField: "target_details",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "targets",
-				GoField:   "Targets",
-				EntField:  "targets",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "targets",
+				GoField: "Targets",
+				EntField: "targets",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "validated",
-				GoField:   "Validated",
-				EntField:  "validated",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "validated",
+				GoField: "Validated",
+				EntField: "validated",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vector",
-				GoField:   "Vector",
-				EntField:  "vector",
-				Type:      "string",
-				Required:  false,
+				InputKey: "vector",
+				GoField: "Vector",
+				EntField: "vector",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"assessmentID":       {},
-			"blocksProduction":   {},
-			"categories":         {},
-			"category":           {},
-			"description":        {},
-			"displayName":        {},
-			"environmentID":      {},
-			"environmentName":    {},
-			"eventTime":          {},
-			"exploitability":     {},
-			"externalID":         {},
-			"externalOwnerID":    {},
-			"externalURI":        {},
-			"findingClass":       {},
-			"findingStatusID":    {},
-			"findingStatusName":  {},
-			"impact":             {},
-			"internalNotes":      {},
-			"metadata":           {},
-			"numericSeverity":    {},
-			"open":               {},
-			"ownerID":            {},
-			"priority":           {},
-			"production":         {},
-			"public":             {},
-			"rawPayload":         {},
-			"recommendation":     {},
+			"assessmentID": {},
+			"blocksProduction": {},
+			"categories": {},
+			"category": {},
+			"description": {},
+			"displayName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"eventTime": {},
+			"exploitability": {},
+			"externalID": {},
+			"externalOwnerID": {},
+			"externalURI": {},
+			"findingClass": {},
+			"findingStatusID": {},
+			"findingStatusName": {},
+			"impact": {},
+			"internalNotes": {},
+			"metadata": {},
+			"numericSeverity": {},
+			"open": {},
+			"ownerID": {},
+			"priority": {},
+			"production": {},
+			"public": {},
+			"rawPayload": {},
+			"recommendation": {},
 			"recommendedActions": {},
-			"references":         {},
-			"remediationSLA":     {},
-			"reportedAt":         {},
-			"resourceName":       {},
-			"scopeID":            {},
-			"scopeName":          {},
-			"score":              {},
-			"severity":           {},
-			"source":             {},
-			"sourceUpdatedAt":    {},
-			"state":              {},
-			"stepsToReproduce":   {},
-			"systemInternalID":   {},
-			"tags":               {},
-			"targetDetails":      {},
-			"targets":            {},
-			"validated":          {},
-			"vector":             {},
+			"references": {},
+			"remediationSLA": {},
+			"reportedAt": {},
+			"resourceName": {},
+			"scopeID": {},
+			"scopeName": {},
+			"score": {},
+			"severity": {},
+			"source": {},
+			"sourceUpdatedAt": {},
+			"state": {},
+			"stepsToReproduce": {},
+			"systemInternalID": {},
+			"tags": {},
+			"targetDetails": {},
+			"targets": {},
+			"validated": {},
+			"vector": {},
 		},
-		RequiredKeys: []string{},
+		RequiredKeys: []string{
+		},
 		UpsertKeys: []string{
 			"externalID",
 		},
@@ -2922,257 +2932,327 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Risk",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "businessCosts",
-				GoField:   "BusinessCosts",
-				EntField:  "business_costs",
-				Type:      "string",
-				Required:  false,
+				InputKey: "businessCosts",
+				GoField: "BusinessCosts",
+				EntField: "business_costs",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "businessCostsJSON",
-				GoField:   "BusinessCostsJSON",
-				EntField:  "business_costs_json",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "businessCostsJSON",
+				GoField: "BusinessCostsJSON",
+				EntField: "business_costs_json",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "details",
-				GoField:   "Details",
-				EntField:  "details",
-				Type:      "string",
-				Required:  false,
+				InputKey: "details",
+				GoField: "Details",
+				EntField: "details",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "detailsJSON",
-				GoField:   "DetailsJSON",
-				EntField:  "details_json",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "detailsJSON",
+				GoField: "DetailsJSON",
+				EntField: "details_json",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "externalUUID",
-				GoField:   "ExternalUUID",
-				EntField:  "external_uuid",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalUUID",
+				GoField: "ExternalUUID",
+				EntField: "external_uuid",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "impact",
-				GoField:   "Impact",
-				EntField:  "impact",
-				Type:      "string",
-				Required:  false,
+				InputKey: "impact",
+				GoField: "Impact",
+				EntField: "impact",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "integrationID",
-				GoField:   "IntegrationID",
-				EntField:  "integration_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "integrationID",
+				GoField: "IntegrationID",
+				EntField: "integration_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "likelihood",
-				GoField:   "Likelihood",
-				EntField:  "likelihood",
-				Type:      "string",
-				Required:  false,
+				InputKey: "lastReviewedAt",
+				GoField: "LastReviewedAt",
+				EntField: "last_reviewed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "mitigation",
-				GoField:   "Mitigation",
-				EntField:  "mitigation",
-				Type:      "string",
-				Required:  false,
+				InputKey: "likelihood",
+				GoField: "Likelihood",
+				EntField: "likelihood",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "mitigationJSON",
-				GoField:   "MitigationJSON",
-				EntField:  "mitigation_json",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "mitigatedAt",
+				GoField: "MitigatedAt",
+				EntField: "mitigated_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "name",
-				GoField:   "Name",
-				EntField:  "name",
-				Type:      "string",
-				Required:  true,
+				InputKey: "mitigation",
+				GoField: "Mitigation",
+				EntField: "mitigation",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "mitigationJSON",
+				GoField: "MitigationJSON",
+				EntField: "mitigation_json",
+				Type: "json.RawMessage",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "name",
+				GoField: "Name",
+				EntField: "name",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "observedAt",
-				GoField:   "ObservedAt",
-				EntField:  "observed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "nextReviewDueAt",
+				GoField: "NextReviewDueAt",
+				EntField: "next_review_due_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ownerID",
-				GoField:   "OwnerID",
-				EntField:  "owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "observedAt",
+				GoField: "ObservedAt",
+				EntField: "observed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskCategoryID",
-				GoField:   "RiskCategoryID",
-				EntField:  "risk_category_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "ownerID",
+				GoField: "OwnerID",
+				EntField: "owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskCategoryName",
-				GoField:   "RiskCategoryName",
-				EntField:  "risk_category_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "residualScore",
+				GoField: "ResidualScore",
+				EntField: "residual_score",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskKindID",
-				GoField:   "RiskKindID",
-				EntField:  "risk_kind_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewFrequency",
+				GoField: "ReviewFrequency",
+				EntField: "review_frequency",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "riskKindName",
-				GoField:   "RiskKindName",
-				EntField:  "risk_kind_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "reviewRequired",
+				GoField: "ReviewRequired",
+				EntField: "review_required",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "riskCategoryID",
+				GoField: "RiskCategoryID",
+				EntField: "risk_category_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "riskCategoryName",
+				GoField: "RiskCategoryName",
+				EntField: "risk_category_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "score",
-				GoField:   "Score",
-				EntField:  "score",
-				Type:      "int",
-				Required:  false,
+				InputKey: "riskDecision",
+				GoField: "RiskDecision",
+				EntField: "risk_decision",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "status",
-				GoField:   "Status",
-				EntField:  "status",
-				Type:      "string",
-				Required:  false,
+				InputKey: "riskKindID",
+				GoField: "RiskKindID",
+				EntField: "risk_kind_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "riskKindName",
+				GoField: "RiskKindName",
+				EntField: "risk_kind_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "score",
+				GoField: "Score",
+				EntField: "score",
+				Type: "int",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "status",
+				GoField: "Status",
+				EntField: "status",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"businessCosts":     {},
+			"businessCosts": {},
 			"businessCostsJSON": {},
-			"details":           {},
-			"detailsJSON":       {},
-			"environmentID":     {},
-			"environmentName":   {},
-			"externalID":        {},
-			"externalUUID":      {},
-			"impact":            {},
-			"integrationID":     {},
-			"likelihood":        {},
-			"mitigation":        {},
-			"mitigationJSON":    {},
-			"name":              {},
-			"observedAt":        {},
-			"ownerID":           {},
-			"riskCategoryID":    {},
-			"riskCategoryName":  {},
-			"riskKindID":        {},
-			"riskKindName":      {},
-			"scopeID":           {},
-			"scopeName":         {},
-			"score":             {},
-			"status":            {},
-			"tags":              {},
+			"details": {},
+			"detailsJSON": {},
+			"environmentID": {},
+			"environmentName": {},
+			"externalID": {},
+			"externalUUID": {},
+			"impact": {},
+			"integrationID": {},
+			"lastReviewedAt": {},
+			"likelihood": {},
+			"mitigatedAt": {},
+			"mitigation": {},
+			"mitigationJSON": {},
+			"name": {},
+			"nextReviewDueAt": {},
+			"observedAt": {},
+			"ownerID": {},
+			"residualScore": {},
+			"reviewFrequency": {},
+			"reviewRequired": {},
+			"riskCategoryID": {},
+			"riskCategoryName": {},
+			"riskDecision": {},
+			"riskKindID": {},
+			"riskKindName": {},
+			"scopeID": {},
+			"scopeName": {},
+			"score": {},
+			"status": {},
+			"tags": {},
 		},
 		RequiredKeys: []string{
 			"name",
@@ -3187,507 +3267,507 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		Name: "Vulnerability",
 		Fields: []IntegrationMappingField{
 			{
-				InputKey:  "autoDismissedAt",
-				GoField:   "AutoDismissedAt",
-				EntField:  "auto_dismissed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "autoDismissedAt",
+				GoField: "AutoDismissedAt",
+				EntField: "auto_dismissed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "blocking",
-				GoField:   "Blocking",
-				EntField:  "blocking",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "blocking",
+				GoField: "Blocking",
+				EntField: "blocking",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "category",
-				GoField:   "Category",
-				EntField:  "category",
-				Type:      "string",
-				Required:  false,
+				InputKey: "category",
+				GoField: "Category",
+				EntField: "category",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "cveID",
-				GoField:   "CveID",
-				EntField:  "cve_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "cveID",
+				GoField: "CveID",
+				EntField: "cve_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: true,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "cweIds",
-				GoField:   "CweIds",
-				EntField:  "cwe_ids",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "cweIds",
+				GoField: "CweIds",
+				EntField: "cwe_ids",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "dependencyScope",
-				GoField:   "DependencyScope",
-				EntField:  "dependency_scope",
-				Type:      "string",
-				Required:  false,
+				InputKey: "dependencyScope",
+				GoField: "DependencyScope",
+				EntField: "dependency_scope",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "description",
-				GoField:   "Description",
-				EntField:  "description",
-				Type:      "string",
-				Required:  false,
+				InputKey: "description",
+				GoField: "Description",
+				EntField: "description",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "discoveredAt",
-				GoField:   "DiscoveredAt",
-				EntField:  "discovered_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "discoveredAt",
+				GoField: "DiscoveredAt",
+				EntField: "discovered_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "dismissedAt",
-				GoField:   "DismissedAt",
-				EntField:  "dismissed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "dismissedAt",
+				GoField: "DismissedAt",
+				EntField: "dismissed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "dismissedComment",
-				GoField:   "DismissedComment",
-				EntField:  "dismissed_comment",
-				Type:      "string",
-				Required:  false,
+				InputKey: "dismissedComment",
+				GoField: "DismissedComment",
+				EntField: "dismissed_comment",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "dismissedReason",
-				GoField:   "DismissedReason",
-				EntField:  "dismissed_reason",
-				Type:      "string",
-				Required:  false,
+				InputKey: "dismissedReason",
+				GoField: "DismissedReason",
+				EntField: "dismissed_reason",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "displayName",
-				GoField:   "DisplayName",
-				EntField:  "display_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "displayName",
+				GoField: "DisplayName",
+				EntField: "display_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentID",
-				GoField:   "EnvironmentID",
-				EntField:  "environment_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentID",
+				GoField: "EnvironmentID",
+				EntField: "environment_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "environmentName",
-				GoField:   "EnvironmentName",
-				EntField:  "environment_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "environmentName",
+				GoField: "EnvironmentName",
+				EntField: "environment_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "exploitability",
-				GoField:   "Exploitability",
-				EntField:  "exploitability",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "exploitability",
+				GoField: "Exploitability",
+				EntField: "exploitability",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalID",
-				GoField:   "ExternalID",
-				EntField:  "external_id",
-				Type:      "string",
-				Required:  true,
+				InputKey: "externalID",
+				GoField: "ExternalID",
+				EntField: "external_id",
+				Type: "string",
+				Required: true,
 				UpsertKey: true,
 				LookupKey: true,
 			},
 			{
-				InputKey:  "externalOwnerID",
-				GoField:   "ExternalOwnerID",
-				EntField:  "external_owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalOwnerID",
+				GoField: "ExternalOwnerID",
+				EntField: "external_owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "externalURI",
-				GoField:   "ExternalURI",
-				EntField:  "external_uri",
-				Type:      "string",
-				Required:  false,
+				InputKey: "externalURI",
+				GoField: "ExternalURI",
+				EntField: "external_uri",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "firstPatchedVersion",
-				GoField:   "FirstPatchedVersion",
-				EntField:  "first_patched_version",
-				Type:      "string",
-				Required:  false,
+				InputKey: "firstPatchedVersion",
+				GoField: "FirstPatchedVersion",
+				EntField: "first_patched_version",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "fixedAt",
-				GoField:   "FixedAt",
-				EntField:  "fixed_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "fixedAt",
+				GoField: "FixedAt",
+				EntField: "fixed_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "impact",
-				GoField:   "Impact",
-				EntField:  "impact",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "impact",
+				GoField: "Impact",
+				EntField: "impact",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "impacts",
-				GoField:   "Impacts",
-				EntField:  "impacts",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "impacts",
+				GoField: "Impacts",
+				EntField: "impacts",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "internalNotes",
-				GoField:   "InternalNotes",
-				EntField:  "internal_notes",
-				Type:      "string",
-				Required:  false,
+				InputKey: "internalNotes",
+				GoField: "InternalNotes",
+				EntField: "internal_notes",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "manifestPath",
-				GoField:   "ManifestPath",
-				EntField:  "manifest_path",
-				Type:      "string",
-				Required:  false,
+				InputKey: "manifestPath",
+				GoField: "ManifestPath",
+				EntField: "manifest_path",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "metadata",
-				GoField:   "Metadata",
-				EntField:  "metadata",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "metadata",
+				GoField: "Metadata",
+				EntField: "metadata",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "open",
-				GoField:   "Open",
-				EntField:  "open",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "open",
+				GoField: "Open",
+				EntField: "open",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "ownerID",
-				GoField:   "OwnerID",
-				EntField:  "owner_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "ownerID",
+				GoField: "OwnerID",
+				EntField: "owner_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "packageEcosystem",
-				GoField:   "PackageEcosystem",
-				EntField:  "package_ecosystem",
-				Type:      "string",
-				Required:  false,
+				InputKey: "packageEcosystem",
+				GoField: "PackageEcosystem",
+				EntField: "package_ecosystem",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "packageName",
-				GoField:   "PackageName",
-				EntField:  "package_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "packageName",
+				GoField: "PackageName",
+				EntField: "package_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "priority",
-				GoField:   "Priority",
-				EntField:  "priority",
-				Type:      "string",
-				Required:  false,
+				InputKey: "priority",
+				GoField: "Priority",
+				EntField: "priority",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "production",
-				GoField:   "Production",
-				EntField:  "production",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "production",
+				GoField: "Production",
+				EntField: "production",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "public",
-				GoField:   "Public",
-				EntField:  "public",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "public",
+				GoField: "Public",
+				EntField: "public",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "publishedAt",
-				GoField:   "PublishedAt",
-				EntField:  "published_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "publishedAt",
+				GoField: "PublishedAt",
+				EntField: "published_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "rawPayload",
-				GoField:   "RawPayload",
-				EntField:  "raw_payload",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "rawPayload",
+				GoField: "RawPayload",
+				EntField: "raw_payload",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "references",
-				GoField:   "References",
-				EntField:  "references",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "references",
+				GoField: "References",
+				EntField: "references",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "remediationSLA",
-				GoField:   "RemediationSLA",
-				EntField:  "remediation_sla",
-				Type:      "int",
-				Required:  false,
+				InputKey: "remediationSLA",
+				GoField: "RemediationSLA",
+				EntField: "remediation_sla",
+				Type: "int",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeID",
-				GoField:   "ScopeID",
-				EntField:  "scope_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeID",
+				GoField: "ScopeID",
+				EntField: "scope_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "scopeName",
-				GoField:   "ScopeName",
-				EntField:  "scope_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "scopeName",
+				GoField: "ScopeName",
+				EntField: "scope_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "score",
-				GoField:   "Score",
-				EntField:  "score",
-				Type:      "float64",
-				Required:  false,
+				InputKey: "score",
+				GoField: "Score",
+				EntField: "score",
+				Type: "float64",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "severity",
-				GoField:   "Severity",
-				EntField:  "severity",
-				Type:      "string",
-				Required:  false,
+				InputKey: "severity",
+				GoField: "Severity",
+				EntField: "severity",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "source",
-				GoField:   "Source",
-				EntField:  "source",
-				Type:      "string",
-				Required:  false,
+				InputKey: "source",
+				GoField: "Source",
+				EntField: "source",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "sourceUpdatedAt",
-				GoField:   "SourceUpdatedAt",
-				EntField:  "source_updated_at",
-				Type:      "time.Time",
-				Required:  false,
+				InputKey: "sourceUpdatedAt",
+				GoField: "SourceUpdatedAt",
+				EntField: "source_updated_at",
+				Type: "time.Time",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "summary",
-				GoField:   "Summary",
-				EntField:  "summary",
-				Type:      "string",
-				Required:  false,
+				InputKey: "summary",
+				GoField: "Summary",
+				EntField: "summary",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "systemInternalID",
-				GoField:   "SystemInternalID",
-				EntField:  "system_internal_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "systemInternalID",
+				GoField: "SystemInternalID",
+				EntField: "system_internal_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "tags",
-				GoField:   "Tags",
-				EntField:  "tags",
-				Type:      "json.RawMessage",
-				Required:  false,
+				InputKey: "tags",
+				GoField: "Tags",
+				EntField: "tags",
+				Type: "json.RawMessage",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "validated",
-				GoField:   "Validated",
-				EntField:  "validated",
-				Type:      "bool",
-				Required:  false,
+				InputKey: "validated",
+				GoField: "Validated",
+				EntField: "validated",
+				Type: "bool",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vector",
-				GoField:   "Vector",
-				EntField:  "vector",
-				Type:      "string",
-				Required:  false,
+				InputKey: "vector",
+				GoField: "Vector",
+				EntField: "vector",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vulnerabilityStatusID",
-				GoField:   "VulnerabilityStatusID",
-				EntField:  "vulnerability_status_id",
-				Type:      "string",
-				Required:  false,
+				InputKey: "vulnerabilityStatusID",
+				GoField: "VulnerabilityStatusID",
+				EntField: "vulnerability_status_id",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vulnerabilityStatusName",
-				GoField:   "VulnerabilityStatusName",
-				EntField:  "vulnerability_status_name",
-				Type:      "string",
-				Required:  false,
+				InputKey: "vulnerabilityStatusName",
+				GoField: "VulnerabilityStatusName",
+				EntField: "vulnerability_status_name",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 			{
-				InputKey:  "vulnerableVersionRange",
-				GoField:   "VulnerableVersionRange",
-				EntField:  "vulnerable_version_range",
-				Type:      "string",
-				Required:  false,
+				InputKey: "vulnerableVersionRange",
+				GoField: "VulnerableVersionRange",
+				EntField: "vulnerable_version_range",
+				Type: "string",
+				Required: false,
 				UpsertKey: false,
 				LookupKey: false,
 			},
 		},
 		AllowedKeys: map[string]struct{}{
-			"autoDismissedAt":         {},
-			"blocking":                {},
-			"category":                {},
-			"cveID":                   {},
-			"cweIds":                  {},
-			"dependencyScope":         {},
-			"description":             {},
-			"discoveredAt":            {},
-			"dismissedAt":             {},
-			"dismissedComment":        {},
-			"dismissedReason":         {},
-			"displayName":             {},
-			"environmentID":           {},
-			"environmentName":         {},
-			"exploitability":          {},
-			"externalID":              {},
-			"externalOwnerID":         {},
-			"externalURI":             {},
-			"firstPatchedVersion":     {},
-			"fixedAt":                 {},
-			"impact":                  {},
-			"impacts":                 {},
-			"internalNotes":           {},
-			"manifestPath":            {},
-			"metadata":                {},
-			"open":                    {},
-			"ownerID":                 {},
-			"packageEcosystem":        {},
-			"packageName":             {},
-			"priority":                {},
-			"production":              {},
-			"public":                  {},
-			"publishedAt":             {},
-			"rawPayload":              {},
-			"references":              {},
-			"remediationSLA":          {},
-			"scopeID":                 {},
-			"scopeName":               {},
-			"score":                   {},
-			"severity":                {},
-			"source":                  {},
-			"sourceUpdatedAt":         {},
-			"summary":                 {},
-			"systemInternalID":        {},
-			"tags":                    {},
-			"validated":               {},
-			"vector":                  {},
-			"vulnerabilityStatusID":   {},
+			"autoDismissedAt": {},
+			"blocking": {},
+			"category": {},
+			"cveID": {},
+			"cweIds": {},
+			"dependencyScope": {},
+			"description": {},
+			"discoveredAt": {},
+			"dismissedAt": {},
+			"dismissedComment": {},
+			"dismissedReason": {},
+			"displayName": {},
+			"environmentID": {},
+			"environmentName": {},
+			"exploitability": {},
+			"externalID": {},
+			"externalOwnerID": {},
+			"externalURI": {},
+			"firstPatchedVersion": {},
+			"fixedAt": {},
+			"impact": {},
+			"impacts": {},
+			"internalNotes": {},
+			"manifestPath": {},
+			"metadata": {},
+			"open": {},
+			"ownerID": {},
+			"packageEcosystem": {},
+			"packageName": {},
+			"priority": {},
+			"production": {},
+			"public": {},
+			"publishedAt": {},
+			"rawPayload": {},
+			"references": {},
+			"remediationSLA": {},
+			"scopeID": {},
+			"scopeName": {},
+			"score": {},
+			"severity": {},
+			"source": {},
+			"sourceUpdatedAt": {},
+			"summary": {},
+			"systemInternalID": {},
+			"tags": {},
+			"validated": {},
+			"vector": {},
+			"vulnerabilityStatusID": {},
 			"vulnerabilityStatusName": {},
-			"vulnerableVersionRange":  {},
+			"vulnerableVersionRange": {},
 		},
 		RequiredKeys: []string{
 			"externalID",

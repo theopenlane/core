@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -1451,6 +1452,46 @@ func TitleEqualFold(v string) predicate.Remediation {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.RemediationStatus) predicate.Remediation {
+	vc := v
+	return predicate.Remediation(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.RemediationStatus) predicate.Remediation {
+	vc := v
+	return predicate.Remediation(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.RemediationStatus) predicate.Remediation {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Remediation(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.RemediationStatus) predicate.Remediation {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Remediation(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldNotNull(FieldStatus))
 }
 
 // StateEQ applies the EQ predicate on the "state" field.
@@ -2924,11 +2965,11 @@ func HasRisks() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RemediationRisks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2939,7 +2980,7 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Remediation {
 		step := newRisksStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RemediationRisks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

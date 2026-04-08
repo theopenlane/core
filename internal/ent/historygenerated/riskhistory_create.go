@@ -487,6 +487,104 @@ func (_c *RiskHistoryCreate) SetNillableDelegateID(v *string) *RiskHistoryCreate
 	return _c
 }
 
+// SetMitigatedAt sets the "mitigated_at" field.
+func (_c *RiskHistoryCreate) SetMitigatedAt(v models.DateTime) *RiskHistoryCreate {
+	_c.mutation.SetMitigatedAt(v)
+	return _c
+}
+
+// SetNillableMitigatedAt sets the "mitigated_at" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableMitigatedAt(v *models.DateTime) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetMitigatedAt(*v)
+	}
+	return _c
+}
+
+// SetReviewRequired sets the "review_required" field.
+func (_c *RiskHistoryCreate) SetReviewRequired(v bool) *RiskHistoryCreate {
+	_c.mutation.SetReviewRequired(v)
+	return _c
+}
+
+// SetNillableReviewRequired sets the "review_required" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableReviewRequired(v *bool) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetReviewRequired(*v)
+	}
+	return _c
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_c *RiskHistoryCreate) SetLastReviewedAt(v models.DateTime) *RiskHistoryCreate {
+	_c.mutation.SetLastReviewedAt(v)
+	return _c
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableLastReviewedAt(v *models.DateTime) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetLastReviewedAt(*v)
+	}
+	return _c
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *RiskHistoryCreate) SetReviewFrequency(v enums.Frequency) *RiskHistoryCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableReviewFrequency(v *enums.Frequency) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
+// SetNextReviewDueAt sets the "next_review_due_at" field.
+func (_c *RiskHistoryCreate) SetNextReviewDueAt(v models.DateTime) *RiskHistoryCreate {
+	_c.mutation.SetNextReviewDueAt(v)
+	return _c
+}
+
+// SetNillableNextReviewDueAt sets the "next_review_due_at" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableNextReviewDueAt(v *models.DateTime) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetNextReviewDueAt(*v)
+	}
+	return _c
+}
+
+// SetResidualScore sets the "residual_score" field.
+func (_c *RiskHistoryCreate) SetResidualScore(v int) *RiskHistoryCreate {
+	_c.mutation.SetResidualScore(v)
+	return _c
+}
+
+// SetNillableResidualScore sets the "residual_score" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableResidualScore(v *int) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetResidualScore(*v)
+	}
+	return _c
+}
+
+// SetRiskDecision sets the "risk_decision" field.
+func (_c *RiskHistoryCreate) SetRiskDecision(v enums.RiskDecision) *RiskHistoryCreate {
+	_c.mutation.SetRiskDecision(v)
+	return _c
+}
+
+// SetNillableRiskDecision sets the "risk_decision" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableRiskDecision(v *enums.RiskDecision) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetRiskDecision(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *RiskHistoryCreate) SetID(v string) *RiskHistoryCreate {
 	_c.mutation.SetID(v)
@@ -575,6 +673,18 @@ func (_c *RiskHistoryCreate) defaults() error {
 		v := riskhistory.DefaultLikelihood
 		_c.mutation.SetLikelihood(v)
 	}
+	if _, ok := _c.mutation.ReviewRequired(); !ok {
+		v := riskhistory.DefaultReviewRequired
+		_c.mutation.SetReviewRequired(v)
+	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := riskhistory.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
+	if _, ok := _c.mutation.RiskDecision(); !ok {
+		v := riskhistory.DefaultRiskDecision
+		_c.mutation.SetRiskDecision(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if riskhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized riskhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -617,6 +727,16 @@ func (_c *RiskHistoryCreate) check() error {
 	if v, ok := _c.mutation.Likelihood(); ok {
 		if err := riskhistory.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`historygenerated: validator failed for field "RiskHistory.likelihood": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := riskhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "RiskHistory.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.RiskDecision(); ok {
+		if err := riskhistory.RiskDecisionValidator(v); err != nil {
+			return &ValidationError{Name: "risk_decision", err: fmt.Errorf(`historygenerated: validator failed for field "RiskHistory.risk_decision": %w`, err)}
 		}
 	}
 	return nil
@@ -802,6 +922,34 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DelegateID(); ok {
 		_spec.SetField(riskhistory.FieldDelegateID, field.TypeString, value)
 		_node.DelegateID = value
+	}
+	if value, ok := _c.mutation.MitigatedAt(); ok {
+		_spec.SetField(riskhistory.FieldMitigatedAt, field.TypeTime, value)
+		_node.MitigatedAt = &value
+	}
+	if value, ok := _c.mutation.ReviewRequired(); ok {
+		_spec.SetField(riskhistory.FieldReviewRequired, field.TypeBool, value)
+		_node.ReviewRequired = value
+	}
+	if value, ok := _c.mutation.LastReviewedAt(); ok {
+		_spec.SetField(riskhistory.FieldLastReviewedAt, field.TypeTime, value)
+		_node.LastReviewedAt = &value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(riskhistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.NextReviewDueAt(); ok {
+		_spec.SetField(riskhistory.FieldNextReviewDueAt, field.TypeTime, value)
+		_node.NextReviewDueAt = &value
+	}
+	if value, ok := _c.mutation.ResidualScore(); ok {
+		_spec.SetField(riskhistory.FieldResidualScore, field.TypeInt, value)
+		_node.ResidualScore = value
+	}
+	if value, ok := _c.mutation.RiskDecision(); ok {
+		_spec.SetField(riskhistory.FieldRiskDecision, field.TypeEnum, value)
+		_node.RiskDecision = value
 	}
 	return _node, _spec
 }

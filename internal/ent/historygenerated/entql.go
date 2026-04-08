@@ -2086,6 +2086,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			remediationhistory.FieldExternalID:       {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
 			remediationhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
 			remediationhistory.FieldTitle:            {Type: field.TypeString, Column: remediationhistory.FieldTitle},
+			remediationhistory.FieldStatus:           {Type: field.TypeEnum, Column: remediationhistory.FieldStatus},
 			remediationhistory.FieldState:            {Type: field.TypeString, Column: remediationhistory.FieldState},
 			remediationhistory.FieldIntent:           {Type: field.TypeString, Column: remediationhistory.FieldIntent},
 			remediationhistory.FieldSummary:          {Type: field.TypeString, Column: remediationhistory.FieldSummary},
@@ -2201,6 +2202,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldBusinessCostsJSON: {Type: field.TypeJSON, Column: riskhistory.FieldBusinessCostsJSON},
 			riskhistory.FieldStakeholderID:     {Type: field.TypeString, Column: riskhistory.FieldStakeholderID},
 			riskhistory.FieldDelegateID:        {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
+			riskhistory.FieldMitigatedAt:       {Type: field.TypeTime, Column: riskhistory.FieldMitigatedAt},
+			riskhistory.FieldReviewRequired:    {Type: field.TypeBool, Column: riskhistory.FieldReviewRequired},
+			riskhistory.FieldLastReviewedAt:    {Type: field.TypeTime, Column: riskhistory.FieldLastReviewedAt},
+			riskhistory.FieldReviewFrequency:   {Type: field.TypeEnum, Column: riskhistory.FieldReviewFrequency},
+			riskhistory.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: riskhistory.FieldNextReviewDueAt},
+			riskhistory.FieldResidualScore:     {Type: field.TypeInt, Column: riskhistory.FieldResidualScore},
+			riskhistory.FieldRiskDecision:      {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
 		},
 	}
 	graph.Nodes[50] = &sqlgraph.Node{
@@ -12062,6 +12070,11 @@ func (f *RemediationHistoryFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldTitle))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *RemediationHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldStatus))
+}
+
 // WhereState applies the entql string predicate on the state field.
 func (f *RemediationHistoryFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(remediationhistory.FieldState))
@@ -12585,6 +12598,41 @@ func (f *RiskHistoryFilter) WhereStakeholderID(p entql.StringP) {
 // WhereDelegateID applies the entql string predicate on the delegate_id field.
 func (f *RiskHistoryFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldDelegateID))
+}
+
+// WhereMitigatedAt applies the entql time.Time predicate on the mitigated_at field.
+func (f *RiskHistoryFilter) WhereMitigatedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldMitigatedAt))
+}
+
+// WhereReviewRequired applies the entql bool predicate on the review_required field.
+func (f *RiskHistoryFilter) WhereReviewRequired(p entql.BoolP) {
+	f.Where(p.Field(riskhistory.FieldReviewRequired))
+}
+
+// WhereLastReviewedAt applies the entql time.Time predicate on the last_reviewed_at field.
+func (f *RiskHistoryFilter) WhereLastReviewedAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldLastReviewedAt))
+}
+
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *RiskHistoryFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldReviewFrequency))
+}
+
+// WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.
+func (f *RiskHistoryFilter) WhereNextReviewDueAt(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldNextReviewDueAt))
+}
+
+// WhereResidualScore applies the entql int predicate on the residual_score field.
+func (f *RiskHistoryFilter) WhereResidualScore(p entql.IntP) {
+	f.Where(p.Field(riskhistory.FieldResidualScore))
+}
+
+// WhereRiskDecision applies the entql string predicate on the risk_decision field.
+func (f *RiskHistoryFilter) WhereRiskDecision(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldRiskDecision))
 }
 
 // addPredicate implements the predicateAdder interface.

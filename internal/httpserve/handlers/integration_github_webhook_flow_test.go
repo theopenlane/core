@@ -16,7 +16,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -461,7 +463,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 				"cve_id": "CVE-2026-12345",
 				"severity": "high",
 				"summary": "Prototype Pollution in lodash",
-				"description": "Versions of lodash before 4.17.21 are vulnerable to prototype pollution."
+				"description": "Versions of lodash before 4.17.21 are vulnerable to prototype pollution.",
+				"cvss": {
+					"score": 7.5
+				},
+				"state": "OPEN"
 			}
 		}
 	}`)
@@ -486,8 +492,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 			vulnerability.ExternalID("github:acme/web-app:dependabot:42"),
 		).
 		All(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Len(t, vulns, 1, "expected exactly one vulnerability record")
+	require.NoError(t, err)
+	require.Len(t, vulns, 1, "expected exactly one vulnerability record")
 
 	vuln := vulns[0]
 	assert.Equal(t, "github", vuln.Source)
@@ -498,6 +504,12 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	assert.Equal(t, "CVE-2026-12345", vuln.CveID)
 	assert.Equal(t, "acme/web-app", vuln.ExternalOwnerID)
 	assert.Equal(t, "https://github.com/acme/web-app/security/dependabot/42", vuln.ExternalURI)
+	assert.Equal(t, "CVE-2026-12345", vuln.CveID)
+	assert.Equal(t, "CVE-2026-12345", vuln.DisplayName)
+	assert.Equal(t, 7.5, vuln.Score)
+	assert.Equal(t, enums.SecurityLevelHigh, vuln.SecurityLevel)
+	assert.Equal(t, "OPEN", vuln.VulnerabilityStatusName)
+	assert.True(t, vuln.Open)
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability() {

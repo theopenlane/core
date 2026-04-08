@@ -14883,6 +14883,10 @@ input CreateRemediationInput {
 	"""
 	title: String
 	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
+	"""
 	state of the remediation, such as pending or completed
 	"""
 	state: String
@@ -15169,6 +15173,31 @@ input CreateRiskInput {
 	structured details of the business costs in JSON format
 	"""
 	businessCostsJSON: [Any!]
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	reviewFrequency: RiskFrequency
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -15192,6 +15221,8 @@ input CreateRiskInput {
 	delegateID: ID
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -67323,6 +67354,10 @@ type Remediation implements Node {
 	"""
 	title: String
 	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
+	"""
 	state of the remediation, such as pending or completed
 	"""
 	state: String
@@ -68049,7 +68084,18 @@ enum RemediationOrderField {
 	external_id
 	external_owner_id
 	title
+	status
 	state
+}
+"""
+RemediationRemediationStatus is enum for the field status
+"""
+enum RemediationRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
 }
 """
 Return response for updateRemediation mutation
@@ -68346,6 +68392,15 @@ input RemediationWhereInput {
 	titleNotNil: Boolean
 	titleEqualFold: String
 	titleContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: RemediationRemediationStatus
+	statusNEQ: RemediationRemediationStatus
+	statusIn: [RemediationRemediationStatus!]
+	statusNotIn: [RemediationRemediationStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	state field predicates
 	"""
@@ -70258,6 +70313,31 @@ type Risk implements Node {
 	the id of the group responsible for risk oversight on behalf of the stakeholder
 	"""
 	delegateID: ID
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	reviewFrequency: RiskFrequency
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
 	owner: Organization
 	blockedGroups(
 		"""
@@ -70767,6 +70847,68 @@ type Risk implements Node {
 		"""
 		where: DiscussionWhereInput
 	): DiscussionConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 }
 """
 Return response for createBulkRisk mutation
@@ -70848,6 +70990,16 @@ type RiskEdge {
 	cursor: Cursor!
 }
 """
+RiskFrequency is enum for the field review_frequency
+"""
+enum RiskFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+	NONE
+}
+"""
 Ordering options for Risk connections
 """
 input RiskOrder {
@@ -70874,6 +71026,23 @@ enum RiskOrderField {
 	LIKELIHOOD
 	score
 	business_costs
+	mitigated_at
+	review_required
+	last_reviewed_at
+	review_frequency
+	next_review_due_at
+	residual_score
+	risk_decision
+}
+"""
+RiskRiskDecision is enum for the field risk_decision
+"""
+enum RiskRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+	AVOID
+	MITIGATE
+	ACCEPT
+	TRANSFER
+	NONE
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -71394,6 +71563,83 @@ input RiskWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	mitigated_at field predicates
+	"""
+	mitigatedAt: DateTime
+	mitigatedAtNEQ: DateTime
+	mitigatedAtIn: [DateTime!]
+	mitigatedAtNotIn: [DateTime!]
+	mitigatedAtGT: DateTime
+	mitigatedAtGTE: DateTime
+	mitigatedAtLT: DateTime
+	mitigatedAtLTE: DateTime
+	mitigatedAtIsNil: Boolean
+	mitigatedAtNotNil: Boolean
+	"""
+	review_required field predicates
+	"""
+	reviewRequired: Boolean
+	reviewRequiredNEQ: Boolean
+	reviewRequiredIsNil: Boolean
+	reviewRequiredNotNil: Boolean
+	"""
+	last_reviewed_at field predicates
+	"""
+	lastReviewedAt: DateTime
+	lastReviewedAtNEQ: DateTime
+	lastReviewedAtIn: [DateTime!]
+	lastReviewedAtNotIn: [DateTime!]
+	lastReviewedAtGT: DateTime
+	lastReviewedAtGTE: DateTime
+	lastReviewedAtLT: DateTime
+	lastReviewedAtLTE: DateTime
+	lastReviewedAtIsNil: Boolean
+	lastReviewedAtNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: RiskFrequency
+	reviewFrequencyNEQ: RiskFrequency
+	reviewFrequencyIn: [RiskFrequency!]
+	reviewFrequencyNotIn: [RiskFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	next_review_due_at field predicates
+	"""
+	nextReviewDueAt: DateTime
+	nextReviewDueAtNEQ: DateTime
+	nextReviewDueAtIn: [DateTime!]
+	nextReviewDueAtNotIn: [DateTime!]
+	nextReviewDueAtGT: DateTime
+	nextReviewDueAtGTE: DateTime
+	nextReviewDueAtLT: DateTime
+	nextReviewDueAtLTE: DateTime
+	nextReviewDueAtIsNil: Boolean
+	nextReviewDueAtNotNil: Boolean
+	"""
+	residual_score field predicates
+	"""
+	residualScore: Int
+	residualScoreNEQ: Int
+	residualScoreIn: [Int!]
+	residualScoreNotIn: [Int!]
+	residualScoreGT: Int
+	residualScoreGTE: Int
+	residualScoreLT: Int
+	residualScoreLTE: Int
+	residualScoreIsNil: Boolean
+	residualScoreNotNil: Boolean
+	"""
+	risk_decision field predicates
+	"""
+	riskDecision: RiskRiskDecision
+	riskDecisionNEQ: RiskRiskDecision
+	riskDecisionIn: [RiskRiskDecision!]
+	riskDecisionNotIn: [RiskRiskDecision!]
+	riskDecisionIsNil: Boolean
+	riskDecisionNotNil: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -71508,6 +71754,16 @@ input RiskWhereInput {
 	"""
 	hasDiscussions: Boolean
 	hasDiscussionsWith: [DiscussionWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -90406,6 +90662,11 @@ input UpdateRemediationInput {
 	title: String
 	clearTitle: Boolean
 	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
+	clearStatus: Boolean
+	"""
 	state of the remediation, such as pending or completed
 	"""
 	state: String
@@ -90828,6 +91089,38 @@ input UpdateRiskInput {
 	businessCostsJSON: [Any!]
 	appendBusinessCostsJSON: [Any!]
 	clearBusinessCostsJSON: Boolean
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	clearMitigatedAt: Boolean
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	clearReviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	clearLastReviewedAt: Boolean
+	reviewFrequency: RiskFrequency
+	clearReviewFrequency: Boolean
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	clearNextReviewDueAt: Boolean
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	clearResidualScore: Boolean
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
+	clearRiskDecision: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -90888,6 +91181,12 @@ input UpdateRiskInput {
 	addDiscussionIDs: [ID!]
 	removeDiscussionIDs: [ID!]
 	clearDiscussions: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -95532,7 +95831,7 @@ type Vulnerability implements Node {
 	"""
 	externalOwnerID: String
 	"""
-	lifecycle status of the vulnerability
+	security level of the vulnerability
 	"""
 	securityLevel: VulnerabilitySecurityLevel
 	"""

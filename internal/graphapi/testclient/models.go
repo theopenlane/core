@@ -8169,6 +8169,8 @@ type CreateRemediationInput struct {
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// title or short description of the remediation effort
 	Title *string `json:"title,omitempty"`
+	// status of the remediation, such as pending, in_progress, or completed
+	Status *enums.RemediationStatus `json:"status,omitempty"`
 	// state of the remediation, such as pending or completed
 	State *string `json:"state,omitempty"`
 	// intent or goal of the remediation effort
@@ -8337,30 +8339,45 @@ type CreateRiskInput struct {
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
 	// structured details of the business costs in JSON format
-	BusinessCostsJSON []any    `json:"businessCostsJSON,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string `json:"editorIDs,omitempty"`
-	ViewerIDs         []string `json:"viewerIDs,omitempty"`
-	RiskKindID        *string  `json:"riskKindID,omitempty"`
-	RiskCategoryID    *string  `json:"riskCategoryID,omitempty"`
-	EnvironmentID     *string  `json:"environmentID,omitempty"`
-	ScopeID           *string  `json:"scopeID,omitempty"`
-	ControlIDs        []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs     []string `json:"subcontrolIDs,omitempty"`
-	ProcedureIDs      []string `json:"procedureIDs,omitempty"`
-	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
-	ProgramIDs        []string `json:"programIDs,omitempty"`
-	PlatformIDs       []string `json:"platformIDs,omitempty"`
-	ActionPlanIDs     []string `json:"actionPlanIDs,omitempty"`
-	TaskIDs           []string `json:"taskIDs,omitempty"`
-	AssetIDs          []string `json:"assetIDs,omitempty"`
-	EntityIDs         []string `json:"entityIDs,omitempty"`
-	ScanIDs           []string `json:"scanIDs,omitempty"`
-	StakeholderID     *string  `json:"stakeholderID,omitempty"`
-	DelegateID        *string  `json:"delegateID,omitempty"`
-	CommentIDs        []string `json:"commentIDs,omitempty"`
-	DiscussionIDs     []string `json:"discussionIDs,omitempty"`
+	BusinessCostsJSON []any `json:"businessCostsJSON,omitempty"`
+	// the time when the risk was mitigated
+	MitigatedAt *models.DateTime `json:"mitigatedAt,omitempty"`
+	// indicates if a periodic review is required for the risk
+	ReviewRequired *bool `json:"reviewRequired,omitempty"`
+	// the time when the risk was last reviewed
+	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the next review is due for the risk
+	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
+	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	ResidualScore *int64 `json:"residualScore,omitempty"`
+	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	RiskDecision      *enums.RiskDecision `json:"riskDecision,omitempty"`
+	OwnerID           *string             `json:"ownerID,omitempty"`
+	BlockedGroupIDs   []string            `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string            `json:"editorIDs,omitempty"`
+	ViewerIDs         []string            `json:"viewerIDs,omitempty"`
+	RiskKindID        *string             `json:"riskKindID,omitempty"`
+	RiskCategoryID    *string             `json:"riskCategoryID,omitempty"`
+	EnvironmentID     *string             `json:"environmentID,omitempty"`
+	ScopeID           *string             `json:"scopeID,omitempty"`
+	ControlIDs        []string            `json:"controlIDs,omitempty"`
+	SubcontrolIDs     []string            `json:"subcontrolIDs,omitempty"`
+	ProcedureIDs      []string            `json:"procedureIDs,omitempty"`
+	InternalPolicyIDs []string            `json:"internalPolicyIDs,omitempty"`
+	ProgramIDs        []string            `json:"programIDs,omitempty"`
+	PlatformIDs       []string            `json:"platformIDs,omitempty"`
+	ActionPlanIDs     []string            `json:"actionPlanIDs,omitempty"`
+	TaskIDs           []string            `json:"taskIDs,omitempty"`
+	AssetIDs          []string            `json:"assetIDs,omitempty"`
+	EntityIDs         []string            `json:"entityIDs,omitempty"`
+	ScanIDs           []string            `json:"scanIDs,omitempty"`
+	StakeholderID     *string             `json:"stakeholderID,omitempty"`
+	DelegateID        *string             `json:"delegateID,omitempty"`
+	CommentIDs        []string            `json:"commentIDs,omitempty"`
+	DiscussionIDs     []string            `json:"discussionIDs,omitempty"`
+	ReviewIDs         []string            `json:"reviewIDs,omitempty"`
+	RemediationIDs    []string            `json:"remediationIDs,omitempty"`
 }
 
 // CreateSLADefinitionInput is used for create SLADefinition object.
@@ -28781,6 +28798,8 @@ type Remediation struct {
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
 	// title or short description of the remediation effort
 	Title *string `json:"title,omitempty"`
+	// status of the remediation, such as pending, in_progress, or completed
+	Status *enums.RemediationStatus `json:"status,omitempty"`
 	// state of the remediation, such as pending or completed
 	State *string `json:"state,omitempty"`
 	// intent or goal of the remediation effort
@@ -29152,6 +29171,13 @@ type RemediationWhereInput struct {
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// status field predicates
+	Status       *enums.RemediationStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.RemediationStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.RemediationStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.RemediationStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                     `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                     `json:"statusNotNil,omitempty"`
 	// state field predicates
 	State             *string  `json:"state,omitempty"`
 	StateNeq          *string  `json:"stateNEQ,omitempty"`
@@ -30168,7 +30194,20 @@ type Risk struct {
 	// the id of the group responsible for risk oversight
 	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
-	DelegateID       *string                   `json:"delegateID,omitempty"`
+	DelegateID *string `json:"delegateID,omitempty"`
+	// the time when the risk was mitigated
+	MitigatedAt *models.DateTime `json:"mitigatedAt,omitempty"`
+	// indicates if a periodic review is required for the risk
+	ReviewRequired *bool `json:"reviewRequired,omitempty"`
+	// the time when the risk was last reviewed
+	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the next review is due for the risk
+	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
+	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	ResidualScore *int64 `json:"residualScore,omitempty"`
+	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	RiskDecision     *enums.RiskDecision       `json:"riskDecision,omitempty"`
 	Owner            *Organization             `json:"owner,omitempty"`
 	BlockedGroups    *GroupConnection          `json:"blockedGroups"`
 	Editors          *GroupConnection          `json:"editors"`
@@ -30191,9 +30230,11 @@ type Risk struct {
 	// the group of users who are responsible for risk oversight
 	Stakeholder *Group `json:"stakeholder,omitempty"`
 	// temporary delegates for the risk, used for temporary ownership
-	Delegate    *Group                `json:"delegate,omitempty"`
-	Comments    *NoteConnection       `json:"comments"`
-	Discussions *DiscussionConnection `json:"discussions"`
+	Delegate     *Group                 `json:"delegate,omitempty"`
+	Comments     *NoteConnection        `json:"comments"`
+	Discussions  *DiscussionConnection  `json:"discussions"`
+	Reviews      *ReviewConnection      `json:"reviews"`
+	Remediations *RemediationConnection `json:"remediations"`
 }
 
 func (Risk) IsNode() {}
@@ -30676,6 +30717,69 @@ type RiskWhereInput struct {
 	DelegateIDNotNil       *bool    `json:"delegateIDNotNil,omitempty"`
 	DelegateIDEqualFold    *string  `json:"delegateIDEqualFold,omitempty"`
 	DelegateIDContainsFold *string  `json:"delegateIDContainsFold,omitempty"`
+	// mitigated_at field predicates
+	MitigatedAt       *models.DateTime   `json:"mitigatedAt,omitempty"`
+	MitigatedAtNeq    *models.DateTime   `json:"mitigatedAtNEQ,omitempty"`
+	MitigatedAtIn     []*models.DateTime `json:"mitigatedAtIn,omitempty"`
+	MitigatedAtNotIn  []*models.DateTime `json:"mitigatedAtNotIn,omitempty"`
+	MitigatedAtGt     *models.DateTime   `json:"mitigatedAtGT,omitempty"`
+	MitigatedAtGte    *models.DateTime   `json:"mitigatedAtGTE,omitempty"`
+	MitigatedAtLt     *models.DateTime   `json:"mitigatedAtLT,omitempty"`
+	MitigatedAtLte    *models.DateTime   `json:"mitigatedAtLTE,omitempty"`
+	MitigatedAtIsNil  *bool              `json:"mitigatedAtIsNil,omitempty"`
+	MitigatedAtNotNil *bool              `json:"mitigatedAtNotNil,omitempty"`
+	// review_required field predicates
+	ReviewRequired       *bool `json:"reviewRequired,omitempty"`
+	ReviewRequiredNeq    *bool `json:"reviewRequiredNEQ,omitempty"`
+	ReviewRequiredIsNil  *bool `json:"reviewRequiredIsNil,omitempty"`
+	ReviewRequiredNotNil *bool `json:"reviewRequiredNotNil,omitempty"`
+	// last_reviewed_at field predicates
+	LastReviewedAt       *models.DateTime   `json:"lastReviewedAt,omitempty"`
+	LastReviewedAtNeq    *models.DateTime   `json:"lastReviewedAtNEQ,omitempty"`
+	LastReviewedAtIn     []*models.DateTime `json:"lastReviewedAtIn,omitempty"`
+	LastReviewedAtNotIn  []*models.DateTime `json:"lastReviewedAtNotIn,omitempty"`
+	LastReviewedAtGt     *models.DateTime   `json:"lastReviewedAtGT,omitempty"`
+	LastReviewedAtGte    *models.DateTime   `json:"lastReviewedAtGTE,omitempty"`
+	LastReviewedAtLt     *models.DateTime   `json:"lastReviewedAtLT,omitempty"`
+	LastReviewedAtLte    *models.DateTime   `json:"lastReviewedAtLTE,omitempty"`
+	LastReviewedAtIsNil  *bool              `json:"lastReviewedAtIsNil,omitempty"`
+	LastReviewedAtNotNil *bool              `json:"lastReviewedAtNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// next_review_due_at field predicates
+	NextReviewDueAt       *models.DateTime   `json:"nextReviewDueAt,omitempty"`
+	NextReviewDueAtNeq    *models.DateTime   `json:"nextReviewDueAtNEQ,omitempty"`
+	NextReviewDueAtIn     []*models.DateTime `json:"nextReviewDueAtIn,omitempty"`
+	NextReviewDueAtNotIn  []*models.DateTime `json:"nextReviewDueAtNotIn,omitempty"`
+	NextReviewDueAtGt     *models.DateTime   `json:"nextReviewDueAtGT,omitempty"`
+	NextReviewDueAtGte    *models.DateTime   `json:"nextReviewDueAtGTE,omitempty"`
+	NextReviewDueAtLt     *models.DateTime   `json:"nextReviewDueAtLT,omitempty"`
+	NextReviewDueAtLte    *models.DateTime   `json:"nextReviewDueAtLTE,omitempty"`
+	NextReviewDueAtIsNil  *bool              `json:"nextReviewDueAtIsNil,omitempty"`
+	NextReviewDueAtNotNil *bool              `json:"nextReviewDueAtNotNil,omitempty"`
+	// residual_score field predicates
+	ResidualScore       *int64  `json:"residualScore,omitempty"`
+	ResidualScoreNeq    *int64  `json:"residualScoreNEQ,omitempty"`
+	ResidualScoreIn     []int64 `json:"residualScoreIn,omitempty"`
+	ResidualScoreNotIn  []int64 `json:"residualScoreNotIn,omitempty"`
+	ResidualScoreGt     *int64  `json:"residualScoreGT,omitempty"`
+	ResidualScoreGte    *int64  `json:"residualScoreGTE,omitempty"`
+	ResidualScoreLt     *int64  `json:"residualScoreLT,omitempty"`
+	ResidualScoreLte    *int64  `json:"residualScoreLTE,omitempty"`
+	ResidualScoreIsNil  *bool   `json:"residualScoreIsNil,omitempty"`
+	ResidualScoreNotNil *bool   `json:"residualScoreNotNil,omitempty"`
+	// risk_decision field predicates
+	RiskDecision       *enums.RiskDecision  `json:"riskDecision,omitempty"`
+	RiskDecisionNeq    *enums.RiskDecision  `json:"riskDecisionNEQ,omitempty"`
+	RiskDecisionIn     []enums.RiskDecision `json:"riskDecisionIn,omitempty"`
+	RiskDecisionNotIn  []enums.RiskDecision `json:"riskDecisionNotIn,omitempty"`
+	RiskDecisionIsNil  *bool                `json:"riskDecisionIsNil,omitempty"`
+	RiskDecisionNotNil *bool                `json:"riskDecisionNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -30745,6 +30849,12 @@ type RiskWhereInput struct {
 	// discussions edge predicates
 	HasDiscussions     *bool                   `json:"hasDiscussions,omitempty"`
 	HasDiscussionsWith []*DiscussionWhereInput `json:"hasDiscussionsWith,omitempty"`
+	// reviews edge predicates
+	HasReviews     *bool               `json:"hasReviews,omitempty"`
+	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
+	// remediations edge predicates
+	HasRemediations     *bool                    `json:"hasRemediations,omitempty"`
+	HasRemediationsWith []*RemediationWhereInput `json:"hasRemediationsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -42588,6 +42698,9 @@ type UpdateRemediationInput struct {
 	// title or short description of the remediation effort
 	Title      *string `json:"title,omitempty"`
 	ClearTitle *bool   `json:"clearTitle,omitempty"`
+	// status of the remediation, such as pending, in_progress, or completed
+	Status      *enums.RemediationStatus `json:"status,omitempty"`
+	ClearStatus *bool                    `json:"clearStatus,omitempty"`
 	// state of the remediation, such as pending or completed
 	State      *string `json:"state,omitempty"`
 	ClearState *bool   `json:"clearState,omitempty"`
@@ -42890,9 +43003,29 @@ type UpdateRiskInput struct {
 	BusinessCosts      *string `json:"businessCosts,omitempty"`
 	ClearBusinessCosts *bool   `json:"clearBusinessCosts,omitempty"`
 	// structured details of the business costs in JSON format
-	BusinessCostsJSON       []any                   `json:"businessCostsJSON,omitempty"`
-	AppendBusinessCostsJSON []any                   `json:"appendBusinessCostsJSON,omitempty"`
-	ClearBusinessCostsJSON  *bool                   `json:"clearBusinessCostsJSON,omitempty"`
+	BusinessCostsJSON       []any `json:"businessCostsJSON,omitempty"`
+	AppendBusinessCostsJSON []any `json:"appendBusinessCostsJSON,omitempty"`
+	ClearBusinessCostsJSON  *bool `json:"clearBusinessCostsJSON,omitempty"`
+	// the time when the risk was mitigated
+	MitigatedAt      *models.DateTime `json:"mitigatedAt,omitempty"`
+	ClearMitigatedAt *bool            `json:"clearMitigatedAt,omitempty"`
+	// indicates if a periodic review is required for the risk
+	ReviewRequired      *bool `json:"reviewRequired,omitempty"`
+	ClearReviewRequired *bool `json:"clearReviewRequired,omitempty"`
+	// the time when the risk was last reviewed
+	LastReviewedAt       *models.DateTime `json:"lastReviewedAt,omitempty"`
+	ClearLastReviewedAt  *bool            `json:"clearLastReviewedAt,omitempty"`
+	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// the time when the next review is due for the risk
+	NextReviewDueAt      *models.DateTime `json:"nextReviewDueAt,omitempty"`
+	ClearNextReviewDueAt *bool            `json:"clearNextReviewDueAt,omitempty"`
+	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	ResidualScore      *int64 `json:"residualScore,omitempty"`
+	ClearResidualScore *bool  `json:"clearResidualScore,omitempty"`
+	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	RiskDecision            *enums.RiskDecision     `json:"riskDecision,omitempty"`
+	ClearRiskDecision       *bool                   `json:"clearRiskDecision,omitempty"`
 	AddBlockedGroupIDs      []string                `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs   []string                `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups      *bool                   `json:"clearBlockedGroups,omitempty"`
@@ -42953,6 +43086,12 @@ type UpdateRiskInput struct {
 	AddDiscussionIDs        []string                `json:"addDiscussionIDs,omitempty"`
 	RemoveDiscussionIDs     []string                `json:"removeDiscussionIDs,omitempty"`
 	ClearDiscussions        *bool                   `json:"clearDiscussions,omitempty"`
+	AddReviewIDs            []string                `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs         []string                `json:"removeReviewIDs,omitempty"`
+	ClearReviews            *bool                   `json:"clearReviews,omitempty"`
+	AddRemediationIDs       []string                `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs    []string                `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations       *bool                   `json:"clearRemediations,omitempty"`
 	AddDiscussion           *CreateDiscussionInput  `json:"addDiscussion,omitempty"`
 	UpdateDiscussion        *UpdateDiscussionsInput `json:"updateDiscussion,omitempty"`
 	DeleteDiscussion        *string                 `json:"deleteDiscussion,omitempty"`
@@ -45835,7 +45974,7 @@ type Vulnerability struct {
 	VulnerabilityStatusID *string `json:"vulnerabilityStatusID,omitempty"`
 	// owner of the vulnerability
 	ExternalOwnerID *string `json:"externalOwnerID,omitempty"`
-	// lifecycle status of the vulnerability
+	// security level of the vulnerability
 	SecurityLevel *enums.SecurityLevel `json:"securityLevel,omitempty"`
 	// external identifier from the integration source for the vulnerability
 	ExternalID string `json:"externalID"`
@@ -53222,6 +53361,7 @@ const (
 	RemediationOrderFieldExternalID      RemediationOrderField = "external_id"
 	RemediationOrderFieldExternalOwnerID RemediationOrderField = "external_owner_id"
 	RemediationOrderFieldTitle           RemediationOrderField = "title"
+	RemediationOrderFieldStatus          RemediationOrderField = "status"
 	RemediationOrderFieldState           RemediationOrderField = "state"
 )
 
@@ -53231,12 +53371,13 @@ var AllRemediationOrderField = []RemediationOrderField{
 	RemediationOrderFieldExternalID,
 	RemediationOrderFieldExternalOwnerID,
 	RemediationOrderFieldTitle,
+	RemediationOrderFieldStatus,
 	RemediationOrderFieldState,
 }
 
 func (e RemediationOrderField) IsValid() bool {
 	switch e {
-	case RemediationOrderFieldCreatedAt, RemediationOrderFieldUpdatedAt, RemediationOrderFieldExternalID, RemediationOrderFieldExternalOwnerID, RemediationOrderFieldTitle, RemediationOrderFieldState:
+	case RemediationOrderFieldCreatedAt, RemediationOrderFieldUpdatedAt, RemediationOrderFieldExternalID, RemediationOrderFieldExternalOwnerID, RemediationOrderFieldTitle, RemediationOrderFieldStatus, RemediationOrderFieldState:
 		return true
 	}
 	return false
@@ -53345,16 +53486,23 @@ func (e ReviewOrderField) MarshalJSON() ([]byte, error) {
 type RiskOrderField string
 
 const (
-	RiskOrderFieldCreatedAt     RiskOrderField = "created_at"
-	RiskOrderFieldUpdatedAt     RiskOrderField = "updated_at"
-	RiskOrderFieldExternalID    RiskOrderField = "external_id"
-	RiskOrderFieldObservedAt    RiskOrderField = "observed_at"
-	RiskOrderFieldName          RiskOrderField = "name"
-	RiskOrderFieldStatus        RiskOrderField = "STATUS"
-	RiskOrderFieldImpact        RiskOrderField = "IMPACT"
-	RiskOrderFieldLikelihood    RiskOrderField = "LIKELIHOOD"
-	RiskOrderFieldScore         RiskOrderField = "score"
-	RiskOrderFieldBusinessCosts RiskOrderField = "business_costs"
+	RiskOrderFieldCreatedAt       RiskOrderField = "created_at"
+	RiskOrderFieldUpdatedAt       RiskOrderField = "updated_at"
+	RiskOrderFieldExternalID      RiskOrderField = "external_id"
+	RiskOrderFieldObservedAt      RiskOrderField = "observed_at"
+	RiskOrderFieldName            RiskOrderField = "name"
+	RiskOrderFieldStatus          RiskOrderField = "STATUS"
+	RiskOrderFieldImpact          RiskOrderField = "IMPACT"
+	RiskOrderFieldLikelihood      RiskOrderField = "LIKELIHOOD"
+	RiskOrderFieldScore           RiskOrderField = "score"
+	RiskOrderFieldBusinessCosts   RiskOrderField = "business_costs"
+	RiskOrderFieldMitigatedAt     RiskOrderField = "mitigated_at"
+	RiskOrderFieldReviewRequired  RiskOrderField = "review_required"
+	RiskOrderFieldLastReviewedAt  RiskOrderField = "last_reviewed_at"
+	RiskOrderFieldReviewFrequency RiskOrderField = "review_frequency"
+	RiskOrderFieldNextReviewDueAt RiskOrderField = "next_review_due_at"
+	RiskOrderFieldResidualScore   RiskOrderField = "residual_score"
+	RiskOrderFieldRiskDecision    RiskOrderField = "risk_decision"
 )
 
 var AllRiskOrderField = []RiskOrderField{
@@ -53368,11 +53516,18 @@ var AllRiskOrderField = []RiskOrderField{
 	RiskOrderFieldLikelihood,
 	RiskOrderFieldScore,
 	RiskOrderFieldBusinessCosts,
+	RiskOrderFieldMitigatedAt,
+	RiskOrderFieldReviewRequired,
+	RiskOrderFieldLastReviewedAt,
+	RiskOrderFieldReviewFrequency,
+	RiskOrderFieldNextReviewDueAt,
+	RiskOrderFieldResidualScore,
+	RiskOrderFieldRiskDecision,
 }
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts, RiskOrderFieldMitigatedAt, RiskOrderFieldReviewRequired, RiskOrderFieldLastReviewedAt, RiskOrderFieldReviewFrequency, RiskOrderFieldNextReviewDueAt, RiskOrderFieldResidualScore, RiskOrderFieldRiskDecision:
 		return true
 	}
 	return false

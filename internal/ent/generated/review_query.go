@@ -463,11 +463,11 @@ func (_q *ReviewQuery) QueryRisks() *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.RisksTable, review.RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.RisksTable, review.RisksPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ReviewRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2168,33 +2168,64 @@ func (_q *ReviewQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQue
 	return nil
 }
 func (_q *ReviewQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Review, init func(*Review), assign func(*Review, *Risk)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Risk(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.RisksColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.RisksTable)
+		joinT.Schema(_q.schemaConfig.ReviewRisks)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(review.RisksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.RisksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.RisksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_risks
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_risks" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_risks" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }

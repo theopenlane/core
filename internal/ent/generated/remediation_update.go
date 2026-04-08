@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -317,6 +318,26 @@ func (_u *RemediationUpdate) SetNillableTitle(v *string) *RemediationUpdate {
 // ClearTitle clears the value of the "title" field.
 func (_u *RemediationUpdate) ClearTitle() *RemediationUpdate {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *RemediationUpdate) SetStatus(v enums.RemediationStatus) *RemediationUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableStatus(v *enums.RemediationStatus) *RemediationUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *RemediationUpdate) ClearStatus() *RemediationUpdate {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -1349,6 +1370,16 @@ func (_u *RemediationUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *RemediationUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := remediation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Remediation.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *RemediationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1356,6 +1387,9 @@ func (_u *RemediationUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Re
 }
 
 func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(remediation.Table, remediation.Columns, sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1449,6 +1483,12 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediation.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(remediation.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(remediation.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(remediation.FieldState, field.TypeString, value)
@@ -2138,30 +2178,30 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2169,16 +2209,16 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2763,6 +2803,26 @@ func (_u *RemediationUpdateOne) SetNillableTitle(v *string) *RemediationUpdateOn
 // ClearTitle clears the value of the "title" field.
 func (_u *RemediationUpdateOne) ClearTitle() *RemediationUpdateOne {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *RemediationUpdateOne) SetStatus(v enums.RemediationStatus) *RemediationUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableStatus(v *enums.RemediationStatus) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *RemediationUpdateOne) ClearStatus() *RemediationUpdateOne {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -3808,6 +3868,16 @@ func (_u *RemediationUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *RemediationUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := remediation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Remediation.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *RemediationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -3815,6 +3885,9 @@ func (_u *RemediationUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) 
 }
 
 func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(remediation.Table, remediation.Columns, sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -3925,6 +3998,12 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediation.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(remediation.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(remediation.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(remediation.FieldState, field.TypeString, value)
@@ -4614,30 +4693,30 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4645,16 +4724,16 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
