@@ -454,7 +454,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 		"repository": {"full_name": "acme/web-app"},
 		"alert": {
 			"number": 42,
-			"state": "OPEN",
+			"state": "open",
 			"html_url": "https://github.com/acme/web-app/security/dependabot/42",
 			"created_at": "2026-03-01T00:00:00Z",
 			"updated_at": "2026-03-25T12:00:00Z",
