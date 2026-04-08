@@ -4,6 +4,7 @@ import (
 	"maps"
 	"net/http"
 	"slices"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -88,8 +89,8 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context, openapiCtx *OpenAPICont
 	}
 
 	// ConsoleURL is the full base URL for the frontend (e.g. https://console.theopenlane.io).
-	// The redirect path is derived from the definition ID so the browser lands on the integration detail page.
-	redirectTo := h.ConsoleURL + "organization-settings/integrations/" + def.ID
+	// Accept either form with or without a trailing slash.
+	redirectTo := strings.TrimRight(h.ConsoleURL, "/") + "/organization-settings/integrations/" + def.ID
 	cookies["redirect_to"] = redirectTo
 
 	sessions.SetCookies(ctx.Response().Writer, cfg, cookies)
