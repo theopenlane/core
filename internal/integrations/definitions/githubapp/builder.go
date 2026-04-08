@@ -92,7 +92,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:            gitHubClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
 					Description:    "GitHub GraphQL client",
-					Build:          Client{APIURL: cfg.APIURL}.Build,
+					Build:          Client{AppConfig: cfg}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

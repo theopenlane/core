@@ -1,4 +1,4 @@
-h1:T6Ddfu9LtxbdV4dauCsv5YcIJdnMtSnRvyB2dEMJLx8=
+h1:91eB3NJs9ksdKYys8xPYiF9y2/gkF23T/dVxDV/e2E0=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -98,3 +98,5 @@ h1:T6Ddfu9LtxbdV4dauCsv5YcIJdnMtSnRvyB2dEMJLx8=
 20260405172938_vendorriskscore.sql h1:qPwwDtspPkSPWz4Dodp7KDyRoTZequXCUipRu1W7NUQ=
 20260405172940_vendorriskscore_history.sql h1:NFdOOtD+4GBDC8r0mz2iMnc3HJOiyQt3XyE6umbDOYc=
 20260407160336_platform_files.sql h1:IDrKMvaYP44KVGtOSGm50TcsxF9Jb4kWB/lQe/ZbwMs=
+20260407224951_vulnfieldupdates.sql h1:yAAEu3ZllOtYmu880vlwnWReMuVGcCBrnFQJuUcg9Ls=
+20260407224954_vulnfieldupdates_history.sql h1:stWXvVqqGIZQ8vvERR2Ra5xlFbQYAwXvzJoCdLmPQqs=

@@ -491,6 +491,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 		OauthProvider: handlers.OauthProviderConfig{
 			RedirectURL: "http://localhost",
 		},
+		ConsoleURL:               "http://console.example",
 		DefaultTrustCenterDomain: "trust.openlane.com",
 	}
 

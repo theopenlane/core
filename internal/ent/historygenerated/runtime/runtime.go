@@ -3252,6 +3252,10 @@ func init() {
 	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[44].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
+	// vulnerabilityhistoryDescCweIds is the schema descriptor for cwe_ids field.
+	vulnerabilityhistoryDescCweIds := vulnerabilityhistoryFields[45].Descriptor()
+	// vulnerabilityhistory.DefaultCweIds holds the default value on creation for the cwe_ids field.
+	vulnerabilityhistory.DefaultCweIds = vulnerabilityhistoryDescCweIds.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.
 	vulnerabilityhistoryDescID := vulnerabilityhistoryFields[9].Descriptor()
 	// vulnerabilityhistory.DefaultID holds the default value on creation for the id field.

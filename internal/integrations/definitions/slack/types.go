@@ -48,8 +48,6 @@ type slackBotTokenCred struct {
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // InstallationMetadata holds the stable Slack workspace identity for one installation

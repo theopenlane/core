@@ -2366,14 +2366,16 @@ func searchVulnerabilities(ctx context.Context, query string, after *entgql.Curs
 		Where(
 			vulnerability.Or(
 				vulnerability.CveIDContainsFold(query),           // search by CveID
+				vulnerability.DismissedReasonContainsFold(query), // search by DismissedReason
 				vulnerability.DisplayID(query),                   // search equal to DisplayID
 				vulnerability.ExternalIDContainsFold(query),      // search by ExternalID
 				vulnerability.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				vulnerability.ID(query),                          // search equal to ID
+				vulnerability.PackageNameContainsFold(query),     // search by PackageName
 				vulnerability.SeverityContainsFold(query),        // search by Severity
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $7", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $9", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -2420,14 +2422,26 @@ func adminSearchVulnerabilities(ctx context.Context, query string, after *entgql
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(impacts)::text LIKE $25", likeQuery)) // search by Impacts
 				},
-				vulnerability.ExternalURIContainsFold(query), // search by ExternalURI
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $27", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(cwe_ids)::text LIKE $26", likeQuery)) // search by CweIds
+				},
+				vulnerability.VulnerableVersionRangeContainsFold(query), // search by VulnerableVersionRange
+				vulnerability.FirstPatchedVersionContainsFold(query),    // search by FirstPatchedVersion
+				vulnerability.PackageNameContainsFold(query),            // search by PackageName
+				vulnerability.PackageEcosystemContainsFold(query),       // search by PackageEcosystem
+				vulnerability.ManifestPathContainsFold(query),           // search by ManifestPath
+				vulnerability.DependencyScopeContainsFold(query),        // search by DependencyScope
+				vulnerability.DismissedReasonContainsFold(query),        // search by DismissedReason
+				vulnerability.DismissedCommentContainsFold(query),       // search by DismissedComment
+				vulnerability.ExternalURIContainsFold(query),            // search by ExternalURI
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $36", likeQuery)) // search by Metadata
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(raw_payload)::text LIKE $28", likeQuery)) // search by RawPayload
+					s.Where(sql.ExprP("(raw_payload)::text LIKE $37", likeQuery)) // search by RawPayload
 				},
 			),
 		)

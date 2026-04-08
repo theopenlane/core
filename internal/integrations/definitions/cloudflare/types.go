@@ -28,8 +28,6 @@ type UserInput struct {
 	AccountID string `json:"accountId,omitempty" jsonschema:"required,title=Account ID,description=Cloudflare account ID required for listing account members."`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // CredentialSchema holds the Cloudflare API credentials for one installation

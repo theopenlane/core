@@ -393,7 +393,7 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"}, Default: "TECHNOLOGY"},
+		{Name: "asset_type", Type: field.TypeEnum, Enums: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE", "REPOSITORY"}, Default: "TECHNOLOGY"},
 		{Name: "name", Type: field.TypeString},
 		{Name: "display_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "description", Type: field.TypeString, Nullable: true},
@@ -8093,9 +8093,21 @@ var (
 		{Name: "validated", Type: field.TypeBool, Nullable: true},
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
 		{Name: "impacts", Type: field.TypeJSON, Nullable: true},
+		{Name: "cwe_ids", Type: field.TypeJSON, Nullable: true},
+		{Name: "vulnerable_version_range", Type: field.TypeString, Nullable: true},
+		{Name: "first_patched_version", Type: field.TypeString, Nullable: true},
+		{Name: "package_name", Type: field.TypeString, Nullable: true},
+		{Name: "package_ecosystem", Type: field.TypeString, Nullable: true},
+		{Name: "manifest_path", Type: field.TypeString, Nullable: true},
+		{Name: "dependency_scope", Type: field.TypeString, Nullable: true},
 		{Name: "published_at", Type: field.TypeTime, Nullable: true},
 		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
 		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "dismissed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "dismissed_reason", Type: field.TypeString, Nullable: true},
+		{Name: "dismissed_comment", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "fixed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "auto_dismissed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "external_uri", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
@@ -8112,25 +8124,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vulnerabilities_organizations_vulnerabilities",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[44]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[56]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_environment",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[45]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[57]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_scope",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[46]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[58]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_vulnerability_status",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[47]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[59]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8139,12 +8151,12 @@ var (
 			{
 				Name:    "vulnerability_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[56]},
 			},
 			{
 				Name:    "vulnerability_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8152,7 +8164,7 @@ var (
 			{
 				Name:    "vulnerability_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[17], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[17], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8160,7 +8172,7 @@ var (
 			{
 				Name:    "vulnerability_cve_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[44]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
