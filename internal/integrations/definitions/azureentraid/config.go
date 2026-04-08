@@ -7,5 +7,5 @@ type Config struct {
 	// ClientSecret is the Azure application client secret used for client credentials auth
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Azure application
-	RedirectURL string `json:"redirecturl" koanf:"redirecturl"`
+	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
 }
