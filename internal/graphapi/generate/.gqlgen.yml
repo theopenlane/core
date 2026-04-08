@@ -63,9 +63,6 @@ autobind:
 # modelgen, the others will be allowed when binding to fields. Configure them to
 # your liking
 models:
-  UploadFileName:
-    model:
-      - github.com/99designs/gqlgen/graphql.Map
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.String

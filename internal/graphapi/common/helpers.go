@@ -1213,6 +1213,9 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 	}
 }
 
+// extract the metadata from the mutation
+// the convention is as follows: If avatarFile is the name, avatarFileMetadata is what should be used.
+// this allows us not to touch the resolvers in anyway
 func metadataInputForUploadArg(variables map[string]any, uploadArg string, index int) map[string]any {
 	raw, ok := variables[uploadArg+"Metadata"]
 	if !ok || raw == nil {

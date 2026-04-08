@@ -240,7 +240,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
-		entx.FileCategory("Evidence"),
+		entx.FileCategory("evidence"),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(
 				oscalgen.OSCALModelComponentDefinition,

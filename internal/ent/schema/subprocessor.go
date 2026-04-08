@@ -171,6 +171,6 @@ func (Subprocessor) Annotations() []schema.Annotation {
 			entx.WithOrgOwned(),
 			entx.WithSystemOwned(),
 		),
-		entx.FileCategory("Logo"),
+		entx.FileCategory("logo"),
 	}
 }

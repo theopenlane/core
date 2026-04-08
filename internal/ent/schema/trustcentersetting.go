@@ -266,6 +266,6 @@ func (TrustCenterSetting) Modules() []models.OrgModule {
 func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entx.FileCategory("Logo"),
+		entx.FileCategory("logo"),
 	}
 }

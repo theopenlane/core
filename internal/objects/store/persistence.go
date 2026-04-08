@@ -10,6 +10,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/consts"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -18,7 +19,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
 )
 
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.
@@ -71,6 +71,7 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	}
 
 	set := ent.CreateFileInput{
+		Name:                  lo.ToPtr(retrieveFileName(f)),
 		ProvidedFileName:      f.OriginalName,
 		ProvidedFileExtension: filepath.Ext(f.ProvidedExtension),
 		ProvidedFileSize:      &f.Size,
@@ -82,8 +83,8 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		StoragePath:           &f.Folder,
 	}
 
-	if categoryName := autoFileCategoryName(f); categoryName != "" {
-		set.CategoryName = &categoryName
+	if name := getCategoryNameForSchema(f); name != "" {
+		set.CategoryName = &name
 	}
 
 	if orgID != "" {
@@ -103,12 +104,29 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	return entFile, nil
 }
 
-func autoFileCategoryName(f pkgobjects.File) string {
-	objectType := strings.TrimSpace(f.CorrelatedObjectType)
+func retrieveFileName(f pkgobjects.File) string {
+	if name := strings.TrimSpace(f.Name); name != "" {
+		return name
+	}
 
-	for schemaName, categoryName := range FileCategoryDefaults {
-		if strings.EqualFold(schemaName, objectType) {
-			return categoryName
+	if f.Metadata != nil {
+		if name, ok := f.Metadata["name"].(string); ok {
+			name = strings.TrimSpace(name)
+			if name != "" {
+				return name
+			}
+		}
+	}
+
+	return f.OriginalName
+}
+
+func getCategoryNameForSchema(f pkgobjects.File) string {
+	object := strings.TrimSpace(f.CorrelatedObjectType)
+
+	for k, v := range FileCategoryDefaults {
+		if strings.EqualFold(k, object) {
+			return v
 		}
 	}
 

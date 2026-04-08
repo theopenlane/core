@@ -324,7 +324,7 @@ func (u User) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.FileCategory("Avatar"),
+		entx.FileCategory("avatar"),
 	}
 }
 

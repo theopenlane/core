@@ -642,7 +642,7 @@ func (o Organization) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.FileCategory("Avatar"),
+		entx.FileCategory("avatar"),
 		entfga.SelfAccessChecks(),
 	}
 }
