@@ -24913,6 +24913,11 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldCategoryID)
 				fieldSeen[file.FieldCategoryID] = struct{}{}
 			}
+		case "name":
+			if _, ok := fieldSeen[file.FieldName]; !ok {
+				selectedFields = append(selectedFields, file.FieldName)
+				fieldSeen[file.FieldName] = struct{}{}
+			}
 		case "providedFileName":
 			if _, ok := fieldSeen[file.FieldProvidedFileName]; !ok {
 				selectedFields = append(selectedFields, file.FieldProvidedFileName)

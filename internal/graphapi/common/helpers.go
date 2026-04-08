@@ -1195,7 +1195,7 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 	}
 
 	if upload.Metadata == nil {
-		upload.Metadata = make(map[string]string)
+		upload.Metadata = make(map[string]any)
 	}
 
 	if name, ok := metadata["name"].(string); ok {
@@ -1203,6 +1203,12 @@ func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string
 		if name != "" {
 			upload.Metadata["name"] = name
 			upload.Name = name
+		}
+	}
+
+	if rawMetadata, ok := metadata["metadata"].(map[string]any); ok {
+		for k, v := range rawMetadata {
+			upload.Metadata[k] = v
 		}
 	}
 }

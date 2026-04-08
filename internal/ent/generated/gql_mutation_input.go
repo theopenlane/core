@@ -9259,6 +9259,7 @@ type CreateFileInput struct {
 	EnvironmentName           *string
 	ScopeName                 *string
 	CategoryName              *string
+	Name                      *string
 	ProvidedFileName          string
 	ProvidedFileExtension     string
 	ProvidedFileSize          *int64
@@ -9318,6 +9319,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.CategoryName; v != nil {
 		m.SetCategoryName(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
 	}
 	m.SetProvidedFileName(i.ProvidedFileName)
 	m.SetProvidedFileExtension(i.ProvidedFileExtension)
@@ -9450,6 +9454,8 @@ type UpdateFileInput struct {
 	ScopeName                       *string
 	ClearCategoryName               bool
 	CategoryName                    *string
+	ClearName                       bool
+	Name                            *string
 	ProvidedFileName                *string
 	ProvidedFileExtension           *string
 	ClearProvidedFileSize           bool
@@ -9583,6 +9589,12 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.CategoryName; v != nil {
 		m.SetCategoryName(*v)
+	}
+	if i.ClearName {
+		m.ClearName()
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
 	}
 	if v := i.ProvidedFileName; v != nil {
 		m.SetProvidedFileName(*v)

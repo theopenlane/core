@@ -273,6 +273,20 @@ func (_c *FileHistoryCreate) SetNillableCategoryID(v *string) *FileHistoryCreate
 	return _c
 }
 
+// SetName sets the "name" field.
+func (_c *FileHistoryCreate) SetName(v string) *FileHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetName(*v)
+	}
+	return _c
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_c *FileHistoryCreate) SetProvidedFileName(v string) *FileHistoryCreate {
 	_c.mutation.SetProvidedFileName(v)
@@ -708,6 +722,10 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.CategoryID(); ok {
 		_spec.SetField(filehistory.FieldCategoryID, field.TypeString, value)
 		_node.CategoryID = value
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(filehistory.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

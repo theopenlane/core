@@ -158,11 +158,9 @@ func storageFileFromEnt(file *generated.File) *storagetypes.File {
 	}
 
 	if file.Metadata != nil {
-		metadata := make(map[string]string)
+		metadata := make(map[string]any)
 		for k, v := range file.Metadata {
-			if str, ok := v.(string); ok {
-				metadata[k] = str
-			}
+			metadata[k] = v
 		}
 
 		storageFile.Metadata = metadata

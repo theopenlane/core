@@ -2125,6 +2125,7 @@ type ComplexityRoot struct {
 		LastAccessedAt         func(childComplexity int) int
 		Md5Hash                func(childComplexity int) int
 		Metadata               func(childComplexity int) int
+		Name                   func(childComplexity int) int
 		Organization           func(childComplexity int) int
 		OrganizationSetting    func(childComplexity int) int
 		OriginalTrustCenterDoc func(childComplexity int) int
@@ -17986,6 +17987,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.Metadata(childComplexity), true
+
+	case "File.name":
+		if e.ComplexityRoot.File.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.File.Name(childComplexity), true
 
 	case "File.organization":
 		if e.ComplexityRoot.File.Organization == nil {
@@ -67933,6 +67941,10 @@ input CreateFileInput {
   """
   categoryName: String
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -82737,6 +82749,10 @@ type File implements Node {
   """
   categoryID: ID
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -83255,6 +83271,24 @@ input FileWhereInput {
   categoryIDNotNil: Boolean
   categoryIDEqualFold: ID
   categoryIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -129725,6 +129759,11 @@ input UpdateFileInput {
   categoryName: String
   clearCategoryName: Boolean
   """
+  the user-facing display name of the file
+  """
+  name: String
+  clearName: Boolean
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String
@@ -143216,6 +143255,10 @@ input FileMetadataInput {
     the display name for the file, defaults to the original filename
     """
     name: String
+    """
+    additional extracted or client-provided metadata for the file
+    """
+    metadata: Map
 }
 `, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {

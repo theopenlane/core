@@ -12930,6 +12930,10 @@ type FileHistory implements Node {
   """
   categoryID: String
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -13322,6 +13326,24 @@ input FileHistoryWhereInput {
   categoryIDNotNil: Boolean
   categoryIDEqualFold: String
   categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """

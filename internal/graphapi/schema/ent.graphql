@@ -11837,6 +11837,10 @@ input CreateFileInput {
   """
   categoryName: String
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -26641,6 +26645,10 @@ type File implements Node {
   """
   categoryID: ID
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -27159,6 +27167,24 @@ input FileWhereInput {
   categoryIDNotNil: Boolean
   categoryIDEqualFold: ID
   categoryIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -73628,6 +73654,11 @@ input UpdateFileInput {
   """
   categoryName: String
   clearCategoryName: Boolean
+  """
+  the user-facing display name of the file
+  """
+  name: String
+  clearName: Boolean
   """
   the name of the file provided in the payload key without the extension
   """

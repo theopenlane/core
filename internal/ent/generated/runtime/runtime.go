@@ -2907,11 +2907,11 @@ func init() {
 	// file.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	file.DefaultSystemOwned = fileDescSystemOwned.Default.(bool)
 	// fileDescProvidedFileSize is the schema descriptor for provided_file_size field.
-	fileDescProvidedFileSize := fileFields[2].Descriptor()
+	fileDescProvidedFileSize := fileFields[3].Descriptor()
 	// file.ProvidedFileSizeValidator is a validator for the "provided_file_size" field. It is called by the builders before save.
 	file.ProvidedFileSizeValidator = fileDescProvidedFileSize.Validators[0].(func(int64) error)
 	// fileDescPersistedFileSize is the schema descriptor for persisted_file_size field.
-	fileDescPersistedFileSize := fileFields[3].Descriptor()
+	fileDescPersistedFileSize := fileFields[4].Descriptor()
 	// file.PersistedFileSizeValidator is a validator for the "persisted_file_size" field. It is called by the builders before save.
 	file.PersistedFileSizeValidator = fileDescPersistedFileSize.Validators[0].(func(int64) error)
 	// fileDescID is the schema descriptor for id field.

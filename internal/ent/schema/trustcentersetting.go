@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
@@ -265,5 +266,6 @@ func (TrustCenterSetting) Modules() []models.OrgModule {
 func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entx.FileCategory("Logo"),
 	}
 }

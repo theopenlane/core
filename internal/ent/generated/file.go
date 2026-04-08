@@ -51,6 +51,8 @@ type File struct {
 	CategoryName string `json:"category_name,omitempty"`
 	// the category of the file
 	CategoryID string `json:"category_id,omitempty"`
+	// the user-facing display name of the file
+	Name string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -385,7 +387,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -531,6 +533,12 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field category_id", values[i])
 			} else if value.Valid {
 				_m.CategoryID = value.String
+			}
+		case file.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
 			}
 		case file.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -912,6 +920,9 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("category_id=")
 	builder.WriteString(_m.CategoryID)
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)

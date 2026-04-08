@@ -82,6 +82,10 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		StoragePath:           &f.Folder,
 	}
 
+	if categoryName := autoFileCategoryName(f); categoryName != "" {
+		set.CategoryName = &categoryName
+	}
+
 	if orgID != "" {
 		set.OrganizationIDs = []string{orgID}
 	}
@@ -97,6 +101,18 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	}
 
 	return entFile, nil
+}
+
+func autoFileCategoryName(f pkgobjects.File) string {
+	objectType := strings.TrimSpace(f.CorrelatedObjectType)
+
+	for schemaName, categoryName := range FileCategoryDefaults {
+		if strings.EqualFold(schemaName, objectType) {
+			return categoryName
+		}
+	}
+
+	return ""
 }
 
 // mappedParent represents the table used to derive the organization ID for object types

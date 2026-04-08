@@ -1017,6 +1017,7 @@ type ComplexityRoot struct {
 		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
@@ -8807,6 +8808,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.Metadata(childComplexity), true
+
+	case "FileHistory.name":
+		if e.ComplexityRoot.FileHistory.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.Name(childComplexity), true
 
 	case "FileHistory.operation":
 		if e.ComplexityRoot.FileHistory.Operation == nil {
@@ -34913,6 +34921,10 @@ type FileHistory implements Node {
   """
   categoryID: String
   """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -35305,6 +35317,24 @@ input FileHistoryWhereInput {
   categoryIDNotNil: Boolean
   categoryIDEqualFold: String
   categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """

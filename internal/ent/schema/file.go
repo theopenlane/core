@@ -41,6 +41,9 @@ func (File) PluralName() string {
 // Fields returns file fields.
 func (File) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("name").
+			Comment("the user-facing display name of the file").
+			Optional(),
 		field.String("provided_file_name").
 			Comment("the name of the file provided in the payload key without the extension"),
 		field.String("provided_file_extension").

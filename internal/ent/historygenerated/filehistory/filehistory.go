@@ -57,6 +57,8 @@ const (
 	FieldCategoryName = "category_name"
 	// FieldCategoryID holds the string denoting the category_id field in the database.
 	FieldCategoryID = "category_id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
 	// FieldProvidedFileName holds the string denoting the provided_file_name field in the database.
 	FieldProvidedFileName = "provided_file_name"
 	// FieldProvidedFileExtension holds the string denoting the provided_file_extension field in the database.
@@ -119,6 +121,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldCategoryName,
 	FieldCategoryID,
+	FieldName,
 	FieldProvidedFileName,
 	FieldProvidedFileExtension,
 	FieldProvidedFileSize,
@@ -280,6 +283,11 @@ func ByCategoryName(opts ...sql.OrderTermOption) OrderOption {
 // ByCategoryID orders the results by the category_id field.
 func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
 // ByProvidedFileName orders the results by the provided_file_name field.

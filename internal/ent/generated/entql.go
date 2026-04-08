@@ -1214,6 +1214,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldScopeID:               {Type: field.TypeString, Column: file.FieldScopeID},
 			file.FieldCategoryName:          {Type: field.TypeString, Column: file.FieldCategoryName},
 			file.FieldCategoryID:            {Type: field.TypeString, Column: file.FieldCategoryID},
+			file.FieldName:                  {Type: field.TypeString, Column: file.FieldName},
 			file.FieldProvidedFileName:      {Type: field.TypeString, Column: file.FieldProvidedFileName},
 			file.FieldProvidedFileExtension: {Type: field.TypeString, Column: file.FieldProvidedFileExtension},
 			file.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: file.FieldProvidedFileSize},
@@ -26424,6 +26425,11 @@ func (f *FileFilter) WhereCategoryName(p entql.StringP) {
 // WhereCategoryID applies the entql string predicate on the category_id field.
 func (f *FileFilter) WhereCategoryID(p entql.StringP) {
 	f.Where(p.Field(file.FieldCategoryID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *FileFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(file.FieldName))
 }
 
 // WhereProvidedFileName applies the entql string predicate on the provided_file_name field.

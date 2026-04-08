@@ -300,6 +300,26 @@ func (_u *FileUpdate) ClearCategoryID() *FileUpdate {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *FileUpdate) SetName(v string) *FileUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableName(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileUpdate) ClearName() *FileUpdate {
+	_u.mutation.ClearName()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdate) SetProvidedFileName(v string) *FileUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -1474,6 +1494,12 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.CategoryNameCleared() {
 		_spec.ClearField(file.FieldCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(file.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(file.FieldName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
@@ -2811,6 +2837,26 @@ func (_u *FileUpdateOne) ClearCategoryID() *FileUpdateOne {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *FileUpdateOne) SetName(v string) *FileUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableName(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileUpdateOne) ClearName() *FileUpdateOne {
+	_u.mutation.ClearName()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdateOne) SetProvidedFileName(v string) *FileUpdateOne {
 	_u.mutation.SetProvidedFileName(v)
@@ -4015,6 +4061,12 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.CategoryNameCleared() {
 		_spec.ClearField(file.FieldCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(file.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(file.FieldName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)

@@ -768,6 +768,54 @@ func TestInsensitiveHeaders(t *testing.T) {
 	}
 }
 
+func TestApplyUploadMetadataFromVariables(t *testing.T) {
+	t.Run("single upload metadata", func(t *testing.T) {
+		upload := &pkgobjects.File{}
+		variables := map[string]any{
+			"avatarFileMetadata": map[string]any{
+				"name": "Profile Photo",
+				"metadata": map[string]any{
+					"classification": "avatar",
+					"source":         "client",
+				},
+			},
+		}
+
+		applyUploadMetadataFromVariables(variables, "avatarFile", 0, upload)
+
+		assert.Check(t, is.Equal("Profile Photo", upload.Name))
+		assert.Check(t, is.Equal("Profile Photo", upload.Metadata["name"]))
+		assert.Check(t, is.Equal("avatar", upload.Metadata["classification"]))
+		assert.Check(t, is.Equal("client", upload.Metadata["source"]))
+	})
+
+	t.Run("list upload metadata by index", func(t *testing.T) {
+		upload := &pkgobjects.File{}
+		variables := map[string]any{
+			"entityFilesMetadata": []any{
+				map[string]any{
+					"name": "April Invoice",
+					"metadata": map[string]any{
+						"classification": "invoice",
+					},
+				},
+				map[string]any{
+					"name": "SOC 2 Report",
+					"metadata": map[string]any{
+						"classification": "soc2",
+					},
+				},
+			},
+		}
+
+		applyUploadMetadataFromVariables(variables, "entityFiles", 1, upload)
+
+		assert.Check(t, is.Equal("SOC 2 Report", upload.Name))
+		assert.Check(t, is.Equal("SOC 2 Report", upload.Metadata["name"]))
+		assert.Check(t, is.Equal("soc2", upload.Metadata["classification"]))
+	})
+}
+
 // TestGetOrgOwnerFromInputWrapped verifies wrapped Input owner extraction.
 func TestGetOrgOwnerFromInputWrapped(t *testing.T) {
 	type ownerInput struct {

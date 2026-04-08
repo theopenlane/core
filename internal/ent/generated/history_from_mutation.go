@@ -8811,6 +8811,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetCategoryID(categoryID)
 	}
 
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
 	if providedFileName, exists := m.ProvidedFileName(); exists {
 		create = create.SetProvidedFileName(providedFileName)
 	}
@@ -9010,6 +9014,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetCategoryID(file.CategoryID)
 		}
 
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(file.Name)
+		}
+
 		if providedFileName, exists := m.ProvidedFileName(); exists {
 			create = create.SetProvidedFileName(providedFileName)
 		} else {
@@ -9169,6 +9179,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetScopeID(file.ScopeID).
 			SetCategoryName(file.CategoryName).
 			SetCategoryID(file.CategoryID).
+			SetName(file.Name).
 			SetProvidedFileName(file.ProvidedFileName).
 			SetProvidedFileExtension(file.ProvidedFileExtension).
 			SetProvidedFileSize(file.ProvidedFileSize).

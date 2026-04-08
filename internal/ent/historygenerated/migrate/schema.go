@@ -1082,6 +1082,7 @@ var (
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "category_name", Type: field.TypeString, Nullable: true},
 		{Name: "category_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
 		{Name: "provided_file_extension", Type: field.TypeString},
 		{Name: "provided_file_size", Type: field.TypeInt64, Nullable: true},

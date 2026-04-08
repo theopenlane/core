@@ -1167,6 +1167,8 @@ type FileDeletePayload struct {
 type FileMetadataInput struct {
 	// the display name for the file, defaults to the original filename
 	Name *string `json:"name,omitempty"`
+	// additional extracted or client-provided metadata for the file
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 // Return response for createBulkFinding mutation

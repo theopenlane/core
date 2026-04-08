@@ -284,6 +284,26 @@ func (_u *FileHistoryUpdate) ClearCategoryID() *FileHistoryUpdate {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *FileHistoryUpdate) SetName(v string) *FileHistoryUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableName(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileHistoryUpdate) ClearName() *FileHistoryUpdate {
+	_u.mutation.ClearName()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileHistoryUpdate) SetProvidedFileName(v string) *FileHistoryUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -781,6 +801,12 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.CategoryIDCleared() {
 		_spec.ClearField(filehistory.FieldCategoryID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(filehistory.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(filehistory.FieldName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -1157,6 +1183,26 @@ func (_u *FileHistoryUpdateOne) SetNillableCategoryID(v *string) *FileHistoryUpd
 // ClearCategoryID clears the value of the "category_id" field.
 func (_u *FileHistoryUpdateOne) ClearCategoryID() *FileHistoryUpdateOne {
 	_u.mutation.ClearCategoryID()
+	return _u
+}
+
+// SetName sets the "name" field.
+func (_u *FileHistoryUpdateOne) SetName(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableName(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileHistoryUpdateOne) ClearName() *FileHistoryUpdateOne {
+	_u.mutation.ClearName()
 	return _u
 }
 
@@ -1686,6 +1732,12 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.CategoryIDCleared() {
 		_spec.ClearField(filehistory.FieldCategoryID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(filehistory.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(filehistory.FieldName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

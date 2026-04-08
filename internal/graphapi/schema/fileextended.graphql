@@ -8,4 +8,8 @@ input FileMetadataInput {
     the display name for the file, defaults to the original filename
     """
     name: String
+    """
+    additional extracted or client-provided metadata for the file
+    """
+    metadata: Map
 }

@@ -50,6 +50,7 @@ query GetFileByID ($fileId: ID!) {
 		lastAccessedAt
 		md5Hash
 		metadata
+		name
 		persistedFileSize
 		providedFileExtension
 		providedFileName
