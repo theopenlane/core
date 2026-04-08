@@ -508,7 +508,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	assert.Equal(t, "CVE-2026-12345", vuln.DisplayName)
 	assert.Equal(t, 7.5, vuln.Score)
 	assert.Equal(t, enums.SecurityLevelHigh, vuln.SecurityLevel)
-	assert.Equal(t, "OPEN", vuln.VulnerabilityStatusName)
+	assert.Equal(t, "open", vuln.VulnerabilityStatusName)
 	assert.True(t, vuln.Open)
 }
 
