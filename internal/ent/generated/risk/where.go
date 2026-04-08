@@ -204,6 +204,31 @@ func DelegateID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldDelegateID, v))
 }
 
+// MitigatedAt applies equality check predicate on the "mitigated_at" field. It's identical to MitigatedAtEQ.
+func MitigatedAt(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldMitigatedAt, v))
+}
+
+// ReviewRequired applies equality check predicate on the "review_required" field. It's identical to ReviewRequiredEQ.
+func ReviewRequired(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldReviewRequired, v))
+}
+
+// LastReviewedAt applies equality check predicate on the "last_reviewed_at" field. It's identical to LastReviewedAtEQ.
+func LastReviewedAt(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
+// NextReviewDueAt applies equality check predicate on the "next_review_due_at" field. It's identical to NextReviewDueAtEQ.
+func NextReviewDueAt(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldNextReviewDueAt, v))
+}
+
+// ResidualScore applies equality check predicate on the "residual_score" field. It's identical to ResidualScoreEQ.
+func ResidualScore(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldResidualScore, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldCreatedAt, v))
@@ -2244,6 +2269,306 @@ func DelegateIDContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldDelegateID, v))
 }
 
+// MitigatedAtEQ applies the EQ predicate on the "mitigated_at" field.
+func MitigatedAtEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldMitigatedAt, v))
+}
+
+// MitigatedAtNEQ applies the NEQ predicate on the "mitigated_at" field.
+func MitigatedAtNEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldMitigatedAt, v))
+}
+
+// MitigatedAtIn applies the In predicate on the "mitigated_at" field.
+func MitigatedAtIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldMitigatedAt, vs...))
+}
+
+// MitigatedAtNotIn applies the NotIn predicate on the "mitigated_at" field.
+func MitigatedAtNotIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldMitigatedAt, vs...))
+}
+
+// MitigatedAtGT applies the GT predicate on the "mitigated_at" field.
+func MitigatedAtGT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldMitigatedAt, v))
+}
+
+// MitigatedAtGTE applies the GTE predicate on the "mitigated_at" field.
+func MitigatedAtGTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldMitigatedAt, v))
+}
+
+// MitigatedAtLT applies the LT predicate on the "mitigated_at" field.
+func MitigatedAtLT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldMitigatedAt, v))
+}
+
+// MitigatedAtLTE applies the LTE predicate on the "mitigated_at" field.
+func MitigatedAtLTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldMitigatedAt, v))
+}
+
+// MitigatedAtIsNil applies the IsNil predicate on the "mitigated_at" field.
+func MitigatedAtIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldMitigatedAt))
+}
+
+// MitigatedAtNotNil applies the NotNil predicate on the "mitigated_at" field.
+func MitigatedAtNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldMitigatedAt))
+}
+
+// ReviewRequiredEQ applies the EQ predicate on the "review_required" field.
+func ReviewRequiredEQ(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldReviewRequired, v))
+}
+
+// ReviewRequiredNEQ applies the NEQ predicate on the "review_required" field.
+func ReviewRequiredNEQ(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldReviewRequired, v))
+}
+
+// ReviewRequiredIsNil applies the IsNil predicate on the "review_required" field.
+func ReviewRequiredIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldReviewRequired))
+}
+
+// ReviewRequiredNotNil applies the NotNil predicate on the "review_required" field.
+func ReviewRequiredNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldReviewRequired))
+}
+
+// LastReviewedAtEQ applies the EQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtNEQ applies the NEQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtNEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIn applies the In predicate on the "last_reviewed_at" field.
+func LastReviewedAtIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtNotIn applies the NotIn predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtGT applies the GT predicate on the "last_reviewed_at" field.
+func LastReviewedAtGT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtGTE applies the GTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtGTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLT applies the LT predicate on the "last_reviewed_at" field.
+func LastReviewedAtLT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLTE applies the LTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtLTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIsNil applies the IsNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldLastReviewedAt))
+}
+
+// LastReviewedAtNotNil applies the NotNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldLastReviewedAt))
+}
+
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.Risk {
+	vc := v
+	return predicate.Risk(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.Risk {
+	vc := v
+	return predicate.Risk(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.Risk {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Risk(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.Risk {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Risk(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// NextReviewDueAtEQ applies the EQ predicate on the "next_review_due_at" field.
+func NextReviewDueAtEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtNEQ applies the NEQ predicate on the "next_review_due_at" field.
+func NextReviewDueAtNEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtIn applies the In predicate on the "next_review_due_at" field.
+func NextReviewDueAtIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldNextReviewDueAt, vs...))
+}
+
+// NextReviewDueAtNotIn applies the NotIn predicate on the "next_review_due_at" field.
+func NextReviewDueAtNotIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldNextReviewDueAt, vs...))
+}
+
+// NextReviewDueAtGT applies the GT predicate on the "next_review_due_at" field.
+func NextReviewDueAtGT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtGTE applies the GTE predicate on the "next_review_due_at" field.
+func NextReviewDueAtGTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtLT applies the LT predicate on the "next_review_due_at" field.
+func NextReviewDueAtLT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtLTE applies the LTE predicate on the "next_review_due_at" field.
+func NextReviewDueAtLTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtIsNil applies the IsNil predicate on the "next_review_due_at" field.
+func NextReviewDueAtIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldNextReviewDueAt))
+}
+
+// NextReviewDueAtNotNil applies the NotNil predicate on the "next_review_due_at" field.
+func NextReviewDueAtNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldNextReviewDueAt))
+}
+
+// ResidualScoreEQ applies the EQ predicate on the "residual_score" field.
+func ResidualScoreEQ(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldResidualScore, v))
+}
+
+// ResidualScoreNEQ applies the NEQ predicate on the "residual_score" field.
+func ResidualScoreNEQ(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldResidualScore, v))
+}
+
+// ResidualScoreIn applies the In predicate on the "residual_score" field.
+func ResidualScoreIn(vs ...int) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldResidualScore, vs...))
+}
+
+// ResidualScoreNotIn applies the NotIn predicate on the "residual_score" field.
+func ResidualScoreNotIn(vs ...int) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldResidualScore, vs...))
+}
+
+// ResidualScoreGT applies the GT predicate on the "residual_score" field.
+func ResidualScoreGT(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldResidualScore, v))
+}
+
+// ResidualScoreGTE applies the GTE predicate on the "residual_score" field.
+func ResidualScoreGTE(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldResidualScore, v))
+}
+
+// ResidualScoreLT applies the LT predicate on the "residual_score" field.
+func ResidualScoreLT(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldResidualScore, v))
+}
+
+// ResidualScoreLTE applies the LTE predicate on the "residual_score" field.
+func ResidualScoreLTE(v int) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldResidualScore, v))
+}
+
+// ResidualScoreIsNil applies the IsNil predicate on the "residual_score" field.
+func ResidualScoreIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldResidualScore))
+}
+
+// ResidualScoreNotNil applies the NotNil predicate on the "residual_score" field.
+func ResidualScoreNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldResidualScore))
+}
+
+// RiskDecisionEQ applies the EQ predicate on the "risk_decision" field.
+func RiskDecisionEQ(v enums.RiskDecision) predicate.Risk {
+	vc := v
+	return predicate.Risk(sql.FieldEQ(FieldRiskDecision, vc))
+}
+
+// RiskDecisionNEQ applies the NEQ predicate on the "risk_decision" field.
+func RiskDecisionNEQ(v enums.RiskDecision) predicate.Risk {
+	vc := v
+	return predicate.Risk(sql.FieldNEQ(FieldRiskDecision, vc))
+}
+
+// RiskDecisionIn applies the In predicate on the "risk_decision" field.
+func RiskDecisionIn(vs ...enums.RiskDecision) predicate.Risk {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Risk(sql.FieldIn(FieldRiskDecision, v...))
+}
+
+// RiskDecisionNotIn applies the NotIn predicate on the "risk_decision" field.
+func RiskDecisionNotIn(vs ...enums.RiskDecision) predicate.Risk {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Risk(sql.FieldNotIn(FieldRiskDecision, v...))
+}
+
+// RiskDecisionIsNil applies the IsNil predicate on the "risk_decision" field.
+func RiskDecisionIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldRiskDecision))
+}
+
+// RiskDecisionNotNil applies the NotNil predicate on the "risk_decision" field.
+func RiskDecisionNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldRiskDecision))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
@@ -2903,6 +3228,64 @@ func HasDiscussionsWith(preds ...predicate.Discussion) predicate.Risk {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Discussion
 		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviews applies the HasEdge predicate on the "reviews" edge.
+func HasReviews() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewsWith applies the HasEdge predicate on the "reviews" edge with a given conditions (other predicates).
+func HasReviewsWith(preds ...predicate.Review) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newReviewsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationRisks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

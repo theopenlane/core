@@ -2333,6 +2333,10 @@ func init() {
 	riskhistoryDescTags := riskhistoryFields[11].Descriptor()
 	// riskhistory.DefaultTags holds the default value on creation for the tags field.
 	riskhistory.DefaultTags = riskhistoryDescTags.Default.([]string)
+	// riskhistoryDescReviewRequired is the schema descriptor for review_required field.
+	riskhistoryDescReviewRequired := riskhistoryFields[39].Descriptor()
+	// riskhistory.DefaultReviewRequired holds the default value on creation for the review_required field.
+	riskhistory.DefaultReviewRequired = riskhistoryDescReviewRequired.Default.(bool)
 	// riskhistoryDescID is the schema descriptor for id field.
 	riskhistoryDescID := riskhistoryFields[9].Descriptor()
 	// riskhistory.DefaultID holds the default value on creation for the id field.

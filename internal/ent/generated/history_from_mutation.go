@@ -17676,6 +17676,10 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetTitle(title)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if state, exists := m.State(); exists {
 		create = create.SetState(state)
 	}
@@ -17885,6 +17889,12 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetTitle(remediation.Title)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(remediation.Status)
+		}
+
 		if state, exists := m.State(); exists {
 			create = create.SetState(state)
 		} else {
@@ -18035,6 +18045,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
+			SetStatus(remediation.Status).
 			SetState(remediation.State).
 			SetIntent(remediation.Intent).
 			SetSummary(remediation.Summary).
@@ -18666,6 +18677,34 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDelegateID(delegateID)
 	}
 
+	if mitigatedAt, exists := m.MitigatedAt(); exists {
+		create = create.SetNillableMitigatedAt(&mitigatedAt)
+	}
+
+	if reviewRequired, exists := m.ReviewRequired(); exists {
+		create = create.SetReviewRequired(reviewRequired)
+	}
+
+	if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+		create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+	}
+
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+		create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+	}
+
+	if residualScore, exists := m.ResidualScore(); exists {
+		create = create.SetResidualScore(residualScore)
+	}
+
+	if riskDecision, exists := m.RiskDecision(); exists {
+		create = create.SetRiskDecision(riskDecision)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -18901,6 +18940,48 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateID(risk.DelegateID)
 		}
 
+		if mitigatedAt, exists := m.MitigatedAt(); exists {
+			create = create.SetNillableMitigatedAt(&mitigatedAt)
+		} else {
+			create = create.SetNillableMitigatedAt(risk.MitigatedAt)
+		}
+
+		if reviewRequired, exists := m.ReviewRequired(); exists {
+			create = create.SetReviewRequired(reviewRequired)
+		} else {
+			create = create.SetReviewRequired(risk.ReviewRequired)
+		}
+
+		if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+			create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+		} else {
+			create = create.SetNillableLastReviewedAt(risk.LastReviewedAt)
+		}
+
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(risk.ReviewFrequency)
+		}
+
+		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+		} else {
+			create = create.SetNillableNextReviewDueAt(risk.NextReviewDueAt)
+		}
+
+		if residualScore, exists := m.ResidualScore(); exists {
+			create = create.SetResidualScore(residualScore)
+		} else {
+			create = create.SetResidualScore(risk.ResidualScore)
+		}
+
+		if riskDecision, exists := m.RiskDecision(); exists {
+			create = create.SetRiskDecision(riskDecision)
+		} else {
+			create = create.SetRiskDecision(risk.RiskDecision)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -18970,6 +19051,13 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetBusinessCostsJSON(risk.BusinessCostsJSON).
 			SetStakeholderID(risk.StakeholderID).
 			SetDelegateID(risk.DelegateID).
+			SetNillableMitigatedAt(risk.MitigatedAt).
+			SetReviewRequired(risk.ReviewRequired).
+			SetNillableLastReviewedAt(risk.LastReviewedAt).
+			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
+			SetResidualScore(risk.ResidualScore).
+			SetRiskDecision(risk.RiskDecision).
 			Save(ctx)
 		if err != nil {
 			return err

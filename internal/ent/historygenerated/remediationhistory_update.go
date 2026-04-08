@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
@@ -302,6 +303,26 @@ func (_u *RemediationHistoryUpdate) SetNillableTitle(v *string) *RemediationHist
 // ClearTitle clears the value of the "title" field.
 func (_u *RemediationHistoryUpdate) ClearTitle() *RemediationHistoryUpdate {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *RemediationHistoryUpdate) SetStatus(v enums.RemediationStatus) *RemediationHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableStatus(v *enums.RemediationStatus) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *RemediationHistoryUpdate) ClearStatus() *RemediationHistoryUpdate {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -664,6 +685,16 @@ func (_u *RemediationHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *RemediationHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := remediationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "RemediationHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *RemediationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -671,6 +702,9 @@ func (_u *RemediationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilde
 }
 
 func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(remediationhistory.Table, remediationhistory.Columns, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -782,6 +816,12 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediationhistory.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(remediationhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(remediationhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(remediationhistory.FieldState, field.TypeString, value)
@@ -1173,6 +1213,26 @@ func (_u *RemediationHistoryUpdateOne) ClearTitle() *RemediationHistoryUpdateOne
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *RemediationHistoryUpdateOne) SetStatus(v enums.RemediationStatus) *RemediationHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableStatus(v *enums.RemediationStatus) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *RemediationHistoryUpdateOne) ClearStatus() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetState sets the "state" field.
 func (_u *RemediationHistoryUpdateOne) SetState(v string) *RemediationHistoryUpdateOne {
 	_u.mutation.SetState(v)
@@ -1545,6 +1605,16 @@ func (_u *RemediationHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *RemediationHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := remediationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "RemediationHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *RemediationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1552,6 +1622,9 @@ func (_u *RemediationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RemediationHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(remediationhistory.Table, remediationhistory.Columns, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1680,6 +1753,12 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediationhistory.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(remediationhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(remediationhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.State(); ok {
 		_spec.SetField(remediationhistory.FieldState, field.TypeString, value)

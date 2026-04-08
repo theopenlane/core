@@ -2120,6 +2120,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
@@ -2207,16 +2208,23 @@ type ComplexityRoot struct {
 		ID                func(childComplexity int) int
 		Impact            func(childComplexity int) int
 		IntegrationID     func(childComplexity int) int
+		LastReviewedAt    func(childComplexity int) int
 		Likelihood        func(childComplexity int) int
+		MitigatedAt       func(childComplexity int) int
 		Mitigation        func(childComplexity int) int
 		MitigationJSON    func(childComplexity int) int
 		Name              func(childComplexity int) int
+		NextReviewDueAt   func(childComplexity int) int
 		ObservedAt        func(childComplexity int) int
 		Operation         func(childComplexity int) int
 		OwnerID           func(childComplexity int) int
 		Ref               func(childComplexity int) int
+		ResidualScore     func(childComplexity int) int
+		ReviewFrequency   func(childComplexity int) int
+		ReviewRequired    func(childComplexity int) int
 		RiskCategoryID    func(childComplexity int) int
 		RiskCategoryName  func(childComplexity int) int
+		RiskDecision      func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
 		ScopeID           func(childComplexity int) int
@@ -15327,6 +15335,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RemediationHistory.State(childComplexity), true
 
+	case "RemediationHistory.status":
+		if e.ComplexityRoot.RemediationHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.Status(childComplexity), true
+
 	case "RemediationHistory.summary":
 		if e.ComplexityRoot.RemediationHistory.Summary == nil {
 			break
@@ -15810,12 +15825,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.IntegrationID(childComplexity), true
 
+	case "RiskHistory.lastReviewedAt":
+		if e.ComplexityRoot.RiskHistory.LastReviewedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.LastReviewedAt(childComplexity), true
+
 	case "RiskHistory.likelihood":
 		if e.ComplexityRoot.RiskHistory.Likelihood == nil {
 			break
 		}
 
 		return e.ComplexityRoot.RiskHistory.Likelihood(childComplexity), true
+
+	case "RiskHistory.mitigatedAt":
+		if e.ComplexityRoot.RiskHistory.MitigatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.MitigatedAt(childComplexity), true
 
 	case "RiskHistory.mitigation":
 		if e.ComplexityRoot.RiskHistory.Mitigation == nil {
@@ -15837,6 +15866,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.Name(childComplexity), true
+
+	case "RiskHistory.nextReviewDueAt":
+		if e.ComplexityRoot.RiskHistory.NextReviewDueAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.NextReviewDueAt(childComplexity), true
 
 	case "RiskHistory.observedAt":
 		if e.ComplexityRoot.RiskHistory.ObservedAt == nil {
@@ -15866,6 +15902,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskHistory.Ref(childComplexity), true
 
+	case "RiskHistory.residualScore":
+		if e.ComplexityRoot.RiskHistory.ResidualScore == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ResidualScore(childComplexity), true
+
+	case "RiskHistory.reviewFrequency":
+		if e.ComplexityRoot.RiskHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ReviewFrequency(childComplexity), true
+
+	case "RiskHistory.reviewRequired":
+		if e.ComplexityRoot.RiskHistory.ReviewRequired == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.ReviewRequired(childComplexity), true
+
 	case "RiskHistory.riskCategoryID":
 		if e.ComplexityRoot.RiskHistory.RiskCategoryID == nil {
 			break
@@ -15879,6 +15936,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.RiskCategoryName(childComplexity), true
+
+	case "RiskHistory.riskDecision":
+		if e.ComplexityRoot.RiskHistory.RiskDecision == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.RiskDecision(childComplexity), true
 
 	case "RiskHistory.riskKindID":
 		if e.ComplexityRoot.RiskHistory.RiskKindID == nil {
@@ -50004,6 +50068,10 @@ type RemediationHistory implements Node {
   """
   title: String
   """
+  status of the remediation, such as pending, in_progress, or completed
+  """
+  status: RemediationHistoryRemediationStatus
+  """
   state of the remediation, such as pending or completed
   """
   state: String
@@ -50129,7 +50197,18 @@ enum RemediationHistoryOrderField {
   external_id
   external_owner_id
   title
+  status
   state
+}
+"""
+RemediationHistoryRemediationStatus is enum for the field status
+"""
+enum RemediationHistoryRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 RemediationHistoryWhereInput is used for filtering RemediationHistory objects.
@@ -50453,6 +50532,15 @@ input RemediationHistoryWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  status field predicates
+  """
+  status: RemediationHistoryRemediationStatus
+  statusNEQ: RemediationHistoryRemediationStatus
+  statusIn: [RemediationHistoryRemediationStatus!]
+  statusNotIn: [RemediationHistoryRemediationStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   state field predicates
   """
@@ -51524,6 +51612,31 @@ type RiskHistory implements Node {
   the id of the group responsible for risk oversight on behalf of the stakeholder
   """
   delegateID: String
+  """
+  the time when the risk was mitigated
+  """
+  mitigatedAt: DateTime
+  """
+  indicates if a periodic review is required for the risk
+  """
+  reviewRequired: Boolean
+  """
+  the time when the risk was last reviewed
+  """
+  lastReviewedAt: DateTime
+  reviewFrequency: RiskHistoryFrequency
+  """
+  the time when the next review is due for the risk
+  """
+  nextReviewDueAt: DateTime
+  """
+  score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+  """
+  residualScore: Int
+  """
+  the decision made for the risk - accept, transfer, avoid, mitigate, or none
+  """
+  riskDecision: RiskHistoryRiskDecision
 }
 """
 A connection to a list of items.
@@ -51554,6 +51667,16 @@ type RiskHistoryEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+RiskHistoryFrequency is enum for the field review_frequency
+"""
+enum RiskHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
 }
 """
 RiskHistoryOpType is enum for the field operation
@@ -51591,6 +51714,23 @@ enum RiskHistoryOrderField {
   LIKELIHOOD
   score
   business_costs
+  mitigated_at
+  review_required
+  last_reviewed_at
+  review_frequency
+  next_review_due_at
+  residual_score
+  risk_decision
+}
+"""
+RiskHistoryRiskDecision is enum for the field risk_decision
+"""
+enum RiskHistoryRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+  AVOID
+  MITIGATE
+  ACCEPT
+  TRANSFER
+  NONE
 }
 """
 RiskHistoryRiskImpact is enum for the field impact
@@ -52133,6 +52273,83 @@ input RiskHistoryWhereInput {
   delegateIDNotNil: Boolean
   delegateIDEqualFold: String
   delegateIDContainsFold: String
+  """
+  mitigated_at field predicates
+  """
+  mitigatedAt: DateTime
+  mitigatedAtNEQ: DateTime
+  mitigatedAtIn: [DateTime!]
+  mitigatedAtNotIn: [DateTime!]
+  mitigatedAtGT: DateTime
+  mitigatedAtGTE: DateTime
+  mitigatedAtLT: DateTime
+  mitigatedAtLTE: DateTime
+  mitigatedAtIsNil: Boolean
+  mitigatedAtNotNil: Boolean
+  """
+  review_required field predicates
+  """
+  reviewRequired: Boolean
+  reviewRequiredNEQ: Boolean
+  reviewRequiredIsNil: Boolean
+  reviewRequiredNotNil: Boolean
+  """
+  last_reviewed_at field predicates
+  """
+  lastReviewedAt: DateTime
+  lastReviewedAtNEQ: DateTime
+  lastReviewedAtIn: [DateTime!]
+  lastReviewedAtNotIn: [DateTime!]
+  lastReviewedAtGT: DateTime
+  lastReviewedAtGTE: DateTime
+  lastReviewedAtLT: DateTime
+  lastReviewedAtLTE: DateTime
+  lastReviewedAtIsNil: Boolean
+  lastReviewedAtNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: RiskHistoryFrequency
+  reviewFrequencyNEQ: RiskHistoryFrequency
+  reviewFrequencyIn: [RiskHistoryFrequency!]
+  reviewFrequencyNotIn: [RiskHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_due_at field predicates
+  """
+  nextReviewDueAt: DateTime
+  nextReviewDueAtNEQ: DateTime
+  nextReviewDueAtIn: [DateTime!]
+  nextReviewDueAtNotIn: [DateTime!]
+  nextReviewDueAtGT: DateTime
+  nextReviewDueAtGTE: DateTime
+  nextReviewDueAtLT: DateTime
+  nextReviewDueAtLTE: DateTime
+  nextReviewDueAtIsNil: Boolean
+  nextReviewDueAtNotNil: Boolean
+  """
+  residual_score field predicates
+  """
+  residualScore: Int
+  residualScoreNEQ: Int
+  residualScoreIn: [Int!]
+  residualScoreNotIn: [Int!]
+  residualScoreGT: Int
+  residualScoreGTE: Int
+  residualScoreLT: Int
+  residualScoreLTE: Int
+  residualScoreIsNil: Boolean
+  residualScoreNotNil: Boolean
+  """
+  risk_decision field predicates
+  """
+  riskDecision: RiskHistoryRiskDecision
+  riskDecisionNEQ: RiskHistoryRiskDecision
+  riskDecisionIn: [RiskHistoryRiskDecision!]
+  riskDecisionNotIn: [RiskHistoryRiskDecision!]
+  riskDecisionIsNil: Boolean
+  riskDecisionNotNil: Boolean
 }
 type SLADefinitionHistory implements Node {
   id: ID!
@@ -61737,7 +61954,7 @@ type VulnerabilityHistory implements Node {
   """
   externalOwnerID: String
   """
-  lifecycle status of the vulnerability
+  security level of the vulnerability
   """
   securityLevel: VulnerabilityHistorySecurityLevel
   """

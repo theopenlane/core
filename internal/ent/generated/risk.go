@@ -91,6 +91,20 @@ type Risk struct {
 	StakeholderID string `json:"stakeholder_id,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
 	DelegateID string `json:"delegate_id,omitempty"`
+	// the time when the risk was mitigated
+	MitigatedAt *models.DateTime `json:"mitigated_at,omitempty"`
+	// indicates if a periodic review is required for the risk
+	ReviewRequired bool `json:"review_required,omitempty"`
+	// the time when the risk was last reviewed
+	LastReviewedAt *models.DateTime `json:"last_reviewed_at,omitempty"`
+	// ReviewFrequency holds the value of the "review_frequency" field.
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the time when the next review is due for the risk
+	NextReviewDueAt *models.DateTime `json:"next_review_due_at,omitempty"`
+	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	ResidualScore int `json:"residual_score,omitempty"`
+	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	RiskDecision enums.RiskDecision `json:"risk_decision,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RiskQuery when eager-loading is set.
 	Edges                            RiskEdges `json:"edges"`
@@ -98,8 +112,6 @@ type Risk struct {
 	custom_type_enum_risks           *string
 	custom_type_enum_risk_categories *string
 	finding_risks                    *string
-	remediation_risks                *string
-	review_risks                     *string
 	vulnerability_risks              *string
 	selectValues                     sql.SelectValues
 }
@@ -152,11 +164,15 @@ type RiskEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// discussions related to the risk
 	Discussions []*Discussion `json:"discussions,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -174,6 +190,8 @@ type RiskEdges struct {
 	namedScans            map[string][]*Scan
 	namedComments         map[string][]*Note
 	namedDiscussions      map[string][]*Discussion
+	namedReviews          map[string][]*Review
+	namedRemediations     map[string][]*Remediation
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -397,18 +415,38 @@ func (e RiskEdges) DiscussionsOrErr() ([]*Discussion, error) {
 	return nil, &NotLoadedError{edge: "discussions"}
 }
 
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[23] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[24] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Risk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case risk.FieldObservedAt:
+		case risk.FieldObservedAt, risk.FieldMitigatedAt, risk.FieldLastReviewedAt, risk.FieldNextReviewDueAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case risk.FieldTags, risk.FieldMitigationJSON, risk.FieldDetailsJSON, risk.FieldBusinessCostsJSON:
 			values[i] = new([]byte)
-		case risk.FieldScore:
+		case risk.FieldReviewRequired:
+			values[i] = new(sql.NullBool)
+		case risk.FieldScore, risk.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldExternalID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldExternalID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID, risk.FieldReviewFrequency, risk.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -420,11 +458,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case risk.ForeignKeys[3]: // finding_risks
 			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[4]: // remediation_risks
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[5]: // review_risks
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[6]: // vulnerability_risks
+		case risk.ForeignKeys[4]: // vulnerability_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -661,6 +695,51 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DelegateID = value.String
 			}
+		case risk.FieldMitigatedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field mitigated_at", values[i])
+			} else if value.Valid {
+				_m.MitigatedAt = new(models.DateTime)
+				*_m.MitigatedAt = *value.S.(*models.DateTime)
+			}
+		case risk.FieldReviewRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field review_required", values[i])
+			} else if value.Valid {
+				_m.ReviewRequired = value.Bool
+			}
+		case risk.FieldLastReviewedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field last_reviewed_at", values[i])
+			} else if value.Valid {
+				_m.LastReviewedAt = new(models.DateTime)
+				*_m.LastReviewedAt = *value.S.(*models.DateTime)
+			}
+		case risk.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case risk.FieldNextReviewDueAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_review_due_at", values[i])
+			} else if value.Valid {
+				_m.NextReviewDueAt = new(models.DateTime)
+				*_m.NextReviewDueAt = *value.S.(*models.DateTime)
+			}
+		case risk.FieldResidualScore:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field residual_score", values[i])
+			} else if value.Valid {
+				_m.ResidualScore = int(value.Int64)
+			}
+		case risk.FieldRiskDecision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_decision", values[i])
+			} else if value.Valid {
+				_m.RiskDecision = enums.RiskDecision(value.String)
+			}
 		case risk.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_risks", values[i])
@@ -690,20 +769,6 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				*_m.finding_risks = value.String
 			}
 		case risk.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field remediation_risks", values[i])
-			} else if value.Valid {
-				_m.remediation_risks = new(string)
-				*_m.remediation_risks = value.String
-			}
-		case risk.ForeignKeys[5]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field review_risks", values[i])
-			} else if value.Valid {
-				_m.review_risks = new(string)
-				*_m.review_risks = value.String
-			}
-		case risk.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_risks", values[i])
 			} else if value.Valid {
@@ -838,6 +903,16 @@ func (_m *Risk) QueryDiscussions() *DiscussionQuery {
 	return NewRiskClient(_m.config).QueryDiscussions(_m)
 }
 
+// QueryReviews queries the "reviews" edge of the Risk entity.
+func (_m *Risk) QueryReviews() *ReviewQuery {
+	return NewRiskClient(_m.config).QueryReviews(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Risk entity.
+func (_m *Risk) QueryRemediations() *RemediationQuery {
+	return NewRiskClient(_m.config).QueryRemediations(_m)
+}
+
 // Update returns a builder for updating this Risk.
 // Note that you need to call Risk.Unwrap() before calling this method if this Risk
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -966,6 +1041,33 @@ func (_m *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(_m.DelegateID)
+	builder.WriteString(", ")
+	if v := _m.MitigatedAt; v != nil {
+		builder.WriteString("mitigated_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("review_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewRequired))
+	builder.WriteString(", ")
+	if v := _m.LastReviewedAt; v != nil {
+		builder.WriteString("last_reviewed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	if v := _m.NextReviewDueAt; v != nil {
+		builder.WriteString("next_review_due_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("residual_score=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResidualScore))
+	builder.WriteString(", ")
+	builder.WriteString("risk_decision=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskDecision))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1351,6 +1453,54 @@ func (_m *Risk) appendNamedDiscussions(name string, edges ...*Discussion) {
 		_m.Edges.namedDiscussions[name] = []*Discussion{}
 	} else {
 		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
 	}
 }
 

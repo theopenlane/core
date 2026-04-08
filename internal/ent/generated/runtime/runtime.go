@@ -6307,6 +6307,10 @@ func init() {
 	riskDescName := riskFields[4].Descriptor()
 	// risk.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	risk.NameValidator = riskDescName.Validators[0].(func(string) error)
+	// riskDescReviewRequired is the schema descriptor for review_required field.
+	riskDescReviewRequired := riskFields[18].Descriptor()
+	// risk.DefaultReviewRequired holds the default value on creation for the review_required field.
+	risk.DefaultReviewRequired = riskDescReviewRequired.Default.(bool)
 	// riskDescID is the schema descriptor for id field.
 	riskDescID := riskMixinFields2[0].Descriptor()
 	// risk.DefaultID holds the default value on creation for the id field.

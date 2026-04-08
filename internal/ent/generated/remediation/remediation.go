@@ -3,11 +3,14 @@
 package remediation
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -53,6 +56,8 @@ const (
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldState holds the string denoting the state field in the database.
 	FieldState = "state"
 	// FieldIntent holds the string denoting the intent field in the database.
@@ -213,13 +218,11 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// RisksTable is the table that holds the risks relation/edge.
-	RisksTable = "risks"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "remediation_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// RisksColumn is the table column denoting the risks relation/edge.
-	RisksColumn = "remediation_risks"
 	// ProgramsTable is the table that holds the programs relation/edge.
 	ProgramsTable = "programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -284,6 +287,7 @@ var Columns = []string{
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
+	FieldStatus,
 	FieldState,
 	FieldIntent,
 	FieldSummary,
@@ -324,6 +328,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"remediation_id", "subcontrol_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"remediation_id", "risk_id"}
 	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
 	// primary key for the reviews relation (M2M).
 	ReviewsPrimaryKey = []string{"review_id", "remediation_id"}
@@ -365,6 +372,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.RemediationStatus = "IN_PROGRESS"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.RemediationStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO":
+		return nil
+	default:
+		return fmt.Errorf("remediation: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Remediation queries.
 type OrderOption func(*sql.Selector)
@@ -462,6 +481,11 @@ func ByExternalOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByState orders the results by the state field.
@@ -913,7 +937,7 @@ func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {
@@ -958,3 +982,10 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
 	)
 }
+
+var (
+	// enums.RemediationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RemediationStatus)(nil)
+	// enums.RemediationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RemediationStatus)(nil)
+)

@@ -27,7 +27,7 @@ func webhookBaseEntries(category, externalIDExpr string) []providerkit.CelMapEnt
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDismissedComment, Expr: `'dismissed_comment' in payload ? payload.dismissed_comment : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityFixedAt, Expr: `'fixed_at' in payload ? payload.fixed_at : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityAutoDismissedAt, Expr: `'auto_dismissed_at' in payload ? payload.auto_dismissed_at : null`},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'state' in payload ? payload.state == "OPEN" : false`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'state' in payload ? payload.state == "open" : false`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, Expr: "payload"},
 	}
 }
@@ -77,6 +77,7 @@ var (
 		{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'security_advisory' in payload && 'summary' in payload.security_advisory ? payload.security_advisory.summary : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'security_advisory' in payload && 'description' in payload.security_advisory ? payload.security_advisory.description : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCveID, Expr: `'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`},
+		{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityScore, Expr: `'security_advisory' in payload && 'cvss' in payload.security_advisory && 'score' in payload.security_advisory.cvss ? payload.security_advisory.cvss.score : null`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityVector, Expr: `'security_advisory' in payload && 'cvss' in payload.security_advisory && 'vector_string' in payload.security_advisory.cvss ? payload.security_advisory.cvss.vector_string : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCweIds, Expr: `'security_advisory' in payload && 'cwes' in payload.security_advisory ? payload.security_advisory.cwes.map(c, c.cwe_id) : []`},
@@ -127,6 +128,7 @@ var (
 var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingAssetSourceIdentifier, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: "payload.NameWithOwner"},
+	{Key: integrationgenerated.IntegrationMappingAssetName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"REPOSITORY"`},
 	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"github"`},
 	{Key: integrationgenerated.IntegrationMappingAssetWebsite, Expr: "payload.URL"},

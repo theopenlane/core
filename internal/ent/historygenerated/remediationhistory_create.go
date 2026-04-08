@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/entx/history"
@@ -304,6 +305,20 @@ func (_c *RemediationHistoryCreate) SetTitle(v string) *RemediationHistoryCreate
 func (_c *RemediationHistoryCreate) SetNillableTitle(v *string) *RemediationHistoryCreate {
 	if v != nil {
 		_c.SetTitle(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *RemediationHistoryCreate) SetStatus(v enums.RemediationStatus) *RemediationHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableStatus(v *enums.RemediationStatus) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
 	return _c
 }
@@ -604,6 +619,10 @@ func (_c *RemediationHistoryCreate) defaults() error {
 		v := remediationhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := remediationhistory.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if remediationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized remediationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -629,6 +648,11 @@ func (_c *RemediationHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.DisplayID(); !ok {
 		return &ValidationError{Name: "display_id", err: errors.New(`historygenerated: missing required field "RemediationHistory.display_id"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := remediationhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "RemediationHistory.status": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -753,6 +777,10 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(remediationhistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(remediationhistory.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(remediationhistory.FieldState, field.TypeString, value)

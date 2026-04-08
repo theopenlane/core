@@ -2596,6 +2596,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			remediation.FieldExternalID:       {Type: field.TypeString, Column: remediation.FieldExternalID},
 			remediation.FieldExternalOwnerID:  {Type: field.TypeString, Column: remediation.FieldExternalOwnerID},
 			remediation.FieldTitle:            {Type: field.TypeString, Column: remediation.FieldTitle},
+			remediation.FieldStatus:           {Type: field.TypeEnum, Column: remediation.FieldStatus},
 			remediation.FieldState:            {Type: field.TypeString, Column: remediation.FieldState},
 			remediation.FieldIntent:           {Type: field.TypeString, Column: remediation.FieldIntent},
 			remediation.FieldSummary:          {Type: field.TypeString, Column: remediation.FieldSummary},
@@ -2705,6 +2706,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldBusinessCostsJSON: {Type: field.TypeJSON, Column: risk.FieldBusinessCostsJSON},
 			risk.FieldStakeholderID:     {Type: field.TypeString, Column: risk.FieldStakeholderID},
 			risk.FieldDelegateID:        {Type: field.TypeString, Column: risk.FieldDelegateID},
+			risk.FieldMitigatedAt:       {Type: field.TypeTime, Column: risk.FieldMitigatedAt},
+			risk.FieldReviewRequired:    {Type: field.TypeBool, Column: risk.FieldReviewRequired},
+			risk.FieldLastReviewedAt:    {Type: field.TypeTime, Column: risk.FieldLastReviewedAt},
+			risk.FieldReviewFrequency:   {Type: field.TypeEnum, Column: risk.FieldReviewFrequency},
+			risk.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: risk.FieldNextReviewDueAt},
+			risk.FieldResidualScore:     {Type: field.TypeInt, Column: risk.FieldResidualScore},
+			risk.FieldRiskDecision:      {Type: field.TypeEnum, Column: risk.FieldRiskDecision},
 		},
 	}
 	graph.Nodes[72] = &sqlgraph.Node{
@@ -13350,10 +13358,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -13590,10 +13598,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.RisksTable,
-			Columns: []string{review.RisksColumn},
+			Columns: review.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -13970,6 +13978,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Risk",
 		"Discussion",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Remediation",
 	)
 	graph.MustAddE(
 		"owner",
@@ -38959,6 +38991,11 @@ func (f *RemediationFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(remediation.FieldTitle))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *RemediationFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldStatus))
+}
+
 // WhereState applies the entql string predicate on the state field.
 func (f *RemediationFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(remediation.FieldState))
@@ -40056,6 +40093,41 @@ func (f *RiskFilter) WhereDelegateID(p entql.StringP) {
 	f.Where(p.Field(risk.FieldDelegateID))
 }
 
+// WhereMitigatedAt applies the entql time.Time predicate on the mitigated_at field.
+func (f *RiskFilter) WhereMitigatedAt(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldMitigatedAt))
+}
+
+// WhereReviewRequired applies the entql bool predicate on the review_required field.
+func (f *RiskFilter) WhereReviewRequired(p entql.BoolP) {
+	f.Where(p.Field(risk.FieldReviewRequired))
+}
+
+// WhereLastReviewedAt applies the entql time.Time predicate on the last_reviewed_at field.
+func (f *RiskFilter) WhereLastReviewedAt(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldLastReviewedAt))
+}
+
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *RiskFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(risk.FieldReviewFrequency))
+}
+
+// WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.
+func (f *RiskFilter) WhereNextReviewDueAt(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldNextReviewDueAt))
+}
+
+// WhereResidualScore applies the entql int predicate on the residual_score field.
+func (f *RiskFilter) WhereResidualScore(p entql.IntP) {
+	f.Where(p.Field(risk.FieldResidualScore))
+}
+
+// WhereRiskDecision applies the entql string predicate on the risk_decision field.
+func (f *RiskFilter) WhereRiskDecision(p entql.StringP) {
+	f.Where(p.Field(risk.FieldRiskDecision))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *RiskFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -40372,6 +40444,34 @@ func (f *RiskFilter) WhereHasDiscussions() {
 // WhereHasDiscussionsWith applies a predicate to check if query has an edge discussions with a given conditions (other predicates).
 func (f *RiskFilter) WhereHasDiscussionsWith(preds ...predicate.Discussion) {
 	f.Where(entql.HasEdgeWith("discussions", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *RiskFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *RiskFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

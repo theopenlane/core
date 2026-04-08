@@ -96,7 +96,21 @@ type RiskHistory struct {
 	// the id of the group responsible for risk oversight
 	StakeholderID string `json:"stakeholder_id,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
-	DelegateID   string `json:"delegate_id,omitempty"`
+	DelegateID string `json:"delegate_id,omitempty"`
+	// the time when the risk was mitigated
+	MitigatedAt *models.DateTime `json:"mitigated_at,omitempty"`
+	// indicates if a periodic review is required for the risk
+	ReviewRequired bool `json:"review_required,omitempty"`
+	// the time when the risk was last reviewed
+	LastReviewedAt *models.DateTime `json:"last_reviewed_at,omitempty"`
+	// ReviewFrequency holds the value of the "review_frequency" field.
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the time when the next review is due for the risk
+	NextReviewDueAt *models.DateTime `json:"next_review_due_at,omitempty"`
+	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	ResidualScore int `json:"residual_score,omitempty"`
+	// the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	RiskDecision enums.RiskDecision `json:"risk_decision,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -105,15 +119,17 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case riskhistory.FieldObservedAt:
+		case riskhistory.FieldObservedAt, riskhistory.FieldMitigatedAt, riskhistory.FieldLastReviewedAt, riskhistory.FieldNextReviewDueAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case riskhistory.FieldTags, riskhistory.FieldMitigationJSON, riskhistory.FieldDetailsJSON, riskhistory.FieldBusinessCostsJSON:
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldScore:
+		case riskhistory.FieldReviewRequired:
+			values[i] = new(sql.NullBool)
+		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -370,6 +386,51 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DelegateID = value.String
 			}
+		case riskhistory.FieldMitigatedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field mitigated_at", values[i])
+			} else if value.Valid {
+				_m.MitigatedAt = new(models.DateTime)
+				*_m.MitigatedAt = *value.S.(*models.DateTime)
+			}
+		case riskhistory.FieldReviewRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field review_required", values[i])
+			} else if value.Valid {
+				_m.ReviewRequired = value.Bool
+			}
+		case riskhistory.FieldLastReviewedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field last_reviewed_at", values[i])
+			} else if value.Valid {
+				_m.LastReviewedAt = new(models.DateTime)
+				*_m.LastReviewedAt = *value.S.(*models.DateTime)
+			}
+		case riskhistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case riskhistory.FieldNextReviewDueAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_review_due_at", values[i])
+			} else if value.Valid {
+				_m.NextReviewDueAt = new(models.DateTime)
+				*_m.NextReviewDueAt = *value.S.(*models.DateTime)
+			}
+		case riskhistory.FieldResidualScore:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field residual_score", values[i])
+			} else if value.Valid {
+				_m.ResidualScore = int(value.Int64)
+			}
+		case riskhistory.FieldRiskDecision:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_decision", values[i])
+			} else if value.Valid {
+				_m.RiskDecision = enums.RiskDecision(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -520,6 +581,33 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_id=")
 	builder.WriteString(_m.DelegateID)
+	builder.WriteString(", ")
+	if v := _m.MitigatedAt; v != nil {
+		builder.WriteString("mitigated_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("review_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewRequired))
+	builder.WriteString(", ")
+	if v := _m.LastReviewedAt; v != nil {
+		builder.WriteString("last_reviewed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	if v := _m.NextReviewDueAt; v != nil {
+		builder.WriteString("next_review_due_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("residual_score=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResidualScore))
+	builder.WriteString(", ")
+	builder.WriteString("risk_decision=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskDecision))
 	builder.WriteByte(')')
 	return builder.String()
 }
