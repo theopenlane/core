@@ -1353,6 +1353,16 @@ func IntegrationIDContainsFold(v string) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldContainsFold(FieldIntegrationID, v))
 }
 
+// DestinationsIsNil applies the IsNil predicate on the "destinations" field.
+func DestinationsIsNil() predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldIsNull(FieldDestinations))
+}
+
+// DestinationsNotNil applies the NotNil predicate on the "destinations" field.
+func DestinationsNotNil() predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldNotNull(FieldDestinations))
+}
+
 // WorkflowDefinitionIDEQ applies the EQ predicate on the "workflow_definition_id" field.
 func WorkflowDefinitionIDEQ(v string) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldEQ(FieldWorkflowDefinitionID, v))

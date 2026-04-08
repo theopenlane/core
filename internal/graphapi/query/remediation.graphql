@@ -1,11 +1,13 @@
-
 mutation CreateBulkCSVRemediation($input: Upload!) {
   createBulkCSVRemediation(input: $input) {
     remediations {
       completedAt
       createdAt
       createdBy
+      displayID
       dueAt
+      environmentID
+      environmentName
       error
       explanation
       externalID
@@ -14,14 +16,21 @@ mutation CreateBulkCSVRemediation($input: Upload!) {
       id
       instructions
       intent
+      internalNotes
       metadata
+      ownerID
       ownerReference
       prGeneratedAt
       pullRequestURI
       repositoryURI
+      scopeID
+      scopeName
       source
       state
+      status
       summary
+      systemInternalID
+      systemOwned
       tags
       ticketReference
       title
@@ -37,7 +46,10 @@ mutation CreateBulkRemediation($input: [CreateRemediationInput!]) {
       completedAt
       createdAt
       createdBy
+      displayID
       dueAt
+      environmentID
+      environmentName
       error
       explanation
       externalID
@@ -46,14 +58,21 @@ mutation CreateBulkRemediation($input: [CreateRemediationInput!]) {
       id
       instructions
       intent
+      internalNotes
       metadata
+      ownerID
       ownerReference
       prGeneratedAt
       pullRequestURI
       repositoryURI
+      scopeID
+      scopeName
       source
       state
+      status
       summary
+      systemInternalID
+      systemOwned
       tags
       ticketReference
       title
@@ -69,7 +88,10 @@ mutation CreateRemediation($input: CreateRemediationInput!) {
       completedAt
       createdAt
       createdBy
+      displayID
       dueAt
+      environmentID
+      environmentName
       error
       explanation
       externalID
@@ -78,20 +100,33 @@ mutation CreateRemediation($input: CreateRemediationInput!) {
       id
       instructions
       intent
+      internalNotes
       metadata
+      ownerID
       ownerReference
       prGeneratedAt
       pullRequestURI
       repositoryURI
+      scopeID
+      scopeName
       source
       state
+      status
       summary
+      systemInternalID
+      systemOwned
       tags
       ticketReference
       title
       updatedAt
       updatedBy
     }
+  }
+}
+
+mutation DeleteBulkRemediation($ids: [ID!]!) {
+  deleteBulkRemediation(ids: $ids) {
+    deletedIDs
   }
 }
 
@@ -141,12 +176,16 @@ query GetAllRemediations {
     }
   }
 }
+
 query GetRemediationByID($remediationId: ID!) {
   remediation(id: $remediationId) {
     completedAt
     createdAt
     createdBy
+    displayID
     dueAt
+    environmentID
+    environmentName
     error
     explanation
     externalID
@@ -155,14 +194,21 @@ query GetRemediationByID($remediationId: ID!) {
     id
     instructions
     intent
+    internalNotes
     metadata
+    ownerID
     ownerReference
     prGeneratedAt
     pullRequestURI
     repositoryURI
+    scopeID
+    scopeName
     source
     state
+    status
     summary
+    systemInternalID
+    systemOwned
     tags
     ticketReference
     title
@@ -211,38 +257,6 @@ query GetRemediations($first: Int, $last: Int, $where: RemediationWhereInput) {
     }
   }
 }
-mutation UpdateBulkRemediation($ids: [ID!]!, $input: UpdateRemediationInput!) {
-  updateBulkRemediation(ids: $ids, input: $input) {
-    remediations {
-      completedAt
-      createdAt
-      createdBy
-      dueAt
-      error
-      explanation
-      externalID
-      externalOwnerID
-      externalURI
-      id
-      instructions
-      intent
-      metadata
-      ownerReference
-      prGeneratedAt
-      pullRequestURI
-      repositoryURI
-      source
-      state
-      summary
-      tags
-      ticketReference
-      title
-      updatedAt
-      updatedBy
-    }
-    updatedIDs
-  }
-}
 
 mutation UpdateBulkCSVRemediation($input: Upload!) {
   updateBulkCSVRemediation(input: $input) {
@@ -250,7 +264,10 @@ mutation UpdateBulkCSVRemediation($input: Upload!) {
       completedAt
       createdAt
       createdBy
+      displayID
       dueAt
+      environmentID
+      environmentName
       error
       explanation
       externalID
@@ -259,14 +276,21 @@ mutation UpdateBulkCSVRemediation($input: Upload!) {
       id
       instructions
       intent
+      internalNotes
       metadata
+      ownerID
       ownerReference
       prGeneratedAt
       pullRequestURI
       repositoryURI
+      scopeID
+      scopeName
       source
       state
+      status
       summary
+      systemInternalID
+      systemOwned
       tags
       ticketReference
       title
@@ -277,9 +301,46 @@ mutation UpdateBulkCSVRemediation($input: Upload!) {
   }
 }
 
-mutation DeleteBulkRemediation($ids: [ID!]!) {
-  deleteBulkRemediation(ids: $ids) {
-    deletedIDs
+mutation UpdateBulkRemediation($ids: [ID!]!, $input: UpdateRemediationInput!) {
+  updateBulkRemediation(ids: $ids, input: $input) {
+    remediations {
+      completedAt
+      createdAt
+      createdBy
+      displayID
+      dueAt
+      environmentID
+      environmentName
+      error
+      explanation
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      instructions
+      intent
+      internalNotes
+      metadata
+      ownerID
+      ownerReference
+      prGeneratedAt
+      pullRequestURI
+      repositoryURI
+      scopeID
+      scopeName
+      source
+      state
+      status
+      summary
+      systemInternalID
+      systemOwned
+      tags
+      ticketReference
+      title
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
   }
 }
 
@@ -289,7 +350,10 @@ mutation UpdateRemediation($updateRemediationId: ID!, $input: UpdateRemediationI
       completedAt
       createdAt
       createdBy
+      displayID
       dueAt
+      environmentID
+      environmentName
       error
       explanation
       externalID
@@ -298,14 +362,21 @@ mutation UpdateRemediation($updateRemediationId: ID!, $input: UpdateRemediationI
       id
       instructions
       intent
+      internalNotes
       metadata
+      ownerID
       ownerReference
       prGeneratedAt
       pullRequestURI
       repositoryURI
+      scopeID
+      scopeName
       source
       state
+      status
       summary
+      systemInternalID
+      systemOwned
       tags
       ticketReference
       title

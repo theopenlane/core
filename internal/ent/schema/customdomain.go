@@ -10,6 +10,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -74,6 +75,12 @@ func (CustomDomain) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("the ID of the trust center the domain belongs to, if applicable").
 			Optional(),
+		field.Enum("domain_type").
+			Immutable().
+			// because of pre existing data.
+			Default(enums.CustomDomainTypeUnknown.String()).
+			Comment("the type of this custom domain").
+			GoType(enums.CustomDomainType("")),
 	}
 }
 

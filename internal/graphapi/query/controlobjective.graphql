@@ -1,383 +1,396 @@
-
-mutation CreateBulkCSVControlObjective($input: Upload!) {
-  createBulkCSVControlObjective(input: $input) {
-    controlObjectives {
-      category
-      controlObjectiveType
-      createdAt
-      createdBy
-      desiredOutcome
-      displayID
-      id
-      name
-      ownerID
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      revision
-    }
-  }
+mutation CreateBulkCSVControlObjective ($input: Upload!) {
+	createBulkCSVControlObjective(input: $input) {
+		controlObjectives {
+			category
+			controlObjectiveType
+			createdAt
+			createdBy
+			desiredOutcome
+			desiredOutcomeJSON
+			displayID
+			id
+			internalNotes
+			name
+			ownerID
+			revision
+			source
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkControlObjective($input: [CreateControlObjectiveInput!]) {
-  createBulkControlObjective(input: $input) {
-    controlObjectives {
-      category
-      controlObjectiveType
-      createdAt
-      createdBy
-      desiredOutcome
-      displayID
-      id
-      name
-      ownerID
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      revision
-    }
-  }
+mutation CreateBulkControlObjective ($input: [CreateControlObjectiveInput!]) {
+	createBulkControlObjective(input: $input) {
+		controlObjectives {
+			category
+			controlObjectiveType
+			createdAt
+			createdBy
+			desiredOutcome
+			desiredOutcomeJSON
+			displayID
+			id
+			internalNotes
+			name
+			ownerID
+			revision
+			source
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateControlObjective($input: CreateControlObjectiveInput!) {
-  createControlObjective(input: $input) {
-    controlObjective {
-      category
-      controlObjectiveType
-      createdAt
-      createdBy
-      desiredOutcome
-      displayID
-      id
-      name
-      ownerID
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      revision
-      controls {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-            description
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      editors {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-    }
-  }
+mutation CreateControlObjective ($input: CreateControlObjectiveInput!) {
+	createControlObjective(input: $input) {
+		controlObjective {
+			category
+			controlObjectiveType
+			createdAt
+			createdBy
+			desiredOutcome
+			desiredOutcomeJSON
+			displayID
+			id
+			internalNotes
+			name
+			ownerID
+			revision
+			source
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			controls {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+						description
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteControlObjective($deleteControlObjectiveId: ID!) {
-  deleteControlObjective(id: $deleteControlObjectiveId) {
-    deletedID
-  }
+mutation DeleteControlObjective ($deleteControlObjectiveId: ID!) {
+	deleteControlObjective(id: $deleteControlObjectiveId) {
+		deletedID
+	}
 }
-
 query GetAllControlObjectives {
-  controlObjectives {
-    edges {
-      node {
-        category
-        controlObjectiveType
-        createdAt
-        createdBy
-        desiredOutcome
-        displayID
-        id
-        name
-        ownerID
-        source
-        status
-        subcategory
-        tags
-        updatedAt
-        updatedBy
-        revision
-        controls {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-              description
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        editors {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+	controlObjectives {
+		edges {
+			node {
+				category
+				controlObjectiveType
+				createdAt
+				createdBy
+				desiredOutcome
+				displayID
+				id
+				name
+				ownerID
+				source
+				status
+				subcategory
+				tags
+				updatedAt
+				updatedBy
+				revision
+				controls {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+							description
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-query GetControlObjectiveByID($controlObjectiveId: ID!) {
-  controlObjective(id: $controlObjectiveId) {
-    category
-    controlObjectiveType
-    createdAt
-    createdBy
-    desiredOutcome
-    displayID
-    id
-    name
-    ownerID
-    source
-    status
-    subcategory
-    tags
-    updatedAt
-    updatedBy
-    revision
-    controls {
-      edges {
-        node {
-          id
-          displayID
-          refCode
-          description
-        }
-      }
-    }
-    programs {
-      edges {
-        node {
-          id
-          displayID
-          name
-        }
-      }
-    }
-    editors {
-      edges{
-        node{
-          id
-          name
-        }
-      }
-    }
-    viewers {
-      edges{
-        node{
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges{
-        node{
-          id
-          name
-        }
-      }
-    }
-  }
+query GetControlObjectiveByID ($controlObjectiveId: ID!) {
+	controlObjective(id: $controlObjectiveId) {
+		category
+		controlObjectiveType
+		createdAt
+		createdBy
+		desiredOutcome
+		desiredOutcomeJSON
+		displayID
+		id
+		internalNotes
+		name
+		ownerID
+		revision
+		source
+		status
+		subcategory
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+		controls {
+			edges {
+				node {
+					id
+					displayID
+					refCode
+					description
+				}
+			}
+		}
+		programs {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		viewers {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetControlObjectives($where: ControlObjectiveWhereInput) {
-  controlObjectives(where: $where) {
-    edges {
-      node {
-        category
-        controlObjectiveType
-        createdAt
-        createdBy
-        desiredOutcome
-        displayID
-        id
-        name
-        ownerID
-        source
-        status
-        subcategory
-        tags
-        updatedAt
-        updatedBy
-        revision
-        controls {
-          edges {
-            node {
-              id
-              displayID
-              refCode
-              description
-            }
-          }
-        }
-        programs {
-          edges {
-            node {
-              id
-              displayID
-              name
-            }
-          }
-        }
-        editors {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges{
-            node{
-              id
-              name
-            }
-          }
-        }
-      }
-    }
-  }
+query GetControlObjectives ($where: ControlObjectiveWhereInput) {
+	controlObjectives(where: $where) {
+		edges {
+			node {
+				category
+				controlObjectiveType
+				createdAt
+				createdBy
+				desiredOutcome
+				displayID
+				id
+				name
+				ownerID
+				source
+				status
+				subcategory
+				tags
+				updatedAt
+				updatedBy
+				revision
+				controls {
+					edges {
+						node {
+							id
+							displayID
+							refCode
+							description
+						}
+					}
+				}
+				programs {
+					edges {
+						node {
+							id
+							displayID
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateControlObjective($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
-  updateControlObjective(id: $updateControlObjectiveId, input: $input) {
-    controlObjective {
-      category
-      controlObjectiveType
-      createdAt
-      createdBy
-      desiredOutcome
-      displayID
-      id
-      name
-      ownerID
-      source
-      status
-      subcategory
-      tags
-      updatedAt
-      updatedBy
-      revision
-      controls {
-        edges {
-          node {
-            id
-            displayID
-            refCode
-            description
-          }
-        }
-      }
-      programs {
-        edges {
-          node {
-            id
-            displayID
-            name
-          }
-        }
-      }
-      editors {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges{
-          node{
-            id
-            name
-          }
-        }
-      }
-    }
-  }
+mutation UpdateControlObjective ($updateControlObjectiveId: ID!, $input: UpdateControlObjectiveInput!) {
+	updateControlObjective(id: $updateControlObjectiveId, input: $input) {
+		controlObjective {
+			category
+			controlObjectiveType
+			createdAt
+			createdBy
+			desiredOutcome
+			desiredOutcomeJSON
+			displayID
+			id
+			internalNotes
+			name
+			ownerID
+			revision
+			source
+			status
+			subcategory
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			controls {
+				edges {
+					node {
+						id
+						displayID
+						refCode
+						description
+					}
+				}
+			}
+			programs {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
 }

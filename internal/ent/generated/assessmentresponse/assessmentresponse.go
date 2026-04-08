@@ -86,6 +86,8 @@ const (
 	EdgeEntity = "entity"
 	// EdgeDocument holds the string denoting the document edge name in mutations.
 	EdgeDocument = "document"
+	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
+	EdgeVendorRiskScores = "vendor_risk_scores"
 	// Table holds the table name of the assessmentresponse in the database.
 	Table = "assessment_responses"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -130,6 +132,13 @@ const (
 	DocumentInverseTable = "document_data"
 	// DocumentColumn is the table column denoting the document relation/edge.
 	DocumentColumn = "document_data_id"
+	// VendorRiskScoresTable is the table that holds the vendor_risk_scores relation/edge.
+	VendorRiskScoresTable = "vendor_risk_scores"
+	// VendorRiskScoresInverseTable is the table name for the VendorRiskScore entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorriskscore" package.
+	VendorRiskScoresInverseTable = "vendor_risk_scores"
+	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
+	VendorRiskScoresColumn = "assessment_response_vendor_risk_scores"
 )
 
 // Columns holds all SQL columns for assessmentresponse fields.
@@ -410,6 +419,20 @@ func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByVendorRiskScoresCount orders the results by vendor_risk_scores count.
+func ByVendorRiskScoresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorRiskScoresStep(), opts...)
+	}
+}
+
+// ByVendorRiskScores orders the results by vendor_risk_scores terms.
+func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -450,6 +473,13 @@ func newDocumentStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DocumentInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
+	)
+}
+func newVendorRiskScoresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
 	)
 }
 

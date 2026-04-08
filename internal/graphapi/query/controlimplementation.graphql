@@ -1,273 +1,291 @@
-mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
-  createBulkControlImplementation(input: $input) {
-    controlImplementations {
-      createdAt
-      createdBy
-      details
-      id
-      implementationDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      verificationDate
-      verified
-      controls {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-    }
-  }
+mutation CreateBulkCSVControlImplementation ($input: Upload!) {
+	createBulkCSVControlImplementation(input: $input) {
+		controlImplementations {
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			id
+			implementationDate
+			internalNotes
+			ownerID
+			status
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			verificationDate
+			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateBulkCSVControlImplementation($input: Upload!) {
-  createBulkCSVControlImplementation(input: $input) {
-    controlImplementations {
-      createdAt
-      createdBy
-      details
-      id
-      implementationDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      verificationDate
-      verified
-      controls {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-    }
-  }
+mutation CreateBulkControlImplementation ($input: [CreateControlImplementationInput!]) {
+	createBulkControlImplementation(input: $input) {
+		controlImplementations {
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			id
+			implementationDate
+			internalNotes
+			ownerID
+			status
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			verificationDate
+			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateControlImplementation($input: CreateControlImplementationInput!) {
-  createControlImplementation(input: $input) {
-    controlImplementation {
-      createdAt
-      createdBy
-      details
-      id
-      implementationDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      verificationDate
-      verified
-      controls {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-    }
-  }
+mutation CreateControlImplementation ($input: CreateControlImplementationInput!) {
+	createControlImplementation(input: $input) {
+		controlImplementation {
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			id
+			implementationDate
+			internalNotes
+			ownerID
+			status
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			verificationDate
+			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteControlImplementation($deleteControlImplementationId: ID!) {
-  deleteControlImplementation(id: $deleteControlImplementationId) {
-    deletedID
-  }
+mutation DeleteControlImplementation ($deleteControlImplementationId: ID!) {
+	deleteControlImplementation(id: $deleteControlImplementationId) {
+		deletedID
+	}
 }
-
 query GetAllControlImplementations {
-  controlImplementations {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        details
-        id
-        implementationDate
-        status
-        tags
-        updatedAt
-        updatedBy
-        verificationDate
-        verified
-        controls {
-          totalCount
-          edges {
-            node {
-              id
-              refCode
-            }
-          }
-        }
-        subcontrols {
-          totalCount
-          edges {
-            node {
-              id
-              refCode
-            }
-          }
-        }
-      }
-    }
-  }
+	controlImplementations {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				details
+				id
+				implementationDate
+				status
+				tags
+				updatedAt
+				updatedBy
+				verificationDate
+				verified
+				controls {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetControlImplementationByID($controlImplementationId: ID!) {
-  controlImplementation(id: $controlImplementationId) {
-    createdAt
-    createdBy
-    details
-    id
-    implementationDate
-    status
-    tags
-    updatedAt
-    updatedBy
-    verificationDate
-    verified
-    controls {
-      totalCount
-      edges {
-        node {
-          id
-          refCode
-        }
-      }
-    }
-    subcontrols {
-      totalCount
-      edges {
-        node {
-          id
-          refCode
-        }
-      }
-    }
-  }
+query GetControlImplementationByID ($controlImplementationId: ID!) {
+	controlImplementation(id: $controlImplementationId) {
+		createdAt
+		createdBy
+		details
+		detailsJSON
+		id
+		implementationDate
+		internalNotes
+		ownerID
+		status
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+		verificationDate
+		verified
+		controls {
+			totalCount
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
+		subcontrols {
+			totalCount
+			edges {
+				node {
+					id
+					refCode
+				}
+			}
+		}
+	}
 }
-
-query GetControlImplementations($where: ControlImplementationWhereInput) {
-  controlImplementations(where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        details
-        id
-        implementationDate
-        status
-        tags
-        updatedAt
-        updatedBy
-        verificationDate
-        verified
-        controls {
-          totalCount
-          edges {
-            node {
-              id
-              refCode
-            }
-          }
-        }
-        subcontrols {
-          totalCount
-          edges {
-            node {
-              id
-              refCode
-            }
-          }
-        }
-      }
-    }
-  }
+query GetControlImplementations ($where: ControlImplementationWhereInput) {
+	controlImplementations(where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				details
+				id
+				implementationDate
+				status
+				tags
+				updatedAt
+				updatedBy
+				verificationDate
+				verified
+				controls {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+				subcontrols {
+					totalCount
+					edges {
+						node {
+							id
+							refCode
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateControlImplementation($updateControlImplementationId: ID!, $input: UpdateControlImplementationInput!) {
-  updateControlImplementation(id: $updateControlImplementationId, input: $input) {
-    controlImplementation {
-      createdAt
-      createdBy
-      details
-      id
-      implementationDate
-      status
-      tags
-      updatedAt
-      updatedBy
-      verificationDate
-      verified
-      controls {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-      subcontrols {
-        totalCount
-        edges {
-          node {
-            id
-            refCode
-          }
-        }
-      }
-    }
-  }
+mutation UpdateControlImplementation ($updateControlImplementationId: ID!, $input: UpdateControlImplementationInput!) {
+	updateControlImplementation(id: $updateControlImplementationId, input: $input) {
+		controlImplementation {
+			createdAt
+			createdBy
+			details
+			detailsJSON
+			id
+			implementationDate
+			internalNotes
+			ownerID
+			status
+			systemInternalID
+			systemOwned
+			tags
+			updatedAt
+			updatedBy
+			verificationDate
+			verified
+			controls {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+			subcontrols {
+				totalCount
+				edges {
+					node {
+						id
+						refCode
+					}
+				}
+			}
+		}
+	}
 }

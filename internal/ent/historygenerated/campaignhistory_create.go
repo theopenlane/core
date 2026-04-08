@@ -669,6 +669,10 @@ func (_c *CampaignHistoryCreate) defaults() error {
 		v := campaignhistory.DefaultIsRecurring
 		_c.mutation.SetIsRecurring(v)
 	}
+	if _, ok := _c.mutation.RecurrenceFrequency(); !ok {
+		v := campaignhistory.DefaultRecurrenceFrequency
+		_c.mutation.SetRecurrenceFrequency(v)
+	}
 	if _, ok := _c.mutation.RecurrenceInterval(); !ok {
 		v := campaignhistory.DefaultRecurrenceInterval
 		_c.mutation.SetRecurrenceInterval(v)

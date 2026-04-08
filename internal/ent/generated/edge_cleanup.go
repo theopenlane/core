@@ -98,6 +98,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -2229,6 +2231,20 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).VendorScoringConfig.Query().Where((vendorscoringconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorscoringconfigCount, err := FromContext(ctx).VendorScoringConfig.Delete().Where(vendorscoringconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", vendorscoringconfigCount).Msg("error deleting vendorscoringconfig")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).VendorRiskScore.Query().Where((vendorriskscore.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if vendorriskscoreCount, err := FromContext(ctx).VendorRiskScore.Delete().Where(vendorriskscore.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", vendorriskscoreCount).Msg("error deleting vendorriskscore")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("error deleting orgmembership")
@@ -2908,6 +2924,18 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 
 func UserSettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")))
+
+	return nil
+}
+
+func VendorRiskScoreEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorriskscore edge")))
+
+	return nil
+}
+
+func VendorScoringConfigEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vendorscoringconfig edge")))
 
 	return nil
 }

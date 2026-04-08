@@ -72,8 +72,6 @@ const (
 	FieldTemplateContext = "template_context"
 	// FieldDefaults holds the string denoting the defaults field in the database.
 	FieldDefaults = "defaults"
-	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
-	FieldEmailBrandingID = "email_branding_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
 	// FieldWorkflowDefinitionID holds the string denoting the workflow_definition_id field in the database.
@@ -82,6 +80,12 @@ const (
 	FieldWorkflowInstanceID = "workflow_instance_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
+	// EdgeViewers holds the string denoting the viewers edge name in mutations.
+	EdgeViewers = "viewers"
 	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
 	EdgeEmailBranding = "email_branding"
 	// EdgeIntegration holds the string denoting the integration edge name in mutations.
@@ -105,13 +109,32 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// EmailBrandingTable is the table that holds the email_branding relation/edge.
-	EmailBrandingTable = "email_templates"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "email_template_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "email_template_editors"
+	// ViewersTable is the table that holds the viewers relation/edge.
+	ViewersTable = "groups"
+	// ViewersInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ViewersInverseTable = "groups"
+	// ViewersColumn is the table column denoting the viewers relation/edge.
+	ViewersColumn = "email_template_viewers"
+	// EmailBrandingTable is the table that holds the email_branding relation/edge. The primary key declared below.
+	EmailBrandingTable = "email_branding_email_templates"
 	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
 	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
 	EmailBrandingInverseTable = "email_brandings"
-	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
-	EmailBrandingColumn = "email_branding_id"
 	// IntegrationTable is the table that holds the integration relation/edge.
 	IntegrationTable = "email_templates"
 	// IntegrationInverseTable is the table name for the Integration entity.
@@ -186,11 +209,16 @@ var Columns = []string{
 	FieldVersion,
 	FieldTemplateContext,
 	FieldDefaults,
-	FieldEmailBrandingID,
 	FieldIntegrationID,
 	FieldWorkflowDefinitionID,
 	FieldWorkflowInstanceID,
 }
+
+var (
+	// EmailBrandingPrimaryKey and EmailBrandingColumn2 are the table columns denoting the
+	// primary key for the email_branding relation (M2M).
+	EmailBrandingPrimaryKey = []string{"email_branding_id", "email_template_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -208,7 +236,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -384,11 +412,6 @@ func ByTemplateContext(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemplateContext, opts...).ToFunc()
 }
 
-// ByEmailBrandingID orders the results by the email_branding_id field.
-func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
-}
-
 // ByIntegrationID orders the results by the integration_id field.
 func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
@@ -411,10 +434,59 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByEmailBrandingField orders the results by email_branding field.
-func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByViewersCount orders the results by viewers count.
+func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newViewersStep(), opts...)
+	}
+}
+
+// ByViewers orders the results by viewers terms.
+func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmailBrandingCount orders the results by email_branding count.
+func ByEmailBrandingCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingStep(), opts...)
+	}
+}
+
+// ByEmailBranding orders the results by email_branding terms.
+func ByEmailBranding(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -487,11 +559,32 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
+}
+func newViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
+	)
+}
 func newEmailBrandingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailBrandingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, EmailBrandingTable, EmailBrandingPrimaryKey...),
 	)
 }
 func newIntegrationStep() *sqlgraph.Step {

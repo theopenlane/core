@@ -3,11 +3,14 @@
 package remediation
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -53,6 +56,8 @@ const (
 	FieldExternalOwnerID = "external_owner_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldState holds the string denoting the state field in the database.
 	FieldState = "state"
 	// FieldIntent holds the string denoting the intent field in the database.
@@ -181,20 +186,16 @@ const (
 	// ScansInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScansInverseTable = "scans"
-	// FindingsTable is the table that holds the findings relation/edge.
-	FindingsTable = "findings"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "remediation_findings"
 	// FindingsInverseTable is the table name for the Finding entity.
 	// It exists in this package in order to avoid circular dependency with the "finding" package.
 	FindingsInverseTable = "findings"
-	// FindingsColumn is the table column denoting the findings relation/edge.
-	FindingsColumn = "remediation_findings"
-	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
-	VulnerabilitiesTable = "vulnerabilities"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "remediation_vulnerabilities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
 	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
 	VulnerabilitiesInverseTable = "vulnerabilities"
-	// VulnerabilitiesColumn is the table column denoting the vulnerabilities relation/edge.
-	VulnerabilitiesColumn = "remediation_vulnerabilities"
 	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
 	ActionPlansTable = "remediation_action_plans"
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
@@ -212,20 +213,16 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "remediation_subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "remediation_subcontrols"
-	// RisksTable is the table that holds the risks relation/edge.
-	RisksTable = "risks"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "remediation_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// RisksColumn is the table column denoting the risks relation/edge.
-	RisksColumn = "remediation_risks"
 	// ProgramsTable is the table that holds the programs relation/edge.
 	ProgramsTable = "programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -247,13 +244,11 @@ const (
 	EntitiesInverseTable = "entities"
 	// EntitiesColumn is the table column denoting the entities relation/edge.
 	EntitiesColumn = "remediation_entities"
-	// ReviewsTable is the table that holds the reviews relation/edge.
-	ReviewsTable = "reviews"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_remediations"
 	// ReviewsInverseTable is the table name for the Review entity.
 	// It exists in this package in order to avoid circular dependency with the "review" package.
 	ReviewsInverseTable = "reviews"
-	// ReviewsColumn is the table column denoting the reviews relation/edge.
-	ReviewsColumn = "remediation_reviews"
 	// CommentsTable is the table that holds the comments relation/edge.
 	CommentsTable = "notes"
 	// CommentsInverseTable is the table name for the Note entity.
@@ -292,6 +287,7 @@ var Columns = []string{
 	FieldExternalID,
 	FieldExternalOwnerID,
 	FieldTitle,
+	FieldStatus,
 	FieldState,
 	FieldIntent,
 	FieldSummary,
@@ -310,14 +306,6 @@ var Columns = []string{
 	FieldMetadata,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "remediations"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"finding_remediations",
-	"review_remediations",
-	"vulnerability_remediations",
-}
-
 var (
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
@@ -325,23 +313,33 @@ var (
 	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
 	// primary key for the scans relation (M2M).
 	ScansPrimaryKey = []string{"scan_id", "remediation_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"remediation_id", "finding_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"remediation_id", "vulnerability_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"remediation_id", "action_plan_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"remediation_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"remediation_id", "subcontrol_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"remediation_id", "risk_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "remediation_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -374,6 +372,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.RemediationStatus = "IN_PROGRESS"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.RemediationStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO":
+		return nil
+	default:
+		return fmt.Errorf("remediation: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Remediation queries.
 type OrderOption func(*sql.Selector)
@@ -471,6 +481,11 @@ func ByExternalOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByState orders the results by the state field.
@@ -880,14 +895,14 @@ func newFindingsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newVulnerabilitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 func newActionPlansStep() *sqlgraph.Step {
@@ -915,14 +930,14 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {
@@ -950,7 +965,7 @@ func newReviewsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ReviewsTable, ReviewsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
 	)
 }
 func newCommentsStep() *sqlgraph.Step {
@@ -967,3 +982,10 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
 	)
 }
+
+var (
+	// enums.RemediationStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RemediationStatus)(nil)
+	// enums.RemediationStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RemediationStatus)(nil)
+)

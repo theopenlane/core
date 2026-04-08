@@ -101,6 +101,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -2641,6 +2643,33 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldObservedAt orders Asset by observed_at.
+	AssetOrderFieldObservedAt = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: asset.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) asset.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return asset.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Asset) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2675,6 +2704,8 @@ func (f AssetOrderField) String() string {
 		str = "estimated_monthly_cost"
 	case AssetOrderFieldPurchaseDate.column:
 		str = "purchase_date"
+	case AssetOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -2719,6 +2750,8 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldEstimatedMonthlyCost
 	case "purchase_date":
 		*f = *AssetOrderFieldPurchaseDate
+	case "observed_at":
+		*f = *AssetOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid AssetOrderField", str)
 	}
@@ -4386,6 +4419,47 @@ var (
 			}
 		},
 	}
+	// ContactOrderFieldExternalID orders Contact by external_id.
+	ContactOrderFieldExternalID = &ContactOrderField{
+		Value: func(_m *Contact) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: contact.FieldExternalID,
+		toTerm: contact.ByExternalID,
+		toCursor: func(_m *Contact) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// ContactOrderFieldObservedAt orders Contact by observed_at.
+	ContactOrderFieldObservedAt = &ContactOrderField{
+		Value: func(_m *Contact) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: contact.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) contact.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return contact.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Contact) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -4406,6 +4480,10 @@ func (f ContactOrderField) String() string {
 		str = "email"
 	case ContactOrderFieldStatus.column:
 		str = "STATUS"
+	case ContactOrderFieldExternalID.column:
+		str = "external_id"
+	case ContactOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -4436,6 +4514,10 @@ func (f *ContactOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactOrderFieldEmail
 	case "STATUS":
 		*f = *ContactOrderFieldStatus
+	case "external_id":
+		*f = *ContactOrderFieldExternalID
+	case "observed_at":
+		*f = *ContactOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid ContactOrderField", str)
 	}
@@ -7385,6 +7467,33 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldDirectoryInstanceID orders DirectoryAccount by directory_instance_id.
+	DirectoryAccountOrderFieldDirectoryInstanceID = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directoryaccount.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
 	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -7477,6 +7586,8 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryAccountOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryAccountOrderFieldDirectoryName.column:
 		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
@@ -7505,6 +7616,8 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryAccountOrderFieldDirectoryInstanceID
 	case "directory_name":
 		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
@@ -7838,6 +7951,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupOrderFieldDirectoryInstanceID orders DirectoryGroup by directory_instance_id.
+	DirectoryGroupOrderFieldDirectoryInstanceID = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryInstanceID == nil {
+				return nil, nil
+			}
+			return _m.DirectoryInstanceID, nil
+		},
+		column: directorygroup.FieldDirectoryInstanceID,
+		toTerm: func(opts ...sql.OrderTermOption) directorygroup.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygroup.ByDirectoryInstanceID(opts...)
+		},
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			if _m.DirectoryInstanceID == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryInstanceID,
+			}
+		},
+	}
 	// DirectoryGroupOrderFieldExternalID orders DirectoryGroup by external_id.
 	DirectoryGroupOrderFieldExternalID = &DirectoryGroupOrderField{
 		Value: func(_m *DirectoryGroup) (ent.Value, error) {
@@ -7903,6 +8043,8 @@ func (f DirectoryGroupOrderField) String() string {
 		str = "created_at"
 	case DirectoryGroupOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryGroupOrderFieldDirectoryInstanceID.column:
+		str = "directory_instance_id"
 	case DirectoryGroupOrderFieldExternalID.column:
 		str = "external_id"
 	case DirectoryGroupOrderFieldEmail.column:
@@ -7929,6 +8071,8 @@ func (f *DirectoryGroupOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryGroupOrderFieldUpdatedAt
+	case "directory_instance_id":
+		*f = *DirectoryGroupOrderFieldDirectoryInstanceID
 	case "external_id":
 		*f = *DirectoryGroupOrderFieldExternalID
 	case "email":
@@ -10944,6 +11088,20 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldRiskScoreCoverage orders Entity by risk_score_coverage.
+	EntityOrderFieldRiskScoreCoverage = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.RiskScoreCoverage, nil
+		},
+		column: entity.FieldRiskScoreCoverage,
+		toTerm: entity.ByRiskScoreCoverage,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskScoreCoverage,
+			}
+		},
+	}
 	// EntityOrderFieldTier orders Entity by tier.
 	EntityOrderFieldTier = &EntityOrderField{
 		Value: func(_m *Entity) (ent.Value, error) {
@@ -11026,6 +11184,47 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldExternalID orders Entity by external_id.
+	EntityOrderFieldExternalID = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: entity.FieldExternalID,
+		toTerm: entity.ByExternalID,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// EntityOrderFieldObservedAt orders Entity by observed_at.
+	EntityOrderFieldObservedAt = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: entity.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11082,6 +11281,8 @@ func (f EntityOrderField) String() string {
 		str = "risk_rating"
 	case EntityOrderFieldRiskScore.column:
 		str = "risk_score"
+	case EntityOrderFieldRiskScoreCoverage.column:
+		str = "risk_score_coverage"
 	case EntityOrderFieldTier.column:
 		str = "tier"
 	case EntityOrderFieldReviewFrequency.column:
@@ -11090,6 +11291,10 @@ func (f EntityOrderField) String() string {
 		str = "next_review_at"
 	case EntityOrderFieldContractRenewalAt.column:
 		str = "contract_renewal_at"
+	case EntityOrderFieldExternalID.column:
+		str = "external_id"
+	case EntityOrderFieldObservedAt.column:
+		str = "observed_at"
 	}
 	return str
 }
@@ -11156,6 +11361,8 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldRiskRating
 	case "risk_score":
 		*f = *EntityOrderFieldRiskScore
+	case "risk_score_coverage":
+		*f = *EntityOrderFieldRiskScoreCoverage
 	case "tier":
 		*f = *EntityOrderFieldTier
 	case "REVIEW_FREQUENCY":
@@ -11164,6 +11371,10 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldNextReviewAt
 	case "contract_renewal_at":
 		*f = *EntityOrderFieldContractRenewalAt
+	case "external_id":
+		*f = *EntityOrderFieldExternalID
+	case "observed_at":
+		*f = *EntityOrderFieldObservedAt
 	default:
 		return fmt.Errorf("%s is not a valid EntityOrderField", str)
 	}
@@ -12234,11 +12445,24 @@ var (
 	// EvidenceOrderFieldCreationDate orders Evidence by creation_date.
 	EvidenceOrderFieldCreationDate = &EvidenceOrderField{
 		Value: func(_m *Evidence) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CreationDate == nil {
+				return nil, nil
+			}
 			return _m.CreationDate, nil
 		},
 		column: evidence.FieldCreationDate,
-		toTerm: evidence.ByCreationDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidence.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidence.ByCreationDate(opts...)
+		},
 		toCursor: func(_m *Evidence) Cursor {
+			if _m.CreationDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.CreationDate,
@@ -12248,11 +12472,24 @@ var (
 	// EvidenceOrderFieldRenewalDate orders Evidence by renewal_date.
 	EvidenceOrderFieldRenewalDate = &EvidenceOrderField{
 		Value: func(_m *Evidence) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RenewalDate == nil {
+				return nil, nil
+			}
 			return _m.RenewalDate, nil
 		},
 		column: evidence.FieldRenewalDate,
-		toTerm: evidence.ByRenewalDate,
+		toTerm: func(opts ...sql.OrderTermOption) evidence.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return evidence.ByRenewalDate(opts...)
+		},
 		toCursor: func(_m *Evidence) Cursor {
+			if _m.RenewalDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.RenewalDate,
@@ -26833,6 +27070,20 @@ var (
 			}
 		},
 	}
+	// RemediationOrderFieldStatus orders Remediation by status.
+	RemediationOrderFieldStatus = &RemediationOrderField{
+		Value: func(_m *Remediation) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: remediation.FieldStatus,
+		toTerm: remediation.ByStatus,
+		toCursor: func(_m *Remediation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
 	// RemediationOrderFieldState orders Remediation by state.
 	RemediationOrderFieldState = &RemediationOrderField{
 		Value: func(_m *Remediation) (ent.Value, error) {
@@ -26863,6 +27114,8 @@ func (f RemediationOrderField) String() string {
 		str = "external_owner_id"
 	case RemediationOrderFieldTitle.column:
 		str = "title"
+	case RemediationOrderFieldStatus.column:
+		str = "status"
 	case RemediationOrderFieldState.column:
 		str = "state"
 	}
@@ -26891,6 +27144,8 @@ func (f *RemediationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RemediationOrderFieldExternalOwnerID
 	case "title":
 		*f = *RemediationOrderFieldTitle
+	case "status":
+		*f = *RemediationOrderFieldStatus
 	case "state":
 		*f = *RemediationOrderFieldState
 	default:
@@ -27645,6 +27900,47 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldExternalID orders Risk by external_id.
+	RiskOrderFieldExternalID = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: risk.FieldExternalID,
+		toTerm: risk.ByExternalID,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// RiskOrderFieldObservedAt orders Risk by observed_at.
+	RiskOrderFieldObservedAt = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ObservedAt == nil {
+				return nil, nil
+			}
+			return _m.ObservedAt, nil
+		},
+		column: risk.FieldObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByObservedAt(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.ObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservedAt,
+			}
+		},
+	}
 	// RiskOrderFieldName orders Risk by name.
 	RiskOrderFieldName = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -27729,6 +28025,143 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldMitigatedAt orders Risk by mitigated_at.
+	RiskOrderFieldMitigatedAt = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.MitigatedAt == nil {
+				return nil, nil
+			}
+			return _m.MitigatedAt, nil
+		},
+		column: risk.FieldMitigatedAt,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByMitigatedAt(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.MitigatedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MitigatedAt,
+			}
+		},
+	}
+	// RiskOrderFieldReviewRequired orders Risk by review_required.
+	RiskOrderFieldReviewRequired = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ReviewRequired, nil
+		},
+		column: risk.FieldReviewRequired,
+		toTerm: risk.ByReviewRequired,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewRequired,
+			}
+		},
+	}
+	// RiskOrderFieldLastReviewedAt orders Risk by last_reviewed_at.
+	RiskOrderFieldLastReviewedAt = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastReviewedAt == nil {
+				return nil, nil
+			}
+			return _m.LastReviewedAt, nil
+		},
+		column: risk.FieldLastReviewedAt,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByLastReviewedAt(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.LastReviewedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastReviewedAt,
+			}
+		},
+	}
+	// RiskOrderFieldReviewFrequency orders Risk by review_frequency.
+	RiskOrderFieldReviewFrequency = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: risk.FieldReviewFrequency,
+		toTerm: risk.ByReviewFrequency,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
+	// RiskOrderFieldNextReviewDueAt orders Risk by next_review_due_at.
+	RiskOrderFieldNextReviewDueAt = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextReviewDueAt == nil {
+				return nil, nil
+			}
+			return _m.NextReviewDueAt, nil
+		},
+		column: risk.FieldNextReviewDueAt,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByNextReviewDueAt(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.NextReviewDueAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextReviewDueAt,
+			}
+		},
+	}
+	// RiskOrderFieldResidualScore orders Risk by residual_score.
+	RiskOrderFieldResidualScore = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ResidualScore, nil
+		},
+		column: risk.FieldResidualScore,
+		toTerm: risk.ByResidualScore,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResidualScore,
+			}
+		},
+	}
+	// RiskOrderFieldRiskDecision orders Risk by risk_decision.
+	RiskOrderFieldRiskDecision = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.RiskDecision, nil
+		},
+		column: risk.FieldRiskDecision,
+		toTerm: risk.ByRiskDecision,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskDecision,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -27739,6 +28172,10 @@ func (f RiskOrderField) String() string {
 		str = "created_at"
 	case RiskOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskOrderFieldExternalID.column:
+		str = "external_id"
+	case RiskOrderFieldObservedAt.column:
+		str = "observed_at"
 	case RiskOrderFieldName.column:
 		str = "name"
 	case RiskOrderFieldStatus.column:
@@ -27751,6 +28188,20 @@ func (f RiskOrderField) String() string {
 		str = "score"
 	case RiskOrderFieldBusinessCosts.column:
 		str = "business_costs"
+	case RiskOrderFieldMitigatedAt.column:
+		str = "mitigated_at"
+	case RiskOrderFieldReviewRequired.column:
+		str = "review_required"
+	case RiskOrderFieldLastReviewedAt.column:
+		str = "last_reviewed_at"
+	case RiskOrderFieldReviewFrequency.column:
+		str = "review_frequency"
+	case RiskOrderFieldNextReviewDueAt.column:
+		str = "next_review_due_at"
+	case RiskOrderFieldResidualScore.column:
+		str = "residual_score"
+	case RiskOrderFieldRiskDecision.column:
+		str = "risk_decision"
 	}
 	return str
 }
@@ -27771,6 +28222,10 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskOrderFieldUpdatedAt
+	case "external_id":
+		*f = *RiskOrderFieldExternalID
+	case "observed_at":
+		*f = *RiskOrderFieldObservedAt
 	case "name":
 		*f = *RiskOrderFieldName
 	case "STATUS":
@@ -27783,6 +28238,20 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldScore
 	case "business_costs":
 		*f = *RiskOrderFieldBusinessCosts
+	case "mitigated_at":
+		*f = *RiskOrderFieldMitigatedAt
+	case "review_required":
+		*f = *RiskOrderFieldReviewRequired
+	case "last_reviewed_at":
+		*f = *RiskOrderFieldLastReviewedAt
+	case "review_frequency":
+		*f = *RiskOrderFieldReviewFrequency
+	case "next_review_due_at":
+		*f = *RiskOrderFieldNextReviewDueAt
+	case "residual_score":
+		*f = *RiskOrderFieldResidualScore
+	case "risk_decision":
+		*f = *RiskOrderFieldRiskDecision
 	default:
 		return fmt.Errorf("%s is not a valid RiskOrderField", str)
 	}
@@ -37215,6 +37684,824 @@ func (_m *UserSetting) ToEdge(order *UserSettingOrder) *UserSettingEdge {
 		order = DefaultUserSettingOrder
 	}
 	return &UserSettingEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// VendorRiskScoreEdge is the edge representation of VendorRiskScore.
+type VendorRiskScoreEdge struct {
+	Node   *VendorRiskScore `json:"node"`
+	Cursor Cursor           `json:"cursor"`
+}
+
+// VendorRiskScoreConnection is the connection containing edges to VendorRiskScore.
+type VendorRiskScoreConnection struct {
+	Edges      []*VendorRiskScoreEdge `json:"edges"`
+	PageInfo   PageInfo               `json:"pageInfo"`
+	TotalCount int                    `json:"totalCount"`
+}
+
+func (c *VendorRiskScoreConnection) build(nodes []*VendorRiskScore, pager *vendorriskscorePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *VendorRiskScore
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorRiskScore {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorRiskScore {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorRiskScoreEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorRiskScoreEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorRiskScorePaginateOption enables pagination customization.
+type VendorRiskScorePaginateOption func(*vendorriskscorePager) error
+
+// WithVendorRiskScoreOrder configures pagination ordering.
+func WithVendorRiskScoreOrder(order []*VendorRiskScoreOrder) VendorRiskScorePaginateOption {
+	return func(pager *vendorriskscorePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithVendorRiskScoreFilter configures pagination filter.
+func WithVendorRiskScoreFilter(filter func(*VendorRiskScoreQuery) (*VendorRiskScoreQuery, error)) VendorRiskScorePaginateOption {
+	return func(pager *vendorriskscorePager) error {
+		if filter == nil {
+			return errors.New("VendorRiskScoreQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorriskscorePager struct {
+	reverse bool
+	order   []*VendorRiskScoreOrder
+	filter  func(*VendorRiskScoreQuery) (*VendorRiskScoreQuery, error)
+}
+
+func newVendorRiskScorePager(opts []VendorRiskScorePaginateOption, reverse bool) (*vendorriskscorePager, error) {
+	pager := &vendorriskscorePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *vendorriskscorePager) applyFilter(query *VendorRiskScoreQuery) (*VendorRiskScoreQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorriskscorePager) toCursor(_m *VendorRiskScore) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *vendorriskscorePager) applyCursors(query *VendorRiskScoreQuery, after, before *Cursor) (*VendorRiskScoreQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultVendorRiskScoreOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *vendorriskscorePager) applyOrder(query *VendorRiskScoreQuery) *VendorRiskScoreQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultVendorRiskScoreOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultVendorRiskScoreOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *vendorriskscorePager) orderExpr(query *VendorRiskScoreQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultVendorRiskScoreOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorRiskScore.
+func (_m *VendorRiskScoreQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorRiskScorePaginateOption,
+) (*VendorRiskScoreConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorRiskScorePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &VendorRiskScoreConnection{Edges: []*VendorRiskScoreEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorRiskScoreOrderFieldCreatedAt orders VendorRiskScore by created_at.
+	VendorRiskScoreOrderFieldCreatedAt = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: vendorriskscore.FieldCreatedAt,
+		toTerm: vendorriskscore.ByCreatedAt,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldUpdatedAt orders VendorRiskScore by updated_at.
+	VendorRiskScoreOrderFieldUpdatedAt = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: vendorriskscore.FieldUpdatedAt,
+		toTerm: vendorriskscore.ByUpdatedAt,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldQuestionKey orders VendorRiskScore by question_key.
+	VendorRiskScoreOrderFieldQuestionKey = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.QuestionKey, nil
+		},
+		column: vendorriskscore.FieldQuestionKey,
+		toTerm: vendorriskscore.ByQuestionKey,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.QuestionKey,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldQuestionCategory orders VendorRiskScore by question_category.
+	VendorRiskScoreOrderFieldQuestionCategory = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.QuestionCategory, nil
+		},
+		column: vendorriskscore.FieldQuestionCategory,
+		toTerm: vendorriskscore.ByQuestionCategory,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.QuestionCategory,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldImpact orders VendorRiskScore by impact.
+	VendorRiskScoreOrderFieldImpact = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.Impact, nil
+		},
+		column: vendorriskscore.FieldImpact,
+		toTerm: vendorriskscore.ByImpact,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Impact,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldLikelihood orders VendorRiskScore by likelihood.
+	VendorRiskScoreOrderFieldLikelihood = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.Likelihood, nil
+		},
+		column: vendorriskscore.FieldLikelihood,
+		toTerm: vendorriskscore.ByLikelihood,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Likelihood,
+			}
+		},
+	}
+	// VendorRiskScoreOrderFieldScore orders VendorRiskScore by score.
+	VendorRiskScoreOrderFieldScore = &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.Score, nil
+		},
+		column: vendorriskscore.FieldScore,
+		toTerm: vendorriskscore.ByScore,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Score,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorRiskScoreOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorRiskScoreOrderFieldCreatedAt.column:
+		str = "created_at"
+	case VendorRiskScoreOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case VendorRiskScoreOrderFieldQuestionKey.column:
+		str = "question_key"
+	case VendorRiskScoreOrderFieldQuestionCategory.column:
+		str = "question_category"
+	case VendorRiskScoreOrderFieldImpact.column:
+		str = "impact"
+	case VendorRiskScoreOrderFieldLikelihood.column:
+		str = "likelihood"
+	case VendorRiskScoreOrderFieldScore.column:
+		str = "score"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorRiskScoreOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorRiskScoreOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorRiskScoreOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *VendorRiskScoreOrderFieldCreatedAt
+	case "updated_at":
+		*f = *VendorRiskScoreOrderFieldUpdatedAt
+	case "question_key":
+		*f = *VendorRiskScoreOrderFieldQuestionKey
+	case "question_category":
+		*f = *VendorRiskScoreOrderFieldQuestionCategory
+	case "impact":
+		*f = *VendorRiskScoreOrderFieldImpact
+	case "likelihood":
+		*f = *VendorRiskScoreOrderFieldLikelihood
+	case "score":
+		*f = *VendorRiskScoreOrderFieldScore
+	default:
+		return fmt.Errorf("%s is not a valid VendorRiskScoreOrderField", str)
+	}
+	return nil
+}
+
+// VendorRiskScoreOrderField defines the ordering field of VendorRiskScore.
+type VendorRiskScoreOrderField struct {
+	// Value extracts the ordering value from the given VendorRiskScore.
+	Value    func(*VendorRiskScore) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorriskscore.OrderOption
+	toCursor func(*VendorRiskScore) Cursor
+}
+
+// VendorRiskScoreOrder defines the ordering of VendorRiskScore.
+type VendorRiskScoreOrder struct {
+	Direction OrderDirection             `json:"direction"`
+	Field     *VendorRiskScoreOrderField `json:"field"`
+}
+
+// DefaultVendorRiskScoreOrder is the default ordering of VendorRiskScore.
+var DefaultVendorRiskScoreOrder = &VendorRiskScoreOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorRiskScoreOrderField{
+		Value: func(_m *VendorRiskScore) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: vendorriskscore.FieldID,
+		toTerm: vendorriskscore.ByID,
+		toCursor: func(_m *VendorRiskScore) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorRiskScore into VendorRiskScoreEdge.
+func (_m *VendorRiskScore) ToEdge(order *VendorRiskScoreOrder) *VendorRiskScoreEdge {
+	if order == nil {
+		order = DefaultVendorRiskScoreOrder
+	}
+	return &VendorRiskScoreEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// VendorScoringConfigEdge is the edge representation of VendorScoringConfig.
+type VendorScoringConfigEdge struct {
+	Node   *VendorScoringConfig `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// VendorScoringConfigConnection is the connection containing edges to VendorScoringConfig.
+type VendorScoringConfigConnection struct {
+	Edges      []*VendorScoringConfigEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *VendorScoringConfigConnection) build(nodes []*VendorScoringConfig, pager *vendorscoringconfigPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *VendorScoringConfig
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *VendorScoringConfig {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *VendorScoringConfig {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*VendorScoringConfigEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &VendorScoringConfigEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// VendorScoringConfigPaginateOption enables pagination customization.
+type VendorScoringConfigPaginateOption func(*vendorscoringconfigPager) error
+
+// WithVendorScoringConfigOrder configures pagination ordering.
+func WithVendorScoringConfigOrder(order []*VendorScoringConfigOrder) VendorScoringConfigPaginateOption {
+	return func(pager *vendorscoringconfigPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithVendorScoringConfigFilter configures pagination filter.
+func WithVendorScoringConfigFilter(filter func(*VendorScoringConfigQuery) (*VendorScoringConfigQuery, error)) VendorScoringConfigPaginateOption {
+	return func(pager *vendorscoringconfigPager) error {
+		if filter == nil {
+			return errors.New("VendorScoringConfigQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type vendorscoringconfigPager struct {
+	reverse bool
+	order   []*VendorScoringConfigOrder
+	filter  func(*VendorScoringConfigQuery) (*VendorScoringConfigQuery, error)
+}
+
+func newVendorScoringConfigPager(opts []VendorScoringConfigPaginateOption, reverse bool) (*vendorscoringconfigPager, error) {
+	pager := &vendorscoringconfigPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *vendorscoringconfigPager) applyFilter(query *VendorScoringConfigQuery) (*VendorScoringConfigQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *vendorscoringconfigPager) toCursor(_m *VendorScoringConfig) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *vendorscoringconfigPager) applyCursors(query *VendorScoringConfigQuery, after, before *Cursor) (*VendorScoringConfigQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultVendorScoringConfigOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *vendorscoringconfigPager) applyOrder(query *VendorScoringConfigQuery) *VendorScoringConfigQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultVendorScoringConfigOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultVendorScoringConfigOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *vendorscoringconfigPager) orderExpr(query *VendorScoringConfigQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultVendorScoringConfigOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to VendorScoringConfig.
+func (_m *VendorScoringConfigQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...VendorScoringConfigPaginateOption,
+) (*VendorScoringConfigConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newVendorScoringConfigPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &VendorScoringConfigConnection{Edges: []*VendorScoringConfigEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// VendorScoringConfigOrderFieldCreatedAt orders VendorScoringConfig by created_at.
+	VendorScoringConfigOrderFieldCreatedAt = &VendorScoringConfigOrderField{
+		Value: func(_m *VendorScoringConfig) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: vendorscoringconfig.FieldCreatedAt,
+		toTerm: vendorscoringconfig.ByCreatedAt,
+		toCursor: func(_m *VendorScoringConfig) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// VendorScoringConfigOrderFieldUpdatedAt orders VendorScoringConfig by updated_at.
+	VendorScoringConfigOrderFieldUpdatedAt = &VendorScoringConfigOrderField{
+		Value: func(_m *VendorScoringConfig) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: vendorscoringconfig.FieldUpdatedAt,
+		toTerm: vendorscoringconfig.ByUpdatedAt,
+		toCursor: func(_m *VendorScoringConfig) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// VendorScoringConfigOrderFieldScoringMode orders VendorScoringConfig by scoring_mode.
+	VendorScoringConfigOrderFieldScoringMode = &VendorScoringConfigOrderField{
+		Value: func(_m *VendorScoringConfig) (ent.Value, error) {
+			return _m.ScoringMode, nil
+		},
+		column: vendorscoringconfig.FieldScoringMode,
+		toTerm: vendorscoringconfig.ByScoringMode,
+		toCursor: func(_m *VendorScoringConfig) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScoringMode,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f VendorScoringConfigOrderField) String() string {
+	var str string
+	switch f.column {
+	case VendorScoringConfigOrderFieldCreatedAt.column:
+		str = "created_at"
+	case VendorScoringConfigOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case VendorScoringConfigOrderFieldScoringMode.column:
+		str = "scoring_mode"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f VendorScoringConfigOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *VendorScoringConfigOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("VendorScoringConfigOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *VendorScoringConfigOrderFieldCreatedAt
+	case "updated_at":
+		*f = *VendorScoringConfigOrderFieldUpdatedAt
+	case "scoring_mode":
+		*f = *VendorScoringConfigOrderFieldScoringMode
+	default:
+		return fmt.Errorf("%s is not a valid VendorScoringConfigOrderField", str)
+	}
+	return nil
+}
+
+// VendorScoringConfigOrderField defines the ordering field of VendorScoringConfig.
+type VendorScoringConfigOrderField struct {
+	// Value extracts the ordering value from the given VendorScoringConfig.
+	Value    func(*VendorScoringConfig) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) vendorscoringconfig.OrderOption
+	toCursor func(*VendorScoringConfig) Cursor
+}
+
+// VendorScoringConfigOrder defines the ordering of VendorScoringConfig.
+type VendorScoringConfigOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *VendorScoringConfigOrderField `json:"field"`
+}
+
+// DefaultVendorScoringConfigOrder is the default ordering of VendorScoringConfig.
+var DefaultVendorScoringConfigOrder = &VendorScoringConfigOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &VendorScoringConfigOrderField{
+		Value: func(_m *VendorScoringConfig) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: vendorscoringconfig.FieldID,
+		toTerm: vendorscoringconfig.ByID,
+		toCursor: func(_m *VendorScoringConfig) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts VendorScoringConfig into VendorScoringConfigEdge.
+func (_m *VendorScoringConfig) ToEdge(order *VendorScoringConfigOrder) *VendorScoringConfigEdge {
+	if order == nil {
+		order = DefaultVendorScoringConfigOrder
+	}
+	return &VendorScoringConfigEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

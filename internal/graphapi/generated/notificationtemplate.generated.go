@@ -88,6 +88,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkCreatePayload_n
 				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
+			case "destinations":
+				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
 			case "emailTemplateID":
@@ -220,6 +222,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_n
 				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
+			case "destinations":
+				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
 			case "emailTemplateID":
@@ -352,6 +356,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateCreatePayload_notif
 				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
+			case "destinations":
+				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
 			case "emailTemplateID":
@@ -484,6 +490,8 @@ func (ec *executionContext) fieldContext_NotificationTemplateUpdatePayload_notif
 				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
 			case "integrationID":
 				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
+			case "destinations":
+				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
 			case "emailTemplateID":

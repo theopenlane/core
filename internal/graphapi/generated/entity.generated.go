@@ -158,6 +158,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_riskRating(ctx, field)
 			case "riskScore":
 				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "riskScoreCoverage":
+				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
 			case "tier":
 				return ec.fieldContext_Entity_tier(ctx, field)
 			case "reviewFrequency":
@@ -168,6 +170,12 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -210,6 +218,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_campaigns(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "vendorRiskScores":
+				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Entity_integrations(ctx, field)
 			case "subprocessors":
@@ -222,6 +232,8 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -230,6 +242,10 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -396,6 +412,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_riskRating(ctx, field)
 			case "riskScore":
 				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "riskScoreCoverage":
+				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
 			case "tier":
 				return ec.fieldContext_Entity_tier(ctx, field)
 			case "reviewFrequency":
@@ -406,6 +424,12 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -448,6 +472,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_campaigns(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "vendorRiskScores":
+				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Entity_integrations(ctx, field)
 			case "subprocessors":
@@ -460,6 +486,8 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -468,6 +496,10 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -634,6 +666,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_riskRating(ctx, field)
 			case "riskScore":
 				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "riskScoreCoverage":
+				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
 			case "tier":
 				return ec.fieldContext_Entity_tier(ctx, field)
 			case "reviewFrequency":
@@ -644,6 +678,12 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -686,6 +726,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_campaigns(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "vendorRiskScores":
+				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Entity_integrations(ctx, field)
 			case "subprocessors":
@@ -698,6 +740,8 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -706,6 +750,10 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},
@@ -872,6 +920,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_riskRating(ctx, field)
 			case "riskScore":
 				return ec.fieldContext_Entity_riskScore(ctx, field)
+			case "riskScoreCoverage":
+				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
 			case "tier":
 				return ec.fieldContext_Entity_tier(ctx, field)
 			case "reviewFrequency":
@@ -882,6 +932,12 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
 			case "vendorMetadata":
 				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Entity_logoFileID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Entity_externalID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Entity_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Entity_owner(ctx, field)
 			case "blockedGroups":
@@ -924,6 +980,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_campaigns(ctx, field)
 			case "assessmentResponses":
 				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
+			case "vendorRiskScores":
+				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Entity_integrations(ctx, field)
 			case "subprocessors":
@@ -936,6 +994,8 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Entity_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Entity_subcontrols(ctx, field)
 			case "platforms":
 				return ec.fieldContext_Entity_platforms(ctx, field)
 			case "outOfScopePlatforms":
@@ -944,6 +1004,10 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
 			case "entityType":
 				return ec.fieldContext_Entity_entityType(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Entity_logoFile(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Entity_internalPolicies(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
 		},

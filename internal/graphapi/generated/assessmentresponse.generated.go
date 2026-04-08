@@ -118,6 +118,8 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_entity(ctx, field)
 			case "document":
 				return ec.fieldContext_AssessmentResponse_document(ctx, field)
+			case "vendorRiskScores":
+				return ec.fieldContext_AssessmentResponse_vendorRiskScores(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 		},

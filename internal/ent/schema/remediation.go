@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -66,6 +67,14 @@ func (Remediation) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("title"),
+			),
+		field.Enum("status").
+			Comment("status of the remediation, such as pending, in_progress, or completed").
+			GoType(enums.RemediationStatus("")).
+			Default(enums.RemediationStatusInProgress.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("status"),
 			),
 		field.String("state").
 			Comment("state of the remediation, such as pending or completed").
@@ -135,24 +144,86 @@ func (r Remediation) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			comment:    "integration that produced the remediation",
 		}),
-		defaultEdgeFromWithPagination(r, Scan{}),
-		defaultEdgeToWithPagination(r, Finding{}),
-		defaultEdgeToWithPagination(r, Vulnerability{}),
-		defaultEdgeToWithPagination(r, ActionPlan{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Scan{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Scan{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(ActionPlan{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Task{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,
 			edgeSchema: Control{},
 			annotations: []schema.Annotation{
 				entx.CSVRef().FromColumn("ControlRefCodes").MatchOn("ref_code"),
+				accessmap.EdgeViewCheck(Control{}.Name()),
 			},
 		}),
-		defaultEdgeToWithPagination(r, Subcontrol{}),
-		defaultEdgeToWithPagination(r, Risk{}),
-		defaultEdgeToWithPagination(r, Program{}),
-		defaultEdgeToWithPagination(r, Asset{}),
-		defaultEdgeToWithPagination(r, Entity{}),
-		defaultEdgeToWithPagination(r, Review{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("SubcontrolRefCodes").MatchOn("ref_code"),
+				accessmap.EdgeViewCheck(Subcontrol{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Risk{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Program{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Asset{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Asset{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Entity{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Review{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Review{}.Name()),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,
 			name:       "comments",

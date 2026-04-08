@@ -43,7 +43,7 @@ type ScanHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`

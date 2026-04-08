@@ -170,6 +170,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_InternalPolicy_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_InternalPolicy_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
+			case "reviews":
+				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -356,6 +364,14 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_InternalPolicy_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_InternalPolicy_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
+			case "reviews":
+				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -542,6 +558,14 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_InternalPolicy_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_InternalPolicy_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
+			case "reviews":
+				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":
@@ -728,6 +752,14 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
+			case "assets":
+				return ec.fieldContext_InternalPolicy_assets(ctx, field)
+			case "entities":
+				return ec.fieldContext_InternalPolicy_entities(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
+			case "reviews":
+				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
 			case "hasPendingWorkflow":
 				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
 			case "hasWorkflowHistory":

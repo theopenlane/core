@@ -24,6 +24,10 @@ extend type Mutation{
         """
         entityTypeName: String
         entityFiles: [Upload!]
+        """
+        file to upload as the logo of the entity
+        """
+        logoFile: Upload
     ): EntityCreatePayload!
     """
     Create multiple new entities
@@ -64,6 +68,10 @@ extend type Mutation{
         """
         input: UpdateEntityInput!
         entityFiles: [Upload!]
+        """
+        file to upload as the logo of the entity
+        """
+        logoFile: Upload
     ): EntityUpdatePayload!
     """
     Delete an existing entity

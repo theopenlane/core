@@ -22,11 +22,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -135,26 +135,6 @@ func (_u *ScanUpdate) AppendTags(v []string) *ScanUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanUpdate) ClearTags() *ScanUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ScanUpdate) SetOwnerID(v string) *ScanUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ScanUpdate) SetNillableOwnerID(v *string) *ScanUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ScanUpdate) ClearOwnerID() *ScanUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -570,11 +550,6 @@ func (_u *ScanUpdate) SetNillableStatus(v *enums.ScanStatus) *ScanUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *ScanUpdate) SetOwner(v *Organization) *ScanUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ScanUpdate) AddBlockedGroupIDs(ids ...string) *ScanUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -800,6 +775,21 @@ func (_u *ScanUpdate) AddControls(v ...*Control) *ScanUpdate {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *ScanUpdate) AddSubcontrolIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdate) AddSubcontrols(v ...*Subcontrol) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdate) SetGeneratedByPlatform(v *Platform) *ScanUpdate {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -818,12 +808,6 @@ func (_u *ScanUpdate) SetPerformedByGroup(v *Group) *ScanUpdate {
 // Mutation returns the ScanMutation object of the builder.
 func (_u *ScanUpdate) Mutation() *ScanMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *ScanUpdate) ClearOwner() *ScanUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1135,6 +1119,27 @@ func (_u *ScanUpdate) RemoveControls(v ...*Control) *ScanUpdate {
 	return _u.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdate) ClearSubcontrols() *ScanUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *ScanUpdate) RemoveSubcontrolIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *ScanUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdate) ClearGeneratedByPlatform() *ScanUpdate {
 	_u.mutation.ClearGeneratedByPlatform()
@@ -1197,11 +1202,6 @@ func (_u *ScanUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ScanUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := scan.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Scan.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Target(); ok {
 		if err := scan.TargetValidator(v); err != nil {
 			return &ValidationError{Name: "target", err: fmt.Errorf(`generated: validator failed for field "Scan.target": %w`, err)}
@@ -1357,37 +1357,6 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   scan.OwnerTable,
-			Columns: []string{scan.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Scan
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   scan.OwnerTable,
-			Columns: []string{scan.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Scan
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2199,6 +2168,54 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GeneratedByPlatformCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2403,26 +2420,6 @@ func (_u *ScanUpdateOne) AppendTags(v []string) *ScanUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanUpdateOne) ClearTags() *ScanUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ScanUpdateOne) SetOwnerID(v string) *ScanUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ScanUpdateOne) SetNillableOwnerID(v *string) *ScanUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ScanUpdateOne) ClearOwnerID() *ScanUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -2838,11 +2835,6 @@ func (_u *ScanUpdateOne) SetNillableStatus(v *enums.ScanStatus) *ScanUpdateOne {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *ScanUpdateOne) SetOwner(v *Organization) *ScanUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ScanUpdateOne) AddBlockedGroupIDs(ids ...string) *ScanUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -3068,6 +3060,21 @@ func (_u *ScanUpdateOne) AddControls(v ...*Control) *ScanUpdateOne {
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *ScanUpdateOne) AddSubcontrolIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdateOne) SetGeneratedByPlatform(v *Platform) *ScanUpdateOne {
 	return _u.SetGeneratedByPlatformID(v.ID)
@@ -3086,12 +3093,6 @@ func (_u *ScanUpdateOne) SetPerformedByGroup(v *Group) *ScanUpdateOne {
 // Mutation returns the ScanMutation object of the builder.
 func (_u *ScanUpdateOne) Mutation() *ScanMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *ScanUpdateOne) ClearOwner() *ScanUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -3403,6 +3404,27 @@ func (_u *ScanUpdateOne) RemoveControls(v ...*Control) *ScanUpdateOne {
 	return _u.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *ScanUpdateOne) ClearSubcontrols() *ScanUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *ScanUpdateOne) RemoveSubcontrolIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *ScanUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdateOne) ClearGeneratedByPlatform() *ScanUpdateOne {
 	_u.mutation.ClearGeneratedByPlatform()
@@ -3478,11 +3500,6 @@ func (_u *ScanUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *ScanUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := scan.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Scan.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Target(); ok {
 		if err := scan.TargetValidator(v); err != nil {
 			return &ValidationError{Name: "target", err: fmt.Errorf(`generated: validator failed for field "Scan.target": %w`, err)}
@@ -3655,37 +3672,6 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   scan.OwnerTable,
-			Columns: []string{scan.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Scan
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   scan.OwnerTable,
-			Columns: []string{scan.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Scan
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4492,6 +4478,54 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.SubcontrolsTable,
+			Columns: scan.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

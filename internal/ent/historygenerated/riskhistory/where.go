@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
@@ -158,6 +159,21 @@ func ScopeID(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldScopeID, v))
 }
 
+// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
+func ExternalID(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldExternalID, v))
+}
+
+// IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
+func IntegrationID(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
+func ObservedAt(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldObservedAt, v))
+}
+
 // ExternalUUID applies equality check predicate on the "external_uuid" field. It's identical to ExternalUUIDEQ.
 func ExternalUUID(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldExternalUUID, v))
@@ -196,6 +212,31 @@ func StakeholderID(v string) predicate.RiskHistory {
 // DelegateID applies equality check predicate on the "delegate_id" field. It's identical to DelegateIDEQ.
 func DelegateID(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldDelegateID, v))
+}
+
+// MitigatedAt applies equality check predicate on the "mitigated_at" field. It's identical to MitigatedAtEQ.
+func MitigatedAt(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldMitigatedAt, v))
+}
+
+// ReviewRequired applies equality check predicate on the "review_required" field. It's identical to ReviewRequiredEQ.
+func ReviewRequired(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldReviewRequired, v))
+}
+
+// LastReviewedAt applies equality check predicate on the "last_reviewed_at" field. It's identical to LastReviewedAtEQ.
+func LastReviewedAt(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
+// NextReviewDueAt applies equality check predicate on the "next_review_due_at" field. It's identical to NextReviewDueAtEQ.
+func NextReviewDueAt(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldNextReviewDueAt, v))
+}
+
+// ResidualScore applies equality check predicate on the "residual_score" field. It's identical to ResidualScoreEQ.
+func ResidualScore(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldResidualScore, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1458,6 +1499,206 @@ func ScopeIDContainsFold(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldContainsFold(FieldScopeID, v))
 }
 
+// ExternalIDEQ applies the EQ predicate on the "external_id" field.
+func ExternalIDEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
+func ExternalIDNEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldExternalID, v))
+}
+
+// ExternalIDIn applies the In predicate on the "external_id" field.
+func ExternalIDIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldExternalID, vs...))
+}
+
+// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
+func ExternalIDNotIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldExternalID, vs...))
+}
+
+// ExternalIDGT applies the GT predicate on the "external_id" field.
+func ExternalIDGT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldExternalID, v))
+}
+
+// ExternalIDGTE applies the GTE predicate on the "external_id" field.
+func ExternalIDGTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldExternalID, v))
+}
+
+// ExternalIDLT applies the LT predicate on the "external_id" field.
+func ExternalIDLT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldExternalID, v))
+}
+
+// ExternalIDLTE applies the LTE predicate on the "external_id" field.
+func ExternalIDLTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldExternalID, v))
+}
+
+// ExternalIDContains applies the Contains predicate on the "external_id" field.
+func ExternalIDContains(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContains(FieldExternalID, v))
+}
+
+// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
+func ExternalIDHasPrefix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasPrefix(FieldExternalID, v))
+}
+
+// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
+func ExternalIDHasSuffix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasSuffix(FieldExternalID, v))
+}
+
+// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
+func ExternalIDIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldExternalID))
+}
+
+// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
+func ExternalIDNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldExternalID))
+}
+
+// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
+func ExternalIDEqualFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEqualFold(FieldExternalID, v))
+}
+
+// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
+func ExternalIDContainsFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContainsFold(FieldExternalID, v))
+}
+
+// IntegrationIDEQ applies the EQ predicate on the "integration_id" field.
+func IntegrationIDEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDNEQ applies the NEQ predicate on the "integration_id" field.
+func IntegrationIDNEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDIn applies the In predicate on the "integration_id" field.
+func IntegrationIDIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDNotIn applies the NotIn predicate on the "integration_id" field.
+func IntegrationIDNotIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDGT applies the GT predicate on the "integration_id" field.
+func IntegrationIDGT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldIntegrationID, v))
+}
+
+// IntegrationIDGTE applies the GTE predicate on the "integration_id" field.
+func IntegrationIDGTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDLT applies the LT predicate on the "integration_id" field.
+func IntegrationIDLT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldIntegrationID, v))
+}
+
+// IntegrationIDLTE applies the LTE predicate on the "integration_id" field.
+func IntegrationIDLTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDContains applies the Contains predicate on the "integration_id" field.
+func IntegrationIDContains(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContains(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasPrefix applies the HasPrefix predicate on the "integration_id" field.
+func IntegrationIDHasPrefix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasPrefix(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasSuffix applies the HasSuffix predicate on the "integration_id" field.
+func IntegrationIDHasSuffix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasSuffix(FieldIntegrationID, v))
+}
+
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldIntegrationID))
+}
+
+// IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
+func IntegrationIDEqualFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEqualFold(FieldIntegrationID, v))
+}
+
+// IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
+func IntegrationIDContainsFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
+// ObservedAtEQ applies the EQ predicate on the "observed_at" field.
+func ObservedAtEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldObservedAt, v))
+}
+
+// ObservedAtNEQ applies the NEQ predicate on the "observed_at" field.
+func ObservedAtNEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldObservedAt, v))
+}
+
+// ObservedAtIn applies the In predicate on the "observed_at" field.
+func ObservedAtIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtNotIn applies the NotIn predicate on the "observed_at" field.
+func ObservedAtNotIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtGT applies the GT predicate on the "observed_at" field.
+func ObservedAtGT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldObservedAt, v))
+}
+
+// ObservedAtGTE applies the GTE predicate on the "observed_at" field.
+func ObservedAtGTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldObservedAt, v))
+}
+
+// ObservedAtLT applies the LT predicate on the "observed_at" field.
+func ObservedAtLT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldObservedAt, v))
+}
+
+// ObservedAtLTE applies the LTE predicate on the "observed_at" field.
+func ObservedAtLTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldObservedAt, v))
+}
+
+// ObservedAtIsNil applies the IsNil predicate on the "observed_at" field.
+func ObservedAtIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldObservedAt))
+}
+
+// ObservedAtNotNil applies the NotNil predicate on the "observed_at" field.
+func ObservedAtNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldObservedAt))
+}
+
 // ExternalUUIDEQ applies the EQ predicate on the "external_uuid" field.
 func ExternalUUIDEQ(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldExternalUUID, v))
@@ -2171,6 +2412,306 @@ func DelegateIDEqualFold(v string) predicate.RiskHistory {
 // DelegateIDContainsFold applies the ContainsFold predicate on the "delegate_id" field.
 func DelegateIDContainsFold(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldContainsFold(FieldDelegateID, v))
+}
+
+// MitigatedAtEQ applies the EQ predicate on the "mitigated_at" field.
+func MitigatedAtEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldMitigatedAt, v))
+}
+
+// MitigatedAtNEQ applies the NEQ predicate on the "mitigated_at" field.
+func MitigatedAtNEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldMitigatedAt, v))
+}
+
+// MitigatedAtIn applies the In predicate on the "mitigated_at" field.
+func MitigatedAtIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldMitigatedAt, vs...))
+}
+
+// MitigatedAtNotIn applies the NotIn predicate on the "mitigated_at" field.
+func MitigatedAtNotIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldMitigatedAt, vs...))
+}
+
+// MitigatedAtGT applies the GT predicate on the "mitigated_at" field.
+func MitigatedAtGT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldMitigatedAt, v))
+}
+
+// MitigatedAtGTE applies the GTE predicate on the "mitigated_at" field.
+func MitigatedAtGTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldMitigatedAt, v))
+}
+
+// MitigatedAtLT applies the LT predicate on the "mitigated_at" field.
+func MitigatedAtLT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldMitigatedAt, v))
+}
+
+// MitigatedAtLTE applies the LTE predicate on the "mitigated_at" field.
+func MitigatedAtLTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldMitigatedAt, v))
+}
+
+// MitigatedAtIsNil applies the IsNil predicate on the "mitigated_at" field.
+func MitigatedAtIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldMitigatedAt))
+}
+
+// MitigatedAtNotNil applies the NotNil predicate on the "mitigated_at" field.
+func MitigatedAtNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldMitigatedAt))
+}
+
+// ReviewRequiredEQ applies the EQ predicate on the "review_required" field.
+func ReviewRequiredEQ(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldReviewRequired, v))
+}
+
+// ReviewRequiredNEQ applies the NEQ predicate on the "review_required" field.
+func ReviewRequiredNEQ(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldReviewRequired, v))
+}
+
+// ReviewRequiredIsNil applies the IsNil predicate on the "review_required" field.
+func ReviewRequiredIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldReviewRequired))
+}
+
+// ReviewRequiredNotNil applies the NotNil predicate on the "review_required" field.
+func ReviewRequiredNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldReviewRequired))
+}
+
+// LastReviewedAtEQ applies the EQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtNEQ applies the NEQ predicate on the "last_reviewed_at" field.
+func LastReviewedAtNEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIn applies the In predicate on the "last_reviewed_at" field.
+func LastReviewedAtIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtNotIn applies the NotIn predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldLastReviewedAt, vs...))
+}
+
+// LastReviewedAtGT applies the GT predicate on the "last_reviewed_at" field.
+func LastReviewedAtGT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtGTE applies the GTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtGTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLT applies the LT predicate on the "last_reviewed_at" field.
+func LastReviewedAtLT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtLTE applies the LTE predicate on the "last_reviewed_at" field.
+func LastReviewedAtLTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldLastReviewedAt, v))
+}
+
+// LastReviewedAtIsNil applies the IsNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldLastReviewedAt))
+}
+
+// LastReviewedAtNotNil applies the NotNil predicate on the "last_reviewed_at" field.
+func LastReviewedAtNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldLastReviewedAt))
+}
+
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// NextReviewDueAtEQ applies the EQ predicate on the "next_review_due_at" field.
+func NextReviewDueAtEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtNEQ applies the NEQ predicate on the "next_review_due_at" field.
+func NextReviewDueAtNEQ(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtIn applies the In predicate on the "next_review_due_at" field.
+func NextReviewDueAtIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldNextReviewDueAt, vs...))
+}
+
+// NextReviewDueAtNotIn applies the NotIn predicate on the "next_review_due_at" field.
+func NextReviewDueAtNotIn(vs ...models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldNextReviewDueAt, vs...))
+}
+
+// NextReviewDueAtGT applies the GT predicate on the "next_review_due_at" field.
+func NextReviewDueAtGT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtGTE applies the GTE predicate on the "next_review_due_at" field.
+func NextReviewDueAtGTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtLT applies the LT predicate on the "next_review_due_at" field.
+func NextReviewDueAtLT(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtLTE applies the LTE predicate on the "next_review_due_at" field.
+func NextReviewDueAtLTE(v models.DateTime) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldNextReviewDueAt, v))
+}
+
+// NextReviewDueAtIsNil applies the IsNil predicate on the "next_review_due_at" field.
+func NextReviewDueAtIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldNextReviewDueAt))
+}
+
+// NextReviewDueAtNotNil applies the NotNil predicate on the "next_review_due_at" field.
+func NextReviewDueAtNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldNextReviewDueAt))
+}
+
+// ResidualScoreEQ applies the EQ predicate on the "residual_score" field.
+func ResidualScoreEQ(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldResidualScore, v))
+}
+
+// ResidualScoreNEQ applies the NEQ predicate on the "residual_score" field.
+func ResidualScoreNEQ(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldResidualScore, v))
+}
+
+// ResidualScoreIn applies the In predicate on the "residual_score" field.
+func ResidualScoreIn(vs ...int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldResidualScore, vs...))
+}
+
+// ResidualScoreNotIn applies the NotIn predicate on the "residual_score" field.
+func ResidualScoreNotIn(vs ...int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldResidualScore, vs...))
+}
+
+// ResidualScoreGT applies the GT predicate on the "residual_score" field.
+func ResidualScoreGT(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldResidualScore, v))
+}
+
+// ResidualScoreGTE applies the GTE predicate on the "residual_score" field.
+func ResidualScoreGTE(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldResidualScore, v))
+}
+
+// ResidualScoreLT applies the LT predicate on the "residual_score" field.
+func ResidualScoreLT(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldResidualScore, v))
+}
+
+// ResidualScoreLTE applies the LTE predicate on the "residual_score" field.
+func ResidualScoreLTE(v int) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldResidualScore, v))
+}
+
+// ResidualScoreIsNil applies the IsNil predicate on the "residual_score" field.
+func ResidualScoreIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldResidualScore))
+}
+
+// ResidualScoreNotNil applies the NotNil predicate on the "residual_score" field.
+func ResidualScoreNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldResidualScore))
+}
+
+// RiskDecisionEQ applies the EQ predicate on the "risk_decision" field.
+func RiskDecisionEQ(v enums.RiskDecision) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldEQ(FieldRiskDecision, vc))
+}
+
+// RiskDecisionNEQ applies the NEQ predicate on the "risk_decision" field.
+func RiskDecisionNEQ(v enums.RiskDecision) predicate.RiskHistory {
+	vc := v
+	return predicate.RiskHistory(sql.FieldNEQ(FieldRiskDecision, vc))
+}
+
+// RiskDecisionIn applies the In predicate on the "risk_decision" field.
+func RiskDecisionIn(vs ...enums.RiskDecision) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldIn(FieldRiskDecision, v...))
+}
+
+// RiskDecisionNotIn applies the NotIn predicate on the "risk_decision" field.
+func RiskDecisionNotIn(vs ...enums.RiskDecision) predicate.RiskHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.RiskHistory(sql.FieldNotIn(FieldRiskDecision, v...))
+}
+
+// RiskDecisionIsNil applies the IsNil predicate on the "risk_decision" field.
+func RiskDecisionIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldRiskDecision))
+}
+
+// RiskDecisionNotNil applies the NotNil predicate on the "risk_decision" field.
+func RiskDecisionNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldRiskDecision))
 }
 
 // And groups predicates with the AND operator between them.

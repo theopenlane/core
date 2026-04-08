@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -55,14 +56,14 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	})
 
 	validConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
-		email:         "meow@example.com",
+		email:         fmt.Sprintf("meow+%s@example.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
 	})
 
 	invalidConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
-		email:         "meow@foobar.com",
+		email:         fmt.Sprintf("meow+%s@foobar.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
 		tfaEnabled:    tfaTrue,
@@ -160,6 +161,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			expectedModules: []interface{}{
 				models.CatalogBaseModule.String(),
 				models.CatalogComplianceModule.String(),
+				models.CatalogTrustCenterModule.String(),
 			},
 		},
 		{
@@ -171,6 +173,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			expectedModules: []interface{}{
 				models.CatalogBaseModule.String(),
 				models.CatalogComplianceModule.String(),
+				models.CatalogTrustCenterModule.String(),
 			},
 		},
 		{
@@ -197,7 +200,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		},
 		{
 			name:           "user not found",
-			username:       "rick.sanchez@theopenlane.io",
+			username:       fmt.Sprintf("rick.sanchez%s@theopenlane.io", strings.ToLower(ulids.New().String())),
 			password:       validPassword,
 			expectedStatus: http.StatusBadRequest,
 			expectedErr:    handlers.ErrLoginFailed,

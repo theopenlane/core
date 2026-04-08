@@ -10,8 +10,6 @@ import (
 )
 
 func TestSearchContextTracker(t *testing.T) {
-	t.Parallel()
-
 	query := "test"
 	tracker := newContextTracker(query)
 
@@ -33,8 +31,6 @@ func TestSearchContextTracker(t *testing.T) {
 }
 
 func TestFieldMatchChecker(t *testing.T) {
-	t.Parallel()
-
 	checker := fieldMatchChecker{"policy"}
 
 	control := &generated.Control{
@@ -55,8 +51,6 @@ func TestFieldMatchChecker(t *testing.T) {
 }
 
 func TestCreateSnippet(t *testing.T) {
-	t.Parallel()
-
 	tracker := newContextTracker("security")
 
 	// test snippet creation with match in middle
@@ -75,8 +69,6 @@ func TestCreateSnippet(t *testing.T) {
 }
 
 func TestExtractSnippets(t *testing.T) {
-	t.Parallel()
-
 	tracker := newContextTracker("test")
 
 	entity := &generated.ActionPlan{

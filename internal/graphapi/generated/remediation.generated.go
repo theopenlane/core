@@ -88,6 +88,8 @@ func (ec *executionContext) fieldContext_RemediationBulkCreatePayload_remediatio
 				return ec.fieldContext_Remediation_externalOwnerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Remediation_title(ctx, field)
+			case "status":
+				return ec.fieldContext_Remediation_status(ctx, field)
 			case "state":
 				return ec.fieldContext_Remediation_state(ctx, field)
 			case "intent":
@@ -258,6 +260,8 @@ func (ec *executionContext) fieldContext_RemediationBulkUpdatePayload_remediatio
 				return ec.fieldContext_Remediation_externalOwnerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Remediation_title(ctx, field)
+			case "status":
+				return ec.fieldContext_Remediation_status(ctx, field)
 			case "state":
 				return ec.fieldContext_Remediation_state(ctx, field)
 			case "intent":
@@ -428,6 +432,8 @@ func (ec *executionContext) fieldContext_RemediationCreatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_externalOwnerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Remediation_title(ctx, field)
+			case "status":
+				return ec.fieldContext_Remediation_status(ctx, field)
 			case "state":
 				return ec.fieldContext_Remediation_state(ctx, field)
 			case "intent":
@@ -598,6 +604,8 @@ func (ec *executionContext) fieldContext_RemediationUpdatePayload_remediation(_ 
 				return ec.fieldContext_Remediation_externalOwnerID(ctx, field)
 			case "title":
 				return ec.fieldContext_Remediation_title(ctx, field)
+			case "status":
+				return ec.fieldContext_Remediation_status(ctx, field)
 			case "state":
 				return ec.fieldContext_Remediation_state(ctx, field)
 			case "intent":

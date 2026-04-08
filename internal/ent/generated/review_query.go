@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -41,51 +42,52 @@ import (
 // ReviewQuery is the builder for querying Review entities.
 type ReviewQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []review.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Review
-	withOwner                *OrganizationQuery
-	withBlockedGroups        *GroupQuery
-	withEditors              *GroupQuery
-	withViewers              *GroupQuery
-	withEnvironment          *CustomTypeEnumQuery
-	withScope                *CustomTypeEnumQuery
-	withIntegrations         *IntegrationQuery
-	withFindings             *FindingQuery
-	withVulnerabilities      *VulnerabilityQuery
-	withActionPlans          *ActionPlanQuery
-	withRemediations         *RemediationQuery
-	withControls             *ControlQuery
-	withSubcontrols          *SubcontrolQuery
-	withRisks                *RiskQuery
-	withPrograms             *ProgramQuery
-	withAssets               *AssetQuery
-	withEntities             *EntityQuery
-	withTasks                *TaskQuery
-	withReviewer             *UserQuery
-	withComments             *NoteQuery
-	withFiles                *FileQuery
-	withFKs                  bool
-	loadTotal                []func(context.Context, []*Review) error
-	modifiers                []func(*sql.Selector)
-	withNamedBlockedGroups   map[string]*GroupQuery
-	withNamedEditors         map[string]*GroupQuery
-	withNamedViewers         map[string]*GroupQuery
-	withNamedIntegrations    map[string]*IntegrationQuery
-	withNamedFindings        map[string]*FindingQuery
-	withNamedVulnerabilities map[string]*VulnerabilityQuery
-	withNamedActionPlans     map[string]*ActionPlanQuery
-	withNamedRemediations    map[string]*RemediationQuery
-	withNamedControls        map[string]*ControlQuery
-	withNamedSubcontrols     map[string]*SubcontrolQuery
-	withNamedRisks           map[string]*RiskQuery
-	withNamedPrograms        map[string]*ProgramQuery
-	withNamedAssets          map[string]*AssetQuery
-	withNamedEntities        map[string]*EntityQuery
-	withNamedTasks           map[string]*TaskQuery
-	withNamedComments        map[string]*NoteQuery
-	withNamedFiles           map[string]*FileQuery
+	ctx                       *QueryContext
+	order                     []review.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.Review
+	withOwner                 *OrganizationQuery
+	withBlockedGroups         *GroupQuery
+	withEditors               *GroupQuery
+	withViewers               *GroupQuery
+	withEnvironment           *CustomTypeEnumQuery
+	withScope                 *CustomTypeEnumQuery
+	withIntegrations          *IntegrationQuery
+	withFindings              *FindingQuery
+	withVulnerabilities       *VulnerabilityQuery
+	withActionPlans           *ActionPlanQuery
+	withRemediations          *RemediationQuery
+	withControls              *ControlQuery
+	withSubcontrols           *SubcontrolQuery
+	withRisks                 *RiskQuery
+	withPrograms              *ProgramQuery
+	withAssets                *AssetQuery
+	withEntities              *EntityQuery
+	withTasks                 *TaskQuery
+	withReviewer              *UserQuery
+	withComments              *NoteQuery
+	withFiles                 *FileQuery
+	withInternalPolicies      *InternalPolicyQuery
+	loadTotal                 []func(context.Context, []*Review) error
+	modifiers                 []func(*sql.Selector)
+	withNamedBlockedGroups    map[string]*GroupQuery
+	withNamedEditors          map[string]*GroupQuery
+	withNamedViewers          map[string]*GroupQuery
+	withNamedIntegrations     map[string]*IntegrationQuery
+	withNamedFindings         map[string]*FindingQuery
+	withNamedVulnerabilities  map[string]*VulnerabilityQuery
+	withNamedActionPlans      map[string]*ActionPlanQuery
+	withNamedRemediations     map[string]*RemediationQuery
+	withNamedControls         map[string]*ControlQuery
+	withNamedSubcontrols      map[string]*SubcontrolQuery
+	withNamedRisks            map[string]*RiskQuery
+	withNamedPrograms         map[string]*ProgramQuery
+	withNamedAssets           map[string]*AssetQuery
+	withNamedEntities         map[string]*EntityQuery
+	withNamedTasks            map[string]*TaskQuery
+	withNamedComments         map[string]*NoteQuery
+	withNamedFiles            map[string]*FileQuery
+	withNamedInternalPolicies map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -311,11 +313,11 @@ func (_q *ReviewQuery) QueryFindings() *FindingQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(finding.Table, finding.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.FindingsTable, review.FindingsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.FindingsTable, review.FindingsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -336,11 +338,11 @@ func (_q *ReviewQuery) QueryVulnerabilities() *VulnerabilityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.VulnerabilitiesTable, review.VulnerabilitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.VulnerabilitiesTable, review.VulnerabilitiesPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.ReviewVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -386,11 +388,11 @@ func (_q *ReviewQuery) QueryRemediations() *RemediationQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(remediation.Table, remediation.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.RemediationsTable, review.RemediationsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.RemediationsTable, review.RemediationsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.ReviewRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -436,11 +438,11 @@ func (_q *ReviewQuery) QuerySubcontrols() *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.SubcontrolsTable, review.SubcontrolsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.SubcontrolsTable, review.SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.ReviewSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -461,11 +463,11 @@ func (_q *ReviewQuery) QueryRisks() *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(review.Table, review.FieldID, selector),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, review.RisksTable, review.RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.RisksTable, review.RisksPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.ReviewRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -641,6 +643,31 @@ func (_q *ReviewQuery) QueryFiles() *FileQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.File
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *ReviewQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.InternalPoliciesTable, review.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.ReviewInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -834,32 +861,33 @@ func (_q *ReviewQuery) Clone() *ReviewQuery {
 		return nil
 	}
 	return &ReviewQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]review.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.Review{}, _q.predicates...),
-		withOwner:           _q.withOwner.Clone(),
-		withBlockedGroups:   _q.withBlockedGroups.Clone(),
-		withEditors:         _q.withEditors.Clone(),
-		withViewers:         _q.withViewers.Clone(),
-		withEnvironment:     _q.withEnvironment.Clone(),
-		withScope:           _q.withScope.Clone(),
-		withIntegrations:    _q.withIntegrations.Clone(),
-		withFindings:        _q.withFindings.Clone(),
-		withVulnerabilities: _q.withVulnerabilities.Clone(),
-		withActionPlans:     _q.withActionPlans.Clone(),
-		withRemediations:    _q.withRemediations.Clone(),
-		withControls:        _q.withControls.Clone(),
-		withSubcontrols:     _q.withSubcontrols.Clone(),
-		withRisks:           _q.withRisks.Clone(),
-		withPrograms:        _q.withPrograms.Clone(),
-		withAssets:          _q.withAssets.Clone(),
-		withEntities:        _q.withEntities.Clone(),
-		withTasks:           _q.withTasks.Clone(),
-		withReviewer:        _q.withReviewer.Clone(),
-		withComments:        _q.withComments.Clone(),
-		withFiles:           _q.withFiles.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]review.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.Review{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withBlockedGroups:    _q.withBlockedGroups.Clone(),
+		withEditors:          _q.withEditors.Clone(),
+		withViewers:          _q.withViewers.Clone(),
+		withEnvironment:      _q.withEnvironment.Clone(),
+		withScope:            _q.withScope.Clone(),
+		withIntegrations:     _q.withIntegrations.Clone(),
+		withFindings:         _q.withFindings.Clone(),
+		withVulnerabilities:  _q.withVulnerabilities.Clone(),
+		withActionPlans:      _q.withActionPlans.Clone(),
+		withRemediations:     _q.withRemediations.Clone(),
+		withControls:         _q.withControls.Clone(),
+		withSubcontrols:      _q.withSubcontrols.Clone(),
+		withRisks:            _q.withRisks.Clone(),
+		withPrograms:         _q.withPrograms.Clone(),
+		withAssets:           _q.withAssets.Clone(),
+		withEntities:         _q.withEntities.Clone(),
+		withTasks:            _q.withTasks.Clone(),
+		withReviewer:         _q.withReviewer.Clone(),
+		withComments:         _q.withComments.Clone(),
+		withFiles:            _q.withFiles.Clone(),
+		withInternalPolicies: _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1098,6 +1126,17 @@ func (_q *ReviewQuery) WithFiles(opts ...func(*FileQuery)) *ReviewQuery {
 	return _q
 }
 
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *ReviewQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1181,9 +1220,8 @@ func (_q *ReviewQuery) prepareQuery(ctx context.Context) error {
 func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Review, error) {
 	var (
 		nodes       = []*Review{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [22]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1205,11 +1243,9 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 			_q.withReviewer != nil,
 			_q.withComments != nil,
 			_q.withFiles != nil,
+			_q.withInternalPolicies != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, review.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Review).scanValues(nil, columns)
 	}
@@ -1376,6 +1412,13 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 			return nil, err
 		}
 	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Review) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Review, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Review) { n.appendNamedBlockedGroups(name) },
@@ -1492,6 +1535,13 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Review) { n.appendNamedFiles(name) },
 			func(n *Review, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Review) { n.appendNamedInternalPolicies(name) },
+			func(n *Review, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1746,64 +1796,126 @@ func (_q *ReviewQuery) loadIntegrations(ctx context.Context, query *IntegrationQ
 	return nil
 }
 func (_q *ReviewQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Review, init func(*Review), assign func(*Review, *Finding)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Finding(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.FindingsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.FindingsTable)
+		joinT.Schema(_q.schemaConfig.ReviewFindings)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(review.FindingsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.FindingsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.FindingsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_findings
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_findings" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_findings" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *ReviewQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Review, init func(*Review), assign func(*Review, *Vulnerability)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Vulnerability(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.VulnerabilitiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.ReviewVulnerabilities)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(review.VulnerabilitiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.VulnerabilitiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_vulnerabilities
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_vulnerabilities" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_vulnerabilities" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -1870,33 +1982,64 @@ func (_q *ReviewQuery) loadActionPlans(ctx context.Context, query *ActionPlanQue
 	return nil
 }
 func (_q *ReviewQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Review, init func(*Review), assign func(*Review, *Remediation)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Remediation(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.RemediationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.ReviewRemediations)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(review.RemediationsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.RemediationsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.RemediationsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_remediations
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_remediations" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_remediations" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -1963,64 +2106,126 @@ func (_q *ReviewQuery) loadControls(ctx context.Context, query *ControlQuery, no
 	return nil
 }
 func (_q *ReviewQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Review, init func(*Review), assign func(*Review, *Subcontrol)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.SubcontrolsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.ReviewSubcontrols)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(review.SubcontrolsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.SubcontrolsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.SubcontrolsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_subcontrols
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_subcontrols" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_subcontrols" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *ReviewQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Review, init func(*Review), assign func(*Review, *Risk)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Review)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Risk(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(review.RisksColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.RisksTable)
+		joinT.Schema(_q.schemaConfig.ReviewRisks)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(review.RisksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.RisksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.RisksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.review_risks
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "review_risks" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "review_risks" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2236,6 +2441,68 @@ func (_q *ReviewQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []
 			return fmt.Errorf(`unexpected referenced foreign-key "review_files" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (_q *ReviewQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Review, init func(*Review), assign func(*Review, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Review)
+	nids := make(map[string]map[*Review]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(review.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.ReviewInternalPolicies)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(review.InternalPoliciesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(review.InternalPoliciesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(review.InternalPoliciesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Review]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2585,6 +2852,20 @@ func (_q *ReviewQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *Re
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ReviewQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *ReviewQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

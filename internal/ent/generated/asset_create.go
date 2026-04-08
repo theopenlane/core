@@ -18,9 +18,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
@@ -665,6 +668,34 @@ func (_c *AssetCreate) SetCategories(v []string) *AssetCreate {
 	return _c
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_c *AssetCreate) SetIntegrationID(v string) *AssetCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableIntegrationID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *AssetCreate) SetObservedAt(v models.DateTime) *AssetCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableObservedAt(v *models.DateTime) *AssetCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssetCreate) SetID(v string) *AssetCreate {
 	_c.mutation.SetID(v)
@@ -869,9 +900,44 @@ func (_c *AssetCreate) AddControls(v ...*Control) *AssetCreate {
 	return _c.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_c *AssetCreate) AddSubcontrolIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_c *AssetCreate) AddSubcontrols(v ...*Subcontrol) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubcontrolIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_c *AssetCreate) AddInternalPolicyIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_c *AssetCreate) AddInternalPolicies(v ...*InternalPolicy) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
+}
+
 // SetSourcePlatform sets the "source_platform" edge to the Platform entity.
 func (_c *AssetCreate) SetSourcePlatform(v *Platform) *AssetCreate {
 	return _c.SetSourcePlatformID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_c *AssetCreate) SetIntegration(v *Integration) *AssetCreate {
+	return _c.SetIntegrationID(v.ID)
 }
 
 // AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
@@ -1196,6 +1262,10 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Categories(); ok {
 		_spec.SetField(asset.FieldCategories, field.TypeJSON, value)
 		_node.Categories = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(asset.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1548,6 +1618,40 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.SubcontrolsTable,
+			Columns: asset.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SubcontrolAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.InternalPoliciesTable,
+			Columns: asset.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicyAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.SourcePlatformIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1564,6 +1668,24 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SourcePlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {

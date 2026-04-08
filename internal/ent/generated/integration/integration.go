@@ -62,6 +62,8 @@ const (
 	FieldProviderMetadata = "provider_metadata"
 	// FieldConfig holds the string denoting the config field in the database.
 	FieldConfig = "config"
+	// FieldInstallationMetadata holds the string denoting the installation_metadata field in the database.
+	FieldInstallationMetadata = "installation_metadata"
 	// FieldProviderState holds the string denoting the provider_state field in the database.
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
@@ -78,6 +80,8 @@ const (
 	FieldStatus = "status"
 	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
+	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
+	FieldPrimaryDirectory = "primary_directory"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -102,6 +106,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeAssets holds the string denoting the assets edge name in mutations.
+	EdgeAssets = "assets"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
@@ -194,6 +200,13 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
+	// AssetsTable is the table that holds the assets relation/edge.
+	AssetsTable = "assets"
+	// AssetsInverseTable is the table name for the Asset entity.
+	// It exists in this package in order to avoid circular dependency with the "asset" package.
+	AssetsInverseTable = "assets"
+	// AssetsColumn is the table column denoting the assets relation/edge.
+	AssetsColumn = "integration_id"
 	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
 	DirectoryAccountsTable = "directory_accounts"
 	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
@@ -289,6 +302,7 @@ var Columns = []string{
 	FieldPlatformID,
 	FieldProviderMetadata,
 	FieldConfig,
+	FieldInstallationMetadata,
 	FieldProviderState,
 	FieldMetadata,
 	FieldDefinitionID,
@@ -297,6 +311,7 @@ var Columns = []string{
 	FieldFamily,
 	FieldStatus,
 	FieldProviderMetadataSnapshot,
+	FieldPrimaryDirectory,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "integrations"
@@ -354,7 +369,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -371,6 +386,8 @@ var (
 	NameValidator func(string) error
 	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	PlatformIDValidator func(string) error
+	// DefaultPrimaryDirectory holds the default value on creation for the "primary_directory" field.
+	DefaultPrimaryDirectory bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -513,6 +530,11 @@ func ByFamily(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByPrimaryDirectory orders the results by the primary_directory field.
+func ByPrimaryDirectory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPrimaryDirectory, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -659,6 +681,20 @@ func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
 func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssetsCount orders the results by assets count.
+func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetsStep(), opts...)
+	}
+}
+
+// ByAssets orders the results by assets terms.
+func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -876,6 +912,13 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+	)
+}
+func newAssetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
 	)
 }
 func newDirectoryAccountsStep() *sqlgraph.Step {

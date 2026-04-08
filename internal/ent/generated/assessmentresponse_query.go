@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -28,18 +30,20 @@ import (
 // AssessmentResponseQuery is the builder for querying AssessmentResponse entities.
 type AssessmentResponseQuery struct {
 	config
-	ctx                *QueryContext
-	order              []assessmentresponse.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.AssessmentResponse
-	withOwner          *OrganizationQuery
-	withAssessment     *AssessmentQuery
-	withCampaign       *CampaignQuery
-	withIdentityHolder *IdentityHolderQuery
-	withEntity         *EntityQuery
-	withDocument       *DocumentDataQuery
-	loadTotal          []func(context.Context, []*AssessmentResponse) error
-	modifiers          []func(*sql.Selector)
+	ctx                       *QueryContext
+	order                     []assessmentresponse.OrderOption
+	inters                    []Interceptor
+	predicates                []predicate.AssessmentResponse
+	withOwner                 *OrganizationQuery
+	withAssessment            *AssessmentQuery
+	withCampaign              *CampaignQuery
+	withIdentityHolder        *IdentityHolderQuery
+	withEntity                *EntityQuery
+	withDocument              *DocumentDataQuery
+	withVendorRiskScores      *VendorRiskScoreQuery
+	loadTotal                 []func(context.Context, []*AssessmentResponse) error
+	modifiers                 []func(*sql.Selector)
+	withNamedVendorRiskScores map[string]*VendorRiskScoreQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -220,6 +224,31 @@ func (_q *AssessmentResponseQuery) QueryDocument() *DocumentDataQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores chains the current query on the "vendor_risk_scores" edge.
+func (_q *AssessmentResponseQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, assessmentresponse.VendorRiskScoresTable, assessmentresponse.VendorRiskScoresColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -413,17 +442,18 @@ func (_q *AssessmentResponseQuery) Clone() *AssessmentResponseQuery {
 		return nil
 	}
 	return &AssessmentResponseQuery{
-		config:             _q.config,
-		ctx:                _q.ctx.Clone(),
-		order:              append([]assessmentresponse.OrderOption{}, _q.order...),
-		inters:             append([]Interceptor{}, _q.inters...),
-		predicates:         append([]predicate.AssessmentResponse{}, _q.predicates...),
-		withOwner:          _q.withOwner.Clone(),
-		withAssessment:     _q.withAssessment.Clone(),
-		withCampaign:       _q.withCampaign.Clone(),
-		withIdentityHolder: _q.withIdentityHolder.Clone(),
-		withEntity:         _q.withEntity.Clone(),
-		withDocument:       _q.withDocument.Clone(),
+		config:               _q.config,
+		ctx:                  _q.ctx.Clone(),
+		order:                append([]assessmentresponse.OrderOption{}, _q.order...),
+		inters:               append([]Interceptor{}, _q.inters...),
+		predicates:           append([]predicate.AssessmentResponse{}, _q.predicates...),
+		withOwner:            _q.withOwner.Clone(),
+		withAssessment:       _q.withAssessment.Clone(),
+		withCampaign:         _q.withCampaign.Clone(),
+		withIdentityHolder:   _q.withIdentityHolder.Clone(),
+		withEntity:           _q.withEntity.Clone(),
+		withDocument:         _q.withDocument.Clone(),
+		withVendorRiskScores: _q.withVendorRiskScores.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -494,6 +524,17 @@ func (_q *AssessmentResponseQuery) WithDocument(opts ...func(*DocumentDataQuery)
 		opt(query)
 	}
 	_q.withDocument = query
+	return _q
+}
+
+// WithVendorRiskScores tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_risk_scores" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithVendorRiskScores(opts ...func(*VendorRiskScoreQuery)) *AssessmentResponseQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorRiskScores = query
 	return _q
 }
 
@@ -581,13 +622,14 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*AssessmentResponse{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withOwner != nil,
 			_q.withAssessment != nil,
 			_q.withCampaign != nil,
 			_q.withIdentityHolder != nil,
 			_q.withEntity != nil,
 			_q.withDocument != nil,
+			_q.withVendorRiskScores != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -646,6 +688,22 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if query := _q.withDocument; query != nil {
 		if err := _q.loadDocument(ctx, query, nodes, nil,
 			func(n *AssessmentResponse, e *DocumentData) { n.Edges.Document = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVendorRiskScores; query != nil {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *AssessmentResponse) { n.Edges.VendorRiskScores = []*VendorRiskScore{} },
+			func(n *AssessmentResponse, e *VendorRiskScore) {
+				n.Edges.VendorRiskScores = append(n.Edges.VendorRiskScores, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVendorRiskScores {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *AssessmentResponse) { n.appendNamedVendorRiskScores(name) },
+			func(n *AssessmentResponse, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -831,6 +889,37 @@ func (_q *AssessmentResponseQuery) loadDocument(ctx context.Context, query *Docu
 	}
 	return nil
 }
+func (_q *AssessmentResponseQuery) loadVendorRiskScores(ctx context.Context, query *VendorRiskScoreQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *VendorRiskScore)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*AssessmentResponse)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.VendorRiskScore(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessmentresponse.VendorRiskScoresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.assessment_response_vendor_risk_scores
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "assessment_response_vendor_risk_scores" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_response_vendor_risk_scores" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *AssessmentResponseQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -946,6 +1035,20 @@ func (_q *AssessmentResponseQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *AssessmentResponseQuery) Modify(modifiers ...func(s *sql.Selector)) *AssessmentResponseSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedVendorRiskScores tells the query-builder to eager-load the nodes that are connected to the "vendor_risk_scores"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithNamedVendorRiskScores(name string, opts ...func(*VendorRiskScoreQuery)) *AssessmentResponseQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorRiskScores == nil {
+		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
+	}
+	_q.withNamedVendorRiskScores[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied

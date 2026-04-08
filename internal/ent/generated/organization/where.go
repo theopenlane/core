@@ -4278,6 +4278,64 @@ func HasDiscussionsWith(preds ...predicate.Discussion) predicate.Organization {
 	})
 }
 
+// HasVendorScoringConfigs applies the HasEdge predicate on the "vendor_scoring_configs" edge.
+func HasVendorScoringConfigs() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorScoringConfigsTable, VendorScoringConfigsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorScoringConfig
+		step.Edge.Schema = schemaConfig.VendorScoringConfig
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorScoringConfigsWith applies the HasEdge predicate on the "vendor_scoring_configs" edge with a given conditions (other predicates).
+func HasVendorScoringConfigsWith(preds ...predicate.VendorScoringConfig) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newVendorScoringConfigsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorScoringConfig
+		step.Edge.Schema = schemaConfig.VendorScoringConfig
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVendorRiskScores applies the HasEdge predicate on the "vendor_risk_scores" edge.
+func HasVendorRiskScores() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorRiskScoresWith applies the HasEdge predicate on the "vendor_risk_scores" edge with a given conditions (other predicates).
+func HasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newVendorRiskScoresStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

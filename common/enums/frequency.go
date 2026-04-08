@@ -14,6 +14,8 @@ var (
 	FrequencyBiAnnually Frequency = "BIANNUALLY"
 	// FrequencyMonthly indicates that the frequency should occur monthly
 	FrequencyMonthly Frequency = "MONTHLY"
+	// FrequencyNone indicates that there is no frequency
+	FrequencyNone Frequency = "NONE"
 )
 
 var frequencyValues = []Frequency{
@@ -21,6 +23,7 @@ var frequencyValues = []Frequency{
 	FrequencyQuarterly,
 	FrequencyBiAnnually,
 	FrequencyMonthly,
+	FrequencyNone,
 }
 
 // Values returns a slice of strings that represents all the possible values of the Frequency enum.

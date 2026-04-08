@@ -10,9 +10,12 @@ func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 	envOpts = append(envOpts,
 		cel.ParserRecursionLimit(cfg.ParserRecursionLimit),
 		cel.ParserExpressionSizeLimit(cfg.ParserExpressionSizeLimit),
-		cel.ASTValidators(cel.ValidateComprehensionNestingLimit(cfg.ComprehensionNestingLimit)),
 		cel.CrossTypeNumericComparisons(cfg.CrossTypeNumericComparisons),
 	)
+
+	if cfg.ComprehensionNestingLimit > 0 {
+		envOpts = append(envOpts, cel.ASTValidators(cel.ValidateComprehensionNestingLimit(cfg.ComprehensionNestingLimit)))
+	}
 
 	if cfg.IdentifierEscapeSyntax {
 		envOpts = append(envOpts, cel.EnableIdentifierEscapeSyntax())

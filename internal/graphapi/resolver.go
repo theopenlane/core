@@ -17,6 +17,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -35,14 +36,15 @@ const (
 
 // Resolver provides a graph response resolver
 type Resolver struct {
-	db                *ent.Client
-	pool              *gala.Pool
-	extensionsEnabled bool
-	uploader          *objects.Service
-	isDevelopment     bool
-	complexityLimit   int
-	maxResultLimit    *int
-	workflowsConfig   workflows.Config
+	db                  *ent.Client
+	pool                *gala.Pool
+	extensionsEnabled   bool
+	uploader            *objects.Service
+	isDevelopment       bool
+	complexityLimit     int
+	maxResultLimit      *int
+	workflowsConfig     workflows.Config
+	integrationsRuntime *integrationsruntime.Runtime
 
 	// subscription settings
 	subscriptionSettings

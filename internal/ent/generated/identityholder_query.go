@@ -25,9 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -60,6 +62,7 @@ type IdentityHolderQuery struct {
 	withEntities                 *EntityQuery
 	withDirectoryAccounts        *DirectoryAccountQuery
 	withControls                 *ControlQuery
+	withSubcontrols              *SubcontrolQuery
 	withPlatforms                *PlatformQuery
 	withCampaigns                *CampaignQuery
 	withTasks                    *TaskQuery
@@ -68,6 +71,7 @@ type IdentityHolderQuery struct {
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	withAccessPlatforms          *PlatformQuery
 	withUser                     *UserQuery
+	withInternalPolicies         *InternalPolicyQuery
 	loadTotal                    []func(context.Context, []*IdentityHolder) error
 	modifiers                    []func(*sql.Selector)
 	withNamedBlockedGroups       map[string]*GroupQuery
@@ -80,6 +84,7 @@ type IdentityHolderQuery struct {
 	withNamedEntities            map[string]*EntityQuery
 	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
 	withNamedControls            map[string]*ControlQuery
+	withNamedSubcontrols         map[string]*SubcontrolQuery
 	withNamedPlatforms           map[string]*PlatformQuery
 	withNamedCampaigns           map[string]*CampaignQuery
 	withNamedTasks               map[string]*TaskQuery
@@ -87,6 +92,7 @@ type IdentityHolderQuery struct {
 	withNamedFindings            map[string]*FindingQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	withNamedAccessPlatforms     map[string]*PlatformQuery
+	withNamedInternalPolicies    map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -523,6 +529,31 @@ func (_q *IdentityHolderQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (_q *IdentityHolderQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.SubcontrolsTable, identityholder.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatforms chains the current query on the "platforms" edge.
 func (_q *IdentityHolderQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -717,6 +748,31 @@ func (_q *IdentityHolderQuery) QueryUser() *UserQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.IdentityHolder
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *IdentityHolderQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.InternalPoliciesTable, identityholder.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -931,6 +987,7 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withEntities:            _q.withEntities.Clone(),
 		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
 		withControls:            _q.withControls.Clone(),
+		withSubcontrols:         _q.withSubcontrols.Clone(),
 		withPlatforms:           _q.withPlatforms.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
 		withTasks:               _q.withTasks.Clone(),
@@ -939,6 +996,7 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		withAccessPlatforms:     _q.withAccessPlatforms.Clone(),
 		withUser:                _q.withUser.Clone(),
+		withInternalPolicies:    _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1122,6 +1180,17 @@ func (_q *IdentityHolderQuery) WithControls(opts ...func(*ControlQuery)) *Identi
 	return _q
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *IdentityHolderQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrols = query
+	return _q
+}
+
 // WithPlatforms tells the query-builder to eager-load the nodes that are connected to
 // the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithPlatforms(opts ...func(*PlatformQuery)) *IdentityHolderQuery {
@@ -1210,6 +1279,17 @@ func (_q *IdentityHolderQuery) WithUser(opts ...func(*UserQuery)) *IdentityHolde
 	return _q
 }
 
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *IdentityHolderQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1294,7 +1374,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1311,6 +1391,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withEntities != nil,
 			_q.withDirectoryAccounts != nil,
 			_q.withControls != nil,
+			_q.withSubcontrols != nil,
 			_q.withPlatforms != nil,
 			_q.withCampaigns != nil,
 			_q.withTasks != nil,
@@ -1319,6 +1400,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withWorkflowObjectRefs != nil,
 			_q.withAccessPlatforms != nil,
 			_q.withUser != nil,
+			_q.withInternalPolicies != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1454,6 +1536,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *IdentityHolder, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatforms; query != nil {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Platforms = []*Platform{} },
@@ -1508,6 +1597,15 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withUser; query != nil {
 		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *IdentityHolder, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *IdentityHolder, e *InternalPolicy) {
+				n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -1581,6 +1679,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedSubcontrols(name) },
+			func(n *IdentityHolder, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedPlatforms {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedPlatforms(name) },
@@ -1627,6 +1732,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadAccessPlatforms(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedAccessPlatforms(name) },
 			func(n *IdentityHolder, e *Platform) { n.appendNamedAccessPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedInternalPolicies(name) },
+			func(n *IdentityHolder, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2278,6 +2390,68 @@ func (_q *IdentityHolderQuery) loadControls(ctx context.Context, query *ControlQ
 	}
 	return nil
 }
+func (_q *IdentityHolderQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolIdentityHolders)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(identityholder.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(identityholder.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *IdentityHolderQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Platform)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*IdentityHolder)
@@ -2679,6 +2853,68 @@ func (_q *IdentityHolderQuery) loadUser(ctx context.Context, query *UserQuery, n
 	}
 	return nil
 }
+func (_q *IdentityHolderQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IdentityHolder)
+	nids := make(map[string]map[*IdentityHolder]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(identityholder.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.InternalPolicyIdentityHolders)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(identityholder.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(identityholder.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(identityholder.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IdentityHolder]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *IdentityHolderQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2939,6 +3175,20 @@ func (_q *IdentityHolderQuery) WithNamedControls(name string, opts ...func(*Cont
 	return _q
 }
 
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *IdentityHolderQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
 // WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *IdentityHolderQuery {
@@ -3034,6 +3284,20 @@ func (_q *IdentityHolderQuery) WithNamedAccessPlatforms(name string, opts ...fun
 		_q.withNamedAccessPlatforms = make(map[string]*PlatformQuery)
 	}
 	_q.withNamedAccessPlatforms[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *IdentityHolderQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

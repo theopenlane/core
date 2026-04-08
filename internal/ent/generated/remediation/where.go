@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
@@ -1453,6 +1454,46 @@ func TitleContainsFold(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldContainsFold(FieldTitle, v))
 }
 
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.RemediationStatus) predicate.Remediation {
+	vc := v
+	return predicate.Remediation(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.RemediationStatus) predicate.Remediation {
+	vc := v
+	return predicate.Remediation(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.RemediationStatus) predicate.Remediation {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Remediation(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.RemediationStatus) predicate.Remediation {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Remediation(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldNotNull(FieldStatus))
+}
+
 // StateEQ applies the EQ predicate on the "state" field.
 func StateEQ(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldEQ(FieldState, v))
@@ -2750,11 +2791,11 @@ func HasFindings() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, FindingsTable, FindingsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.RemediationFindings
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2765,7 +2806,7 @@ func HasFindingsWith(preds ...predicate.Finding) predicate.Remediation {
 		step := newFindingsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.RemediationFindings
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2779,11 +2820,11 @@ func HasVulnerabilities() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.RemediationVulnerabilities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2794,7 +2835,7 @@ func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Remediat
 		step := newVulnerabilitiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.RemediationVulnerabilities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2895,11 +2936,11 @@ func HasSubcontrols() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.RemediationSubcontrols
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2910,7 +2951,7 @@ func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Remediation {
 		step := newSubcontrolsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.RemediationSubcontrols
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2924,11 +2965,11 @@ func HasRisks() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RemediationRisks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2939,7 +2980,7 @@ func HasRisksWith(preds ...predicate.Risk) predicate.Remediation {
 		step := newRisksStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.RemediationRisks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3040,11 +3081,11 @@ func HasReviews() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ReviewsTable, ReviewsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewRemediations
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3055,7 +3096,7 @@ func HasReviewsWith(preds ...predicate.Review) predicate.Remediation {
 		step := newReviewsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewRemediations
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

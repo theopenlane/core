@@ -126,8 +126,8 @@ type WorkflowInstanceContext struct {
 	TriggerProposedChanges map[string]any `json:"triggerProposedChanges,omitempty"`
 	// ParallelApprovalKeys tracks approval action keys that can execute concurrently
 	ParallelApprovalKeys []string `json:"parallelApprovalKeys,omitempty"`
-	// Data carries optional runtime payload captured with the instance
-	Data json.RawMessage `json:"data,omitempty"`
+	// ExecutedNotifications tracks conditional notification action keys that have already fired
+	ExecutedNotifications []string `json:"executedNotifications,omitempty"`
 }
 
 // WorkflowAssignmentContext tracks an assignment decision within an instance.

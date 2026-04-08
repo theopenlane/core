@@ -197,6 +197,12 @@ type PlatformEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// ArchitectureDiagrams holds the value of the architecture_diagrams edge.
+	ArchitectureDiagrams []*File `json:"architecture_diagrams,omitempty"`
+	// DataFlowDiagrams holds the value of the data_flow_diagrams edge.
+	DataFlowDiagrams []*File `json:"data_flow_diagrams,omitempty"`
+	// TrustBoundaryDiagrams holds the value of the trust_boundary_diagrams edge.
+	TrustBoundaryDiagrams []*File `json:"trust_boundary_diagrams,omitempty"`
 	// Risks holds the value of the risks edge.
 	Risks []*Risk `json:"risks,omitempty"`
 	// Controls holds the value of the controls edge.
@@ -239,35 +245,38 @@ type PlatformEdges struct {
 	SystemDetail *SystemDetail `json:"system_detail,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [44]bool
+	loadedTypes [47]bool
 	// totalCount holds the count of the edges above.
-	totalCount [44]map[string]int
+	totalCount [47]map[string]int
 
-	namedBlockedGroups        map[string][]*Group
-	namedEditors              map[string][]*Group
-	namedViewers              map[string][]*Group
-	namedAssets               map[string][]*Asset
-	namedEntities             map[string][]*Entity
-	namedEvidence             map[string][]*Evidence
-	namedFiles                map[string][]*File
-	namedRisks                map[string][]*Risk
-	namedControls             map[string][]*Control
-	namedAssessments          map[string][]*Assessment
-	namedScans                map[string][]*Scan
-	namedTasks                map[string][]*Task
-	namedIdentityHolders      map[string][]*IdentityHolder
-	namedIntegrations         map[string][]*Integration
-	namedDirectorySyncRuns    map[string][]*DirectorySyncRun
-	namedDirectoryAccounts    map[string][]*DirectoryAccount
-	namedDirectoryGroups      map[string][]*DirectoryGroup
-	namedDirectoryMemberships map[string][]*DirectoryMembership
-	namedWorkflowObjectRefs   map[string][]*WorkflowObjectRef
-	namedSourceAssets         map[string][]*Asset
-	namedSourceEntities       map[string][]*Entity
-	namedOutOfScopeAssets     map[string][]*Asset
-	namedOutOfScopeVendors    map[string][]*Entity
-	namedApplicableFrameworks map[string][]*Standard
-	namedGeneratedScans       map[string][]*Scan
+	namedBlockedGroups         map[string][]*Group
+	namedEditors               map[string][]*Group
+	namedViewers               map[string][]*Group
+	namedAssets                map[string][]*Asset
+	namedEntities              map[string][]*Entity
+	namedEvidence              map[string][]*Evidence
+	namedFiles                 map[string][]*File
+	namedArchitectureDiagrams  map[string][]*File
+	namedDataFlowDiagrams      map[string][]*File
+	namedTrustBoundaryDiagrams map[string][]*File
+	namedRisks                 map[string][]*Risk
+	namedControls              map[string][]*Control
+	namedAssessments           map[string][]*Assessment
+	namedScans                 map[string][]*Scan
+	namedTasks                 map[string][]*Task
+	namedIdentityHolders       map[string][]*IdentityHolder
+	namedIntegrations          map[string][]*Integration
+	namedDirectorySyncRuns     map[string][]*DirectorySyncRun
+	namedDirectoryAccounts     map[string][]*DirectoryAccount
+	namedDirectoryGroups       map[string][]*DirectoryGroup
+	namedDirectoryMemberships  map[string][]*DirectoryMembership
+	namedWorkflowObjectRefs    map[string][]*WorkflowObjectRef
+	namedSourceAssets          map[string][]*Asset
+	namedSourceEntities        map[string][]*Entity
+	namedOutOfScopeAssets      map[string][]*Asset
+	namedOutOfScopeVendors     map[string][]*Entity
+	namedApplicableFrameworks  map[string][]*Standard
+	namedGeneratedScans        map[string][]*Scan
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -520,10 +529,37 @@ func (e PlatformEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// ArchitectureDiagramsOrErr returns the ArchitectureDiagrams value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) ArchitectureDiagramsOrErr() ([]*File, error) {
+	if e.loadedTypes[24] {
+		return e.ArchitectureDiagrams, nil
+	}
+	return nil, &NotLoadedError{edge: "architecture_diagrams"}
+}
+
+// DataFlowDiagramsOrErr returns the DataFlowDiagrams value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) DataFlowDiagramsOrErr() ([]*File, error) {
+	if e.loadedTypes[25] {
+		return e.DataFlowDiagrams, nil
+	}
+	return nil, &NotLoadedError{edge: "data_flow_diagrams"}
+}
+
+// TrustBoundaryDiagramsOrErr returns the TrustBoundaryDiagrams value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) TrustBoundaryDiagramsOrErr() ([]*File, error) {
+	if e.loadedTypes[26] {
+		return e.TrustBoundaryDiagrams, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_boundary_diagrams"}
+}
+
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[27] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -532,7 +568,7 @@ func (e PlatformEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[28] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -541,7 +577,7 @@ func (e PlatformEdges) ControlsOrErr() ([]*Control, error) {
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[29] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -550,7 +586,7 @@ func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[30] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -559,7 +595,7 @@ func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[31] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -568,7 +604,7 @@ func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[32] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -577,7 +613,7 @@ func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[33] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -586,7 +622,7 @@ func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
 // DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[34] {
 		return e.DirectorySyncRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
@@ -595,7 +631,7 @@ func (e PlatformEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[35] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -604,7 +640,7 @@ func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[36] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -613,7 +649,7 @@ func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[37] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -622,7 +658,7 @@ func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, erro
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[38] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -631,7 +667,7 @@ func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // SourceAssetsOrErr returns the SourceAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[39] {
 		return e.SourceAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "source_assets"}
@@ -640,7 +676,7 @@ func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
 // SourceEntitiesOrErr returns the SourceEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[40] {
 		return e.SourceEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "source_entities"}
@@ -649,7 +685,7 @@ func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
 // OutOfScopeAssetsOrErr returns the OutOfScopeAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[41] {
 		return e.OutOfScopeAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_assets"}
@@ -658,7 +694,7 @@ func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
 // OutOfScopeVendorsOrErr returns the OutOfScopeVendors value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[39] {
+	if e.loadedTypes[42] {
 		return e.OutOfScopeVendors, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_vendors"}
@@ -667,7 +703,7 @@ func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
 // ApplicableFrameworksOrErr returns the ApplicableFrameworks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[43] {
 		return e.ApplicableFrameworks, nil
 	}
 	return nil, &NotLoadedError{edge: "applicable_frameworks"}
@@ -676,7 +712,7 @@ func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
 // GeneratedScansOrErr returns the GeneratedScans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[41] {
+	if e.loadedTypes[44] {
 		return e.GeneratedScans, nil
 	}
 	return nil, &NotLoadedError{edge: "generated_scans"}
@@ -687,7 +723,7 @@ func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
 func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	if e.PlatformOwner != nil {
 		return e.PlatformOwner, nil
-	} else if e.loadedTypes[42] {
+	} else if e.loadedTypes[45] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_owner"}
@@ -698,7 +734,7 @@ func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 func (e PlatformEdges) SystemDetailOrErr() (*SystemDetail, error) {
 	if e.SystemDetail != nil {
 		return e.SystemDetail, nil
-	} else if e.loadedTypes[43] {
+	} else if e.loadedTypes[46] {
 		return nil, &NotFoundError{label: systemdetail.Label}
 	}
 	return nil, &NotLoadedError{edge: "system_detail"}
@@ -1241,6 +1277,21 @@ func (_m *Platform) QueryFiles() *FileQuery {
 	return NewPlatformClient(_m.config).QueryFiles(_m)
 }
 
+// QueryArchitectureDiagrams queries the "architecture_diagrams" edge of the Platform entity.
+func (_m *Platform) QueryArchitectureDiagrams() *FileQuery {
+	return NewPlatformClient(_m.config).QueryArchitectureDiagrams(_m)
+}
+
+// QueryDataFlowDiagrams queries the "data_flow_diagrams" edge of the Platform entity.
+func (_m *Platform) QueryDataFlowDiagrams() *FileQuery {
+	return NewPlatformClient(_m.config).QueryDataFlowDiagrams(_m)
+}
+
+// QueryTrustBoundaryDiagrams queries the "trust_boundary_diagrams" edge of the Platform entity.
+func (_m *Platform) QueryTrustBoundaryDiagrams() *FileQuery {
+	return NewPlatformClient(_m.config).QueryTrustBoundaryDiagrams(_m)
+}
+
 // QueryRisks queries the "risks" edge of the Platform entity.
 func (_m *Platform) QueryRisks() *RiskQuery {
 	return NewPlatformClient(_m.config).QueryRisks(_m)
@@ -1707,6 +1758,78 @@ func (_m *Platform) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedArchitectureDiagrams returns the ArchitectureDiagrams named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedArchitectureDiagrams(name string) ([]*File, error) {
+	if _m.Edges.namedArchitectureDiagrams == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedArchitectureDiagrams[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedArchitectureDiagrams(name string, edges ...*File) {
+	if _m.Edges.namedArchitectureDiagrams == nil {
+		_m.Edges.namedArchitectureDiagrams = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedArchitectureDiagrams[name] = []*File{}
+	} else {
+		_m.Edges.namedArchitectureDiagrams[name] = append(_m.Edges.namedArchitectureDiagrams[name], edges...)
+	}
+}
+
+// NamedDataFlowDiagrams returns the DataFlowDiagrams named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedDataFlowDiagrams(name string) ([]*File, error) {
+	if _m.Edges.namedDataFlowDiagrams == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDataFlowDiagrams[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedDataFlowDiagrams(name string, edges ...*File) {
+	if _m.Edges.namedDataFlowDiagrams == nil {
+		_m.Edges.namedDataFlowDiagrams = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDataFlowDiagrams[name] = []*File{}
+	} else {
+		_m.Edges.namedDataFlowDiagrams[name] = append(_m.Edges.namedDataFlowDiagrams[name], edges...)
+	}
+}
+
+// NamedTrustBoundaryDiagrams returns the TrustBoundaryDiagrams named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedTrustBoundaryDiagrams(name string) ([]*File, error) {
+	if _m.Edges.namedTrustBoundaryDiagrams == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustBoundaryDiagrams[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedTrustBoundaryDiagrams(name string, edges ...*File) {
+	if _m.Edges.namedTrustBoundaryDiagrams == nil {
+		_m.Edges.namedTrustBoundaryDiagrams = make(map[string][]*File)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustBoundaryDiagrams[name] = []*File{}
+	} else {
+		_m.Edges.namedTrustBoundaryDiagrams[name] = append(_m.Edges.namedTrustBoundaryDiagrams[name], edges...)
 	}
 }
 

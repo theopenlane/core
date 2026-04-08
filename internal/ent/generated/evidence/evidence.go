@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
@@ -272,9 +273,9 @@ var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
-	DefaultCreationDate func() time.Time
+	DefaultCreationDate func() models.DateTime
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
-	DefaultRenewalDate time.Time
+	DefaultRenewalDate func() models.DateTime
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
 	// URLValidator is a validator for the "url" field. It is called by the builders before save.
@@ -286,7 +287,7 @@ var (
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.EvidenceStatus) error {
 	switch s.String() {
-	case "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED":
+	case "REQUESTED", "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED":
 		return nil
 	default:
 		return fmt.Errorf("evidence: invalid enum value for status field: %q", s)

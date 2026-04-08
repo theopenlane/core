@@ -960,6 +960,8 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hushhistory"})
 	}
 
+	redactHushHistoryConnection(res)
+
 	return res, err
 }
 
@@ -2270,6 +2272,70 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 		historygenerated.WithUserSettingHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "usersettinghistory"})
+	}
+
+	return res, err
+}
+
+// VendorRiskScoreHistories is the resolver for the vendorRiskScoreHistories field.
+func (r *queryResolver) VendorRiskScoreHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorRiskScoreHistoryOrder, where *historygenerated.VendorRiskScoreHistoryWhereInput) (*historygenerated.VendorRiskScoreHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.VendorRiskScoreHistoryOrder{
+			Field:     historygenerated.VendorRiskScoreHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).VendorRiskScoreHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorriskscorehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithVendorRiskScoreHistoryOrder(orderBy),
+		historygenerated.WithVendorRiskScoreHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorriskscorehistory"})
+	}
+
+	return res, err
+}
+
+// VendorScoringConfigHistories is the resolver for the vendorScoringConfigHistories field.
+func (r *queryResolver) VendorScoringConfigHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorScoringConfigHistoryOrder, where *historygenerated.VendorScoringConfigHistoryWhereInput) (*historygenerated.VendorScoringConfigHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.VendorScoringConfigHistoryOrder{
+			Field:     historygenerated.VendorScoringConfigHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).VendorScoringConfigHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorscoringconfighistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithVendorScoringConfigHistoryOrder(orderBy),
+		historygenerated.WithVendorScoringConfigHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorscoringconfighistory"})
 	}
 
 	return res, err

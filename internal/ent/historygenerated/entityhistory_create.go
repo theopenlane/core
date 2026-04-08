@@ -775,14 +775,28 @@ func (_c *EntityHistoryCreate) SetNillableRiskScore(v *int) *EntityHistoryCreate
 	return _c
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_c *EntityHistoryCreate) SetRiskScoreCoverage(v int) *EntityHistoryCreate {
+	_c.mutation.SetRiskScoreCoverage(v)
+	return _c
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableRiskScoreCoverage(v *int) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetRiskScoreCoverage(*v)
+	}
+	return _c
+}
+
 // SetTier sets the "tier" field.
-func (_c *EntityHistoryCreate) SetTier(v string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetTier(v enums.VendorTier) *EntityHistoryCreate {
 	_c.mutation.SetTier(v)
 	return _c
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_c *EntityHistoryCreate) SetNillableTier(v *string) *EntityHistoryCreate {
+func (_c *EntityHistoryCreate) SetNillableTier(v *enums.VendorTier) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetTier(*v)
 	}
@@ -834,6 +848,48 @@ func (_c *EntityHistoryCreate) SetNillableContractRenewalAt(v *models.DateTime) 
 // SetVendorMetadata sets the "vendor_metadata" field.
 func (_c *EntityHistoryCreate) SetVendorMetadata(v map[string]interface{}) *EntityHistoryCreate {
 	_c.mutation.SetVendorMetadata(v)
+	return _c
+}
+
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *EntityHistoryCreate) SetLogoFileID(v string) *EntityHistoryCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableLogoFileID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *EntityHistoryCreate) SetExternalID(v string) *EntityHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableExternalID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *EntityHistoryCreate) SetObservedAt(v models.DateTime) *EntityHistoryCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableObservedAt(v *models.DateTime) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
 	return _c
 }
 
@@ -991,6 +1047,11 @@ func (_c *EntityHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1262,8 +1323,12 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldRiskScore, field.TypeInt, value)
 		_node.RiskScore = value
 	}
+	if value, ok := _c.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+		_node.RiskScoreCoverage = value
+	}
 	if value, ok := _c.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 		_node.Tier = value
 	}
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1281,6 +1346,18 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+		_node.LogoFileID = &value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	return _node, _spec
 }

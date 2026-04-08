@@ -137,6 +137,8 @@ type IdentityHolderEdges struct {
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// Campaigns holds the value of the campaigns edge.
@@ -153,11 +155,13 @@ type IdentityHolderEdges struct {
 	AccessPlatforms []*Platform `json:"access_platforms,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [26]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -169,6 +173,7 @@ type IdentityHolderEdges struct {
 	namedEntities            map[string][]*Entity
 	namedDirectoryAccounts   map[string][]*DirectoryAccount
 	namedControls            map[string][]*Control
+	namedSubcontrols         map[string][]*Subcontrol
 	namedPlatforms           map[string][]*Platform
 	namedCampaigns           map[string][]*Campaign
 	namedTasks               map[string][]*Task
@@ -176,6 +181,7 @@ type IdentityHolderEdges struct {
 	namedFindings            map[string][]*Finding
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 	namedAccessPlatforms     map[string][]*Platform
+	namedInternalPolicies    map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -334,10 +340,19 @@ func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[16] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -346,7 +361,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -355,7 +370,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -364,7 +379,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -373,7 +388,7 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -382,7 +397,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -391,7 +406,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -402,10 +417,19 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[23] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[25] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -759,6 +783,11 @@ func (_m *IdentityHolder) QueryControls() *ControlQuery {
 	return NewIdentityHolderClient(_m.config).QueryControls(_m)
 }
 
+// QuerySubcontrols queries the "subcontrols" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QuerySubcontrols() *SubcontrolQuery {
+	return NewIdentityHolderClient(_m.config).QuerySubcontrols(_m)
+}
+
 // QueryPlatforms queries the "platforms" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryPlatforms() *PlatformQuery {
 	return NewIdentityHolderClient(_m.config).QueryPlatforms(_m)
@@ -797,6 +826,11 @@ func (_m *IdentityHolder) QueryAccessPlatforms() *PlatformQuery {
 // QueryUser queries the "user" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryUser() *UserQuery {
 	return NewIdentityHolderClient(_m.config).QueryUser(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewIdentityHolderClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // Update returns a builder for updating this IdentityHolder.
@@ -1177,6 +1211,30 @@ func (_m *IdentityHolder) appendNamedControls(name string, edges ...*Control) {
 	}
 }
 
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
 // NamedPlatforms returns the Platforms named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *IdentityHolder) NamedPlatforms(name string) ([]*Platform, error) {
@@ -1342,6 +1400,30 @@ func (_m *IdentityHolder) appendNamedAccessPlatforms(name string, edges ...*Plat
 		_m.Edges.namedAccessPlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedAccessPlatforms[name] = append(_m.Edges.namedAccessPlatforms[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

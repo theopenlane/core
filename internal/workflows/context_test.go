@@ -78,3 +78,20 @@ func TestAllowContextWithOrg_EmptyAuthorizedOrgs(t *testing.T) {
 	_, _, err := AllowContextWithOrg(ctx)
 	assert.Error(t, err)
 }
+
+func TestAllowContextForOrgSeedsCaller(t *testing.T) {
+	orgID := ulids.New().String()
+
+	allowCtx := AllowContextForOrg(context.Background(), orgID)
+
+	caller, ok := auth.CallerFromContext(allowCtx)
+	assert.True(t, ok)
+	assert.NotNil(t, caller)
+	assert.Equal(t, orgID, caller.OrganizationID)
+	assert.Contains(t, caller.OrganizationIDs, orgID)
+	assert.True(t, caller.Has(auth.CapInternalOperation))
+
+	decision, decisionOK := privacy.DecisionFromContext(allowCtx)
+	assert.True(t, decisionOK)
+	assert.NoError(t, decision)
+}

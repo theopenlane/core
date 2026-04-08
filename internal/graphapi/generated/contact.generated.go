@@ -80,6 +80,12 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Contact_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Contact_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Contact_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -178,6 +184,12 @@ func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ con
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Contact_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Contact_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Contact_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -276,6 +288,12 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Contact_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Contact_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Contact_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":
@@ -374,6 +392,12 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 				return ec.fieldContext_Contact_address(ctx, field)
 			case "status":
 				return ec.fieldContext_Contact_status(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Contact_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Contact_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Contact_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Contact_owner(ctx, field)
 			case "entities":

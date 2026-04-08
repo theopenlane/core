@@ -189,6 +189,8 @@ var (
 	ErrFailedToTriggerWorkflow = errors.New("failed to trigger workflow")
 	// ErrMissingIDForTrustCenterNDARequest is returned when a mutation for trust center nda request is missing the ID field, which is required to determine the trust center and send the appropriate email
 	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
+	// ErrVendorScoringQuestionNotFound is returned when a question key cannot be resolved in the scoring config
+	ErrVendorScoringQuestionNotFound = errors.New("vendor scoring question not found in config")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

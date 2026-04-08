@@ -126,6 +126,8 @@ const (
 	FieldRiskRating = "risk_rating"
 	// FieldRiskScore holds the string denoting the risk_score field in the database.
 	FieldRiskScore = "risk_score"
+	// FieldRiskScoreCoverage holds the string denoting the risk_score_coverage field in the database.
+	FieldRiskScoreCoverage = "risk_score_coverage"
 	// FieldTier holds the string denoting the tier field in the database.
 	FieldTier = "tier"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
@@ -136,6 +138,12 @@ const (
 	FieldContractRenewalAt = "contract_renewal_at"
 	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
 	FieldVendorMetadata = "vendor_metadata"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -178,6 +186,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
 	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
+	EdgeVendorRiskScores = "vendor_risk_scores"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeSubprocessors holds the string denoting the subprocessors edge name in mutations.
@@ -190,6 +200,8 @@ const (
 	EdgeIdentityHolders = "identity_holders"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
 	// EdgeOutOfScopePlatforms holds the string denoting the out_of_scope_platforms edge name in mutations.
@@ -198,6 +210,10 @@ const (
 	EdgeSourcePlatforms = "source_platforms"
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
 	EdgeEntityType = "entity_type"
+	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
+	EdgeLogoFile = "logo_file"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the entity in the database.
 	Table = "entities"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -333,6 +349,13 @@ const (
 	AssessmentResponsesInverseTable = "assessment_responses"
 	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
 	AssessmentResponsesColumn = "entity_id"
+	// VendorRiskScoresTable is the table that holds the vendor_risk_scores relation/edge.
+	VendorRiskScoresTable = "vendor_risk_scores"
+	// VendorRiskScoresInverseTable is the table name for the VendorRiskScore entity.
+	// It exists in this package in order to avoid circular dependency with the "vendorriskscore" package.
+	VendorRiskScoresInverseTable = "vendor_risk_scores"
+	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
+	VendorRiskScoresColumn = "entity_vendor_risk_scores"
 	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
 	IntegrationsTable = "entity_integrations"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -367,6 +390,11 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "subcontrol_entities"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
 	PlatformsTable = "platform_entities"
 	// PlatformsInverseTable is the table name for the Platform entity.
@@ -389,6 +417,18 @@ const (
 	EntityTypeInverseTable = "entity_types"
 	// EntityTypeColumn is the table column denoting the entity_type relation/edge.
 	EntityTypeColumn = "entity_type_id"
+	// LogoFileTable is the table that holds the logo_file relation/edge.
+	LogoFileTable = "entities"
+	// LogoFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	LogoFileInverseTable = "files"
+	// LogoFileColumn is the table column denoting the logo_file relation/edge.
+	LogoFileColumn = "logo_file_id"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_entities"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
 )
 
 // Columns holds all SQL columns for entity fields.
@@ -448,11 +488,15 @@ var Columns = []string{
 	FieldLinks,
 	FieldRiskRating,
 	FieldRiskScore,
+	FieldRiskScoreCoverage,
 	FieldTier,
 	FieldReviewFrequency,
 	FieldNextReviewAt,
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
+	FieldLogoFileID,
+	FieldExternalID,
+	FieldObservedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "entities"
@@ -501,6 +545,9 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "entity_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"subcontrol_id", "entity_id"}
 	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
 	// primary key for the platforms relation (M2M).
 	PlatformsPrimaryKey = []string{"platform_id", "entity_id"}
@@ -510,6 +557,9 @@ var (
 	// SourcePlatformsPrimaryKey and SourcePlatformsColumn2 are the table columns denoting the
 	// primary key for the source_platforms relation (M2M).
 	SourcePlatformsPrimaryKey = []string{"platform_id", "entity_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "entity_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -533,7 +583,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -594,12 +644,22 @@ func StatusValidator(s enums.EntityStatus) error {
 	}
 }
 
+// TierValidator is a validator for the "tier" field enum values. It is called by the builders before save.
+func TierValidator(t enums.VendorTier) error {
+	switch t.String() {
+	case "CRITICAL", "HIGH", "STANDARD", "LOW":
+		return nil
+	default:
+		return fmt.Errorf("entity: invalid enum value for tier field: %q", t)
+	}
+}
+
 const DefaultReviewFrequency enums.Frequency = "YEARLY"
 
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
 func ReviewFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {
-	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("entity: invalid enum value for review_frequency field: %q", rf)
@@ -859,6 +919,11 @@ func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
 }
 
+// ByRiskScoreCoverage orders the results by the risk_score_coverage field.
+func ByRiskScoreCoverage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScoreCoverage, opts...).ToFunc()
+}
+
 // ByTier orders the results by the tier field.
 func ByTier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTier, opts...).ToFunc()
@@ -877,6 +942,21 @@ func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
 // ByContractRenewalAt orders the results by the contract_renewal_at field.
 func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
+}
+
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -1103,6 +1183,20 @@ func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByVendorRiskScoresCount orders the results by vendor_risk_scores count.
+func ByVendorRiskScoresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVendorRiskScoresStep(), opts...)
+	}
+}
+
+// ByVendorRiskScores orders the results by vendor_risk_scores terms.
+func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByIntegrationsCount orders the results by integrations count.
 func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1187,6 +1281,20 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPlatformsCount orders the results by platforms count.
 func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1233,6 +1341,27 @@ func BySourcePlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEntityTypeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByLogoFileField orders the results by logo_file field.
+func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -1382,6 +1511,13 @@ func newAssessmentResponsesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
 	)
 }
+func newVendorRiskScoresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+	)
+}
 func newIntegrationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1424,6 +1560,13 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
+func newSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
 func newPlatformsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1452,12 +1595,33 @@ func newEntityTypeStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 	)
 }
+func newLogoFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogoFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+	)
+}
 
 var (
 	// enums.EntityStatus must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
 	// enums.EntityStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
+)
+
+var (
+	// enums.VendorTier must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorTier)(nil)
+	// enums.VendorTier must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorTier)(nil)
 )
 
 var (

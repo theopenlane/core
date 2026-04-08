@@ -5,6 +5,8 @@ import "errors"
 var (
 	// ErrInstanceNotFound is returned when a workflow instance cannot be found
 	ErrInstanceNotFound = errors.New("workflow instance not found")
+	// ErrScopeExpressionRequired is returned when a scope expression is required but empty
+	ErrScopeExpressionRequired = errors.New("scope expression is required")
 	// ErrAssignmentNotFound is returned when a workflow assignment cannot be found
 	ErrAssignmentNotFound = errors.New("workflow assignment not found")
 	// ErrInvalidState is returned when a workflow instance is in an invalid state for the operation
@@ -23,8 +25,6 @@ var (
 	ErrObjectRefMissingID = errors.New("workflow object ref has no object ID set")
 	// ErrCELTypeMismatch is returned when a CEL expression returns a non-boolean type
 	ErrCELTypeMismatch = errors.New("CEL expression must return boolean")
-	// ErrCELValueExtraction is returned when extracting a boolean value from CEL fails
-	ErrCELValueExtraction = errors.New("failed to extract boolean value from CEL result")
 	// ErrEvaluationTimeout is returned when CEL evaluation exceeds the timeout
 	ErrEvaluationTimeout = errors.New("CEL evaluation timeout")
 	// ErrCELNilOutput is returned when CEL evaluation returns nil output
@@ -37,38 +37,22 @@ var (
 	ErrWebhookPayloadExpressionFailed = errors.New("webhook payload expression failed")
 	// ErrWebhookPayloadExpressionInvalid is returned when webhook payload CEL does not produce a JSON object
 	ErrWebhookPayloadExpressionInvalid = errors.New("webhook payload expression invalid")
-	// ErrIntegrationFailed is returned when an integration operation fails
-	ErrIntegrationFailed = errors.New("integration operation failed")
 	// ErrExecutorNotAvailable is returned when the executor is not available
 	ErrExecutorNotAvailable = errors.New("executor is nil")
-	// ErrIntegrationStoreRequired is returned when an integration store dependency is missing
-	ErrIntegrationStoreRequired = errors.New("integration store required")
-	// ErrIntegrationOperationsRequired is returned when integration operations are not configured
-	ErrIntegrationOperationsRequired = errors.New("integration operations required")
-	// ErrIntegrationRunIDRequired indicates the integration run identifier is missing
-	ErrIntegrationRunIDRequired = errors.New("integration run id required")
-	// ErrIntegrationRecordMissing indicates the integration record is missing for a run
-	ErrIntegrationRecordMissing = errors.New("integration record missing for run")
-	// ErrIntegrationProviderUnknown indicates the integration provider could not be resolved
-	ErrIntegrationProviderUnknown = errors.New("integration provider unknown")
-	// ErrIntegrationOperationNameRequired indicates the run operation name is missing
-	ErrIntegrationOperationNameRequired = errors.New("integration operation name required")
-	// ErrIntegrationOperationFailed indicates the operation failed to execute successfully
-	ErrIntegrationOperationFailed = errors.New("integration operation failed")
-	// ErrIntegrationAlertPayloadsMissing indicates alert payloads are missing from operation output
-	ErrIntegrationAlertPayloadsMissing = errors.New("integration alert payloads missing")
-	// ErrIntegrationActionQueued indicates the integration action was queued for async processing
-	ErrIntegrationActionQueued = errors.New("integration action queued")
+	// ErrIntegrationRegistryRequired is returned when an integration registry dependency is missing
+	ErrIntegrationRegistryRequired = errors.New("integration registry required")
+	// ErrIntegrationOperationsRequired is returned when integration dispatcher is not configured
+	ErrIntegrationOperationsRequired = errors.New("integration dispatcher required")
+	// ErrIntegrationOperationCriteriaRequired indicates operation name is required
+	ErrIntegrationOperationCriteriaRequired = errors.New("integration operation name required")
+	// ErrIntegrationScopeConditionFalse indicates integration scope evaluation rejected the operation
+	ErrIntegrationScopeConditionFalse = errors.New("integration scope condition false")
 	// ErrObjectNil is returned when the workflow object is nil
 	ErrObjectNil = errors.New("object is nil")
-	// ErrProposalChangesModified is returned when proposal changes are modified after approval
-	ErrProposalChangesModified = errors.New("proposal changes modified after approval")
 	// ErrUnmarshalParams is returned when action params cannot be unmarshaled
 	ErrUnmarshalParams = errors.New("failed to unmarshal action params")
 	// ErrMarshalPayload is returned when a payload cannot be marshaled
 	ErrMarshalPayload = errors.New("failed to marshal payload")
-	// ErrIntegrationProviderRequired is returned when integration action is missing provider
-	ErrIntegrationProviderRequired = errors.New("integration action requires provider")
 	// ErrIntegrationOwnerRequired is returned when integration action is missing owner
 	ErrIntegrationOwnerRequired = errors.New("integration action requires instance owner_id")
 	// ErrAssignmentCreationFailed is returned when workflow assignment creation fails
@@ -81,10 +65,6 @@ var (
 	ErrNotificationTemplateReferenceConflict = errors.New("notification template reference conflict")
 	// ErrNotificationTemplateDataInvalid is returned when template data fails schema validation
 	ErrNotificationTemplateDataInvalid = errors.New("notification template data invalid")
-	// ErrNotificationTemplateChannelMismatch is returned when template channel does not match requested channel
-	ErrNotificationTemplateChannelMismatch = errors.New("notification template channel mismatch")
-	// ErrNotificationChannelUnsupported is returned when a notification channel lacks integration support
-	ErrNotificationChannelUnsupported = errors.New("notification channel unsupported")
 	// ErrWebhookURLRequired is returned when webhook action is missing URL
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrAssignmentUpdateFailed is returned when assignment update fails
@@ -127,4 +107,6 @@ var (
 	ErrReviewNoTargets = errors.New("review action has no resolved targets")
 	// ErrTemplateRenderDepthExceeded is returned when template rendering exceeds the maximum depth
 	ErrTemplateRenderDepthExceeded = errors.New("template render depth exceeded")
+	// ErrNotificationTemplateBlocksInvalid is returned when rendered template blocks are not a valid block list
+	ErrNotificationTemplateBlocksInvalid = errors.New("notification template blocks invalid")
 )

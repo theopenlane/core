@@ -154,6 +154,10 @@ type Tx struct {
 	UserHistory *UserHistoryClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// VendorRiskScoreHistory is the client for interacting with the VendorRiskScoreHistory builders.
+	VendorRiskScoreHistory *VendorRiskScoreHistoryClient
+	// VendorScoringConfigHistory is the client for interacting with the VendorScoringConfigHistory builders.
+	VendorScoringConfigHistory *VendorScoringConfigHistoryClient
 	// VulnerabilityHistory is the client for interacting with the VulnerabilityHistory builders.
 	VulnerabilityHistory *VulnerabilityHistoryClient
 	// WorkflowAssignmentHistory is the client for interacting with the WorkflowAssignmentHistory builders.
@@ -369,6 +373,8 @@ func (tx *Tx) init() {
 	tx.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(tx.config)
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
+	tx.VendorRiskScoreHistory = NewVendorRiskScoreHistoryClient(tx.config)
+	tx.VendorScoringConfigHistory = NewVendorScoringConfigHistoryClient(tx.config)
 	tx.VulnerabilityHistory = NewVulnerabilityHistoryClient(tx.config)
 	tx.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(tx.config)
 	tx.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(tx.config)

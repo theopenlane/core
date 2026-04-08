@@ -60,6 +60,12 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
 	FieldExternalUUID = "external_uuid"
 	// FieldName holds the string denoting the name field in the database.
@@ -88,6 +94,20 @@ const (
 	FieldStakeholderID = "stakeholder_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
 	FieldDelegateID = "delegate_id"
+	// FieldMitigatedAt holds the string denoting the mitigated_at field in the database.
+	FieldMitigatedAt = "mitigated_at"
+	// FieldReviewRequired holds the string denoting the review_required field in the database.
+	FieldReviewRequired = "review_required"
+	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
+	FieldLastReviewedAt = "last_reviewed_at"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldNextReviewDueAt holds the string denoting the next_review_due_at field in the database.
+	FieldNextReviewDueAt = "next_review_due_at"
+	// FieldResidualScore holds the string denoting the residual_score field in the database.
+	FieldResidualScore = "residual_score"
+	// FieldRiskDecision holds the string denoting the risk_decision field in the database.
+	FieldRiskDecision = "risk_decision"
 	// Table holds the table name of the riskhistory in the database.
 	Table = "risk_history"
 )
@@ -115,6 +135,9 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldExternalID,
+	FieldIntegrationID,
+	FieldObservedAt,
 	FieldExternalUUID,
 	FieldName,
 	FieldStatus,
@@ -129,6 +152,13 @@ var Columns = []string{
 	FieldBusinessCostsJSON,
 	FieldStakeholderID,
 	FieldDelegateID,
+	FieldMitigatedAt,
+	FieldReviewRequired,
+	FieldLastReviewedAt,
+	FieldReviewFrequency,
+	FieldNextReviewDueAt,
+	FieldResidualScore,
+	FieldRiskDecision,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -160,6 +190,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultReviewRequired holds the default value on creation for the "review_required" field.
+	DefaultReviewRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -207,6 +239,30 @@ func LikelihoodValidator(l enums.RiskLikelihood) error {
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for likelihood field: %q", l)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("riskhistory: invalid enum value for review_frequency field: %q", rf)
+	}
+}
+
+const DefaultRiskDecision enums.RiskDecision = " NONE"
+
+// RiskDecisionValidator is a validator for the "risk_decision" field enum values. It is called by the builders before save.
+func RiskDecisionValidator(rd enums.RiskDecision) error {
+	switch rd.String() {
+	case "AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE":
+		return nil
+	default:
+		return fmt.Errorf("riskhistory: invalid enum value for risk_decision field: %q", rd)
 	}
 }
 
@@ -313,6 +369,21 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
+}
+
 // ByExternalUUID orders the results by the external_uuid field.
 func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
@@ -368,6 +439,41 @@ func ByDelegateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateID, opts...).ToFunc()
 }
 
+// ByMitigatedAt orders the results by the mitigated_at field.
+func ByMitigatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMitigatedAt, opts...).ToFunc()
+}
+
+// ByReviewRequired orders the results by the review_required field.
+func ByReviewRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewRequired, opts...).ToFunc()
+}
+
+// ByLastReviewedAt orders the results by the last_reviewed_at field.
+func ByLastReviewedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastReviewedAt, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByNextReviewDueAt orders the results by the next_review_due_at field.
+func ByNextReviewDueAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextReviewDueAt, opts...).ToFunc()
+}
+
+// ByResidualScore orders the results by the residual_score field.
+func ByResidualScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResidualScore, opts...).ToFunc()
+}
+
+// ByRiskDecision orders the results by the risk_decision field.
+func ByRiskDecision(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskDecision, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -394,4 +500,18 @@ var (
 	_ graphql.Marshaler = (*enums.RiskLikelihood)(nil)
 	// enums.RiskLikelihood must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.RiskLikelihood)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)
+
+var (
+	// enums.RiskDecision must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.RiskDecision)(nil)
+	// enums.RiskDecision must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.RiskDecision)(nil)
 )

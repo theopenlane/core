@@ -309,20 +309,6 @@ func (_c *FindingHistoryCreate) SetNillableExternalID(v *string) *FindingHistory
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingHistoryCreate) SetStatus(v string) *FindingHistoryCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableStatus(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetSecurityLevel sets the "security_level" field.
 func (_c *FindingHistoryCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingHistoryCreate {
 	_c.mutation.SetSecurityLevel(v)
@@ -1029,10 +1015,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
-	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(findinghistory.FieldStatus, field.TypeString, value)
-		_node.Status = value
 	}
 	if value, ok := _c.mutation.SecurityLevel(); ok {
 		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)

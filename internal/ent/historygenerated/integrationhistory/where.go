@@ -193,6 +193,11 @@ func Family(v string) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldFamily, v))
 }
 
+// PrimaryDirectory applies equality check predicate on the "primary_directory" field. It's identical to PrimaryDirectoryEQ.
+func PrimaryDirectory(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldPrimaryDirectory, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1643,6 +1648,16 @@ func ConfigNotNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldNotNull(FieldConfig))
 }
 
+// InstallationMetadataIsNil applies the IsNil predicate on the "installation_metadata" field.
+func InstallationMetadataIsNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldIsNull(FieldInstallationMetadata))
+}
+
+// InstallationMetadataNotNil applies the NotNil predicate on the "installation_metadata" field.
+func InstallationMetadataNotNil() predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNotNull(FieldInstallationMetadata))
+}
+
 // ProviderStateIsNil applies the IsNil predicate on the "provider_state" field.
 func ProviderStateIsNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldIsNull(FieldProviderState))
@@ -2001,6 +2016,16 @@ func ProviderMetadataSnapshotIsNil() predicate.IntegrationHistory {
 // ProviderMetadataSnapshotNotNil applies the NotNil predicate on the "provider_metadata_snapshot" field.
 func ProviderMetadataSnapshotNotNil() predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldNotNull(FieldProviderMetadataSnapshot))
+}
+
+// PrimaryDirectoryEQ applies the EQ predicate on the "primary_directory" field.
+func PrimaryDirectoryEQ(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldPrimaryDirectory, v))
+}
+
+// PrimaryDirectoryNEQ applies the NEQ predicate on the "primary_directory" field.
+func PrimaryDirectoryNEQ(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldPrimaryDirectory, v))
 }
 
 // And groups predicates with the AND operator between them.

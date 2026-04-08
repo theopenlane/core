@@ -15,6 +15,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 )
 
@@ -149,10 +150,38 @@ var (
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
 	// ErrUnableToVerifyToken is returned when unable to verify a token
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
+	// errIntegrationWebhookNotConfigured is returned when the webhook registration is missing
+	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
+	// errIntegrationWebhookSecretMissing is returned when the persisted webhook has no secret token
+	errIntegrationWebhookSecretMissing = errors.New("integration webhook secret is missing")
+	// errIntegrationWebhookSignatureMissing is returned when the signature header is absent
+	errIntegrationWebhookSignatureMissing = errors.New("integration webhook signature header missing")
+	// errIntegrationWebhookSignatureMismatch is returned when the HMAC signature does not match
+	errIntegrationWebhookSignatureMismatch = errors.New("integration webhook signature mismatch")
 	// ErrResendWebhookDisabled is returned when resend webhook is not enabled
 	ErrResendWebhookDisabled = errors.New("resend webhook is not enabled")
 	// ErrResendWebhookMissingID is returned when resend webhook is missing svix-id header
 	ErrResendWebhookMissingID = errors.New("resend webhook is missing svix-id header")
+	// ErrInvalidState is returned when OAuth state validation fails
+	ErrInvalidState = errors.New("invalid OAuth state parameter")
+	// ErrMissingCode is returned when OAuth authorization code is missing
+	ErrMissingCode = errors.New("missing OAuth authorization code")
+	// ErrExchangeAuthCode is returned when OAuth code exchange fails
+	ErrExchangeAuthCode = errors.New("failed to exchange authorization code")
+	// ErrValidateToken is returned when OAuth token validation fails
+	ErrValidateToken = errors.New("failed to validate OAuth token")
+	// ErrInvalidStateFormat is returned when OAuth state format is invalid
+	ErrInvalidStateFormat = errors.New("invalid state format")
+	// ErrProviderRequired is returned when provider parameter is missing
+	ErrProviderRequired = errors.New("provider parameter is required")
+	// ErrIntegrationIDRequired is returned when integration ID is missing
+	ErrIntegrationIDRequired = errors.New("integration ID is required")
+	// ErrIntegrationNotFound is returned when the integration installation is not found
+	ErrIntegrationNotFound = errors.New("integration not found")
+	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
+	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
+	// ErrProviderHealthCheckFailed indicates the provider health check failed
+	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
 
 var (
@@ -223,8 +252,12 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 	// Record metrics
 	metrics.RecordHandlerError(http.StatusInternalServerError)
 
+	if err != nil && ctx != nil && ctx.Request() != nil {
+		logx.FromContext(ctx.Request().Context()).Error().Err(err).Msg("handler internal server error")
+	}
+
 	// Create error response
-	errorResponse := rout.ErrorResponse(err)
+	errorResponse := rout.ErrorResponse(safeInternalError(err))
 
 	// Automatically register response schema if OpenAPI context is provided
 	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
@@ -240,6 +273,31 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 	}
 
 	return ctx.JSON(http.StatusInternalServerError, errorResponse)
+}
+
+func safeInternalError(err error) error {
+	if err == nil {
+		return ErrProcessingRequest
+	}
+
+	if isWhitelistedInternalError(err) {
+		return err
+	}
+
+	return ErrProcessingRequest
+}
+
+func isWhitelistedInternalError(err error) bool {
+	switch err {
+	case ErrProcessingRequest,
+		ErrUnableToVerifyEmail,
+		ErrUnableToRegisterJobRunner,
+		ErrObjectStoreUnavailable,
+		ErrFailedToExtractSessionID:
+		return true
+	default:
+		return false
+	}
 }
 
 // Unauthorized returns a 401 Unauthorized response with the error message.

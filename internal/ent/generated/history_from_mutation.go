@@ -1453,6 +1453,14 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetCategories(categories)
 	}
 
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -1766,6 +1774,18 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetCategories(asset.Categories)
 		}
 
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(asset.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(asset.ObservedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -1848,6 +1868,8 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillablePurchaseDate(asset.PurchaseDate).
 			SetCpe(asset.Cpe).
 			SetCategories(asset.Categories).
+			SetIntegrationID(asset.IntegrationID).
+			SetNillableObservedAt(asset.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -2742,6 +2764,18 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2863,6 +2897,24 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(contact.Status)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(contact.ExternalID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(contact.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(contact.ObservedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2913,6 +2965,9 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPhoneNumber(contact.PhoneNumber).
 			SetAddress(contact.Address).
 			SetStatus(contact.Status).
+			SetExternalID(contact.ExternalID).
+			SetIntegrationID(contact.IntegrationID).
+			SetNillableObservedAt(contact.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4272,6 +4327,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if domainType, exists := m.DomainType(); exists {
+		create = create.SetDomainType(domainType)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -4393,6 +4452,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetTrustCenterID(customdomain.TrustCenterID)
 		}
 
+		if domainType, exists := m.DomainType(); exists {
+			create = create.SetDomainType(domainType)
+		} else {
+			create = create.SetDomainType(customdomain.DomainType)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -4443,6 +4508,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetMappableDomainID(customdomain.MappableDomainID).
 			SetDNSVerificationID(customdomain.DNSVerificationID).
 			SetTrustCenterID(customdomain.TrustCenterID).
+			SetDomainType(customdomain.DomainType).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -4802,6 +4868,10 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if identityHolderID, exists := m.IdentityHolderID(); exists {
 		create = create.SetNillableIdentityHolderID(&identityHolderID)
 	}
@@ -4878,6 +4948,22 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetNillableLastLoginAt(&lastLoginAt)
 	}
 
+	if firstSeenAt, exists := m.FirstSeenAt(); exists {
+		create = create.SetNillableFirstSeenAt(&firstSeenAt)
+	}
+
+	if lastSeenAt, exists := m.LastSeenAt(); exists {
+		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
+	}
+
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetObservedAt(observedAt)
 	}
@@ -4890,12 +4976,20 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetProfile(profile)
 	}
 
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
 	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
 		create = create.SetNillableRawProfileFileID(&rawProfileFileID)
 	}
 
 	if sourceVersion, exists := m.SourceVersion(); exists {
 		create = create.SetNillableSourceVersion(&sourceVersion)
+	}
+
+	if primarySource, exists := m.PrimarySource(); exists {
+		create = create.SetPrimarySource(primarySource)
 	}
 
 	_, err := create.Save(ctx)
@@ -5013,6 +5107,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetPlatformID(directoryaccount.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID)
+		}
+
 		if identityHolderID, exists := m.IdentityHolderID(); exists {
 			create = create.SetNillableIdentityHolderID(&identityHolderID)
 		} else {
@@ -5127,6 +5227,30 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableLastLoginAt(directoryaccount.LastLoginAt)
 		}
 
+		if firstSeenAt, exists := m.FirstSeenAt(); exists {
+			create = create.SetNillableFirstSeenAt(&firstSeenAt)
+		} else {
+			create = create.SetNillableFirstSeenAt(directoryaccount.FirstSeenAt)
+		}
+
+		if lastSeenAt, exists := m.LastSeenAt(); exists {
+			create = create.SetNillableLastSeenAt(&lastSeenAt)
+		} else {
+			create = create.SetNillableLastSeenAt(directoryaccount.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directoryaccount.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directoryaccount.RemovedAt)
+		}
+
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetObservedAt(observedAt)
 		} else {
@@ -5145,6 +5269,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetProfile(directoryaccount.Profile)
 		}
 
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(directoryaccount.Metadata)
+		}
+
 		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
 			create = create.SetNillableRawProfileFileID(&rawProfileFileID)
 		} else {
@@ -5155,6 +5285,12 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableSourceVersion(&sourceVersion)
 		} else {
 			create = create.SetNillableSourceVersion(directoryaccount.SourceVersion)
+		}
+
+		if primarySource, exists := m.PrimarySource(); exists {
+			create = create.SetPrimarySource(primarySource)
+		} else {
+			create = create.SetPrimarySource(directoryaccount.PrimarySource)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -5206,6 +5342,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetIntegrationID(directoryaccount.IntegrationID).
 			SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID).
 			SetPlatformID(directoryaccount.PlatformID).
+			SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID).
 			SetNillableIdentityHolderID(directoryaccount.IdentityHolderID).
 			SetNillableDirectoryName(directoryaccount.DirectoryName).
 			SetExternalID(directoryaccount.ExternalID).
@@ -5225,11 +5362,17 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetMfaState(directoryaccount.MfaState).
 			SetNillableLastSeenIP(directoryaccount.LastSeenIP).
 			SetNillableLastLoginAt(directoryaccount.LastLoginAt).
+			SetNillableFirstSeenAt(directoryaccount.FirstSeenAt).
+			SetNillableLastSeenAt(directoryaccount.LastSeenAt).
+			SetNillableAddedAt(directoryaccount.AddedAt).
+			SetNillableRemovedAt(directoryaccount.RemovedAt).
 			SetObservedAt(directoryaccount.ObservedAt).
 			SetProfileHash(directoryaccount.ProfileHash).
 			SetProfile(directoryaccount.Profile).
+			SetMetadata(directoryaccount.Metadata).
 			SetNillableRawProfileFileID(directoryaccount.RawProfileFileID).
 			SetNillableSourceVersion(directoryaccount.SourceVersion).
+			SetPrimarySource(directoryaccount.PrimarySource).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5307,6 +5450,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
@@ -5343,6 +5490,22 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetMemberCount(memberCount)
 	}
 
+	if firstSeenAt, exists := m.FirstSeenAt(); exists {
+		create = create.SetNillableFirstSeenAt(&firstSeenAt)
+	}
+
+	if lastSeenAt, exists := m.LastSeenAt(); exists {
+		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
+	}
+
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetObservedAt(observedAt)
 	}
@@ -5353,6 +5516,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if profile, exists := m.Profile(); exists {
 		create = create.SetProfile(profile)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5472,6 +5639,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetPlatformID(directorygroup.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5526,6 +5699,30 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetMemberCount(directorygroup.MemberCount)
 		}
 
+		if firstSeenAt, exists := m.FirstSeenAt(); exists {
+			create = create.SetNillableFirstSeenAt(&firstSeenAt)
+		} else {
+			create = create.SetNillableFirstSeenAt(directorygroup.FirstSeenAt)
+		}
+
+		if lastSeenAt, exists := m.LastSeenAt(); exists {
+			create = create.SetNillableLastSeenAt(&lastSeenAt)
+		} else {
+			create = create.SetNillableLastSeenAt(directorygroup.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directorygroup.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directorygroup.RemovedAt)
+		}
+
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetObservedAt(observedAt)
 		} else {
@@ -5542,6 +5739,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetProfile(profile)
 		} else {
 			create = create.SetProfile(directorygroup.Profile)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(directorygroup.Metadata)
 		}
 
 		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
@@ -5604,6 +5807,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetScopeID(directorygroup.ScopeID).
 			SetIntegrationID(directorygroup.IntegrationID).
 			SetPlatformID(directorygroup.PlatformID).
+			SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID).
 			SetDirectorySyncRunID(directorygroup.DirectorySyncRunID).
 			SetExternalID(directorygroup.ExternalID).
 			SetNillableEmail(directorygroup.Email).
@@ -5613,9 +5817,14 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetStatus(directorygroup.Status).
 			SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed).
 			SetMemberCount(directorygroup.MemberCount).
+			SetNillableFirstSeenAt(directorygroup.FirstSeenAt).
+			SetNillableLastSeenAt(directorygroup.LastSeenAt).
+			SetNillableAddedAt(directorygroup.AddedAt).
+			SetNillableRemovedAt(directorygroup.RemovedAt).
 			SetObservedAt(directorygroup.ObservedAt).
 			SetProfileHash(directorygroup.ProfileHash).
 			SetProfile(directorygroup.Profile).
+			SetMetadata(directorygroup.Metadata).
 			SetNillableRawProfileFileID(directorygroup.RawProfileFileID).
 			SetNillableSourceVersion(directorygroup.SourceVersion).
 			Save(ctx)
@@ -5691,6 +5900,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetPlatformID(platformID)
 	}
 
+	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+	}
+
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
@@ -5717,6 +5930,14 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if lastSeenAt, exists := m.LastSeenAt(); exists {
 		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if addedAt, exists := m.AddedAt(); exists {
+		create = create.SetNillableAddedAt(&addedAt)
+	}
+
+	if removedAt, exists := m.RemovedAt(); exists {
+		create = create.SetNillableRemovedAt(&removedAt)
 	}
 
 	if observedAt, exists := m.ObservedAt(); exists {
@@ -5834,6 +6055,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetPlatformID(directorymembership.PlatformID)
 		}
 
+		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
+			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
+		} else {
+			create = create.SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -5874,6 +6101,18 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetNillableLastSeenAt(&lastSeenAt)
 		} else {
 			create = create.SetNillableLastSeenAt(directorymembership.LastSeenAt)
+		}
+
+		if addedAt, exists := m.AddedAt(); exists {
+			create = create.SetNillableAddedAt(&addedAt)
+		} else {
+			create = create.SetNillableAddedAt(directorymembership.AddedAt)
+		}
+
+		if removedAt, exists := m.RemovedAt(); exists {
+			create = create.SetNillableRemovedAt(&removedAt)
+		} else {
+			create = create.SetNillableRemovedAt(directorymembership.RemovedAt)
 		}
 
 		if observedAt, exists := m.ObservedAt(); exists {
@@ -5941,6 +6180,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetScopeID(directorymembership.ScopeID).
 			SetIntegrationID(directorymembership.IntegrationID).
 			SetPlatformID(directorymembership.PlatformID).
+			SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID).
 			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
 			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
 			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
@@ -5948,6 +6188,8 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetNillableSource(directorymembership.Source).
 			SetNillableFirstSeenAt(directorymembership.FirstSeenAt).
 			SetNillableLastSeenAt(directorymembership.LastSeenAt).
+			SetNillableAddedAt(directorymembership.AddedAt).
+			SetNillableRemovedAt(directorymembership.RemovedAt).
 			SetObservedAt(directorymembership.ObservedAt).
 			SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID).
 			SetMetadata(directorymembership.Metadata).
@@ -6830,10 +7072,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetDefaults(defaults)
 	}
 
-	if emailBrandingID, exists := m.EmailBrandingID(); exists {
-		create = create.SetEmailBrandingID(emailBrandingID)
-	}
-
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
 	}
@@ -7039,12 +7277,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetDefaults(emailtemplate.Defaults)
 		}
 
-		if emailBrandingID, exists := m.EmailBrandingID(); exists {
-			create = create.SetEmailBrandingID(emailBrandingID)
-		} else {
-			create = create.SetEmailBrandingID(emailtemplate.EmailBrandingID)
-		}
-
 		if integrationID, exists := m.IntegrationID(); exists {
 			create = create.SetIntegrationID(integrationID)
 		} else {
@@ -7125,7 +7357,6 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetVersion(emailtemplate.Version).
 			SetTemplateContext(emailtemplate.TemplateContext).
 			SetDefaults(emailtemplate.Defaults).
-			SetEmailBrandingID(emailtemplate.EmailBrandingID).
 			SetIntegrationID(emailtemplate.IntegrationID).
 			SetWorkflowDefinitionID(emailtemplate.WorkflowDefinitionID).
 			SetWorkflowInstanceID(emailtemplate.WorkflowInstanceID).
@@ -7370,6 +7601,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRiskScore(riskScore)
 	}
 
+	if riskScoreCoverage, exists := m.RiskScoreCoverage(); exists {
+		create = create.SetRiskScoreCoverage(riskScoreCoverage)
+	}
+
 	if tier, exists := m.Tier(); exists {
 		create = create.SetTier(tier)
 	}
@@ -7388,6 +7623,18 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if vendorMetadata, exists := m.VendorMetadata(); exists {
 		create = create.SetVendorMetadata(vendorMetadata)
+	}
+
+	if logoFileID, exists := m.LogoFileID(); exists {
+		create = create.SetNillableLogoFileID(&logoFileID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
 	}
 
 	_, err := create.Save(ctx)
@@ -7745,6 +7992,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRiskScore(entity.RiskScore)
 		}
 
+		if riskScoreCoverage, exists := m.RiskScoreCoverage(); exists {
+			create = create.SetRiskScoreCoverage(riskScoreCoverage)
+		} else {
+			create = create.SetRiskScoreCoverage(entity.RiskScoreCoverage)
+		}
+
 		if tier, exists := m.Tier(); exists {
 			create = create.SetTier(tier)
 		} else {
@@ -7773,6 +8026,24 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVendorMetadata(vendorMetadata)
 		} else {
 			create = create.SetVendorMetadata(entity.VendorMetadata)
+		}
+
+		if logoFileID, exists := m.LogoFileID(); exists {
+			create = create.SetNillableLogoFileID(&logoFileID)
+		} else {
+			create = create.SetNillableLogoFileID(entity.LogoFileID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(entity.ExternalID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(entity.ObservedAt)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -7864,11 +8135,15 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetLinks(entity.Links).
 			SetRiskRating(entity.RiskRating).
 			SetRiskScore(entity.RiskScore).
+			SetRiskScoreCoverage(entity.RiskScoreCoverage).
 			SetTier(entity.Tier).
 			SetReviewFrequency(entity.ReviewFrequency).
 			SetNillableNextReviewAt(entity.NextReviewAt).
 			SetNillableContractRenewalAt(entity.ContractRenewalAt).
 			SetVendorMetadata(entity.VendorMetadata).
+			SetNillableLogoFileID(entity.LogoFileID).
+			SetExternalID(entity.ExternalID).
+			SetNillableObservedAt(entity.ObservedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8190,11 +8465,11 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if creationDate, exists := m.CreationDate(); exists {
-		create = create.SetCreationDate(creationDate)
+		create = create.SetNillableCreationDate(&creationDate)
 	}
 
 	if renewalDate, exists := m.RenewalDate(); exists {
-		create = create.SetRenewalDate(renewalDate)
+		create = create.SetNillableRenewalDate(&renewalDate)
 	}
 
 	if source, exists := m.Source(); exists {
@@ -8353,15 +8628,15 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if creationDate, exists := m.CreationDate(); exists {
-			create = create.SetCreationDate(creationDate)
+			create = create.SetNillableCreationDate(&creationDate)
 		} else {
-			create = create.SetCreationDate(evidence.CreationDate)
+			create = create.SetNillableCreationDate(evidence.CreationDate)
 		}
 
 		if renewalDate, exists := m.RenewalDate(); exists {
-			create = create.SetRenewalDate(renewalDate)
+			create = create.SetNillableRenewalDate(&renewalDate)
 		} else {
-			create = create.SetRenewalDate(evidence.RenewalDate)
+			create = create.SetNillableRenewalDate(evidence.RenewalDate)
 		}
 
 		if source, exists := m.Source(); exists {
@@ -8441,8 +8716,8 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
-			SetCreationDate(evidence.CreationDate).
-			SetRenewalDate(evidence.RenewalDate).
+			SetNillableCreationDate(evidence.CreationDate).
+			SetNillableRenewalDate(evidence.RenewalDate).
 			SetSource(evidence.Source).
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
@@ -8991,10 +9266,6 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetExternalID(externalID)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if securityLevel, exists := m.SecurityLevel(); exists {
 		create = create.SetSecurityLevel(securityLevel)
 	}
@@ -9284,12 +9555,6 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternalID(finding.ExternalID)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(finding.Status)
-		}
-
 		if securityLevel, exists := m.SecurityLevel(); exists {
 			create = create.SetSecurityLevel(securityLevel)
 		} else {
@@ -9560,7 +9825,6 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFindingStatusName(finding.FindingStatusName).
 			SetFindingStatusID(finding.FindingStatusID).
 			SetExternalID(finding.ExternalID).
-			SetStatus(finding.Status).
 			SetSecurityLevel(finding.SecurityLevel).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
@@ -11455,6 +11719,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetConfig(config)
 	}
 
+	if installationMetadata, exists := m.InstallationMetadata(); exists {
+		create = create.SetInstallationMetadata(installationMetadata)
+	}
+
 	if providerState, exists := m.ProviderState(); exists {
 		create = create.SetProviderState(providerState)
 	}
@@ -11485,6 +11753,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if providerMetadataSnapshot, exists := m.ProviderMetadataSnapshot(); exists {
 		create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
+	}
+
+	if primaryDirectory, exists := m.PrimaryDirectory(); exists {
+		create = create.SetPrimaryDirectory(primaryDirectory)
 	}
 
 	_, err := create.Save(ctx)
@@ -11650,6 +11922,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetConfig(integration.Config)
 		}
 
+		if installationMetadata, exists := m.InstallationMetadata(); exists {
+			create = create.SetInstallationMetadata(installationMetadata)
+		} else {
+			create = create.SetInstallationMetadata(integration.InstallationMetadata)
+		}
+
 		if providerState, exists := m.ProviderState(); exists {
 			create = create.SetProviderState(providerState)
 		} else {
@@ -11696,6 +11974,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
 		} else {
 			create = create.SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot)
+		}
+
+		if primaryDirectory, exists := m.PrimaryDirectory(); exists {
+			create = create.SetPrimaryDirectory(primaryDirectory)
+		} else {
+			create = create.SetPrimaryDirectory(integration.PrimaryDirectory)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -11755,6 +12039,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetPlatformID(integration.PlatformID).
 			SetProviderMetadata(integration.ProviderMetadata).
 			SetConfig(integration.Config).
+			SetInstallationMetadata(integration.InstallationMetadata).
 			SetProviderState(integration.ProviderState).
 			SetMetadata(integration.Metadata).
 			SetDefinitionID(integration.DefinitionID).
@@ -11763,6 +12048,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetFamily(integration.Family).
 			SetStatus(integration.Status).
 			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
+			SetPrimaryDirectory(integration.PrimaryDirectory).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -14041,6 +14327,10 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 		create = create.SetIntegrationID(integrationID)
 	}
 
+	if destinations, exists := m.Destinations(); exists {
+		create = create.SetDestinations(destinations)
+	}
+
 	if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
 		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
 	}
@@ -14238,6 +14528,12 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 			create = create.SetIntegrationID(notificationtemplate.IntegrationID)
 		}
 
+		if destinations, exists := m.Destinations(); exists {
+			create = create.SetDestinations(destinations)
+		} else {
+			create = create.SetDestinations(notificationtemplate.Destinations)
+		}
+
 		if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
 			create = create.SetWorkflowDefinitionID(workflowDefinitionID)
 		} else {
@@ -14370,6 +14666,7 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 			SetLocale(notificationtemplate.Locale).
 			SetTopicPattern(notificationtemplate.TopicPattern).
 			SetIntegrationID(notificationtemplate.IntegrationID).
+			SetDestinations(notificationtemplate.Destinations).
 			SetWorkflowDefinitionID(notificationtemplate.WorkflowDefinitionID).
 			SetEmailTemplateID(notificationtemplate.EmailTemplateID).
 			SetTitleTemplate(notificationtemplate.TitleTemplate).
@@ -17379,6 +17676,10 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetTitle(title)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if state, exists := m.State(); exists {
 		create = create.SetState(state)
 	}
@@ -17588,6 +17889,12 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetTitle(remediation.Title)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(remediation.Status)
+		}
+
 		if state, exists := m.State(); exists {
 			create = create.SetState(state)
 		} else {
@@ -17738,6 +18045,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
+			SetStatus(remediation.Status).
 			SetState(remediation.State).
 			SetIntent(remediation.Intent).
 			SetSummary(remediation.Summary).
@@ -18301,6 +18609,18 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetNillableObservedAt(&observedAt)
+	}
+
 	if externalUUID, exists := m.ExternalUUID(); exists {
 		create = create.SetNillableExternalUUID(&externalUUID)
 	}
@@ -18355,6 +18675,34 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if delegateID, exists := m.DelegateID(); exists {
 		create = create.SetDelegateID(delegateID)
+	}
+
+	if mitigatedAt, exists := m.MitigatedAt(); exists {
+		create = create.SetNillableMitigatedAt(&mitigatedAt)
+	}
+
+	if reviewRequired, exists := m.ReviewRequired(); exists {
+		create = create.SetReviewRequired(reviewRequired)
+	}
+
+	if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+		create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+	}
+
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+		create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+	}
+
+	if residualScore, exists := m.ResidualScore(); exists {
+		create = create.SetResidualScore(residualScore)
+	}
+
+	if riskDecision, exists := m.RiskDecision(); exists {
+		create = create.SetRiskDecision(riskDecision)
 	}
 
 	_, err := create.Save(ctx)
@@ -18490,6 +18838,24 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(risk.ScopeID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(risk.ExternalID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(risk.IntegrationID)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetNillableObservedAt(&observedAt)
+		} else {
+			create = create.SetNillableObservedAt(risk.ObservedAt)
+		}
+
 		if externalUUID, exists := m.ExternalUUID(); exists {
 			create = create.SetNillableExternalUUID(&externalUUID)
 		} else {
@@ -18574,6 +18940,48 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateID(risk.DelegateID)
 		}
 
+		if mitigatedAt, exists := m.MitigatedAt(); exists {
+			create = create.SetNillableMitigatedAt(&mitigatedAt)
+		} else {
+			create = create.SetNillableMitigatedAt(risk.MitigatedAt)
+		}
+
+		if reviewRequired, exists := m.ReviewRequired(); exists {
+			create = create.SetReviewRequired(reviewRequired)
+		} else {
+			create = create.SetReviewRequired(risk.ReviewRequired)
+		}
+
+		if lastReviewedAt, exists := m.LastReviewedAt(); exists {
+			create = create.SetNillableLastReviewedAt(&lastReviewedAt)
+		} else {
+			create = create.SetNillableLastReviewedAt(risk.LastReviewedAt)
+		}
+
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(risk.ReviewFrequency)
+		}
+
+		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
+			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
+		} else {
+			create = create.SetNillableNextReviewDueAt(risk.NextReviewDueAt)
+		}
+
+		if residualScore, exists := m.ResidualScore(); exists {
+			create = create.SetResidualScore(residualScore)
+		} else {
+			create = create.SetResidualScore(risk.ResidualScore)
+		}
+
+		if riskDecision, exists := m.RiskDecision(); exists {
+			create = create.SetRiskDecision(riskDecision)
+		} else {
+			create = create.SetRiskDecision(risk.RiskDecision)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -18626,6 +19034,9 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(risk.EnvironmentID).
 			SetScopeName(risk.ScopeName).
 			SetScopeID(risk.ScopeID).
+			SetExternalID(risk.ExternalID).
+			SetIntegrationID(risk.IntegrationID).
+			SetNillableObservedAt(risk.ObservedAt).
 			SetNillableExternalUUID(risk.ExternalUUID).
 			SetName(risk.Name).
 			SetStatus(risk.Status).
@@ -18640,6 +19051,13 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetBusinessCostsJSON(risk.BusinessCostsJSON).
 			SetStakeholderID(risk.StakeholderID).
 			SetDelegateID(risk.DelegateID).
+			SetNillableMitigatedAt(risk.MitigatedAt).
+			SetReviewRequired(risk.ReviewRequired).
+			SetNillableLastReviewedAt(risk.LastReviewedAt).
+			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
+			SetResidualScore(risk.ResidualScore).
+			SetRiskDecision(risk.RiskDecision).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -18699,14 +19117,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
-	}
-
-	if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
-		create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
-	}
-
-	if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
-		create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
 	}
 
 	if slaDays, exists := m.SLADays(); exists {
@@ -18802,18 +19212,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetOwnerID(sladefinition.OwnerID)
 		}
 
-		if slaDefinitionSeverityLevelName, exists := m.SLADefinitionSeverityLevelName(); exists {
-			create = create.SetSLADefinitionSeverityLevelName(slaDefinitionSeverityLevelName)
-		} else {
-			create = create.SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName)
-		}
-
-		if slaDefinitionSeverityLevelID, exists := m.SLADefinitionSeverityLevelID(); exists {
-			create = create.SetSLADefinitionSeverityLevelID(slaDefinitionSeverityLevelID)
-		} else {
-			create = create.SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID)
-		}
-
 		if slaDays, exists := m.SLADays(); exists {
 			create = create.SetSLADays(slaDays)
 		} else {
@@ -18870,8 +19268,6 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDisplayID(sladefinition.DisplayID).
 			SetTags(sladefinition.Tags).
 			SetOwnerID(sladefinition.OwnerID).
-			SetSLADefinitionSeverityLevelName(sladefinition.SLADefinitionSeverityLevelName).
-			SetSLADefinitionSeverityLevelID(sladefinition.SLADefinitionSeverityLevelID).
 			SetSLADays(sladefinition.SLADays).
 			SetSecurityLevel(sladefinition.SecurityLevel).
 			Save(ctx)
@@ -24869,6 +25265,540 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if questionKey, exists := m.QuestionKey(); exists {
+		create = create.SetQuestionKey(questionKey)
+	}
+
+	if questionName, exists := m.QuestionName(); exists {
+		create = create.SetQuestionName(questionName)
+	}
+
+	if questionDescription, exists := m.QuestionDescription(); exists {
+		create = create.SetNillableQuestionDescription(&questionDescription)
+	}
+
+	if questionCategory, exists := m.QuestionCategory(); exists {
+		create = create.SetQuestionCategory(questionCategory)
+	}
+
+	if answerType, exists := m.AnswerType(); exists {
+		create = create.SetAnswerType(answerType)
+	}
+
+	if impact, exists := m.Impact(); exists {
+		create = create.SetImpact(impact)
+	}
+
+	if likelihood, exists := m.Likelihood(); exists {
+		create = create.SetLikelihood(likelihood)
+	}
+
+	if score, exists := m.Score(); exists {
+		create = create.SetScore(score)
+	}
+
+	if answer, exists := m.Answer(); exists {
+		create = create.SetNillableAnswer(&answer)
+	}
+
+	if notes, exists := m.Notes(); exists {
+		create = create.SetNillableNotes(&notes)
+	}
+
+	if vendorScoringConfigID, exists := m.VendorScoringConfigID(); exists {
+		create = create.SetVendorScoringConfigID(vendorScoringConfigID)
+	}
+
+	if entityID, exists := m.EntityID(); exists {
+		create = create.SetEntityID(entityID)
+	}
+
+	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+		create = create.SetAssessmentResponseID(assessmentResponseID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorriskscore, err := client.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorriskscore.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorriskscore.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorriskscore.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorriskscore.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorriskscore.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorriskscore.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorriskscore.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorriskscore.OwnerID)
+		}
+
+		if questionKey, exists := m.QuestionKey(); exists {
+			create = create.SetQuestionKey(questionKey)
+		} else {
+			create = create.SetQuestionKey(vendorriskscore.QuestionKey)
+		}
+
+		if questionName, exists := m.QuestionName(); exists {
+			create = create.SetQuestionName(questionName)
+		} else {
+			create = create.SetQuestionName(vendorriskscore.QuestionName)
+		}
+
+		if questionDescription, exists := m.QuestionDescription(); exists {
+			create = create.SetNillableQuestionDescription(&questionDescription)
+		} else {
+			create = create.SetNillableQuestionDescription(vendorriskscore.QuestionDescription)
+		}
+
+		if questionCategory, exists := m.QuestionCategory(); exists {
+			create = create.SetQuestionCategory(questionCategory)
+		} else {
+			create = create.SetQuestionCategory(vendorriskscore.QuestionCategory)
+		}
+
+		if answerType, exists := m.AnswerType(); exists {
+			create = create.SetAnswerType(answerType)
+		} else {
+			create = create.SetAnswerType(vendorriskscore.AnswerType)
+		}
+
+		if impact, exists := m.Impact(); exists {
+			create = create.SetImpact(impact)
+		} else {
+			create = create.SetImpact(vendorriskscore.Impact)
+		}
+
+		if likelihood, exists := m.Likelihood(); exists {
+			create = create.SetLikelihood(likelihood)
+		} else {
+			create = create.SetLikelihood(vendorriskscore.Likelihood)
+		}
+
+		if score, exists := m.Score(); exists {
+			create = create.SetScore(score)
+		} else {
+			create = create.SetScore(vendorriskscore.Score)
+		}
+
+		if answer, exists := m.Answer(); exists {
+			create = create.SetNillableAnswer(&answer)
+		} else {
+			create = create.SetNillableAnswer(vendorriskscore.Answer)
+		}
+
+		if notes, exists := m.Notes(); exists {
+			create = create.SetNillableNotes(&notes)
+		} else {
+			create = create.SetNillableNotes(vendorriskscore.Notes)
+		}
+
+		if vendorScoringConfigID, exists := m.VendorScoringConfigID(); exists {
+			create = create.SetVendorScoringConfigID(vendorScoringConfigID)
+		} else {
+			create = create.SetVendorScoringConfigID(vendorriskscore.VendorScoringConfigID)
+		}
+
+		if entityID, exists := m.EntityID(); exists {
+			create = create.SetEntityID(entityID)
+		} else {
+			create = create.SetEntityID(vendorriskscore.EntityID)
+		}
+
+		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+			create = create.SetAssessmentResponseID(assessmentResponseID)
+		} else {
+			create = create.SetAssessmentResponseID(vendorriskscore.AssessmentResponseID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorriskscore, err := client.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorRiskScoreHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorriskscore.CreatedAt).
+			SetUpdatedAt(vendorriskscore.UpdatedAt).
+			SetCreatedBy(vendorriskscore.CreatedBy).
+			SetUpdatedBy(vendorriskscore.UpdatedBy).
+			SetDeletedAt(vendorriskscore.DeletedAt).
+			SetDeletedBy(vendorriskscore.DeletedBy).
+			SetTags(vendorriskscore.Tags).
+			SetOwnerID(vendorriskscore.OwnerID).
+			SetQuestionKey(vendorriskscore.QuestionKey).
+			SetQuestionName(vendorriskscore.QuestionName).
+			SetNillableQuestionDescription(vendorriskscore.QuestionDescription).
+			SetQuestionCategory(vendorriskscore.QuestionCategory).
+			SetAnswerType(vendorriskscore.AnswerType).
+			SetImpact(vendorriskscore.Impact).
+			SetLikelihood(vendorriskscore.Likelihood).
+			SetScore(vendorriskscore.Score).
+			SetNillableAnswer(vendorriskscore.Answer).
+			SetNillableNotes(vendorriskscore.Notes).
+			SetVendorScoringConfigID(vendorriskscore.VendorScoringConfigID).
+			SetEntityID(vendorriskscore.EntityID).
+			SetAssessmentResponseID(vendorriskscore.AssessmentResponseID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if questions, exists := m.Questions(); exists {
+		create = create.SetQuestions(questions)
+	}
+
+	if scoringMode, exists := m.ScoringMode(); exists {
+		create = create.SetScoringMode(scoringMode)
+	}
+
+	if riskThresholds, exists := m.RiskThresholds(); exists {
+		create = create.SetRiskThresholds(riskThresholds)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorscoringconfig, err := client.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(vendorscoringconfig.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(vendorscoringconfig.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(vendorscoringconfig.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(vendorscoringconfig.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(vendorscoringconfig.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(vendorscoringconfig.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(vendorscoringconfig.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(vendorscoringconfig.OwnerID)
+		}
+
+		if questions, exists := m.Questions(); exists {
+			create = create.SetQuestions(questions)
+		} else {
+			create = create.SetQuestions(vendorscoringconfig.Questions)
+		}
+
+		if scoringMode, exists := m.ScoringMode(); exists {
+			create = create.SetScoringMode(scoringMode)
+		} else {
+			create = create.SetScoringMode(vendorscoringconfig.ScoringMode)
+		}
+
+		if riskThresholds, exists := m.RiskThresholds(); exists {
+			create = create.SetRiskThresholds(riskThresholds)
+		} else {
+			create = create.SetRiskThresholds(vendorscoringconfig.RiskThresholds)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		vendorscoringconfig, err := client.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.VendorScoringConfigHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(vendorscoringconfig.CreatedAt).
+			SetUpdatedAt(vendorscoringconfig.UpdatedAt).
+			SetCreatedBy(vendorscoringconfig.CreatedBy).
+			SetUpdatedBy(vendorscoringconfig.UpdatedBy).
+			SetDeletedAt(vendorscoringconfig.DeletedAt).
+			SetDeletedBy(vendorscoringconfig.DeletedBy).
+			SetTags(vendorscoringconfig.Tags).
+			SetOwnerID(vendorscoringconfig.OwnerID).
+			SetQuestions(vendorscoringconfig.Questions).
+			SetScoringMode(vendorscoringconfig.ScoringMode).
+			SetRiskThresholds(vendorscoringconfig.RiskThresholds).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -24961,10 +25891,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetExternalOwnerID(externalOwnerID)
 	}
 
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
 	if securityLevel, exists := m.SecurityLevel(); exists {
 		create = create.SetSecurityLevel(securityLevel)
 	}
@@ -25053,6 +25979,34 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetImpacts(impacts)
 	}
 
+	if cweIds, exists := m.CweIds(); exists {
+		create = create.SetCweIds(cweIds)
+	}
+
+	if vulnerableVersionRange, exists := m.VulnerableVersionRange(); exists {
+		create = create.SetVulnerableVersionRange(vulnerableVersionRange)
+	}
+
+	if firstPatchedVersion, exists := m.FirstPatchedVersion(); exists {
+		create = create.SetFirstPatchedVersion(firstPatchedVersion)
+	}
+
+	if packageName, exists := m.PackageName(); exists {
+		create = create.SetPackageName(packageName)
+	}
+
+	if packageEcosystem, exists := m.PackageEcosystem(); exists {
+		create = create.SetPackageEcosystem(packageEcosystem)
+	}
+
+	if manifestPath, exists := m.ManifestPath(); exists {
+		create = create.SetManifestPath(manifestPath)
+	}
+
+	if dependencyScope, exists := m.DependencyScope(); exists {
+		create = create.SetDependencyScope(dependencyScope)
+	}
+
 	if publishedAt, exists := m.PublishedAt(); exists {
 		create = create.SetNillablePublishedAt(&publishedAt)
 	}
@@ -25063,6 +26017,26 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if sourceUpdatedAt, exists := m.SourceUpdatedAt(); exists {
 		create = create.SetNillableSourceUpdatedAt(&sourceUpdatedAt)
+	}
+
+	if dismissedAt, exists := m.DismissedAt(); exists {
+		create = create.SetNillableDismissedAt(&dismissedAt)
+	}
+
+	if dismissedReason, exists := m.DismissedReason(); exists {
+		create = create.SetDismissedReason(dismissedReason)
+	}
+
+	if dismissedComment, exists := m.DismissedComment(); exists {
+		create = create.SetDismissedComment(dismissedComment)
+	}
+
+	if fixedAt, exists := m.FixedAt(); exists {
+		create = create.SetNillableFixedAt(&fixedAt)
+	}
+
+	if autoDismissedAt, exists := m.AutoDismissedAt(); exists {
+		create = create.SetNillableAutoDismissedAt(&autoDismissedAt)
 	}
 
 	if externalURI, exists := m.ExternalURI(); exists {
@@ -25222,12 +26196,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetExternalOwnerID(vulnerability.ExternalOwnerID)
 		}
 
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(vulnerability.Status)
-		}
-
 		if securityLevel, exists := m.SecurityLevel(); exists {
 			create = create.SetSecurityLevel(securityLevel)
 		} else {
@@ -25360,6 +26328,48 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetImpacts(vulnerability.Impacts)
 		}
 
+		if cweIds, exists := m.CweIds(); exists {
+			create = create.SetCweIds(cweIds)
+		} else {
+			create = create.SetCweIds(vulnerability.CweIds)
+		}
+
+		if vulnerableVersionRange, exists := m.VulnerableVersionRange(); exists {
+			create = create.SetVulnerableVersionRange(vulnerableVersionRange)
+		} else {
+			create = create.SetVulnerableVersionRange(vulnerability.VulnerableVersionRange)
+		}
+
+		if firstPatchedVersion, exists := m.FirstPatchedVersion(); exists {
+			create = create.SetFirstPatchedVersion(firstPatchedVersion)
+		} else {
+			create = create.SetFirstPatchedVersion(vulnerability.FirstPatchedVersion)
+		}
+
+		if packageName, exists := m.PackageName(); exists {
+			create = create.SetPackageName(packageName)
+		} else {
+			create = create.SetPackageName(vulnerability.PackageName)
+		}
+
+		if packageEcosystem, exists := m.PackageEcosystem(); exists {
+			create = create.SetPackageEcosystem(packageEcosystem)
+		} else {
+			create = create.SetPackageEcosystem(vulnerability.PackageEcosystem)
+		}
+
+		if manifestPath, exists := m.ManifestPath(); exists {
+			create = create.SetManifestPath(manifestPath)
+		} else {
+			create = create.SetManifestPath(vulnerability.ManifestPath)
+		}
+
+		if dependencyScope, exists := m.DependencyScope(); exists {
+			create = create.SetDependencyScope(dependencyScope)
+		} else {
+			create = create.SetDependencyScope(vulnerability.DependencyScope)
+		}
+
 		if publishedAt, exists := m.PublishedAt(); exists {
 			create = create.SetNillablePublishedAt(&publishedAt)
 		} else {
@@ -25376,6 +26386,36 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetNillableSourceUpdatedAt(&sourceUpdatedAt)
 		} else {
 			create = create.SetNillableSourceUpdatedAt(vulnerability.SourceUpdatedAt)
+		}
+
+		if dismissedAt, exists := m.DismissedAt(); exists {
+			create = create.SetNillableDismissedAt(&dismissedAt)
+		} else {
+			create = create.SetNillableDismissedAt(vulnerability.DismissedAt)
+		}
+
+		if dismissedReason, exists := m.DismissedReason(); exists {
+			create = create.SetDismissedReason(dismissedReason)
+		} else {
+			create = create.SetDismissedReason(vulnerability.DismissedReason)
+		}
+
+		if dismissedComment, exists := m.DismissedComment(); exists {
+			create = create.SetDismissedComment(dismissedComment)
+		} else {
+			create = create.SetDismissedComment(vulnerability.DismissedComment)
+		}
+
+		if fixedAt, exists := m.FixedAt(); exists {
+			create = create.SetNillableFixedAt(&fixedAt)
+		} else {
+			create = create.SetNillableFixedAt(vulnerability.FixedAt)
+		}
+
+		if autoDismissedAt, exists := m.AutoDismissedAt(); exists {
+			create = create.SetNillableAutoDismissedAt(&autoDismissedAt)
+		} else {
+			create = create.SetNillableAutoDismissedAt(vulnerability.AutoDismissedAt)
 		}
 
 		if externalURI, exists := m.ExternalURI(); exists {
@@ -25450,7 +26490,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName).
 			SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
-			SetStatus(vulnerability.Status).
 			SetSecurityLevel(vulnerability.SecurityLevel).
 			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).
@@ -25473,9 +26512,21 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetValidated(vulnerability.Validated).
 			SetReferences(vulnerability.References).
 			SetImpacts(vulnerability.Impacts).
+			SetCweIds(vulnerability.CweIds).
+			SetVulnerableVersionRange(vulnerability.VulnerableVersionRange).
+			SetFirstPatchedVersion(vulnerability.FirstPatchedVersion).
+			SetPackageName(vulnerability.PackageName).
+			SetPackageEcosystem(vulnerability.PackageEcosystem).
+			SetManifestPath(vulnerability.ManifestPath).
+			SetDependencyScope(vulnerability.DependencyScope).
 			SetNillablePublishedAt(vulnerability.PublishedAt).
 			SetNillableDiscoveredAt(vulnerability.DiscoveredAt).
 			SetNillableSourceUpdatedAt(vulnerability.SourceUpdatedAt).
+			SetNillableDismissedAt(vulnerability.DismissedAt).
+			SetDismissedReason(vulnerability.DismissedReason).
+			SetDismissedComment(vulnerability.DismissedComment).
+			SetNillableFixedAt(vulnerability.FixedAt).
+			SetNillableAutoDismissedAt(vulnerability.AutoDismissedAt).
 			SetExternalURI(vulnerability.ExternalURI).
 			SetMetadata(vulnerability.Metadata).
 			SetRawPayload(vulnerability.RawPayload).

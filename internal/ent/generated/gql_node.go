@@ -96,6 +96,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -546,6 +548,16 @@ var usersettingImplementors = []string{"UserSetting", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*UserSetting) IsNode() {}
+
+var vendorriskscoreImplementors = []string{"VendorRiskScore", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorRiskScore) IsNode() {}
+
+var vendorscoringconfigImplementors = []string{"VendorScoringConfig", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VendorScoringConfig) IsNode() {}
 
 var vulnerabilityImplementors = []string{"Vulnerability", "Node"}
 
@@ -1429,6 +1441,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(usersetting.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usersettingImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorriskscore.Table:
+		query := c.VendorRiskScore.Query().
+			Where(vendorriskscore.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorriskscoreImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vendorscoringconfig.Table:
+		query := c.VendorScoringConfig.Query().
+			Where(vendorscoringconfig.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vendorscoringconfigImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2967,6 +2997,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.UserSetting.Query().
 			Where(usersetting.IDIn(ids...))
 		query, err := query.CollectFields(ctx, usersettingImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorriskscore.Table:
+		query := c.VendorRiskScore.Query().
+			Where(vendorriskscore.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorriskscoreImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vendorscoringconfig.Table:
+		query := c.VendorScoringConfig.Query().
+			Where(vendorscoringconfig.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vendorscoringconfigImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -294,6 +294,16 @@ func Cpe(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldCpe, v))
 }
 
+// IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
+func IntegrationID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
+func ObservedAt(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldObservedAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -3487,6 +3497,131 @@ func CategoriesIsNil() predicate.AssetHistory {
 // CategoriesNotNil applies the NotNil predicate on the "categories" field.
 func CategoriesNotNil() predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldNotNull(FieldCategories))
+}
+
+// IntegrationIDEQ applies the EQ predicate on the "integration_id" field.
+func IntegrationIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDNEQ applies the NEQ predicate on the "integration_id" field.
+func IntegrationIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDIn applies the In predicate on the "integration_id" field.
+func IntegrationIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDNotIn applies the NotIn predicate on the "integration_id" field.
+func IntegrationIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDGT applies the GT predicate on the "integration_id" field.
+func IntegrationIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldIntegrationID, v))
+}
+
+// IntegrationIDGTE applies the GTE predicate on the "integration_id" field.
+func IntegrationIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDLT applies the LT predicate on the "integration_id" field.
+func IntegrationIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldIntegrationID, v))
+}
+
+// IntegrationIDLTE applies the LTE predicate on the "integration_id" field.
+func IntegrationIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDContains applies the Contains predicate on the "integration_id" field.
+func IntegrationIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasPrefix applies the HasPrefix predicate on the "integration_id" field.
+func IntegrationIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasSuffix applies the HasSuffix predicate on the "integration_id" field.
+func IntegrationIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldIntegrationID, v))
+}
+
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldIntegrationID))
+}
+
+// IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
+func IntegrationIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldIntegrationID, v))
+}
+
+// IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
+func IntegrationIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
+// ObservedAtEQ applies the EQ predicate on the "observed_at" field.
+func ObservedAtEQ(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldObservedAt, v))
+}
+
+// ObservedAtNEQ applies the NEQ predicate on the "observed_at" field.
+func ObservedAtNEQ(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldObservedAt, v))
+}
+
+// ObservedAtIn applies the In predicate on the "observed_at" field.
+func ObservedAtIn(vs ...models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtNotIn applies the NotIn predicate on the "observed_at" field.
+func ObservedAtNotIn(vs ...models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtGT applies the GT predicate on the "observed_at" field.
+func ObservedAtGT(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldObservedAt, v))
+}
+
+// ObservedAtGTE applies the GTE predicate on the "observed_at" field.
+func ObservedAtGTE(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldObservedAt, v))
+}
+
+// ObservedAtLT applies the LT predicate on the "observed_at" field.
+func ObservedAtLT(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldObservedAt, v))
+}
+
+// ObservedAtLTE applies the LTE predicate on the "observed_at" field.
+func ObservedAtLTE(v models.DateTime) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldObservedAt, v))
+}
+
+// ObservedAtIsNil applies the IsNil predicate on the "observed_at" field.
+func ObservedAtIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldObservedAt))
+}
+
+// ObservedAtNotNil applies the NotNil predicate on the "observed_at" field.
+func ObservedAtNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldObservedAt))
 }
 
 // And groups predicates with the AND operator between them.

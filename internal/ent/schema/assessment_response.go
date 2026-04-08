@@ -250,6 +250,7 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
+		defaultEdgeToWithPagination(ar, VendorRiskScore{}),
 	}
 }
 

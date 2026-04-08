@@ -1,385 +1,504 @@
-mutation CreateBulkCSVProcedure($input: Upload!) {
-  createBulkCSVProcedure(input: $input) {
-    procedures {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkCSVProcedure ($input: Upload!) {
+	createBulkCSVProcedure(input: $input) {
+		procedures {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			name
+			ownerID
+			procedureKindID
+			procedureKindName
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
-  createBulkProcedure(input: $input) {
-    procedures {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
+	createBulkProcedure(input: $input) {
+		procedures {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			name
+			ownerID
+			procedureKindID
+			procedureKindName
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateProcedure($input: CreateProcedureInput!) {
-  createProcedure(input: $input) {
-    procedure {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateProcedure ($input: CreateProcedureInput!) {
+	createProcedure(input: $input) {
+		procedure {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			name
+			ownerID
+			procedureKindID
+			procedureKindName
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
-  createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
-    procedure {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+		procedure {
+			approvalRequired
+			createdAt
+			createdBy
+			details
+			displayID
+			id
+			name
+			ownerID
+			reviewDue
+			reviewFrequency
+			revision
+			status
+			summary
+			tags
+			updatedAt
+			updatedBy
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation DeleteBulkProcedure($ids: [ID!]!) {
-  deleteBulkProcedure(ids: $ids) {
-    deletedIDs
-  }
+mutation DeleteBulkProcedure ($ids: [ID!]!) {
+	deleteBulkProcedure(ids: $ids) {
+		deletedIDs
+	}
 }
-
-mutation DeleteProcedure($deleteProcedureId: ID!) {
-  deleteProcedure(id: $deleteProcedureId) {
-    deletedID
-  }
+mutation DeleteProcedure ($deleteProcedureId: ID!) {
+	deleteProcedure(id: $deleteProcedureId) {
+		deletedID
+	}
 }
-
 query GetAllProcedures {
-  procedures {
-    edges {
-      node {
-        approvalRequired
-        createdAt
-        createdBy
-        details
-        displayID
-        id
-        name
-        ownerID
-        reviewDue
-        reviewFrequency
-        revision
-        status
-        summary
-        tags
-        updatedAt
-        updatedBy
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        approver {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+	procedures {
+		edges {
+			node {
+				approvalRequired
+				createdAt
+				createdBy
+				details
+				displayID
+				id
+				name
+				ownerID
+				reviewDue
+				reviewFrequency
+				revision
+				status
+				summary
+				tags
+				updatedAt
+				updatedBy
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				approver {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetProcedureByID($procedureId: ID!) {
-  procedure(id: $procedureId) {
-    approvalRequired
-    createdAt
-    createdBy
-    details
-    displayID
-    id
-    name
-    ownerID
-    reviewDue
-    reviewFrequency
-    revision
-    status
-    summary
-    tags
-    updatedAt
-    updatedBy
-    editors {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    approver {
-      id
-      name
-    }
-    delegate {
-      id
-      name
-    }
-  }
+query GetProcedureByID ($procedureId: ID!) {
+	procedure(id: $procedureId) {
+		approvalRequired
+		approverID
+		controlSuggestions
+		createdAt
+		createdBy
+		delegateID
+		details
+		detailsJSON
+		dismissedControlSuggestions
+		dismissedImprovementSuggestions
+		dismissedTagSuggestions
+		displayID
+		environmentID
+		environmentName
+		fileID
+		id
+		improvementSuggestions
+		internalNotes
+		name
+		ownerID
+		procedureKindID
+		procedureKindName
+		reviewDue
+		reviewFrequency
+		revision
+		scopeID
+		scopeName
+		status
+		summary
+		systemInternalID
+		systemOwned
+		tagSuggestions
+		tags
+		updatedAt
+		updatedBy
+		url
+		workflowEligibleMarker
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		approver {
+			id
+			name
+		}
+		delegate {
+			id
+			name
+		}
+	}
 }
-
-query GetProcedures($where: ProcedureWhereInput) {
-  procedures(where: $where) {
-    edges {
-      node {
-        approvalRequired
-        createdAt
-        createdBy
-        details
-        displayID
-        id
-        name
-        ownerID
-        reviewDue
-        reviewFrequency
-        revision
-        status
-        tags
-        updatedAt
-        updatedBy
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        approver {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetProcedures ($where: ProcedureWhereInput) {
+	procedures(where: $where) {
+		edges {
+			node {
+				approvalRequired
+				createdAt
+				createdBy
+				details
+				displayID
+				id
+				name
+				ownerID
+				reviewDue
+				reviewFrequency
+				revision
+				status
+				tags
+				updatedAt
+				updatedBy
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				approver {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateBulkProcedure($ids: [ID!]!, $input: UpdateProcedureInput!) {
-  updateBulkProcedure(ids: $ids, input: $input) {
-    procedures {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
+mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
+	updateBulkProcedure(ids: $ids, input: $input) {
+		procedures {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			name
+			ownerID
+			procedureKindID
+			procedureKindName
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
-  updateProcedure(id: $updateProcedureId, input: $input) {
-    procedure {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      summary
-      tags
-      updatedAt
-      updatedBy
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
+	updateProcedure(id: $updateProcedureId, input: $input) {
+		procedure {
+			approvalRequired
+			approverID
+			controlSuggestions
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			dismissedControlSuggestions
+			dismissedImprovementSuggestions
+			dismissedTagSuggestions
+			displayID
+			environmentID
+			environmentName
+			fileID
+			id
+			improvementSuggestions
+			internalNotes
+			name
+			ownerID
+			procedureKindID
+			procedureKindName
+			reviewDue
+			reviewFrequency
+			revision
+			scopeID
+			scopeName
+			status
+			summary
+			systemInternalID
+			systemOwned
+			tagSuggestions
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			approver {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }

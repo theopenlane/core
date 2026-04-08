@@ -309,9 +309,9 @@ func RiskScore(v int) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldRiskScore, v))
 }
 
-// Tier applies equality check predicate on the "tier" field. It's identical to TierEQ.
-func Tier(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldTier, v))
+// RiskScoreCoverage applies equality check predicate on the "risk_score_coverage" field. It's identical to RiskScoreCoverageEQ.
+func RiskScoreCoverage(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldRiskScoreCoverage, v))
 }
 
 // NextReviewAt applies equality check predicate on the "next_review_at" field. It's identical to NextReviewAtEQ.
@@ -322,6 +322,21 @@ func NextReviewAt(v models.DateTime) predicate.Entity {
 // ContractRenewalAt applies equality check predicate on the "contract_renewal_at" field. It's identical to ContractRenewalAtEQ.
 func ContractRenewalAt(v models.DateTime) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldContractRenewalAt, v))
+}
+
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
+func ExternalID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
+func ObservedAt(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldObservedAt, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -3379,59 +3394,84 @@ func RiskScoreNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldRiskScore))
 }
 
+// RiskScoreCoverageEQ applies the EQ predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageEQ(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageNEQ applies the NEQ predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNEQ(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageIn applies the In predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageIn(vs ...int) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldRiskScoreCoverage, vs...))
+}
+
+// RiskScoreCoverageNotIn applies the NotIn predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNotIn(vs ...int) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldRiskScoreCoverage, vs...))
+}
+
+// RiskScoreCoverageGT applies the GT predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageGT(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageGTE applies the GTE predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageGTE(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageLT applies the LT predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageLT(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageLTE applies the LTE predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageLTE(v int) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldRiskScoreCoverage, v))
+}
+
+// RiskScoreCoverageIsNil applies the IsNil predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldRiskScoreCoverage))
+}
+
+// RiskScoreCoverageNotNil applies the NotNil predicate on the "risk_score_coverage" field.
+func RiskScoreCoverageNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldRiskScoreCoverage))
+}
+
 // TierEQ applies the EQ predicate on the "tier" field.
-func TierEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldTier, v))
+func TierEQ(v enums.VendorTier) predicate.Entity {
+	vc := v
+	return predicate.Entity(sql.FieldEQ(FieldTier, vc))
 }
 
 // TierNEQ applies the NEQ predicate on the "tier" field.
-func TierNEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldNEQ(FieldTier, v))
+func TierNEQ(v enums.VendorTier) predicate.Entity {
+	vc := v
+	return predicate.Entity(sql.FieldNEQ(FieldTier, vc))
 }
 
 // TierIn applies the In predicate on the "tier" field.
-func TierIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldIn(FieldTier, vs...))
+func TierIn(vs ...enums.VendorTier) predicate.Entity {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Entity(sql.FieldIn(FieldTier, v...))
 }
 
 // TierNotIn applies the NotIn predicate on the "tier" field.
-func TierNotIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldNotIn(FieldTier, vs...))
-}
-
-// TierGT applies the GT predicate on the "tier" field.
-func TierGT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGT(FieldTier, v))
-}
-
-// TierGTE applies the GTE predicate on the "tier" field.
-func TierGTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGTE(FieldTier, v))
-}
-
-// TierLT applies the LT predicate on the "tier" field.
-func TierLT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLT(FieldTier, v))
-}
-
-// TierLTE applies the LTE predicate on the "tier" field.
-func TierLTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLTE(FieldTier, v))
-}
-
-// TierContains applies the Contains predicate on the "tier" field.
-func TierContains(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContains(FieldTier, v))
-}
-
-// TierHasPrefix applies the HasPrefix predicate on the "tier" field.
-func TierHasPrefix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasPrefix(FieldTier, v))
-}
-
-// TierHasSuffix applies the HasSuffix predicate on the "tier" field.
-func TierHasSuffix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasSuffix(FieldTier, v))
+func TierNotIn(vs ...enums.VendorTier) predicate.Entity {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Entity(sql.FieldNotIn(FieldTier, v...))
 }
 
 // TierIsNil applies the IsNil predicate on the "tier" field.
@@ -3442,16 +3482,6 @@ func TierIsNil() predicate.Entity {
 // TierNotNil applies the NotNil predicate on the "tier" field.
 func TierNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldTier))
-}
-
-// TierEqualFold applies the EqualFold predicate on the "tier" field.
-func TierEqualFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEqualFold(FieldTier, v))
-}
-
-// TierContainsFold applies the ContainsFold predicate on the "tier" field.
-func TierContainsFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContainsFold(FieldTier, v))
 }
 
 // ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
@@ -3602,6 +3632,206 @@ func VendorMetadataIsNil() predicate.Entity {
 // VendorMetadataNotNil applies the NotNil predicate on the "vendor_metadata" field.
 func VendorMetadataNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldVendorMetadata))
+}
+
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldLogoFileID, v))
+}
+
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldLogoFileID, v))
+}
+
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldLogoFileID, v))
+}
+
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldLogoFileID))
+}
+
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldLogoFileID))
+}
+
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldLogoFileID, v))
+}
+
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldLogoFileID, v))
+}
+
+// ExternalIDEQ applies the EQ predicate on the "external_id" field.
+func ExternalIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
+func ExternalIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldExternalID, v))
+}
+
+// ExternalIDIn applies the In predicate on the "external_id" field.
+func ExternalIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldExternalID, vs...))
+}
+
+// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
+func ExternalIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldExternalID, vs...))
+}
+
+// ExternalIDGT applies the GT predicate on the "external_id" field.
+func ExternalIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldExternalID, v))
+}
+
+// ExternalIDGTE applies the GTE predicate on the "external_id" field.
+func ExternalIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldExternalID, v))
+}
+
+// ExternalIDLT applies the LT predicate on the "external_id" field.
+func ExternalIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldExternalID, v))
+}
+
+// ExternalIDLTE applies the LTE predicate on the "external_id" field.
+func ExternalIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldExternalID, v))
+}
+
+// ExternalIDContains applies the Contains predicate on the "external_id" field.
+func ExternalIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldExternalID, v))
+}
+
+// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
+func ExternalIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldExternalID, v))
+}
+
+// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
+func ExternalIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldExternalID, v))
+}
+
+// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
+func ExternalIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldExternalID))
+}
+
+// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
+func ExternalIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldExternalID))
+}
+
+// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
+func ExternalIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldExternalID, v))
+}
+
+// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
+func ExternalIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldExternalID, v))
+}
+
+// ObservedAtEQ applies the EQ predicate on the "observed_at" field.
+func ObservedAtEQ(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldObservedAt, v))
+}
+
+// ObservedAtNEQ applies the NEQ predicate on the "observed_at" field.
+func ObservedAtNEQ(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldObservedAt, v))
+}
+
+// ObservedAtIn applies the In predicate on the "observed_at" field.
+func ObservedAtIn(vs ...models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtNotIn applies the NotIn predicate on the "observed_at" field.
+func ObservedAtNotIn(vs ...models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldObservedAt, vs...))
+}
+
+// ObservedAtGT applies the GT predicate on the "observed_at" field.
+func ObservedAtGT(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldObservedAt, v))
+}
+
+// ObservedAtGTE applies the GTE predicate on the "observed_at" field.
+func ObservedAtGTE(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldObservedAt, v))
+}
+
+// ObservedAtLT applies the LT predicate on the "observed_at" field.
+func ObservedAtLT(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldObservedAt, v))
+}
+
+// ObservedAtLTE applies the LTE predicate on the "observed_at" field.
+func ObservedAtLTE(v models.DateTime) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldObservedAt, v))
+}
+
+// ObservedAtIsNil applies the IsNil predicate on the "observed_at" field.
+func ObservedAtIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldObservedAt))
+}
+
+// ObservedAtNotNil applies the NotNil predicate on the "observed_at" field.
+func ObservedAtNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldObservedAt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -4213,6 +4443,35 @@ func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate
 	})
 }
 
+// HasVendorRiskScores applies the HasEdge predicate on the "vendor_risk_scores" edge.
+func HasVendorRiskScores() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVendorRiskScoresWith applies the HasEdge predicate on the "vendor_risk_scores" edge with a given conditions (other predicates).
+func HasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newVendorRiskScoresStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasIntegrations applies the HasEdge predicate on the "integrations" edge.
 func HasIntegrations() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
@@ -4387,6 +4646,35 @@ func HasControlsWith(preds ...predicate.Control) predicate.Entity {
 	})
 }
 
+// HasSubcontrols applies the HasEdge predicate on the "subcontrols" edge.
+func HasSubcontrols() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolsWith applies the HasEdge predicate on the "subcontrols" edge with a given conditions (other predicates).
+func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newSubcontrolsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPlatforms applies the HasEdge predicate on the "platforms" edge.
 func HasPlatforms() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
@@ -4495,6 +4783,64 @@ func HasEntityTypeWith(preds ...predicate.EntityType) predicate.Entity {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EntityType
 		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
+func HasLogoFile() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogoFileWith applies the HasEdge predicate on the "logo_file" edge with a given conditions (other predicates).
+func HasLogoFileWith(preds ...predicate.File) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newLogoFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEntities
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newInternalPoliciesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

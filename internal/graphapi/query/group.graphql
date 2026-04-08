@@ -1,440 +1,500 @@
-mutation CreateBulkCSVGroup($input: Upload!) {
-  createBulkCSVGroup(input: $input) {
-    groups {
-      description
-      displayName
-      id
-      logoURL
-      name
-      tags
-      owner {
-        id
-        displayName
-      }
-      setting {
-        id
-        joinPolicy
-        syncToGithub
-        syncToSlack
-        visibility
-      }
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateBulkCSVGroup ($input: Upload!) {
+	createBulkCSVGroup(input: $input) {
+		groups {
+			avatarLocalFileID
+			createdAt
+			createdBy
+			description
+			displayID
+			displayName
+			gravatarLogoURL
+			id
+			isManaged
+			logoURL
+			name
+			oscalContactUuids
+			oscalPartyUUID
+			oscalRole
+			ownerID
+			scimActive
+			scimDisplayName
+			scimExternalID
+			scimGroupMailing
+			tags
+			updatedAt
+			updatedBy
+			owner {
+				id
+				displayName
+			}
+			setting {
+				id
+				joinPolicy
+				syncToGithub
+				syncToSlack
+				visibility
+			}
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateBulkGroup($input: [CreateGroupInput!]) {
-  createBulkGroup(input: $input) {
-    groups {
-      description
-      displayName
-      id
-      logoURL
-      name
-      tags
-      owner {
-        id
-        displayName
-      }
-      setting {
-        id
-        joinPolicy
-        syncToGithub
-        syncToSlack
-        visibility
-      }
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateBulkGroup ($input: [CreateGroupInput!]) {
+	createBulkGroup(input: $input) {
+		groups {
+			avatarLocalFileID
+			createdAt
+			createdBy
+			description
+			displayID
+			displayName
+			gravatarLogoURL
+			id
+			isManaged
+			logoURL
+			name
+			oscalContactUuids
+			oscalPartyUUID
+			oscalRole
+			ownerID
+			scimActive
+			scimDisplayName
+			scimExternalID
+			scimGroupMailing
+			tags
+			updatedAt
+			updatedBy
+			owner {
+				id
+				displayName
+			}
+			setting {
+				id
+				joinPolicy
+				syncToGithub
+				syncToSlack
+				visibility
+			}
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateGroup($input: CreateGroupInput!) {
-  createGroup(input: $input) {
-    group {
-      description
-      displayName
-      id
-      logoURL
-      name
-      tags
-      owner {
-        id
-        displayName
-      }
-      setting {
-        id
-        joinPolicy
-        syncToGithub
-        syncToSlack
-        visibility
-      }
-      permissions {
-        edges {
-          node {
-            displayID
-            id
-            name
-            objectType
-            permissions
-          }
-        }
-      }
-      members {
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateGroup ($input: CreateGroupInput!) {
+	createGroup(input: $input) {
+		group {
+			avatarLocalFileID
+			createdAt
+			createdBy
+			description
+			displayID
+			displayName
+			gravatarLogoURL
+			id
+			isManaged
+			logoURL
+			name
+			oscalContactUuids
+			oscalPartyUUID
+			oscalRole
+			ownerID
+			scimActive
+			scimDisplayName
+			scimExternalID
+			scimGroupMailing
+			tags
+			updatedAt
+			updatedBy
+			owner {
+				id
+				displayName
+			}
+			setting {
+				id
+				joinPolicy
+				syncToGithub
+				syncToSlack
+				visibility
+			}
+			permissions {
+				edges {
+					node {
+						displayID
+						id
+						name
+						objectType
+						permissions
+					}
+				}
+			}
+			members {
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateGroupByClone($groupInput: CreateGroupInput!, $inheritGroupPermissions: ID, $cloneGroupMembers: ID) {
-  createGroupByClone(
-    groupInput: $groupInput
-    inheritGroupPermissions: $inheritGroupPermissions
-    cloneGroupMembers: $cloneGroupMembers
-  ) {
-    group {
-      id
-      displayID
-      members {
-        edges {
-          node {
-            id
-            user {
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-      permissions {
-        edges {
-          node {
-            displayID
-            id
-            name
-            objectType
-            permissions
-          }
-        }
-      }
-    }
-  }
+mutation CreateGroupByClone ($groupInput: CreateGroupInput!, $inheritGroupPermissions: ID, $cloneGroupMembers: ID) {
+	createGroupByClone(groupInput: $groupInput, inheritGroupPermissions: $inheritGroupPermissions, cloneGroupMembers: $cloneGroupMembers) {
+		group {
+			id
+			displayID
+			members {
+				edges {
+					node {
+						id
+						user {
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+			permissions {
+				edges {
+					node {
+						displayID
+						id
+						name
+						objectType
+						permissions
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation CreateGroupWithMembers($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
-  createGroupWithMembers(groupInput: $groupInput, members: $members) {
-    group {
-      id
-      displayID
-      name
-      setting {
-        visibility
-      }
-      members {
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation CreateGroupWithMembers ($groupInput: CreateGroupInput!, $members: [GroupMembersInput!]) {
+	createGroupWithMembers(groupInput: $groupInput, members: $members) {
+		group {
+			id
+			displayID
+			name
+			setting {
+				visibility
+			}
+			members {
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-mutation DeleteGroup($deleteGroupId: ID!) {
-  deleteGroup(id: $deleteGroupId) {
-    deletedID
-  }
+mutation DeleteGroup ($deleteGroupId: ID!) {
+	deleteGroup(id: $deleteGroupId) {
+		deletedID
+	}
 }
-
 query GetAllGroups {
-  groups {
-    edges {
-      node {
-        description
-        displayName
-        id
-        logoURL
-        name
-        tags
-        isManaged
-        owner {
-          id
-          displayName
-        }
-        setting {
-          createdAt
-          createdBy
-          id
-          joinPolicy
-          syncToGithub
-          syncToSlack
-          updatedAt
-          updatedBy
-          visibility
-        }
-        members {
-          totalCount
-          edges {
-            node {
-              id
-              role
-              user {
-                id
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	groups {
+		edges {
+			node {
+				description
+				displayName
+				id
+				logoURL
+				name
+				tags
+				isManaged
+				owner {
+					id
+					displayName
+				}
+				setting {
+					createdAt
+					createdBy
+					id
+					joinPolicy
+					syncToGithub
+					syncToSlack
+					updatedAt
+					updatedBy
+					visibility
+				}
+				members {
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetGroupByID($groupId: ID!) {
-  group(id: $groupId) {
-    description
-    displayName
-    id
-    logoURL
-    name
-    tags
-    isManaged
-    owner {
-      id
-      displayName
-    }
-    setting {
-      createdAt
-      createdBy
-      id
-      joinPolicy
-      syncToGithub
-      syncToSlack
-      updatedAt
-      updatedBy
-      visibility
-    }
-    permissions {
-      edges {
-        node {
-          displayID
-          id
-          name
-          objectType
-          permissions
-        }
-      }
-    }
-    members {
-      edges {
-        node {
-          id
-          role
-          user {
-            id
-            firstName
-            lastName
-          }
-        }
-      }
-      totalCount
-    }
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-  }
+query GetGroupByID ($groupId: ID!) {
+	group(id: $groupId) {
+		avatarLocalFileID
+		createdAt
+		createdBy
+		description
+		displayID
+		displayName
+		gravatarLogoURL
+		id
+		isManaged
+		logoURL
+		name
+		oscalContactUuids
+		oscalPartyUUID
+		oscalRole
+		ownerID
+		scimActive
+		scimDisplayName
+		scimExternalID
+		scimGroupMailing
+		tags
+		updatedAt
+		updatedBy
+		owner {
+			id
+			displayName
+		}
+		setting {
+			createdAt
+			createdBy
+			id
+			joinPolicy
+			syncToGithub
+			syncToSlack
+			updatedAt
+			updatedBy
+			visibility
+		}
+		permissions {
+			edges {
+				node {
+					displayID
+					id
+					name
+					objectType
+					permissions
+				}
+			}
+		}
+		members {
+			edges {
+				node {
+					id
+					role
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
+			}
+			totalCount
+		}
+	}
 }
-
-query GetGroupInfo($where: GroupWhereInput) {
-  groups(where: $where) {
-    edges {
-      node {
-        description
-        displayName
-        id
-        logoURL
-        name
-        tags
-        isManaged
-        setting {
-          createdAt
-          createdBy
-          id
-          joinPolicy
-          syncToGithub
-          syncToSlack
-          updatedAt
-          updatedBy
-          visibility
-        }
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetGroupInfo ($where: GroupWhereInput) {
+	groups(where: $where) {
+		edges {
+			node {
+				description
+				displayName
+				id
+				logoURL
+				name
+				tags
+				isManaged
+				setting {
+					createdAt
+					createdBy
+					id
+					joinPolicy
+					syncToGithub
+					syncToSlack
+					updatedAt
+					updatedBy
+					visibility
+				}
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetGroups($where: GroupWhereInput) {
-  groups(where: $where) {
-    edges {
-      node {
-        description
-        displayName
-        id
-        logoURL
-        name
-        tags
-        isManaged
-        owner {
-          id
-          displayName
-        }
-        setting {
-          createdAt
-          createdBy
-          id
-          joinPolicy
-          syncToGithub
-          syncToSlack
-          updatedAt
-          updatedBy
-          visibility
-        }
-        permissions {
-          edges {
-            node {
-              displayID
-              id
-              name
-              objectType
-              permissions
-            }
-          }
-        }
-        members {
-          totalCount
-          edges {
-            node {
-              id
-              role
-              user {
-                id
-                firstName
-                lastName
-              }
-            }
-          }
-        }
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetGroups ($where: GroupWhereInput) {
+	groups(where: $where) {
+		edges {
+			node {
+				description
+				displayName
+				id
+				logoURL
+				name
+				tags
+				isManaged
+				owner {
+					id
+					displayName
+				}
+				setting {
+					createdAt
+					createdBy
+					id
+					joinPolicy
+					syncToGithub
+					syncToSlack
+					updatedAt
+					updatedBy
+					visibility
+				}
+				permissions {
+					edges {
+						node {
+							displayID
+							id
+							name
+							objectType
+							permissions
+						}
+					}
+				}
+				members {
+					totalCount
+					edges {
+						node {
+							id
+							role
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-mutation UpdateGroup($updateGroupId: ID!, $input: UpdateGroupInput!) {
-  updateGroup(id: $updateGroupId, input: $input) {
-    group {
-      description
-      displayName
-      id
-      displayID
-      logoURL
-      name
-      tags
-      owner {
-        id
-        displayName
-      }
-      setting {
-        createdAt
-        createdBy
-        id
-        joinPolicy
-        syncToGithub
-        syncToSlack
-        updatedAt
-        updatedBy
-        visibility
-      }
-      permissions {
-        edges {
-          node {
-            displayID
-            id
-            name
-            objectType
-            permissions
-          }
-        }
-      }
-      members {
-        totalCount
-        edges {
-          node {
-            id
-            role
-            user {
-              id
-              firstName
-              lastName
-            }
-          }
-        }
-      }
-    }
-  }
+mutation UpdateGroup ($updateGroupId: ID!, $input: UpdateGroupInput!) {
+	updateGroup(id: $updateGroupId, input: $input) {
+		group {
+			avatarLocalFileID
+			createdAt
+			createdBy
+			description
+			displayID
+			displayName
+			gravatarLogoURL
+			id
+			isManaged
+			logoURL
+			name
+			oscalContactUuids
+			oscalPartyUUID
+			oscalRole
+			ownerID
+			scimActive
+			scimDisplayName
+			scimExternalID
+			scimGroupMailing
+			tags
+			updatedAt
+			updatedBy
+			owner {
+				id
+				displayName
+			}
+			setting {
+				createdAt
+				createdBy
+				id
+				joinPolicy
+				syncToGithub
+				syncToSlack
+				updatedAt
+				updatedBy
+				visibility
+			}
+			permissions {
+				edges {
+					node {
+						displayID
+						id
+						name
+						objectType
+						permissions
+					}
+				}
+			}
+			members {
+				totalCount
+				edges {
+					node {
+						id
+						role
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
 }

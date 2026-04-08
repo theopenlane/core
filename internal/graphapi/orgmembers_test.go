@@ -17,8 +17,6 @@ import (
 )
 
 func TestQueryOrgMembers(t *testing.T) {
-	t.Parallel()
-
 	testOrgMemberUser := suite.userBuilder(context.Background(), t)
 	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
 
@@ -180,8 +178,6 @@ func TestQueryOrgMembers(t *testing.T) {
 }
 
 func TestMutationCreateOrgMembers(t *testing.T) {
-	t.Parallel()
-
 	testUser := suite.userBuilder(context.Background(), t)
 
 	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
@@ -327,8 +323,6 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {
-	t.Parallel()
-
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	testUserOrg := suite.userBuilder(context.Background(), t)
@@ -409,8 +403,6 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 }
 
 func TestMutationDeleteOrgMembers(t *testing.T) {
-	t.Parallel()
-
 	testUser := suite.userBuilder(context.Background(), t)
 
 	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)

@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/entx/history"
@@ -74,8 +73,10 @@ type IntegrationHistory struct {
 	ProviderMetadata openapi.IntegrationProviderMetadata `json:"provider_metadata,omitempty"`
 	// runtime configuration for operations, scheduling, and mappings
 	Config openapi.IntegrationConfig `json:"config,omitempty"`
+	// stable, non-secret installation identity metadata for the provider
+	InstallationMetadata openapi.IntegrationInstallationMetadata `json:"installation_metadata,omitempty"`
 	// provider-specific integration state captured during auth/config
-	ProviderState state.IntegrationProviderState `json:"provider_state,omitempty"`
+	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// the canonical definition identifier for the installation
@@ -90,7 +91,9 @@ type IntegrationHistory struct {
 	Status enums.IntegrationStatus `json:"status,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
-	selectValues             sql.SelectValues
+	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
+	PrimaryDirectory bool `json:"primary_directory,omitempty"`
+	selectValues     sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -98,11 +101,11 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integrationhistory.FieldTags, integrationhistory.FieldProviderMetadata, integrationhistory.FieldConfig, integrationhistory.FieldProviderState, integrationhistory.FieldMetadata, integrationhistory.FieldProviderMetadataSnapshot:
+		case integrationhistory.FieldTags, integrationhistory.FieldProviderMetadata, integrationhistory.FieldConfig, integrationhistory.FieldInstallationMetadata, integrationhistory.FieldProviderState, integrationhistory.FieldMetadata, integrationhistory.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case integrationhistory.FieldSystemOwned:
+		case integrationhistory.FieldSystemOwned, integrationhistory.FieldPrimaryDirectory:
 			values[i] = new(sql.NullBool)
 		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType, integrationhistory.FieldPlatformID, integrationhistory.FieldDefinitionID, integrationhistory.FieldDefinitionVersion, integrationhistory.FieldDefinitionSlug, integrationhistory.FieldFamily, integrationhistory.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -287,6 +290,14 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field config: %w", err)
 				}
 			}
+		case integrationhistory.FieldInstallationMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field installation_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.InstallationMetadata); err != nil {
+					return fmt.Errorf("unmarshal field installation_metadata: %w", err)
+				}
+			}
 		case integrationhistory.FieldProviderState:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field provider_state", values[i])
@@ -340,6 +351,12 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 				if err := json.Unmarshal(*value, &_m.ProviderMetadataSnapshot); err != nil {
 					return fmt.Errorf("unmarshal field provider_metadata_snapshot: %w", err)
 				}
+			}
+		case integrationhistory.FieldPrimaryDirectory:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field primary_directory", values[i])
+			} else if value.Valid {
+				_m.PrimaryDirectory = value.Bool
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -456,6 +473,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString("config=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Config))
 	builder.WriteString(", ")
+	builder.WriteString("installation_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.InstallationMetadata))
+	builder.WriteString(", ")
 	builder.WriteString("provider_state=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderState))
 	builder.WriteString(", ")
@@ -479,6 +499,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))
+	builder.WriteString(", ")
+	builder.WriteString("primary_directory=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PrimaryDirectory))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -133,8 +134,10 @@ type Entity struct {
 	RiskRating string `json:"risk_rating,omitempty"`
 	// the risk score for the entity
 	RiskScore int `json:"risk_score,omitempty"`
-	// the tier classification for the entity
-	Tier string `json:"tier,omitempty"`
+	// number of scoring questions answered for the current risk score; used to contextualize partial assessments
+	RiskScoreCoverage int `json:"risk_score_coverage,omitempty"`
+	// the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	Tier enums.VendorTier `json:"tier,omitempty"`
 	// the cadence for reviewing the entity
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
 	// when the entity is due for review
@@ -143,6 +146,12 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contract_renewal_at,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]interface{} `json:"vendor_metadata,omitempty"`
+	// The logo file id for the entity
+	LogoFileID *string `json:"logo_file_id,omitempty"`
+	// stable identifier assigned by the source system, used for integration ingest deduplication
+	ExternalID string `json:"external_id,omitempty"`
+	// time when this entity was last observed by the source integration
+	ObservedAt *models.DateTime `json:"observed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntityQuery when eager-loading is set.
 	Edges                  EntityEdges `json:"edges"`
@@ -200,6 +209,8 @@ type EntityEdges struct {
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
+	// VendorRiskScores holds the value of the vendor_risk_scores edge.
+	VendorRiskScores []*VendorRiskScore `json:"vendor_risk_scores,omitempty"`
 	// Integrations holds the value of the integrations edge.
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Subprocessors holds the value of the subprocessors edge.
@@ -212,6 +223,8 @@ type EntityEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// Subcontrols holds the value of the subcontrols edge.
+	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// Platforms holds the value of the platforms edge.
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// OutOfScopePlatforms holds the value of the out_of_scope_platforms edge.
@@ -220,11 +233,15 @@ type EntityEdges struct {
 	SourcePlatforms []*Platform `json:"source_platforms,omitempty"`
 	// EntityType holds the value of the entity_type edge.
 	EntityType *EntityType `json:"entity_type,omitempty"`
+	// LogoFile holds the value of the logo_file edge.
+	LogoFile *File `json:"logo_file,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [31]bool
+	loadedTypes [35]bool
 	// totalCount holds the count of the edges above.
-	totalCount [31]map[string]int
+	totalCount [35]map[string]int
 
 	namedBlockedGroups           map[string][]*Group
 	namedEditors                 map[string][]*Group
@@ -237,15 +254,18 @@ type EntityEdges struct {
 	namedScans                   map[string][]*Scan
 	namedCampaigns               map[string][]*Campaign
 	namedAssessmentResponses     map[string][]*AssessmentResponse
+	namedVendorRiskScores        map[string][]*VendorRiskScore
 	namedIntegrations            map[string][]*Integration
 	namedSubprocessors           map[string][]*Subprocessor
 	namedAuthMethods             map[string][]*CustomTypeEnum
 	namedEmployerIdentityHolders map[string][]*IdentityHolder
 	namedIdentityHolders         map[string][]*IdentityHolder
 	namedControls                map[string][]*Control
+	namedSubcontrols             map[string][]*Subcontrol
 	namedPlatforms               map[string][]*Platform
 	namedOutOfScopePlatforms     map[string][]*Platform
 	namedSourcePlatforms         map[string][]*Platform
+	namedInternalPolicies        map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -457,10 +477,19 @@ func (e EntityEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
 	return nil, &NotLoadedError{edge: "assessment_responses"}
 }
 
+// VendorRiskScoresOrErr returns the VendorRiskScores value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
+	if e.loadedTypes[21] {
+		return e.VendorRiskScores, nil
+	}
+	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
+}
+
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -469,7 +498,7 @@ func (e EntityEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SubprocessorsOrErr returns the Subprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SubprocessorsOrErr() ([]*Subprocessor, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Subprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "subprocessors"}
@@ -478,7 +507,7 @@ func (e EntityEdges) SubprocessorsOrErr() ([]*Subprocessor, error) {
 // AuthMethodsOrErr returns the AuthMethods value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) AuthMethodsOrErr() ([]*CustomTypeEnum, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.AuthMethods, nil
 	}
 	return nil, &NotLoadedError{edge: "auth_methods"}
@@ -487,7 +516,7 @@ func (e EntityEdges) AuthMethodsOrErr() ([]*CustomTypeEnum, error) {
 // EmployerIdentityHoldersOrErr returns the EmployerIdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) EmployerIdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.EmployerIdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "employer_identity_holders"}
@@ -496,7 +525,7 @@ func (e EntityEdges) EmployerIdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -505,16 +534,25 @@ func (e EntityEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
 }
 
+// SubcontrolsOrErr returns the Subcontrols value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
+	if e.loadedTypes[28] {
+		return e.Subcontrols, nil
+	}
+	return nil, &NotLoadedError{edge: "subcontrols"}
+}
+
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[29] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -523,7 +561,7 @@ func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[30] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -532,7 +570,7 @@ func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // SourcePlatformsOrErr returns the SourcePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[31] {
 		return e.SourcePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "source_platforms"}
@@ -543,10 +581,30 @@ func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[30] {
+	} else if e.loadedTypes[32] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
+}
+
+// LogoFileOrErr returns the LogoFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) LogoFileOrErr() (*File, error) {
+	if e.LogoFile != nil {
+		return e.LogoFile, nil
+	} else if e.loadedTypes[33] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "logo_file"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[34] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -554,7 +612,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt:
+		case entity.FieldLastReviewedAt, entity.FieldSoc2PeriodEnd, entity.FieldContractStartDate, entity.FieldContractEndDate, entity.FieldNextReviewAt, entity.FieldContractRenewalAt, entity.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case entity.FieldTags, entity.FieldDomains, entity.FieldLinkedAssetIds, entity.FieldProvidedServices, entity.FieldLinks, entity.FieldVendorMetadata:
 			values[i] = new([]byte)
@@ -562,9 +620,9 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case entity.FieldAnnualSpend:
 			values[i] = new(sql.NullFloat64)
-		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore:
+		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoFileID, entity.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -943,11 +1001,17 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RiskScore = int(value.Int64)
 			}
+		case entity.FieldRiskScoreCoverage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_score_coverage", values[i])
+			} else if value.Valid {
+				_m.RiskScoreCoverage = int(value.Int64)
+			}
 		case entity.FieldTier:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field tier", values[i])
 			} else if value.Valid {
-				_m.Tier = value.String
+				_m.Tier = enums.VendorTier(value.String)
 			}
 		case entity.FieldReviewFrequency:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -976,6 +1040,26 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.VendorMetadata); err != nil {
 					return fmt.Errorf("unmarshal field vendor_metadata: %w", err)
 				}
+			}
+		case entity.FieldLogoFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+			} else if value.Valid {
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
+			}
+		case entity.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
+		case entity.FieldObservedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
+			} else if value.Valid {
+				_m.ObservedAt = new(models.DateTime)
+				*_m.ObservedAt = *value.S.(*models.DateTime)
 			}
 		case entity.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1144,6 +1228,11 @@ func (_m *Entity) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return NewEntityClient(_m.config).QueryAssessmentResponses(_m)
 }
 
+// QueryVendorRiskScores queries the "vendor_risk_scores" edge of the Entity entity.
+func (_m *Entity) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	return NewEntityClient(_m.config).QueryVendorRiskScores(_m)
+}
+
 // QueryIntegrations queries the "integrations" edge of the Entity entity.
 func (_m *Entity) QueryIntegrations() *IntegrationQuery {
 	return NewEntityClient(_m.config).QueryIntegrations(_m)
@@ -1174,6 +1263,11 @@ func (_m *Entity) QueryControls() *ControlQuery {
 	return NewEntityClient(_m.config).QueryControls(_m)
 }
 
+// QuerySubcontrols queries the "subcontrols" edge of the Entity entity.
+func (_m *Entity) QuerySubcontrols() *SubcontrolQuery {
+	return NewEntityClient(_m.config).QuerySubcontrols(_m)
+}
+
 // QueryPlatforms queries the "platforms" edge of the Entity entity.
 func (_m *Entity) QueryPlatforms() *PlatformQuery {
 	return NewEntityClient(_m.config).QueryPlatforms(_m)
@@ -1192,6 +1286,16 @@ func (_m *Entity) QuerySourcePlatforms() *PlatformQuery {
 // QueryEntityType queries the "entity_type" edge of the Entity entity.
 func (_m *Entity) QueryEntityType() *EntityTypeQuery {
 	return NewEntityClient(_m.config).QueryEntityType(_m)
+}
+
+// QueryLogoFile queries the "logo_file" edge of the Entity entity.
+func (_m *Entity) QueryLogoFile() *FileQuery {
+	return NewEntityClient(_m.config).QueryLogoFile(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the Entity entity.
+func (_m *Entity) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewEntityClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // Update returns a builder for updating this Entity.
@@ -1391,8 +1495,11 @@ func (_m *Entity) String() string {
 	builder.WriteString("risk_score=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RiskScore))
 	builder.WriteString(", ")
+	builder.WriteString("risk_score_coverage=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RiskScoreCoverage))
+	builder.WriteString(", ")
 	builder.WriteString("tier=")
-	builder.WriteString(_m.Tier)
+	builder.WriteString(fmt.Sprintf("%v", _m.Tier))
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
@@ -1409,6 +1516,19 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("vendor_metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.VendorMetadata))
+	builder.WriteString(", ")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	if v := _m.ObservedAt; v != nil {
+		builder.WriteString("observed_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1677,6 +1797,30 @@ func (_m *Entity) appendNamedAssessmentResponses(name string, edges ...*Assessme
 	}
 }
 
+// NamedVendorRiskScores returns the VendorRiskScores named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedVendorRiskScores(name string) ([]*VendorRiskScore, error) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVendorRiskScores[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedVendorRiskScores(name string, edges ...*VendorRiskScore) {
+	if _m.Edges.namedVendorRiskScores == nil {
+		_m.Edges.namedVendorRiskScores = make(map[string][]*VendorRiskScore)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVendorRiskScores[name] = []*VendorRiskScore{}
+	} else {
+		_m.Edges.namedVendorRiskScores[name] = append(_m.Edges.namedVendorRiskScores[name], edges...)
+	}
+}
+
 // NamedIntegrations returns the Integrations named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Entity) NamedIntegrations(name string) ([]*Integration, error) {
@@ -1821,6 +1965,30 @@ func (_m *Entity) appendNamedControls(name string, edges ...*Control) {
 	}
 }
 
+// NamedSubcontrols returns the Subcontrols named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedSubcontrols(name string) ([]*Subcontrol, error) {
+	if _m.Edges.namedSubcontrols == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedSubcontrols[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
+	if _m.Edges.namedSubcontrols == nil {
+		_m.Edges.namedSubcontrols = make(map[string][]*Subcontrol)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
+	} else {
+		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
 // NamedPlatforms returns the Platforms named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Entity) NamedPlatforms(name string) ([]*Platform, error) {
@@ -1890,6 +2058,30 @@ func (_m *Entity) appendNamedSourcePlatforms(name string, edges ...*Platform) {
 		_m.Edges.namedSourcePlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedSourcePlatforms[name] = append(_m.Edges.namedSourcePlatforms[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 

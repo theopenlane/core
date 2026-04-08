@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -264,8 +265,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Description:         lo.ToPtr("This is a test Evidence"),
 				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
 				Source:              lo.ToPtr("meows"),
-				CreationDate:        lo.ToPtr(time.Now().Add(-time.Hour)),
-				RenewalDate:         lo.ToPtr(time.Now().Add(365 * 24 * time.Hour)),
+				CreationDate:        lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate:         lo.ToPtr(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
 				IsAutomated:         lo.ToPtr(true),
 				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
 				ProgramIDs:          []string{program.ID},
@@ -288,8 +289,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Description:         lo.ToPtr("This is a test Evidence"),
 				CollectionProcedure: lo.ToPtr("This is how we collected the Evidence"),
 				Source:              lo.ToPtr("meows"),
-				CreationDate:        lo.ToPtr(time.Now().Add(-time.Hour)),
-				RenewalDate:         lo.ToPtr(time.Now().Add(365 * 24 * time.Hour)),
+				CreationDate:        lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
+				RenewalDate:         lo.ToPtr(models.DateTime(time.Now().Add(365 * 24 * time.Hour))),
 				IsAutomated:         lo.ToPtr(true),
 				URL:                 lo.ToPtr("https://example.com/my-evidence.png"),
 				ControlIDs:          []string{control1.ID, control2.ID},                   // ensure the same controls can be added to multiple evidences
@@ -409,7 +410,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "creation date in the future",
 			request: testclient.CreateEvidenceInput{
 				Name:         "Test Evidence",
-				CreationDate: lo.ToPtr(time.Now().Add(time.Hour)),
+				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Hour))),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -419,7 +420,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			name: "renewal date in the past",
 			request: testclient.CreateEvidenceInput{
 				Name:        "Test Evidence",
-				RenewalDate: lo.ToPtr(time.Now().Add(-time.Hour)),
+				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -468,21 +469,21 @@ func TestMutationCreateEvidence(t *testing.T) {
 
 			if tc.request.CreationDate != nil {
 				assert.Check(t, !resp.CreateEvidence.Evidence.CreationDate.IsZero())
-				diff := resp.CreateEvidence.Evidence.CreationDate.Sub(*tc.request.CreationDate)
+				diff := time.Time(resp.CreateEvidence.Evidence.CreationDate).Sub(time.Time(*tc.request.CreationDate))
 				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			} else {
 				assert.Check(t, !resp.CreateEvidence.Evidence.CreationDate.IsZero())
-				diff := time.Until(resp.CreateEvidence.Evidence.CreationDate)
+				diff := time.Until(time.Time(resp.CreateEvidence.Evidence.CreationDate))
 				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
 			if tc.request.RenewalDate != nil {
 				assert.Check(t, !resp.CreateEvidence.Evidence.RenewalDate.IsZero())
-				diff := resp.CreateEvidence.Evidence.RenewalDate.Sub(*tc.request.RenewalDate)
+				diff := time.Time(*resp.CreateEvidence.Evidence.RenewalDate).Sub(time.Time(*tc.request.RenewalDate))
 				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			} else {
 				assert.Check(t, !resp.CreateEvidence.Evidence.RenewalDate.IsZero())
-				diff := resp.CreateEvidence.Evidence.RenewalDate.Sub(time.Now().Add(365 * 24 * time.Hour)) // check that it is 1 year from now
+				diff := time.Time(*resp.CreateEvidence.Evidence.RenewalDate).Sub(time.Now().Add(365 * 24 * time.Hour)) // check that it is 1 year from now
 				assert.Check(t, diff >= -2*time.Minute && diff <= 2*time.Minute, "time difference is not within 2 minutes")
 			}
 
@@ -693,7 +694,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, creation date is in the future",
 			request: testclient.UpdateEvidenceInput{
-				CreationDate: lo.ToPtr(time.Now().Add(time.Minute)),
+				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Minute))),
 			},
 			client:      suite.client.api,
 			ctx:         adminUser.UserCtx,
@@ -702,7 +703,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		{
 			name: "update not allowed, renewal date is in the past",
 			request: testclient.UpdateEvidenceInput{
-				RenewalDate: lo.ToPtr(time.Now().Add(-time.Hour)),
+				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
 			},
 			client:      suite.client.api,
 			ctx:         adminUser.UserCtx,

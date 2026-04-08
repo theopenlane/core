@@ -144,6 +144,10 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
 				return ec.fieldContext_Asset_categories(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Asset_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Asset_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Asset_owner(ctx, field)
 			case "blockedGroups":
@@ -184,8 +188,14 @@ func (ec *executionContext) fieldContext_AssetBulkCreatePayload_assets(_ context
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
 				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "integration":
+				return ec.fieldContext_Asset_integration(ctx, field)
 			case "connectedAssets":
 				return ec.fieldContext_Asset_connectedAssets(ctx, field)
 			case "connectedFrom":
@@ -342,6 +352,10 @@ func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_assets(_ context
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
 				return ec.fieldContext_Asset_categories(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Asset_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Asset_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Asset_owner(ctx, field)
 			case "blockedGroups":
@@ -382,8 +396,14 @@ func (ec *executionContext) fieldContext_AssetBulkUpdatePayload_assets(_ context
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
 				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "integration":
+				return ec.fieldContext_Asset_integration(ctx, field)
 			case "connectedAssets":
 				return ec.fieldContext_Asset_connectedAssets(ctx, field)
 			case "connectedFrom":
@@ -540,6 +560,10 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
 				return ec.fieldContext_Asset_categories(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Asset_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Asset_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Asset_owner(ctx, field)
 			case "blockedGroups":
@@ -580,8 +604,14 @@ func (ec *executionContext) fieldContext_AssetCreatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
 				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "integration":
+				return ec.fieldContext_Asset_integration(ctx, field)
 			case "connectedAssets":
 				return ec.fieldContext_Asset_connectedAssets(ctx, field)
 			case "connectedFrom":
@@ -738,6 +768,10 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_cpe(ctx, field)
 			case "categories":
 				return ec.fieldContext_Asset_categories(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Asset_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Asset_observedAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Asset_owner(ctx, field)
 			case "blockedGroups":
@@ -778,8 +812,14 @@ func (ec *executionContext) fieldContext_AssetUpdatePayload_asset(_ context.Cont
 				return ec.fieldContext_Asset_identityHolders(ctx, field)
 			case "controls":
 				return ec.fieldContext_Asset_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Asset_subcontrols(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Asset_internalPolicies(ctx, field)
 			case "sourcePlatform":
 				return ec.fieldContext_Asset_sourcePlatform(ctx, field)
+			case "integration":
+				return ec.fieldContext_Asset_integration(ctx, field)
 			case "connectedAssets":
 				return ec.fieldContext_Asset_connectedAssets(ctx, field)
 			case "connectedFrom":

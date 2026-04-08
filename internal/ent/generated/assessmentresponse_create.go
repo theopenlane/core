@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 )
 
 // AssessmentResponseCreate is the builder for creating a AssessmentResponse entity.
@@ -453,6 +454,21 @@ func (_c *AssessmentResponseCreate) SetDocument(v *DocumentData) *AssessmentResp
 	return _c.SetDocumentID(v.ID)
 }
 
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_c *AssessmentResponseCreate) AddVendorRiskScoreIDs(ids ...string) *AssessmentResponseCreate {
+	_c.mutation.AddVendorRiskScoreIDs(ids...)
+	return _c
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_c *AssessmentResponseCreate) AddVendorRiskScores(v ...*VendorRiskScore) *AssessmentResponseCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorRiskScoreIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_c *AssessmentResponseCreate) Mutation() *AssessmentResponseMutation {
 	return _c.mutation
@@ -828,6 +844,23 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DocumentDataID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentresponse.VendorRiskScoresTable,
+			Columns: []string{assessmentresponse.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

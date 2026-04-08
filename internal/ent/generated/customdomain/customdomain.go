@@ -3,11 +3,14 @@
 package customdomain
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -45,6 +48,8 @@ const (
 	FieldDNSVerificationID = "dns_verification_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldDomainType holds the string denoting the domain_type field in the database.
+	FieldDomainType = "domain_type"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeMappableDomain holds the string denoting the mappable_domain edge name in mutations.
@@ -94,6 +99,7 @@ var Columns = []string{
 	FieldMappableDomainID,
 	FieldDNSVerificationID,
 	FieldTrustCenterID,
+	FieldDomainType,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "custom_domains"
@@ -144,6 +150,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultDomainType enums.CustomDomainType = "UNKNOWN"
+
+// DomainTypeValidator is a validator for the "domain_type" field enum values. It is called by the builders before save.
+func DomainTypeValidator(dt enums.CustomDomainType) error {
+	switch dt.String() {
+	case "PREVIEW", "EXTERNAL", "UNKNOWN":
+		return nil
+	default:
+		return fmt.Errorf("customdomain: invalid enum value for domain_type field: %q", dt)
+	}
+}
 
 // OrderOption defines the ordering options for the CustomDomain queries.
 type OrderOption func(*sql.Selector)
@@ -223,6 +241,11 @@ func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
+// ByDomainType orders the results by the domain_type field.
+func ByDomainType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDomainType, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -264,3 +287,10 @@ func newDNSVerificationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, DNSVerificationTable, DNSVerificationColumn),
 	)
 }
+
+var (
+	// enums.CustomDomainType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.CustomDomainType)(nil)
+	// enums.CustomDomainType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.CustomDomainType)(nil)
+)

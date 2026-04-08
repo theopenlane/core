@@ -84,6 +84,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
@@ -221,6 +223,8 @@ func checkColumn(t, c string) error {
 			trustcenterwatermarkconfighistory.Table: trustcenterwatermarkconfighistory.ValidColumn,
 			userhistory.Table:                       userhistory.ValidColumn,
 			usersettinghistory.Table:                usersettinghistory.ValidColumn,
+			vendorriskscorehistory.Table:            vendorriskscorehistory.ValidColumn,
+			vendorscoringconfighistory.Table:        vendorscoringconfighistory.ValidColumn,
 			vulnerabilityhistory.Table:              vulnerabilityhistory.ValidColumn,
 			workflowassignmenthistory.Table:         workflowassignmenthistory.ValidColumn,
 			workflowassignmenttargethistory.Table:   workflowassignmenttargethistory.ValidColumn,

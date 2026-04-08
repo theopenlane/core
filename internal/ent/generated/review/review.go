@@ -123,6 +123,8 @@ const (
 	EdgeComments = "comments"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the review in the database.
 	Table = "reviews"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -172,51 +174,41 @@ const (
 	// IntegrationsInverseTable is the table name for the Integration entity.
 	// It exists in this package in order to avoid circular dependency with the "integration" package.
 	IntegrationsInverseTable = "integrations"
-	// FindingsTable is the table that holds the findings relation/edge.
-	FindingsTable = "findings"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "review_findings"
 	// FindingsInverseTable is the table name for the Finding entity.
 	// It exists in this package in order to avoid circular dependency with the "finding" package.
 	FindingsInverseTable = "findings"
-	// FindingsColumn is the table column denoting the findings relation/edge.
-	FindingsColumn = "review_findings"
-	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
-	VulnerabilitiesTable = "vulnerabilities"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "review_vulnerabilities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
 	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
 	VulnerabilitiesInverseTable = "vulnerabilities"
-	// VulnerabilitiesColumn is the table column denoting the vulnerabilities relation/edge.
-	VulnerabilitiesColumn = "review_vulnerabilities"
 	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
 	ActionPlansTable = "review_action_plans"
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
-	// RemediationsTable is the table that holds the remediations relation/edge.
-	RemediationsTable = "remediations"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "review_remediations"
 	// RemediationsInverseTable is the table name for the Remediation entity.
 	// It exists in this package in order to avoid circular dependency with the "remediation" package.
 	RemediationsInverseTable = "remediations"
-	// RemediationsColumn is the table column denoting the remediations relation/edge.
-	RemediationsColumn = "review_remediations"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "review_controls"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "review_subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "review_subcontrols"
-	// RisksTable is the table that holds the risks relation/edge.
-	RisksTable = "risks"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "review_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// RisksColumn is the table column denoting the risks relation/edge.
-	RisksColumn = "review_risks"
 	// ProgramsTable is the table that holds the programs relation/edge.
 	ProgramsTable = "programs"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -266,6 +258,11 @@ const (
 	FilesInverseTable = "files"
 	// FilesColumn is the table column denoting the files relation/edge.
 	FilesColumn = "review_files"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "review_internal_policies"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
 )
 
 // Columns holds all SQL columns for review fields.
@@ -306,35 +303,40 @@ var Columns = []string{
 	FieldRawPayload,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "reviews"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"finding_reviews",
-	"remediation_reviews",
-	"vulnerability_reviews",
-}
-
 var (
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
 	IntegrationsPrimaryKey = []string{"integration_id", "review_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"review_id", "finding_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"review_id", "vulnerability_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"review_id", "action_plan_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"review_id", "remediation_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"review_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"review_id", "subcontrol_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"review_id", "risk_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"review_id", "internal_policy_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -347,7 +349,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [14]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -793,6 +795,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -846,14 +862,14 @@ func newFindingsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newVulnerabilitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 func newActionPlansStep() *sqlgraph.Step {
@@ -867,7 +883,7 @@ func newRemediationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RemediationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RemediationsTable, RemediationsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {
@@ -881,14 +897,14 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {
@@ -938,5 +954,12 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FilesTable, FilesColumn),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }

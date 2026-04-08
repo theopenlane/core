@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -310,13 +311,13 @@ func (_u *EvidenceUpdate) ClearCollectionProcedure() *EvidenceUpdate {
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (_u *EvidenceUpdate) SetCreationDate(v time.Time) *EvidenceUpdate {
+func (_u *EvidenceUpdate) SetCreationDate(v models.DateTime) *EvidenceUpdate {
 	_u.mutation.SetCreationDate(v)
 	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (_u *EvidenceUpdate) SetNillableCreationDate(v *time.Time) *EvidenceUpdate {
+func (_u *EvidenceUpdate) SetNillableCreationDate(v *models.DateTime) *EvidenceUpdate {
 	if v != nil {
 		_u.SetCreationDate(*v)
 	}
@@ -324,13 +325,13 @@ func (_u *EvidenceUpdate) SetNillableCreationDate(v *time.Time) *EvidenceUpdate 
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (_u *EvidenceUpdate) SetRenewalDate(v time.Time) *EvidenceUpdate {
+func (_u *EvidenceUpdate) SetRenewalDate(v models.DateTime) *EvidenceUpdate {
 	_u.mutation.SetRenewalDate(v)
 	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (_u *EvidenceUpdate) SetNillableRenewalDate(v *time.Time) *EvidenceUpdate {
+func (_u *EvidenceUpdate) SetNillableRenewalDate(v *models.DateTime) *EvidenceUpdate {
 	if v != nil {
 		_u.SetRenewalDate(*v)
 	}
@@ -1918,13 +1919,13 @@ func (_u *EvidenceUpdateOne) ClearCollectionProcedure() *EvidenceUpdateOne {
 }
 
 // SetCreationDate sets the "creation_date" field.
-func (_u *EvidenceUpdateOne) SetCreationDate(v time.Time) *EvidenceUpdateOne {
+func (_u *EvidenceUpdateOne) SetCreationDate(v models.DateTime) *EvidenceUpdateOne {
 	_u.mutation.SetCreationDate(v)
 	return _u
 }
 
 // SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (_u *EvidenceUpdateOne) SetNillableCreationDate(v *time.Time) *EvidenceUpdateOne {
+func (_u *EvidenceUpdateOne) SetNillableCreationDate(v *models.DateTime) *EvidenceUpdateOne {
 	if v != nil {
 		_u.SetCreationDate(*v)
 	}
@@ -1932,13 +1933,13 @@ func (_u *EvidenceUpdateOne) SetNillableCreationDate(v *time.Time) *EvidenceUpda
 }
 
 // SetRenewalDate sets the "renewal_date" field.
-func (_u *EvidenceUpdateOne) SetRenewalDate(v time.Time) *EvidenceUpdateOne {
+func (_u *EvidenceUpdateOne) SetRenewalDate(v models.DateTime) *EvidenceUpdateOne {
 	_u.mutation.SetRenewalDate(v)
 	return _u
 }
 
 // SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (_u *EvidenceUpdateOne) SetNillableRenewalDate(v *time.Time) *EvidenceUpdateOne {
+func (_u *EvidenceUpdateOne) SetNillableRenewalDate(v *models.DateTime) *EvidenceUpdateOne {
 	if v != nil {
 		_u.SetRenewalDate(*v)
 	}

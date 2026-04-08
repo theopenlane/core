@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -142,9 +143,9 @@ var (
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
-	DefaultCreationDate func() time.Time
+	DefaultCreationDate func() models.DateTime
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
-	DefaultRenewalDate time.Time
+	DefaultRenewalDate func() models.DateTime
 	// DefaultIsAutomated holds the default value on creation for the "is_automated" field.
 	DefaultIsAutomated bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -164,7 +165,7 @@ func OperationValidator(o history.OpType) error {
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.EvidenceStatus) error {
 	switch s.String() {
-	case "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED":
+	case "REQUESTED", "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED":
 		return nil
 	default:
 		return fmt.Errorf("evidencehistory: invalid enum value for status field: %q", s)

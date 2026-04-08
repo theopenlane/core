@@ -122,6 +122,8 @@ const (
 	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
+	EdgeSubcontrols = "subcontrols"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
 	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
@@ -138,6 +140,8 @@ const (
 	EdgeAccessPlatforms = "access_platforms"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the identityholder in the database.
 	Table = "identity_holders"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -242,6 +246,11 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "subcontrol_identity_holders"
+	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolsInverseTable = "subcontrols"
 	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
 	PlatformsTable = "platform_identity_holders"
 	// PlatformsInverseTable is the table name for the Platform entity.
@@ -288,6 +297,11 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_identity_holders"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
 )
 
 // Columns holds all SQL columns for identityholder fields.
@@ -347,6 +361,9 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "identity_holder_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"subcontrol_id", "identity_holder_id"}
 	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
 	// primary key for the platforms relation (M2M).
 	PlatformsPrimaryKey = []string{"platform_id", "identity_holder_id"}
@@ -362,6 +379,9 @@ var (
 	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
 	// primary key for the findings relation (M2M).
 	FindingsPrimaryKey = []string{"finding_id", "identity_holder_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "identity_holder_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -413,12 +433,12 @@ var (
 	DefaultID func() string
 )
 
-const DefaultIdentityHolderType enums.IdentityHolderType = "EMPLOYEE"
+const DefaultIdentityHolderType enums.IdentityHolderType = "UNSPECIFIED"
 
 // IdentityHolderTypeValidator is a validator for the "identity_holder_type" field enum values. It is called by the builders before save.
 func IdentityHolderTypeValidator(iht enums.IdentityHolderType) error {
 	switch iht.String() {
-	case "EMPLOYEE", "CONTRACTOR":
+	case "EMPLOYEE", "CONTRACTOR", "UNSPECIFIED", "INTERN", "SERVICE", "PARTNER":
 		return nil
 	default:
 		return fmt.Errorf("identityholder: invalid enum value for identity_holder_type field: %q", iht)
@@ -430,7 +450,7 @@ const DefaultStatus enums.UserStatus = "ACTIVE"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.UserStatus) error {
 	switch s.String() {
-	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING":
+	case "ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING", "UNKNOWN":
 		return nil
 	default:
 		return fmt.Errorf("identityholder: invalid enum value for status field: %q", s)
@@ -797,6 +817,20 @@ func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySubcontrolsCount orders the results by subcontrols count.
+func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubcontrolsStep(), opts...)
+	}
+}
+
+// BySubcontrols orders the results by subcontrols terms.
+func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPlatformsCount orders the results by platforms count.
 func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -899,6 +933,20 @@ func ByAccessPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -1013,6 +1061,13 @@ func newControlsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 	)
 }
+func newSubcontrolsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
 func newPlatformsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1067,6 +1122,13 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
 

@@ -92,6 +92,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -221,6 +223,8 @@ type OrganizationQuery struct {
 	withDirectoryMemberships                 *DirectoryMembershipQuery
 	withDirectorySyncRuns                    *DirectorySyncRunQuery
 	withDiscussions                          *DiscussionQuery
+	withVendorScoringConfigs                 *VendorScoringConfigQuery
+	withVendorRiskScores                     *VendorRiskScoreQuery
 	withMembers                              *OrgMembershipQuery
 	loadTotal                                []func(context.Context, []*Organization) error
 	modifiers                                []func(*sql.Selector)
@@ -330,6 +334,8 @@ type OrganizationQuery struct {
 	withNamedDirectoryMemberships            map[string]*DirectoryMembershipQuery
 	withNamedDirectorySyncRuns               map[string]*DirectorySyncRunQuery
 	withNamedDiscussions                     map[string]*DiscussionQuery
+	withNamedVendorScoringConfigs            map[string]*VendorScoringConfigQuery
+	withNamedVendorRiskScores                map[string]*VendorRiskScoreQuery
 	withNamedMembers                         map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -3092,6 +3098,56 @@ func (_q *OrganizationQuery) QueryDiscussions() *DiscussionQuery {
 	return query
 }
 
+// QueryVendorScoringConfigs chains the current query on the "vendor_scoring_configs" edge.
+func (_q *OrganizationQuery) QueryVendorScoringConfigs() *VendorScoringConfigQuery {
+	query := (&VendorScoringConfigClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vendorscoringconfig.Table, vendorscoringconfig.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorScoringConfigsTable, organization.VendorScoringConfigsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.VendorScoringConfig
+		step.Edge.Schema = schemaConfig.VendorScoringConfig
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVendorRiskScores chains the current query on the "vendor_risk_scores" edge.
+func (_q *OrganizationQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoresTable, organization.VendorRiskScoresColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -3418,6 +3474,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withDirectoryMemberships:            _q.withDirectoryMemberships.Clone(),
 		withDirectorySyncRuns:               _q.withDirectorySyncRuns.Clone(),
 		withDiscussions:                     _q.withDiscussions.Clone(),
+		withVendorScoringConfigs:            _q.withVendorScoringConfigs.Clone(),
+		withVendorRiskScores:                _q.withVendorRiskScores.Clone(),
 		withMembers:                         _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -4625,6 +4683,28 @@ func (_q *OrganizationQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *Or
 	return _q
 }
 
+// WithVendorScoringConfigs tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_scoring_configs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithVendorScoringConfigs(opts ...func(*VendorScoringConfigQuery)) *OrganizationQuery {
+	query := (&VendorScoringConfigClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorScoringConfigs = query
+	return _q
+}
+
+// WithVendorRiskScores tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_risk_scores" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithVendorRiskScores(opts ...func(*VendorRiskScoreQuery)) *OrganizationQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorRiskScores = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -4720,7 +4800,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [110]bool{
+		loadedTypes = [112]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4830,6 +4910,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
 			_q.withDiscussions != nil,
+			_q.withVendorScoringConfigs != nil,
+			_q.withVendorRiskScores != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -5682,6 +5764,24 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withVendorScoringConfigs; query != nil {
+		if err := _q.loadVendorScoringConfigs(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VendorScoringConfigs = []*VendorScoringConfig{} },
+			func(n *Organization, e *VendorScoringConfig) {
+				n.Edges.VendorScoringConfigs = append(n.Edges.VendorScoringConfigs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVendorRiskScores; query != nil {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VendorRiskScores = []*VendorRiskScore{} },
+			func(n *Organization, e *VendorRiskScore) {
+				n.Edges.VendorRiskScores = append(n.Edges.VendorRiskScores, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -6432,6 +6532,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadDiscussions(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedDiscussions(name) },
 			func(n *Organization, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVendorScoringConfigs {
+		if err := _q.loadVendorScoringConfigs(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendorScoringConfigs(name) },
+			func(n *Organization, e *VendorScoringConfig) { n.appendNamedVendorScoringConfigs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVendorRiskScores {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVendorRiskScores(name) },
+			func(n *Organization, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9391,7 +9505,6 @@ func (_q *OrganizationQuery) loadRemediations(ctx context.Context, query *Remedi
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(remediation.FieldOwnerID)
 	}
@@ -9422,7 +9535,6 @@ func (_q *OrganizationQuery) loadFindings(ctx context.Context, query *FindingQue
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(finding.FieldOwnerID)
 	}
@@ -9453,7 +9565,6 @@ func (_q *OrganizationQuery) loadReviews(ctx context.Context, query *ReviewQuery
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(review.FieldOwnerID)
 	}
@@ -9484,7 +9595,6 @@ func (_q *OrganizationQuery) loadVulnerabilities(ctx context.Context, query *Vul
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(vulnerability.FieldOwnerID)
 	}
@@ -9885,6 +9995,67 @@ func (_q *OrganizationQuery) loadDiscussions(ctx context.Context, query *Discuss
 	}
 	query.Where(predicate.Discussion(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.DiscussionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadVendorScoringConfigs(ctx context.Context, query *VendorScoringConfigQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *VendorScoringConfig)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorscoringconfig.FieldOwnerID)
+	}
+	query.Where(predicate.VendorScoringConfig(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorScoringConfigsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadVendorRiskScores(ctx context.Context, query *VendorRiskScoreQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *VendorRiskScore)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(vendorriskscore.FieldOwnerID)
+	}
+	query.Where(predicate.VendorRiskScore(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VendorRiskScoresColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -11516,6 +11687,34 @@ func (_q *OrganizationQuery) WithNamedDiscussions(name string, opts ...func(*Dis
 		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
 	}
 	_q.withNamedDiscussions[name] = query
+	return _q
+}
+
+// WithNamedVendorScoringConfigs tells the query-builder to eager-load the nodes that are connected to the "vendor_scoring_configs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedVendorScoringConfigs(name string, opts ...func(*VendorScoringConfigQuery)) *OrganizationQuery {
+	query := (&VendorScoringConfigClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorScoringConfigs == nil {
+		_q.withNamedVendorScoringConfigs = make(map[string]*VendorScoringConfigQuery)
+	}
+	_q.withNamedVendorScoringConfigs[name] = query
+	return _q
+}
+
+// WithNamedVendorRiskScores tells the query-builder to eager-load the nodes that are connected to the "vendor_risk_scores"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedVendorRiskScores(name string, opts ...func(*VendorRiskScoreQuery)) *OrganizationQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorRiskScores == nil {
+		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
+	}
+	_q.withNamedVendorRiskScores[name] = query
 	return _q
 }
 

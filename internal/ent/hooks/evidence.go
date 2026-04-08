@@ -30,7 +30,7 @@ func HookEvidenceFiles() ent.Hook {
 					return nil, ErrZeroTimeNotAllowed
 				}
 
-				if ok && creationDate.After(time.Now()) {
+				if ok && time.Time(creationDate).After(time.Now()) {
 					return nil, ErrFutureTimeNotAllowed
 				}
 

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -26,6 +27,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -295,6 +298,66 @@ func (_u *RiskUpdate) SetNillableScopeID(v *string) *RiskUpdate {
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RiskUpdate) ClearScopeID() *RiskUpdate {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdate) SetExternalID(v string) *RiskUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableExternalID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdate) ClearExternalID() *RiskUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *RiskUpdate) SetIntegrationID(v string) *RiskUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableIntegrationID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *RiskUpdate) ClearIntegrationID() *RiskUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *RiskUpdate) SetObservedAt(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableObservedAt(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *RiskUpdate) ClearObservedAt() *RiskUpdate {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -573,6 +636,153 @@ func (_u *RiskUpdate) ClearDelegateID() *RiskUpdate {
 	return _u
 }
 
+// SetMitigatedAt sets the "mitigated_at" field.
+func (_u *RiskUpdate) SetMitigatedAt(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetMitigatedAt(v)
+	return _u
+}
+
+// SetNillableMitigatedAt sets the "mitigated_at" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableMitigatedAt(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetMitigatedAt(*v)
+	}
+	return _u
+}
+
+// ClearMitigatedAt clears the value of the "mitigated_at" field.
+func (_u *RiskUpdate) ClearMitigatedAt() *RiskUpdate {
+	_u.mutation.ClearMitigatedAt()
+	return _u
+}
+
+// SetReviewRequired sets the "review_required" field.
+func (_u *RiskUpdate) SetReviewRequired(v bool) *RiskUpdate {
+	_u.mutation.SetReviewRequired(v)
+	return _u
+}
+
+// SetNillableReviewRequired sets the "review_required" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableReviewRequired(v *bool) *RiskUpdate {
+	if v != nil {
+		_u.SetReviewRequired(*v)
+	}
+	return _u
+}
+
+// ClearReviewRequired clears the value of the "review_required" field.
+func (_u *RiskUpdate) ClearReviewRequired() *RiskUpdate {
+	_u.mutation.ClearReviewRequired()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *RiskUpdate) SetLastReviewedAt(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableLastReviewedAt(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *RiskUpdate) ClearLastReviewedAt() *RiskUpdate {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *RiskUpdate) SetReviewFrequency(v enums.Frequency) *RiskUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableReviewFrequency(v *enums.Frequency) *RiskUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *RiskUpdate) ClearReviewFrequency() *RiskUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewDueAt sets the "next_review_due_at" field.
+func (_u *RiskUpdate) SetNextReviewDueAt(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetNextReviewDueAt(v)
+	return _u
+}
+
+// SetNillableNextReviewDueAt sets the "next_review_due_at" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableNextReviewDueAt(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetNextReviewDueAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewDueAt clears the value of the "next_review_due_at" field.
+func (_u *RiskUpdate) ClearNextReviewDueAt() *RiskUpdate {
+	_u.mutation.ClearNextReviewDueAt()
+	return _u
+}
+
+// SetResidualScore sets the "residual_score" field.
+func (_u *RiskUpdate) SetResidualScore(v int) *RiskUpdate {
+	_u.mutation.ResetResidualScore()
+	_u.mutation.SetResidualScore(v)
+	return _u
+}
+
+// SetNillableResidualScore sets the "residual_score" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableResidualScore(v *int) *RiskUpdate {
+	if v != nil {
+		_u.SetResidualScore(*v)
+	}
+	return _u
+}
+
+// AddResidualScore adds value to the "residual_score" field.
+func (_u *RiskUpdate) AddResidualScore(v int) *RiskUpdate {
+	_u.mutation.AddResidualScore(v)
+	return _u
+}
+
+// ClearResidualScore clears the value of the "residual_score" field.
+func (_u *RiskUpdate) ClearResidualScore() *RiskUpdate {
+	_u.mutation.ClearResidualScore()
+	return _u
+}
+
+// SetRiskDecision sets the "risk_decision" field.
+func (_u *RiskUpdate) SetRiskDecision(v enums.RiskDecision) *RiskUpdate {
+	_u.mutation.SetRiskDecision(v)
+	return _u
+}
+
+// SetNillableRiskDecision sets the "risk_decision" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableRiskDecision(v *enums.RiskDecision) *RiskUpdate {
+	if v != nil {
+		_u.SetRiskDecision(*v)
+	}
+	return _u
+}
+
+// ClearRiskDecision clears the value of the "risk_decision" field.
+func (_u *RiskUpdate) ClearRiskDecision() *RiskUpdate {
+	_u.mutation.ClearRiskDecision()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *RiskUpdate) AddBlockedGroupIDs(ids ...string) *RiskUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -841,6 +1051,36 @@ func (_u *RiskUpdate) AddDiscussions(v ...*Discussion) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddDiscussionIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *RiskUpdate) AddReviewIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *RiskUpdate) AddReviews(v ...*Review) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *RiskUpdate) AddRemediationIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *RiskUpdate) AddRemediations(v ...*Remediation) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -1220,6 +1460,48 @@ func (_u *RiskUpdate) RemoveDiscussions(v ...*Discussion) *RiskUpdate {
 	return _u.RemoveDiscussionIDs(ids...)
 }
 
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *RiskUpdate) ClearReviews() *RiskUpdate {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *RiskUpdate) RemoveReviewIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *RiskUpdate) RemoveReviews(v ...*Review) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *RiskUpdate) ClearRemediations() *RiskUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *RiskUpdate) RemoveRemediationIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *RiskUpdate) RemoveRemediations(v ...*Remediation) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *RiskUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1282,6 +1564,16 @@ func (_u *RiskUpdate) check() error {
 	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := risk.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Risk.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RiskDecision(); ok {
+		if err := risk.RiskDecisionValidator(v); err != nil {
+			return &ValidationError{Name: "risk_decision", err: fmt.Errorf(`generated: validator failed for field "Risk.risk_decision": %w`, err)}
 		}
 	}
 	return nil
@@ -1370,6 +1662,24 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(risk.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(risk.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(risk.FieldObservedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
 	}
@@ -1456,6 +1766,51 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.BusinessCostsJSONCleared() {
 		_spec.ClearField(risk.FieldBusinessCostsJSON, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.MitigatedAt(); ok {
+		_spec.SetField(risk.FieldMitigatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.MitigatedAtCleared() {
+		_spec.ClearField(risk.FieldMitigatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ReviewRequired(); ok {
+		_spec.SetField(risk.FieldReviewRequired, field.TypeBool, value)
+	}
+	if _u.mutation.ReviewRequiredCleared() {
+		_spec.ClearField(risk.FieldReviewRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(risk.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(risk.FieldLastReviewedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(risk.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(risk.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewDueAt(); ok {
+		_spec.SetField(risk.FieldNextReviewDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewDueAtCleared() {
+		_spec.ClearField(risk.FieldNextReviewDueAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ResidualScore(); ok {
+		_spec.SetField(risk.FieldResidualScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedResidualScore(); ok {
+		_spec.AddField(risk.FieldResidualScore, field.TypeInt, value)
+	}
+	if _u.mutation.ResidualScoreCleared() {
+		_spec.ClearField(risk.FieldResidualScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.RiskDecision(); ok {
+		_spec.SetField(risk.FieldRiskDecision, field.TypeEnum, value)
+	}
+	if _u.mutation.RiskDecisionCleared() {
+		_spec.ClearField(risk.FieldRiskDecision, field.TypeEnum)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2411,6 +2766,102 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Risk
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2682,6 +3133,66 @@ func (_u *RiskUpdateOne) SetNillableScopeID(v *string) *RiskUpdateOne {
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RiskUpdateOne) ClearScopeID() *RiskUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdateOne) SetExternalID(v string) *RiskUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableExternalID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdateOne) ClearExternalID() *RiskUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *RiskUpdateOne) SetIntegrationID(v string) *RiskUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableIntegrationID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *RiskUpdateOne) ClearIntegrationID() *RiskUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *RiskUpdateOne) SetObservedAt(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableObservedAt(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *RiskUpdateOne) ClearObservedAt() *RiskUpdateOne {
+	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -2960,6 +3471,153 @@ func (_u *RiskUpdateOne) ClearDelegateID() *RiskUpdateOne {
 	return _u
 }
 
+// SetMitigatedAt sets the "mitigated_at" field.
+func (_u *RiskUpdateOne) SetMitigatedAt(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetMitigatedAt(v)
+	return _u
+}
+
+// SetNillableMitigatedAt sets the "mitigated_at" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableMitigatedAt(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetMitigatedAt(*v)
+	}
+	return _u
+}
+
+// ClearMitigatedAt clears the value of the "mitigated_at" field.
+func (_u *RiskUpdateOne) ClearMitigatedAt() *RiskUpdateOne {
+	_u.mutation.ClearMitigatedAt()
+	return _u
+}
+
+// SetReviewRequired sets the "review_required" field.
+func (_u *RiskUpdateOne) SetReviewRequired(v bool) *RiskUpdateOne {
+	_u.mutation.SetReviewRequired(v)
+	return _u
+}
+
+// SetNillableReviewRequired sets the "review_required" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableReviewRequired(v *bool) *RiskUpdateOne {
+	if v != nil {
+		_u.SetReviewRequired(*v)
+	}
+	return _u
+}
+
+// ClearReviewRequired clears the value of the "review_required" field.
+func (_u *RiskUpdateOne) ClearReviewRequired() *RiskUpdateOne {
+	_u.mutation.ClearReviewRequired()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *RiskUpdateOne) SetLastReviewedAt(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableLastReviewedAt(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *RiskUpdateOne) ClearLastReviewedAt() *RiskUpdateOne {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *RiskUpdateOne) SetReviewFrequency(v enums.Frequency) *RiskUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *RiskUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *RiskUpdateOne) ClearReviewFrequency() *RiskUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewDueAt sets the "next_review_due_at" field.
+func (_u *RiskUpdateOne) SetNextReviewDueAt(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetNextReviewDueAt(v)
+	return _u
+}
+
+// SetNillableNextReviewDueAt sets the "next_review_due_at" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableNextReviewDueAt(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetNextReviewDueAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewDueAt clears the value of the "next_review_due_at" field.
+func (_u *RiskUpdateOne) ClearNextReviewDueAt() *RiskUpdateOne {
+	_u.mutation.ClearNextReviewDueAt()
+	return _u
+}
+
+// SetResidualScore sets the "residual_score" field.
+func (_u *RiskUpdateOne) SetResidualScore(v int) *RiskUpdateOne {
+	_u.mutation.ResetResidualScore()
+	_u.mutation.SetResidualScore(v)
+	return _u
+}
+
+// SetNillableResidualScore sets the "residual_score" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableResidualScore(v *int) *RiskUpdateOne {
+	if v != nil {
+		_u.SetResidualScore(*v)
+	}
+	return _u
+}
+
+// AddResidualScore adds value to the "residual_score" field.
+func (_u *RiskUpdateOne) AddResidualScore(v int) *RiskUpdateOne {
+	_u.mutation.AddResidualScore(v)
+	return _u
+}
+
+// ClearResidualScore clears the value of the "residual_score" field.
+func (_u *RiskUpdateOne) ClearResidualScore() *RiskUpdateOne {
+	_u.mutation.ClearResidualScore()
+	return _u
+}
+
+// SetRiskDecision sets the "risk_decision" field.
+func (_u *RiskUpdateOne) SetRiskDecision(v enums.RiskDecision) *RiskUpdateOne {
+	_u.mutation.SetRiskDecision(v)
+	return _u
+}
+
+// SetNillableRiskDecision sets the "risk_decision" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableRiskDecision(v *enums.RiskDecision) *RiskUpdateOne {
+	if v != nil {
+		_u.SetRiskDecision(*v)
+	}
+	return _u
+}
+
+// ClearRiskDecision clears the value of the "risk_decision" field.
+func (_u *RiskUpdateOne) ClearRiskDecision() *RiskUpdateOne {
+	_u.mutation.ClearRiskDecision()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *RiskUpdateOne) AddBlockedGroupIDs(ids ...string) *RiskUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -3228,6 +3886,36 @@ func (_u *RiskUpdateOne) AddDiscussions(v ...*Discussion) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddDiscussionIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *RiskUpdateOne) AddReviewIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *RiskUpdateOne) AddReviews(v ...*Review) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *RiskUpdateOne) AddRemediationIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *RiskUpdateOne) AddRemediations(v ...*Remediation) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
 }
 
 // Mutation returns the RiskMutation object of the builder.
@@ -3607,6 +4295,48 @@ func (_u *RiskUpdateOne) RemoveDiscussions(v ...*Discussion) *RiskUpdateOne {
 	return _u.RemoveDiscussionIDs(ids...)
 }
 
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *RiskUpdateOne) ClearReviews() *RiskUpdateOne {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *RiskUpdateOne) RemoveReviewIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *RiskUpdateOne) RemoveReviews(v ...*Review) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *RiskUpdateOne) ClearRemediations() *RiskUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *RiskUpdateOne) RemoveRemediationIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *RiskUpdateOne) RemoveRemediations(v ...*Remediation) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
 // Where appends a list predicates to the RiskUpdate builder.
 func (_u *RiskUpdateOne) Where(ps ...predicate.Risk) *RiskUpdateOne {
 	_u.mutation.Where(ps...)
@@ -3682,6 +4412,16 @@ func (_u *RiskUpdateOne) check() error {
 	if v, ok := _u.mutation.Likelihood(); ok {
 		if err := risk.LikelihoodValidator(v); err != nil {
 			return &ValidationError{Name: "likelihood", err: fmt.Errorf(`generated: validator failed for field "Risk.likelihood": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := risk.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Risk.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.RiskDecision(); ok {
+		if err := risk.RiskDecisionValidator(v); err != nil {
+			return &ValidationError{Name: "risk_decision", err: fmt.Errorf(`generated: validator failed for field "Risk.risk_decision": %w`, err)}
 		}
 	}
 	return nil
@@ -3787,6 +4527,24 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(risk.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(risk.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(risk.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(risk.FieldObservedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.ExternalUUID(); ok {
 		_spec.SetField(risk.FieldExternalUUID, field.TypeString, value)
 	}
@@ -3873,6 +4631,51 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.BusinessCostsJSONCleared() {
 		_spec.ClearField(risk.FieldBusinessCostsJSON, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.MitigatedAt(); ok {
+		_spec.SetField(risk.FieldMitigatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.MitigatedAtCleared() {
+		_spec.ClearField(risk.FieldMitigatedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ReviewRequired(); ok {
+		_spec.SetField(risk.FieldReviewRequired, field.TypeBool, value)
+	}
+	if _u.mutation.ReviewRequiredCleared() {
+		_spec.ClearField(risk.FieldReviewRequired, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(risk.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(risk.FieldLastReviewedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(risk.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(risk.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewDueAt(); ok {
+		_spec.SetField(risk.FieldNextReviewDueAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewDueAtCleared() {
+		_spec.ClearField(risk.FieldNextReviewDueAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ResidualScore(); ok {
+		_spec.SetField(risk.FieldResidualScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedResidualScore(); ok {
+		_spec.AddField(risk.FieldResidualScore, field.TypeInt, value)
+	}
+	if _u.mutation.ResidualScoreCleared() {
+		_spec.ClearField(risk.FieldResidualScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.RiskDecision(); ok {
+		_spec.SetField(risk.FieldRiskDecision, field.TypeEnum, value)
+	}
+	if _u.mutation.RiskDecisionCleared() {
+		_spec.ClearField(risk.FieldRiskDecision, field.TypeEnum)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4823,6 +5626,102 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.ReviewsTable,
+			Columns: risk.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.RemediationsTable,
+			Columns: risk.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

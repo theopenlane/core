@@ -12,17 +12,26 @@ type info struct {
 }
 
 // ExportableSchemas contains all schemas that have Exportable annotation
-var ExportableSchemas = map[string]info{"ASSET": info{
-	hasOwnerField:       false,
+var ExportableSchemas = map[string]info{"ASSESSMENT": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "ASSET": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "CAMPAIGN": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "CONTACT": info{
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "CONTROL": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,
 }, "DIRECTORY_MEMBERSHIP": info{
-	hasOwnerField:       false,
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "ENTITY": info{
-	hasOwnerField:       false,
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "EVIDENCE": info{
 	hasOwnerField:       true,
@@ -31,7 +40,7 @@ var ExportableSchemas = map[string]info{"ASSET": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,
 }, "IDENTITY_HOLDER": info{
-	hasOwnerField:       false,
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "INTERNAL_POLICY": info{
 	hasOwnerField:       true,
@@ -65,6 +74,12 @@ var ExportableSchemas = map[string]info{"ASSET": info{
 	hasSystemOwnedField: false,
 }, "TRUST_CENTER_SUBPROCESSOR": info{
 	hasOwnerField:       false,
+	hasSystemOwnedField: false,
+}, "VENDOR_RISK_SCORE": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
+}, "VENDOR_SCORING_CONFIG": info{
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "VULNERABILITY": info{
 	hasOwnerField:       true,

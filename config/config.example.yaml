@@ -76,6 +76,7 @@ authz:
     maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
+    modulefile: ""
     storeid: ""
     storename: openlane
 campaignwebhook:
@@ -165,95 +166,34 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
-integrationgithubapp:
-    appid: ""
-    appslug: ""
-    enabled: false
-    privatekey: ""
-    successredirecturl: ""
-    webhooksecret: ""
-integrationoauthprovider:
-    enabled: false
-    successredirecturl: ""
-integrationproviders:
+integrations:
     azureentraid:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
-    github:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    githubapp:
+        appid: ""
+        appslug: ""
+        privatekey: ""
+        webhooksecret: ""
     googleworkspace:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     microsoftteams:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
-    oidcgeneric:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    oidclocal:
+        clientid: local-core-oidc
+        clientsecret: local-core-oidc-secret
+        discoveryurl: http://localhost:5557/dex
+        enabled: false
+        redirecturl: http://localhost:17608/v1/integrations/auth/callback
     slack:
-        authType: ""
-        category: ""
-        displayName: ""
-        docsUrl: ""
-        logoUrl: ""
-        name: ""
-        oauth:
-            authUrl: ""
-            clientId: ""
-            clientSecret: ""
-            scopes: null
-            tokenUrl: ""
+        clientid: ""
+        clientsecret: ""
+        redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

@@ -132,7 +132,6 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 	actionIndex := actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key)
 	assignmentIDs := make([]string, 0)
 	targetUserIDs := make([]string, 0)
-	seenAssignmentIDs := make(map[string]struct{})
 	seenTargetUserIDs := make(map[string]struct{})
 	seenAssignments := make(map[string]struct{})
 
@@ -175,31 +174,21 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 				assignmentCreate.SetRole(cfg.Role)
 			}
 
-			assignmentCreated := true
-			assignment, err := assignmentCreate.Save(allowCtx)
-			if err != nil {
-				if generated.IsConstraintError(err) {
-					assignmentCreated = false
-					assignment, err = e.client.WorkflowAssignment.
-						Query().
-						Where(
-							workflowassignment.WorkflowInstanceIDEQ(instance.ID),
-							workflowassignment.AssignmentKeyEQ(assignmentKey),
-							workflowassignment.OwnerIDEQ(ownerID),
-						).
-						Only(allowCtx)
-				}
-			}
-
+			assignment, assignmentCreated, err := upsertAssignment(allowCtx, assignmentCreate, func() (*generated.WorkflowAssignment, error) {
+				return e.client.WorkflowAssignment.Query().
+					Where(
+						workflowassignment.WorkflowInstanceIDEQ(instance.ID),
+						workflowassignment.AssignmentKeyEQ(assignmentKey),
+						workflowassignment.OwnerIDEQ(ownerID),
+					).
+					Only(allowCtx)
+			})
 			if err != nil {
 				return ErrAssignmentCreationFailed
 			}
 
 			if assignment != nil {
-				if _, ok := seenAssignmentIDs[assignment.ID]; !ok {
-					seenAssignmentIDs[assignment.ID] = struct{}{}
-					assignmentIDs = append(assignmentIDs, assignment.ID)
-				}
+				assignmentIDs = append(assignmentIDs, assignment.ID)
 			}
 			if _, ok := seenTargetUserIDs[userID]; !ok {
 				seenTargetUserIDs[userID] = struct{}{}
@@ -249,6 +238,23 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 	return nil
 }
 
+// upsertAssignment attempts to save a new WorkflowAssignment and falls back to loading
+// the existing record on a unique constraint error. Returns the record and whether it was created.
+func upsertAssignment(ctx context.Context, create *generated.WorkflowAssignmentCreate, query func() (*generated.WorkflowAssignment, error)) (*generated.WorkflowAssignment, bool, error) {
+	record, err := create.Save(ctx)
+	if err != nil {
+		if !generated.IsConstraintError(err) {
+			return nil, false, err
+		}
+		record, err = query()
+		if err != nil {
+			return nil, false, err
+		}
+		return record, false, nil
+	}
+	return record, true, nil
+}
+
 // executeFieldUpdate applies field updates to the target object
 func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.WorkflowAction, obj *wfworkflows.Object) error {
 	var params wfworkflows.FieldUpdateActionParams
@@ -277,7 +283,6 @@ func (e *WorkflowEngine) executeFieldUpdate(ctx context.Context, action models.W
 // executeApproval creates workflow assignments for approval actions
 func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
 	var params wfworkflows.ApprovalActionParams
-
 	if action.Params != nil {
 		if err := json.Unmarshal(action.Params, &params); err != nil {
 			return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
@@ -337,15 +342,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return ErrObjectRefMissingID
 	}
 
-	if len(params.Targets) == 0 {
-		return nil
-	}
-
-	channels := params.Channels
-	if len(channels) == 0 {
-		channels = []enums.Channel{enums.ChannelInApp}
-	}
-
 	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
@@ -357,6 +353,11 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		if err != nil {
 			return err
 		}
+	}
+
+	hasIntegration := rendered != nil && rendered.Template != nil && rendered.Template.IntegrationID != ""
+	if len(params.Targets) == 0 && !hasIntegration {
+		return nil
 	}
 
 	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
@@ -375,7 +376,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		data = rendered.Data
 		vars = rendered.Vars
 	} else {
-		var err error
 		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
 		if err != nil {
 			return err
@@ -383,7 +383,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	}
 
 	if title == "" {
-		var err error
 		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
 		if err != nil {
 			return err
@@ -391,7 +390,6 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	}
 
 	if body == "" {
-		var err error
 		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
 		if err != nil {
 			return err
@@ -403,13 +401,25 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		templateID = rendered.Template.ID
 	}
 
-	userIDs, err := e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params, title, body, data, channels, ownerID, action.Type, action.Key, templateID)
-	if err != nil {
-		return err
+	if len(params.Targets) > 0 {
+		_, err = e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params.Targets, params.Topic, title, body, data, ownerID, action.Type, action.Key, templateID)
+		if err != nil {
+			return err
+		}
 	}
 
-	if rendered != nil {
-		if err := e.dispatchNotificationIntegrations(ctx, ownerID, channels, rendered, userIDs); err != nil {
+	if hasIntegration {
+		integrationRendered := rendered
+		if integrationRendered == nil {
+			integrationRendered = &renderedNotificationTemplate{
+				Title: title,
+				Body:  body,
+				Data:  data,
+				Vars:  vars,
+			}
+		}
+
+		if err := e.dispatchTemplateIntegration(ctx, ownerID, integrationRendered, params.OperationName); err != nil {
 			return err
 		}
 	}
@@ -417,12 +427,12 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	return nil
 }
 
-// dispatchWorkflowNotifications sends notification payloads to configured channels
-func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, params wfworkflows.NotificationActionParams, title, body string, data map[string]any, channels []enums.Channel, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
+// dispatchWorkflowNotifications creates in-app notification records for resolved user targets
+func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, targets []wfworkflows.TargetConfig, topic string, title, body string, data map[string]any, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
 	seenUsers := make(map[string]struct{})
 	resolvedUserIDs := make([]string, 0)
 
-	for _, targetConfig := range params.Targets {
+	for _, targetConfig := range targets {
 		targetUserIDs, err := e.resolveTargetUsers(ctx, targetConfig, obj, actionType, actionKey)
 		if err != nil {
 			return nil, fmt.Errorf("%w %s: %w", ErrFailedToResolveNotificationTarget, targetConfig.Type.String(), err)
@@ -446,15 +456,14 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allo
 				SetTitle(title).
 				SetBody(body).
 				SetData(notificationData).
-				SetChannels(channels).
 				SetUserID(userID)
 
 			if templateID != "" {
 				builder.SetTemplateID(templateID)
 			}
 
-			if params.Topic != "" {
-				builder.SetTopic(enums.NotificationTopic(params.Topic))
+			if topic != "" {
+				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
 			if err := builder.Exec(allowCtx); err != nil {

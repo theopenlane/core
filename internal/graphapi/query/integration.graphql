@@ -26,17 +26,33 @@ query GetAllIntegrations {
 
 query GetIntegrationByID($integrationId: ID!) {
   integration(id: $integrationId) {
-    description
-    id
-    kind
-    name
-    ownerID
     createdAt
     createdBy
+    definitionID
+    definitionSlug
+    definitionVersion
+    description
+    environmentID
+    environmentName
+    family
+    id
+    integrationType
+    internalNotes
+    kind
+    metadata
+    name
+    ownerID
+    platformID
+    primaryDirectory
+    providerMetadataSnapshot
+    scopeID
+    scopeName
+    status
+    systemInternalID
+    systemOwned
+    tags
     updatedAt
     updatedBy
-    integrationType
-    metadata
   }
 }
 

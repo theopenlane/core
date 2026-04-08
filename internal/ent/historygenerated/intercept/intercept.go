@@ -81,6 +81,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
@@ -2036,6 +2038,60 @@ func (f TraverseUserSettingHistory) Traverse(ctx context.Context, q historygener
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.UserSettingHistoryQuery", q)
 }
 
+// The VendorRiskScoreHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorRiskScoreHistoryFunc func(context.Context, *historygenerated.VendorRiskScoreHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorRiskScoreHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.VendorRiskScoreHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.VendorRiskScoreHistoryQuery", q)
+}
+
+// The TraverseVendorRiskScoreHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorRiskScoreHistory func(context.Context, *historygenerated.VendorRiskScoreHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorRiskScoreHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorRiskScoreHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.VendorRiskScoreHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.VendorRiskScoreHistoryQuery", q)
+}
+
+// The VendorScoringConfigHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorScoringConfigHistoryFunc func(context.Context, *historygenerated.VendorScoringConfigHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorScoringConfigHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.VendorScoringConfigHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.VendorScoringConfigHistoryQuery", q)
+}
+
+// The TraverseVendorScoringConfigHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorScoringConfigHistory func(context.Context, *historygenerated.VendorScoringConfigHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorScoringConfigHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorScoringConfigHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.VendorScoringConfigHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.VendorScoringConfigHistoryQuery", q)
+}
+
 // The VulnerabilityHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type VulnerabilityHistoryFunc func(context.Context, *historygenerated.VulnerabilityHistoryQuery) (historygenerated.Value, error)
 
@@ -2368,6 +2424,10 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.UserHistoryQuery, predicate.UserHistory, userhistory.OrderOption]{typ: historygenerated.TypeUserHistory, tq: q}, nil
 	case *historygenerated.UserSettingHistoryQuery:
 		return &query[*historygenerated.UserSettingHistoryQuery, predicate.UserSettingHistory, usersettinghistory.OrderOption]{typ: historygenerated.TypeUserSettingHistory, tq: q}, nil
+	case *historygenerated.VendorRiskScoreHistoryQuery:
+		return &query[*historygenerated.VendorRiskScoreHistoryQuery, predicate.VendorRiskScoreHistory, vendorriskscorehistory.OrderOption]{typ: historygenerated.TypeVendorRiskScoreHistory, tq: q}, nil
+	case *historygenerated.VendorScoringConfigHistoryQuery:
+		return &query[*historygenerated.VendorScoringConfigHistoryQuery, predicate.VendorScoringConfigHistory, vendorscoringconfighistory.OrderOption]{typ: historygenerated.TypeVendorScoringConfigHistory, tq: q}, nil
 	case *historygenerated.VulnerabilityHistoryQuery:
 		return &query[*historygenerated.VulnerabilityHistoryQuery, predicate.VulnerabilityHistory, vulnerabilityhistory.OrderOption]{typ: historygenerated.TypeVulnerabilityHistory, tq: q}, nil
 	case *historygenerated.WorkflowAssignmentHistoryQuery:

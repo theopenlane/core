@@ -1,244 +1,337 @@
-mutation CreateBulkCSVEntity($input: Upload!, $entityTypeName: String) {
-  createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
-    entities {
-      createdAt
-      createdBy
-      description
-      displayName
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkCSVEntity ($input: Upload!, $entityTypeName: String) {
+	createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
+		entities {
+			createdAt
+			createdBy
+			description
+			displayName
+			status
+			domains
+			notes {
+				edges {
+					node {
+						text
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			entityType {
+				id
+				name
+			}
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateBulkEntity($input: [CreateEntityInput!], $entityTypeName: String) {
-  createBulkEntity(input: $input, entityTypeName: $entityTypeName) {
-    entities {
-      createdAt
-      createdBy
-      description
-      displayName
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateBulkEntity ($input: [CreateEntityInput!], $entityTypeName: String) {
+	createBulkEntity(input: $input, entityTypeName: $entityTypeName) {
+		entities {
+			createdAt
+			createdBy
+			description
+			displayName
+			status
+			domains
+			notes {
+				edges {
+					node {
+						text
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			entityType {
+				id
+				name
+			}
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation CreateEntity($input: CreateEntityInput!, $entityTypeName: String) {
-  createEntity(input: $input, entityTypeName: $entityTypeName) {
-    entity {
-      createdAt
-      createdBy
-      description
-      displayName
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String) {
+	createEntity(input: $input, entityTypeName: $entityTypeName) {
+		entity {
+			createdAt
+			createdBy
+			description
+			displayName
+			status
+			domains
+			notes {
+				edges {
+					node {
+						text
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			entityType {
+				id
+				name
+			}
+			id
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteEntity($deleteEntityId: ID!) {
-  deleteEntity(id: $deleteEntityId) {
-    deletedID
-  }
+mutation DeleteEntity ($deleteEntityId: ID!) {
+	deleteEntity(id: $deleteEntityId) {
+		deletedID
+	}
 }
-
 query GetAllEntities {
-  entities {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        status
-        domains
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	entities {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				status
+				domains
+				notes {
+					edges {
+						node {
+							text
+							updatedAt
+							updatedBy
+						}
+					}
+				}
+				entityType {
+					id
+					name
+				}
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetEntities($where: EntityWhereInput) {
-  entities(where: $where) {
-    edges {
-      node {
-        createdAt
-        createdBy
-        description
-        displayName
-        status
-        domains
-        notes {
-          edges {
-            node {
-              text
-              updatedAt
-              updatedBy
-            }
-          }
-        }
-        entityType {
-          id
-          name
-        }
-        id
-        name
-        ownerID
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetEntities ($where: EntityWhereInput) {
+	entities(where: $where) {
+		edges {
+			node {
+				createdAt
+				createdBy
+				description
+				displayName
+				status
+				domains
+				notes {
+					edges {
+						node {
+							text
+							updatedAt
+							updatedBy
+						}
+					}
+				}
+				entityType {
+					id
+					name
+				}
+				id
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetEntityByID($entityId: ID!) {
-  entity(id: $entityId) {
-    createdAt
-    createdBy
-    description
-    displayName
-    status
-    domains
-    notes {
-      edges {
-        node {
-          text
-          updatedAt
-          updatedBy
-        }
-      }
-    }
-    entityType {
-      id
-      name
-    }
-    id
-    name
-    ownerID
-    contacts {
-      edges {
-        node {
-          id
-          fullName
-          email
-          title
-          company
-          address
-          phoneNumber
-        }
-      }
-    }
-    tags
-    updatedAt
-    updatedBy
-  }
+query GetEntityByID ($entityId: ID!) {
+	entity(id: $entityId) {
+		annualSpend
+		approvedForUse
+		autoRenews
+		billingModel
+		contractEndDate
+		contractRenewalAt
+		contractStartDate
+		createdAt
+		createdBy
+		description
+		displayName
+		domains
+		entityRelationshipStateID
+		entityRelationshipStateName
+		entitySecurityQuestionnaireStatusID
+		entitySecurityQuestionnaireStatusName
+		entitySourceTypeID
+		entitySourceTypeName
+		entityTypeID
+		environmentID
+		environmentName
+		externalID
+		hasSoc2
+		id
+		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerUserID
+		lastReviewedAt
+		linkedAssetIds
+		links
+		logoFileID
+		mfaEnforced
+		mfaSupported
+		name
+		nextReviewAt
+		observedAt
+		ownerID
+		providedServices
+		renewalRisk
+		reviewFrequency
+		reviewedBy
+		reviewedByGroupID
+		reviewedByUserID
+		riskRating
+		riskScore
+		riskScoreCoverage
+		scopeID
+		scopeName
+		soc2PeriodEnd
+		spendCurrency
+		ssoEnforced
+		status
+		statusPageURL
+		systemInternalID
+		systemOwned
+		tags
+		terminationNoticeDays
+		tier
+		updatedAt
+		updatedBy
+		vendorMetadata
+		notes {
+			edges {
+				node {
+					text
+					updatedAt
+					updatedBy
+				}
+			}
+		}
+		entityType {
+			id
+			name
+		}
+		contacts {
+			edges {
+				node {
+					id
+					fullName
+					email
+					title
+					company
+					address
+					phoneNumber
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!) {
-  updateEntity(id: $updateEntityId, input: $input) {
-    entity {
-      createdAt
-      createdBy
-      description
-      displayName
-      status
-      domains
-      notes {
-        edges {
-          node {
-            text
-            updatedAt
-            updatedBy
-          }
-        }
-      }
-      entityType {
-        id
-        name
-      }
-      id
-      name
-      ownerID
-      tags
-      updatedAt
-      updatedBy
-    }
-  }
+mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
+	updateEntity(id: $updateEntityId, input: $input) {
+		entity {
+			annualSpend
+			approvedForUse
+			autoRenews
+			billingModel
+			contractEndDate
+			contractRenewalAt
+			contractStartDate
+			createdAt
+			createdBy
+			description
+			displayName
+			domains
+			entityRelationshipStateID
+			entityRelationshipStateName
+			entitySecurityQuestionnaireStatusID
+			entitySecurityQuestionnaireStatusName
+			entitySourceTypeID
+			entitySourceTypeName
+			entityTypeID
+			environmentID
+			environmentName
+			externalID
+			hasSoc2
+			id
+			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerUserID
+			lastReviewedAt
+			linkedAssetIds
+			links
+			logoFileID
+			mfaEnforced
+			mfaSupported
+			name
+			nextReviewAt
+			observedAt
+			ownerID
+			providedServices
+			renewalRisk
+			reviewFrequency
+			reviewedBy
+			reviewedByGroupID
+			reviewedByUserID
+			riskRating
+			riskScore
+			riskScoreCoverage
+			scopeID
+			scopeName
+			soc2PeriodEnd
+			spendCurrency
+			ssoEnforced
+			status
+			statusPageURL
+			systemInternalID
+			systemOwned
+			tags
+			terminationNoticeDays
+			tier
+			updatedAt
+			updatedBy
+			vendorMetadata
+			notes {
+				edges {
+					node {
+						text
+						updatedAt
+						updatedBy
+					}
+				}
+			}
+			entityType {
+				id
+				name
+			}
+		}
+	}
 }

@@ -1039,14 +1039,41 @@ func (_u *EntityHistoryUpdate) ClearRiskScore() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) SetRiskScoreCoverage(v int) *EntityHistoryUpdate {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableRiskScoreCoverage(v *int) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) AddRiskScoreCoverage(v int) *EntityHistoryUpdate {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdate) ClearRiskScoreCoverage() *EntityHistoryUpdate {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityHistoryUpdate) SetTier(v string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetTier(v enums.VendorTier) *EntityHistoryUpdate {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityHistoryUpdate) SetNillableTier(v *string) *EntityHistoryUpdate {
+func (_u *EntityHistoryUpdate) SetNillableTier(v *enums.VendorTier) *EntityHistoryUpdate {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -1131,6 +1158,66 @@ func (_u *EntityHistoryUpdate) ClearVendorMetadata() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityHistoryUpdate) SetLogoFileID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableLogoFileID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityHistoryUpdate) ClearLogoFileID() *EntityHistoryUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdate) SetExternalID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableExternalID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdate) ClearExternalID() *EntityHistoryUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdate) SetObservedAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdate) ClearObservedAt() *EntityHistoryUpdate {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdate) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -1183,6 +1270,11 @@ func (_u *EntityHistoryUpdate) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
@@ -1560,11 +1652,20 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+		_spec.ClearField(entityhistory.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
@@ -1589,6 +1690,24 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2617,14 +2736,41 @@ func (_u *EntityHistoryUpdateOne) ClearRiskScore() *EntityHistoryUpdateOne {
 	return _u
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) SetRiskScoreCoverage(v int) *EntityHistoryUpdateOne {
+	_u.mutation.ResetRiskScoreCoverage()
+	_u.mutation.SetRiskScoreCoverage(v)
+	return _u
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableRiskScoreCoverage(v *int) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskScoreCoverage(*v)
+	}
+	return _u
+}
+
+// AddRiskScoreCoverage adds value to the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) AddRiskScoreCoverage(v int) *EntityHistoryUpdateOne {
+	_u.mutation.AddRiskScoreCoverage(v)
+	return _u
+}
+
+// ClearRiskScoreCoverage clears the value of the "risk_score_coverage" field.
+func (_u *EntityHistoryUpdateOne) ClearRiskScoreCoverage() *EntityHistoryUpdateOne {
+	_u.mutation.ClearRiskScoreCoverage()
+	return _u
+}
+
 // SetTier sets the "tier" field.
-func (_u *EntityHistoryUpdateOne) SetTier(v string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetTier(v enums.VendorTier) *EntityHistoryUpdateOne {
 	_u.mutation.SetTier(v)
 	return _u
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_u *EntityHistoryUpdateOne) SetNillableTier(v *string) *EntityHistoryUpdateOne {
+func (_u *EntityHistoryUpdateOne) SetNillableTier(v *enums.VendorTier) *EntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetTier(*v)
 	}
@@ -2709,6 +2855,66 @@ func (_u *EntityHistoryUpdateOne) ClearVendorMetadata() *EntityHistoryUpdateOne 
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *EntityHistoryUpdateOne) SetLogoFileID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *EntityHistoryUpdateOne) ClearLogoFileID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *EntityHistoryUpdateOne) SetExternalID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableExternalID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityHistoryUpdateOne) ClearExternalID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) SetObservedAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *EntityHistoryUpdateOne) ClearObservedAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdateOne) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -2774,6 +2980,11 @@ func (_u *EntityHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := entityhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Tier(); ok {
+		if err := entityhistory.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.tier": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
@@ -3168,11 +3379,20 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.RiskScoreCleared() {
 		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
 	}
+	if value, ok := _u.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScoreCoverage(); ok {
+		_spec.AddField(entityhistory.FieldRiskScoreCoverage, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCoverageCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScoreCoverage, field.TypeInt)
+	}
 	if value, ok := _u.mutation.Tier(); ok {
-		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+		_spec.SetField(entityhistory.FieldTier, field.TypeEnum, value)
 	}
 	if _u.mutation.TierCleared() {
-		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+		_spec.ClearField(entityhistory.FieldTier, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.ReviewFrequency(); ok {
 		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
@@ -3197,6 +3417,24 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(entityhistory.FieldLogoFileID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

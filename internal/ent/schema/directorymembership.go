@@ -47,24 +47,40 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").
 			Optional().
 			NotEmpty().
 			Immutable(),
+		field.String("directory_instance_id").
+			Comment("stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance").
+			Optional().
+			Nillable(),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey(),
+			),
 		field.String("directory_account_id").
 			Comment("directory account participating in this membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
 		field.String("directory_group_id").
 			Comment("directory group associated with this membership").
 			NotEmpty().
-			Immutable(),
+			Immutable().
+			Annotations(
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
 		field.Enum("role").
 			Comment("membership role reported by the provider").
 			GoType(enums.DirectoryMembershipRole("")).
@@ -77,11 +93,31 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.Time("first_seen_at").
 			Comment("first time the membership was detected").
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("last_seen_at").
-			Comment("most recent time the membership was detected").
+			Comment("most recent time the membership was confirmed by directory ingest").
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("added_at").
+			Comment("provider-reported time the membership was added in the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
+		field.Time("removed_at").
+			Comment("provider-reported or locally-recorded time the membership was removed from the source directory").
+			Optional().
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 		field.Time("observed_at").
 			Comment("time when this record was created").
 			Default(time.Now).
@@ -171,6 +207,7 @@ func (DirectoryMembership) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("directory_account_id", "directory_group_id", "directory_sync_run_id").
 			Unique(),
+		index.Fields("directory_instance_id", "directory_account_id", "directory_group_id"),
 		index.Fields("directory_sync_run_id"),
 		index.Fields("integration_id", "directory_sync_run_id"),
 		index.Fields("platform_id", "directory_sync_run_id"),
@@ -190,6 +227,9 @@ func (m DirectoryMembership) Policy() ent.Policy {
 func (DirectoryMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
+		entx.IntegrationMappingSchema().StockPersist(),
 	}
 }

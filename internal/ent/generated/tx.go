@@ -204,6 +204,10 @@ type Tx struct {
 	User *UserClient
 	// UserSetting is the client for interacting with the UserSetting builders.
 	UserSetting *UserSettingClient
+	// VendorRiskScore is the client for interacting with the VendorRiskScore builders.
+	VendorRiskScore *VendorRiskScoreClient
+	// VendorScoringConfig is the client for interacting with the VendorScoringConfig builders.
+	VendorScoringConfig *VendorScoringConfigClient
 	// Vulnerability is the client for interacting with the Vulnerability builders.
 	Vulnerability *VulnerabilityClient
 	// Webauthn is the client for interacting with the Webauthn builders.
@@ -449,6 +453,8 @@ func (tx *Tx) init() {
 	tx.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)
+	tx.VendorRiskScore = NewVendorRiskScoreClient(tx.config)
+	tx.VendorScoringConfig = NewVendorScoringConfigClient(tx.config)
 	tx.Vulnerability = NewVulnerabilityClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
 	tx.WorkflowAssignment = NewWorkflowAssignmentClient(tx.config)

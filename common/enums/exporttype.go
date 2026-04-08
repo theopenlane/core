@@ -6,8 +6,14 @@ import "io"
 type ExportType string
 
 var (
+	// ExportTypeAssessment indicates the assessment.
+	ExportTypeAssessment ExportType = "ASSESSMENT"
 	// ExportTypeAsset indicates the asset.
 	ExportTypeAsset ExportType = "ASSET"
+	// ExportTypeCampaign indicates the campaign.
+	ExportTypeCampaign ExportType = "CAMPAIGN"
+	// ExportTypeContact indicates the contact.
+	ExportTypeContact ExportType = "CONTACT"
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
 	// ExportTypeDirectoryMembership indicates the directorymembership.
@@ -42,6 +48,10 @@ var (
 	ExportTypeTrustCenterFaq ExportType = "TRUST_CENTER_FAQ"
 	// ExportTypeTrustCenterSubprocessor indicates the trustcentersubprocessor.
 	ExportTypeTrustCenterSubprocessor ExportType = "TRUST_CENTER_SUBPROCESSOR"
+	// ExportTypeVendorRiskScore indicates the vendorriskscore.
+	ExportTypeVendorRiskScore ExportType = "VENDOR_RISK_SCORE"
+	// ExportTypeVendorScoringConfig indicates the vendorscoringconfig.
+	ExportTypeVendorScoringConfig ExportType = "VENDOR_SCORING_CONFIG"
 	// ExportTypeVulnerability indicates the vulnerability.
 	ExportTypeVulnerability ExportType = "VULNERABILITY"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
@@ -49,7 +59,10 @@ var (
 )
 
 var exportTypeValues = []ExportType{
+	ExportTypeAssessment,
 	ExportTypeAsset,
+	ExportTypeCampaign,
+	ExportTypeContact,
 	ExportTypeControl,
 	ExportTypeDirectoryMembership,
 	ExportTypeEntity,
@@ -67,6 +80,8 @@ var exportTypeValues = []ExportType{
 	ExportTypeTask,
 	ExportTypeTrustCenterFaq,
 	ExportTypeTrustCenterSubprocessor,
+	ExportTypeVendorRiskScore,
+	ExportTypeVendorScoringConfig,
 	ExportTypeVulnerability,
 }
 

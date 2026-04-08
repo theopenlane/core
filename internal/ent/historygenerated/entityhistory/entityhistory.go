@@ -134,6 +134,8 @@ const (
 	FieldRiskRating = "risk_rating"
 	// FieldRiskScore holds the string denoting the risk_score field in the database.
 	FieldRiskScore = "risk_score"
+	// FieldRiskScoreCoverage holds the string denoting the risk_score_coverage field in the database.
+	FieldRiskScoreCoverage = "risk_score_coverage"
 	// FieldTier holds the string denoting the tier field in the database.
 	FieldTier = "tier"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
@@ -144,6 +146,12 @@ const (
 	FieldContractRenewalAt = "contract_renewal_at"
 	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
 	FieldVendorMetadata = "vendor_metadata"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
+	// FieldObservedAt holds the string denoting the observed_at field in the database.
+	FieldObservedAt = "observed_at"
 	// Table holds the table name of the entityhistory in the database.
 	Table = "entity_history"
 )
@@ -208,11 +216,15 @@ var Columns = []string{
 	FieldLinks,
 	FieldRiskRating,
 	FieldRiskScore,
+	FieldRiskScoreCoverage,
 	FieldTier,
 	FieldReviewFrequency,
 	FieldNextReviewAt,
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
+	FieldLogoFileID,
+	FieldExternalID,
+	FieldObservedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -292,12 +304,22 @@ func StatusValidator(s enums.EntityStatus) error {
 	}
 }
 
+// TierValidator is a validator for the "tier" field enum values. It is called by the builders before save.
+func TierValidator(t enums.VendorTier) error {
+	switch t.String() {
+	case "CRITICAL", "HIGH", "STANDARD", "LOW":
+		return nil
+	default:
+		return fmt.Errorf("entityhistory: invalid enum value for tier field: %q", t)
+	}
+}
+
 const DefaultReviewFrequency enums.Frequency = "YEARLY"
 
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
 func ReviewFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {
-	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("entityhistory: invalid enum value for review_frequency field: %q", rf)
@@ -572,6 +594,11 @@ func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
 }
 
+// ByRiskScoreCoverage orders the results by the risk_score_coverage field.
+func ByRiskScoreCoverage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScoreCoverage, opts...).ToFunc()
+}
+
 // ByTier orders the results by the tier field.
 func ByTier(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTier, opts...).ToFunc()
@@ -592,6 +619,21 @@ func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
 }
 
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByObservedAt orders the results by the observed_at field.
+func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -604,6 +646,13 @@ var (
 	_ graphql.Marshaler = (*enums.EntityStatus)(nil)
 	// enums.EntityStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EntityStatus)(nil)
+)
+
+var (
+	// enums.VendorTier must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.VendorTier)(nil)
+	// enums.VendorTier must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.VendorTier)(nil)
 )
 
 var (

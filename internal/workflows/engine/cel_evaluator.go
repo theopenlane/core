@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/common/types"
 
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/celx"
@@ -58,17 +57,14 @@ func (e *CELEvaluator) Evaluate(ctx context.Context, expression string, vars map
 		return false, fmt.Errorf("%w: %v", ErrConditionFailed, evalErr)
 	}
 
-	if out == nil {
-		return false, ErrCELNilOutput
-	}
-
-	if out.Type() != types.BoolType {
-		return false, ErrCELTypeMismatch
-	}
-
-	result, ok := out.Value().(bool)
-	if !ok {
-		result = out.Equal(types.True) == types.True
+	result, boolErr := celx.BoolResult(out)
+	if boolErr != nil {
+		switch {
+		case errors.Is(boolErr, celx.ErrNilOutput):
+			return false, ErrCELNilOutput
+		default:
+			return false, ErrCELTypeMismatch
+		}
 	}
 
 	return result, nil

@@ -2415,6 +2415,54 @@ func (f UserSettingMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.UserSettingMutation", m)
 }
 
+// The VendorRiskScoreQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorRiskScoreQueryRuleFunc func(context.Context, *generated.VendorRiskScoreQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorRiskScoreQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorRiskScoreQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.VendorRiskScoreQuery", q)
+}
+
+// The VendorRiskScoreMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorRiskScoreMutationRuleFunc func(context.Context, *generated.VendorRiskScoreMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorRiskScoreMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.VendorRiskScoreMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.VendorRiskScoreMutation", m)
+}
+
+// The VendorScoringConfigQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type VendorScoringConfigQueryRuleFunc func(context.Context, *generated.VendorScoringConfigQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f VendorScoringConfigQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorScoringConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.VendorScoringConfigQuery", q)
+}
+
+// The VendorScoringConfigMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type VendorScoringConfigMutationRuleFunc func(context.Context, *generated.VendorScoringConfigMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f VendorScoringConfigMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.VendorScoringConfigMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.VendorScoringConfigMutation", m)
+}
+
 // The VulnerabilityQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type VulnerabilityQueryRuleFunc func(context.Context, *generated.VulnerabilityQuery) error
@@ -2858,6 +2906,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.UserSettingQuery:
 		return q.Filter(), nil
+	case *generated.VendorRiskScoreQuery:
+		return q.Filter(), nil
+	case *generated.VendorScoringConfigQuery:
+		return q.Filter(), nil
 	case *generated.VulnerabilityQuery:
 		return q.Filter(), nil
 	case *generated.WebauthnQuery:
@@ -3074,6 +3126,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.UserMutation:
 		return m.Filter(), nil
 	case *generated.UserSettingMutation:
+		return m.Filter(), nil
+	case *generated.VendorRiskScoreMutation:
+		return m.Filter(), nil
+	case *generated.VendorScoringConfigMutation:
 		return m.Filter(), nil
 	case *generated.VulnerabilityMutation:
 		return m.Filter(), nil

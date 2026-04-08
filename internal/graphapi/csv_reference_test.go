@@ -19,8 +19,6 @@ type csvRefRow struct {
 
 // TestResolveCSVReferenceRulesSuccess verifies successful reference resolution.
 func TestResolveCSVReferenceRulesSuccess(t *testing.T) {
-	t.Parallel()
-
 	rows := []*csvRefRow{
 		{
 			UserEmail:  "Test@Example.com",
@@ -55,8 +53,6 @@ func TestResolveCSVReferenceRulesSuccess(t *testing.T) {
 
 // TestResolveCSVReferenceRulesMissing ensures missing references return validation errors.
 func TestResolveCSVReferenceRulesMissing(t *testing.T) {
-	t.Parallel()
-
 	rows := []*csvRefRow{{UserEmail: "missing@example.com"}}
 	rules := []CSVReferenceRule{
 		{
@@ -74,8 +70,6 @@ func TestResolveCSVReferenceRulesMissing(t *testing.T) {
 
 // TestResolveCSVReferenceRulesCreate verifies create callbacks are applied.
 func TestResolveCSVReferenceRulesCreate(t *testing.T) {
-	t.Parallel()
-
 	rows := []*csvRefRow{{UserEmail: "created@example.com"}}
 	rule := CSVReferenceRule{
 		SourceField: "UserEmail",
@@ -100,8 +94,6 @@ func TestResolveCSVReferenceRulesCreate(t *testing.T) {
 
 // TestResolveCSVReferencesForSchemaWithoutRules verifies no error for schemas without rules.
 func TestResolveCSVReferencesForSchemaWithoutRules(t *testing.T) {
-	t.Parallel()
-
 	type testRow struct{ Name string }
 	rows := []*testRow{{Name: "test"}}
 	err := resolveCSVReferencesForSchema(context.Background(), "User", rows)
@@ -110,8 +102,6 @@ func TestResolveCSVReferencesForSchemaWithoutRules(t *testing.T) {
 
 // TestResolveCSVReferencesForSchemaNonexistent verifies no error for nonexistent schemas.
 func TestResolveCSVReferencesForSchemaNonexistent(t *testing.T) {
-	t.Parallel()
-
 	type testRow struct{ Name string }
 	rows := []*testRow{{Name: "test"}}
 	err := resolveCSVReferencesForSchema(context.Background(), "NonexistentSchema", rows)

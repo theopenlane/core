@@ -1130,6 +1130,51 @@ func (_u *ControlUpdate) SetResponsibleParty(v *Entity) *ControlUpdate {
 	return _u.SetResponsiblePartyID(v.ID)
 }
 
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *ControlUpdate) AddReviewIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *ControlUpdate) AddReviews(v ...*Review) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ControlUpdate) AddRemediationIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ControlUpdate) AddRemediations(v ...*Remediation) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_u *ControlUpdate) AddScanIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_u *ControlUpdate) AddScans(v ...*Scan) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlUpdate) AddBlockedGroupIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1225,21 +1270,6 @@ func (_u *ControlUpdate) AddAssets(v ...*Asset) *ControlUpdate {
 	return _u.AddAssetIDs(ids...)
 }
 
-// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (_u *ControlUpdate) AddScanIDs(ids ...string) *ControlUpdate {
-	_u.mutation.AddScanIDs(ids...)
-	return _u
-}
-
-// AddScans adds the "scans" edges to the Scan entity.
-func (_u *ControlUpdate) AddScans(v ...*Scan) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanIDs(ids...)
-}
-
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (_u *ControlUpdate) AddEntityIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddEntityIDs(ids...)
@@ -1283,36 +1313,6 @@ func (_u *ControlUpdate) AddCampaigns(v ...*Campaign) *ControlUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddCampaignIDs(ids...)
-}
-
-// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
-func (_u *ControlUpdate) AddRemediationIDs(ids ...string) *ControlUpdate {
-	_u.mutation.AddRemediationIDs(ids...)
-	return _u
-}
-
-// AddRemediations adds the "remediations" edges to the Remediation entity.
-func (_u *ControlUpdate) AddRemediations(v ...*Remediation) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddRemediationIDs(ids...)
-}
-
-// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
-func (_u *ControlUpdate) AddReviewIDs(ids ...string) *ControlUpdate {
-	_u.mutation.AddReviewIDs(ids...)
-	return _u
-}
-
-// AddReviews adds the "reviews" edges to the Review entity.
-func (_u *ControlUpdate) AddReviews(v ...*Review) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddReviewIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -1668,6 +1668,69 @@ func (_u *ControlUpdate) ClearResponsibleParty() *ControlUpdate {
 	return _u
 }
 
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *ControlUpdate) ClearReviews() *ControlUpdate {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *ControlUpdate) RemoveReviewIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *ControlUpdate) RemoveReviews(v ...*Review) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ControlUpdate) ClearRemediations() *ControlUpdate {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ControlUpdate) RemoveRemediationIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ControlUpdate) RemoveRemediations(v ...*Remediation) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (_u *ControlUpdate) ClearScans() *ControlUpdate {
+	_u.mutation.ClearScans()
+	return _u
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (_u *ControlUpdate) RemoveScanIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (_u *ControlUpdate) RemoveScans(v ...*Scan) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
+}
+
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
 func (_u *ControlUpdate) ClearBlockedGroups() *ControlUpdate {
 	_u.mutation.ClearBlockedGroups()
@@ -1797,27 +1860,6 @@ func (_u *ControlUpdate) RemoveAssets(v ...*Asset) *ControlUpdate {
 	return _u.RemoveAssetIDs(ids...)
 }
 
-// ClearScans clears all "scans" edges to the Scan entity.
-func (_u *ControlUpdate) ClearScans() *ControlUpdate {
-	_u.mutation.ClearScans()
-	return _u
-}
-
-// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (_u *ControlUpdate) RemoveScanIDs(ids ...string) *ControlUpdate {
-	_u.mutation.RemoveScanIDs(ids...)
-	return _u
-}
-
-// RemoveScans removes "scans" edges to Scan entities.
-func (_u *ControlUpdate) RemoveScans(v ...*Scan) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanIDs(ids...)
-}
-
 // ClearEntities clears all "entities" edges to the Entity entity.
 func (_u *ControlUpdate) ClearEntities() *ControlUpdate {
 	_u.mutation.ClearEntities()
@@ -1879,48 +1921,6 @@ func (_u *ControlUpdate) RemoveCampaigns(v ...*Campaign) *ControlUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignIDs(ids...)
-}
-
-// ClearRemediations clears all "remediations" edges to the Remediation entity.
-func (_u *ControlUpdate) ClearRemediations() *ControlUpdate {
-	_u.mutation.ClearRemediations()
-	return _u
-}
-
-// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
-func (_u *ControlUpdate) RemoveRemediationIDs(ids ...string) *ControlUpdate {
-	_u.mutation.RemoveRemediationIDs(ids...)
-	return _u
-}
-
-// RemoveRemediations removes "remediations" edges to Remediation entities.
-func (_u *ControlUpdate) RemoveRemediations(v ...*Remediation) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveRemediationIDs(ids...)
-}
-
-// ClearReviews clears all "reviews" edges to the Review entity.
-func (_u *ControlUpdate) ClearReviews() *ControlUpdate {
-	_u.mutation.ClearReviews()
-	return _u
-}
-
-// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
-func (_u *ControlUpdate) RemoveReviewIDs(ids ...string) *ControlUpdate {
-	_u.mutation.RemoveReviewIDs(ids...)
-	return _u
-}
-
-// RemoveReviews removes "reviews" edges to Review entities.
-func (_u *ControlUpdate) RemoveReviews(v ...*Review) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveReviewIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -3068,6 +3068,150 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3432,54 +3576,6 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ScansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3619,102 +3715,6 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlCampaigns
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.RemediationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ReviewsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5216,6 +5216,51 @@ func (_u *ControlUpdateOne) SetResponsibleParty(v *Entity) *ControlUpdateOne {
 	return _u.SetResponsiblePartyID(v.ID)
 }
 
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_u *ControlUpdateOne) AddReviewIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddReviewIDs(ids...)
+	return _u
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_u *ControlUpdateOne) AddReviews(v ...*Review) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_u *ControlUpdateOne) AddRemediationIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddRemediationIDs(ids...)
+	return _u
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_u *ControlUpdateOne) AddRemediations(v ...*Remediation) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRemediationIDs(ids...)
+}
+
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_u *ControlUpdateOne) AddScanIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddScanIDs(ids...)
+	return _u
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_u *ControlUpdateOne) AddScans(v ...*Scan) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddScanIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -5311,21 +5356,6 @@ func (_u *ControlUpdateOne) AddAssets(v ...*Asset) *ControlUpdateOne {
 	return _u.AddAssetIDs(ids...)
 }
 
-// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
-func (_u *ControlUpdateOne) AddScanIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.AddScanIDs(ids...)
-	return _u
-}
-
-// AddScans adds the "scans" edges to the Scan entity.
-func (_u *ControlUpdateOne) AddScans(v ...*Scan) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScanIDs(ids...)
-}
-
 // AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
 func (_u *ControlUpdateOne) AddEntityIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddEntityIDs(ids...)
@@ -5369,36 +5399,6 @@ func (_u *ControlUpdateOne) AddCampaigns(v ...*Campaign) *ControlUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddCampaignIDs(ids...)
-}
-
-// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
-func (_u *ControlUpdateOne) AddRemediationIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.AddRemediationIDs(ids...)
-	return _u
-}
-
-// AddRemediations adds the "remediations" edges to the Remediation entity.
-func (_u *ControlUpdateOne) AddRemediations(v ...*Remediation) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddRemediationIDs(ids...)
-}
-
-// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
-func (_u *ControlUpdateOne) AddReviewIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.AddReviewIDs(ids...)
-	return _u
-}
-
-// AddReviews adds the "reviews" edges to the Review entity.
-func (_u *ControlUpdateOne) AddReviews(v ...*Review) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddReviewIDs(ids...)
 }
 
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
@@ -5754,6 +5754,69 @@ func (_u *ControlUpdateOne) ClearResponsibleParty() *ControlUpdateOne {
 	return _u
 }
 
+// ClearReviews clears all "reviews" edges to the Review entity.
+func (_u *ControlUpdateOne) ClearReviews() *ControlUpdateOne {
+	_u.mutation.ClearReviews()
+	return _u
+}
+
+// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
+func (_u *ControlUpdateOne) RemoveReviewIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveReviewIDs(ids...)
+	return _u
+}
+
+// RemoveReviews removes "reviews" edges to Review entities.
+func (_u *ControlUpdateOne) RemoveReviews(v ...*Review) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReviewIDs(ids...)
+}
+
+// ClearRemediations clears all "remediations" edges to the Remediation entity.
+func (_u *ControlUpdateOne) ClearRemediations() *ControlUpdateOne {
+	_u.mutation.ClearRemediations()
+	return _u
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
+func (_u *ControlUpdateOne) RemoveRemediationIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveRemediationIDs(ids...)
+	return _u
+}
+
+// RemoveRemediations removes "remediations" edges to Remediation entities.
+func (_u *ControlUpdateOne) RemoveRemediations(v ...*Remediation) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRemediationIDs(ids...)
+}
+
+// ClearScans clears all "scans" edges to the Scan entity.
+func (_u *ControlUpdateOne) ClearScans() *ControlUpdateOne {
+	_u.mutation.ClearScans()
+	return _u
+}
+
+// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
+func (_u *ControlUpdateOne) RemoveScanIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveScanIDs(ids...)
+	return _u
+}
+
+// RemoveScans removes "scans" edges to Scan entities.
+func (_u *ControlUpdateOne) RemoveScans(v ...*Scan) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveScanIDs(ids...)
+}
+
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
 func (_u *ControlUpdateOne) ClearBlockedGroups() *ControlUpdateOne {
 	_u.mutation.ClearBlockedGroups()
@@ -5883,27 +5946,6 @@ func (_u *ControlUpdateOne) RemoveAssets(v ...*Asset) *ControlUpdateOne {
 	return _u.RemoveAssetIDs(ids...)
 }
 
-// ClearScans clears all "scans" edges to the Scan entity.
-func (_u *ControlUpdateOne) ClearScans() *ControlUpdateOne {
-	_u.mutation.ClearScans()
-	return _u
-}
-
-// RemoveScanIDs removes the "scans" edge to Scan entities by IDs.
-func (_u *ControlUpdateOne) RemoveScanIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.RemoveScanIDs(ids...)
-	return _u
-}
-
-// RemoveScans removes "scans" edges to Scan entities.
-func (_u *ControlUpdateOne) RemoveScans(v ...*Scan) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScanIDs(ids...)
-}
-
 // ClearEntities clears all "entities" edges to the Entity entity.
 func (_u *ControlUpdateOne) ClearEntities() *ControlUpdateOne {
 	_u.mutation.ClearEntities()
@@ -5965,48 +6007,6 @@ func (_u *ControlUpdateOne) RemoveCampaigns(v ...*Campaign) *ControlUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignIDs(ids...)
-}
-
-// ClearRemediations clears all "remediations" edges to the Remediation entity.
-func (_u *ControlUpdateOne) ClearRemediations() *ControlUpdateOne {
-	_u.mutation.ClearRemediations()
-	return _u
-}
-
-// RemoveRemediationIDs removes the "remediations" edge to Remediation entities by IDs.
-func (_u *ControlUpdateOne) RemoveRemediationIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.RemoveRemediationIDs(ids...)
-	return _u
-}
-
-// RemoveRemediations removes "remediations" edges to Remediation entities.
-func (_u *ControlUpdateOne) RemoveRemediations(v ...*Remediation) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveRemediationIDs(ids...)
-}
-
-// ClearReviews clears all "reviews" edges to the Review entity.
-func (_u *ControlUpdateOne) ClearReviews() *ControlUpdateOne {
-	_u.mutation.ClearReviews()
-	return _u
-}
-
-// RemoveReviewIDs removes the "reviews" edge to Review entities by IDs.
-func (_u *ControlUpdateOne) RemoveReviewIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.RemoveReviewIDs(ids...)
-	return _u
-}
-
-// RemoveReviews removes "reviews" edges to Review entities.
-func (_u *ControlUpdateOne) RemoveReviews(v ...*Review) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveReviewIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -7184,6 +7184,150 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.ReviewsTable,
+			Columns: control.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ReviewControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.RemediationsTable,
+			Columns: control.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.RemediationControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   control.ScansTable,
+			Columns: control.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ControlScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -7548,54 +7692,6 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ScansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScansIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   control.ScansTable,
-			Columns: control.ScansPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ControlScans
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -7735,102 +7831,6 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlCampaigns
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.RemediationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemediationsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.RemediationsTable,
-			Columns: control.RemediationsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.RemediationControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ReviewsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ReviewsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ReviewsTable,
-			Columns: control.ReviewsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

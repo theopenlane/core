@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -59,6 +60,8 @@ type Remediation struct {
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// title or short description of the remediation effort
 	Title string `json:"title,omitempty"`
+	// status of the remediation, such as pending, in_progress, or completed
+	Status enums.RemediationStatus `json:"status,omitempty"`
 	// state of the remediation, such as pending or completed
 	State string `json:"state,omitempty"`
 	// intent or goal of the remediation effort
@@ -93,11 +96,8 @@ type Remediation struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RemediationQuery when eager-loading is set.
-	Edges                      RemediationEdges `json:"edges"`
-	finding_remediations       *string
-	review_remediations        *string
-	vulnerability_remediations *string
-	selectValues               sql.SelectValues
+	Edges        RemediationEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // RemediationEdges holds the relations/edges for other nodes in the graph.
@@ -376,16 +376,10 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case remediation.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
+		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldStatus, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediation.FieldCreatedAt, remediation.FieldUpdatedAt, remediation.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case remediation.ForeignKeys[0]: // finding_remediations
-			values[i] = new(sql.NullString)
-		case remediation.ForeignKeys[1]: // review_remediations
-			values[i] = new(sql.NullString)
-		case remediation.ForeignKeys[2]: // vulnerability_remediations
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -525,6 +519,12 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Title = value.String
 			}
+		case remediation.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = enums.RemediationStatus(value.String)
+			}
 		case remediation.FieldState:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
@@ -625,27 +625,6 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
-			}
-		case remediation.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_remediations", values[i])
-			} else if value.Valid {
-				_m.finding_remediations = new(string)
-				*_m.finding_remediations = value.String
-			}
-		case remediation.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field review_remediations", values[i])
-			} else if value.Valid {
-				_m.review_remediations = new(string)
-				*_m.review_remediations = value.String
-			}
-		case remediation.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_remediations", values[i])
-			} else if value.Valid {
-				_m.vulnerability_remediations = new(string)
-				*_m.vulnerability_remediations = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -848,6 +827,9 @@ func (_m *Remediation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(_m.State)

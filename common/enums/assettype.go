@@ -10,6 +10,7 @@ var (
 	AssetTypeDomain     AssetType = "DOMAIN"
 	AssetTypeDevice     AssetType = "DEVICE"
 	AssetTypeTelephone  AssetType = "TELEPHONE"
+	AssetTypeRepository AssetType = "REPOSITORY"
 	AssetTypeInvalid    AssetType = "INVALID"
 )
 
@@ -18,10 +19,11 @@ var assetTypeValues = []AssetType{
 	AssetTypeDomain,
 	AssetTypeDevice,
 	AssetTypeTelephone,
+	AssetTypeRepository,
 }
 
 // Values returns a slice of strings that represents all the possible values of the AssetType enum.
-// Possible default values are "TECHNOLOGY", "DOMAIN", "DEVICE", and "TELEPHONE".
+// Possible default values are "TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE", and "REPOSITORY".
 func (AssetType) Values() []string { return stringValues(assetTypeValues) }
 
 // String returns the AssetType as a string

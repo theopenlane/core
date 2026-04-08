@@ -1,22 +1,46 @@
-mutation UpdateNotification($updateNotificationId: ID!, $input: UpdateNotificationInput!) {
-  updateNotification(id: $updateNotificationId, input: $input) {
-    notification {
-      body
-      channels
-      createdAt
-      createdBy
-      data
-      id
-      notificationType
-      objectType
-      ownerID
-      readAt
-      tags
-      title
-      topic
-      updatedAt
-      updatedBy
-      userID
-    }
-  }
+mutation CreateNotification ($input: CreateNotificationInput!) {
+	createNotification(input: $input) {
+		notification {
+			body
+			channels
+			createdAt
+			createdBy
+			data
+			id
+			notificationType
+			objectType
+			ownerID
+			readAt
+			tags
+			templateID
+			title
+			topic
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
+}
+mutation UpdateNotification ($updateNotificationId: ID!, $input: UpdateNotificationInput!) {
+	updateNotification(id: $updateNotificationId, input: $input) {
+		notification {
+			body
+			channels
+			createdAt
+			createdBy
+			data
+			id
+			notificationType
+			objectType
+			ownerID
+			readAt
+			tags
+			templateID
+			title
+			topic
+			updatedAt
+			updatedBy
+			userID
+		}
+	}
 }

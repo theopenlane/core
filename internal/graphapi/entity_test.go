@@ -135,6 +135,7 @@ func TestQueryEntities(t *testing.T) {
 func TestMutationCreateEntity(t *testing.T) {
 	entitiesToDelete := []string{}
 	entityTypesToDelete := []string{}
+	defaultTier := lo.ToPtr(enums.VendorTierStandard)
 
 	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(testUser1.UserCtx, t)
 	entityTypeAnotherOrg := (&EntityTypeBuilder{client: suite.client, Name: "villains"}).MustNew(testUser2.UserCtx, t)
@@ -151,6 +152,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "happy path, minimal input",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("fraser fir"),
+				Tier: defaultTier,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -163,6 +165,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Description: lo.ToPtr("the pine trees of appalachia"),
 				Domains:     []string{"https://appalachiatrees.com"},
 				Status:      &enums.EntityStatusUnderReview,
+				Tier:        defaultTier,
 				Note: &testclient.CreateNoteInput{
 					Text:    "matt is the best",
 					OwnerID: &adminUser.OrganizationID,
@@ -176,6 +179,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "not allowed to use another org's entity type",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("peter pan"),
+				Tier: defaultTier,
 			},
 			entityTypeName: &entityTypeAnotherOrg.Name,
 			client:         suite.client.api,
@@ -186,6 +190,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "happy path, using api token",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("douglas fir"),
+				Tier: defaultTier,
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -195,6 +200,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			request: testclient.CreateEntityInput{
 				Name:    lo.ToPtr("blue spruce"),
 				OwnerID: &testUser1.OrganizationID,
+				Tier:    defaultTier,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -203,6 +209,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "do not create if not allowed",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("test-entity"),
+				Tier: defaultTier,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -212,6 +219,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "missing name, but display name provided",
 			request: testclient.CreateEntityInput{
 				DisplayName: lo.ToPtr("fraser firs"),
+				Tier:        defaultTier,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -220,6 +228,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "name already exists, different casing",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("Blue spruce"),
+				Tier: defaultTier,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -230,6 +239,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			request: testclient.CreateEntityInput{
 				Name:    lo.ToPtr("stone pines"),
 				Domains: []string{"appalachiatrees"},
+				Tier:    defaultTier,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,

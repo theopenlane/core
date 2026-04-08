@@ -91,6 +91,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -1967,6 +1969,36 @@ func (_u *OrganizationUpdate) AddDiscussions(v ...*Discussion) *OrganizationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddDiscussionIDs(ids...)
+}
+
+// AddVendorScoringConfigIDs adds the "vendor_scoring_configs" edge to the VendorScoringConfig entity by IDs.
+func (_u *OrganizationUpdate) AddVendorScoringConfigIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddVendorScoringConfigIDs(ids...)
+	return _u
+}
+
+// AddVendorScoringConfigs adds the "vendor_scoring_configs" edges to the VendorScoringConfig entity.
+func (_u *OrganizationUpdate) AddVendorScoringConfigs(v ...*VendorScoringConfig) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorScoringConfigIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *OrganizationUpdate) AddVendorRiskScoreIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *OrganizationUpdate) AddVendorRiskScores(v ...*VendorRiskScore) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -4225,6 +4257,48 @@ func (_u *OrganizationUpdate) RemoveDiscussions(v ...*Discussion) *OrganizationU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDiscussionIDs(ids...)
+}
+
+// ClearVendorScoringConfigs clears all "vendor_scoring_configs" edges to the VendorScoringConfig entity.
+func (_u *OrganizationUpdate) ClearVendorScoringConfigs() *OrganizationUpdate {
+	_u.mutation.ClearVendorScoringConfigs()
+	return _u
+}
+
+// RemoveVendorScoringConfigIDs removes the "vendor_scoring_configs" edge to VendorScoringConfig entities by IDs.
+func (_u *OrganizationUpdate) RemoveVendorScoringConfigIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveVendorScoringConfigIDs(ids...)
+	return _u
+}
+
+// RemoveVendorScoringConfigs removes "vendor_scoring_configs" edges to VendorScoringConfig entities.
+func (_u *OrganizationUpdate) RemoveVendorScoringConfigs(v ...*VendorScoringConfig) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorScoringConfigIDs(ids...)
+}
+
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *OrganizationUpdate) ClearVendorRiskScores() *OrganizationUpdate {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *OrganizationUpdate) RemoveVendorRiskScoreIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *OrganizationUpdate) RemoveVendorRiskScores(v ...*VendorRiskScore) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -9583,6 +9657,102 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.VendorScoringConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorScoringConfigsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorScoringConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -11505,6 +11675,36 @@ func (_u *OrganizationUpdateOne) AddDiscussions(v ...*Discussion) *OrganizationU
 		ids[i] = v[i].ID
 	}
 	return _u.AddDiscussionIDs(ids...)
+}
+
+// AddVendorScoringConfigIDs adds the "vendor_scoring_configs" edge to the VendorScoringConfig entity by IDs.
+func (_u *OrganizationUpdateOne) AddVendorScoringConfigIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddVendorScoringConfigIDs(ids...)
+	return _u
+}
+
+// AddVendorScoringConfigs adds the "vendor_scoring_configs" edges to the VendorScoringConfig entity.
+func (_u *OrganizationUpdateOne) AddVendorScoringConfigs(v ...*VendorScoringConfig) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorScoringConfigIDs(ids...)
+}
+
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_u *OrganizationUpdateOne) AddVendorRiskScoreIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *OrganizationUpdateOne) AddVendorRiskScores(v ...*VendorRiskScore) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVendorRiskScoreIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -13763,6 +13963,48 @@ func (_u *OrganizationUpdateOne) RemoveDiscussions(v ...*Discussion) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDiscussionIDs(ids...)
+}
+
+// ClearVendorScoringConfigs clears all "vendor_scoring_configs" edges to the VendorScoringConfig entity.
+func (_u *OrganizationUpdateOne) ClearVendorScoringConfigs() *OrganizationUpdateOne {
+	_u.mutation.ClearVendorScoringConfigs()
+	return _u
+}
+
+// RemoveVendorScoringConfigIDs removes the "vendor_scoring_configs" edge to VendorScoringConfig entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveVendorScoringConfigIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveVendorScoringConfigIDs(ids...)
+	return _u
+}
+
+// RemoveVendorScoringConfigs removes "vendor_scoring_configs" edges to VendorScoringConfig entities.
+func (_u *OrganizationUpdateOne) RemoveVendorScoringConfigs(v ...*VendorScoringConfig) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorScoringConfigIDs(ids...)
+}
+
+// ClearVendorRiskScores clears all "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_u *OrganizationUpdateOne) ClearVendorRiskScores() *OrganizationUpdateOne {
+	_u.mutation.ClearVendorRiskScores()
+	return _u
+}
+
+// RemoveVendorRiskScoreIDs removes the "vendor_risk_scores" edge to VendorRiskScore entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveVendorRiskScoreIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveVendorRiskScoreIDs(ids...)
+	return _u
+}
+
+// RemoveVendorRiskScores removes "vendor_risk_scores" edges to VendorRiskScore entities.
+func (_u *OrganizationUpdateOne) RemoveVendorRiskScores(v ...*VendorRiskScore) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVendorRiskScoreIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -19146,6 +19388,102 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorScoringConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorScoringConfigsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorScoringConfigsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorScoringConfigsTable,
+			Columns: []string{organization.VendorScoringConfigsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorScoringConfig
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoresTable,
+			Columns: []string{organization.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

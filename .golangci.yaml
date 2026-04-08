@@ -35,7 +35,6 @@ linters:
       - pkg/entitlements/test
       - pkg/entitlements/mocks
       - pkg/objects/mocks
-      - pkg/events/soiree/examples
       - pkg/objects/examples
       - internal/testutils
       - internal/graphapi/generated
@@ -44,6 +43,7 @@ linters:
       - internal/workflows/examples
       - internal/ent/csvgenerated
       - internal/ent/workflowgenerated
+      - internal/ent/integrationgenerated
 formatters:
   enable:
     - gofmt
@@ -55,7 +55,6 @@ formatters:
       - internal/testutils/*
       - pkg/entitlements/test/*
       - cli/cmd/*
-      - pkg/events/soiree/examples/*
       - internal/ent/hush/examples/*
       - internal/workflows/examples/*
       - internal/ent/csvgenerated/*

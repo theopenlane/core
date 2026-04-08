@@ -38,8 +38,8 @@ func (TrustCenterNDARequestHistory) Annotations() []entschema.Annotation {
 		entgql.QueryField(),
 		entgql.RelayConnection(),
 		entfga.Annotations{
-			ObjectType:   "trust_center",
-			IDField:      "TrustCenterID",
+			ObjectType:   "trust_center_nda_request",
+			IDField:      "Ref",
 			IncludeHooks: false,
 		},
 	}
@@ -114,6 +114,6 @@ func (TrustCenterNDARequestHistory) Policy() ent.Policy {
 // Interceptors of the TrustCenterNDARequestHistory
 func (TrustCenterNDARequestHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, "trust_center"),
+		interceptors.FilterListQuery(),
 	}
 }

@@ -1,6 +1,6 @@
 package workflows
 
-import "github.com/theopenlane/core/common/enums"
+import "encoding/json"
 
 // TargetedActionParams captures workflow action params that target recipients
 type TargetedActionParams struct {
@@ -30,14 +30,14 @@ type ApprovalActionParams struct {
 
 // NotificationActionParams defines params for NOTIFICATION actions
 type NotificationActionParams struct {
-	// TargetedActionParams identifies the notification recipients
+	// TargetedActionParams identifies notification message targets
 	TargetedActionParams
-	// Channels selects notification delivery channels
-	Channels []enums.Channel `json:"channels"`
 	// TemplateID references a notification template by ID
 	TemplateID string `json:"template_id,omitempty"`
 	// TemplateKey references a notification template by key
 	TemplateKey string `json:"template_key,omitempty"`
+	// OperationName identifies the integration operation to invoke when the template has an integration_id
+	OperationName string `json:"operation_name,omitempty"`
 	// Topic sets an optional notification topic
 	Topic string `json:"topic"`
 	// Title is the notification title
@@ -65,29 +65,28 @@ type WebhookActionParams struct {
 	Secret string `json:"secret"`
 	// Retries overrides the retry count when non-zero
 	Retries int `json:"retries"`
-
 	// Optional override for the idempotency key header
 	IdempotencyKey string `json:"idempotency_key"`
 }
 
 // IntegrationActionParams defines params for INTEGRATION actions
 type IntegrationActionParams struct {
-	// Integration is the integration identifier for the operation
-	Integration string `json:"integration"`
-	// Provider overrides the integration identifier when set
-	Provider string `json:"provider"`
-	// Operation is the integration operation name
-	Operation string `json:"operation"`
-	// Config holds the integration-specific configuration payload
-	Config map[string]any `json:"config"`
-	// TimeoutMS overrides the operation timeout in milliseconds
-	TimeoutMS int `json:"timeout_ms"`
-	// Retries overrides the retry count when non-zero
-	Retries int `json:"retries"`
-	// Force requests a refresh for the provider
-	Force bool `json:"force_refresh"`
-	// ClientForce requests a client-side refresh for the provider
-	ClientForce bool `json:"client_force"`
+	// InstallationID is the explicit installation identifier for the operation
+	InstallationID string `json:"installation_id,omitempty"`
+	// DefinitionID identifies the integration definition when no installation ID is set
+	DefinitionID string `json:"definition_id,omitempty"`
+	// OperationName identifies the integration operation to execute
+	OperationName string `json:"operation_name,omitempty"`
+	// Config holds the integration-specific configuration payload as a JSON object document
+	Config json.RawMessage `json:"config,omitempty"`
+	// ScopeExpression is an optional CEL expression gate for this integration action
+	ScopeExpression string `json:"scope_expression,omitempty"`
+	// ScopePayload is optional payload data exposed to scope expression evaluation as a JSON object document
+	ScopePayload json.RawMessage `json:"scope_payload,omitempty"`
+	// ScopeResource is optional resource identity data exposed to scope expression evaluation
+	ScopeResource string `json:"scope_resource,omitempty"`
+	// ForceClientRebuild requests a client cache bypass for the installation
+	ForceClientRebuild bool `json:"force_client_rebuild"`
 }
 
 // CreateObjectActionParams defines params for CREATE_OBJECT actions

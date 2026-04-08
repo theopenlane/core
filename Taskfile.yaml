@@ -59,6 +59,7 @@ tasks:
     cmds:
       - task: generate:removechecksums
       - task: generate:checksums
+      - task: go:fmt
 
   generate:checksums:
     desc: Generate with checksum tracking for CI optimization

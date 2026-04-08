@@ -7,6 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -74,6 +75,13 @@ func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
 // WithWorkflowsConfig sets the workflows config for CEL validation in resolvers.
 func (r Resolver) WithWorkflowsConfig(cfg workflows.Config) *Resolver {
 	r.workflowsConfig = cfg
+
+	return &r
+}
+
+// WithIntegrationsRuntime sets the integrations runtime for GraphQL integration surfaces.
+func (r Resolver) WithIntegrationsRuntime(rt *integrationsruntime.Runtime) *Resolver {
+	r.integrationsRuntime = rt
 
 	return &r
 }

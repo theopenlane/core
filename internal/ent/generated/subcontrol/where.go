@@ -3030,6 +3030,93 @@ func HasResponsiblePartyWith(preds ...predicate.Entity) predicate.Subcontrol {
 	})
 }
 
+// HasReviews applies the HasEdge predicate on the "reviews" edge.
+func HasReviews() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewSubcontrols
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewsWith applies the HasEdge predicate on the "reviews" edge with a given conditions (other predicates).
+func HasReviewsWith(preds ...predicate.Review) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newReviewsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewSubcontrols
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationSubcontrols
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationSubcontrols
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasScans applies the HasEdge predicate on the "scans" edge.
+func HasScans() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ScansTable, ScansPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.SubcontrolScans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScansWith applies the HasEdge predicate on the "scans" edge with a given conditions (other predicates).
+func HasScansWith(preds ...predicate.Scan) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newScansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.SubcontrolScans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Subcontrol {
 	return predicate.Subcontrol(func(s *sql.Selector) {
@@ -3254,6 +3341,93 @@ func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.S
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.WorkflowObjectRef
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.SubcontrolAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newEntitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolders applies the HasEdge predicate on the "identity_holders" edge.
+func HasIdentityHolders() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHoldersWith applies the HasEdge predicate on the "identity_holders" edge with a given conditions (other predicates).
+func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newIdentityHoldersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -26,13 +26,16 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -66,16 +69,20 @@ type EntityQuery struct {
 	withScans                             *ScanQuery
 	withCampaigns                         *CampaignQuery
 	withAssessmentResponses               *AssessmentResponseQuery
+	withVendorRiskScores                  *VendorRiskScoreQuery
 	withIntegrations                      *IntegrationQuery
 	withSubprocessors                     *SubprocessorQuery
 	withAuthMethods                       *CustomTypeEnumQuery
 	withEmployerIdentityHolders           *IdentityHolderQuery
 	withIdentityHolders                   *IdentityHolderQuery
 	withControls                          *ControlQuery
+	withSubcontrols                       *SubcontrolQuery
 	withPlatforms                         *PlatformQuery
 	withOutOfScopePlatforms               *PlatformQuery
 	withSourcePlatforms                   *PlatformQuery
 	withEntityType                        *EntityTypeQuery
+	withLogoFile                          *FileQuery
+	withInternalPolicies                  *InternalPolicyQuery
 	withFKs                               bool
 	loadTotal                             []func(context.Context, []*Entity) error
 	modifiers                             []func(*sql.Selector)
@@ -90,15 +97,18 @@ type EntityQuery struct {
 	withNamedScans                        map[string]*ScanQuery
 	withNamedCampaigns                    map[string]*CampaignQuery
 	withNamedAssessmentResponses          map[string]*AssessmentResponseQuery
+	withNamedVendorRiskScores             map[string]*VendorRiskScoreQuery
 	withNamedIntegrations                 map[string]*IntegrationQuery
 	withNamedSubprocessors                map[string]*SubprocessorQuery
 	withNamedAuthMethods                  map[string]*CustomTypeEnumQuery
 	withNamedEmployerIdentityHolders      map[string]*IdentityHolderQuery
 	withNamedIdentityHolders              map[string]*IdentityHolderQuery
 	withNamedControls                     map[string]*ControlQuery
+	withNamedSubcontrols                  map[string]*SubcontrolQuery
 	withNamedPlatforms                    map[string]*PlatformQuery
 	withNamedOutOfScopePlatforms          map[string]*PlatformQuery
 	withNamedSourcePlatforms              map[string]*PlatformQuery
+	withNamedInternalPolicies             map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -660,6 +670,31 @@ func (_q *EntityQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 	return query
 }
 
+// QueryVendorRiskScores chains the current query on the "vendor_risk_scores" edge.
+func (_q *EntityQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.VendorRiskScoresTable, entity.VendorRiskScoresColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.VendorRiskScore
+		step.Edge.Schema = schemaConfig.VendorRiskScore
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryIntegrations chains the current query on the "integrations" edge.
 func (_q *EntityQuery) QueryIntegrations() *IntegrationQuery {
 	query := (&IntegrationClient{config: _q.config}).Query()
@@ -810,6 +845,31 @@ func (_q *EntityQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (_q *EntityQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.SubcontrolsTable, entity.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolEntities
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatforms chains the current query on the "platforms" edge.
 func (_q *EntityQuery) QueryPlatforms() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -904,6 +964,56 @@ func (_q *EntityQuery) QueryEntityType() *EntityTypeQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.EntityType
 		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryLogoFile chains the current query on the "logo_file" edge.
+func (_q *EntityQuery) QueryLogoFile() *FileQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.LogoFileTable, entity.LogoFileColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *EntityQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, entity.InternalPoliciesTable, entity.InternalPoliciesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.InternalPolicyEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1123,16 +1233,20 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withScans:                             _q.withScans.Clone(),
 		withCampaigns:                         _q.withCampaigns.Clone(),
 		withAssessmentResponses:               _q.withAssessmentResponses.Clone(),
+		withVendorRiskScores:                  _q.withVendorRiskScores.Clone(),
 		withIntegrations:                      _q.withIntegrations.Clone(),
 		withSubprocessors:                     _q.withSubprocessors.Clone(),
 		withAuthMethods:                       _q.withAuthMethods.Clone(),
 		withEmployerIdentityHolders:           _q.withEmployerIdentityHolders.Clone(),
 		withIdentityHolders:                   _q.withIdentityHolders.Clone(),
 		withControls:                          _q.withControls.Clone(),
+		withSubcontrols:                       _q.withSubcontrols.Clone(),
 		withPlatforms:                         _q.withPlatforms.Clone(),
 		withOutOfScopePlatforms:               _q.withOutOfScopePlatforms.Clone(),
 		withSourcePlatforms:                   _q.withSourcePlatforms.Clone(),
 		withEntityType:                        _q.withEntityType.Clone(),
+		withLogoFile:                          _q.withLogoFile.Clone(),
+		withInternalPolicies:                  _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1371,6 +1485,17 @@ func (_q *EntityQuery) WithAssessmentResponses(opts ...func(*AssessmentResponseQ
 	return _q
 }
 
+// WithVendorRiskScores tells the query-builder to eager-load the nodes that are connected to
+// the "vendor_risk_scores" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithVendorRiskScores(opts ...func(*VendorRiskScoreQuery)) *EntityQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVendorRiskScores = query
+	return _q
+}
+
 // WithIntegrations tells the query-builder to eager-load the nodes that are connected to
 // the "integrations" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *EntityQuery {
@@ -1437,6 +1562,17 @@ func (_q *EntityQuery) WithControls(opts ...func(*ControlQuery)) *EntityQuery {
 	return _q
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *EntityQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrols = query
+	return _q
+}
+
 // WithPlatforms tells the query-builder to eager-load the nodes that are connected to
 // the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithPlatforms(opts ...func(*PlatformQuery)) *EntityQuery {
@@ -1478,6 +1614,28 @@ func (_q *EntityQuery) WithEntityType(opts ...func(*EntityTypeQuery)) *EntityQue
 		opt(query)
 	}
 	_q.withEntityType = query
+	return _q
+}
+
+// WithLogoFile tells the query-builder to eager-load the nodes that are connected to
+// the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithLogoFile(opts ...func(*FileQuery)) *EntityQuery {
+	query := (&FileClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withLogoFile = query
+	return _q
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *EntityQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
 	return _q
 }
 
@@ -1566,7 +1724,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [31]bool{
+		loadedTypes = [35]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1588,16 +1746,20 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withScans != nil,
 			_q.withCampaigns != nil,
 			_q.withAssessmentResponses != nil,
+			_q.withVendorRiskScores != nil,
 			_q.withIntegrations != nil,
 			_q.withSubprocessors != nil,
 			_q.withAuthMethods != nil,
 			_q.withEmployerIdentityHolders != nil,
 			_q.withIdentityHolders != nil,
 			_q.withControls != nil,
+			_q.withSubcontrols != nil,
 			_q.withPlatforms != nil,
 			_q.withOutOfScopePlatforms != nil,
 			_q.withSourcePlatforms != nil,
 			_q.withEntityType != nil,
+			_q.withLogoFile != nil,
+			_q.withInternalPolicies != nil,
 		}
 	)
 	if withFKs {
@@ -1765,6 +1927,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withVendorRiskScores; query != nil {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Entity) { n.Edges.VendorRiskScores = []*VendorRiskScore{} },
+			func(n *Entity, e *VendorRiskScore) { n.Edges.VendorRiskScores = append(n.Edges.VendorRiskScores, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withIntegrations; query != nil {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Integrations = []*Integration{} },
@@ -1809,6 +1978,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *Entity, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatforms; query != nil {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *Entity) { n.Edges.Platforms = []*Platform{} },
@@ -1833,6 +2009,19 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	if query := _q.withEntityType; query != nil {
 		if err := _q.loadEntityType(ctx, query, nodes, nil,
 			func(n *Entity, e *EntityType) { n.Edges.EntityType = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withLogoFile; query != nil {
+		if err := _q.loadLogoFile(ctx, query, nodes, nil,
+			func(n *Entity, e *File) { n.Edges.LogoFile = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Entity) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Entity, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1913,6 +2102,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedVendorRiskScores {
+		if err := _q.loadVendorRiskScores(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedVendorRiskScores(name) },
+			func(n *Entity, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedIntegrations {
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedIntegrations(name) },
@@ -1955,6 +2151,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedSubcontrols(name) },
+			func(n *Entity, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedPlatforms {
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedPlatforms(name) },
@@ -1973,6 +2176,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadSourcePlatforms(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedSourcePlatforms(name) },
 			func(n *Entity, e *Platform) { n.appendNamedSourcePlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedInternalPolicies(name) },
+			func(n *Entity, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2830,6 +3040,37 @@ func (_q *EntityQuery) loadAssessmentResponses(ctx context.Context, query *Asses
 	}
 	return nil
 }
+func (_q *EntityQuery) loadVendorRiskScores(ctx context.Context, query *VendorRiskScoreQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *VendorRiskScore)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.VendorRiskScore(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.VendorRiskScoresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.entity_vendor_risk_scores
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "entity_vendor_risk_scores" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "entity_vendor_risk_scores" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *EntityQuery) loadIntegrations(ctx context.Context, query *IntegrationQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Integration)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Entity)
@@ -3139,6 +3380,68 @@ func (_q *EntityQuery) loadControls(ctx context.Context, query *ControlQuery, no
 	}
 	return nil
 }
+func (_q *EntityQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolEntities)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(entity.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *EntityQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Platform)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Entity)
@@ -3354,6 +3657,100 @@ func (_q *EntityQuery) loadEntityType(ctx context.Context, query *EntityTypeQuer
 	}
 	return nil
 }
+func (_q *EntityQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *File)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		if nodes[i].LogoFileID == nil {
+			continue
+		}
+		fk := *nodes[i].LogoFileID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(file.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "logo_file_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Entity)
+	nids := make(map[string]map[*Entity]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(entity.InternalPoliciesTable)
+		joinT.Schema(_q.schemaConfig.InternalPolicyEntities)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(entity.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(entity.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(entity.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Entity]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *EntityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3417,6 +3814,9 @@ func (_q *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withEntityType != nil {
 			_spec.Node.AddColumnOnce(entity.FieldEntityTypeID)
+		}
+		if _q.withLogoFile != nil {
+			_spec.Node.AddColumnOnce(entity.FieldLogoFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -3640,6 +4040,20 @@ func (_q *EntityQuery) WithNamedAssessmentResponses(name string, opts ...func(*A
 	return _q
 }
 
+// WithNamedVendorRiskScores tells the query-builder to eager-load the nodes that are connected to the "vendor_risk_scores"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedVendorRiskScores(name string, opts ...func(*VendorRiskScoreQuery)) *EntityQuery {
+	query := (&VendorRiskScoreClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVendorRiskScores == nil {
+		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
+	}
+	_q.withNamedVendorRiskScores[name] = query
+	return _q
+}
+
 // WithNamedIntegrations tells the query-builder to eager-load the nodes that are connected to the "integrations"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithNamedIntegrations(name string, opts ...func(*IntegrationQuery)) *EntityQuery {
@@ -3724,6 +4138,20 @@ func (_q *EntityQuery) WithNamedControls(name string, opts ...func(*ControlQuery
 	return _q
 }
 
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *EntityQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
 // WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *EntityQuery {
@@ -3763,6 +4191,20 @@ func (_q *EntityQuery) WithNamedSourcePlatforms(name string, opts ...func(*Platf
 		_q.withNamedSourcePlatforms = make(map[string]*PlatformQuery)
 	}
 	_q.withNamedSourcePlatforms[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *EntityQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
 	return _q
 }
 

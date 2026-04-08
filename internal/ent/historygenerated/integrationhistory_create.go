@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/entx/history"
@@ -352,14 +351,28 @@ func (_c *IntegrationHistoryCreate) SetNillableConfig(v *openapi.IntegrationConf
 	return _c
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_c *IntegrationHistoryCreate) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationHistoryCreate {
+	_c.mutation.SetInstallationMetadata(v)
+	return _c
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetInstallationMetadata(*v)
+	}
+	return _c
+}
+
 // SetProviderState sets the "provider_state" field.
-func (_c *IntegrationHistoryCreate) SetProviderState(v state.IntegrationProviderState) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationHistoryCreate {
 	_c.mutation.SetProviderState(v)
 	return _c
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_c *IntegrationHistoryCreate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationHistoryCreate {
+func (_c *IntegrationHistoryCreate) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationHistoryCreate {
 	if v != nil {
 		_c.SetProviderState(*v)
 	}
@@ -448,6 +461,20 @@ func (_c *IntegrationHistoryCreate) SetProviderMetadataSnapshot(v map[string]int
 	return _c
 }
 
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_c *IntegrationHistoryCreate) SetPrimaryDirectory(v bool) *IntegrationHistoryCreate {
+	_c.mutation.SetPrimaryDirectory(v)
+	return _c
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillablePrimaryDirectory(v *bool) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetPrimaryDirectory(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationHistoryCreate) SetID(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -532,6 +559,10 @@ func (_c *IntegrationHistoryCreate) defaults() error {
 		v := integrationhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		v := integrationhistory.DefaultPrimaryDirectory
+		_c.mutation.SetPrimaryDirectory(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integrationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized integrationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -565,6 +596,9 @@ func (_c *IntegrationHistoryCreate) check() error {
 		if err := integrationhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "IntegrationHistory.status": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
+		return &ValidationError{Name: "primary_directory", err: errors.New(`historygenerated: missing required field "IntegrationHistory.primary_directory"`)}
 	}
 	return nil
 }
@@ -702,6 +736,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 		_spec.SetField(integrationhistory.FieldConfig, field.TypeJSON, value)
 		_node.Config = value
 	}
+	if value, ok := _c.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integrationhistory.FieldInstallationMetadata, field.TypeJSON, value)
+		_node.InstallationMetadata = value
+	}
 	if value, ok := _c.mutation.ProviderState(); ok {
 		_spec.SetField(integrationhistory.FieldProviderState, field.TypeJSON, value)
 		_node.ProviderState = value
@@ -733,6 +771,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integrationhistory.FieldProviderMetadataSnapshot, field.TypeJSON, value)
 		_node.ProviderMetadataSnapshot = value
+	}
+	if value, ok := _c.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
+		_node.PrimaryDirectory = value
 	}
 	return _node, _spec
 }

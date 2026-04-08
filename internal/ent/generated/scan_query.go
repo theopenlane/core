@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
@@ -61,6 +62,7 @@ type ScanQuery struct {
 	withPlatforms            *PlatformQuery
 	withVulnerabilities      *VulnerabilityQuery
 	withControls             *ControlQuery
+	withSubcontrols          *SubcontrolQuery
 	withGeneratedByPlatform  *PlatformQuery
 	withPerformedByUser      *UserQuery
 	withPerformedByGroup     *GroupQuery
@@ -80,6 +82,7 @@ type ScanQuery struct {
 	withNamedPlatforms       map[string]*PlatformQuery
 	withNamedVulnerabilities map[string]*VulnerabilityQuery
 	withNamedControls        map[string]*ControlQuery
+	withNamedSubcontrols     map[string]*SubcontrolQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -616,6 +619,31 @@ func (_q *ScanQuery) QueryControls() *ControlQuery {
 	return query
 }
 
+// QuerySubcontrols chains the current query on the "subcontrols" edge.
+func (_q *ScanQuery) QuerySubcontrols() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, scan.SubcontrolsTable, scan.SubcontrolsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.SubcontrolScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGeneratedByPlatform chains the current query on the "generated_by_platform" edge.
 func (_q *ScanQuery) QueryGeneratedByPlatform() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -903,6 +931,7 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		withPlatforms:           _q.withPlatforms.Clone(),
 		withVulnerabilities:     _q.withVulnerabilities.Clone(),
 		withControls:            _q.withControls.Clone(),
+		withSubcontrols:         _q.withSubcontrols.Clone(),
 		withGeneratedByPlatform: _q.withGeneratedByPlatform.Clone(),
 		withPerformedByUser:     _q.withPerformedByUser.Clone(),
 		withPerformedByGroup:    _q.withPerformedByGroup.Clone(),
@@ -1133,6 +1162,17 @@ func (_q *ScanQuery) WithControls(opts ...func(*ControlQuery)) *ScanQuery {
 	return _q
 }
 
+// WithSubcontrols tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *ScanQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrols = query
+	return _q
+}
+
 // WithGeneratedByPlatform tells the query-builder to eager-load the nodes that are connected to
 // the "generated_by_platform" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ScanQuery) WithGeneratedByPlatform(opts ...func(*PlatformQuery)) *ScanQuery {
@@ -1251,7 +1291,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1272,6 +1312,7 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			_q.withPlatforms != nil,
 			_q.withVulnerabilities != nil,
 			_q.withControls != nil,
+			_q.withSubcontrols != nil,
 			_q.withGeneratedByPlatform != nil,
 			_q.withPerformedByUser != nil,
 			_q.withPerformedByGroup != nil,
@@ -1436,6 +1477,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			return nil, err
 		}
 	}
+	if query := _q.withSubcontrols; query != nil {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Scan) { n.Edges.Subcontrols = []*Subcontrol{} },
+			func(n *Scan, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGeneratedByPlatform; query != nil {
 		if err := _q.loadGeneratedByPlatform(ctx, query, nodes, nil,
 			func(n *Scan, e *Platform) { n.Edges.GeneratedByPlatform = e }); err != nil {
@@ -1542,6 +1590,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedControls(name) },
 			func(n *Scan, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubcontrols {
+		if err := _q.loadSubcontrols(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedSubcontrols(name) },
+			func(n *Scan, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2531,6 +2586,68 @@ func (_q *ScanQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	return nil
 }
+func (_q *ScanQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Subcontrol)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Scan)
+	nids := make(map[string]map[*Scan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(scan.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.SubcontrolScans)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(scan.SubcontrolsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(scan.SubcontrolsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(scan.SubcontrolsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Scan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ScanQuery) loadGeneratedByPlatform(ctx context.Context, query *PlatformQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Platform)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Scan)
@@ -2926,6 +3043,20 @@ func (_q *ScanQuery) WithNamedControls(name string, opts ...func(*ControlQuery))
 		_q.withNamedControls = make(map[string]*ControlQuery)
 	}
 	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedSubcontrols tells the query-builder to eager-load the nodes that are connected to the "subcontrols"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQuery)) *ScanQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubcontrols == nil {
+		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
+	}
+	_q.withNamedSubcontrols[name] = query
 	return _q
 }
 

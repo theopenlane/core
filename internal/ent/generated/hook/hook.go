@@ -1161,6 +1161,30 @@ func (f UserSettingFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.UserSettingMutation", m)
 }
 
+// The VendorRiskScoreFunc type is an adapter to allow the use of ordinary
+// function as VendorRiskScore mutator.
+type VendorRiskScoreFunc func(context.Context, *generated.VendorRiskScoreMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorRiskScoreFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorRiskScoreMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorRiskScoreMutation", m)
+}
+
+// The VendorScoringConfigFunc type is an adapter to allow the use of ordinary
+// function as VendorScoringConfig mutator.
+type VendorScoringConfigFunc func(context.Context, *generated.VendorScoringConfigMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f VendorScoringConfigFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.VendorScoringConfigMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.VendorScoringConfigMutation", m)
+}
+
 // The VulnerabilityFunc type is an adapter to allow the use of ordinary
 // function as Vulnerability mutator.
 type VulnerabilityFunc func(context.Context, *generated.VulnerabilityMutation) (generated.Value, error)

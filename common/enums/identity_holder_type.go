@@ -10,11 +10,19 @@ var (
 	IdentityHolderTypeEmployee IdentityHolderType = "EMPLOYEE"
 	// IdentityHolderTypeContractor indicates a contractor
 	IdentityHolderTypeContractor IdentityHolderType = "CONTRACTOR"
-	// IdentityHolderTypeInvalid is used when an unknown or unsupported value is provided
+	// IdentityHolderTypeInvalid is used when an unsupported value is provided
 	IdentityHolderTypeInvalid IdentityHolderType = "INVALID"
+	// IdentityHolderTypeUnspecified is used when the identity holder type is unknown or not provided
+	IdentityHolderTypeUnspecified IdentityHolderType = "UNSPECIFIED"
+	// IdentityHolderTypeIntern indicates an intern / student worker
+	IdentityHolderTypeIntern IdentityHolderType = "INTERN"
+	// IdentityHolderTypeService indicates a service identity
+	IdentityHolderTypeService IdentityHolderType = "SERVICE"
+	// IdentityHolderTypePartner indicates a partner identity
+	IdentityHolderTypePartner IdentityHolderType = "PARTNER"
 )
 
-var identityHolderTypeValues = []IdentityHolderType{IdentityHolderTypeEmployee, IdentityHolderTypeContractor}
+var identityHolderTypeValues = []IdentityHolderType{IdentityHolderTypeEmployee, IdentityHolderTypeContractor, IdentityHolderTypeUnspecified, IdentityHolderTypeIntern, IdentityHolderTypeService, IdentityHolderTypePartner}
 
 // Values returns a slice of strings that represents all the possible values of the IdentityHolderType enum
 // Possible default values are "EMPLOYEE" and "CONTRACTOR"

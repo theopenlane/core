@@ -1,60 +1,58 @@
-
-
 query GetAllOrgSubscriptions {
-  orgSubscriptions {
-    edges {
-      node {
-        active
-        createdAt
-        createdBy
-        daysUntilDue
-        expiresAt
-        id
-        ownerID
-        stripeSubscriptionID
-        stripeSubscriptionStatus
-        tags
-        trialExpiresAt
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	orgSubscriptions {
+		edges {
+			node {
+				active
+				createdAt
+				createdBy
+				daysUntilDue
+				expiresAt
+				id
+				ownerID
+				stripeSubscriptionID
+				stripeSubscriptionStatus
+				tags
+				trialExpiresAt
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
-  orgSubscription(id: $orgSubscriptionId) {
-    active
-    createdAt
-    createdBy
-    daysUntilDue
-    expiresAt
-    id
-    ownerID
-    stripeSubscriptionStatus
-    tags
-    trialExpiresAt
-    updatedAt
-    updatedBy
-  }
+query GetOrgSubscriptionByID ($orgSubscriptionId: ID!) {
+	orgSubscription(id: $orgSubscriptionId) {
+		active
+		createdAt
+		createdBy
+		daysUntilDue
+		expiresAt
+		id
+		ownerID
+		stripeSubscriptionID
+		stripeSubscriptionStatus
+		tags
+		trialExpiresAt
+		updatedAt
+		updatedBy
+	}
 }
-
-query GetOrgSubscriptions($where: OrgSubscriptionWhereInput) {
-  orgSubscriptions(where: $where) {
-    edges {
-      node {
-        active
-        createdAt
-        createdBy
-        daysUntilDue
-        expiresAt
-        id
-        ownerID
-        stripeSubscriptionStatus
-        tags
-        trialExpiresAt
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetOrgSubscriptions ($where: OrgSubscriptionWhereInput) {
+	orgSubscriptions(where: $where) {
+		edges {
+			node {
+				active
+				createdAt
+				createdBy
+				daysUntilDue
+				expiresAt
+				id
+				ownerID
+				stripeSubscriptionStatus
+				tags
+				trialExpiresAt
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }

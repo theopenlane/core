@@ -159,6 +159,7 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 
 		// add the file permissions before returning the field
 		if ctx, err = store.AddFilePermissions(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to add file permissions to uploaded files, rolling back uploads")
 			// rollback the uploaded files in case of an error
 			upload.HandleRollback(ctx, u, uploads)
 

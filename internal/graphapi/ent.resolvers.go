@@ -1190,6 +1190,8 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
+	redactHushConnection(res)
+
 	return res, err
 }
 
@@ -2934,6 +2936,74 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 	return res, err
 }
 
+// VendorRiskScores is the resolver for the vendorRiskScores field.
+func (r *queryResolver) VendorRiskScores(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorRiskScoreOrder, where *generated.VendorRiskScoreWhereInput) (*generated.VendorRiskScoreConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.VendorRiskScoreOrder{
+			{
+				Field:     generated.VendorRiskScoreOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).VendorRiskScore.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorriskscore"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorRiskScoreOrder(orderBy),
+		generated.WithVendorRiskScoreFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorriskscore"})
+	}
+
+	return res, err
+}
+
+// VendorScoringConfigs is the resolver for the vendorScoringConfigs field.
+func (r *queryResolver) VendorScoringConfigs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorScoringConfigOrder, where *generated.VendorScoringConfigWhereInput) (*generated.VendorScoringConfigConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.VendorScoringConfigOrder{
+			{
+				Field:     generated.VendorScoringConfigOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).VendorScoringConfig.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorscoringconfig"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithVendorScoringConfigOrder(orderBy),
+		generated.WithVendorScoringConfigFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "vendorscoringconfig"})
+	}
+
+	return res, err
+}
+
 // Vulnerabilities is the resolver for the vulnerabilities field.
 func (r *queryResolver) Vulnerabilities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) (*generated.VulnerabilityConnection, error) {
 	// set page limit if nothing was set
@@ -3256,6 +3326,9 @@ func (r *Resolver) IdentityHolder() gqlgenerated.IdentityHolderResolver {
 	return &identityHolderResolver{r}
 }
 
+// Integration returns gqlgenerated.IntegrationResolver implementation.
+func (r *Resolver) Integration() gqlgenerated.IntegrationResolver { return &integrationResolver{r} }
+
 // InternalPolicy returns gqlgenerated.InternalPolicyResolver implementation.
 func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 	return &internalPolicyResolver{r}
@@ -3428,6 +3501,7 @@ type controlResolver struct{ *Resolver }
 type evidenceResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
 type identityHolderResolver struct{ *Resolver }
+type integrationResolver struct{ *Resolver }
 type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
 type platformResolver struct{ *Resolver }

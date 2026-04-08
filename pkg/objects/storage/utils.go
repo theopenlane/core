@@ -162,7 +162,7 @@ func parseDocx(content []byte) (string, error) {
 			}
 
 		case *docx.Table:
-			for _, row := range p.TableRows {
+			for rowIdx, row := range p.TableRows {
 				var cells []string
 
 				for _, cell := range row.TableCells {
@@ -178,9 +178,20 @@ func parseDocx(content []byte) (string, error) {
 				}
 
 				if len(cells) > 0 {
-					paragraphs = append(paragraphs, strings.Join(cells, " | "))
+					line := "| " + strings.Join(cells, " | ") + " |"
+					paragraphs = append(paragraphs, line)
+					// If this is the first row, add a markdown separator
+					if rowIdx == 0 {
+						separator := "|"
+						for range cells {
+							separator += " --- |"
+						}
+						paragraphs = append(paragraphs, separator)
+					}
 				}
 			}
+
+			paragraphs = append(paragraphs, "")
 		}
 	}
 

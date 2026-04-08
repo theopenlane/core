@@ -56,8 +56,6 @@ const (
 	FieldFindingStatusID = "finding_status_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
-	// FieldStatus holds the string denoting the status field in the database.
-	FieldStatus = "status"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
 	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -238,13 +236,11 @@ const (
 	// IntegrationsInverseTable is the table name for the Integration entity.
 	// It exists in this package in order to avoid circular dependency with the "integration" package.
 	IntegrationsInverseTable = "integrations"
-	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
-	VulnerabilitiesTable = "vulnerabilities"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "finding_vulnerabilities"
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
 	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
 	VulnerabilitiesInverseTable = "vulnerabilities"
-	// VulnerabilitiesColumn is the table column denoting the vulnerabilities relation/edge.
-	VulnerabilitiesColumn = "finding_vulnerabilities"
 	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
 	ActionPlansTable = "finding_action_plans"
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
@@ -297,13 +293,11 @@ const (
 	ScansInverseTable = "scans"
 	// ScansColumn is the table column denoting the scans relation/edge.
 	ScansColumn = "finding_scans"
-	// TasksTable is the table that holds the tasks relation/edge.
-	TasksTable = "tasks"
+	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
+	TasksTable = "finding_tasks"
 	// TasksInverseTable is the table name for the Task entity.
 	// It exists in this package in order to avoid circular dependency with the "task" package.
 	TasksInverseTable = "tasks"
-	// TasksColumn is the table column denoting the tasks relation/edge.
-	TasksColumn = "finding_tasks"
 	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge. The primary key declared below.
 	DirectoryAccountsTable = "finding_directory_accounts"
 	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
@@ -314,20 +308,16 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
-	// RemediationsTable is the table that holds the remediations relation/edge.
-	RemediationsTable = "remediations"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_findings"
 	// RemediationsInverseTable is the table name for the Remediation entity.
 	// It exists in this package in order to avoid circular dependency with the "remediation" package.
 	RemediationsInverseTable = "remediations"
-	// RemediationsColumn is the table column denoting the remediations relation/edge.
-	RemediationsColumn = "finding_remediations"
-	// ReviewsTable is the table that holds the reviews relation/edge.
-	ReviewsTable = "reviews"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_findings"
 	// ReviewsInverseTable is the table name for the Review entity.
 	// It exists in this package in order to avoid circular dependency with the "review" package.
 	ReviewsInverseTable = "reviews"
-	// ReviewsColumn is the table column denoting the reviews relation/edge.
-	ReviewsColumn = "finding_reviews"
 	// CommentsTable is the table that holds the comments relation/edge.
 	CommentsTable = "notes"
 	// CommentsInverseTable is the table name for the Note entity.
@@ -380,7 +370,6 @@ var Columns = []string{
 	FieldFindingStatusName,
 	FieldFindingStatusID,
 	FieldExternalID,
-	FieldStatus,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
@@ -419,41 +408,40 @@ var Columns = []string{
 	FieldRawPayload,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "findings"
-// table and are not defined as standalone fields in the schema.
-var ForeignKeys = []string{
-	"remediation_findings",
-	"review_findings",
-	"vulnerability_findings",
-}
-
 var (
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
 	IntegrationsPrimaryKey = []string{"integration_id", "finding_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"finding_id", "vulnerability_id"}
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"finding_id", "action_plan_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"finding_id", "control_id"}
+	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
+	// primary key for the tasks relation (M2M).
+	TasksPrimaryKey = []string{"finding_id", "task_id"}
 	// DirectoryAccountsPrimaryKey and DirectoryAccountsColumn2 are the table columns denoting the
 	// primary key for the directory_accounts relation (M2M).
 	DirectoryAccountsPrimaryKey = []string{"finding_id", "directory_account_id"}
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"finding_id", "identity_holder_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "finding_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "finding_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
-			return true
-		}
-	}
-	for i := range ForeignKeys {
-		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -605,11 +593,6 @@ func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
-}
-
-// ByStatus orders the results by the status field.
-func ByStatus(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // BySecurityLevel orders the results by the security_level field.
@@ -1152,7 +1135,7 @@ func newVulnerabilitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 func newActionPlansStep() *sqlgraph.Step {
@@ -1215,7 +1198,7 @@ func newTasksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TasksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 	)
 }
 func newDirectoryAccountsStep() *sqlgraph.Step {
@@ -1236,14 +1219,14 @@ func newRemediationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RemediationsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RemediationsTable, RemediationsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newReviewsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ReviewsTable, ReviewsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
 	)
 }
 func newCommentsStep() *sqlgraph.Step {

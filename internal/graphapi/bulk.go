@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -37,6 +38,14 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []string, input generated.UpdateActionPlanInput) (*model.ActionPlanBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "action_plan", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ActionPlanBulkUpdatePayload{
+			ActionPlans: []*generated.ActionPlan{},
+			UpdatedIDs:  []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -121,6 +130,13 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "action_plan", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ActionPlanBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -193,6 +209,13 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "api_token", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.APITokenBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -244,6 +267,14 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 func (r *mutationResolver) bulkUpdateAPIToken(ctx context.Context, ids []string, input generated.UpdateAPITokenInput) (*model.APITokenBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "api_token", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.APITokenBulkUpdatePayload{
+			APITokens:  []*generated.APIToken{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -328,6 +359,13 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "assessment", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.AssessmentBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -400,6 +438,13 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "asset", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.AssetBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -451,6 +496,14 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 func (r *mutationResolver) bulkUpdateAsset(ctx context.Context, ids []string, input generated.UpdateAssetInput) (*model.AssetBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "asset", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.AssetBulkUpdatePayload{
+			Assets:     []*generated.Asset{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -592,6 +645,14 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "contact", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ContactBulkUpdatePayload{
+			Contacts:   []*generated.Contact{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Contact, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -674,6 +735,13 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "contact", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ContactBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -744,6 +812,14 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "control", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ControlBulkUpdatePayload{
+			Controls:   []*generated.Control{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -828,6 +904,13 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "control", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ControlBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -900,6 +983,13 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "control_implementation", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ControlImplementationBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -951,6 +1041,14 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 func (r *mutationResolver) bulkUpdateControlImplementation(ctx context.Context, ids []string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "control_implementation", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ControlImplementationBulkUpdatePayload{
+			ControlImplementations: []*generated.ControlImplementation{},
+			UpdatedIDs:             []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -1054,6 +1152,13 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "control_objective", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ControlObjectiveBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -1105,6 +1210,14 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 func (r *mutationResolver) bulkUpdateControlObjective(ctx context.Context, ids []string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "control_objective", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ControlObjectiveBulkUpdatePayload{
+			ControlObjectives: []*generated.ControlObjective{},
+			UpdatedIDs:        []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -1208,6 +1321,13 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "custom_domain", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.CustomDomainBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -1259,6 +1379,14 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 func (r *mutationResolver) bulkUpdateCustomDomain(ctx context.Context, ids []string, input generated.UpdateCustomDomainInput) (*model.CustomDomainBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "custom_domain", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.CustomDomainBulkUpdatePayload{
+			CustomDomains: []*generated.CustomDomain{},
+			UpdatedIDs:    []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -1476,6 +1604,13 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "dns_verification", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.DNSVerificationBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -1527,6 +1662,14 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 func (r *mutationResolver) bulkUpdateDNSVerification(ctx context.Context, ids []string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "dns_verification", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.DNSVerificationBulkUpdatePayload{
+			DNSVerifications: []*generated.DNSVerification{},
+			UpdatedIDs:       []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -1630,6 +1773,13 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "document_data", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.DocumentDataBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -1681,6 +1831,14 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 func (r *mutationResolver) bulkUpdateDocumentData(ctx context.Context, ids []string, input generated.UpdateDocumentDataInput) (*model.DocumentDataBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "document_data", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.DocumentDataBulkUpdatePayload{
+			DocumentData: []*generated.DocumentData{},
+			UpdatedIDs:   []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -1784,6 +1942,14 @@ func (r *mutationResolver) bulkUpdateEmailBranding(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "email_branding", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EmailBrandingBulkUpdatePayload{
+			EmailBrandings: []*generated.EmailBranding{},
+			UpdatedIDs:     []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.EmailBranding, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -1866,6 +2032,13 @@ func (r *mutationResolver) bulkDeleteEmailBranding(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "email_branding", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EmailBrandingBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -1936,6 +2109,14 @@ func (r *mutationResolver) bulkCreateEmailTemplate(ctx context.Context, input []
 func (r *mutationResolver) bulkUpdateEmailTemplate(ctx context.Context, ids []string, input generated.UpdateEmailTemplateInput) (*model.EmailTemplateBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "email_template", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EmailTemplateBulkUpdatePayload{
+			EmailTemplates: []*generated.EmailTemplate{},
+			UpdatedIDs:     []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -2020,6 +2201,13 @@ func (r *mutationResolver) bulkDeleteEmailTemplate(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "email_template", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EmailTemplateBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2092,6 +2280,13 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "entity", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EntityBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2143,6 +2338,14 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 func (r *mutationResolver) bulkUpdateEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "entity", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EntityBulkUpdatePayload{
+			Entities:   []*generated.Entity{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -2246,6 +2449,13 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "entity_type", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EntityTypeBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2297,6 +2507,14 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 func (r *mutationResolver) bulkUpdateEntityType(ctx context.Context, ids []string, input generated.UpdateEntityTypeInput) (*model.EntityTypeBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "entity_type", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EntityTypeBulkUpdatePayload{
+			EntityTypes: []*generated.EntityType{},
+			UpdatedIDs:  []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -2400,6 +2618,13 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "event", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EventBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2451,6 +2676,14 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 func (r *mutationResolver) bulkUpdateEvent(ctx context.Context, ids []string, input generated.UpdateEventInput) (*model.EventBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "event", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EventBulkUpdatePayload{
+			Events:     []*generated.Event{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -2554,6 +2787,14 @@ func (r *mutationResolver) bulkUpdateEvidence(ctx context.Context, ids []string,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "evidence", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.EvidenceBulkUpdatePayload{
+			Evidences:  []*generated.Evidence{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Evidence, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -2636,6 +2877,13 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "evidence", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.EvidenceBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2687,6 +2935,13 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "export", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ExportBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -2759,6 +3014,14 @@ func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*gener
 func (r *mutationResolver) bulkUpdateFinding(ctx context.Context, ids []string, input generated.UpdateFindingInput) (*model.FindingBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "finding", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.FindingBulkUpdatePayload{
+			Findings:   []*generated.Finding{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -2841,6 +3104,13 @@ func (r *mutationResolver) bulkUpdateCSVFinding(ctx context.Context, inputs []*c
 func (r *mutationResolver) bulkDeleteFinding(ctx context.Context, ids []string) (*model.FindingBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "finding", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.FindingBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -2934,6 +3204,13 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "group", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.GroupBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -2985,6 +3262,14 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 func (r *mutationResolver) bulkUpdateGroup(ctx context.Context, ids []string, input generated.UpdateGroupInput) (*model.GroupBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "group", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.GroupBulkUpdatePayload{
+			Groups:     []*generated.Group{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -3088,6 +3373,13 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "group_membership", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.GroupMembershipBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3139,6 +3431,14 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 func (r *mutationResolver) bulkUpdateGroupMembership(ctx context.Context, ids []string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "group_membership", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.GroupMembershipBulkUpdatePayload{
+			GroupMemberships: []*generated.GroupMembership{},
+			UpdatedIDs:       []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -3242,6 +3542,13 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "group_setting", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.GroupSettingBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3293,6 +3600,14 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 func (r *mutationResolver) bulkUpdateGroupSetting(ctx context.Context, ids []string, input generated.UpdateGroupSettingInput) (*model.GroupSettingBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "group_setting", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.GroupSettingBulkUpdatePayload{
+			GroupSettings: []*generated.GroupSetting{},
+			UpdatedIDs:    []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -3396,6 +3711,14 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "hush", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.HushBulkUpdatePayload{
+			Hushes:     []*generated.Hush{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Hush, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -3478,6 +3801,13 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "hush", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.HushBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3550,6 +3880,13 @@ func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "identity_holder", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.IdentityHolderBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3601,6 +3938,14 @@ func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []s
 func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "identity_holder", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.IdentityHolderBulkUpdatePayload{
+			IdentityHolders: []*generated.IdentityHolder{},
+			UpdatedIDs:      []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -3704,6 +4049,14 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "internal_policy", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.InternalPolicyBulkUpdatePayload{
+			InternalPolicies: []*generated.InternalPolicy{},
+			UpdatedIDs:       []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.InternalPolicy, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -3786,6 +4139,13 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "internal_policy", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.InternalPolicyBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3858,6 +4218,13 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "invite", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.InviteBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -3909,6 +4276,14 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 func (r *mutationResolver) bulkUpdateInvite(ctx context.Context, ids []string, input generated.UpdateInviteInput) (*model.InviteBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "invite", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.InviteBulkUpdatePayload{
+			Invites:    []*generated.Invite{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -4012,6 +4387,13 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "job_template", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.JobTemplateBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4063,6 +4445,14 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 func (r *mutationResolver) bulkUpdateJobTemplate(ctx context.Context, ids []string, input generated.UpdateJobTemplateInput) (*model.JobTemplateBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "job_template", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.JobTemplateBulkUpdatePayload{
+			JobTemplates: []*generated.JobTemplate{},
+			UpdatedIDs:   []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -4166,6 +4556,13 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "mappable_domain", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.MappableDomainBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4217,6 +4614,14 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 func (r *mutationResolver) bulkUpdateMappableDomain(ctx context.Context, ids []string, input generated.UpdateMappableDomainInput) (*model.MappableDomainBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "mappable_domain", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.MappableDomainBulkUpdatePayload{
+			MappableDomains: []*generated.MappableDomain{},
+			UpdatedIDs:      []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -4320,6 +4725,13 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "mapped_control", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.MappedControlBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4371,6 +4783,14 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 func (r *mutationResolver) bulkUpdateMappedControl(ctx context.Context, ids []string, input generated.UpdateMappedControlInput) (*model.MappedControlBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "mapped_control", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.MappedControlBulkUpdatePayload{
+			MappedControls: []*generated.MappedControl{},
+			UpdatedIDs:     []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -4474,6 +4894,13 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "narrative", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.NarrativeBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4525,6 +4952,14 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 func (r *mutationResolver) bulkUpdateNarrative(ctx context.Context, ids []string, input generated.UpdateNarrativeInput) (*model.NarrativeBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "narrative", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.NarrativeBulkUpdatePayload{
+			Narratives: []*generated.Narrative{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -4628,6 +5063,14 @@ func (r *mutationResolver) bulkUpdateNotificationPreference(ctx context.Context,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "notification_preference", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.NotificationPreferenceBulkUpdatePayload{
+			NotificationPreferences: []*generated.NotificationPreference{},
+			UpdatedIDs:              []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.NotificationPreference, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -4710,6 +5153,13 @@ func (r *mutationResolver) bulkDeleteNotificationPreference(ctx context.Context,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "notification_preference", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.NotificationPreferenceBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4782,6 +5232,14 @@ func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "notification_template", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.NotificationTemplateBulkUpdatePayload{
+			NotificationTemplates: []*generated.NotificationTemplate{},
+			UpdatedIDs:            []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.NotificationTemplate, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -4801,7 +5259,7 @@ func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, i
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendDestinations(input.AppendDestinations).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", id).Msg("failed to update notificationtemplate in bulk operation")
 			continue
@@ -4842,7 +5300,7 @@ func (r *mutationResolver) bulkUpdateCSVNotificationTemplate(ctx context.Context
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendDestinations(input.Input.AppendDestinations).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("notificationtemplate_id", input.ID).Msg("failed to update notificationtemplate in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "notificationtemplate"})
@@ -4862,6 +5320,13 @@ func (r *mutationResolver) bulkUpdateCSVNotificationTemplate(ctx context.Context
 func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, ids []string) (*model.NotificationTemplateBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "notification_template", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.NotificationTemplateBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -4936,6 +5401,13 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "organization_setting", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.OrganizationSettingBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -4987,6 +5459,14 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 func (r *mutationResolver) bulkUpdateOrganizationSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "organization_setting", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.OrganizationSettingBulkUpdatePayload{
+			OrganizationSettings: []*generated.OrganizationSetting{},
+			UpdatedIDs:           []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -5090,6 +5570,13 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "org_membership", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.OrgMembershipBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5141,6 +5628,14 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 func (r *mutationResolver) bulkUpdateOrgMembership(ctx context.Context, ids []string, input generated.UpdateOrgMembershipInput) (*model.OrgMembershipBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "org_membership", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.OrgMembershipBulkUpdatePayload{
+			OrgMemberships: []*generated.OrgMembership{},
+			UpdatedIDs:     []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -5263,6 +5758,14 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "procedure", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ProcedureBulkUpdatePayload{
+			Procedures: []*generated.Procedure{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Procedure, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -5345,6 +5848,13 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "procedure", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ProcedureBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5417,6 +5927,13 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "program", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ProgramBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5468,6 +5985,14 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 func (r *mutationResolver) bulkUpdateProgram(ctx context.Context, ids []string, input generated.UpdateProgramInput) (*model.ProgramBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "program", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ProgramBulkUpdatePayload{
+			Programs:   []*generated.Program{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -5571,6 +6096,13 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "program_membership", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ProgramMembershipBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5622,6 +6154,14 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 func (r *mutationResolver) bulkUpdateProgramMembership(ctx context.Context, ids []string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "program_membership", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ProgramMembershipBulkUpdatePayload{
+			ProgramMemberships: []*generated.ProgramMembership{},
+			UpdatedIDs:         []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -5725,6 +6265,14 @@ func (r *mutationResolver) bulkUpdateRemediation(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "remediation", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.RemediationBulkUpdatePayload{
+			Remediations: []*generated.Remediation{},
+			UpdatedIDs:   []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Remediation, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -5807,6 +6355,13 @@ func (r *mutationResolver) bulkDeleteRemediation(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "remediation", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.RemediationBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5879,6 +6434,13 @@ func (r *mutationResolver) bulkDeleteReview(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "review", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ReviewBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -5930,6 +6492,14 @@ func (r *mutationResolver) bulkDeleteReview(ctx context.Context, ids []string) (
 func (r *mutationResolver) bulkUpdateReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "review", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ReviewBulkUpdatePayload{
+			Reviews:    []*generated.Review{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -6033,6 +6603,14 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "risk", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.RiskBulkUpdatePayload{
+			Risks:      []*generated.Risk{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Risk, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -6115,6 +6693,13 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "risk", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.RiskBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -6185,6 +6770,14 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "scan", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ScanBulkUpdatePayload{
+			Scans:      []*generated.Scan{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -6269,6 +6862,13 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "scan", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ScanBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -6341,6 +6941,13 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "scheduled_job", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.ScheduledJobBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -6392,6 +6999,14 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 func (r *mutationResolver) bulkUpdateScheduledJob(ctx context.Context, ids []string, input generated.UpdateScheduledJobInput) (*model.ScheduledJobBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "scheduled_job", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.ScheduledJobBulkUpdatePayload{
+			ScheduledJobs: []*generated.ScheduledJob{},
+			UpdatedIDs:    []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -6495,6 +7110,14 @@ func (r *mutationResolver) bulkUpdateSLADefinition(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "sla_definition", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.SLADefinitionBulkUpdatePayload{
+			SLADefinitions: []*generated.SLADefinition{},
+			UpdatedIDs:     []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.SLADefinition, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -6577,6 +7200,13 @@ func (r *mutationResolver) bulkDeleteSLADefinition(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "sla_definition", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.SLADefinitionBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -6649,6 +7279,13 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "subcontrol", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.SubcontrolBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -6700,6 +7337,14 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 func (r *mutationResolver) bulkUpdateSubcontrol(ctx context.Context, ids []string, input generated.UpdateSubcontrolInput) (*model.SubcontrolBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "subcontrol", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.SubcontrolBulkUpdatePayload{
+			Subcontrols: []*generated.Subcontrol{},
+			UpdatedIDs:  []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -6803,6 +7448,14 @@ func (r *mutationResolver) bulkUpdateSubprocessor(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "subprocessor", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.SubprocessorBulkUpdatePayload{
+			Subprocessors: []*generated.Subprocessor{},
+			UpdatedIDs:    []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Subprocessor, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -6883,6 +7536,13 @@ func (r *mutationResolver) bulkUpdateCSVSubprocessor(ctx context.Context, inputs
 func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "subprocessor", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.SubprocessorBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -6976,6 +7636,14 @@ func (r *mutationResolver) bulkUpdateSystemDetail(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "system_detail", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.SystemDetailBulkUpdatePayload{
+			SystemDetails: []*generated.SystemDetail{},
+			UpdatedIDs:    []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.SystemDetail, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -7056,6 +7724,13 @@ func (r *mutationResolver) bulkUpdateCSVSystemDetail(ctx context.Context, inputs
 func (r *mutationResolver) bulkDeleteSystemDetail(ctx context.Context, ids []string) (*model.SystemDetailBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "system_detail", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.SystemDetailBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -7149,6 +7824,14 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "task", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TaskBulkUpdatePayload{
+			Tasks:      []*generated.Task{},
+			UpdatedIDs: []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Task, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -7231,6 +7914,13 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "task", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TaskBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -7303,6 +7993,13 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "template", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TemplateBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -7354,6 +8051,14 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 func (r *mutationResolver) bulkUpdateTemplate(ctx context.Context, ids []string, input generated.UpdateTemplateInput) (*model.TemplateBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "template", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TemplateBulkUpdatePayload{
+			Templates:  []*generated.Template{},
+			UpdatedIDs: []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -7457,6 +8162,13 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_compliance", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TrustCenterComplianceBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -7508,6 +8220,14 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 func (r *mutationResolver) bulkUpdateTrustCenterCompliance(ctx context.Context, ids []string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_compliance", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TrustCenterComplianceBulkUpdatePayload{
+			TrustCenterCompliances: []*generated.TrustCenterCompliance{},
+			UpdatedIDs:             []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -7611,6 +8331,14 @@ func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_doc", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TrustCenterDocBulkUpdatePayload{
+			TrustCenterDocs: []*generated.TrustCenterDoc{},
+			UpdatedIDs:      []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.TrustCenterDoc, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -7691,6 +8419,13 @@ func (r *mutationResolver) bulkUpdateCSVTrustCenterDoc(ctx context.Context, inpu
 func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_doc", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TrustCenterDocBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))
@@ -7784,6 +8519,13 @@ func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_faq", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TrustCenterFAQBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -7835,6 +8577,14 @@ func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []s
 func (r *mutationResolver) bulkUpdateTrustCenterFAQ(ctx context.Context, ids []string, input generated.UpdateTrustCenterFAQInput) (*model.TrustCenterFAQBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_faq", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TrustCenterFAQBulkUpdatePayload{
+			TrustCenterFAQs: []*generated.TrustCenterFAQ{},
+			UpdatedIDs:      []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -7938,6 +8688,13 @@ func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_nda_request", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TrustCenterNDARequestBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -8008,6 +8765,14 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_subprocessor", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.TrustCenterSubprocessorBulkUpdatePayload{
+			TrustCenterSubprocessors: []*generated.TrustCenterSubprocessor{},
+			UpdatedIDs:               []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -8092,6 +8857,13 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_subprocessor", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.TrustCenterSubprocessorBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -8164,6 +8936,13 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "user_setting", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.UserSettingBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
 	deletedIDs := make([]string, 0, len(ids))
 	errors := make([]error, 0, len(ids))
 
@@ -8215,6 +8994,14 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 func (r *mutationResolver) bulkUpdateUserSetting(ctx context.Context, ids []string, input generated.UpdateUserSettingInput) (*model.UserSettingBulkUpdatePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "user_setting", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.UserSettingBulkUpdatePayload{
+			UserSettings: []*generated.UserSetting{},
+			UpdatedIDs:   []string{},
+		}, nil
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -8293,6 +9080,344 @@ func (r *mutationResolver) bulkUpdateCSVUserSetting(ctx context.Context, inputs 
 	}, nil
 }
 
+// bulkCreateVendorRiskScore uses the CreateBulk function to create multiple VendorRiskScore entities
+func (r *mutationResolver) bulkCreateVendorRiskScore(ctx context.Context, input []*generated.CreateVendorRiskScoreInput) (*model.VendorRiskScoreBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorRiskScoreCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorRiskScore.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorRiskScore.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorriskscore"})
+	}
+
+	// return response
+	return &model.VendorRiskScoreBulkCreatePayload{
+		VendorRiskScores: res,
+	}, nil
+}
+
+// bulkUpdateVendorRiskScore updates multiple VendorRiskScore entities
+func (r *mutationResolver) bulkUpdateVendorRiskScore(ctx context.Context, ids []string, input generated.UpdateVendorRiskScoreInput) (*model.VendorRiskScoreBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.VendorRiskScoreBulkUpdatePayload{
+			VendorRiskScores: []*generated.VendorRiskScore{},
+			UpdatedIDs:       []string{},
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorRiskScore, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each vendorriskscore individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for vendorriskscore")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorRiskScore.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to get vendorriskscore in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to update vendorriskscore in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.VendorRiskScoreBulkUpdatePayload{
+		VendorRiskScores: results,
+		UpdatedIDs:       updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVVendorRiskScore updates multiple VendorRiskScore entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVVendorRiskScore(ctx context.Context, inputs []*csvgenerated.VendorRiskScoreCSVUpdateInput) (*model.VendorRiskScoreBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorRiskScore, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each vendorriskscore individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for vendorriskscore")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorRiskScore.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to get vendorriskscore in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorriskscore_id", input.ID).Msg("failed to update vendorriskscore in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorriskscore"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.VendorRiskScoreBulkUpdatePayload{
+		VendorRiskScores: results,
+		UpdatedIDs:       updatedIDs,
+	}, nil
+}
+
+// bulkDeleteVendorRiskScore deletes multiple VendorRiskScore entities by their IDs
+func (r *mutationResolver) bulkDeleteVendorRiskScore(ctx context.Context, ids []string) (*model.VendorRiskScoreBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.VendorRiskScoreBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each vendorriskscore individually to ensure proper cleanup
+			if err := r.db.VendorRiskScore.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to delete vendorriskscore in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.VendorRiskScoreEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorriskscore_id", id).Msg("failed to cleanup vendorriskscore edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorriskscore deletions failed")
+	}
+
+	return &model.VendorRiskScoreBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreateVendorScoringConfig uses the CreateBulk function to create multiple VendorScoringConfig entities
+func (r *mutationResolver) bulkCreateVendorScoringConfig(ctx context.Context, input []*generated.CreateVendorScoringConfigInput) (*model.VendorScoringConfigBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VendorScoringConfigCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.VendorScoringConfig.Create().SetInput(*data)
+	}
+
+	res, err := c.VendorScoringConfig.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vendorscoringconfig"})
+	}
+
+	// return response
+	return &model.VendorScoringConfigBulkCreatePayload{
+		VendorScoringConfigs: res,
+	}, nil
+}
+
+// bulkUpdateVendorScoringConfig updates multiple VendorScoringConfig entities
+func (r *mutationResolver) bulkUpdateVendorScoringConfig(ctx context.Context, ids []string, input generated.UpdateVendorScoringConfigInput) (*model.VendorScoringConfigBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.VendorScoringConfigBulkUpdatePayload{
+			VendorScoringConfigs: []*generated.VendorScoringConfig{},
+			UpdatedIDs:           []string{},
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorScoringConfig, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each vendorscoringconfig individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for vendorscoringconfig")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorScoringConfig.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to get vendorscoringconfig in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to update vendorscoringconfig in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.VendorScoringConfigBulkUpdatePayload{
+		VendorScoringConfigs: results,
+		UpdatedIDs:           updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVVendorScoringConfig updates multiple VendorScoringConfig entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVVendorScoringConfig(ctx context.Context, inputs []*csvgenerated.VendorScoringConfigCSVUpdateInput) (*model.VendorScoringConfigBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.VendorScoringConfig, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each vendorscoringconfig individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for vendorscoringconfig")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.VendorScoringConfig.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to get vendorscoringconfig in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("vendorscoringconfig_id", input.ID).Msg("failed to update vendorscoringconfig in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vendorscoringconfig"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.VendorScoringConfigBulkUpdatePayload{
+		VendorScoringConfigs: results,
+		UpdatedIDs:           updatedIDs,
+	}, nil
+}
+
+// bulkDeleteVendorScoringConfig deletes multiple VendorScoringConfig entities by their IDs
+func (r *mutationResolver) bulkDeleteVendorScoringConfig(ctx context.Context, ids []string) (*model.VendorScoringConfigBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.VendorScoringConfigBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each vendorscoringconfig individually to ensure proper cleanup
+			if err := r.db.VendorScoringConfig.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to delete vendorscoringconfig in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.VendorScoringConfigEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("vendorscoringconfig_id", id).Msg("failed to cleanup vendorscoringconfig edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorscoringconfig deletions failed")
+	}
+
+	return &model.VendorScoringConfigBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateVulnerability uses the CreateBulk function to create multiple Vulnerability entities
 func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []*generated.CreateVulnerabilityInput) (*model.VulnerabilityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -8318,6 +9443,14 @@ func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	ids = r.filterAuthorizedIDs(ctx, ids, "vulnerability", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.VulnerabilityBulkUpdatePayload{
+			Vulnerabilities: []*generated.Vulnerability{},
+			UpdatedIDs:      []string{},
+		}, nil
+	}
+
 	c := withTransactionalMutation(ctx)
 	results := make([]*generated.Vulnerability, 0, len(ids))
 	updatedIDs := make([]string, 0, len(ids))
@@ -8337,7 +9470,7 @@ func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []st
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences).AppendImpacts(input.AppendImpacts).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendReferences(input.AppendReferences).AppendImpacts(input.AppendImpacts).AppendCweIds(input.AppendCweIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", id).Msg("failed to update vulnerability in bulk operation")
 			continue
@@ -8378,7 +9511,7 @@ func (r *mutationResolver) bulkUpdateCSVVulnerability(ctx context.Context, input
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendReferences(input.Input.AppendReferences).AppendImpacts(input.Input.AppendImpacts).AppendCweIds(input.Input.AppendCweIds).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("vulnerability_id", input.ID).Msg("failed to update vulnerability in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "vulnerability"})
@@ -8398,6 +9531,13 @@ func (r *mutationResolver) bulkUpdateCSVVulnerability(ctx context.Context, input
 func (r *mutationResolver) bulkDeleteVulnerability(ctx context.Context, ids []string) (*model.VulnerabilityBulkDeletePayload, error) {
 	if len(ids) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "vulnerability", fgax.CanDelete)
+	if len(ids) == 0 {
+		return &model.VulnerabilityBulkDeletePayload{
+			DeletedIDs: []string{},
+		}, nil
 	}
 
 	deletedIDs := make([]string, 0, len(ids))

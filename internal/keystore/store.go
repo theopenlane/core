@@ -2,412 +2,328 @@ package keystore
 
 import (
 	"context"
-	"maps"
-	"strings"
+	"encoding/json"
+	"sync"
 	"time"
 
-	"github.com/samber/lo"
-	"golang.org/x/oauth2"
+	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/eddy"
 
-	"github.com/zitadel/oidc/v3/pkg/oidc"
-
-	"github.com/theopenlane/core/common/integrations/state"
-	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/helpers"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
-	integration "github.com/theopenlane/core/internal/ent/generated/integration"
+	enthush "github.com/theopenlane/core/internal/ent/generated/hush"
+	entintegration "github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations"
-	githubprovider "github.com/theopenlane/core/internal/integrations/providers/github"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
-// Store persists credential payloads using Ent-backed integrations and hush secrets
+// Store persists and retrieves installation credentials via Ent-backed hush secrets
 type Store struct {
-	// db provides access to the Ent ORM client for database operations
+	// db provides access to the Ent ORM client
 	db *ent.Client
-	// now returns the current time, overridable for testing
-	now func() time.Time
+	// clientPool caches installation-scoped initialized clients
+	clientPool *eddy.ClientPool[any]
+	// clientKeys indexes pooled cache keys by installation for targeted invalidation
+	clientKeys map[string]map[clientCacheKey]struct{}
+	// mu protects clientKeys
+	mu sync.Mutex
 }
 
-// NewStore returns a Store backed by the supplied Ent client
-func NewStore(db *ent.Client) *Store {
-	return &Store{
-		db:  db,
-		now: time.Now,
-	}
+const defaultClientPoolTTL = 5 * time.Minute
+
+type clientCacheKey struct {
+	integrationID string
+	clientID      types.ClientID
+	digest        string
 }
 
-// SaveCredential upserts the credential payload for the given org/provider pair
-func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.CredentialPayload) (types.CredentialPayload, error) {
-	if payload.Provider == types.ProviderUnknown {
-		return types.CredentialPayload{}, ErrProviderRequired
-	}
-
-	if strings.TrimSpace(orgID) == "" {
-		return types.CredentialPayload{}, ErrOrgIDRequired
-	}
-
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	systemCtx = auth.WithCaller(systemCtx, auth.NewKeystoreCaller())
-
-	integrationRecord, err := s.ensureIntegration(systemCtx, orgID, payload.Provider)
-	if err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
-		return types.CredentialPayload{}, err
-	}
-
-	s.updateIntegrationProviderState(systemCtx, integrationRecord, payload.Provider, payload.Data.ProviderData)
-
-	secretName := string(payload.Provider)
-	envelope := payloadToCredentialSet(payload, s.now)
-
-	existing, err := s.db.Hush.Query().
-		Where(
-			hushschema.And(
-				hushschema.OwnerID(orgID),
-				hushschema.SecretName(secretName),
-				hushschema.HasIntegrationsWith(integration.ID(integrationRecord.ID)),
-			),
-		).
-		Only(systemCtx)
-
-	if err != nil {
-		if !ent.IsNotFound(err) {
-			logx.FromContext(systemCtx).Error().Err(err).Msg("failed to query existing credential")
-			return types.CredentialPayload{}, err
-		}
-
-		createErr := s.db.Hush.Create().
-			SetOwnerID(orgID).
-			SetName(secretName).
-			SetSecretName(secretName).
-			SetKind(string(payload.Kind)).
-			SetCredentialSet(envelope).
-			AddIntegrations(integrationRecord).
-			Exec(systemCtx)
-		if createErr != nil {
-			logx.FromContext(systemCtx).Error().Err(createErr).Msg("failed to create credential record")
-			return types.CredentialPayload{}, createErr
-		}
-	} else {
-		updateErr := existing.Update().
-			SetCredentialSet(envelope).
-			SetKind(string(payload.Kind)).
-			Exec(systemCtx)
-		if updateErr != nil {
-			logx.FromContext(systemCtx).Error().Err(updateErr).Msg("failed to update credential record")
-			return types.CredentialPayload{}, updateErr
-		}
-	}
-
-	return payload, nil
+func (k clientCacheKey) String() string {
+	return k.integrationID + ":" + k.clientID.String() + ":" + k.digest
 }
 
-// EnsureIntegration guarantees an integration record exists for the given org/provider pair
-func (s *Store) EnsureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
-	if s == nil {
+// NewStore constructs the credential store backed by the supplied Ent client
+func NewStore(db *ent.Client) (*Store, error) {
+	if db == nil {
 		return nil, ErrStoreNotInitialized
 	}
 
-	return s.ensureIntegration(ctx, orgID, provider)
+	return &Store{
+		db:         db,
+		clientPool: eddy.NewClientPool[any](defaultClientPoolTTL),
+		clientKeys: map[string]map[clientCacheKey]struct{}{},
+	}, nil
 }
 
-// LoadCredential retrieves the credential payload for the given org/provider pair
-func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) {
-	if provider == types.ProviderUnknown {
-		return types.CredentialPayload{}, ErrProviderRequired
+// LoadCredential resolves one persisted credential slot for one installation record
+func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.CredentialSet, bool, error) {
+	if credentialRef == (types.CredentialSlotID{}) {
+		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	if strings.TrimSpace(orgID) == "" {
-		return types.CredentialPayload{}, ErrOrgIDRequired
-	}
-
-	integrationRecord, err := s.db.Integration.Query().Where(
-		integration.And(
-			integration.OwnerIDEQ(orgID),
-			integration.KindEQ(string(provider)),
-		),
-	).WithSecrets().Only(ctx)
+	record, ok, err := s.activeCredentialRecord(integrationSystemContext(ctx), installation.ID, credentialRef)
 	if err != nil {
-		if ent.IsNotFound(err) {
-			return types.CredentialPayload{}, ErrCredentialNotFound
-		}
-
-		return types.CredentialPayload{}, err
+		return types.CredentialSet{}, false, err
+	}
+	if !ok {
+		return types.CredentialSet{}, false, nil
 	}
 
-	secretName := string(provider)
-
-	for _, secret := range integrationRecord.Edges.Secrets {
-		if secret.SecretName != secretName {
-			continue
-		}
-
-		envelope := secret.CredentialSet
-
-		s.updateIntegrationProviderState(ctx, integrationRecord, provider, envelope.ProviderData)
-
-		payload, err := credentialSetToPayload(provider, envelope)
-		if err != nil {
-			return types.CredentialPayload{}, err
-		}
-		providerState := integrationRecord.ProviderState
-		payload.ProviderState = &providerState
-
-		return payload, nil
-	}
-
-	return types.CredentialPayload{}, ErrCredentialNotFound
+	return types.CredentialSet(record.CredentialSet), true, nil
 }
 
-// DeleteIntegration removes the integration and associated secrets for the given org
-func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integrationID string) (types.ProviderType, string, error) {
-	if s == nil || s.db == nil {
-		return types.ProviderUnknown, "", ErrStoreNotInitialized
-	}
-
-	if strings.TrimSpace(orgID) == "" {
-		return types.ProviderUnknown, "", integrations.ErrOrgIDRequired
-	}
-	if strings.TrimSpace(integrationID) == "" {
-		return types.ProviderUnknown, "", integrations.ErrIntegrationIDRequired
-	}
-
-	record, err := s.db.Integration.Query().
-		Where(
-			integration.IDEQ(integrationID),
-			integration.OwnerIDEQ(orgID),
-		).
-		WithSecrets().
-		Only(ctx)
+// LoadCredentials resolves the requested credential slots for one installation record
+func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
+	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
 	if err != nil {
-		return types.ProviderUnknown, "", err
-	}
-
-	tx, err := s.db.Tx(ctx)
-	if err != nil {
-		return types.ProviderUnknown, "", err
-	}
-
-	defer func() {
-		if err != nil {
-			_ = tx.Rollback()
-			return
-		}
-
-		if cerr := tx.Commit(); cerr != nil {
-			err = cerr
-		}
-	}()
-
-	if len(record.Edges.Secrets) > 0 {
-		secretIDs := lo.Map(record.Edges.Secrets, func(s *ent.Hush, _ int) string { return s.ID })
-		if _, err = tx.Hush.Delete().Where(hushschema.IDIn(secretIDs...)).Exec(ctx); err != nil {
-			return types.ProviderUnknown, "", err
-		}
-	}
-
-	if err = tx.Integration.DeleteOneID(record.ID).Exec(ctx); err != nil {
-		return types.ProviderUnknown, "", err
-	}
-
-	return types.ProviderTypeFromString(record.Kind), record.ID, nil
-}
-
-// ensureIntegration guarantees an integration record exists for the given org/provider pair
-func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
-	record, err := s.db.Integration.Query().
-		Where(
-			integration.And(
-				integration.OwnerIDEQ(orgID),
-				integration.KindEQ(string(provider)),
-			),
-		).
-		Only(ctx)
-	if err == nil {
-		return record, nil
-	}
-
-	if !ent.IsNotFound(err) {
 		return nil, err
 	}
 
-	record, createErr := s.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetKind(string(provider)).
-		SetName(string(provider)).
-		Save(ctx)
-	if createErr != nil {
-		return nil, createErr
+	bindings := make(types.CredentialBindings, 0, len(records))
+	for _, ref := range credentialRefs {
+		record, ok := records[ref.String()]
+		if !ok {
+			continue
+		}
+
+		bindings = append(bindings, types.CredentialBinding{
+			Ref:        ref,
+			Credential: cloneCredentialSet(types.CredentialSet(record.CredentialSet)),
+		})
 	}
-	return record, nil
+
+	return bindings, nil
 }
 
-func (s *Store) updateIntegrationProviderState(ctx context.Context, record *ent.Integration, provider types.ProviderType, data map[string]any) {
-	if len(data) == 0 {
-		return
+// SaveCredential upserts one credential slot for one installation record
+func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
+	if credentialRef == (types.CredentialSlotID{}) {
+		return ErrCredentialNotFound
 	}
 
-	var (
-		updated bool
-		next    = record.ProviderState
-	)
+	systemCtx := integrationSystemContext(ctx)
 
-	switch provider {
-	case githubprovider.TypeGitHub, githubprovider.TypeGitHubApp:
-		appID, _ := data["appId"].(string)
-		installationID, _ := data["installationId"].(string)
-		if appID == "" && installationID == "" {
-			return
-		}
-
-		current := next.GitHub
-		currentAppID := ""
-		currentInstallationID := ""
-		if current != nil {
-			currentAppID = current.AppID
-			currentInstallationID = current.InstallationID
-		}
-
-		nextAppID := currentAppID
-		if appID != "" {
-			nextAppID = appID
-		}
-		nextInstallationID := currentInstallationID
-		if installationID != "" {
-			nextInstallationID = installationID
-		}
-
-		if nextAppID == currentAppID && nextInstallationID == currentInstallationID {
-			return
-		}
-
-		nextGitHub := state.GitHubState{}
-		if current != nil {
-			nextGitHub = *current
-		}
-		nextGitHub.AppID = nextAppID
-		nextGitHub.InstallationID = nextInstallationID
-		next.GitHub = &nextGitHub
-		updated = true
-	default:
-		return
+	existing, ok, err := s.activeCredentialRecord(systemCtx, installation.ID, credentialRef)
+	if err != nil {
+		return err
 	}
 
-	if !updated {
-		return
+	secretName := credentialRef.String()
+	if !ok {
+		if err := s.db.Hush.Create().
+			SetOwnerID(installation.OwnerID).
+			SetName(secretName).
+			SetSecretName(secretName).
+			SetCredentialSet(credential).
+			AddIntegrationIDs(installation.ID).
+			Exec(systemCtx); err != nil {
+			return err
+		}
+	} else {
+		if err := existing.Update().
+			SetCredentialSet(credential).
+			Exec(systemCtx); err != nil {
+			return err
+		}
 	}
 
-	if err := s.db.Integration.UpdateOneID(record.ID).SetProviderState(next).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("provider", string(provider)).Msg("failed to update integration provider state")
-		return
-	}
+	s.InvalidateClients(installation.ID)
 
-	record.ProviderState = next
+	return nil
 }
 
-// payloadToCredentialSet converts a CredentialPayload into a storable CredentialSet
-func payloadToCredentialSet(payload types.CredentialPayload, now func() time.Time) models.CredentialSet {
-	cloned := payload.Data
-	// Copy map to avoid mutating caller
-	cloned.ProviderData = maps.Clone(payload.Data.ProviderData)
-
-	if payload.Token != nil {
-		cloned.OAuthAccessToken = payload.Token.AccessToken
-		cloned.OAuthRefreshToken = payload.Token.RefreshToken
-		cloned.OAuthTokenType = payload.Token.TokenType
-		if !payload.Token.Expiry.IsZero() {
-			exp := payload.Token.Expiry.UTC()
-			cloned.OAuthExpiry = &exp
-		} else {
-			cloned.OAuthExpiry = nil
-		}
+// SaveInstallationCredential loads the installation record by ID and upserts one credential slot
+func (s *Store) SaveInstallationCredential(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
+	if integrationID == "" {
+		return ErrInstallationIDRequired
+	}
+	if credentialRef == (types.CredentialSlotID{}) {
+		return ErrCredentialNotFound
 	}
 
-	if payload.Claims != nil {
-		if claimsMap, err := claimsToMap(payload.Claims); err == nil {
-			cloned.Claims = claimsMap
+	systemCtx := integrationSystemContext(ctx)
+
+	installation, err := s.db.Integration.Get(systemCtx, integrationID)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return ErrCredentialNotFound
 		}
+
+		return err
 	}
 
-	if cloned.OAuthExpiry == nil && payload.Token == nil {
-		ts := now().UTC()
-		cloned.OAuthExpiry = &ts
+	return s.SaveCredential(ctx, installation, credentialRef, credential)
+}
+
+// DeleteCredential removes all credentials for one installation by identifier
+func (s *Store) DeleteCredential(ctx context.Context, integrationID string) error {
+	if integrationID == "" {
+		return ErrInstallationIDRequired
+	}
+
+	systemCtx := integrationSystemContext(ctx)
+
+	_, err := s.db.Hush.Delete().
+		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID))).
+		Exec(systemCtx)
+	if err != nil {
+		return err
+	}
+
+	s.InvalidateClients(integrationID)
+
+	return nil
+}
+
+// BuildClient resolves one named client for an installation using explicit credential bundles
+func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, registration types.ClientRegistration, credentials types.CredentialBindings, config json.RawMessage, force bool) (any, error) {
+	cacheKey := clientCacheKey{
+		integrationID: installation.ID,
+		clientID:      registration.Ref,
+		digest:        clientCacheDigest(credentials, config),
+	}
+
+	if force {
+		s.clientPool.RemoveClient(cacheKey)
+	} else if cached := s.clientPool.GetClient(cacheKey); cached.IsPresent() {
+		return cached.MustGet(), nil
+	}
+
+	client, err := registration.Build(ctx, types.ClientBuildRequest{
+		Integration: installation,
+		Credentials: cloneCredentialBindings(credentials),
+		Config:      jsonx.CloneRawMessage(config),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	s.clientPool.SetClient(cacheKey, client)
+	s.trackClientKey(cacheKey)
+
+	return client, nil
+}
+
+// InvalidateClients drops all pooled clients for one installation
+func (s *Store) InvalidateClients(integrationID string) {
+	s.mu.Lock()
+	keys := s.clientKeys[integrationID]
+	delete(s.clientKeys, integrationID)
+	s.mu.Unlock()
+
+	for key := range keys {
+		s.clientPool.RemoveClient(key)
+	}
+}
+
+// trackClientKey tracks a client cache key for an installation
+func (s *Store) trackClientKey(key clientCacheKey) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.clientKeys[key.integrationID] == nil {
+		s.clientKeys[key.integrationID] = map[clientCacheKey]struct{}{}
+	}
+
+	s.clientKeys[key.integrationID][key] = struct{}{}
+}
+
+// clientCacheDigest computes a hash digest for a set of credentials and config
+func clientCacheDigest(credentials types.CredentialBindings, config json.RawMessage) string {
+	encodedCredential, err := json.Marshal(credentials)
+	if err != nil {
+		encodedCredential = nil
+	}
+
+	return helpers.NewHashBuilder().
+		WriteStrings(string(encodedCredential), string(config)).
+		Hex()
+}
+
+// cloneCredentialSet returns a deep copy of a CredentialSet
+func cloneCredentialSet(credential types.CredentialSet) types.CredentialSet {
+	return types.CredentialSet{
+		Data: jsonx.CloneRawMessage(credential.Data),
+	}
+}
+
+// cloneCredentialBindings returns a deep copy of CredentialBindings
+func cloneCredentialBindings(credentials types.CredentialBindings) types.CredentialBindings {
+	if len(credentials) == 0 {
+		return nil
+	}
+
+	cloned := make(types.CredentialBindings, 0, len(credentials))
+	for _, binding := range credentials {
+		cloned = append(cloned, types.CredentialBinding{
+			Ref:        binding.Ref,
+			Credential: cloneCredentialSet(binding.Credential),
+		})
 	}
 
 	return cloned
 }
 
-// credentialSetToPayload converts a stored CredentialSet back into a CredentialPayload
-func credentialSetToPayload(provider types.ProviderType, set models.CredentialSet) (types.CredentialPayload, error) {
-	baseSet := set
-	baseSet.OAuthAccessToken = ""
-	baseSet.OAuthRefreshToken = ""
-	baseSet.OAuthTokenType = ""
-	baseSet.OAuthExpiry = nil
-	baseSet.Claims = nil
-
-	builder := types.NewCredentialBuilder(provider).
-		With(types.WithCredentialSet(baseSet))
-
-	if token := tokenFromSet(set); token != nil {
-		builder = builder.With(types.WithOAuthToken(token))
+// activeCredentialRecord returns the active credential record for an installation and credential ref
+func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
+	records, err := s.activeCredentialRecords(ctx, integrationID, []types.CredentialSlotID{credentialRef})
+	if err != nil {
+		return nil, false, err
 	}
 
-	if claims := claimsFromSet(set.Claims); claims != nil {
-		builder = builder.With(types.WithOIDCClaims(claims))
+	record, ok := records[credentialRef.String()]
+	if !ok {
+		return nil, false, nil
 	}
 
-	return builder.Build()
+	return record, true, nil
 }
 
-// tokenFromSet constructs an oauth2.Token from the CredentialSet if token data is present
-func tokenFromSet(set models.CredentialSet) *oauth2.Token {
-	if strings.TrimSpace(set.OAuthAccessToken) == "" && strings.TrimSpace(set.OAuthRefreshToken) == "" {
-		return nil
+// activeCredentialRecords returns all active credential records for an installation and credential refs
+// Credentials are keyed by Hush.SecretName which stores the CredentialSlotID as a unique discriminator
+func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
+	query := s.db.Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
+
+	if len(credentialRefs) > 0 {
+		secretNames := make([]string, 0, len(credentialRefs))
+		for _, ref := range credentialRefs {
+			if ref == (types.CredentialSlotID{}) {
+				continue
+			}
+
+			secretNames = append(secretNames, ref.String())
+		}
+
+		if len(secretNames) > 0 {
+			query = query.Where(enthush.SecretNameIn(secretNames...))
+		}
 	}
 
-	token := &oauth2.Token{
-		AccessToken:  set.OAuthAccessToken,
-		RefreshToken: set.OAuthRefreshToken,
-		TokenType:    set.OAuthTokenType,
-	}
-
-	if set.OAuthExpiry != nil {
-		token.Expiry = set.OAuthExpiry.UTC()
-	}
-
-	return token
-}
-
-// claimsToMap serializes OIDC claims into a map for storage
-func claimsToMap(claims *oidc.IDTokenClaims) (map[string]any, error) {
-	if claims == nil {
-		return nil, nil
-	}
-
-	out, err := jsonx.ToMap(claims)
+	records, err := query.
+		Order(
+			enthush.ByUpdatedAt(sql.OrderDesc()),
+			enthush.ByCreatedAt(sql.OrderDesc()),
+		).
+		All(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	out := make(map[string]*ent.Hush, len(records))
+	for _, record := range records {
+		if _, exists := out[record.SecretName]; exists {
+			continue
+		}
+
+		out[record.SecretName] = record
 	}
 
 	return out, nil
 }
 
-// claimsFromSet deserializes OIDC claims from a stored map
-func claimsFromSet(raw map[string]any) *oidc.IDTokenClaims {
-	if len(raw) == 0 {
-		return nil
-	}
-
-	var claims oidc.IDTokenClaims
-	if err := jsonx.RoundTrip(raw, &claims); err != nil {
-		return nil
-	}
-
-	return &claims
+// integrationSystemContext returns a context with system-level privileges for integration operations
+func integrationSystemContext(ctx context.Context) context.Context {
+	callCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	return auth.WithCaller(callCtx, auth.NewKeystoreCaller())
 }

@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/oscalgen"
@@ -50,11 +52,31 @@ func (Risk) PluralName() string {
 // Fields returns risk fields.
 func (Risk) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
+		field.String("integration_id").
+			Comment("integration that surfaced this risk, when sourced via integration ingest").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
+		field.Time("observed_at").
+			Comment("time when this risk was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 		field.String("external_uuid").
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
 			Optional().
 			Nillable().
-			Unique().
 			Annotations(
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleUUID,
@@ -71,6 +93,7 @@ func (Risk) Fields() []ent.Field {
 					oscalgen.OSCALFieldRoleTitle,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 				),
+				entx.IntegrationMappingField().UpsertKey(),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
@@ -154,6 +177,58 @@ func (Risk) Fields() []ent.Field {
 				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
 			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
+		field.Time("mitigated_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("mitigated_at"),
+			).
+			Comment("the time when the risk was mitigated"),
+		field.Bool("review_required").
+			Optional().
+			Annotations(
+				entgql.OrderField("review_required"),
+			).
+			Default(true).
+			Comment("indicates if a periodic review is required for the risk"),
+		field.Time("last_reviewed_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("last_reviewed_at"),
+			).
+			Comment("the time when the risk was last reviewed"),
+		field.Enum("review_frequency").
+			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("review_frequency"),
+			),
+		field.Time("next_review_due_at").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("next_review_due_at"),
+			).
+			Comment("the time when the next review is due for the risk"),
+		field.Int("residual_score").
+			Optional().
+			Annotations(
+				entgql.OrderField("residual_score"),
+			).
+			Comment("score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
+		field.Enum("risk_decision").
+			GoType(enums.RiskDecision("")).
+			Default(enums.RiskDecisionNone.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("risk_decision"),
+			).
+			Comment("the decision made for the risk - accept, transfer, avoid, mitigate, or none"),
 	}
 }
 
@@ -171,15 +246,49 @@ func (r Risk) Edges() []ent.Edge {
 				),
 			},
 		}),
-		defaultEdgeFromWithPagination(r, Subcontrol{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("SubcontrolRefCodes").MatchOn("ref_code"),
+			},
+		}),
 		defaultEdgeFromWithPagination(r, Procedure{}),
 		defaultEdgeFromWithPagination(r, InternalPolicy{}),
 		defaultEdgeFromWithPagination(r, Program{}), // risk can be associated to 1:m programs, this allow permission inheritance from the program(s)
-		defaultEdgeFromWithPagination(r, Platform{}),
-		defaultEdgeToWithPagination(r, ActionPlan{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Platform{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("PlatformNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Platform{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("ActionPlanNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(ActionPlan{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Task{}),
-		defaultEdgeToWithPagination(r, Asset{}),
-		defaultEdgeToWithPagination(r, Entity{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Asset{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("AssetNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Asset{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Entity{},
+			annotations: []schema.Annotation{
+				entx.CSVRef().FromColumn("EntityNames").MatchOn("name"),
+				accessmap.EdgeViewCheck(Entity{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(r, Scan{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: r,
@@ -201,7 +310,6 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Group{}.Name()),
 			},
 		}),
-
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,
 			name:       "comments",
@@ -219,6 +327,16 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(r, Review{}),
+		defaultEdgeFromWithPagination(r, Remediation{}),
+	}
+}
+
+// Indexes of the Risk
+func (Risk) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_uuid", ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -282,6 +400,9 @@ func (r Risk) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("risk"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			Exclude("stakeholder_id", "delegate_id"),
 	}
 }
 

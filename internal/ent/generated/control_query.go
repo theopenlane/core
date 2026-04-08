@@ -70,6 +70,9 @@ type ControlQuery struct {
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
 	withResponsibleParty            *EntityQuery
+	withReviews                     *ReviewQuery
+	withRemediations                *RemediationQuery
+	withScans                       *ScanQuery
 	withOwner                       *OrganizationQuery
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
@@ -80,12 +83,9 @@ type ControlQuery struct {
 	withPrograms                    *ProgramQuery
 	withPlatforms                   *PlatformQuery
 	withAssets                      *AssetQuery
-	withScans                       *ScanQuery
 	withEntities                    *EntityQuery
 	withIdentityHolders             *IdentityHolderQuery
 	withCampaigns                   *CampaignQuery
-	withRemediations                *RemediationQuery
-	withReviews                     *ReviewQuery
 	withFindings                    *FindingQuery
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
@@ -107,17 +107,17 @@ type ControlQuery struct {
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
 	withNamedComments               map[string]*NoteQuery
 	withNamedDiscussions            map[string]*DiscussionQuery
+	withNamedReviews                map[string]*ReviewQuery
+	withNamedRemediations           map[string]*RemediationQuery
+	withNamedScans                  map[string]*ScanQuery
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedPlatforms              map[string]*PlatformQuery
 	withNamedAssets                 map[string]*AssetQuery
-	withNamedScans                  map[string]*ScanQuery
 	withNamedEntities               map[string]*EntityQuery
 	withNamedIdentityHolders        map[string]*IdentityHolderQuery
 	withNamedCampaigns              map[string]*CampaignQuery
-	withNamedRemediations           map[string]*RemediationQuery
-	withNamedReviews                map[string]*ReviewQuery
 	withNamedFindings               map[string]*FindingQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedSubcontrols            map[string]*SubcontrolQuery
@@ -487,6 +487,81 @@ func (_q *ControlQuery) QueryResponsibleParty() *EntityQuery {
 	return query
 }
 
+// QueryReviews chains the current query on the "reviews" edge.
+func (_q *ControlQuery) QueryReviews() *ReviewQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.ReviewsTable, control.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewControls
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRemediations chains the current query on the "remediations" edge.
+func (_q *ControlQuery) QueryRemediations() *RemediationQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.RemediationsTable, control.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationControls
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryScans chains the current query on the "scans" edge.
+func (_q *ControlQuery) QueryScans() *ScanQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, control.ScansTable, control.ScansPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ControlScans
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryOwner chains the current query on the "owner" edge.
 func (_q *ControlQuery) QueryOwner() *OrganizationQuery {
 	query := (&OrganizationClient{config: _q.config}).Query()
@@ -737,31 +812,6 @@ func (_q *ControlQuery) QueryAssets() *AssetQuery {
 	return query
 }
 
-// QueryScans chains the current query on the "scans" edge.
-func (_q *ControlQuery) QueryScans() *ScanQuery {
-	query := (&ScanClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, control.ScansTable, control.ScansPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ControlScans
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryEntities chains the current query on the "entities" edge.
 func (_q *ControlQuery) QueryEntities() *EntityQuery {
 	query := (&EntityClient{config: _q.config}).Query()
@@ -831,56 +881,6 @@ func (_q *ControlQuery) QueryCampaigns() *CampaignQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Campaign
 		step.Edge.Schema = schemaConfig.ControlCampaigns
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryRemediations chains the current query on the "remediations" edge.
-func (_q *ControlQuery) QueryRemediations() *RemediationQuery {
-	query := (&RemediationClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(remediation.Table, remediation.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.RemediationsTable, control.RemediationsPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationControls
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryReviews chains the current query on the "reviews" edge.
-func (_q *ControlQuery) QueryReviews() *ReviewQuery {
-	query := (&ReviewClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(review.Table, review.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.ReviewsTable, control.ReviewsPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1292,6 +1292,9 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withControlOwner:           _q.withControlOwner.Clone(),
 		withDelegate:               _q.withDelegate.Clone(),
 		withResponsibleParty:       _q.withResponsibleParty.Clone(),
+		withReviews:                _q.withReviews.Clone(),
+		withRemediations:           _q.withRemediations.Clone(),
+		withScans:                  _q.withScans.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
 		withBlockedGroups:          _q.withBlockedGroups.Clone(),
 		withEditors:                _q.withEditors.Clone(),
@@ -1302,12 +1305,9 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withPrograms:               _q.withPrograms.Clone(),
 		withPlatforms:              _q.withPlatforms.Clone(),
 		withAssets:                 _q.withAssets.Clone(),
-		withScans:                  _q.withScans.Clone(),
 		withEntities:               _q.withEntities.Clone(),
 		withIdentityHolders:        _q.withIdentityHolders.Clone(),
 		withCampaigns:              _q.withCampaigns.Clone(),
-		withRemediations:           _q.withRemediations.Clone(),
-		withReviews:                _q.withReviews.Clone(),
 		withFindings:               _q.withFindings.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
 		withSubcontrols:            _q.withSubcontrols.Clone(),
@@ -1466,6 +1466,39 @@ func (_q *ControlQuery) WithResponsibleParty(opts ...func(*EntityQuery)) *Contro
 	return _q
 }
 
+// WithReviews tells the query-builder to eager-load the nodes that are connected to
+// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithReviews(opts ...func(*ReviewQuery)) *ControlQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviews = query
+	return _q
+}
+
+// WithRemediations tells the query-builder to eager-load the nodes that are connected to
+// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithRemediations(opts ...func(*RemediationQuery)) *ControlQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRemediations = query
+	return _q
+}
+
+// WithScans tells the query-builder to eager-load the nodes that are connected to
+// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithScans(opts ...func(*ScanQuery)) *ControlQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withScans = query
+	return _q
+}
+
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
 // the "owner" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithOwner(opts ...func(*OrganizationQuery)) *ControlQuery {
@@ -1576,17 +1609,6 @@ func (_q *ControlQuery) WithAssets(opts ...func(*AssetQuery)) *ControlQuery {
 	return _q
 }
 
-// WithScans tells the query-builder to eager-load the nodes that are connected to
-// the "scans" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithScans(opts ...func(*ScanQuery)) *ControlQuery {
-	query := (&ScanClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScans = query
-	return _q
-}
-
 // WithEntities tells the query-builder to eager-load the nodes that are connected to
 // the "entities" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithEntities(opts ...func(*EntityQuery)) *ControlQuery {
@@ -1617,28 +1639,6 @@ func (_q *ControlQuery) WithCampaigns(opts ...func(*CampaignQuery)) *ControlQuer
 		opt(query)
 	}
 	_q.withCampaigns = query
-	return _q
-}
-
-// WithRemediations tells the query-builder to eager-load the nodes that are connected to
-// the "remediations" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithRemediations(opts ...func(*RemediationQuery)) *ControlQuery {
-	query := (&RemediationClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withRemediations = query
-	return _q
-}
-
-// WithReviews tells the query-builder to eager-load the nodes that are connected to
-// the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithReviews(opts ...func(*ReviewQuery)) *ControlQuery {
-	query := (&ReviewClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withReviews = query
 	return _q
 }
 
@@ -1829,6 +1829,9 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withControlOwner != nil,
 			_q.withDelegate != nil,
 			_q.withResponsibleParty != nil,
+			_q.withReviews != nil,
+			_q.withRemediations != nil,
+			_q.withScans != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1839,12 +1842,9 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withPrograms != nil,
 			_q.withPlatforms != nil,
 			_q.withAssets != nil,
-			_q.withScans != nil,
 			_q.withEntities != nil,
 			_q.withIdentityHolders != nil,
 			_q.withCampaigns != nil,
-			_q.withRemediations != nil,
-			_q.withReviews != nil,
 			_q.withFindings != nil,
 			_q.withControlImplementations != nil,
 			_q.withSubcontrols != nil,
@@ -1971,6 +1971,27 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withReviews; query != nil {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Control) { n.Edges.Reviews = []*Review{} },
+			func(n *Control, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRemediations; query != nil {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Control) { n.Edges.Remediations = []*Remediation{} },
+			func(n *Control, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withScans; query != nil {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Control) { n.Edges.Scans = []*Scan{} },
+			func(n *Control, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Control, e *Organization) { n.Edges.Owner = e }); err != nil {
@@ -2036,13 +2057,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	if query := _q.withScans; query != nil {
-		if err := _q.loadScans(ctx, query, nodes,
-			func(n *Control) { n.Edges.Scans = []*Scan{} },
-			func(n *Control, e *Scan) { n.Edges.Scans = append(n.Edges.Scans, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withEntities; query != nil {
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Control) { n.Edges.Entities = []*Entity{} },
@@ -2061,20 +2075,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *Control) { n.Edges.Campaigns = []*Campaign{} },
 			func(n *Control, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withRemediations; query != nil {
-		if err := _q.loadRemediations(ctx, query, nodes,
-			func(n *Control) { n.Edges.Remediations = []*Remediation{} },
-			func(n *Control, e *Remediation) { n.Edges.Remediations = append(n.Edges.Remediations, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withReviews; query != nil {
-		if err := _q.loadReviews(ctx, query, nodes,
-			func(n *Control) { n.Edges.Reviews = []*Review{} },
-			func(n *Control, e *Review) { n.Edges.Reviews = append(n.Edges.Reviews, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2208,6 +2208,27 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedReviews {
+		if err := _q.loadReviews(ctx, query, nodes,
+			func(n *Control) { n.appendNamedReviews(name) },
+			func(n *Control, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRemediations {
+		if err := _q.loadRemediations(ctx, query, nodes,
+			func(n *Control) { n.appendNamedRemediations(name) },
+			func(n *Control, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedScans {
+		if err := _q.loadScans(ctx, query, nodes,
+			func(n *Control) { n.appendNamedScans(name) },
+			func(n *Control, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Control) { n.appendNamedBlockedGroups(name) },
@@ -2243,13 +2264,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedScans {
-		if err := _q.loadScans(ctx, query, nodes,
-			func(n *Control) { n.appendNamedScans(name) },
-			func(n *Control, e *Scan) { n.appendNamedScans(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedEntities {
 		if err := _q.loadEntities(ctx, query, nodes,
 			func(n *Control) { n.appendNamedEntities(name) },
@@ -2268,20 +2282,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *Control) { n.appendNamedCampaigns(name) },
 			func(n *Control, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedRemediations {
-		if err := _q.loadRemediations(ctx, query, nodes,
-			func(n *Control) { n.appendNamedRemediations(name) },
-			func(n *Control, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedReviews {
-		if err := _q.loadReviews(ctx, query, nodes,
-			func(n *Control) { n.appendNamedReviews(name) },
-			func(n *Control, e *Review) { n.appendNamedReviews(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2997,6 +2997,192 @@ func (_q *ControlQuery) loadResponsibleParty(ctx context.Context, query *EntityQ
 	}
 	return nil
 }
+func (_q *ControlQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Control, init func(*Control), assign func(*Control, *Review)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.ReviewsTable)
+		joinT.Schema(_q.schemaConfig.ReviewControls)
+		s.Join(joinT).On(s.C(review.FieldID), joinT.C(control.ReviewsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.ReviewsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.ReviewsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ControlQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Control, init func(*Control), assign func(*Control, *Remediation)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.RemediationsTable)
+		joinT.Schema(_q.schemaConfig.RemediationControls)
+		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(control.RemediationsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.RemediationsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.RemediationsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ControlQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Control, init func(*Control), assign func(*Control, *Scan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.ScansTable)
+		joinT.Schema(_q.schemaConfig.ControlScans)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.ScansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Control, init func(*Control), assign func(*Control, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Control)
@@ -3452,68 +3638,6 @@ func (_q *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes
 	}
 	return nil
 }
-func (_q *ControlQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Control, init func(*Control), assign func(*Control, *Scan)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.ScansTable)
-		joinT.Schema(_q.schemaConfig.ControlScans)
-		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.ScansPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (_q *ControlQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Control, init func(*Control), assign func(*Control, *Entity)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -3693,130 +3817,6 @@ func (_q *ControlQuery) loadCampaigns(ctx context.Context, query *CampaignQuery,
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "campaigns" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (_q *ControlQuery) loadRemediations(ctx context.Context, query *RemediationQuery, nodes []*Control, init func(*Control), assign func(*Control, *Remediation)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationControls)
-		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(control.RemediationsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(control.RemediationsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.RemediationsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Remediation](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "remediations" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
-func (_q *ControlQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Control, init func(*Control), assign func(*Control, *Review)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewControls)
-		s.Join(joinT).On(s.C(review.FieldID), joinT.C(control.ReviewsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(control.ReviewsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.ReviewsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*Review](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "reviews" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -4489,6 +4489,48 @@ func (_q *ControlQuery) WithNamedDiscussions(name string, opts ...func(*Discussi
 	return _q
 }
 
+// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *ControlQuery {
+	query := (&ReviewClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReviews == nil {
+		_q.withNamedReviews = make(map[string]*ReviewQuery)
+	}
+	_q.withNamedReviews[name] = query
+	return _q
+}
+
+// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *ControlQuery {
+	query := (&RemediationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRemediations == nil {
+		_q.withNamedRemediations = make(map[string]*RemediationQuery)
+	}
+	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *ControlQuery {
+	query := (&ScanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedScans == nil {
+		_q.withNamedScans = make(map[string]*ScanQuery)
+	}
+	_q.withNamedScans[name] = query
+	return _q
+}
+
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ControlQuery {
@@ -4559,20 +4601,6 @@ func (_q *ControlQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) 
 	return _q
 }
 
-// WithNamedScans tells the query-builder to eager-load the nodes that are connected to the "scans"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *ControlQuery {
-	query := (&ScanClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScans == nil {
-		_q.withNamedScans = make(map[string]*ScanQuery)
-	}
-	_q.withNamedScans[name] = query
-	return _q
-}
-
 // WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ControlQuery {
@@ -4612,34 +4640,6 @@ func (_q *ControlQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQu
 		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
 	}
 	_q.withNamedCampaigns[name] = query
-	return _q
-}
-
-// WithNamedRemediations tells the query-builder to eager-load the nodes that are connected to the "remediations"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithNamedRemediations(name string, opts ...func(*RemediationQuery)) *ControlQuery {
-	query := (&RemediationClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedRemediations == nil {
-		_q.withNamedRemediations = make(map[string]*RemediationQuery)
-	}
-	_q.withNamedRemediations[name] = query
-	return _q
-}
-
-// WithNamedReviews tells the query-builder to eager-load the nodes that are connected to the "reviews"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithNamedReviews(name string, opts ...func(*ReviewQuery)) *ControlQuery {
-	query := (&ReviewClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedReviews == nil {
-		_q.withNamedReviews = make(map[string]*ReviewQuery)
-	}
-	_q.withNamedReviews[name] = query
 	return _q
 }
 

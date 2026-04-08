@@ -844,6 +844,10 @@ func (_c *CampaignCreate) defaults() error {
 		v := campaign.DefaultIsRecurring
 		_c.mutation.SetIsRecurring(v)
 	}
+	if _, ok := _c.mutation.RecurrenceFrequency(); !ok {
+		v := campaign.DefaultRecurrenceFrequency
+		_c.mutation.SetRecurrenceFrequency(v)
+	}
 	if _, ok := _c.mutation.RecurrenceInterval(); !ok {
 		v := campaign.DefaultRecurrenceInterval
 		_c.mutation.SetRecurrenceInterval(v)

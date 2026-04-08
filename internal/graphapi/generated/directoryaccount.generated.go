@@ -82,6 +82,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
 			case "identityHolderID":
 				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
 			case "directoryName":
@@ -120,16 +122,28 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
 			case "lastLoginAt":
 				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":
@@ -215,6 +229,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
 			case "identityHolderID":
 				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
 			case "directoryName":
@@ -253,16 +269,28 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
 			case "lastLoginAt":
 				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":
@@ -377,6 +405,8 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
 			case "platformID":
 				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
+			case "directoryInstanceID":
+				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
 			case "identityHolderID":
 				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
 			case "directoryName":
@@ -415,16 +445,28 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
 			case "lastLoginAt":
 				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
+			case "firstSeenAt":
+				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
+			case "lastSeenAt":
+				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
+			case "addedAt":
+				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
+			case "removedAt":
+				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
 			case "observedAt":
 				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
 			case "profileHash":
 				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
 			case "profile":
 				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
+			case "metadata":
+				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
 			case "rawProfileFileID":
 				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
+			case "primarySource":
+				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 			case "environment":

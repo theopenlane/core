@@ -1,2 +1,2 @@
-// Package registry wires provider specifications into runtime provider instances
+// Package registry stores definition registrations for the greenfield integration runtime
 package registry

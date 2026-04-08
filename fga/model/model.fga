@@ -169,9 +169,17 @@ type organization
     define can_create_workflow_assignment_target: [service]
     define can_create_workflow_event: [service]
     define can_create_workflow_proposal: [service]
+    define can_create_integration_run: [service]
+    define can_create_integration_webhook: [service]
 
     define entity_creator: [group#member]
     define can_create_entity: can_edit or entity_creator or can_manage_trust_center
+
+    define vendor_scoring_config_creator: [group#member]
+    define can_create_vendor_scoring_config: can_edit or vendor_scoring_config_creator
+
+    define vendor_risk_score_creator: [group#member]
+    define can_create_vendor_risk_score: can_edit or vendor_risk_score_creator
 
     define asset_creator: [group#member]
     define can_create_asset: can_edit or asset_creator
@@ -199,6 +207,13 @@ type organization
 
     define sla_definition_creator: [group#member]
     define can_create_sla_definition: can_edit or sla_definition_creator
+
+    define email_branding_creator: [group#member]
+    define can_create_email_branding: can_edit or email_branding_creator
+
+    define email_template_creator: [group#member]
+    define can_create_email_template: can_edit or email_template_creator
+
     # additional relations
     define user_in_context: [user]
 
@@ -415,7 +430,7 @@ type internal_policy
     # the parent of the policy will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
-    define admin: [user,service] or can_delete from parent
+    define admin: [user,service] or can_edit from parent
     # allow a group to be assigned to add edit permissions for a set of users
     define editor: [group#member]
     # allow for auditors assigned to the program to view the policy
@@ -438,7 +453,7 @@ type procedure
     # the parent of the procedure will be the organization, not all permissions will be inherited
     define parent: [organization]
     # allow a user or service to be assigned to add edit permissions
-    define admin: [user,service] or can_delete from parent
+    define admin: [user,service] or can_edit from parent
     # allow a group to be assigned to add edit permissions for a set of users
     define editor: [group#member]
       # allow for auditors assigned to the program to view the procedure
@@ -531,14 +546,13 @@ type integration
 # webhooks configured for integrations
 type integration_webhook
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
-    define can_edit: [user, service] or (editor but not blocked)
-    define can_delete: [user, service] or (editor but not blocked)
+    define can_view: [service] or (viewer but not blocked)
+    define can_edit: [service]
+    define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
-    define blocked: [user, group#member]
     define parent: [user, service, organization, integration]
+    define viewer: can_view from parent
+    define blocked: [user, group#member]
 
 # integration run history is service-driven but visible to org members via parent
 type integration_run
@@ -852,7 +866,7 @@ type trust_center_nda_request
   relations
     define can_view: [user, service] or parent_viewer or viewer
     define can_edit: [user, service] or parent_editor or editor
-    define can_delete: [user, service] or parent_deleter or editor
+    define can_delete: [user, service] or parent_deleter or can_edit from parent or editor
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
@@ -940,6 +954,7 @@ type assessment
 type assessment_response
   relations
     define can_view: [user] or response_owner or admin_viewer or viewer
+    define can_edit: [user] or response_owner or editor
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, assessment, campaign, identity_holder, entity]
@@ -951,6 +966,28 @@ type assessment_response
     define editor: [organization#owner] or can_edit from parent
     define viewer: [organization#owner] or editor or can_view from parent
 
+type vendor_scoring_config
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization]
+
+type vendor_risk_score
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
+    define blocked: [user, group#member]
+    define parent: [user, service, organization, vendor_scoring_config, entity, assessment_response]
+
 # workflow definitions can be created by org admins or users in groups with create access
 type workflow_definition
   relations
@@ -960,7 +997,7 @@ type workflow_definition
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization]
     define admin: [user, service] or can_delete from parent
-    define viewer: [group#member] or editor 
+    define viewer: [group#member] or editor
     define editor: [group#member, organization#owner] or can_edit from parent
     define blocked: [user, group#member]
 

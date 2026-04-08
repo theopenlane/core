@@ -148,6 +148,7 @@ type EntityBuilder struct {
 	DisplayName string
 	TypeID      string
 	Description string
+	Tier        enums.VendorTier
 }
 
 type EntityTypeBuilder struct {
@@ -436,6 +437,13 @@ type SLADefinitionBuilder struct {
 	// Fields
 	SLADays       int
 	SecurityLevel enums.SecurityLevel
+}
+
+type PlatformBuilder struct {
+	client *client
+
+	// Fields
+	Name string
 }
 
 // Faker structs with random injected data
@@ -944,20 +952,26 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		e.Description = gofakeit.HipsterSentence()
 	}
 
+	if e.Tier == "" {
+		e.Tier = enums.VendorTierStandard
+	}
+
 	if e.TypeID == "" {
 		et := (&EntityTypeBuilder{client: e.client}).MustNew(ctx, t)
 		e.TypeID = et.ID
 	}
 
-	entity, err := e.client.db.Entity.Create().
+	entity := e.client.db.Entity.Create().
 		SetName(e.Name).
 		SetDisplayName(e.DisplayName).
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
-		Save(ctx)
+		SetTier(e.Tier)
+
+	savedEntity, err := entity.Save(ctx)
 	requireNoError(t, err)
 
-	return entity
+	return savedEntity
 }
 
 // MustNew identity holder builder is used to create, without authz checks, identity holders in the database
@@ -1419,7 +1433,7 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 	}
 
 	mutation := e.client.db.Evidence.Create().
-		SetCreationDate(time.Now().Add(-time.Minute)).
+		SetCreationDate(models.DateTime(time.Now().Add(-time.Minute))).
 		SetName(e.Name)
 
 	if e.ProgramID != "" {
@@ -1919,6 +1933,25 @@ type TrustCenterComplianceBuilder struct {
 	TrustCenterID string
 	StandardID    string
 	Tags          []string
+}
+
+// EmailTemplateBuilder is used to create email templates
+type EmailTemplateBuilder struct {
+	client *client
+
+	// Fields
+	Name            string
+	Key             string
+	TemplateContext *enums.TemplateContext
+}
+
+// EmailBrandingBuilder is used to create email branding
+type EmailBrandingBuilder struct {
+	client *client
+
+	// Fields
+	Name         string
+	PrimaryColor string
 }
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
@@ -2627,4 +2660,64 @@ func (s *SLADefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.S
 	}
 
 	return existing
+}
+
+func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailTemplate {
+	ctx = setContext(ctx, e.client.db)
+
+	if e.Name == "" {
+		e.Name = gofakeit.HipsterWord() + " Template"
+	}
+
+	if e.Key == "" {
+		e.Key = ulids.New().String()
+	}
+
+	if e.TemplateContext == nil {
+		e.TemplateContext = &enums.TemplateContextCampaignRecipient
+	}
+
+	emailTemplate, err := e.client.db.EmailTemplate.Create().
+		SetName(e.Name).
+		SetKey(e.Key).
+		SetTemplateContext(*e.TemplateContext).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return emailTemplate
+}
+
+func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailBranding {
+	ctx = setContext(ctx, e.client.db)
+
+	if e.Name == "" {
+		e.Name = gofakeit.Company() + " Email Branding"
+	}
+
+	if e.PrimaryColor == "" {
+		e.PrimaryColor = gofakeit.HexColor()
+	}
+
+	emailBranding, err := e.client.db.EmailBranding.Create().
+		SetName(e.Name).
+		SetPrimaryColor(e.PrimaryColor).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return emailBranding
+}
+
+func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platform {
+	ctx = setContext(ctx, p.client.db)
+
+	if p.Name == "" {
+		p.Name = gofakeit.AppName() + ulids.New().String()
+	}
+
+	platform, err := p.client.db.Platform.Create().
+		SetName(p.Name).
+		Save(ctx)
+	requireNoError(t, err)
+
+	return platform
 }

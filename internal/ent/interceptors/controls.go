@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // InterceptorTrustCenterControl is middleware that filters control queries based on user context:
@@ -30,10 +31,18 @@ func InterceptorTrustCenterControl() ent.Interceptor {
 		// anonymous trust center users can only see controls that are:
 		// 1. marked as trust center controls (cloned from the trust center standard)
 		// 2. have public visibility
+		// 3. owned by the trust center's organization
 		if _, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok {
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Err(err).Msg("failed to get organization ID from context for trust center control query")
+				return err
+			}
+
 			q.WhereP(
 				sql.FieldEQ(control.FieldIsTrustCenterControl, true),
 				sql.FieldEQ(control.FieldTrustCenterVisibility, enums.TrustCenterControlVisibilityPubliclyVisible),
+				sql.FieldEQ(control.FieldOwnerID, orgID),
 			)
 
 			return nil

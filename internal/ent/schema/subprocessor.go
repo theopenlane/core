@@ -151,6 +151,8 @@ func (Subprocessor) Indexes() []ent.Index {
 func (Subprocessor) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+		models.CatalogEntityManagementModule,
+		models.CatalogComplianceModule,
 	}
 }
 

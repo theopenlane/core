@@ -145,46 +145,6 @@ func (_u *SLADefinitionHistoryUpdate) ClearOwnerID() *SLADefinitionHistoryUpdate
 	return _u
 }
 
-// SetSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field.
-func (_u *SLADefinitionHistoryUpdate) SetSLADefinitionSeverityLevelName(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetSLADefinitionSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableSLADefinitionSeverityLevelName(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSLADefinitionSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearSLADefinitionSeverityLevelName clears the value of the "sla_definition_severity_level_name" field.
-func (_u *SLADefinitionHistoryUpdate) ClearSLADefinitionSeverityLevelName() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearSLADefinitionSeverityLevelName()
-	return _u
-}
-
-// SetSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field.
-func (_u *SLADefinitionHistoryUpdate) SetSLADefinitionSeverityLevelID(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetSLADefinitionSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableSLADefinitionSeverityLevelID(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSLADefinitionSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearSLADefinitionSeverityLevelID clears the value of the "sla_definition_severity_level_id" field.
-func (_u *SLADefinitionHistoryUpdate) ClearSLADefinitionSeverityLevelID() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearSLADefinitionSeverityLevelID()
-	return _u
-}
-
 // SetSLADays sets the "sla_days" field.
 func (_u *SLADefinitionHistoryUpdate) SetSLADays(v int) *SLADefinitionHistoryUpdate {
 	_u.mutation.ResetSLADays()
@@ -345,18 +305,6 @@ func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SLADefinitionSeverityLevelName(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.SLADefinitionSeverityLevelNameCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSLADefinitionSeverityLevelName, field.TypeString)
-	}
-	if value, ok := _u.mutation.SLADefinitionSeverityLevelID(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelID, field.TypeString, value)
-	}
-	if _u.mutation.SLADefinitionSeverityLevelIDCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSLADefinitionSeverityLevelID, field.TypeString)
-	}
 	if value, ok := _u.mutation.SLADays(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
 	}
@@ -497,46 +445,6 @@ func (_u *SLADefinitionHistoryUpdateOne) SetNillableOwnerID(v *string) *SLADefin
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *SLADefinitionHistoryUpdateOne) ClearOwnerID() *SLADefinitionHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetSLADefinitionSeverityLevelName(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetSLADefinitionSeverityLevelName(v)
-	return _u
-}
-
-// SetNillableSLADefinitionSeverityLevelName sets the "sla_definition_severity_level_name" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableSLADefinitionSeverityLevelName(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSLADefinitionSeverityLevelName(*v)
-	}
-	return _u
-}
-
-// ClearSLADefinitionSeverityLevelName clears the value of the "sla_definition_severity_level_name" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearSLADefinitionSeverityLevelName() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearSLADefinitionSeverityLevelName()
-	return _u
-}
-
-// SetSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetSLADefinitionSeverityLevelID(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetSLADefinitionSeverityLevelID(v)
-	return _u
-}
-
-// SetNillableSLADefinitionSeverityLevelID sets the "sla_definition_severity_level_id" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableSLADefinitionSeverityLevelID(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSLADefinitionSeverityLevelID(*v)
-	}
-	return _u
-}
-
-// ClearSLADefinitionSeverityLevelID clears the value of the "sla_definition_severity_level_id" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearSLADefinitionSeverityLevelID() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearSLADefinitionSeverityLevelID()
 	return _u
 }
 
@@ -729,18 +637,6 @@ func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SL
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.SLADefinitionSeverityLevelName(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelName, field.TypeString, value)
-	}
-	if _u.mutation.SLADefinitionSeverityLevelNameCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSLADefinitionSeverityLevelName, field.TypeString)
-	}
-	if value, ok := _u.mutation.SLADefinitionSeverityLevelID(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADefinitionSeverityLevelID, field.TypeString, value)
-	}
-	if _u.mutation.SLADefinitionSeverityLevelIDCleared() {
-		_spec.ClearField(sladefinitionhistory.FieldSLADefinitionSeverityLevelID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SLADays(); ok {
 		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)

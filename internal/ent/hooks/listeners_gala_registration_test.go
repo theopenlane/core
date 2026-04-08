@@ -71,15 +71,28 @@ func TestRegisterGalaWorkflowListenersRegistersCommandTopics(t *testing.T) {
 
 	ids, err := RegisterGalaWorkflowListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, len(enums.WorkflowObjectTypes)+7)
+	require.Len(t, ids, len(enums.WorkflowObjectTypes)+6)
 
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowTriggered, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionStarted, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionCompleted, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCreated, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCompleted, ""))
 	require.True(t, registry.InterestedIn(gala.TopicWorkflowInstanceCompleted, ""))
 	require.False(t, registry.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))
+}
+
+func TestRegisterGalaVendorScoringListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaVendorScoringListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
 }
 
 func TestRegisterGalaNotificationListeners(t *testing.T) {

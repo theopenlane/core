@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1045,6 +1046,36 @@ func TrustCenterIDEqualFold(v string) predicate.CustomDomain {
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// DomainTypeEQ applies the EQ predicate on the "domain_type" field.
+func DomainTypeEQ(v enums.CustomDomainType) predicate.CustomDomain {
+	vc := v
+	return predicate.CustomDomain(sql.FieldEQ(FieldDomainType, vc))
+}
+
+// DomainTypeNEQ applies the NEQ predicate on the "domain_type" field.
+func DomainTypeNEQ(v enums.CustomDomainType) predicate.CustomDomain {
+	vc := v
+	return predicate.CustomDomain(sql.FieldNEQ(FieldDomainType, vc))
+}
+
+// DomainTypeIn applies the In predicate on the "domain_type" field.
+func DomainTypeIn(vs ...enums.CustomDomainType) predicate.CustomDomain {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomain(sql.FieldIn(FieldDomainType, v...))
+}
+
+// DomainTypeNotIn applies the NotIn predicate on the "domain_type" field.
+func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomain {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomain(sql.FieldNotIn(FieldDomainType, v...))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

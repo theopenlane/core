@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/integrations/state"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -399,14 +399,34 @@ func (_u *IntegrationUpdate) ClearConfig() *IntegrationUpdate {
 	return _u
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_u *IntegrationUpdate) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationUpdate {
+	_u.mutation.SetInstallationMetadata(v)
+	return _u
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationUpdate {
+	if v != nil {
+		_u.SetInstallationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInstallationMetadata clears the value of the "installation_metadata" field.
+func (_u *IntegrationUpdate) ClearInstallationMetadata() *IntegrationUpdate {
+	_u.mutation.ClearInstallationMetadata()
+	return _u
+}
+
 // SetProviderState sets the "provider_state" field.
-func (_u *IntegrationUpdate) SetProviderState(v state.IntegrationProviderState) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetProviderState(v openapi.IntegrationProviderState) *IntegrationUpdate {
 	_u.mutation.SetProviderState(v)
 	return _u
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_u *IntegrationUpdate) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationUpdate {
+func (_u *IntegrationUpdate) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationUpdate {
 	if v != nil {
 		_u.SetProviderState(*v)
 	}
@@ -534,6 +554,20 @@ func (_u *IntegrationUpdate) SetProviderMetadataSnapshot(v map[string]interface{
 // ClearProviderMetadataSnapshot clears the value of the "provider_metadata_snapshot" field.
 func (_u *IntegrationUpdate) ClearProviderMetadataSnapshot() *IntegrationUpdate {
 	_u.mutation.ClearProviderMetadataSnapshot()
+	return _u
+}
+
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationUpdate) SetPrimaryDirectory(v bool) *IntegrationUpdate {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillablePrimaryDirectory(v *bool) *IntegrationUpdate {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
 	return _u
 }
 
@@ -685,6 +719,21 @@ func (_u *IntegrationUpdate) AddActionPlans(v ...*ActionPlan) *IntegrationUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.AddActionPlanIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *IntegrationUpdate) AddAssetIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *IntegrationUpdate) AddAssets(v ...*Asset) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -1032,6 +1081,27 @@ func (_u *IntegrationUpdate) RemoveActionPlans(v ...*ActionPlan) *IntegrationUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *IntegrationUpdate) ClearAssets() *IntegrationUpdate {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *IntegrationUpdate) RemoveAssetIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *IntegrationUpdate) RemoveAssets(v ...*Asset) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
@@ -1399,6 +1469,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ConfigCleared() {
 		_spec.ClearField(integration.FieldConfig, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InstallationMetadataCleared() {
+		_spec.ClearField(integration.FieldInstallationMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
 	}
@@ -1443,6 +1519,9 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1964,6 +2043,54 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2769,14 +2896,34 @@ func (_u *IntegrationUpdateOne) ClearConfig() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetInstallationMetadata sets the "installation_metadata" field.
+func (_u *IntegrationUpdateOne) SetInstallationMetadata(v openapi.IntegrationInstallationMetadata) *IntegrationUpdateOne {
+	_u.mutation.SetInstallationMetadata(v)
+	return _u
+}
+
+// SetNillableInstallationMetadata sets the "installation_metadata" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableInstallationMetadata(v *openapi.IntegrationInstallationMetadata) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetInstallationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInstallationMetadata clears the value of the "installation_metadata" field.
+func (_u *IntegrationUpdateOne) ClearInstallationMetadata() *IntegrationUpdateOne {
+	_u.mutation.ClearInstallationMetadata()
+	return _u
+}
+
 // SetProviderState sets the "provider_state" field.
-func (_u *IntegrationUpdateOne) SetProviderState(v state.IntegrationProviderState) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetProviderState(v openapi.IntegrationProviderState) *IntegrationUpdateOne {
 	_u.mutation.SetProviderState(v)
 	return _u
 }
 
 // SetNillableProviderState sets the "provider_state" field if the given value is not nil.
-func (_u *IntegrationUpdateOne) SetNillableProviderState(v *state.IntegrationProviderState) *IntegrationUpdateOne {
+func (_u *IntegrationUpdateOne) SetNillableProviderState(v *openapi.IntegrationProviderState) *IntegrationUpdateOne {
 	if v != nil {
 		_u.SetProviderState(*v)
 	}
@@ -2904,6 +3051,20 @@ func (_u *IntegrationUpdateOne) SetProviderMetadataSnapshot(v map[string]interfa
 // ClearProviderMetadataSnapshot clears the value of the "provider_metadata_snapshot" field.
 func (_u *IntegrationUpdateOne) ClearProviderMetadataSnapshot() *IntegrationUpdateOne {
 	_u.mutation.ClearProviderMetadataSnapshot()
+	return _u
+}
+
+// SetPrimaryDirectory sets the "primary_directory" field.
+func (_u *IntegrationUpdateOne) SetPrimaryDirectory(v bool) *IntegrationUpdateOne {
+	_u.mutation.SetPrimaryDirectory(v)
+	return _u
+}
+
+// SetNillablePrimaryDirectory sets the "primary_directory" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillablePrimaryDirectory(v *bool) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetPrimaryDirectory(*v)
+	}
 	return _u
 }
 
@@ -3055,6 +3216,21 @@ func (_u *IntegrationUpdateOne) AddActionPlans(v ...*ActionPlan) *IntegrationUpd
 		ids[i] = v[i].ID
 	}
 	return _u.AddActionPlanIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *IntegrationUpdateOne) AddAssetIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *IntegrationUpdateOne) AddAssets(v ...*Asset) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -3402,6 +3578,27 @@ func (_u *IntegrationUpdateOne) RemoveActionPlans(v ...*ActionPlan) *Integration
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *IntegrationUpdateOne) ClearAssets() *IntegrationUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *IntegrationUpdateOne) RemoveAssetIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *IntegrationUpdateOne) RemoveAssets(v ...*Asset) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
 }
 
 // ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
@@ -3799,6 +3996,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	if _u.mutation.ConfigCleared() {
 		_spec.ClearField(integration.FieldConfig, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InstallationMetadata(); ok {
+		_spec.SetField(integration.FieldInstallationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InstallationMetadataCleared() {
+		_spec.ClearField(integration.FieldInstallationMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ProviderState(); ok {
 		_spec.SetField(integration.FieldProviderState, field.TypeJSON, value)
 	}
@@ -3843,6 +4046,9 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.ProviderMetadataSnapshotCleared() {
 		_spec.ClearField(integration.FieldProviderMetadataSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PrimaryDirectory(); ok {
+		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4364,6 +4570,54 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.AssetsTable,
+			Columns: []string{integration.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

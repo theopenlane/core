@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/cel-go/cel"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -16,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
@@ -28,24 +28,18 @@ type WorkflowEngine struct {
 	client *generated.Client
 	// gala is the runtime used for workflow and integration event dispatch.
 	gala *gala.Gala
-	// integrationRegistry provides provider operation descriptors (optional)
-	integrationRegistry IntegrationRegistry
-	// integrationStore ensures integration records exist
-	integrationStore IntegrationStore
-	// integrationOperations executes integration operations
-	integrationOperations IntegrationOperations
-	// integrationListenersRegistered tracks whether integration listeners are registered.
-	integrationListenersRegistered bool
+	// integrationRuntime provides integration definition resolution and execution.
+	integrationRuntime *integrationsruntime.Runtime
 	// observer is the observability observer for metrics and tracing
 	observer *observability.Observer
 	// config is the workflow configuration
 	config *workflows.Config
-	// env is the CEL environment for expression evaluation
-	env *cel.Env
 	// celEvaluator handles CEL expression compilation and evaluation
 	celEvaluator *CELEvaluator
 	// proposalManager handles workflow proposal operations
 	proposalManager *ProposalManager
+	// scopeEvaluator evaluates CEL scope conditions for integration actions; initialized by SetIntegrationDeps
+	scopeEvaluator *IntegrationScopeEvaluator
 }
 
 // NewWorkflowEngine creates a new workflow engine using the provided configuration options
@@ -78,7 +72,6 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 		gala:            runtime,
 		observer:        observability.New(),
 		config:          config,
-		env:             env,
 		celEvaluator:    celEvaluator,
 		proposalManager: proposalManager,
 	}, nil
@@ -120,10 +113,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 
 	defSnapshot := e.serializeDefinition(def)
 
-	userID := ""
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-		userID = caller.SubjectID
-	}
+	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := buildTriggerContext(def.ID, obj, input, userID)
 
 	// Wrap instance + object ref creation in transaction to prevent stranded instances
@@ -159,10 +149,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 		})
 	}
 
-	userID := ""
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
-		userID = caller.SubjectID
-	}
+	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
 	allowCtx := workflows.AllowContext(ctx)
@@ -268,45 +255,36 @@ func (e *WorkflowEngine) guardTriggerPerDomain(ctx context.Context, def *generat
 		return nil
 	}
 
-	// Compute cooldown cutoff once if needed
-	var cooldownCutoff time.Time
-	checkCooldown := def.CooldownSeconds > 0
-	if checkCooldown {
-		cooldownCutoff = time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
+	// Check for any running/paused instance across all proposals in a single query
+	activeExists, err := e.client.WorkflowInstance.Query().
+		Where(
+			workflowinstance.WorkflowProposalIDIn(proposals...),
+			workflowinstance.StateIn(enums.WorkflowInstanceStateRunning, enums.WorkflowInstanceStatePaused),
+			workflowinstance.OwnerIDEQ(orgID),
+		).
+		Exist(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to check for active instances: %w", err)
+	}
+	if activeExists {
+		return workflows.ErrWorkflowAlreadyActive
 	}
 
-	// Check for active instances and cooldown in a single pass
-	for _, proposalID := range proposals {
-		// Check for running/paused instances
-		activeExists, err := e.client.WorkflowInstance.Query().
+	// Check cooldown across all proposals in a single query
+	if def.CooldownSeconds > 0 {
+		cooldownCutoff := time.Now().Add(-time.Duration(def.CooldownSeconds) * time.Second)
+		recentExists, err := e.client.WorkflowInstance.Query().
 			Where(
-				workflowinstance.WorkflowProposalIDEQ(proposalID),
-				workflowinstance.StateIn(enums.WorkflowInstanceStateRunning, enums.WorkflowInstanceStatePaused),
+				workflowinstance.WorkflowProposalIDIn(proposals...),
+				workflowinstance.CreatedAtGTE(cooldownCutoff),
 				workflowinstance.OwnerIDEQ(orgID),
 			).
 			Exist(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to check for active instances: %w", err)
+			return fmt.Errorf("failed to check cooldown: %w", err)
 		}
-		if activeExists {
+		if recentExists {
 			return workflows.ErrWorkflowAlreadyActive
-		}
-
-		// Check cooldown if configured
-		if checkCooldown {
-			recentExists, err := e.client.WorkflowInstance.Query().
-				Where(
-					workflowinstance.WorkflowProposalIDEQ(proposalID),
-					workflowinstance.CreatedAtGTE(cooldownCutoff),
-					workflowinstance.OwnerIDEQ(orgID),
-				).
-				Exist(ctx)
-			if err != nil {
-				return fmt.Errorf("failed to check cooldown: %w", err)
-			}
-			if recentExists {
-				return workflows.ErrWorkflowAlreadyActive
-			}
 		}
 	}
 
@@ -399,10 +377,9 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		}
 	}
 
-	// CompleteAssignment emits workflow-assignment-completed explicitly below
-	// Mark this mutation to skip hook-based mutation emission so we don't re-enter completion logic
-	allowCtx = workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(allowCtx)
+	// CompleteAssignment emits workflow-assignment-completed explicitly below;
+	// skip hook-based mutation emission to avoid re-entering completion logic.
+	allowCtx = workflows.SkipEventEmission(allowCtx)
 
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)

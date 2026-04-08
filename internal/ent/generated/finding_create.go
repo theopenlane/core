@@ -294,20 +294,6 @@ func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
 	return _c
 }
 
-// SetStatus sets the "status" field.
-func (_c *FindingCreate) SetStatus(v string) *FindingCreate {
-	_c.mutation.SetStatus(v)
-	return _c
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableStatus(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetStatus(*v)
-	}
-	return _c
-}
-
 // SetSecurityLevel sets the "security_level" field.
 func (_c *FindingCreate) SetSecurityLevel(v enums.SecurityLevel) *FindingCreate {
 	_c.mutation.SetSecurityLevel(v)
@@ -1329,10 +1315,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
 	}
-	if value, ok := _c.mutation.Status(); ok {
-		_spec.SetField(finding.FieldStatus, field.TypeString, value)
-		_node.Status = value
-	}
 	if value, ok := _c.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
 		_node.SecurityLevel = value
@@ -1619,16 +1601,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.VulnerabilitiesTable,
-			Columns: []string{finding.VulnerabilitiesColumn},
+			Columns: finding.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Vulnerability
+		edge.Schema = _c.schemaConfig.FindingVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1779,16 +1761,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.TasksTable,
-			Columns: []string{finding.TasksColumn},
+			Columns: finding.TasksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Task
+		edge.Schema = _c.schemaConfig.FindingTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1830,16 +1812,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.RemediationsTable,
-			Columns: []string{finding.RemediationsColumn},
+			Columns: finding.RemediationsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Remediation
+		edge.Schema = _c.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1847,16 +1829,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   finding.ReviewsTable,
-			Columns: []string{finding.ReviewsColumn},
+			Columns: finding.ReviewsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Review
+		edge.Schema = _c.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

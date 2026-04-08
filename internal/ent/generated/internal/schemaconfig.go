@@ -35,10 +35,10 @@ type SchemaConfig struct {
 	ControlRisks                       string // Control-risks->Risk table.
 	ControlActionPlans                 string // Control-action_plans->ActionPlan table.
 	ControlProcedures                  string // Control-procedures->Procedure table.
+	ControlScans                       string // Control-scans->Scan table.
 	ControlBlockedGroups               string // Control-blocked_groups->Group table.
 	ControlEditors                     string // Control-editors->Group table.
 	ControlAssets                      string // Control-assets->Asset table.
-	ControlScans                       string // Control-scans->Scan table.
 	ControlEntities                    string // Control-entities->Entity table.
 	ControlIdentityHolders             string // Control-identity_holders->IdentityHolder table.
 	ControlCampaigns                   string // Control-campaigns->Campaign table.
@@ -65,6 +65,7 @@ type SchemaConfig struct {
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
 	EmailBranding                      string // EmailBranding table.
+	EmailBrandingEmailTemplates        string // EmailBranding-email_templates->EmailTemplate table.
 	EmailTemplate                      string // EmailTemplate table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
@@ -90,8 +91,10 @@ type SchemaConfig struct {
 	FileSecrets                        string // File-secrets->Hush table.
 	FileDownloadToken                  string // FileDownloadToken table.
 	Finding                            string // Finding table.
+	FindingVulnerabilities             string // Finding-vulnerabilities->Vulnerability table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingTasks                       string // Finding-tasks->Task table.
 	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
 	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
 	FindingControl                     string // FindingControl table.
@@ -132,6 +135,9 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
+	InternalPolicyAssets               string // InternalPolicy-assets->Asset table.
+	InternalPolicyEntities             string // InternalPolicy-entities->Entity table.
+	InternalPolicyIdentityHolders      string // InternalPolicy-identity_holders->IdentityHolder table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
 	InviteGroups                       string // Invite-groups->Group table.
@@ -216,11 +222,21 @@ type SchemaConfig struct {
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
+	RemediationFindings                string // Remediation-findings->Finding table.
+	RemediationVulnerabilities         string // Remediation-vulnerabilities->Vulnerability table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
 	RemediationControls                string // Remediation-controls->Control table.
+	RemediationSubcontrols             string // Remediation-subcontrols->Subcontrol table.
+	RemediationRisks                   string // Remediation-risks->Risk table.
 	Review                             string // Review table.
+	ReviewFindings                     string // Review-findings->Finding table.
+	ReviewVulnerabilities              string // Review-vulnerabilities->Vulnerability table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
+	ReviewRemediations                 string // Review-remediations->Remediation table.
 	ReviewControls                     string // Review-controls->Control table.
+	ReviewSubcontrols                  string // Review-subcontrols->Subcontrol table.
+	ReviewRisks                        string // Review-risks->Risk table.
+	ReviewInternalPolicies             string // Review-internal_policies->InternalPolicy table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.
@@ -248,7 +264,11 @@ type SchemaConfig struct {
 	SubcontrolTasks                    string // Subcontrol-tasks->Task table.
 	SubcontrolRisks                    string // Subcontrol-risks->Risk table.
 	SubcontrolProcedures               string // Subcontrol-procedures->Procedure table.
+	SubcontrolScans                    string // Subcontrol-scans->Scan table.
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
+	SubcontrolAssets                   string // Subcontrol-assets->Asset table.
+	SubcontrolEntities                 string // Subcontrol-entities->Entity table.
+	SubcontrolIdentityHolders          string // Subcontrol-identity_holders->IdentityHolder table.
 	Subprocessor                       string // Subprocessor table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
@@ -274,9 +294,12 @@ type SchemaConfig struct {
 	UserEvents                         string // User-events->Event table.
 	UserPrograms                       string // User-programs->Program table.
 	UserSetting                        string // UserSetting table.
+	VendorRiskScore                    string // VendorRiskScore table.
+	VendorScoringConfig                string // VendorScoringConfig table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
 	VulnerabilityScans                 string // Vulnerability-scans->Scan table.
+	VulnerabilityTasks                 string // Vulnerability-tasks->Task table.
 	Webauthn                           string // Webauthn table.
 	WorkflowAssignment                 string // WorkflowAssignment table.
 	WorkflowAssignmentTarget           string // WorkflowAssignmentTarget table.

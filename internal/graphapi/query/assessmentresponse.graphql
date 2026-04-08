@@ -1,109 +1,129 @@
-
-mutation CreateAssessmentResponse($input: CreateAssessmentResponseInput!) {
-  createAssessmentResponse(input: $input) {
-    assessmentResponse {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
-    }
-  }
+mutation CreateAssessmentResponse ($input: CreateAssessmentResponseInput!) {
+	createAssessmentResponse(input: $input) {
+		assessmentResponse {
+			assessmentID
+			assignedAt
+			campaignID
+			completedAt
+			createdAt
+			createdBy
+			documentDataID
+			dueDate
+			email
+			emailClickCount
+			emailClickedAt
+			emailDeliveredAt
+			emailMetadata
+			emailOpenCount
+			emailOpenedAt
+			entityID
+			id
+			identityHolderID
+			isDraft
+			isTest
+			lastEmailEventAt
+			ownerID
+			sendAttempts
+			startedAt
+			status
+			updatedAt
+			updatedBy
+		}
+	}
 }
-
-mutation DeleteAssessmentResponse($deleteAssessmentResponseId: ID!) {
-  deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
-    deletedID
-  }
+mutation DeleteAssessmentResponse ($deleteAssessmentResponseId: ID!) {
+	deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
+		deletedID
+	}
 }
-
 query GetAllAssessmentResponses {
-  assessmentResponses {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        assessmentID
-        assignedAt
-        completedAt
-        createdAt
-        createdBy
-        documentDataID
-        dueDate
-        email
-        id
-        ownerID
-        sendAttempts
-        startedAt
-        status
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	assessmentResponses {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-query GetAssessmentResponseByID($assessmentResponseId: ID!) {
-  assessmentResponse(id: $assessmentResponseId) {
-    assessmentID
-    assignedAt
-    completedAt
-    createdAt
-    createdBy
-    documentDataID
-    dueDate
-    email
-    id
-    ownerID
-    sendAttempts
-    startedAt
-    status
-    updatedAt
-    updatedBy
-  }
+query GetAssessmentResponseByID ($assessmentResponseId: ID!) {
+	assessmentResponse(id: $assessmentResponseId) {
+		assessmentID
+		assignedAt
+		campaignID
+		completedAt
+		createdAt
+		createdBy
+		documentDataID
+		dueDate
+		email
+		emailClickCount
+		emailClickedAt
+		emailDeliveredAt
+		emailMetadata
+		emailOpenCount
+		emailOpenedAt
+		entityID
+		id
+		identityHolderID
+		isDraft
+		isTest
+		lastEmailEventAt
+		ownerID
+		sendAttempts
+		startedAt
+		status
+		updatedAt
+		updatedBy
+	}
 }
-
-query GetAssessmentResponses($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {
-  assessmentResponses(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        assessmentID
-        assignedAt
-        completedAt
-        createdAt
-        createdBy
-        documentDataID
-        dueDate
-        email
-        id
-        ownerID
-        sendAttempts
-        startedAt
-        status
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetAssessmentResponses ($first: Int, $last: Int, $where: AssessmentResponseWhereInput) {
+	assessmentResponses(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				assessmentID
+				assignedAt
+				completedAt
+				createdAt
+				createdBy
+				documentDataID
+				dueDate
+				email
+				id
+				ownerID
+				sendAttempts
+				startedAt
+				status
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }

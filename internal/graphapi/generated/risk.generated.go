@@ -84,6 +84,12 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -112,6 +118,20 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
 				return ec.fieldContext_Risk_delegateID(ctx, field)
+			case "mitigatedAt":
+				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
+			case "reviewRequired":
+				return ec.fieldContext_Risk_reviewRequired(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "nextReviewDueAt":
+				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
+			case "residualScore":
+				return ec.fieldContext_Risk_residualScore(ctx, field)
+			case "riskDecision":
+				return ec.fieldContext_Risk_riskDecision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -158,6 +178,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_comments(ctx, field)
 			case "discussions":
 				return ec.fieldContext_Risk_discussions(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Risk_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Risk_remediations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -250,6 +274,12 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -278,6 +308,20 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
 				return ec.fieldContext_Risk_delegateID(ctx, field)
+			case "mitigatedAt":
+				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
+			case "reviewRequired":
+				return ec.fieldContext_Risk_reviewRequired(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "nextReviewDueAt":
+				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
+			case "residualScore":
+				return ec.fieldContext_Risk_residualScore(ctx, field)
+			case "riskDecision":
+				return ec.fieldContext_Risk_riskDecision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -324,6 +368,10 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_comments(ctx, field)
 			case "discussions":
 				return ec.fieldContext_Risk_discussions(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Risk_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Risk_remediations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -416,6 +464,12 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -444,6 +498,20 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
 				return ec.fieldContext_Risk_delegateID(ctx, field)
+			case "mitigatedAt":
+				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
+			case "reviewRequired":
+				return ec.fieldContext_Risk_reviewRequired(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "nextReviewDueAt":
+				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
+			case "residualScore":
+				return ec.fieldContext_Risk_residualScore(ctx, field)
+			case "riskDecision":
+				return ec.fieldContext_Risk_riskDecision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -490,6 +558,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_comments(ctx, field)
 			case "discussions":
 				return ec.fieldContext_Risk_discussions(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Risk_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Risk_remediations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},
@@ -582,6 +654,12 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_scopeName(ctx, field)
 			case "scopeID":
 				return ec.fieldContext_Risk_scopeID(ctx, field)
+			case "externalID":
+				return ec.fieldContext_Risk_externalID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Risk_integrationID(ctx, field)
+			case "observedAt":
+				return ec.fieldContext_Risk_observedAt(ctx, field)
 			case "externalUUID":
 				return ec.fieldContext_Risk_externalUUID(ctx, field)
 			case "name":
@@ -610,6 +688,20 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
 				return ec.fieldContext_Risk_delegateID(ctx, field)
+			case "mitigatedAt":
+				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
+			case "reviewRequired":
+				return ec.fieldContext_Risk_reviewRequired(ctx, field)
+			case "lastReviewedAt":
+				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
+			case "reviewFrequency":
+				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "nextReviewDueAt":
+				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
+			case "residualScore":
+				return ec.fieldContext_Risk_residualScore(ctx, field)
+			case "riskDecision":
+				return ec.fieldContext_Risk_riskDecision(ctx, field)
 			case "owner":
 				return ec.fieldContext_Risk_owner(ctx, field)
 			case "blockedGroups":
@@ -656,6 +748,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_comments(ctx, field)
 			case "discussions":
 				return ec.fieldContext_Risk_discussions(ctx, field)
+			case "reviews":
+				return ec.fieldContext_Risk_reviews(ctx, field)
+			case "remediations":
+				return ec.fieldContext_Risk_remediations(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
 		},

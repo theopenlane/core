@@ -210,6 +210,19 @@ func HookDeleteUser() ent.Hook {
 					return nil, err
 				}
 
+				exists, err := m.Client().OrgMembership.Query().
+					Where(orgmembership.UserID(user.ID)).
+					Where(orgmembership.RoleEQ(enums.RoleOwner)).
+					Where(orgmembership.Not(orgmembership.OrganizationIDIn(personalOrgIDs...))).
+					Exist(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				if exists {
+					return nil, ErrOrgOwnerCannotBeDeleted
+				}
+
 				// run the mutation first
 				v, err := next.Mutate(ctx, m)
 				if err != nil {
@@ -369,7 +382,11 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		return nil
 	}
 
-	oldDisplayName := displayName
+	oldDisplayName, err := m.OldDisplayName(ctx)
+	if err != nil {
+		return err
+	}
+
 	if ok {
 		var err error
 
@@ -410,7 +427,6 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		groups, err := m.Client().Group.Query().
 			Where(
 				group.OwnerID(membership.OrganizationID),
-				group.CreatedBy(user.ID),
 				group.IsManaged(true),
 				group.Name(groupName),
 			).

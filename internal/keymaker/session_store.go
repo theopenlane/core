@@ -1,93 +1,129 @@
 package keymaker
 
 import (
-	"strings"
+	"encoding/json"
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/common/integrations/types"
-	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// ActivationSession captures the temporary state required to complete an OAuth flow
-type ActivationSession struct {
+// defaultSessionTTL is the duration that auth sessions remain valid when no explicit expiry is set
+const defaultSessionTTL = 15 * time.Minute
+
+const defaultAuthStateStoreMaxEntries = 4096
+
+// AuthState captures the temporary state required to complete a definition auth flow callback
+type AuthState struct {
 	// State is the unique CSRF token identifying this authorization session
 	State string
-	// Provider identifies which provider is handling the authorization
-	Provider types.ProviderType
-	// OrgID identifies the organization initiating the flow
-	OrgID string
-	// IntegrationID identifies the integration record being activated
-	IntegrationID string
-	// Scopes contains the authorization scopes requested from the provider
-	Scopes []string
-	// Metadata carries additional provider-specific configuration
-	Metadata map[string]any
-	// LabelOverrides customizes UI labels presented during authorization
-	LabelOverrides map[string]string
+	// DefinitionID identifies which definition is handling the authorization
+	DefinitionID string
+	// InstallationID identifies the installation record being activated
+	InstallationID string
+	// CredentialRef identifies which credential-schema-selected connection mode is being activated
+	CredentialRef types.CredentialSlotID
+	// CallbackState holds the opaque state payload returned by the definition's AuthStartFunc
+	CallbackState json.RawMessage
 	// CreatedAt records when the session was initiated
 	CreatedAt time.Time
 	// ExpiresAt specifies when the session becomes invalid
 	ExpiresAt time.Time
-	// AuthSession holds the provider-specific authorization state
-	AuthSession types.AuthSession
 }
 
-// SessionStore persists activation sessions until the provider callback is completed
-type SessionStore interface {
-	Save(session ActivationSession) error
-	Take(state string) (ActivationSession, error)
+// AuthStateStore persists callback state until the definition auth callback is completed
+type AuthStateStore interface {
+	Save(state AuthState) error
+	Take(token string) (AuthState, error)
 }
 
-// MemorySessionStore stores activation sessions in memory and is safe for concurrent use
-type MemorySessionStore struct {
+// InMemoryAuthStateStore stores definition auth callback state in process memory and is safe for concurrent use
+type InMemoryAuthStateStore struct {
 	// mu protects concurrent access to the sessions map
 	mu sync.Mutex
-	// sessions indexes activation sessions by their state token
-	sessions map[string]ActivationSession
+	// sessions indexes authorization state by state token
+	sessions map[string]AuthState
+	// maxEntries bounds in-memory session growth under abandoned callback flows
+	maxEntries int
+	// now provides the current timestamp, overridable in tests
+	now func() time.Time
 }
 
-// NewMemorySessionStore returns an in-memory session store
-func NewMemorySessionStore() *MemorySessionStore {
-	return &MemorySessionStore{
-		sessions: map[string]ActivationSession{},
+// NewInMemoryAuthStateStore returns an in-memory definition authorization state store
+func NewInMemoryAuthStateStore() *InMemoryAuthStateStore {
+	return &InMemoryAuthStateStore{
+		sessions:   map[string]AuthState{},
+		maxEntries: defaultAuthStateStoreMaxEntries,
+		now:        time.Now,
 	}
 }
 
-// Save records the provided activation session
-func (m *MemorySessionStore) Save(session ActivationSession) error {
-	if strings.TrimSpace(session.State) == "" {
-		return integrations.ErrStateRequired
+// Save records the provided definition authorization state
+func (m *InMemoryAuthStateStore) Save(state AuthState) error {
+	if state.State == "" {
+		return ErrAuthStateTokenRequired
 	}
 
-	if session.AuthSession == nil {
-		return integrations.ErrAuthSessionInvalid
+	clone := state
+	now := m.now()
+	if clone.CreatedAt.IsZero() {
+		clone.CreatedAt = now
 	}
 
-	clone := session
+	if clone.ExpiresAt.IsZero() {
+		clone.ExpiresAt = clone.CreatedAt.Add(defaultSessionTTL)
+	}
+
+	token := clone.State
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	m.sessions[session.State] = clone
+
+	m.purgeExpiredLocked(now)
+
+	if _, exists := m.sessions[token]; !exists && len(m.sessions) >= m.maxEntries {
+		return ErrAuthStateStoreFull
+	}
+
+	m.sessions[token] = clone
 
 	return nil
 }
 
-// Take retrieves and deletes the session associated with the given state
-func (m *MemorySessionStore) Take(state string) (ActivationSession, error) {
-	if strings.TrimSpace(state) == "" {
-		return ActivationSession{}, integrations.ErrStateRequired
+// Take retrieves and deletes authorization state associated with the given token
+func (m *InMemoryAuthStateStore) Take(token string) (AuthState, error) {
+	if token == "" {
+		return AuthState{}, ErrAuthStateTokenRequired
 	}
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	session, ok := m.sessions[state]
+	now := m.now()
+
+	session, ok := m.sessions[token]
 	if !ok {
-		return ActivationSession{}, integrations.ErrAuthorizationStateNotFound
+		m.purgeExpiredLocked(now)
+		return AuthState{}, ErrAuthStateNotFound
 	}
 
-	delete(m.sessions, state)
+	if !session.ExpiresAt.IsZero() && now.After(session.ExpiresAt) {
+		delete(m.sessions, token)
+		m.purgeExpiredLocked(now)
+		return AuthState{}, ErrAuthStateExpired
+	}
+
+	delete(m.sessions, token)
+	m.purgeExpiredLocked(now)
 
 	return session, nil
+}
+
+// purgeExpiredLocked removes expired sessions from the store. m.mu must be held by the caller
+func (m *InMemoryAuthStateStore) purgeExpiredLocked(now time.Time) {
+	for key, session := range m.sessions {
+		if !session.ExpiresAt.IsZero() && !session.ExpiresAt.After(now) {
+			delete(m.sessions, key)
+		}
+	}
 }

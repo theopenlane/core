@@ -1125,6 +1125,7 @@ enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/common/enu
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+	NONE
 }
 """
 Ordering options for ActionPlan connections
@@ -2228,6 +2229,37 @@ type AssessmentResponse implements Node {
 	identityHolder: IdentityHolder
 	entity: Entity
 	document: DocumentData
+	vendorRiskScores(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorRiskScores returned from the connection.
+		"""
+		orderBy: [VendorRiskScoreOrder!]
+
+		"""
+		Filtering options for VendorRiskScores returned from the connection.
+		"""
+		where: VendorRiskScoreWhereInput
+	): VendorRiskScoreConnection!
 }
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
@@ -2692,6 +2724,11 @@ input AssessmentResponseWhereInput {
 	"""
 	hasDocument: Boolean
 	hasDocumentWith: [DocumentDataWhereInput!]
+	"""
+	vendor_risk_scores edge predicates
+	"""
+	hasVendorRiskScores: Boolean
+	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
 }
 """
 Return response for updateAssessment mutation
@@ -3074,6 +3111,14 @@ type Asset implements Node {
 	the categories of the asset, e.g. web server, database, etc
 	"""
 	categories: [String!]
+	"""
+	integration that discovered this asset, when sourced via integration ingest
+	"""
+	integrationID: ID
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	blockedGroups(
 		"""
@@ -3364,7 +3409,73 @@ type Asset implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	sourcePlatform: Platform
+	"""
+	integration that owns this asset
+	"""
+	integration: Integration
 	connectedAssets(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -3436,6 +3547,7 @@ enum AssetAssetType @goModel(model: "github.com/theopenlane/core/common/enums.As
 	DOMAIN
 	DEVICE
 	TELEPHONE
+	REPOSITORY
 }
 """
 Return response for createBulkAsset mutation
@@ -3547,6 +3659,7 @@ enum AssetOrderField {
 	cost_center
 	estimated_monthly_cost
 	purchase_date
+	observed_at
 }
 """
 AssetSourceType is enum for the field source_type
@@ -4278,6 +4391,37 @@ input AssetWhereInput {
 	purchaseDateIsNil: Boolean
 	purchaseDateNotNil: Boolean
 	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDGT: ID
+	integrationIDGTE: ID
+	integrationIDLT: ID
+	integrationIDLTE: ID
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -4378,10 +4522,25 @@ input AssetWhereInput {
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
 	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
 	source_platform edge predicates
 	"""
 	hasSourcePlatform: Boolean
 	hasSourcePlatformWith: [PlatformWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
 	"""
 	connected_assets edge predicates
 	"""
@@ -5012,6 +5171,7 @@ enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+	NONE
 }
 """
 Return response for launchCampaign mutation
@@ -6319,6 +6479,18 @@ type Contact implements Node {
 	status of the contact
 	"""
 	status: ContactUserStatus!
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	entities(
 		"""
@@ -6548,6 +6720,8 @@ enum ContactOrderField {
 	company
 	email
 	STATUS
+	external_id
+	observed_at
 }
 """
 Return response for updateContact mutation
@@ -6567,6 +6741,7 @@ enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/common/enums
 	DEACTIVATED
 	SUSPENDED
 	ONBOARDING
+	UNKNOWN
 }
 """
 ContactWhereInput is used for filtering Contact objects.
@@ -6784,6 +6959,55 @@ input ContactWhereInput {
 	statusNEQ: ContactUserStatus
 	statusIn: [ContactUserStatus!]
 	statusNotIn: [ContactUserStatus!]
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -7330,6 +7554,99 @@ type Control implements Node {
 	the entity who is responsible for the control implementation when it is a third party
 	"""
 	responsibleParty: Entity
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -7490,37 +7807,6 @@ type Control implements Node {
 		"""
 		where: AssetWhereInput
 	): AssetConnection!
-	scans(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Scans returned from the connection.
-		"""
-		orderBy: [ScanOrder!]
-
-		"""
-		Filtering options for Scans returned from the connection.
-		"""
-		where: ScanWhereInput
-	): ScanConnection!
 	entities(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -7614,68 +7900,6 @@ type Control implements Node {
 		"""
 		where: CampaignWhereInput
 	): CampaignConnection!
-	remediations(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Remediations returned from the connection.
-		"""
-		orderBy: [RemediationOrder!]
-
-		"""
-		Filtering options for Remediations returned from the connection.
-		"""
-		where: RemediationWhereInput
-	): RemediationConnection!
-	reviews(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Reviews returned from the connection.
-		"""
-		orderBy: [ReviewOrder!]
-
-		"""
-		Filtering options for Reviews returned from the connection.
-		"""
-		where: ReviewWhereInput
-	): ReviewConnection!
 	findings(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -10408,6 +10632,21 @@ input ControlWhereInput {
 	hasResponsibleParty: Boolean
 	hasResponsiblePartyWith: [EntityWhereInput!]
 	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -10458,11 +10697,6 @@ input ControlWhereInput {
 	hasAssets: Boolean
 	hasAssetsWith: [AssetWhereInput!]
 	"""
-	scans edge predicates
-	"""
-	hasScans: Boolean
-	hasScansWith: [ScanWhereInput!]
-	"""
 	entities edge predicates
 	"""
 	hasEntities: Boolean
@@ -10477,16 +10711,6 @@ input ControlWhereInput {
 	"""
 	hasCampaigns: Boolean
 	hasCampaignsWith: [CampaignWhereInput!]
-	"""
-	remediations edge predicates
-	"""
-	hasRemediations: Boolean
-	hasRemediationsWith: [RemediationWhereInput!]
-	"""
-	reviews edge predicates
-	"""
-	hasReviews: Boolean
-	hasReviewsWith: [ReviewWhereInput!]
 	"""
 	findings edge predicates
 	"""
@@ -10807,6 +11031,7 @@ input CreateAssessmentResponseInput {
 	identityHolderID: ID
 	entityID: ID
 	documentID: ID
+	vendorRiskScoreIDs: [ID!]
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -10922,6 +11147,10 @@ input CreateAssetInput {
 	the categories of the asset, e.g. web server, database, etc
 	"""
 	categories: [String!]
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -10942,7 +11171,10 @@ input CreateAssetInput {
 	outOfScopePlatformIDs: [ID!]
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
+	internalPolicyIDs: [ID!]
 	sourcePlatformID: ID
+	integrationID: ID
 	connectedAssetIDs: [ID!]
 	connectedFromIDs: [ID!]
 }
@@ -11157,6 +11389,18 @@ input CreateContactInput {
 	status of the contact
 	"""
 	status: ContactUserStatus
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	entityIDs: [ID!]
 	campaignIDs: [ID!]
@@ -11374,6 +11618,9 @@ input CreateControlInput {
 	controlOwnerID: ID
 	delegateID: ID
 	responsiblePartyID: ID
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
+	scanIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -11384,12 +11631,9 @@ input CreateControlInput {
 	programIDs: [ID!]
 	platformIDs: [ID!]
 	assetIDs: [ID!]
-	scanIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	campaignIDs: [ID!]
-	remediationIDs: [ID!]
-	reviewIDs: [ID!]
 	findingIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
@@ -11492,6 +11736,10 @@ input CreateCustomDomainInput {
 	the ID of the trust center the domain belongs to, if applicable
 	"""
 	trustCenterID: String
+	"""
+	the type of this custom domain
+	"""
+	domainType: CustomDomainCustomDomainType
 	ownerID: ID
 	mappableDomainID: ID!
 	dnsVerificationID: ID
@@ -11607,6 +11855,10 @@ input CreateDirectoryAccountInput {
 	"""
 	scopeName: String
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
@@ -11675,6 +11927,22 @@ input CreateDirectoryAccountInput {
 	"""
 	lastLoginAt: Time
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time
@@ -11687,9 +11955,17 @@ input CreateDirectoryAccountInput {
 	"""
 	profile: Map
 	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
 	sourceVersion: String
+	"""
+	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	"""
+	primarySource: Boolean
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
@@ -11719,6 +11995,10 @@ input CreateDirectoryGroupInput {
 	the scope of the directory_group
 	"""
 	scopeName: String
+	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
 	"""
 	stable identifier from the directory system
 	"""
@@ -11752,6 +12032,22 @@ input CreateDirectoryGroupInput {
 	"""
 	memberCount: Int
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time
@@ -11763,6 +12059,10 @@ input CreateDirectoryGroupInput {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -11789,6 +12089,10 @@ input CreateDirectoryMembershipInput {
 	"""
 	scopeName: String
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	membership role reported by the provider
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -11801,9 +12105,17 @@ input CreateDirectoryMembershipInput {
 	"""
 	firstSeenAt: Time
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
 	"""
 	time when this record was created
 	"""
@@ -11840,6 +12152,10 @@ input CreateDirectorySyncRunInput {
 	the scope of the directory_sync_run
 	"""
 	scopeName: String
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
 	"""
 	current state of the sync run
 	"""
@@ -12074,13 +12390,16 @@ input CreateEmailTemplateInput {
 	"""
 	runtime data context defining available variable keys for this template
 	"""
-	templateContext: EmailTemplateTemplateContext
+	templateContext: EmailTemplateTemplateContext!
 	"""
 	static variable values merged as base layer at render time; call-site data takes precedence
 	"""
 	defaults: Map
 	ownerID: ID
-	emailBrandingID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
+	emailBrandingIDs: [ID!]
 	integrationID: ID
 	workflowDefinitionID: ID
 	workflowInstanceID: ID
@@ -12238,9 +12557,9 @@ input CreateEntityInput {
 	"""
 	riskScore: Int
 	"""
-	the tier classification for the entity
+	the vendor risk tier classification, used to determine the depth of TPRM assessment required
 	"""
-	tier: String
+	tier: EntityVendorTier
 	"""
 	the cadence for reviewing the entity
 	"""
@@ -12257,6 +12576,14 @@ input CreateEntityInput {
 	vendor metadata such as additional enrichment info, company size, public, etc.
 	"""
 	vendorMetadata: Map
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -12278,16 +12605,20 @@ input CreateEntityInput {
 	scanIDs: [ID!]
 	campaignIDs: [ID!]
 	assessmentResponseIDs: [ID!]
+	vendorRiskScoreIDs: [ID!]
 	integrationIDs: [ID!]
 	subprocessorIDs: [ID!]
 	authMethodIDs: [ID!]
 	employerIdentityHolderIDs: [ID!]
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
 	platformIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	sourcePlatformIDs: [ID!]
 	entityTypeID: ID
+	logoFileID: ID
+	internalPolicyIDs: [ID!]
 	note: CreateNoteInput
 }
 """
@@ -12378,11 +12709,11 @@ input CreateEvidenceInput {
 	"""
 	the date the evidence was retrieved
 	"""
-	creationDate: Time
+	creationDate: DateTime
 	"""
 	the date the evidence should be renewed, defaults to a year from entry date
 	"""
-	renewalDate: Time
+	renewalDate: DateTime
 	"""
 	the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	"""
@@ -12621,10 +12952,6 @@ input CreateFindingInput {
 	external identifier from the integration source for the finding
 	"""
 	externalID: String
-	"""
-	lifecycle status of the finding
-	"""
-	status: String
 	"""
 	the owner of the finding
 	"""
@@ -13095,6 +13422,7 @@ input CreateIdentityHolderInput {
 	entityIDs: [ID!]
 	directoryAccountIDs: [ID!]
 	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
 	platformIDs: [ID!]
 	campaignIDs: [ID!]
 	taskIDs: [ID!]
@@ -13103,6 +13431,7 @@ input CreateIdentityHolderInput {
 	workflowObjectRefIDs: [ID!]
 	accessPlatformIDs: [ID!]
 	userID: ID
+	internalPolicyIDs: [ID!]
 }
 """
 CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -13222,6 +13551,10 @@ input CreateInternalPolicyInput {
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	assetIDs: [ID!]
+	entityIDs: [ID!]
+	identityHolderIDs: [ID!]
+	reviewIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -13738,6 +14071,10 @@ input CreateNotificationTemplateInput {
 	"""
 	topicPattern: String!
 	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
+	"""
 	title template for external channel messages
 	"""
 	titleTemplate: String
@@ -13961,6 +14298,8 @@ input CreateOrganizationInput {
 	directoryGroupIDs: [ID!]
 	directorySyncRunIDs: [ID!]
 	discussionIDs: [ID!]
+	vendorScoringConfigIDs: [ID!]
+	vendorRiskScoreIDs: [ID!]
 	createOrgSettings: CreateOrganizationSettingInput
 }
 """
@@ -14250,6 +14589,9 @@ input CreatePlatformInput {
 	entityIDs: [ID!]
 	evidenceIDs: [ID!]
 	fileIDs: [ID!]
+	architectureDiagramIDs: [ID!]
+	dataFlowDiagramIDs: [ID!]
+	trustBoundaryDiagramIDs: [ID!]
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	assessmentIDs: [ID!]
@@ -14541,6 +14883,10 @@ input CreateRemediationInput {
 	"""
 	title: String
 	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
+	"""
 	state of the remediation, such as pending or completed
 	"""
 	state: String
@@ -14740,6 +15086,7 @@ input CreateReviewInput {
 	reviewerID: ID
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	internalPolicyIDs: [ID!]
 }
 """
 CreateRiskInput is used for create Risk object.
@@ -14766,6 +15113,18 @@ input CreateRiskInput {
 	the scope of the risk
 	"""
 	scopeName: String
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -14814,6 +15173,31 @@ input CreateRiskInput {
 	structured details of the business costs in JSON format
 	"""
 	businessCostsJSON: [Any!]
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	reviewFrequency: RiskFrequency
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -14837,6 +15221,8 @@ input CreateRiskInput {
 	delegateID: ID
 	commentIDs: [ID!]
 	discussionIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -14848,15 +15234,10 @@ input CreateSLADefinitionInput {
 	"""
 	tags: [String!]
 	"""
-	the severity_level of the sla_definition
-	"""
-	slaDefinitionSeverityLevelName: String
-	"""
 	remediation service level agreement in days for the severity level
 	"""
 	slaDays: Int!
 	ownerID: ID
-	slaDefinitionSeverityLevelID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
@@ -14942,6 +15323,7 @@ input CreateScanInput {
 	platformIDs: [ID!]
 	vulnerabilityIDs: [ID!]
 	controlIDs: [ID!]
+	subcontrolIDs: [ID!]
 	generatedByPlatformID: ID
 	performedByUserID: ID
 	performedByGroupID: ID
@@ -15222,12 +15604,18 @@ input CreateSubcontrolInput {
 	controlOwnerID: ID
 	delegateID: ID
 	responsiblePartyID: ID
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
+	scanIDs: [ID!]
 	ownerID: ID
 	subcontrolKindID: ID
 	controlID: ID!
 	controlImplementationIDs: [ID!]
 	scheduledJobIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	assetIDs: [ID!]
+	entityIDs: [ID!]
+	identityHolderIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -15448,6 +15836,8 @@ input CreateTaskInput {
 	actionPlanIDs: [ID!]
 	evidenceIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	findingIDs: [ID!]
 	parentID: ID
 	taskIDs: [ID!]
 }
@@ -16074,6 +16464,76 @@ input CreateUserSettingInput {
 	defaultOrgID: ID
 }
 """
+CreateVendorRiskScoreInput is used for create VendorRiskScore object.
+Input was generated by ent.
+"""
+input CreateVendorRiskScoreInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	"""
+	questionKey: String!
+	"""
+	question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	"""
+	questionName: String!
+	"""
+	question description captured at assessment time
+	"""
+	questionDescription: String
+	"""
+	question category captured at assessment time
+	"""
+	questionCategory: VendorRiskScoreVendorScoringCategory!
+	"""
+	user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	"""
+	impact: VendorRiskScoreVendorRiskImpact!
+	"""
+	user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	"""
+	likelihood: VendorRiskScoreVendorRiskLikelihood!
+	"""
+	factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	"""
+	answer: String
+	"""
+	optional justification or context for the assigned impact and likelihood
+	"""
+	notes: String
+	ownerID: ID
+	vendorScoringConfigID: ID
+	entityID: ID!
+	assessmentResponseID: ID
+}
+"""
+CreateVendorScoringConfigInput is used for create VendorScoringConfig object.
+Input was generated by ent.
+"""
+input CreateVendorScoringConfigInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	"""
+	questions: VendorScoringQuestionsConfig
+	"""
+	controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	"""
+	scoringMode: VendorScoringConfigVendorScoringMode
+	"""
+	org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	"""
+	riskThresholds: RiskThresholdsConfig
+	ownerID: ID
+	vendorRiskScoreIDs: [ID!]
+}
+"""
 CreateVulnerabilityInput is used for create Vulnerability object.
 Input was generated by ent.
 """
@@ -16106,10 +16566,6 @@ input CreateVulnerabilityInput {
 	owner of the vulnerability
 	"""
 	externalOwnerID: String
-	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
 	"""
 	external identifier from the integration source for the vulnerability
 	"""
@@ -16195,6 +16651,34 @@ input CreateVulnerabilityInput {
 	"""
 	impacts: [String!]
 	"""
+	CWE identifiers associated with the vulnerability
+	"""
+	cweIds: [String!]
+	"""
+	version range affected by the vulnerability
+	"""
+	vulnerableVersionRange: String
+	"""
+	earliest version that fixes the vulnerability
+	"""
+	firstPatchedVersion: String
+	"""
+	name of the vulnerable package or dependency
+	"""
+	packageName: String
+	"""
+	ecosystem of the vulnerable package such as npm, pip, or maven
+	"""
+	packageEcosystem: String
+	"""
+	path to the manifest file declaring the vulnerable dependency
+	"""
+	manifestPath: String
+	"""
+	scope of the dependency such as runtime or development
+	"""
+	dependencyScope: String
+	"""
 	timestamp when the vulnerability was published
 	"""
 	publishedAt: DateTime
@@ -16206,6 +16690,26 @@ input CreateVulnerabilityInput {
 	timestamp when the source last updated the vulnerability
 	"""
 	sourceUpdatedAt: DateTime
+	"""
+	timestamp when the vulnerability was dismissed
+	"""
+	dismissedAt: DateTime
+	"""
+	reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	"""
+	dismissedReason: String
+	"""
+	free-text explanation provided when the vulnerability was dismissed
+	"""
+	dismissedComment: String
+	"""
+	timestamp when the vulnerability was marked as fixed
+	"""
+	fixedAt: DateTime
+	"""
+	timestamp when the vulnerability was automatically dismissed by the source system
+	"""
+	autoDismissedAt: DateTime
 	"""
 	link to the vulnerability in the source system
 	"""
@@ -16366,6 +16870,10 @@ type CustomDomain implements Node {
 	the ID of the trust center the domain belongs to, if applicable
 	"""
 	trustCenterID: String
+	"""
+	the type of this custom domain
+	"""
+	domainType: CustomDomainCustomDomainType!
 	owner: Organization
 	mappableDomain: MappableDomain!
 	dnsVerification: DNSVerification
@@ -16426,6 +16934,14 @@ type CustomDomainCreatePayload {
 	Created customDomain
 	"""
 	customDomain: CustomDomain!
+}
+"""
+CustomDomainCustomDomainType is enum for the field domain_type
+"""
+enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/common/enums.CustomDomainType") {
+	PREVIEW
+	EXTERNAL
+	UNKNOWN
 }
 """
 Return response for deleteCustomDomain mutation
@@ -16700,6 +17216,13 @@ input CustomDomainWhereInput {
 	trustCenterIDNotNil: Boolean
 	trustCenterIDEqualFold: String
 	trustCenterIDContainsFold: String
+	"""
+	domain_type field predicates
+	"""
+	domainType: CustomDomainCustomDomainType
+	domainTypeNEQ: CustomDomainCustomDomainType
+	domainTypeIn: [CustomDomainCustomDomainType!]
+	domainTypeNotIn: [CustomDomainCustomDomainType!]
 	"""
 	owner edge predicates
 	"""
@@ -18008,6 +18531,10 @@ type DirectoryAccount implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	deduplicated identity holder linked to this directory account
 	"""
 	identityHolderID: ID
@@ -18084,6 +18611,22 @@ type DirectoryAccount implements Node {
 	"""
 	lastLoginAt: Time
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time!
@@ -18096,6 +18639,10 @@ type DirectoryAccount implements Node {
 	"""
 	profile: Map
 	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	"""
 	object storage file identifier that holds the raw upstream payload
 	"""
 	rawProfileFileID: String
@@ -18103,6 +18650,10 @@ type DirectoryAccount implements Node {
 	cursor or ETag supplied by the source system for auditing
 	"""
 	sourceVersion: String
+	"""
+	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	"""
+	primarySource: Boolean!
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -18354,6 +18905,7 @@ Properties by which DirectoryAccount connections can be ordered.
 enum DirectoryAccountOrderField {
 	created_at
 	updated_at
+	directory_instance_id
 	directory_name
 	external_id
 	canonical_email
@@ -18611,6 +19163,24 @@ input DirectoryAccountWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
+	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
 	"""
 	identity_holder_id field predicates
 	"""
@@ -18911,6 +19481,58 @@ input DirectoryAccountWhereInput {
 	lastLoginAtIsNil: Boolean
 	lastLoginAtNotNil: Boolean
 	"""
+	first_seen_at field predicates
+	"""
+	firstSeenAt: Time
+	firstSeenAtNEQ: Time
+	firstSeenAtIn: [Time!]
+	firstSeenAtNotIn: [Time!]
+	firstSeenAtGT: Time
+	firstSeenAtGTE: Time
+	firstSeenAtLT: Time
+	firstSeenAtLTE: Time
+	firstSeenAtIsNil: Boolean
+	firstSeenAtNotNil: Boolean
+	"""
+	last_seen_at field predicates
+	"""
+	lastSeenAt: Time
+	lastSeenAtNEQ: Time
+	lastSeenAtIn: [Time!]
+	lastSeenAtNotIn: [Time!]
+	lastSeenAtGT: Time
+	lastSeenAtGTE: Time
+	lastSeenAtLT: Time
+	lastSeenAtLTE: Time
+	lastSeenAtIsNil: Boolean
+	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
+	"""
 	observed_at field predicates
 	"""
 	observedAt: Time
@@ -18955,6 +19577,11 @@ input DirectoryAccountWhereInput {
 	sourceVersionNotNil: Boolean
 	sourceVersionEqualFold: String
 	sourceVersionContainsFold: String
+	"""
+	primary_source field predicates
+	"""
+	primarySource: Boolean
+	primarySourceNEQ: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -19063,6 +19690,10 @@ type DirectoryGroup implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: ID!
@@ -19099,6 +19730,22 @@ type DirectoryGroup implements Node {
 	"""
 	memberCount: Int
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	"""
 	time when this snapshot was recorded
 	"""
 	observedAt: Time!
@@ -19110,6 +19757,10 @@ type DirectoryGroup implements Node {
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
 	"""
 	object storage file identifier containing the raw upstream payload
 	"""
@@ -19320,6 +19971,7 @@ Properties by which DirectoryGroup connections can be ordered.
 enum DirectoryGroupOrderField {
 	created_at
 	updated_at
+	directory_instance_id
 	external_id
 	email
 	display_name
@@ -19557,6 +20209,24 @@ input DirectoryGroupWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
+	"""
 	directory_sync_run_id field predicates
 	"""
 	directorySyncRunID: ID
@@ -19658,6 +20328,58 @@ input DirectoryGroupWhereInput {
 	memberCountLTE: Int
 	memberCountIsNil: Boolean
 	memberCountNotNil: Boolean
+	"""
+	first_seen_at field predicates
+	"""
+	firstSeenAt: Time
+	firstSeenAtNEQ: Time
+	firstSeenAtIn: [Time!]
+	firstSeenAtNotIn: [Time!]
+	firstSeenAtGT: Time
+	firstSeenAtGTE: Time
+	firstSeenAtLT: Time
+	firstSeenAtLTE: Time
+	firstSeenAtIsNil: Boolean
+	firstSeenAtNotNil: Boolean
+	"""
+	last_seen_at field predicates
+	"""
+	lastSeenAt: Time
+	lastSeenAtNEQ: Time
+	lastSeenAtIn: [Time!]
+	lastSeenAtNotIn: [Time!]
+	lastSeenAtGT: Time
+	lastSeenAtGTE: Time
+	lastSeenAtLT: Time
+	lastSeenAtLTE: Time
+	lastSeenAtIsNil: Boolean
+	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
 	"""
 	observed_at field predicates
 	"""
@@ -19792,6 +20514,10 @@ type DirectoryMembership implements Node {
 	"""
 	platformID: ID
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: ID!
@@ -19816,9 +20542,17 @@ type DirectoryMembership implements Node {
 	"""
 	firstSeenAt: Time
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
 	"""
 	time when this record was created
 	"""
@@ -20141,6 +20875,24 @@ input DirectoryMembershipWhereInput {
 	scopeNameEqualFold: String
 	scopeNameContainsFold: String
 	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
+	"""
 	role field predicates
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -20193,6 +20945,32 @@ input DirectoryMembershipWhereInput {
 	lastSeenAtLTE: Time
 	lastSeenAtIsNil: Boolean
 	lastSeenAtNotNil: Boolean
+	"""
+	added_at field predicates
+	"""
+	addedAt: Time
+	addedAtNEQ: Time
+	addedAtIn: [Time!]
+	addedAtNotIn: [Time!]
+	addedAtGT: Time
+	addedAtGTE: Time
+	addedAtLT: Time
+	addedAtLTE: Time
+	addedAtIsNil: Boolean
+	addedAtNotNil: Boolean
+	"""
+	removed_at field predicates
+	"""
+	removedAt: Time
+	removedAtNEQ: Time
+	removedAtIn: [Time!]
+	removedAtNotIn: [Time!]
+	removedAtGT: Time
+	removedAtGTE: Time
+	removedAtLT: Time
+	removedAtLTE: Time
+	removedAtIsNil: Boolean
+	removedAtNotNil: Boolean
 	"""
 	observed_at field predicates
 	"""
@@ -20261,6 +21039,10 @@ type DirectorySyncRun implements Node {
 	optional platform associated with this sync run
 	"""
 	platformID: ID
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
 	"""
 	current state of the sync run
 	"""
@@ -20721,6 +21503,24 @@ input DirectorySyncRunWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
+	"""
+	directory_instance_id field predicates
+	"""
+	directoryInstanceID: String
+	directoryInstanceIDNEQ: String
+	directoryInstanceIDIn: [String!]
+	directoryInstanceIDNotIn: [String!]
+	directoryInstanceIDGT: String
+	directoryInstanceIDGTE: String
+	directoryInstanceIDLT: String
+	directoryInstanceIDLTE: String
+	directoryInstanceIDContains: String
+	directoryInstanceIDHasPrefix: String
+	directoryInstanceIDHasSuffix: String
+	directoryInstanceIDIsNil: Boolean
+	directoryInstanceIDNotNil: Boolean
+	directoryInstanceIDEqualFold: String
+	directoryInstanceIDContainsFold: String
 	"""
 	status field predicates
 	"""
@@ -22371,15 +23171,11 @@ type EmailTemplate implements Node {
 	"""
 	runtime data context defining available variable keys for this template
 	"""
-	templateContext: EmailTemplateTemplateContext
+	templateContext: EmailTemplateTemplateContext!
 	"""
 	static variable values merged as base layer at render time; call-site data takes precedence
 	"""
 	defaults: Map
-	"""
-	email branding configuration to apply for this template
-	"""
-	emailBrandingID: ID
 	"""
 	integration used to deliver emails for this template
 	"""
@@ -22393,7 +23189,100 @@ type EmailTemplate implements Node {
 	"""
 	workflowInstanceID: ID
 	owner: Organization
-	emailBranding: EmailBranding
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	emailBranding: [EmailBranding!]
 	integration: Integration
 	workflowDefinition: WorkflowDefinition
 	workflowInstance: WorkflowInstance
@@ -22954,26 +23843,6 @@ input EmailTemplateWhereInput {
 	templateContextNEQ: EmailTemplateTemplateContext
 	templateContextIn: [EmailTemplateTemplateContext!]
 	templateContextNotIn: [EmailTemplateTemplateContext!]
-	templateContextIsNil: Boolean
-	templateContextNotNil: Boolean
-	"""
-	email_branding_id field predicates
-	"""
-	emailBrandingID: ID
-	emailBrandingIDNEQ: ID
-	emailBrandingIDIn: [ID!]
-	emailBrandingIDNotIn: [ID!]
-	emailBrandingIDGT: ID
-	emailBrandingIDGTE: ID
-	emailBrandingIDLT: ID
-	emailBrandingIDLTE: ID
-	emailBrandingIDContains: ID
-	emailBrandingIDHasPrefix: ID
-	emailBrandingIDHasSuffix: ID
-	emailBrandingIDIsNil: Boolean
-	emailBrandingIDNotNil: Boolean
-	emailBrandingIDEqualFold: ID
-	emailBrandingIDContainsFold: ID
 	"""
 	integration_id field predicates
 	"""
@@ -23033,6 +23902,21 @@ input EmailTemplateWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	email_branding edge predicates
 	"""
@@ -23268,9 +24152,13 @@ type Entity implements Node {
 	"""
 	riskScore: Int
 	"""
-	the tier classification for the entity
+	number of scoring questions answered for the current risk score; used to contextualize partial assessments
 	"""
-	tier: String
+	riskScoreCoverage: Int
+	"""
+	the vendor risk tier classification, used to determine the depth of TPRM assessment required
+	"""
+	tier: EntityVendorTier
 	"""
 	the cadence for reviewing the entity
 	"""
@@ -23287,6 +24175,18 @@ type Entity implements Node {
 	vendor metadata such as additional enrichment info, company size, public, etc.
 	"""
 	vendorMetadata: Map
+	"""
+	The logo file id for the entity
+	"""
+	logoFileID: ID
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
 	owner: Organization
 	blockedGroups(
 		"""
@@ -23638,6 +24538,37 @@ type Entity implements Node {
 		"""
 		where: AssessmentResponseWhereInput
 	): AssessmentResponseConnection!
+	vendorRiskScores(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorRiskScores returned from the connection.
+		"""
+		orderBy: [VendorRiskScoreOrder!]
+
+		"""
+		Filtering options for VendorRiskScores returned from the connection.
+		"""
+		where: VendorRiskScoreWhereInput
+	): VendorRiskScoreConnection!
 	integrations(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -23824,6 +24755,37 @@ type Entity implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -23918,6 +24880,38 @@ type Entity implements Node {
 		where: PlatformWhereInput
 	): PlatformConnection!
 	entityType: EntityType
+	logoFile: File
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 }
 """
 Return response for createBulkEntity mutation
@@ -24020,6 +25014,7 @@ enum EntityFrequency @goModel(model: "github.com/theopenlane/core/common/enums.F
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+	NONE
 }
 """
 Ordering options for Entity connections
@@ -24063,10 +25058,13 @@ enum EntityOrderField {
 	status_page_url
 	risk_rating
 	risk_score
+	risk_score_coverage
 	tier
 	REVIEW_FREQUENCY
 	next_review_at
 	contract_renewal_at
+	external_id
+	observed_at
 }
 type EntityType implements Node {
 	id: ID!
@@ -24423,6 +25421,15 @@ type EntityUpdatePayload {
 	Updated entity
 	"""
 	entity: Entity!
+}
+"""
+EntityVendorTier is enum for the field tier
+"""
+enum EntityVendorTier @goModel(model: "github.com/theopenlane/core/common/enums.VendorTier") {
+	CRITICAL
+	HIGH
+	STANDARD
+	LOW
 }
 """
 EntityWhereInput is used for filtering Entity objects.
@@ -25143,23 +26150,27 @@ input EntityWhereInput {
 	riskScoreIsNil: Boolean
 	riskScoreNotNil: Boolean
 	"""
+	risk_score_coverage field predicates
+	"""
+	riskScoreCoverage: Int
+	riskScoreCoverageNEQ: Int
+	riskScoreCoverageIn: [Int!]
+	riskScoreCoverageNotIn: [Int!]
+	riskScoreCoverageGT: Int
+	riskScoreCoverageGTE: Int
+	riskScoreCoverageLT: Int
+	riskScoreCoverageLTE: Int
+	riskScoreCoverageIsNil: Boolean
+	riskScoreCoverageNotNil: Boolean
+	"""
 	tier field predicates
 	"""
-	tier: String
-	tierNEQ: String
-	tierIn: [String!]
-	tierNotIn: [String!]
-	tierGT: String
-	tierGTE: String
-	tierLT: String
-	tierLTE: String
-	tierContains: String
-	tierHasPrefix: String
-	tierHasSuffix: String
+	tier: EntityVendorTier
+	tierNEQ: EntityVendorTier
+	tierIn: [EntityVendorTier!]
+	tierNotIn: [EntityVendorTier!]
 	tierIsNil: Boolean
 	tierNotNil: Boolean
-	tierEqualFold: String
-	tierContainsFold: String
 	"""
 	review_frequency field predicates
 	"""
@@ -25195,6 +26206,55 @@ input EntityWhereInput {
 	contractRenewalAtLTE: DateTime
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
+	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: ID
+	logoFileIDNEQ: ID
+	logoFileIDIn: [ID!]
+	logoFileIDNotIn: [ID!]
+	logoFileIDGT: ID
+	logoFileIDGTE: ID
+	logoFileIDLT: ID
+	logoFileIDLTE: ID
+	logoFileIDContains: ID
+	logoFileIDHasPrefix: ID
+	logoFileIDHasSuffix: ID
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: ID
+	logoFileIDContainsFold: ID
+	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -25301,6 +26361,11 @@ input EntityWhereInput {
 	hasAssessmentResponses: Boolean
 	hasAssessmentResponsesWith: [AssessmentResponseWhereInput!]
 	"""
+	vendor_risk_scores edge predicates
+	"""
+	hasVendorRiskScores: Boolean
+	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
+	"""
 	integrations edge predicates
 	"""
 	hasIntegrations: Boolean
@@ -25331,6 +26396,11 @@ input EntityWhereInput {
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
 	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
 	platforms edge predicates
 	"""
 	hasPlatforms: Boolean
@@ -25350,6 +26420,16 @@ input EntityWhereInput {
 	"""
 	hasEntityType: Boolean
 	hasEntityTypeWith: [EntityTypeWhereInput!]
+	"""
+	logo_file edge predicates
+	"""
+	hasLogoFile: Boolean
+	hasLogoFileWith: [FileWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -26123,11 +27203,11 @@ type Evidence implements Node {
 	"""
 	the date the evidence was retrieved
 	"""
-	creationDate: Time!
+	creationDate: DateTime!
 	"""
 	the date the evidence should be renewed, defaults to a year from entry date
 	"""
-	renewalDate: Time
+	renewalDate: DateTime
 	"""
 	the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
 	"""
@@ -26588,6 +27668,7 @@ type EvidenceEdge {
 EvidenceEvidenceStatus is enum for the field status
 """
 enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
+	REQUESTED
 	DRAFT
 	SUBMITTED
 	READY_FOR_AUDITOR
@@ -26903,25 +27984,25 @@ input EvidenceWhereInput {
 	"""
 	creation_date field predicates
 	"""
-	creationDate: Time
-	creationDateNEQ: Time
-	creationDateIn: [Time!]
-	creationDateNotIn: [Time!]
-	creationDateGT: Time
-	creationDateGTE: Time
-	creationDateLT: Time
-	creationDateLTE: Time
+	creationDate: DateTime
+	creationDateNEQ: DateTime
+	creationDateIn: [DateTime!]
+	creationDateNotIn: [DateTime!]
+	creationDateGT: DateTime
+	creationDateGTE: DateTime
+	creationDateLT: DateTime
+	creationDateLTE: DateTime
 	"""
 	renewal_date field predicates
 	"""
-	renewalDate: Time
-	renewalDateNEQ: Time
-	renewalDateIn: [Time!]
-	renewalDateNotIn: [Time!]
-	renewalDateGT: Time
-	renewalDateGTE: Time
-	renewalDateLT: Time
-	renewalDateLTE: Time
+	renewalDate: DateTime
+	renewalDateNEQ: DateTime
+	renewalDateIn: [DateTime!]
+	renewalDateNotIn: [DateTime!]
+	renewalDateGT: DateTime
+	renewalDateGTE: DateTime
+	renewalDateLT: DateTime
+	renewalDateLTE: DateTime
 	renewalDateIsNil: Boolean
 	renewalDateNotNil: Boolean
 	"""
@@ -27260,7 +28341,10 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enum
 ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
+	ASSESSMENT
 	ASSET
+	CAMPAIGN
+	CONTACT
 	CONTROL
 	DIRECTORY_MEMBERSHIP
 	ENTITY
@@ -27278,6 +28362,8 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
 	TASK
 	TRUST_CENTER_FAQ
 	TRUST_CENTER_SUBPROCESSOR
+	VENDOR_RISK_SCORE
+	VENDOR_SCORING_CONFIG
 	VULNERABILITY
 }
 """
@@ -28481,10 +29567,6 @@ type Finding implements Node {
 	external identifier from the integration source for the finding
 	"""
 	externalID: String
-	"""
-	lifecycle status of the finding
-	"""
-	status: String @deprecated(reason: "Use `finding_status_name` instead.")
 	"""
 	incoming source severity
 	"""
@@ -30026,24 +31108,6 @@ input FindingWhereInput {
 	externalIDNotNil: Boolean
 	externalIDEqualFold: String
 	externalIDContainsFold: String
-	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
 	"""
 	security_level field predicates
 	"""
@@ -34404,6 +35468,37 @@ type IdentityHolder implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -34622,6 +35717,37 @@ type IdentityHolder implements Node {
 		where: PlatformWhereInput
 	): PlatformConnection!
 	user: User
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 	"""
 	Indicates if this identityHolder has pending changes awaiting workflow approval
 	"""
@@ -34724,6 +35850,10 @@ IdentityHolderIdentityHolderType is enum for the field identity_holder_type
 enum IdentityHolderIdentityHolderType @goModel(model: "github.com/theopenlane/core/common/enums.IdentityHolderType") {
 	EMPLOYEE
 	CONTRACTOR
+	UNSPECIFIED
+	INTERN
+	SERVICE
+	PARTNER
 }
 """
 Ordering options for IdentityHolder connections
@@ -34779,6 +35909,7 @@ enum IdentityHolderUserStatus @goModel(model: "github.com/theopenlane/core/commo
 	DEACTIVATED
 	SUSPENDED
 	ONBOARDING
+	UNKNOWN
 }
 """
 IdentityHolderWhereInput is used for filtering IdentityHolder objects.
@@ -35375,6 +36506,11 @@ input IdentityHolderWhereInput {
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
 	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
+	"""
 	platforms edge predicates
 	"""
 	hasPlatforms: Boolean
@@ -35414,6 +36550,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasUser: Boolean
 	hasUserWith: [UserWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -35513,6 +36654,10 @@ type Integration implements Node {
 	snapshot of definition metadata captured on the installation
 	"""
 	providerMetadataSnapshot: Map
+	"""
+	designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
+	"""
+	primaryDirectory: Boolean!
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -35795,6 +36940,37 @@ type Integration implements Node {
 		"""
 		where: ActionPlanWhereInput
 	): ActionPlanConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
 	directoryAccounts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -36016,6 +37192,7 @@ type Integration implements Node {
 		"""
 		where: EntityWhereInput
 	): EntityConnection!
+	webhookURLs: Map
 }
 """
 A connection to a list of items.
@@ -36460,6 +37637,11 @@ input IntegrationWhereInput {
 	statusIn: [IntegrationIntegrationStatus!]
 	statusNotIn: [IntegrationIntegrationStatus!]
 	"""
+	primary_directory field predicates
+	"""
+	primaryDirectory: Boolean
+	primaryDirectoryNEQ: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -36519,6 +37701,11 @@ input IntegrationWhereInput {
 	"""
 	hasActionPlans: Boolean
 	hasActionPlansWith: [ActionPlanWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
 	"""
 	directory_accounts edge predicates
 	"""
@@ -37146,6 +38333,130 @@ type InternalPolicy implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	identityHolders(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IdentityHolders returned from the connection.
+		"""
+		orderBy: [IdentityHolderOrder!]
+
+		"""
+		Filtering options for IdentityHolders returned from the connection.
+		"""
+		where: IdentityHolderWhereInput
+	): IdentityHolderConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
 	"""
 	Indicates if this internalPolicy has pending changes awaiting workflow approval
 	"""
@@ -37260,6 +38571,7 @@ enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/common
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+	NONE
 }
 """
 Ordering options for InternalPolicy connections
@@ -37855,6 +39167,26 @@ input InternalPolicyWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	identity_holders edge predicates
+	"""
+	hasIdentityHolders: Boolean
+	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -42538,7 +43870,12 @@ type Mutation {
 		entity type name allows the name of the entity type to be passed in over an id
 		"""
 		entityTypeName: String
-	entityFiles: [Upload!]): EntityCreatePayload!
+	entityFiles: [Upload!],
+		"""
+		file to upload as the logo of the entity
+		"""
+		logoFile: Upload
+	): EntityCreatePayload!
 	"""
 	Create multiple new entities
 	"""
@@ -42580,7 +43917,12 @@ type Mutation {
 		New values for the entity
 		"""
 		input: UpdateEntityInput!
-	entityFiles: [Upload!]): EntityUpdatePayload!
+	entityFiles: [Upload!],
+		"""
+		file to upload as the logo of the entity
+		"""
+		logoFile: Upload
+	): EntityUpdatePayload!
 	"""
 	Delete an existing entity
 	"""
@@ -44316,6 +45658,15 @@ type Mutation {
 		id: ID!
 	): NoteDeletePayload!
 	"""
+	Create a new notification
+	"""
+	createNotification(
+		"""
+		values of the notification
+		"""
+		input: CreateNotificationInput!
+	): NotificationCreatePayload!
+	"""
 	Update an existing notification
 	"""
 	updateNotification(
@@ -44775,7 +46126,7 @@ type Mutation {
 		values of the platform
 		"""
 		input: CreatePlatformInput!
-	): PlatformCreatePayload!
+	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformCreatePayload!
 	"""
 	Create multiple new platforms
 	"""
@@ -44807,7 +46158,7 @@ type Mutation {
 		New values for the platform
 		"""
 		input: UpdatePlatformInput!
-	): PlatformUpdatePayload!
+	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformUpdatePayload!
 	"""
 	Delete an existing platform
 	"""
@@ -46969,6 +48320,170 @@ type Mutation {
 		input: Upload!
 	): UserSettingBulkUpdatePayload!
 	"""
+	Create a new vendorRiskScore
+	"""
+	createVendorRiskScore(
+		"""
+		values of the vendorRiskScore
+		"""
+		input: CreateVendorRiskScoreInput!
+	): VendorRiskScoreCreatePayload!
+	"""
+	Create multiple new vendorRiskScores
+	"""
+	createBulkVendorRiskScore(
+		"""
+		values of the vendorRiskScore
+		"""
+		input: [CreateVendorRiskScoreInput!]
+	): VendorRiskScoreBulkCreatePayload!
+	"""
+	Create multiple new vendorRiskScores via file upload
+	"""
+	createBulkCSVVendorRiskScore(
+		"""
+		csv file containing values of the vendorRiskScore
+		"""
+		input: Upload!
+	): VendorRiskScoreBulkCreatePayload!
+	"""
+	Update multiple existing vendorRiskScores
+	"""
+	updateBulkVendorRiskScore(
+		"""
+		IDs of the vendorRiskScores to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the vendorRiskScores with
+		"""
+		input: UpdateVendorRiskScoreInput!
+	): VendorRiskScoreBulkUpdatePayload!
+	"""
+	Update multiple existing vendorRiskScores via file upload
+	"""
+	updateBulkCSVVendorRiskScore(
+		"""
+		csv file containing values of the vendorRiskScore, must include ID column
+		"""
+		input: Upload!
+	): VendorRiskScoreBulkUpdatePayload!
+	"""
+	Update an existing vendorRiskScore
+	"""
+	updateVendorRiskScore(
+		"""
+		ID of the vendorRiskScore
+		"""
+		id: ID!
+
+		"""
+		New values for the vendorRiskScore
+		"""
+		input: UpdateVendorRiskScoreInput!
+	): VendorRiskScoreUpdatePayload!
+	"""
+	Delete an existing vendorRiskScore
+	"""
+	deleteVendorRiskScore(
+		"""
+		ID of the vendorRiskScore
+		"""
+		id: ID!
+	): VendorRiskScoreDeletePayload!
+	"""
+	Delete multiple vendorRiskScores
+	"""
+	deleteBulkVendorRiskScore(
+		"""
+		IDs of the vendorRiskScores to delete
+		"""
+		ids: [ID!]!
+	): VendorRiskScoreBulkDeletePayload!
+	"""
+	Create a new vendorScoringConfig
+	"""
+	createVendorScoringConfig(
+		"""
+		values of the vendorScoringConfig
+		"""
+		input: CreateVendorScoringConfigInput!
+	): VendorScoringConfigCreatePayload!
+	"""
+	Create multiple new vendorScoringConfigs
+	"""
+	createBulkVendorScoringConfig(
+		"""
+		values of the vendorScoringConfig
+		"""
+		input: [CreateVendorScoringConfigInput!]
+	): VendorScoringConfigBulkCreatePayload!
+	"""
+	Create multiple new vendorScoringConfigs via file upload
+	"""
+	createBulkCSVVendorScoringConfig(
+		"""
+		csv file containing values of the vendorScoringConfig
+		"""
+		input: Upload!
+	): VendorScoringConfigBulkCreatePayload!
+	"""
+	Update multiple existing vendorScoringConfigs
+	"""
+	updateBulkVendorScoringConfig(
+		"""
+		IDs of the vendorScoringConfigs to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the vendorScoringConfigs with
+		"""
+		input: UpdateVendorScoringConfigInput!
+	): VendorScoringConfigBulkUpdatePayload!
+	"""
+	Update multiple existing vendorScoringConfigs via file upload
+	"""
+	updateBulkCSVVendorScoringConfig(
+		"""
+		csv file containing values of the vendorScoringConfig, must include ID column
+		"""
+		input: Upload!
+	): VendorScoringConfigBulkUpdatePayload!
+	"""
+	Update an existing vendorScoringConfig
+	"""
+	updateVendorScoringConfig(
+		"""
+		ID of the vendorScoringConfig
+		"""
+		id: ID!
+
+		"""
+		New values for the vendorScoringConfig
+		"""
+		input: UpdateVendorScoringConfigInput!
+	): VendorScoringConfigUpdatePayload!
+	"""
+	Delete an existing vendorScoringConfig
+	"""
+	deleteVendorScoringConfig(
+		"""
+		ID of the vendorScoringConfig
+		"""
+		id: ID!
+	): VendorScoringConfigDeletePayload!
+	"""
+	Delete multiple vendorScoringConfigs
+	"""
+	deleteBulkVendorScoringConfig(
+		"""
+		IDs of the vendorScoringConfigs to delete
+		"""
+		ids: [ID!]!
+	): VendorScoringConfigBulkDeletePayload!
+	"""
 	Create a new vulnerability
 	"""
 	createVulnerability(
@@ -48404,6 +49919,15 @@ type NotificationConnection {
 	totalCount: Int!
 }
 """
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+	"""
+	Created notification
+	"""
+	notification: Notification!
+}
+"""
 An edge in a connection.
 """
 type NotificationEdge {
@@ -48425,6 +49949,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	MENTION
 	EXPORT
 	STANDARD_UPDATE
+	DOMAIN_SCAN
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -49100,6 +50625,10 @@ type NotificationTemplate implements Node {
 	integration associated with this template
 	"""
 	integrationID: ID
+	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
 	"""
 	workflow definition associated with this template
 	"""
@@ -53515,6 +55044,68 @@ type Organization implements Node {
 		"""
 		where: DiscussionWhereInput
 	): DiscussionConnection!
+	vendorScoringConfigs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorScoringConfigs returned from the connection.
+		"""
+		orderBy: [VendorScoringConfigOrder!]
+
+		"""
+		Filtering options for VendorScoringConfigs returned from the connection.
+		"""
+		where: VendorScoringConfigWhereInput
+	): VendorScoringConfigConnection!
+	vendorRiskScores(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorRiskScores returned from the connection.
+		"""
+		orderBy: [VendorRiskScoreOrder!]
+
+		"""
+		Filtering options for VendorRiskScores returned from the connection.
+		"""
+		where: VendorRiskScoreWhereInput
+	): VendorRiskScoreConnection!
 	members(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -55004,6 +56595,16 @@ input OrganizationWhereInput {
 	hasDiscussions: Boolean
 	hasDiscussionsWith: [DiscussionWhereInput!]
 	"""
+	vendor_scoring_configs edge predicates
+	"""
+	hasVendorScoringConfigs: Boolean
+	hasVendorScoringConfigsWith: [VendorScoringConfigWhereInput!]
+	"""
+	vendor_risk_scores edge predicates
+	"""
+	hasVendorRiskScores: Boolean
+	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
+	"""
 	members edge predicates
 	"""
 	hasMembers: Boolean
@@ -55862,6 +57463,99 @@ type Platform implements Node {
 		where: EvidenceWhereInput
 	): EvidenceConnection!
 	files(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
+	architectureDiagrams(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
+	dataFlowDiagrams(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Files returned from the connection.
+		"""
+		orderBy: [FileOrder!]
+
+		"""
+		Filtering options for Files returned from the connection.
+		"""
+		where: FileWhereInput
+	): FileConnection!
+	trustBoundaryDiagrams(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -57562,6 +59256,21 @@ input PlatformWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 	"""
+	architecture_diagrams edge predicates
+	"""
+	hasArchitectureDiagrams: Boolean
+	hasArchitectureDiagramsWith: [FileWhereInput!]
+	"""
+	data_flow_diagrams edge predicates
+	"""
+	hasDataFlowDiagrams: Boolean
+	hasDataFlowDiagramsWith: [FileWhereInput!]
+	"""
+	trust_boundary_diagrams edge predicates
+	"""
+	hasTrustBoundaryDiagrams: Boolean
+	hasTrustBoundaryDiagramsWith: [FileWhereInput!]
+	"""
 	risks edge predicates
 	"""
 	hasRisks: Boolean
@@ -58300,6 +60009,7 @@ enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/common/enum
 	QUARTERLY
 	BIANNUALLY
 	MONTHLY
+	NONE
 }
 """
 Ordering options for Procedure connections
@@ -62962,6 +64672,68 @@ type Query {
 		"""
 		where: UserSettingWhereInput
 	): UserSettingConnection!
+	vendorRiskScores(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorRiskScores returned from the connection.
+		"""
+		orderBy: [VendorRiskScoreOrder!]
+
+		"""
+		Filtering options for VendorRiskScores returned from the connection.
+		"""
+		where: VendorRiskScoreWhereInput
+	): VendorRiskScoreConnection!
+	vendorScoringConfigs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorScoringConfigs returned from the connection.
+		"""
+		orderBy: [VendorScoringConfigOrder!]
+
+		"""
+		Filtering options for VendorScoringConfigs returned from the connection.
+		"""
+		where: VendorScoringConfigWhereInput
+	): VendorScoringConfigConnection!
 	vulnerabilities(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -65306,6 +67078,24 @@ type Query {
 		id: ID!
 	): UserSetting!
 	"""
+	Look up vendorRiskScore by ID
+	"""
+	vendorRiskScore(
+		"""
+		ID of the vendorRiskScore
+		"""
+		id: ID!
+	): VendorRiskScore!
+	"""
+	Look up vendorScoringConfig by ID
+	"""
+	vendorScoringConfig(
+		"""
+		ID of the vendorScoringConfig
+		"""
+		id: ID!
+	): VendorScoringConfig!
+	"""
 	Look up vulnerability by ID
 	"""
 	vulnerability(
@@ -65563,6 +67353,10 @@ type Remediation implements Node {
 	title or short description of the remediation effort
 	"""
 	title: String
+	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
 	"""
 	state of the remediation, such as pending or completed
 	"""
@@ -66290,7 +68084,18 @@ enum RemediationOrderField {
 	external_id
 	external_owner_id
 	title
+	status
 	state
+}
+"""
+RemediationRemediationStatus is enum for the field status
+"""
+enum RemediationRemediationStatus @goModel(model: "github.com/theopenlane/core/common/enums.RemediationStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
 }
 """
 Return response for updateRemediation mutation
@@ -66587,6 +68392,15 @@ input RemediationWhereInput {
 	titleNotNil: Boolean
 	titleEqualFold: String
 	titleContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: RemediationRemediationStatus
+	statusNEQ: RemediationRemediationStatus
+	statusIn: [RemediationRemediationStatus!]
+	statusNotIn: [RemediationRemediationStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	state field predicates
 	"""
@@ -67646,6 +69460,37 @@ type Review implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
 }
 """
 Return response for createBulkReview mutation
@@ -68341,6 +70186,11 @@ input ReviewWhereInput {
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
 	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
@@ -68395,6 +70245,18 @@ type Risk implements Node {
 	the scope of the risk
 	"""
 	scopeID: ID
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -68451,6 +70313,31 @@ type Risk implements Node {
 	the id of the group responsible for risk oversight on behalf of the stakeholder
 	"""
 	delegateID: ID
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	reviewFrequency: RiskFrequency
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
 	owner: Organization
 	blockedGroups(
 		"""
@@ -68960,6 +70847,68 @@ type Risk implements Node {
 		"""
 		where: DiscussionWhereInput
 	): DiscussionConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 }
 """
 Return response for createBulkRisk mutation
@@ -69041,6 +70990,16 @@ type RiskEdge {
 	cursor: Cursor!
 }
 """
+RiskFrequency is enum for the field review_frequency
+"""
+enum RiskFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+	NONE
+}
+"""
 Ordering options for Risk connections
 """
 input RiskOrder {
@@ -69059,12 +71018,31 @@ Properties by which Risk connections can be ordered.
 enum RiskOrderField {
 	created_at
 	updated_at
+	external_id
+	observed_at
 	name
 	STATUS
 	IMPACT
 	LIKELIHOOD
 	score
 	business_costs
+	mitigated_at
+	review_required
+	last_reviewed_at
+	review_frequency
+	next_review_due_at
+	residual_score
+	risk_decision
+}
+"""
+RiskRiskDecision is enum for the field risk_decision
+"""
+enum RiskRiskDecision @goModel(model: "github.com/theopenlane/core/common/enums.RiskDecision") {
+	AVOID
+	MITIGATE
+	ACCEPT
+	TRANSFER
+	NONE
 }
 """
 RiskRiskImpact is enum for the field impact
@@ -69097,6 +71075,10 @@ enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/common/enums.Ri
 	TRANSFERRED
 	ARCHIVED
 }
+"""
+RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
+"""
+scalar RiskThresholdsConfig
 """
 Return response for updateRisk mutation
 """
@@ -69368,6 +71350,55 @@ input RiskWhereInput {
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
 	"""
+	external_id field predicates
+	"""
+	externalID: String
+	externalIDNEQ: String
+	externalIDIn: [String!]
+	externalIDNotIn: [String!]
+	externalIDGT: String
+	externalIDGTE: String
+	externalIDLT: String
+	externalIDLTE: String
+	externalIDContains: String
+	externalIDHasPrefix: String
+	externalIDHasSuffix: String
+	externalIDIsNil: Boolean
+	externalIDNotNil: Boolean
+	externalIDEqualFold: String
+	externalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: String
+	integrationIDNEQ: String
+	integrationIDIn: [String!]
+	integrationIDNotIn: [String!]
+	integrationIDGT: String
+	integrationIDGTE: String
+	integrationIDLT: String
+	integrationIDLTE: String
+	integrationIDContains: String
+	integrationIDHasPrefix: String
+	integrationIDHasSuffix: String
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: String
+	integrationIDContainsFold: String
+	"""
+	observed_at field predicates
+	"""
+	observedAt: DateTime
+	observedAtNEQ: DateTime
+	observedAtIn: [DateTime!]
+	observedAtNotIn: [DateTime!]
+	observedAtGT: DateTime
+	observedAtGTE: DateTime
+	observedAtLT: DateTime
+	observedAtLTE: DateTime
+	observedAtIsNil: Boolean
+	observedAtNotNil: Boolean
+	"""
 	external_uuid field predicates
 	"""
 	externalUUID: String
@@ -69532,6 +71563,83 @@ input RiskWhereInput {
 	delegateIDEqualFold: ID
 	delegateIDContainsFold: ID
 	"""
+	mitigated_at field predicates
+	"""
+	mitigatedAt: DateTime
+	mitigatedAtNEQ: DateTime
+	mitigatedAtIn: [DateTime!]
+	mitigatedAtNotIn: [DateTime!]
+	mitigatedAtGT: DateTime
+	mitigatedAtGTE: DateTime
+	mitigatedAtLT: DateTime
+	mitigatedAtLTE: DateTime
+	mitigatedAtIsNil: Boolean
+	mitigatedAtNotNil: Boolean
+	"""
+	review_required field predicates
+	"""
+	reviewRequired: Boolean
+	reviewRequiredNEQ: Boolean
+	reviewRequiredIsNil: Boolean
+	reviewRequiredNotNil: Boolean
+	"""
+	last_reviewed_at field predicates
+	"""
+	lastReviewedAt: DateTime
+	lastReviewedAtNEQ: DateTime
+	lastReviewedAtIn: [DateTime!]
+	lastReviewedAtNotIn: [DateTime!]
+	lastReviewedAtGT: DateTime
+	lastReviewedAtGTE: DateTime
+	lastReviewedAtLT: DateTime
+	lastReviewedAtLTE: DateTime
+	lastReviewedAtIsNil: Boolean
+	lastReviewedAtNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: RiskFrequency
+	reviewFrequencyNEQ: RiskFrequency
+	reviewFrequencyIn: [RiskFrequency!]
+	reviewFrequencyNotIn: [RiskFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
+	"""
+	next_review_due_at field predicates
+	"""
+	nextReviewDueAt: DateTime
+	nextReviewDueAtNEQ: DateTime
+	nextReviewDueAtIn: [DateTime!]
+	nextReviewDueAtNotIn: [DateTime!]
+	nextReviewDueAtGT: DateTime
+	nextReviewDueAtGTE: DateTime
+	nextReviewDueAtLT: DateTime
+	nextReviewDueAtLTE: DateTime
+	nextReviewDueAtIsNil: Boolean
+	nextReviewDueAtNotNil: Boolean
+	"""
+	residual_score field predicates
+	"""
+	residualScore: Int
+	residualScoreNEQ: Int
+	residualScoreIn: [Int!]
+	residualScoreNotIn: [Int!]
+	residualScoreGT: Int
+	residualScoreGTE: Int
+	residualScoreLT: Int
+	residualScoreLTE: Int
+	residualScoreIsNil: Boolean
+	residualScoreNotNil: Boolean
+	"""
+	risk_decision field predicates
+	"""
+	riskDecision: RiskRiskDecision
+	riskDecisionNEQ: RiskRiskDecision
+	riskDecisionIn: [RiskRiskDecision!]
+	riskDecisionNotIn: [RiskRiskDecision!]
+	riskDecisionIsNil: Boolean
+	riskDecisionNotNil: Boolean
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -69647,6 +71755,16 @@ input RiskWhereInput {
 	hasDiscussions: Boolean
 	hasDiscussionsWith: [DiscussionWhereInput!]
 	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
+	"""
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
@@ -69670,23 +71788,14 @@ type SLADefinition implements Node {
 	"""
 	ownerID: ID
 	"""
-	the severity_level of the sla_definition
-	"""
-	slaDefinitionSeverityLevelName: String
-	"""
-	the severity_level of the sla_definition
-	"""
-	slaDefinitionSeverityLevelID: ID
-	"""
 	remediation service level agreement in days for the severity level
 	"""
 	slaDays: Int!
 	"""
-	incoming source severity
+	security level to map with the SLA definition
 	"""
 	securityLevel: SLADefinitionSecurityLevel!
 	owner: Organization
-	slaDefinitionSeverityLevel: CustomTypeEnum
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -70019,42 +72128,6 @@ input SLADefinitionWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
-	sla_definition_severity_level_name field predicates
-	"""
-	slaDefinitionSeverityLevelName: String
-	slaDefinitionSeverityLevelNameNEQ: String
-	slaDefinitionSeverityLevelNameIn: [String!]
-	slaDefinitionSeverityLevelNameNotIn: [String!]
-	slaDefinitionSeverityLevelNameGT: String
-	slaDefinitionSeverityLevelNameGTE: String
-	slaDefinitionSeverityLevelNameLT: String
-	slaDefinitionSeverityLevelNameLTE: String
-	slaDefinitionSeverityLevelNameContains: String
-	slaDefinitionSeverityLevelNameHasPrefix: String
-	slaDefinitionSeverityLevelNameHasSuffix: String
-	slaDefinitionSeverityLevelNameIsNil: Boolean
-	slaDefinitionSeverityLevelNameNotNil: Boolean
-	slaDefinitionSeverityLevelNameEqualFold: String
-	slaDefinitionSeverityLevelNameContainsFold: String
-	"""
-	sla_definition_severity_level_id field predicates
-	"""
-	slaDefinitionSeverityLevelID: ID
-	slaDefinitionSeverityLevelIDNEQ: ID
-	slaDefinitionSeverityLevelIDIn: [ID!]
-	slaDefinitionSeverityLevelIDNotIn: [ID!]
-	slaDefinitionSeverityLevelIDGT: ID
-	slaDefinitionSeverityLevelIDGTE: ID
-	slaDefinitionSeverityLevelIDLT: ID
-	slaDefinitionSeverityLevelIDLTE: ID
-	slaDefinitionSeverityLevelIDContains: ID
-	slaDefinitionSeverityLevelIDHasPrefix: ID
-	slaDefinitionSeverityLevelIDHasSuffix: ID
-	slaDefinitionSeverityLevelIDIsNil: Boolean
-	slaDefinitionSeverityLevelIDNotNil: Boolean
-	slaDefinitionSeverityLevelIDEqualFold: ID
-	slaDefinitionSeverityLevelIDContainsFold: ID
-	"""
 	sla_days field predicates
 	"""
 	slaDays: Int
@@ -70077,11 +72150,6 @@ input SLADefinitionWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
-	"""
-	sla_definition_severity_level edge predicates
-	"""
-	hasSLADefinitionSeverityLevel: Boolean
-	hasSLADefinitionSeverityLevelWith: [CustomTypeEnumWhereInput!]
 	"""
 	blocked_groups edge predicates
 	"""
@@ -70118,7 +72186,7 @@ type Scan implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: ID
 	"""
@@ -70619,6 +72687,37 @@ type Scan implements Node {
 		"""
 		where: ControlWhereInput
 	): ControlConnection!
+	subcontrols(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Subcontrols returned from the connection.
+		"""
+		orderBy: [SubcontrolOrder!]
+
+		"""
+		Filtering options for Subcontrols returned from the connection.
+		"""
+		where: SubcontrolWhereInput
+	): SubcontrolConnection!
 	generatedByPlatform: Platform
 	performedByUser: User
 	performedByGroup: Group
@@ -71262,6 +73361,11 @@ input ScanWhereInput {
 	"""
 	hasControls: Boolean
 	hasControlsWith: [ControlWhereInput!]
+	"""
+	subcontrols edge predicates
+	"""
+	hasSubcontrols: Boolean
+	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
 	generated_by_platform edge predicates
 	"""
@@ -73287,6 +75391,99 @@ type Subcontrol implements Node {
 	the entity who is responsible for the control implementation when it is a third party
 	"""
 	responsibleParty: Entity
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
+	scans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Scans returned from the connection.
+		"""
+		orderBy: [ScanOrder!]
+
+		"""
+		Filtering options for Scans returned from the connection.
+		"""
+		where: ScanWhereInput
+	): ScanConnection!
 	owner: Organization
 	subcontrolKind: CustomTypeEnum
 	control: Control!
@@ -73383,6 +75580,99 @@ type Subcontrol implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	identityHolders(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IdentityHolders returned from the connection.
+		"""
+		orderBy: [IdentityHolderOrder!]
+
+		"""
+		Filtering options for IdentityHolders returned from the connection.
+		"""
+		where: IdentityHolderWhereInput
+	): IdentityHolderConnection!
 	"""
 	Indicates if this subcontrol has pending changes awaiting workflow approval
 	"""
@@ -74165,6 +76455,21 @@ input SubcontrolWhereInput {
 	hasResponsibleParty: Boolean
 	hasResponsiblePartyWith: [EntityWhereInput!]
 	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
+	"""
+	scans edge predicates
+	"""
+	hasScans: Boolean
+	hasScansWith: [ScanWhereInput!]
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -74194,6 +76499,21 @@ input SubcontrolWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	identity_holders edge predicates
+	"""
+	hasIdentityHolders: Boolean
+	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -76624,6 +78944,68 @@ type Task implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	parent: Task
 	tasks: [Task!]
 }
@@ -77246,6 +79628,16 @@ input TaskWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
 	"""
 	parent edge predicates
 	"""
@@ -83074,6 +85466,11 @@ input UpdateAssetInput {
 	categories: [String!]
 	appendCategories: [String!]
 	clearCategories: Boolean
+	"""
+	time when this asset was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -83121,6 +85518,12 @@ input UpdateAssetInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	sourcePlatformID: ID
 	clearSourcePlatform: Boolean
 	addConnectedAssetIDs: [ID!]
@@ -83393,6 +85796,21 @@ input UpdateContactInput {
 	status of the contact
 	"""
 	status: ContactUserStatus
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	integration that sourced this contact, when populated via integration ingest
+	"""
+	integrationID: String
+	clearIntegrationID: Boolean
+	"""
+	time when this contact was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEntityIDs: [ID!]
@@ -83706,6 +86124,15 @@ input UpdateControlInput {
 	clearDelegate: Boolean
 	responsiblePartyID: ID
 	clearResponsibleParty: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -83729,9 +86156,6 @@ input UpdateControlInput {
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
-	addScanIDs: [ID!]
-	removeScanIDs: [ID!]
-	clearScans: Boolean
 	addEntityIDs: [ID!]
 	removeEntityIDs: [ID!]
 	clearEntities: Boolean
@@ -83741,12 +86165,6 @@ input UpdateControlInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
-	addRemediationIDs: [ID!]
-	removeRemediationIDs: [ID!]
-	clearRemediations: Boolean
-	addReviewIDs: [ID!]
-	removeReviewIDs: [ID!]
-	clearReviews: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -84041,6 +86459,11 @@ input UpdateDirectoryAccountInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
@@ -84119,6 +86542,26 @@ input UpdateDirectoryAccountInput {
 	lastLoginAt: Time
 	clearLastLoginAt: Boolean
 	"""
+	time this account was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	clearFirstSeenAt: Boolean
+	"""
+	time this account was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the account was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the account was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
+	"""
 	hash of the normalized profile payload for change detection
 	"""
 	profileHash: String
@@ -84128,10 +86571,19 @@ input UpdateDirectoryAccountInput {
 	profile: Map
 	clearProfile: Boolean
 	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	clearMetadata: Boolean
+	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
 	sourceVersion: String
 	clearSourceVersion: Boolean
+	"""
+	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
+	"""
+	primarySource: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	environmentID: ID
@@ -84174,6 +86626,11 @@ input UpdateDirectoryGroupInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	primary group email address, when applicable
 	"""
 	email: String
@@ -84207,6 +86664,26 @@ input UpdateDirectoryGroupInput {
 	memberCount: Int
 	clearMemberCount: Boolean
 	"""
+	time this group was first observed by Openlane from directory ingest
+	"""
+	firstSeenAt: Time
+	clearFirstSeenAt: Boolean
+	"""
+	time this group was most recently confirmed by directory ingest
+	"""
+	lastSeenAt: Time
+	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the group was added or provisioned in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the group was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
+	"""
 	hash of the normalized payload for diffing
 	"""
 	profileHash: String
@@ -84215,6 +86692,11 @@ input UpdateDirectoryGroupInput {
 	"""
 	profile: Map
 	clearProfile: Boolean
+	"""
+	provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl
+	"""
+	metadata: Map
+	clearMetadata: Boolean
 	"""
 	cursor or ETag supplied by the source system for auditing
 	"""
@@ -84246,6 +86728,11 @@ input UpdateDirectoryMembershipInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
+	"""
 	membership role reported by the provider
 	"""
 	role: DirectoryMembershipDirectoryMembershipRole
@@ -84261,10 +86748,20 @@ input UpdateDirectoryMembershipInput {
 	firstSeenAt: Time
 	clearFirstSeenAt: Boolean
 	"""
-	most recent time the membership was detected
+	most recent time the membership was confirmed by directory ingest
 	"""
 	lastSeenAt: Time
 	clearLastSeenAt: Boolean
+	"""
+	provider-reported time the membership was added in the source directory
+	"""
+	addedAt: Time
+	clearAddedAt: Boolean
+	"""
+	provider-reported or locally-recorded time the membership was removed from the source directory
+	"""
+	removedAt: Time
+	clearRemovedAt: Boolean
 	"""
 	sync run identifier that most recently confirmed this membership
 	"""
@@ -84303,6 +86800,11 @@ input UpdateDirectorySyncRunInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
+	"""
+	directoryInstanceID: String
+	clearDirectoryInstanceID: Boolean
 	"""
 	current state of the sync run
 	"""
@@ -84609,13 +87111,22 @@ input UpdateEmailTemplateInput {
 	runtime data context defining available variable keys for this template
 	"""
 	templateContext: EmailTemplateTemplateContext
-	clearTemplateContext: Boolean
 	"""
 	static variable values merged as base layer at render time; call-site data takes precedence
 	"""
 	defaults: Map
 	clearDefaults: Boolean
-	emailBrandingID: ID
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
+	addEmailBrandingIDs: [ID!]
+	removeEmailBrandingIDs: [ID!]
 	clearEmailBranding: Boolean
 	integrationID: ID
 	clearIntegration: Boolean
@@ -84824,9 +87335,9 @@ input UpdateEntityInput {
 	riskScore: Int
 	clearRiskScore: Boolean
 	"""
-	the tier classification for the entity
+	the vendor risk tier classification, used to determine the depth of TPRM assessment required
 	"""
-	tier: String
+	tier: EntityVendorTier
 	clearTier: Boolean
 	"""
 	the cadence for reviewing the entity
@@ -84848,6 +87359,16 @@ input UpdateEntityInput {
 	"""
 	vendorMetadata: Map
 	clearVendorMetadata: Boolean
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	time when this entity was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -84899,6 +87420,9 @@ input UpdateEntityInput {
 	addAssessmentResponseIDs: [ID!]
 	removeAssessmentResponseIDs: [ID!]
 	clearAssessmentResponses: Boolean
+	addVendorRiskScoreIDs: [ID!]
+	removeVendorRiskScoreIDs: [ID!]
+	clearVendorRiskScores: Boolean
 	addIntegrationIDs: [ID!]
 	removeIntegrationIDs: [ID!]
 	clearIntegrations: Boolean
@@ -84917,6 +87441,9 @@ input UpdateEntityInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -84928,6 +87455,11 @@ input UpdateEntityInput {
 	clearSourcePlatforms: Boolean
 	entityTypeID: ID
 	clearEntityType: Boolean
+	logoFileID: ID
+	clearLogoFile: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 	note: CreateNoteInput
 }
 """
@@ -85058,11 +87590,11 @@ input UpdateEvidenceInput {
 	"""
 	the date the evidence was retrieved
 	"""
-	creationDate: Time
+	creationDate: DateTime
 	"""
 	the date the evidence should be renewed, defaults to a year from entry date
 	"""
-	renewalDate: Time
+	renewalDate: DateTime
 	clearRenewalDate: Boolean
 	"""
 	the source of the evidence, e.g. system the evidence was retrieved from (splunk, github, etc)
@@ -85395,11 +87927,6 @@ input UpdateFindingInput {
 	"""
 	externalID: String
 	clearExternalID: Boolean
-	"""
-	lifecycle status of the finding
-	"""
-	status: String
-	clearStatus: Boolean
 	"""
 	the owner of the finding
 	"""
@@ -86106,6 +88633,9 @@ input UpdateIdentityHolderInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -86129,6 +88659,9 @@ input UpdateIdentityHolderInput {
 	clearAccessPlatforms: Boolean
 	userID: ID
 	clearUser: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 }
 """
 UpdateInternalPolicyInput is used for update InternalPolicy object.
@@ -86313,6 +88846,18 @@ input UpdateInternalPolicyInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolders: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -86888,6 +89433,12 @@ input UpdateNotificationTemplateInput {
 	"""
 	topicPattern: String
 	"""
+	optional explicit provider destination identifiers for this template, such as Slack channel IDs
+	"""
+	destinations: [String!]
+	appendDestinations: [String!]
+	clearDestinations: Boolean
+	"""
 	title template for external channel messages
 	"""
 	titleTemplate: String
@@ -87286,6 +89837,12 @@ input UpdateOrganizationInput {
 	addDiscussionIDs: [ID!]
 	removeDiscussionIDs: [ID!]
 	clearDiscussions: Boolean
+	addVendorScoringConfigIDs: [ID!]
+	removeVendorScoringConfigIDs: [ID!]
+	clearVendorScoringConfigs: Boolean
+	addVendorRiskScoreIDs: [ID!]
+	removeVendorRiskScoreIDs: [ID!]
+	clearVendorRiskScores: Boolean
 	addOrgMembers: [CreateOrgMembershipInput!]
 	removeOrgMembers: [ID!]
 	updateOrgSettings: UpdateOrganizationSettingInput
@@ -87675,6 +90232,15 @@ input UpdatePlatformInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addArchitectureDiagramIDs: [ID!]
+	removeArchitectureDiagramIDs: [ID!]
+	clearArchitectureDiagrams: Boolean
+	addDataFlowDiagramIDs: [ID!]
+	removeDataFlowDiagramIDs: [ID!]
+	clearDataFlowDiagrams: Boolean
+	addTrustBoundaryDiagramIDs: [ID!]
+	removeTrustBoundaryDiagramIDs: [ID!]
+	clearTrustBoundaryDiagrams: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
@@ -88096,6 +90662,11 @@ input UpdateRemediationInput {
 	title: String
 	clearTitle: Boolean
 	"""
+	status of the remediation, such as pending, in_progress, or completed
+	"""
+	status: RemediationRemediationStatus
+	clearStatus: Boolean
+	"""
 	state of the remediation, such as pending or completed
 	"""
 	state: String
@@ -88406,6 +90977,9 @@ input UpdateReviewInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addInternalPolicyIDs: [ID!]
+	removeInternalPolicyIDs: [ID!]
+	clearInternalPolicies: Boolean
 }
 """
 UpdateRiskInput is used for update Risk object.
@@ -88438,6 +91012,21 @@ input UpdateRiskInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	stable identifier assigned by the source system, used for integration ingest deduplication
+	"""
+	externalID: String
+	clearExternalID: Boolean
+	"""
+	integration that surfaced this risk, when sourced via integration ingest
+	"""
+	integrationID: String
+	clearIntegrationID: Boolean
+	"""
+	time when this risk was last observed by the source integration
+	"""
+	observedAt: DateTime
+	clearObservedAt: Boolean
 	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
@@ -88500,6 +91089,38 @@ input UpdateRiskInput {
 	businessCostsJSON: [Any!]
 	appendBusinessCostsJSON: [Any!]
 	clearBusinessCostsJSON: Boolean
+	"""
+	the time when the risk was mitigated
+	"""
+	mitigatedAt: DateTime
+	clearMitigatedAt: Boolean
+	"""
+	indicates if a periodic review is required for the risk
+	"""
+	reviewRequired: Boolean
+	clearReviewRequired: Boolean
+	"""
+	the time when the risk was last reviewed
+	"""
+	lastReviewedAt: DateTime
+	clearLastReviewedAt: Boolean
+	reviewFrequency: RiskFrequency
+	clearReviewFrequency: Boolean
+	"""
+	the time when the next review is due for the risk
+	"""
+	nextReviewDueAt: DateTime
+	clearNextReviewDueAt: Boolean
+	"""
+	score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
+	"""
+	residualScore: Int
+	clearResidualScore: Boolean
+	"""
+	the decision made for the risk - accept, transfer, avoid, mitigate, or none
+	"""
+	riskDecision: RiskRiskDecision
+	clearRiskDecision: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -88560,6 +91181,12 @@ input UpdateRiskInput {
 	addDiscussionIDs: [ID!]
 	removeDiscussionIDs: [ID!]
 	clearDiscussions: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -88578,18 +91205,11 @@ input UpdateSLADefinitionInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the severity_level of the sla_definition
-	"""
-	slaDefinitionSeverityLevelName: String
-	clearSLADefinitionSeverityLevelName: Boolean
-	"""
 	remediation service level agreement in days for the severity level
 	"""
 	slaDays: Int
 	ownerID: ID
 	clearOwner: Boolean
-	slaDefinitionSeverityLevelID: ID
-	clearSLADefinitionSeverityLevel: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -88674,8 +91294,6 @@ input UpdateScanInput {
 	the status of the scan, e.g., processing, completed, failed
 	"""
 	status: ScanScanStatus
-	ownerID: ID
-	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -88727,6 +91345,9 @@ input UpdateScanInput {
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
+	addSubcontrolIDs: [ID!]
+	removeSubcontrolIDs: [ID!]
+	clearSubcontrols: Boolean
 	generatedByPlatformID: ID
 	clearGeneratedByPlatform: Boolean
 	performedByUserID: ID
@@ -89100,6 +91721,15 @@ input UpdateSubcontrolInput {
 	clearDelegate: Boolean
 	responsiblePartyID: ID
 	clearResponsibleParty: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
+	addScanIDs: [ID!]
+	removeScanIDs: [ID!]
+	clearScans: Boolean
 	subcontrolKindID: ID
 	clearSubcontrolKind: Boolean
 	controlID: ID
@@ -89112,6 +91742,15 @@ input UpdateSubcontrolInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addIdentityHolderIDs: [ID!]
+	removeIdentityHolderIDs: [ID!]
+	clearIdentityHolders: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -89429,6 +92068,12 @@ input UpdateTaskInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	parentID: ID
 	clearParent: Boolean
 	addTaskIDs: [ID!]
@@ -90187,6 +92832,87 @@ input UpdateUserSettingInput {
 	clearDefaultOrg: Boolean
 }
 """
+UpdateVendorRiskScoreInput is used for update VendorRiskScore object.
+Input was generated by ent.
+"""
+input UpdateVendorRiskScoreInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	"""
+	questionKey: String
+	"""
+	question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	"""
+	questionName: String
+	"""
+	question description captured at assessment time
+	"""
+	questionDescription: String
+	clearQuestionDescription: Boolean
+	"""
+	question category captured at assessment time
+	"""
+	questionCategory: VendorRiskScoreVendorScoringCategory
+	"""
+	user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	"""
+	impact: VendorRiskScoreVendorRiskImpact
+	"""
+	user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	"""
+	likelihood: VendorRiskScoreVendorRiskLikelihood
+	"""
+	factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	"""
+	answer: String
+	clearAnswer: Boolean
+	"""
+	optional justification or context for the assigned impact and likelihood
+	"""
+	notes: String
+	clearNotes: Boolean
+	vendorScoringConfigID: ID
+	clearVendorScoringConfig: Boolean
+	entityID: ID
+	assessmentResponseID: ID
+	clearAssessmentResponse: Boolean
+}
+"""
+UpdateVendorScoringConfigInput is used for update VendorScoringConfig object.
+Input was generated by ent.
+"""
+input UpdateVendorScoringConfigInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	"""
+	questions: VendorScoringQuestionsConfig
+	"""
+	controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	"""
+	scoringMode: VendorScoringConfigVendorScoringMode
+	"""
+	org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	"""
+	riskThresholds: RiskThresholdsConfig
+	ownerID: ID
+	clearOwner: Boolean
+	addVendorRiskScoreIDs: [ID!]
+	removeVendorRiskScoreIDs: [ID!]
+	clearVendorRiskScores: Boolean
+}
+"""
 UpdateVulnerabilityInput is used for update Vulnerability object.
 Input was generated by ent.
 """
@@ -90227,11 +92953,6 @@ input UpdateVulnerabilityInput {
 	"""
 	externalOwnerID: String
 	clearExternalOwnerID: Boolean
-	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String
-	clearStatus: Boolean
 	"""
 	external identifier from the integration source for the vulnerability
 	"""
@@ -90339,6 +93060,42 @@ input UpdateVulnerabilityInput {
 	appendImpacts: [String!]
 	clearImpacts: Boolean
 	"""
+	CWE identifiers associated with the vulnerability
+	"""
+	cweIds: [String!]
+	appendCweIds: [String!]
+	clearCweIds: Boolean
+	"""
+	version range affected by the vulnerability
+	"""
+	vulnerableVersionRange: String
+	clearVulnerableVersionRange: Boolean
+	"""
+	earliest version that fixes the vulnerability
+	"""
+	firstPatchedVersion: String
+	clearFirstPatchedVersion: Boolean
+	"""
+	name of the vulnerable package or dependency
+	"""
+	packageName: String
+	clearPackageName: Boolean
+	"""
+	ecosystem of the vulnerable package such as npm, pip, or maven
+	"""
+	packageEcosystem: String
+	clearPackageEcosystem: Boolean
+	"""
+	path to the manifest file declaring the vulnerable dependency
+	"""
+	manifestPath: String
+	clearManifestPath: Boolean
+	"""
+	scope of the dependency such as runtime or development
+	"""
+	dependencyScope: String
+	clearDependencyScope: Boolean
+	"""
 	timestamp when the vulnerability was published
 	"""
 	publishedAt: DateTime
@@ -90353,6 +93110,31 @@ input UpdateVulnerabilityInput {
 	"""
 	sourceUpdatedAt: DateTime
 	clearSourceUpdatedAt: Boolean
+	"""
+	timestamp when the vulnerability was dismissed
+	"""
+	dismissedAt: DateTime
+	clearDismissedAt: Boolean
+	"""
+	reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	"""
+	dismissedReason: String
+	clearDismissedReason: Boolean
+	"""
+	free-text explanation provided when the vulnerability was dismissed
+	"""
+	dismissedComment: String
+	clearDismissedComment: Boolean
+	"""
+	timestamp when the vulnerability was marked as fixed
+	"""
+	fixedAt: DateTime
+	clearFixedAt: Boolean
+	"""
+	timestamp when the vulnerability was automatically dismissed by the source system
+	"""
+	autoDismissedAt: DateTime
+	clearAutoDismissedAt: Boolean
 	"""
 	link to the vulnerability in the source system
 	"""
@@ -91471,6 +94253,7 @@ enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/common/e
 	DEACTIVATED
 	SUSPENDED
 	ONBOARDING
+	UNKNOWN
 }
 """
 UserSettingWhereInput is used for filtering UserSetting objects.
@@ -92152,6 +94935,839 @@ input UserWhereInput {
 	"""
 	tagsHas: String
 }
+type VendorRiskScore implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID
+	"""
+	stable key referencing a VendorScoringQuestionDef; used for grouping across vendors and resolving the current question definition
+	"""
+	questionKey: String!
+	"""
+	question text as it existed when this assessment was created; preserved for historical accuracy if the question wording changes later
+	"""
+	questionName: String!
+	"""
+	question description captured at assessment time
+	"""
+	questionDescription: String
+	"""
+	question category captured at assessment time
+	"""
+	questionCategory: VendorRiskScoreVendorScoringCategory!
+	"""
+	expected answer format captured at assessment time
+	"""
+	answerType: VendorRiskScoreVendorScoringAnswerType!
+	"""
+	user-assigned impact for this specific vendor using the 5-point TPRM scale (VERY_LOW=1 through CRITICAL=5); the same question may carry different impact across vendors
+	"""
+	impact: VendorRiskScoreVendorRiskImpact!
+	"""
+	user-assigned likelihood of the risk condition occurring for this vendor using the 5-point TPRM scale (VERY_LOW=0.5 through VERY_HIGH=4)
+	"""
+	likelihood: VendorRiskScoreVendorRiskLikelihood!
+	"""
+	hook-computed risk score: impactNumeric x likelihoodNumeric
+	"""
+	score: Float!
+	"""
+	factual answer to the question (e.g. 'true', 'false', '48 hours', 'ISO 27001'); retained permanently even if the question text changes, because question_key is the stable reference not the display name
+	"""
+	answer: String
+	"""
+	optional justification or context for the assigned impact and likelihood
+	"""
+	notes: String
+	"""
+	the scoring config this assessment belongs to; auto-resolved from org context if not provided
+	"""
+	vendorScoringConfigID: ID
+	"""
+	the vendor entity being assessed
+	"""
+	entityID: ID!
+	"""
+	the assessment response this score belongs to; scopes scores to a specific assessment cycle
+	"""
+	assessmentResponseID: ID
+	owner: Organization
+	vendorScoringConfig: VendorScoringConfig
+	entity: Entity!
+	assessmentResponse: AssessmentResponse
+}
+"""
+Return response for createBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkCreatePayload {
+	"""
+	Created vendorRiskScores
+	"""
+	vendorRiskScores: [VendorRiskScore!]
+}
+"""
+Return response for deleteBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkDeletePayload {
+	"""
+	Deleted vendorRiskScore IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkVendorRiskScore mutation
+"""
+type VendorRiskScoreBulkUpdatePayload {
+	"""
+	Updated vendorRiskScores
+	"""
+	vendorRiskScores: [VendorRiskScore!]
+	"""
+	IDs of the updated vendorRiskScores
+	"""
+	updatedIDs: [ID!]
+}
+"""
+A connection to a list of items.
+"""
+type VendorRiskScoreConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [VendorRiskScoreEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createVendorRiskScore mutation
+"""
+type VendorRiskScoreCreatePayload {
+	"""
+	Created vendorRiskScore
+	"""
+	vendorRiskScore: VendorRiskScore!
+}
+"""
+Return response for deleteVendorRiskScore mutation
+"""
+type VendorRiskScoreDeletePayload {
+	"""
+	Deleted vendorRiskScore ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type VendorRiskScoreEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: VendorRiskScore
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for VendorRiskScore connections
+"""
+input VendorRiskScoreOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order VendorRiskScores.
+	"""
+	field: VendorRiskScoreOrderField!
+}
+"""
+Properties by which VendorRiskScore connections can be ordered.
+"""
+enum VendorRiskScoreOrderField {
+	created_at
+	updated_at
+	question_key
+	question_category
+	impact
+	likelihood
+	score
+}
+"""
+Return response for updateVendorRiskScore mutation
+"""
+type VendorRiskScoreUpdatePayload {
+	"""
+	Updated vendorRiskScore
+	"""
+	vendorRiskScore: VendorRiskScore!
+}
+"""
+VendorRiskScoreVendorRiskImpact is enum for the field impact
+"""
+enum VendorRiskScoreVendorRiskImpact @goModel(model: "github.com/theopenlane/core/common/enums.VendorRiskImpact") {
+	VERY_LOW
+	LOW
+	MEDIUM
+	HIGH
+	CRITICAL
+}
+"""
+VendorRiskScoreVendorRiskLikelihood is enum for the field likelihood
+"""
+enum VendorRiskScoreVendorRiskLikelihood @goModel(model: "github.com/theopenlane/core/common/enums.VendorRiskLikelihood") {
+	VERY_LOW
+	LOW
+	MEDIUM
+	HIGH
+	VERY_HIGH
+}
+"""
+VendorRiskScoreVendorScoringAnswerType is enum for the field answer_type
+"""
+enum VendorRiskScoreVendorScoringAnswerType @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringAnswerType") {
+	BOOLEAN
+	TEXT
+	SINGLE_SELECT
+	NUMERIC
+}
+"""
+VendorRiskScoreVendorScoringCategory is enum for the field question_category
+"""
+enum VendorRiskScoreVendorScoringCategory @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringCategory") {
+	DATA_ACCESS
+	SECURITY_PRACTICES
+	REGULATORY_COMPLIANCE
+	FINANCIAL_STABILITY
+	OPERATIONAL_DEPENDENCY
+	BUSINESS_CONTINUITY
+	SUPPLY_CHAIN_RISK
+	INCIDENT_RESPONSE
+	DATA_PRIVACY
+}
+"""
+VendorRiskScoreWhereInput is used for filtering VendorRiskScore objects.
+Input was generated by ent.
+"""
+input VendorRiskScoreWhereInput {
+	not: VendorRiskScoreWhereInput
+	and: [VendorRiskScoreWhereInput!]
+	or: [VendorRiskScoreWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	question_key field predicates
+	"""
+	questionKey: String
+	questionKeyNEQ: String
+	questionKeyIn: [String!]
+	questionKeyNotIn: [String!]
+	questionKeyGT: String
+	questionKeyGTE: String
+	questionKeyLT: String
+	questionKeyLTE: String
+	questionKeyContains: String
+	questionKeyHasPrefix: String
+	questionKeyHasSuffix: String
+	questionKeyEqualFold: String
+	questionKeyContainsFold: String
+	"""
+	question_name field predicates
+	"""
+	questionName: String
+	questionNameNEQ: String
+	questionNameIn: [String!]
+	questionNameNotIn: [String!]
+	questionNameGT: String
+	questionNameGTE: String
+	questionNameLT: String
+	questionNameLTE: String
+	questionNameContains: String
+	questionNameHasPrefix: String
+	questionNameHasSuffix: String
+	questionNameEqualFold: String
+	questionNameContainsFold: String
+	"""
+	question_description field predicates
+	"""
+	questionDescription: String
+	questionDescriptionNEQ: String
+	questionDescriptionIn: [String!]
+	questionDescriptionNotIn: [String!]
+	questionDescriptionGT: String
+	questionDescriptionGTE: String
+	questionDescriptionLT: String
+	questionDescriptionLTE: String
+	questionDescriptionContains: String
+	questionDescriptionHasPrefix: String
+	questionDescriptionHasSuffix: String
+	questionDescriptionIsNil: Boolean
+	questionDescriptionNotNil: Boolean
+	questionDescriptionEqualFold: String
+	questionDescriptionContainsFold: String
+	"""
+	question_category field predicates
+	"""
+	questionCategory: VendorRiskScoreVendorScoringCategory
+	questionCategoryNEQ: VendorRiskScoreVendorScoringCategory
+	questionCategoryIn: [VendorRiskScoreVendorScoringCategory!]
+	questionCategoryNotIn: [VendorRiskScoreVendorScoringCategory!]
+	"""
+	answer_type field predicates
+	"""
+	answerType: VendorRiskScoreVendorScoringAnswerType
+	answerTypeNEQ: VendorRiskScoreVendorScoringAnswerType
+	answerTypeIn: [VendorRiskScoreVendorScoringAnswerType!]
+	answerTypeNotIn: [VendorRiskScoreVendorScoringAnswerType!]
+	"""
+	impact field predicates
+	"""
+	impact: VendorRiskScoreVendorRiskImpact
+	impactNEQ: VendorRiskScoreVendorRiskImpact
+	impactIn: [VendorRiskScoreVendorRiskImpact!]
+	impactNotIn: [VendorRiskScoreVendorRiskImpact!]
+	"""
+	likelihood field predicates
+	"""
+	likelihood: VendorRiskScoreVendorRiskLikelihood
+	likelihoodNEQ: VendorRiskScoreVendorRiskLikelihood
+	likelihoodIn: [VendorRiskScoreVendorRiskLikelihood!]
+	likelihoodNotIn: [VendorRiskScoreVendorRiskLikelihood!]
+	"""
+	score field predicates
+	"""
+	score: Float
+	scoreNEQ: Float
+	scoreIn: [Float!]
+	scoreNotIn: [Float!]
+	scoreGT: Float
+	scoreGTE: Float
+	scoreLT: Float
+	scoreLTE: Float
+	"""
+	answer field predicates
+	"""
+	answer: String
+	answerNEQ: String
+	answerIn: [String!]
+	answerNotIn: [String!]
+	answerGT: String
+	answerGTE: String
+	answerLT: String
+	answerLTE: String
+	answerContains: String
+	answerHasPrefix: String
+	answerHasSuffix: String
+	answerIsNil: Boolean
+	answerNotNil: Boolean
+	answerEqualFold: String
+	answerContainsFold: String
+	"""
+	notes field predicates
+	"""
+	notes: String
+	notesNEQ: String
+	notesIn: [String!]
+	notesNotIn: [String!]
+	notesGT: String
+	notesGTE: String
+	notesLT: String
+	notesLTE: String
+	notesContains: String
+	notesHasPrefix: String
+	notesHasSuffix: String
+	notesIsNil: Boolean
+	notesNotNil: Boolean
+	notesEqualFold: String
+	notesContainsFold: String
+	"""
+	vendor_scoring_config_id field predicates
+	"""
+	vendorScoringConfigID: ID
+	vendorScoringConfigIDNEQ: ID
+	vendorScoringConfigIDIn: [ID!]
+	vendorScoringConfigIDNotIn: [ID!]
+	vendorScoringConfigIDGT: ID
+	vendorScoringConfigIDGTE: ID
+	vendorScoringConfigIDLT: ID
+	vendorScoringConfigIDLTE: ID
+	vendorScoringConfigIDContains: ID
+	vendorScoringConfigIDHasPrefix: ID
+	vendorScoringConfigIDHasSuffix: ID
+	vendorScoringConfigIDIsNil: Boolean
+	vendorScoringConfigIDNotNil: Boolean
+	vendorScoringConfigIDEqualFold: ID
+	vendorScoringConfigIDContainsFold: ID
+	"""
+	entity_id field predicates
+	"""
+	entityID: ID
+	entityIDNEQ: ID
+	entityIDIn: [ID!]
+	entityIDNotIn: [ID!]
+	entityIDGT: ID
+	entityIDGTE: ID
+	entityIDLT: ID
+	entityIDLTE: ID
+	entityIDContains: ID
+	entityIDHasPrefix: ID
+	entityIDHasSuffix: ID
+	entityIDEqualFold: ID
+	entityIDContainsFold: ID
+	"""
+	assessment_response_id field predicates
+	"""
+	assessmentResponseID: ID
+	assessmentResponseIDNEQ: ID
+	assessmentResponseIDIn: [ID!]
+	assessmentResponseIDNotIn: [ID!]
+	assessmentResponseIDGT: ID
+	assessmentResponseIDGTE: ID
+	assessmentResponseIDLT: ID
+	assessmentResponseIDLTE: ID
+	assessmentResponseIDContains: ID
+	assessmentResponseIDHasPrefix: ID
+	assessmentResponseIDHasSuffix: ID
+	assessmentResponseIDIsNil: Boolean
+	assessmentResponseIDNotNil: Boolean
+	assessmentResponseIDEqualFold: ID
+	assessmentResponseIDContainsFold: ID
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	vendor_scoring_config edge predicates
+	"""
+	hasVendorScoringConfig: Boolean
+	hasVendorScoringConfigWith: [VendorScoringConfigWhereInput!]
+	"""
+	entity edge predicates
+	"""
+	hasEntity: Boolean
+	hasEntityWith: [EntityWhereInput!]
+	"""
+	assessment_response edge predicates
+	"""
+	hasAssessmentResponse: Boolean
+	hasAssessmentResponseWith: [AssessmentResponseWhereInput!]
+	"""
+	Filter for tagsHas to contain a specific value
+	"""
+	tagsHas: String
+}
+type VendorScoringConfig implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
+	org-custom question overrides and additions; system defaults from models.DefaultVendorScoringQuestions are merged at read time via VendorScoringQuestionsConfig.All()
+	"""
+	questions: VendorScoringQuestionsConfig!
+	"""
+	controls how unanswered questions affect the aggregate score: ANSWERED_ONLY sums only answered questions; FULL_QUESTIONNAIRE treats unanswered as maximum risk; MANUAL disables automatic aggregation
+	"""
+	scoringMode: VendorScoringConfigVendorScoringMode!
+	"""
+	org-custom risk rating threshold overrides; system defaults from models.DefaultRiskThresholds are merged at read time via RiskThresholdsConfig.All()
+	"""
+	riskThresholds: RiskThresholdsConfig!
+	owner: Organization
+	vendorRiskScores(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for VendorRiskScores returned from the connection.
+		"""
+		orderBy: [VendorRiskScoreOrder!]
+
+		"""
+		Filtering options for VendorRiskScores returned from the connection.
+		"""
+		where: VendorRiskScoreWhereInput
+	): VendorRiskScoreConnection!
+}
+"""
+Return response for createBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkCreatePayload {
+	"""
+	Created vendorScoringConfigs
+	"""
+	vendorScoringConfigs: [VendorScoringConfig!]
+}
+"""
+Return response for deleteBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkDeletePayload {
+	"""
+	Deleted vendorScoringConfig IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkVendorScoringConfig mutation
+"""
+type VendorScoringConfigBulkUpdatePayload {
+	"""
+	Updated vendorScoringConfigs
+	"""
+	vendorScoringConfigs: [VendorScoringConfig!]
+	"""
+	IDs of the updated vendorScoringConfigs
+	"""
+	updatedIDs: [ID!]
+}
+"""
+A connection to a list of items.
+"""
+type VendorScoringConfigConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [VendorScoringConfigEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createVendorScoringConfig mutation
+"""
+type VendorScoringConfigCreatePayload {
+	"""
+	Created vendorScoringConfig
+	"""
+	vendorScoringConfig: VendorScoringConfig!
+}
+"""
+Return response for deleteVendorScoringConfig mutation
+"""
+type VendorScoringConfigDeletePayload {
+	"""
+	Deleted vendorScoringConfig ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type VendorScoringConfigEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: VendorScoringConfig
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for VendorScoringConfig connections
+"""
+input VendorScoringConfigOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order VendorScoringConfigs.
+	"""
+	field: VendorScoringConfigOrderField!
+}
+"""
+Properties by which VendorScoringConfig connections can be ordered.
+"""
+enum VendorScoringConfigOrderField {
+	created_at
+	updated_at
+	scoring_mode
+}
+"""
+Return response for updateVendorScoringConfig mutation
+"""
+type VendorScoringConfigUpdatePayload {
+	"""
+	Updated vendorScoringConfig
+	"""
+	vendorScoringConfig: VendorScoringConfig!
+}
+"""
+VendorScoringConfigVendorScoringMode is enum for the field scoring_mode
+"""
+enum VendorScoringConfigVendorScoringMode @goModel(model: "github.com/theopenlane/core/common/enums.VendorScoringMode") {
+	ANSWERED_ONLY
+	FULL_QUESTIONNAIRE
+	MANUAL
+}
+"""
+VendorScoringConfigWhereInput is used for filtering VendorScoringConfig objects.
+Input was generated by ent.
+"""
+input VendorScoringConfigWhereInput {
+	not: VendorScoringConfigWhereInput
+	and: [VendorScoringConfigWhereInput!]
+	or: [VendorScoringConfigWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDGT: ID
+	ownerIDGTE: ID
+	ownerIDLT: ID
+	ownerIDLTE: ID
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	scoring_mode field predicates
+	"""
+	scoringMode: VendorScoringConfigVendorScoringMode
+	scoringModeNEQ: VendorScoringConfigVendorScoringMode
+	scoringModeIn: [VendorScoringConfigVendorScoringMode!]
+	scoringModeNotIn: [VendorScoringConfigVendorScoringMode!]
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	vendor_risk_scores edge predicates
+	"""
+	hasVendorRiskScores: Boolean
+	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
+	"""
+	Filter for tagsHas to contain a specific value
+	"""
+	tagsHas: String
+}
+"""
+VendorScoringQuestionsConfig holds org-custom question overrides and additions for vendor scoring
+"""
+scalar VendorScoringQuestionsConfig
 """
 VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
 """
@@ -92215,11 +95831,7 @@ type Vulnerability implements Node {
 	"""
 	externalOwnerID: String
 	"""
-	lifecycle status of the vulnerability
-	"""
-	status: String @deprecated(reason: "Use `vulnerability_status_name` instead.")
-	"""
-	lifecycle status of the vulnerability
+	security level of the vulnerability
 	"""
 	securityLevel: VulnerabilitySecurityLevel
 	"""
@@ -92307,6 +95919,34 @@ type Vulnerability implements Node {
 	"""
 	impacts: [String!]
 	"""
+	CWE identifiers associated with the vulnerability
+	"""
+	cweIds: [String!]
+	"""
+	version range affected by the vulnerability
+	"""
+	vulnerableVersionRange: String
+	"""
+	earliest version that fixes the vulnerability
+	"""
+	firstPatchedVersion: String
+	"""
+	name of the vulnerable package or dependency
+	"""
+	packageName: String
+	"""
+	ecosystem of the vulnerable package such as npm, pip, or maven
+	"""
+	packageEcosystem: String
+	"""
+	path to the manifest file declaring the vulnerable dependency
+	"""
+	manifestPath: String
+	"""
+	scope of the dependency such as runtime or development
+	"""
+	dependencyScope: String
+	"""
 	timestamp when the vulnerability was published
 	"""
 	publishedAt: DateTime
@@ -92318,6 +95958,26 @@ type Vulnerability implements Node {
 	timestamp when the source last updated the vulnerability
 	"""
 	sourceUpdatedAt: DateTime
+	"""
+	timestamp when the vulnerability was dismissed
+	"""
+	dismissedAt: DateTime
+	"""
+	reason the vulnerability was dismissed such as tolerable_risk, not_used, ineligible, or no_bandwidth
+	"""
+	dismissedReason: String
+	"""
+	free-text explanation provided when the vulnerability was dismissed
+	"""
+	dismissedComment: String
+	"""
+	timestamp when the vulnerability was marked as fixed
+	"""
+	fixedAt: DateTime
+	"""
+	timestamp when the vulnerability was automatically dismissed by the source system
+	"""
+	autoDismissedAt: DateTime
 	"""
 	link to the vulnerability in the source system
 	"""
@@ -93351,24 +97011,6 @@ input VulnerabilityWhereInput {
 	externalOwnerIDEqualFold: String
 	externalOwnerIDContainsFold: String
 	"""
-	status field predicates
-	"""
-	status: String
-	statusNEQ: String
-	statusIn: [String!]
-	statusNotIn: [String!]
-	statusGT: String
-	statusGTE: String
-	statusLT: String
-	statusLTE: String
-	statusContains: String
-	statusHasPrefix: String
-	statusHasSuffix: String
-	statusIsNil: Boolean
-	statusNotNil: Boolean
-	statusEqualFold: String
-	statusContainsFold: String
-	"""
 	security_level field predicates
 	"""
 	securityLevel: VulnerabilitySecurityLevel
@@ -93643,6 +97285,114 @@ input VulnerabilityWhereInput {
 	validatedIsNil: Boolean
 	validatedNotNil: Boolean
 	"""
+	vulnerable_version_range field predicates
+	"""
+	vulnerableVersionRange: String
+	vulnerableVersionRangeNEQ: String
+	vulnerableVersionRangeIn: [String!]
+	vulnerableVersionRangeNotIn: [String!]
+	vulnerableVersionRangeGT: String
+	vulnerableVersionRangeGTE: String
+	vulnerableVersionRangeLT: String
+	vulnerableVersionRangeLTE: String
+	vulnerableVersionRangeContains: String
+	vulnerableVersionRangeHasPrefix: String
+	vulnerableVersionRangeHasSuffix: String
+	vulnerableVersionRangeIsNil: Boolean
+	vulnerableVersionRangeNotNil: Boolean
+	vulnerableVersionRangeEqualFold: String
+	vulnerableVersionRangeContainsFold: String
+	"""
+	first_patched_version field predicates
+	"""
+	firstPatchedVersion: String
+	firstPatchedVersionNEQ: String
+	firstPatchedVersionIn: [String!]
+	firstPatchedVersionNotIn: [String!]
+	firstPatchedVersionGT: String
+	firstPatchedVersionGTE: String
+	firstPatchedVersionLT: String
+	firstPatchedVersionLTE: String
+	firstPatchedVersionContains: String
+	firstPatchedVersionHasPrefix: String
+	firstPatchedVersionHasSuffix: String
+	firstPatchedVersionIsNil: Boolean
+	firstPatchedVersionNotNil: Boolean
+	firstPatchedVersionEqualFold: String
+	firstPatchedVersionContainsFold: String
+	"""
+	package_name field predicates
+	"""
+	packageName: String
+	packageNameNEQ: String
+	packageNameIn: [String!]
+	packageNameNotIn: [String!]
+	packageNameGT: String
+	packageNameGTE: String
+	packageNameLT: String
+	packageNameLTE: String
+	packageNameContains: String
+	packageNameHasPrefix: String
+	packageNameHasSuffix: String
+	packageNameIsNil: Boolean
+	packageNameNotNil: Boolean
+	packageNameEqualFold: String
+	packageNameContainsFold: String
+	"""
+	package_ecosystem field predicates
+	"""
+	packageEcosystem: String
+	packageEcosystemNEQ: String
+	packageEcosystemIn: [String!]
+	packageEcosystemNotIn: [String!]
+	packageEcosystemGT: String
+	packageEcosystemGTE: String
+	packageEcosystemLT: String
+	packageEcosystemLTE: String
+	packageEcosystemContains: String
+	packageEcosystemHasPrefix: String
+	packageEcosystemHasSuffix: String
+	packageEcosystemIsNil: Boolean
+	packageEcosystemNotNil: Boolean
+	packageEcosystemEqualFold: String
+	packageEcosystemContainsFold: String
+	"""
+	manifest_path field predicates
+	"""
+	manifestPath: String
+	manifestPathNEQ: String
+	manifestPathIn: [String!]
+	manifestPathNotIn: [String!]
+	manifestPathGT: String
+	manifestPathGTE: String
+	manifestPathLT: String
+	manifestPathLTE: String
+	manifestPathContains: String
+	manifestPathHasPrefix: String
+	manifestPathHasSuffix: String
+	manifestPathIsNil: Boolean
+	manifestPathNotNil: Boolean
+	manifestPathEqualFold: String
+	manifestPathContainsFold: String
+	"""
+	dependency_scope field predicates
+	"""
+	dependencyScope: String
+	dependencyScopeNEQ: String
+	dependencyScopeIn: [String!]
+	dependencyScopeNotIn: [String!]
+	dependencyScopeGT: String
+	dependencyScopeGTE: String
+	dependencyScopeLT: String
+	dependencyScopeLTE: String
+	dependencyScopeContains: String
+	dependencyScopeHasPrefix: String
+	dependencyScopeHasSuffix: String
+	dependencyScopeIsNil: Boolean
+	dependencyScopeNotNil: Boolean
+	dependencyScopeEqualFold: String
+	dependencyScopeContainsFold: String
+	"""
 	published_at field predicates
 	"""
 	publishedAt: DateTime
@@ -93681,6 +97431,81 @@ input VulnerabilityWhereInput {
 	sourceUpdatedAtLTE: DateTime
 	sourceUpdatedAtIsNil: Boolean
 	sourceUpdatedAtNotNil: Boolean
+	"""
+	dismissed_at field predicates
+	"""
+	dismissedAt: DateTime
+	dismissedAtNEQ: DateTime
+	dismissedAtIn: [DateTime!]
+	dismissedAtNotIn: [DateTime!]
+	dismissedAtGT: DateTime
+	dismissedAtGTE: DateTime
+	dismissedAtLT: DateTime
+	dismissedAtLTE: DateTime
+	dismissedAtIsNil: Boolean
+	dismissedAtNotNil: Boolean
+	"""
+	dismissed_reason field predicates
+	"""
+	dismissedReason: String
+	dismissedReasonNEQ: String
+	dismissedReasonIn: [String!]
+	dismissedReasonNotIn: [String!]
+	dismissedReasonGT: String
+	dismissedReasonGTE: String
+	dismissedReasonLT: String
+	dismissedReasonLTE: String
+	dismissedReasonContains: String
+	dismissedReasonHasPrefix: String
+	dismissedReasonHasSuffix: String
+	dismissedReasonIsNil: Boolean
+	dismissedReasonNotNil: Boolean
+	dismissedReasonEqualFold: String
+	dismissedReasonContainsFold: String
+	"""
+	dismissed_comment field predicates
+	"""
+	dismissedComment: String
+	dismissedCommentNEQ: String
+	dismissedCommentIn: [String!]
+	dismissedCommentNotIn: [String!]
+	dismissedCommentGT: String
+	dismissedCommentGTE: String
+	dismissedCommentLT: String
+	dismissedCommentLTE: String
+	dismissedCommentContains: String
+	dismissedCommentHasPrefix: String
+	dismissedCommentHasSuffix: String
+	dismissedCommentIsNil: Boolean
+	dismissedCommentNotNil: Boolean
+	dismissedCommentEqualFold: String
+	dismissedCommentContainsFold: String
+	"""
+	fixed_at field predicates
+	"""
+	fixedAt: DateTime
+	fixedAtNEQ: DateTime
+	fixedAtIn: [DateTime!]
+	fixedAtNotIn: [DateTime!]
+	fixedAtGT: DateTime
+	fixedAtGTE: DateTime
+	fixedAtLT: DateTime
+	fixedAtLTE: DateTime
+	fixedAtIsNil: Boolean
+	fixedAtNotNil: Boolean
+	"""
+	auto_dismissed_at field predicates
+	"""
+	autoDismissedAt: DateTime
+	autoDismissedAtNEQ: DateTime
+	autoDismissedAtIn: [DateTime!]
+	autoDismissedAtNotIn: [DateTime!]
+	autoDismissedAtGT: DateTime
+	autoDismissedAtGTE: DateTime
+	autoDismissedAtLT: DateTime
+	autoDismissedAtLTE: DateTime
+	autoDismissedAtIsNil: Boolean
+	autoDismissedAtNotNil: Boolean
 	"""
 	external_uri field predicates
 	"""
@@ -93821,6 +97646,10 @@ input VulnerabilityWhereInput {
 	Filter for impactsHas to contain a specific value
 	"""
 	impactsHas: String
+	"""
+	Filter for cweIdsHas to contain a specific value
+	"""
+	cweIdsHas: String
 }
 type Webauthn implements Node {
 	id: ID!
@@ -94556,6 +98385,7 @@ enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theo
 	GROUP
 	ROLE
 	RESOLVER
+	CHANNEL
 }
 """
 WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.
@@ -96694,6 +100524,10 @@ type WorkflowMetadata {
 	Available workflow object types
 	"""
 	objectTypes: [WorkflowObjectTypeMetadata!]!
+	"""
+	Extensible workflow metadata payload for action configuration surfaces
+	"""
+	extensions: Map!
 }
 type WorkflowObjectRef implements Node {
 	id: ID!

@@ -26,8 +26,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -831,6 +833,21 @@ func (_u *IdentityHolderUpdate) AddControls(v ...*Control) *IdentityHolderUpdate
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *IdentityHolderUpdate) AddSubcontrolIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *IdentityHolderUpdate) AddSubcontrols(v ...*Subcontrol) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdate) AddPlatformIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -939,6 +956,21 @@ func (_u *IdentityHolderUpdate) AddAccessPlatforms(v ...*Platform) *IdentityHold
 // SetUser sets the "user" edge to the User entity.
 func (_u *IdentityHolderUpdate) SetUser(v *User) *IdentityHolderUpdate {
 	return _u.SetUserID(v.ID)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *IdentityHolderUpdate) AddInternalPolicyIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *IdentityHolderUpdate) AddInternalPolicies(v ...*InternalPolicy) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // Mutation returns the IdentityHolderMutation object of the builder.
@@ -1186,6 +1218,27 @@ func (_u *IdentityHolderUpdate) RemoveControls(v ...*Control) *IdentityHolderUpd
 	return _u.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *IdentityHolderUpdate) ClearSubcontrols() *IdentityHolderUpdate {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveSubcontrolIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *IdentityHolderUpdate) RemoveSubcontrols(v ...*Subcontrol) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdate) ClearPlatforms() *IdentityHolderUpdate {
 	_u.mutation.ClearPlatforms()
@@ -1337,6 +1390,27 @@ func (_u *IdentityHolderUpdate) RemoveAccessPlatforms(v ...*Platform) *IdentityH
 func (_u *IdentityHolderUpdate) ClearUser() *IdentityHolderUpdate {
 	_u.mutation.ClearUser()
 	return _u
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *IdentityHolderUpdate) ClearInternalPolicies() *IdentityHolderUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveInternalPolicyIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *IdentityHolderUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2221,6 +2295,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2583,6 +2705,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3393,6 +3563,21 @@ func (_u *IdentityHolderUpdateOne) AddControls(v ...*Control) *IdentityHolderUpd
 	return _u.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddSubcontrolIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddSubcontrolIDs(ids...)
+	return _u
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_u *IdentityHolderUpdateOne) AddSubcontrols(v ...*Subcontrol) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddSubcontrolIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddPlatformIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddPlatformIDs(ids...)
@@ -3501,6 +3686,21 @@ func (_u *IdentityHolderUpdateOne) AddAccessPlatforms(v ...*Platform) *IdentityH
 // SetUser sets the "user" edge to the User entity.
 func (_u *IdentityHolderUpdateOne) SetUser(v *User) *IdentityHolderUpdateOne {
 	return _u.SetUserID(v.ID)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddInternalPolicyIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *IdentityHolderUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
 }
 
 // Mutation returns the IdentityHolderMutation object of the builder.
@@ -3748,6 +3948,27 @@ func (_u *IdentityHolderUpdateOne) RemoveControls(v ...*Control) *IdentityHolder
 	return _u.RemoveControlIDs(ids...)
 }
 
+// ClearSubcontrols clears all "subcontrols" edges to the Subcontrol entity.
+func (_u *IdentityHolderUpdateOne) ClearSubcontrols() *IdentityHolderUpdateOne {
+	_u.mutation.ClearSubcontrols()
+	return _u
+}
+
+// RemoveSubcontrolIDs removes the "subcontrols" edge to Subcontrol entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveSubcontrolIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveSubcontrolIDs(ids...)
+	return _u
+}
+
+// RemoveSubcontrols removes "subcontrols" edges to Subcontrol entities.
+func (_u *IdentityHolderUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveSubcontrolIDs(ids...)
+}
+
 // ClearPlatforms clears all "platforms" edges to the Platform entity.
 func (_u *IdentityHolderUpdateOne) ClearPlatforms() *IdentityHolderUpdateOne {
 	_u.mutation.ClearPlatforms()
@@ -3899,6 +4120,27 @@ func (_u *IdentityHolderUpdateOne) RemoveAccessPlatforms(v ...*Platform) *Identi
 func (_u *IdentityHolderUpdateOne) ClearUser() *IdentityHolderUpdateOne {
 	_u.mutation.ClearUser()
 	return _u
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *IdentityHolderUpdateOne) ClearInternalPolicies() *IdentityHolderUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveInternalPolicyIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *IdentityHolderUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
 }
 
 // Where appends a list predicates to the IdentityHolderUpdate builder.
@@ -4813,6 +5055,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.SubcontrolsTable,
+			Columns: identityholder.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5175,6 +5465,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolder
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   identityholder.InternalPoliciesTable,
+			Columns: identityholder.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

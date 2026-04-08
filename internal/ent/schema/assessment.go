@@ -121,6 +121,9 @@ func (Assessment) Policy() ent.Policy {
 func (Assessment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
 	}
 }
 

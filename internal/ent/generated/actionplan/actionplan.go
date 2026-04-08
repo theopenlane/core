@@ -375,7 +375,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [19]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -441,7 +441,7 @@ const DefaultReviewFrequency enums.Frequency = "YEARLY"
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
 func ReviewFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {
-	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("actionplan: invalid enum value for review_frequency field: %q", rf)

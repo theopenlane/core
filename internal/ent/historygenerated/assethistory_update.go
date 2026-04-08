@@ -873,6 +873,26 @@ func (_u *AssetHistoryUpdate) ClearCategories() *AssetHistoryUpdate {
 	return _u
 }
 
+// SetObservedAt sets the "observed_at" field.
+func (_u *AssetHistoryUpdate) SetObservedAt(v models.DateTime) *AssetHistoryUpdate {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *AssetHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *AssetHistoryUpdate {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *AssetHistoryUpdate) ClearObservedAt() *AssetHistoryUpdate {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the AssetHistoryMutation object of the builder.
 func (_u *AssetHistoryUpdate) Mutation() *AssetHistoryMutation {
 	return _u.mutation
@@ -1229,6 +1249,15 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(assethistory.FieldCategories, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(assethistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(assethistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(assethistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssetHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -2091,6 +2120,26 @@ func (_u *AssetHistoryUpdateOne) ClearCategories() *AssetHistoryUpdateOne {
 	return _u
 }
 
+// SetObservedAt sets the "observed_at" field.
+func (_u *AssetHistoryUpdateOne) SetObservedAt(v models.DateTime) *AssetHistoryUpdateOne {
+	_u.mutation.SetObservedAt(v)
+	return _u
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_u *AssetHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *AssetHistoryUpdateOne {
+	if v != nil {
+		_u.SetObservedAt(*v)
+	}
+	return _u
+}
+
+// ClearObservedAt clears the value of the "observed_at" field.
+func (_u *AssetHistoryUpdateOne) ClearObservedAt() *AssetHistoryUpdateOne {
+	_u.mutation.ClearObservedAt()
+	return _u
+}
+
 // Mutation returns the AssetHistoryMutation object of the builder.
 func (_u *AssetHistoryUpdateOne) Mutation() *AssetHistoryMutation {
 	return _u.mutation
@@ -2477,6 +2526,15 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(assethistory.FieldCategories, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(assethistory.FieldIntegrationID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ObservedAt(); ok {
+		_spec.SetField(assethistory.FieldObservedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ObservedAtCleared() {
+		_spec.ClearField(assethistory.FieldObservedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssetHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

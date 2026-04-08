@@ -182,6 +182,20 @@ func (_c *DirectoryMembershipCreate) SetNillablePlatformID(v *string) *Directory
 	return _c
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_c *DirectoryMembershipCreate) SetDirectoryInstanceID(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetDirectoryInstanceID(v)
+	return _c
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetDirectoryInstanceID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryMembershipCreate) SetDirectorySyncRunID(v string) *DirectoryMembershipCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
@@ -252,6 +266,34 @@ func (_c *DirectoryMembershipCreate) SetLastSeenAt(v time.Time) *DirectoryMember
 func (_c *DirectoryMembershipCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryMembershipCreate {
 	if v != nil {
 		_c.SetLastSeenAt(*v)
+	}
+	return _c
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_c *DirectoryMembershipCreate) SetAddedAt(v time.Time) *DirectoryMembershipCreate {
+	_c.mutation.SetAddedAt(v)
+	return _c
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableAddedAt(v *time.Time) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetAddedAt(*v)
+	}
+	return _c
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_c *DirectoryMembershipCreate) SetRemovedAt(v time.Time) *DirectoryMembershipCreate {
+	_c.mutation.SetRemovedAt(v)
+	return _c
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableRemovedAt(v *time.Time) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetRemovedAt(*v)
 	}
 	return _c
 }
@@ -582,6 +624,10 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 		_spec.SetField(directorymembership.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorymembership.FieldDirectoryInstanceID, field.TypeString, value)
+		_node.DirectoryInstanceID = &value
+	}
 	if value, ok := _c.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
 		_node.Role = value
@@ -597,6 +643,14 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if value, ok := _c.mutation.LastSeenAt(); ok {
 		_spec.SetField(directorymembership.FieldLastSeenAt, field.TypeTime, value)
 		_node.LastSeenAt = &value
+	}
+	if value, ok := _c.mutation.AddedAt(); ok {
+		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)
+		_node.AddedAt = &value
+	}
+	if value, ok := _c.mutation.RemovedAt(); ok {
+		_spec.SetField(directorymembership.FieldRemovedAt, field.TypeTime, value)
+		_node.RemovedAt = &value
 	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(directorymembership.FieldObservedAt, field.TypeTime, value)

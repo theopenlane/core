@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
@@ -289,6 +290,24 @@ func (_u *NotificationTemplateUpdate) SetNillableIntegrationID(v *string) *Notif
 // ClearIntegrationID clears the value of the "integration_id" field.
 func (_u *NotificationTemplateUpdate) ClearIntegrationID() *NotificationTemplateUpdate {
 	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetDestinations sets the "destinations" field.
+func (_u *NotificationTemplateUpdate) SetDestinations(v []string) *NotificationTemplateUpdate {
+	_u.mutation.SetDestinations(v)
+	return _u
+}
+
+// AppendDestinations appends value to the "destinations" field.
+func (_u *NotificationTemplateUpdate) AppendDestinations(v []string) *NotificationTemplateUpdate {
+	_u.mutation.AppendDestinations(v)
+	return _u
+}
+
+// ClearDestinations clears the value of the "destinations" field.
+func (_u *NotificationTemplateUpdate) ClearDestinations() *NotificationTemplateUpdate {
+	_u.mutation.ClearDestinations()
 	return _u
 }
 
@@ -755,6 +774,17 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.TopicPattern(); ok {
 		_spec.SetField(notificationtemplate.FieldTopicPattern, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Destinations(); ok {
+		_spec.SetField(notificationtemplate.FieldDestinations, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDestinations(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, notificationtemplate.FieldDestinations, value)
+		})
+	}
+	if _u.mutation.DestinationsCleared() {
+		_spec.ClearField(notificationtemplate.FieldDestinations, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.TitleTemplate(); ok {
 		_spec.SetField(notificationtemplate.FieldTitleTemplate, field.TypeString, value)
@@ -1237,6 +1267,24 @@ func (_u *NotificationTemplateUpdateOne) SetNillableIntegrationID(v *string) *No
 // ClearIntegrationID clears the value of the "integration_id" field.
 func (_u *NotificationTemplateUpdateOne) ClearIntegrationID() *NotificationTemplateUpdateOne {
 	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
+// SetDestinations sets the "destinations" field.
+func (_u *NotificationTemplateUpdateOne) SetDestinations(v []string) *NotificationTemplateUpdateOne {
+	_u.mutation.SetDestinations(v)
+	return _u
+}
+
+// AppendDestinations appends value to the "destinations" field.
+func (_u *NotificationTemplateUpdateOne) AppendDestinations(v []string) *NotificationTemplateUpdateOne {
+	_u.mutation.AppendDestinations(v)
+	return _u
+}
+
+// ClearDestinations clears the value of the "destinations" field.
+func (_u *NotificationTemplateUpdateOne) ClearDestinations() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearDestinations()
 	return _u
 }
 
@@ -1733,6 +1781,17 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if value, ok := _u.mutation.TopicPattern(); ok {
 		_spec.SetField(notificationtemplate.FieldTopicPattern, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Destinations(); ok {
+		_spec.SetField(notificationtemplate.FieldDestinations, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDestinations(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, notificationtemplate.FieldDestinations, value)
+		})
+	}
+	if _u.mutation.DestinationsCleared() {
+		_spec.ClearField(notificationtemplate.FieldDestinations, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.TitleTemplate(); ok {
 		_spec.SetField(notificationtemplate.FieldTitleTemplate, field.TypeString, value)

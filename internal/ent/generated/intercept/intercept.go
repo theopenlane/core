@@ -105,6 +105,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -2764,6 +2766,60 @@ func (f TraverseUserSetting) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.UserSettingQuery", q)
 }
 
+// The VendorRiskScoreFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorRiskScoreFunc func(context.Context, *generated.VendorRiskScoreQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorRiskScoreFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorRiskScoreQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorRiskScoreQuery", q)
+}
+
+// The TraverseVendorRiskScore type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorRiskScore func(context.Context, *generated.VendorRiskScoreQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorRiskScore) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorRiskScore) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorRiskScoreQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorRiskScoreQuery", q)
+}
+
+// The VendorScoringConfigFunc type is an adapter to allow the use of ordinary function as a Querier.
+type VendorScoringConfigFunc func(context.Context, *generated.VendorScoringConfigQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f VendorScoringConfigFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.VendorScoringConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.VendorScoringConfigQuery", q)
+}
+
+// The TraverseVendorScoringConfig type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseVendorScoringConfig func(context.Context, *generated.VendorScoringConfigQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseVendorScoringConfig) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseVendorScoringConfig) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.VendorScoringConfigQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.VendorScoringConfigQuery", q)
+}
+
 // The VulnerabilityFunc type is an adapter to allow the use of ordinary function as a Querier.
 type VulnerabilityFunc func(context.Context, *generated.VulnerabilityQuery) (generated.Value, error)
 
@@ -3202,6 +3258,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserSettingQuery:
 		return &query[*generated.UserSettingQuery, predicate.UserSetting, usersetting.OrderOption]{typ: generated.TypeUserSetting, tq: q}, nil
+	case *generated.VendorRiskScoreQuery:
+		return &query[*generated.VendorRiskScoreQuery, predicate.VendorRiskScore, vendorriskscore.OrderOption]{typ: generated.TypeVendorRiskScore, tq: q}, nil
+	case *generated.VendorScoringConfigQuery:
+		return &query[*generated.VendorScoringConfigQuery, predicate.VendorScoringConfig, vendorscoringconfig.OrderOption]{typ: generated.TypeVendorScoringConfig, tq: q}, nil
 	case *generated.VulnerabilityQuery:
 		return &query[*generated.VulnerabilityQuery, predicate.Vulnerability, vulnerability.OrderOption]{typ: generated.TypeVulnerability, tq: q}, nil
 	case *generated.WebauthnQuery:

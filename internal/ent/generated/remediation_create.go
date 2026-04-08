@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -285,6 +286,20 @@ func (_c *RemediationCreate) SetTitle(v string) *RemediationCreate {
 func (_c *RemediationCreate) SetNillableTitle(v *string) *RemediationCreate {
 	if v != nil {
 		_c.SetTitle(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *RemediationCreate) SetStatus(v enums.RemediationStatus) *RemediationCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableStatus(v *enums.RemediationStatus) *RemediationCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
 	return _c
 }
@@ -863,6 +878,10 @@ func (_c *RemediationCreate) defaults() error {
 		v := remediation.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := remediation.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if remediation.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized remediation.DefaultID (forgotten import generated/runtime?)")
@@ -886,6 +905,11 @@ func (_c *RemediationCreate) check() error {
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := remediation.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Remediation.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := remediation.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Remediation.status": %w`, err)}
 		}
 	}
 	return nil
@@ -987,6 +1011,10 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(remediation.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(remediation.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(remediation.FieldState, field.TypeString, value)
@@ -1193,16 +1221,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.FindingsTable,
-			Columns: []string{remediation.FindingsColumn},
+			Columns: remediation.FindingsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Finding
+		edge.Schema = _c.schemaConfig.RemediationFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1210,16 +1238,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.VulnerabilitiesTable,
-			Columns: []string{remediation.VulnerabilitiesColumn},
+			Columns: remediation.VulnerabilitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Vulnerability
+		edge.Schema = _c.schemaConfig.RemediationVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1278,16 +1306,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.SubcontrolsTable,
-			Columns: []string{remediation.SubcontrolsColumn},
+			Columns: remediation.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.RemediationSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1295,16 +1323,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.RisksTable,
-			Columns: []string{remediation.RisksColumn},
+			Columns: remediation.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Risk
+		edge.Schema = _c.schemaConfig.RemediationRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1363,16 +1391,16 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
 			Table:   remediation.ReviewsTable,
-			Columns: []string{remediation.ReviewsColumn},
+			Columns: remediation.ReviewsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Review
+		edge.Schema = _c.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

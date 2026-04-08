@@ -62,6 +62,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
+				entx.IntegrationMappingField().UpsertKey(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -229,8 +230,16 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("risk_score"),
 			),
-		field.String("tier").
-			Comment("the tier classification for the entity").
+		field.Int("risk_score_coverage").
+			Comment("number of scoring questions answered for the current risk score; used to contextualize partial assessments").
+			Optional().
+			Annotations(
+				entgql.OrderField("risk_score_coverage"),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.Enum("tier").
+			Comment("the vendor risk tier classification, used to determine the depth of TPRM assessment required").
+			GoType(enums.VendorTier("")).
 			Optional().
 			Annotations(
 				entgql.OrderField("tier"),
@@ -262,6 +271,28 @@ func (Entity) Fields() []ent.Field {
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
+		field.String("logo_file_id").
+			Comment("The logo file id for the entity").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
+		field.String("external_id").
+			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
+			Optional().
+			Annotations(
+				entgql.OrderField("external_id"),
+				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+			),
+		field.Time("observed_at").
+			Comment("time when this entity was last observed by the source integration").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("observed_at"),
+			),
 	}
 }
 
@@ -288,7 +319,13 @@ func (e Entity) Mixin() []ent.Mixin {
 // Edges of the Entity
 func (e Entity) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(e, Contact{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Contact{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, DocumentData{}),
 		defaultEdgeToWithPagination(e, Note{}),
 		defaultEdgeToWithPagination(e, File{}),
@@ -296,6 +333,7 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, Scan{}),
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, AssessmentResponse{}),
+		defaultEdgeToWithPagination(e, VendorRiskScore{}),
 		defaultEdgeToWithPagination(e, Integration{}),
 		defaultEdgeToWithPagination(e, Subprocessor{}),
 		edgeToWithPagination(&edgeDefinition{
@@ -311,6 +349,7 @@ func (e Entity) Edges() []ent.Edge {
 		}),
 		defaultEdgeFromWithPagination(e, IdentityHolder{}),
 		defaultEdgeFromWithPagination(e, Control{}),
+		defaultEdgeFromWithPagination(e, Subcontrol{}),
 		defaultEdgeFromWithPagination(e, Platform{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,
@@ -335,6 +374,13 @@ func (e Entity) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: e,
+			name:       "logo_file",
+			t:          File.Type,
+			field:      "logo_file_id",
+		}),
+		defaultEdgeFromWithPagination(e, InternalPolicy{}),
 	}
 }
 
@@ -353,6 +399,8 @@ func (Entity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEntityCreate(),
 		hooks.HookEntityFiles(),
+		hooks.HookEntityApprovedForUse(),
+		hooks.HookEntityLogoFile(),
 	}
 }
 
@@ -370,7 +418,12 @@ func (e Entity) Policy() ent.Policy {
 func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
-		entx.Exportable{},
+		entx.NewExportable(
+			entx.WithOrgOwned(),
+		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			Exclude("entity_type_id", "linked_asset_ids"),
 	}
 }
 

@@ -212,6 +212,20 @@ func (_c *DirectoryAccountCreate) SetNillablePlatformID(v *string) *DirectoryAcc
 	return _c
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_c *DirectoryAccountCreate) SetDirectoryInstanceID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetDirectoryInstanceID(v)
+	return _c
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetDirectoryInstanceID(*v)
+	}
+	return _c
+}
+
 // SetIdentityHolderID sets the "identity_holder_id" field.
 func (_c *DirectoryAccountCreate) SetIdentityHolderID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetIdentityHolderID(v)
@@ -470,6 +484,62 @@ func (_c *DirectoryAccountCreate) SetNillableLastLoginAt(v *time.Time) *Director
 	return _c
 }
 
+// SetFirstSeenAt sets the "first_seen_at" field.
+func (_c *DirectoryAccountCreate) SetFirstSeenAt(v time.Time) *DirectoryAccountCreate {
+	_c.mutation.SetFirstSeenAt(v)
+	return _c
+}
+
+// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetFirstSeenAt(*v)
+	}
+	return _c
+}
+
+// SetLastSeenAt sets the "last_seen_at" field.
+func (_c *DirectoryAccountCreate) SetLastSeenAt(v time.Time) *DirectoryAccountCreate {
+	_c.mutation.SetLastSeenAt(v)
+	return _c
+}
+
+// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetLastSeenAt(*v)
+	}
+	return _c
+}
+
+// SetAddedAt sets the "added_at" field.
+func (_c *DirectoryAccountCreate) SetAddedAt(v time.Time) *DirectoryAccountCreate {
+	_c.mutation.SetAddedAt(v)
+	return _c
+}
+
+// SetNillableAddedAt sets the "added_at" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableAddedAt(v *time.Time) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetAddedAt(*v)
+	}
+	return _c
+}
+
+// SetRemovedAt sets the "removed_at" field.
+func (_c *DirectoryAccountCreate) SetRemovedAt(v time.Time) *DirectoryAccountCreate {
+	_c.mutation.SetRemovedAt(v)
+	return _c
+}
+
+// SetNillableRemovedAt sets the "removed_at" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableRemovedAt(v *time.Time) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetRemovedAt(*v)
+	}
+	return _c
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_c *DirectoryAccountCreate) SetObservedAt(v time.Time) *DirectoryAccountCreate {
 	_c.mutation.SetObservedAt(v)
@@ -504,6 +574,12 @@ func (_c *DirectoryAccountCreate) SetProfile(v map[string]interface{}) *Director
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *DirectoryAccountCreate) SetMetadata(v map[string]interface{}) *DirectoryAccountCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetRawProfileFileID sets the "raw_profile_file_id" field.
 func (_c *DirectoryAccountCreate) SetRawProfileFileID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetRawProfileFileID(v)
@@ -528,6 +604,20 @@ func (_c *DirectoryAccountCreate) SetSourceVersion(v string) *DirectoryAccountCr
 func (_c *DirectoryAccountCreate) SetNillableSourceVersion(v *string) *DirectoryAccountCreate {
 	if v != nil {
 		_c.SetSourceVersion(*v)
+	}
+	return _c
+}
+
+// SetPrimarySource sets the "primary_source" field.
+func (_c *DirectoryAccountCreate) SetPrimarySource(v bool) *DirectoryAccountCreate {
+	_c.mutation.SetPrimarySource(v)
+	return _c
+}
+
+// SetNillablePrimarySource sets the "primary_source" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillablePrimarySource(v *bool) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetPrimarySource(*v)
 	}
 	return _c
 }
@@ -745,6 +835,10 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultProfileHash
 		_c.mutation.SetProfileHash(v)
 	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		v := directoryaccount.DefaultPrimarySource
+		_c.mutation.SetPrimarySource(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if directoryaccount.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultID (forgotten import generated/runtime?)")
@@ -825,6 +919,9 @@ func (_c *DirectoryAccountCreate) check() error {
 	if _, ok := _c.mutation.ProfileHash(); !ok {
 		return &ValidationError{Name: "profile_hash", err: errors.New(`generated: missing required field "DirectoryAccount.profile_hash"`)}
 	}
+	if _, ok := _c.mutation.PrimarySource(); !ok {
+		return &ValidationError{Name: "primary_source", err: errors.New(`generated: missing required field "DirectoryAccount.primary_source"`)}
+	}
 	return nil
 }
 
@@ -892,6 +989,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(directoryaccount.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
+		_node.DirectoryInstanceID = &value
 	}
 	if value, ok := _c.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
@@ -961,6 +1062,22 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldLastLoginAt, field.TypeTime, value)
 		_node.LastLoginAt = &value
 	}
+	if value, ok := _c.mutation.FirstSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
+		_node.FirstSeenAt = &value
+	}
+	if value, ok := _c.mutation.LastSeenAt(); ok {
+		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
+		_node.LastSeenAt = &value
+	}
+	if value, ok := _c.mutation.AddedAt(); ok {
+		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)
+		_node.AddedAt = &value
+	}
+	if value, ok := _c.mutation.RemovedAt(); ok {
+		_spec.SetField(directoryaccount.FieldRemovedAt, field.TypeTime, value)
+		_node.RemovedAt = &value
+	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(directoryaccount.FieldObservedAt, field.TypeTime, value)
 		_node.ObservedAt = value
@@ -973,6 +1090,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldProfile, field.TypeJSON, value)
 		_node.Profile = value
 	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(directoryaccount.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
 	if value, ok := _c.mutation.RawProfileFileID(); ok {
 		_spec.SetField(directoryaccount.FieldRawProfileFileID, field.TypeString, value)
 		_node.RawProfileFileID = &value
@@ -980,6 +1101,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.SourceVersion(); ok {
 		_spec.SetField(directoryaccount.FieldSourceVersion, field.TypeString, value)
 		_node.SourceVersion = &value
+	}
+	if value, ok := _c.mutation.PrimarySource(); ok {
+		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
+		_node.PrimarySource = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

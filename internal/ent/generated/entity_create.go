@@ -24,12 +24,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 )
 
 // EntityCreate is the builder for creating a Entity entity.
@@ -755,14 +758,28 @@ func (_c *EntityCreate) SetNillableRiskScore(v *int) *EntityCreate {
 	return _c
 }
 
+// SetRiskScoreCoverage sets the "risk_score_coverage" field.
+func (_c *EntityCreate) SetRiskScoreCoverage(v int) *EntityCreate {
+	_c.mutation.SetRiskScoreCoverage(v)
+	return _c
+}
+
+// SetNillableRiskScoreCoverage sets the "risk_score_coverage" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableRiskScoreCoverage(v *int) *EntityCreate {
+	if v != nil {
+		_c.SetRiskScoreCoverage(*v)
+	}
+	return _c
+}
+
 // SetTier sets the "tier" field.
-func (_c *EntityCreate) SetTier(v string) *EntityCreate {
+func (_c *EntityCreate) SetTier(v enums.VendorTier) *EntityCreate {
 	_c.mutation.SetTier(v)
 	return _c
 }
 
 // SetNillableTier sets the "tier" field if the given value is not nil.
-func (_c *EntityCreate) SetNillableTier(v *string) *EntityCreate {
+func (_c *EntityCreate) SetNillableTier(v *enums.VendorTier) *EntityCreate {
 	if v != nil {
 		_c.SetTier(*v)
 	}
@@ -814,6 +831,48 @@ func (_c *EntityCreate) SetNillableContractRenewalAt(v *models.DateTime) *Entity
 // SetVendorMetadata sets the "vendor_metadata" field.
 func (_c *EntityCreate) SetVendorMetadata(v map[string]interface{}) *EntityCreate {
 	_c.mutation.SetVendorMetadata(v)
+	return _c
+}
+
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *EntityCreate) SetLogoFileID(v string) *EntityCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableLogoFileID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *EntityCreate) SetExternalID(v string) *EntityCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableExternalID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
+// SetObservedAt sets the "observed_at" field.
+func (_c *EntityCreate) SetObservedAt(v models.DateTime) *EntityCreate {
+	_c.mutation.SetObservedAt(v)
+	return _c
+}
+
+// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableObservedAt(v *models.DateTime) *EntityCreate {
+	if v != nil {
+		_c.SetObservedAt(*v)
+	}
 	return _c
 }
 
@@ -1046,6 +1105,21 @@ func (_c *EntityCreate) AddAssessmentResponses(v ...*AssessmentResponse) *Entity
 	return _c.AddAssessmentResponseIDs(ids...)
 }
 
+// AddVendorRiskScoreIDs adds the "vendor_risk_scores" edge to the VendorRiskScore entity by IDs.
+func (_c *EntityCreate) AddVendorRiskScoreIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddVendorRiskScoreIDs(ids...)
+	return _c
+}
+
+// AddVendorRiskScores adds the "vendor_risk_scores" edges to the VendorRiskScore entity.
+func (_c *EntityCreate) AddVendorRiskScores(v ...*VendorRiskScore) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorRiskScoreIDs(ids...)
+}
+
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_c *EntityCreate) AddIntegrationIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddIntegrationIDs(ids...)
@@ -1136,6 +1210,21 @@ func (_c *EntityCreate) AddControls(v ...*Control) *EntityCreate {
 	return _c.AddControlIDs(ids...)
 }
 
+// AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
+func (_c *EntityCreate) AddSubcontrolIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddSubcontrolIDs(ids...)
+	return _c
+}
+
+// AddSubcontrols adds the "subcontrols" edges to the Subcontrol entity.
+func (_c *EntityCreate) AddSubcontrols(v ...*Subcontrol) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubcontrolIDs(ids...)
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
 func (_c *EntityCreate) AddPlatformIDs(ids ...string) *EntityCreate {
 	_c.mutation.AddPlatformIDs(ids...)
@@ -1184,6 +1273,26 @@ func (_c *EntityCreate) AddSourcePlatforms(v ...*Platform) *EntityCreate {
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
 func (_c *EntityCreate) SetEntityType(v *EntityType) *EntityCreate {
 	return _c.SetEntityTypeID(v.ID)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_c *EntityCreate) SetLogoFile(v *File) *EntityCreate {
+	return _c.SetLogoFileID(v.ID)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_c *EntityCreate) AddInternalPolicyIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_c *EntityCreate) AddInternalPolicies(v ...*InternalPolicy) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
 }
 
 // Mutation returns the EntityMutation object of the builder.
@@ -1338,6 +1447,11 @@ func (_c *EntityCreate) check() error {
 	if v, ok := _c.mutation.Links(); ok {
 		if err := entity.LinksValidator(v); err != nil {
 			return &ValidationError{Name: "links", err: fmt.Errorf(`generated: validator failed for field "Entity.links": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Tier(); ok {
+		if err := entity.TierValidator(v); err != nil {
+			return &ValidationError{Name: "tier", err: fmt.Errorf(`generated: validator failed for field "Entity.tier": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1553,8 +1667,12 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_spec.SetField(entity.FieldRiskScore, field.TypeInt, value)
 		_node.RiskScore = value
 	}
+	if value, ok := _c.mutation.RiskScoreCoverage(); ok {
+		_spec.SetField(entity.FieldRiskScoreCoverage, field.TypeInt, value)
+		_node.RiskScoreCoverage = value
+	}
 	if value, ok := _c.mutation.Tier(); ok {
-		_spec.SetField(entity.FieldTier, field.TypeString, value)
+		_spec.SetField(entity.FieldTier, field.TypeEnum, value)
 		_node.Tier = value
 	}
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1572,6 +1690,14 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.ObservedAt(); ok {
+		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)
+		_node.ObservedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1940,6 +2066,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.VendorRiskScoresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.VendorRiskScoresTable,
+			Columns: []string{entity.VendorRiskScoresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2042,6 +2185,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.SubcontrolsTable,
+			Columns: entity.SubcontrolsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.SubcontrolEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2109,6 +2269,41 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.EntityTypeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.LogoFileTable,
+			Columns: []string{entity.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.LogoFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.InternalPoliciesTable,
+			Columns: entity.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicyEntities
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

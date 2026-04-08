@@ -66,6 +66,7 @@ modules:
     display_name: Trust Center
     lookup_key: trust_center_module
     description: Public Security Portal
+    include_with_trial: true
     marketing_description: Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders
     billing:
       prices:

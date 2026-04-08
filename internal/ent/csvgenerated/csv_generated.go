@@ -8,11 +8,19 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 )
@@ -31,8 +39,17 @@ type CSVLookupEntry struct {
 
 // CSVLookupRegistry maps (TargetEntity:MatchField) to lookup/create functions.
 var CSVLookupRegistry = map[string]CSVLookupEntry{
+	"ActionPlan:name": {
+		Lookup: LookupActionPlanByName,
+	},
+	"Asset:name": {
+		Lookup: LookupAssetByName,
+	},
 	"Control:ref_code": {
 		Lookup: LookupControlByRefCode,
+	},
+	"ControlObjective:name": {
+		Lookup: LookupControlObjectiveByName,
 	},
 	"Entity:name": {
 		Lookup: LookupEntityByName,
@@ -43,9 +60,24 @@ var CSVLookupRegistry = map[string]CSVLookupEntry{
 	"IdentityHolder:email": {
 		Lookup: LookupIdentityHolderByEmail,
 	},
+	"InternalPolicy:name": {
+		Lookup: LookupInternalPolicyByName,
+	},
 	"Platform:name": {
 		Lookup: LookupPlatformByName,
 		Create: CreatePlatformByName,
+	},
+	"Procedure:name": {
+		Lookup: LookupProcedureByName,
+	},
+	"Risk:name": {
+		Lookup: LookupRiskByName,
+	},
+	"Subcontrol:ref_code": {
+		Lookup: LookupSubcontrolByRefCode,
+	},
+	"SystemDetail:system_name": {
+		Lookup: LookupSystemDetailBySystemName,
 	},
 	"Template:name": {
 		Lookup: LookupTemplateByName,
@@ -65,6 +97,96 @@ func GetCSVLookupEntry(targetEntity, matchField string) (CSVLookupEntry, bool) {
 // normalizeCSVKey normalizes input values for lookup comparisons.
 func normalizeCSVKey(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
+}
+
+// LookupActionPlanByName resolves ActionPlan name values to IDs.
+func LookupActionPlanByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.ActionPlan, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, actionplan.NameEqualFold(v))
+	}
+	records, err := client.ActionPlan.Query().
+		Where(actionplan.OwnerID(orgID), actionplan.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple ActionPlan records; use ActionPlanID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupAssetByName resolves Asset name values to IDs.
+func LookupAssetByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Asset, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, asset.NameEqualFold(v))
+	}
+	records, err := client.Asset.Query().
+		Where(asset.OwnerID(orgID), asset.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Asset records; use AssetID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
 }
 
 // LookupControlByRefCode resolves Control ref_code values to IDs.
@@ -105,6 +227,51 @@ func LookupControlByRefCode(ctx context.Context, client *generated.Client, orgID
 		key := normalizeCSVKey(r.RefCode)
 		if existingID, exists := resolved[key]; exists && existingID != r.ID {
 			return nil, fmt.Errorf("ref_code '%s' matched multiple Control records; use ControlID directly or add additional columns to scope the lookup", r.RefCode)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupControlObjectiveByName resolves ControlObjective name values to IDs.
+func LookupControlObjectiveByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.ControlObjective, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, controlobjective.NameEqualFold(v))
+	}
+	records, err := client.ControlObjective.Query().
+		Where(controlobjective.OwnerID(orgID), controlobjective.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple ControlObjective records; use ControlObjectiveID directly or add additional columns to scope the lookup", r.Name)
 		}
 		resolved[key] = r.ID
 	}
@@ -247,6 +414,51 @@ func LookupIdentityHolderByEmail(ctx context.Context, client *generated.Client, 
 	return resolved, nil
 }
 
+// LookupInternalPolicyByName resolves InternalPolicy name values to IDs.
+func LookupInternalPolicyByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.InternalPolicy, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, internalpolicy.NameEqualFold(v))
+	}
+	records, err := client.InternalPolicy.Query().
+		Where(internalpolicy.OwnerID(orgID), internalpolicy.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple InternalPolicy records; use InternalPolicyID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
 // LookupPlatformByName resolves Platform name values to IDs.
 func LookupPlatformByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
 	if len(values) == 0 {
@@ -329,6 +541,186 @@ func CreatePlatformByName(ctx context.Context, client *generated.Client, orgID s
 	resolved := make(map[string]string, len(created))
 	for _, r := range created {
 		key := normalizeCSVKey(r.Name)
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupProcedureByName resolves Procedure name values to IDs.
+func LookupProcedureByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Procedure, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, procedure.NameEqualFold(v))
+	}
+	records, err := client.Procedure.Query().
+		Where(procedure.OwnerID(orgID), procedure.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Procedure records; use ProcedureID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupRiskByName resolves Risk name values to IDs.
+func LookupRiskByName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Risk, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, risk.NameEqualFold(v))
+	}
+	records, err := client.Risk.Query().
+		Where(risk.OwnerID(orgID), risk.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.Name)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("name '%s' matched multiple Risk records; use RiskID directly or add additional columns to scope the lookup", r.Name)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupSubcontrolByRefCode resolves Subcontrol ref_code values to IDs.
+func LookupSubcontrolByRefCode(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.Subcontrol, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, subcontrol.RefCodeEqualFold(v))
+	}
+	records, err := client.Subcontrol.Query().
+		Where(subcontrol.OwnerID(orgID), subcontrol.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.RefCode)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("ref_code '%s' matched multiple Subcontrol records; use SubcontrolID directly or add additional columns to scope the lookup", r.RefCode)
+		}
+		resolved[key] = r.ID
+	}
+
+	return resolved, nil
+}
+
+// LookupSystemDetailBySystemName resolves SystemDetail system_name values to IDs.
+func LookupSystemDetailBySystemName(ctx context.Context, client *generated.Client, orgID string, values []string) (map[string]string, error) {
+	if len(values) == 0 {
+		return nil, nil
+	}
+
+	unique := make(map[string]string)
+	for _, v := range values {
+		v = strings.TrimSpace(v)
+		if v == "" {
+			continue
+		}
+		key := normalizeCSVKey(v)
+		if _, exists := unique[key]; !exists {
+			unique[key] = v
+		}
+	}
+
+	if len(unique) == 0 {
+		return nil, nil
+	}
+
+	predicates := make([]predicate.SystemDetail, 0, len(unique))
+	for _, v := range unique {
+		predicates = append(predicates, systemdetail.SystemNameEqualFold(v))
+	}
+	records, err := client.SystemDetail.Query().
+		Where(systemdetail.OwnerID(orgID), systemdetail.Or(predicates...)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	resolved := make(map[string]string, len(records))
+	for _, r := range records {
+		key := normalizeCSVKey(r.SystemName)
+		if existingID, exists := resolved[key]; exists && existingID != r.ID {
+			return nil, fmt.Errorf("system_name '%s' matched multiple SystemDetail records; use SystemDetailID directly or add additional columns to scope the lookup", r.SystemName)
+		}
 		resolved[key] = r.ID
 	}
 
@@ -615,11 +1007,27 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Control",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "ActionPlanNames",
+				TargetField:     "ActionPlanIDs",
+				TargetEntity:    "ActionPlan",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ControlDelegateGroupName",
 				TargetField:     "DelegateID",
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ControlObjectiveNames",
+				TargetField:     "ControlObjectiveIDs",
+				TargetEntity:    "ControlObjective",
+				MatchField:      "name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -631,11 +1039,35 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "PolicyNames",
+				TargetField:     "InternalPolicyIDs",
+				TargetEntity:    "InternalPolicy",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ProcedureNames",
+				TargetField:     "ProcedureIDs",
+				TargetEntity:    "Procedure",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ResponsiblePartyEntityName",
 				TargetField:     "ResponsiblePartyID",
 				TargetEntity:    "Entity",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "RiskNames",
+				TargetField:     "RiskIDs",
+				TargetEntity:    "Risk",
+				MatchField:      "name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 		},
@@ -1000,6 +1432,22 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "OutOfScopeAssetNames",
+				TargetField:     "OutOfScopeAssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "OutOfScopeVendorNames",
+				TargetField:     "OutOfScopeVendorIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "PlatformOwnerEmail",
 				TargetField:     "PlatformOwnerID",
 				TargetEntity:    "User",
@@ -1021,6 +1469,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "User",
 				MatchField:      "email",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SourceAssetNames",
+				TargetField:     "SourceAssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SourceEntityNames",
+				TargetField:     "SourceEntityIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SystemDetailNames",
+				TargetField:     "SystemDetailIDs",
+				TargetEntity:    "SystemDetail",
+				MatchField:      "system_name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -1099,6 +1571,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         true,
 				CreateIfMissing: false,
 			},
+			{
+				SourceColumn:    "SubcontrolRefCodes",
+				TargetField:     "SubcontrolIDs",
+				TargetEntity:    "Subcontrol",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
 		},
 	},
 	"Review": {
@@ -1118,10 +1598,42 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Risk",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "ActionPlanNames",
+				TargetField:     "ActionPlanIDs",
+				TargetEntity:    "ActionPlan",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "AssetNames",
+				TargetField:     "AssetIDs",
+				TargetEntity:    "Asset",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ControlRefCodes",
 				TargetField:     "ControlIDs",
 				TargetEntity:    "Control",
 				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "EntityNames",
+				TargetField:     "EntityIDs",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "PlatformNames",
+				TargetField:     "PlatformIDs",
+				TargetEntity:    "Platform",
+				MatchField:      "name",
 				IsSlice:         true,
 				CreateIfMissing: false,
 			},
@@ -1139,6 +1651,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "SubcontrolRefCodes",
+				TargetField:     "SubcontrolIDs",
+				TargetEntity:    "Subcontrol",
+				MatchField:      "ref_code",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 		},
@@ -1236,11 +1756,27 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Subcontrol",
 		Rules: []CSVReferenceRule{
 			{
+				SourceColumn:    "ActionPlanNames",
+				TargetField:     "ActionPlanIDs",
+				TargetEntity:    "ActionPlan",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ControlDelegateGroupName",
 				TargetField:     "DelegateID",
 				TargetEntity:    "Group",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ControlObjectiveNames",
+				TargetField:     "ControlObjectiveIDs",
+				TargetEntity:    "ControlObjective",
+				MatchField:      "name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 			{
@@ -1252,11 +1788,35 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "PolicyNames",
+				TargetField:     "InternalPolicyIDs",
+				TargetEntity:    "InternalPolicy",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "ProcedureNames",
+				TargetField:     "ProcedureIDs",
+				TargetEntity:    "Procedure",
+				MatchField:      "name",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ResponsiblePartyEntityName",
 				TargetField:     "ResponsiblePartyID",
 				TargetEntity:    "Entity",
 				MatchField:      "name",
 				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "RiskNames",
+				TargetField:     "RiskIDs",
+				TargetEntity:    "Risk",
+				MatchField:      "name",
+				IsSlice:         true,
 				CreateIfMissing: false,
 			},
 		},
@@ -1372,6 +1932,24 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 	},
 	"UserSetting": {
 		SchemaName: "UserSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
+	"VendorRiskScore": {
+		SchemaName: "VendorRiskScore",
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "VendorRiskScoreEntityName",
+				TargetField:     "EntityID",
+				TargetEntity:    "Entity",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+		},
+	},
+	"VendorScoringConfig": {
+		SchemaName: "VendorScoringConfig",
 		Rules: []CSVReferenceRule{
 		},
 	},
@@ -1576,9 +2154,14 @@ func (ContactCSVUpdateInput) CSVInputWrapper() {}
 // ControlCSVInput wraps CreateControlInput with CSV reference columns.
 type ControlCSVInput struct {
 	Input generated.CreateControlInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
 	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlObjectiveNames []string `csv:"ControlObjectiveNames"`
 	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	PolicyNames []string `csv:"PolicyNames"`
+	ProcedureNames []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+	RiskNames []string `csv:"RiskNames"`
 }
 
 // CSVInputWrapper marks ControlCSVInput for CSV header preprocessing.
@@ -1589,9 +2172,14 @@ type ControlCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateControlInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
 	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlObjectiveNames []string `csv:"ControlObjectiveNames"`
 	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	PolicyNames []string `csv:"PolicyNames"`
+	ProcedureNames []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+	RiskNames []string `csv:"RiskNames"`
 }
 
 // CSVInputWrapper marks ControlCSVUpdateInput for CSV header preprocessing.
@@ -2412,9 +3000,14 @@ type PlatformCSVInput struct {
 	BusinessOwnerUserEmail string `csv:"BusinessOwnerUserEmail"`
 	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
 	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+	OutOfScopeAssetNames []string `csv:"OutOfScopeAssetNames"`
+	OutOfScopeVendorNames []string `csv:"OutOfScopeVendorNames"`
 	PlatformOwnerEmail string `csv:"PlatformOwnerEmail"`
 	SecurityOwnerGroupName string `csv:"SecurityOwnerGroupName"`
 	SecurityOwnerUserEmail string `csv:"SecurityOwnerUserEmail"`
+	SourceAssetNames []string `csv:"SourceAssetNames"`
+	SourceEntityNames []string `csv:"SourceEntityNames"`
+	SystemDetailNames []string `csv:"SystemDetailNames"`
 	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
 	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
 }
@@ -2431,9 +3024,14 @@ type PlatformCSVUpdateInput struct {
 	BusinessOwnerUserEmail string `csv:"BusinessOwnerUserEmail"`
 	InternalOwnerGroupName string `csv:"InternalOwnerGroupName"`
 	InternalOwnerUserEmail string `csv:"InternalOwnerUserEmail"`
+	OutOfScopeAssetNames []string `csv:"OutOfScopeAssetNames"`
+	OutOfScopeVendorNames []string `csv:"OutOfScopeVendorNames"`
 	PlatformOwnerEmail string `csv:"PlatformOwnerEmail"`
 	SecurityOwnerGroupName string `csv:"SecurityOwnerGroupName"`
 	SecurityOwnerUserEmail string `csv:"SecurityOwnerUserEmail"`
+	SourceAssetNames []string `csv:"SourceAssetNames"`
+	SourceEntityNames []string `csv:"SourceEntityNames"`
+	SystemDetailNames []string `csv:"SystemDetailNames"`
 	TechnicalOwnerGroupName string `csv:"TechnicalOwnerGroupName"`
 	TechnicalOwnerUserEmail string `csv:"TechnicalOwnerUserEmail"`
 }
@@ -2507,6 +3105,7 @@ func (ProgramMembershipCSVUpdateInput) CSVInputWrapper() {}
 type RemediationCSVInput struct {
 	Input generated.CreateRemediationInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVInput for CSV header preprocessing.
@@ -2518,6 +3117,7 @@ type RemediationCSVUpdateInput struct {
 	ID string `csv:"ID"`
 	Input generated.UpdateRemediationInput
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.
@@ -2546,9 +3146,14 @@ func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
 	Input generated.CreateRiskInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
+	AssetNames []string `csv:"AssetNames"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	EntityNames []string `csv:"EntityNames"`
+	PlatformNames []string `csv:"PlatformNames"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
@@ -2559,9 +3164,14 @@ type RiskCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateRiskInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
+	AssetNames []string `csv:"AssetNames"`
 	ControlRefCodes []string `csv:"ControlRefCodes"`
+	EntityNames []string `csv:"EntityNames"`
+	PlatformNames []string `csv:"PlatformNames"`
 	RiskDelegateGroupName string `csv:"RiskDelegateGroupName"`
 	StakeholderGroupName string `csv:"StakeholderGroupName"`
+	SubcontrolRefCodes []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.
@@ -2676,9 +3286,14 @@ func (StandardCSVUpdateInput) CSVInputWrapper() {}
 // SubcontrolCSVInput wraps CreateSubcontrolInput with CSV reference columns.
 type SubcontrolCSVInput struct {
 	Input generated.CreateSubcontrolInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
 	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlObjectiveNames []string `csv:"ControlObjectiveNames"`
 	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	PolicyNames []string `csv:"PolicyNames"`
+	ProcedureNames []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+	RiskNames []string `csv:"RiskNames"`
 }
 
 // CSVInputWrapper marks SubcontrolCSVInput for CSV header preprocessing.
@@ -2689,9 +3304,14 @@ type SubcontrolCSVUpdateInput struct {
 	// ID is the entity ID to update
 	ID string `csv:"ID"`
 	Input generated.UpdateSubcontrolInput
+	ActionPlanNames []string `csv:"ActionPlanNames"`
 	ControlDelegateGroupName string `csv:"ControlDelegateGroupName"`
+	ControlObjectiveNames []string `csv:"ControlObjectiveNames"`
 	ControlOwnerGroupName string `csv:"ControlOwnerGroupName"`
+	PolicyNames []string `csv:"PolicyNames"`
+	ProcedureNames []string `csv:"ProcedureNames"`
 	ResponsiblePartyEntityName string `csv:"ResponsiblePartyEntityName"`
+	RiskNames []string `csv:"RiskNames"`
 }
 
 // CSVInputWrapper marks SubcontrolCSVUpdateInput for CSV header preprocessing.
@@ -3026,6 +3646,44 @@ type UserSettingCSVUpdateInput struct {
 
 // CSVInputWrapper marks UserSettingCSVUpdateInput for CSV header preprocessing.
 func (UserSettingCSVUpdateInput) CSVInputWrapper() {}
+
+// VendorRiskScoreCSVInput wraps CreateVendorRiskScoreInput with CSV reference columns.
+type VendorRiskScoreCSVInput struct {
+	Input generated.CreateVendorRiskScoreInput
+	VendorRiskScoreEntityName string `csv:"VendorRiskScoreEntityName"`
+}
+
+// CSVInputWrapper marks VendorRiskScoreCSVInput for CSV header preprocessing.
+func (VendorRiskScoreCSVInput) CSVInputWrapper() {}
+
+// VendorRiskScoreCSVUpdateInput wraps UpdateVendorRiskScoreInput with CSV reference columns for bulk updates.
+type VendorRiskScoreCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateVendorRiskScoreInput
+	VendorRiskScoreEntityName string `csv:"VendorRiskScoreEntityName"`
+}
+
+// CSVInputWrapper marks VendorRiskScoreCSVUpdateInput for CSV header preprocessing.
+func (VendorRiskScoreCSVUpdateInput) CSVInputWrapper() {}
+
+// VendorScoringConfigCSVInput wraps CreateVendorScoringConfigInput with CSV reference columns.
+type VendorScoringConfigCSVInput struct {
+	Input generated.CreateVendorScoringConfigInput
+}
+
+// CSVInputWrapper marks VendorScoringConfigCSVInput for CSV header preprocessing.
+func (VendorScoringConfigCSVInput) CSVInputWrapper() {}
+
+// VendorScoringConfigCSVUpdateInput wraps UpdateVendorScoringConfigInput with CSV reference columns for bulk updates.
+type VendorScoringConfigCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateVendorScoringConfigInput
+}
+
+// CSVInputWrapper marks VendorScoringConfigCSVUpdateInput for CSV header preprocessing.
+func (VendorScoringConfigCSVUpdateInput) CSVInputWrapper() {}
 
 // VulnerabilityCSVInput wraps CreateVulnerabilityInput with CSV reference columns.
 type VulnerabilityCSVInput struct {

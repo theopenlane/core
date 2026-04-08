@@ -22,6 +22,7 @@ mutation CreateBulkCSVPlatform($input: Upload!) {
       environmentName
       estimatedMonthlyCost
       externalReferenceID
+      externalUUID
       id
       internalOwner
       internalOwnerGroupID
@@ -84,6 +85,7 @@ mutation CreateBulkPlatform($input: [CreatePlatformInput!]) {
       environmentName
       estimatedMonthlyCost
       externalReferenceID
+      externalUUID
       id
       internalOwner
       internalOwnerGroupID
@@ -118,12 +120,47 @@ mutation CreateBulkPlatform($input: [CreatePlatformInput!]) {
       updatedAt
       updatedBy
       workflowEligibleMarker
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
     }
   }
 }
 
-mutation CreatePlatform($input: CreatePlatformInput!) {
-  createPlatform(input: $input) {
+mutation CreatePlatform($input: CreatePlatformInput!, $architectureDiagrams: [Upload!], $dataFlowDiagrams: [Upload!], $trustBoundaryDiagrams: [Upload!]) {
+  createPlatform(
+    input: $input
+    architectureDiagrams: $architectureDiagrams
+    dataFlowDiagrams: $dataFlowDiagrams
+    trustBoundaryDiagrams: $trustBoundaryDiagrams
+  ) {
     platform {
       accessModelID
       accessModelName
@@ -146,6 +183,7 @@ mutation CreatePlatform($input: CreatePlatformInput!) {
       environmentName
       estimatedMonthlyCost
       externalReferenceID
+      externalUUID
       id
       internalOwner
       internalOwnerGroupID
@@ -180,6 +218,68 @@ mutation CreatePlatform($input: CreatePlatformInput!) {
       updatedAt
       updatedBy
       workflowEligibleMarker
+      sourceAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceEntities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeVendors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
     }
   }
 }
@@ -228,6 +328,7 @@ query GetAllPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         environmentName
         estimatedMonthlyCost
         externalReferenceID
+        externalUUID
         id
         internalOwner
         internalOwnerGroupID
@@ -300,6 +401,7 @@ query GetPlatformByID($platformId: ID!) {
     environmentName
     estimatedMonthlyCost
     externalReferenceID
+    externalUUID
     id
     internalOwner
     internalOwnerGroupID
@@ -376,6 +478,7 @@ query GetPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
         environmentName
         estimatedMonthlyCost
         externalReferenceID
+        externalUUID
         id
         internalOwner
         internalOwnerGroupID
@@ -415,8 +518,14 @@ query GetPlatforms($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
   }
 }
 
-mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!) {
-  updatePlatform(id: $updatePlatformId, input: $input) {
+mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!, $architectureDiagrams: [Upload!], $dataFlowDiagrams: [Upload!], $trustBoundaryDiagrams: [Upload!]) {
+  updatePlatform(
+    id: $updatePlatformId
+    input: $input
+    architectureDiagrams: $architectureDiagrams
+    dataFlowDiagrams: $dataFlowDiagrams
+    trustBoundaryDiagrams: $trustBoundaryDiagrams
+  ) {
     platform {
       accessModelID
       accessModelName
@@ -439,6 +548,7 @@ mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!) {
       environmentName
       estimatedMonthlyCost
       externalReferenceID
+      externalUUID
       id
       internalOwner
       internalOwnerGroupID
@@ -473,6 +583,84 @@ mutation UpdatePlatform($updatePlatformId: ID!, $input: UpdatePlatformInput!) {
       updatedAt
       updatedBy
       workflowEligibleMarker
+      assets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      entities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      sourceEntities {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeAssets {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      outOfScopeVendors {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+      architectureDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      dataFlowDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
+      trustBoundaryDiagrams {
+        edges {
+          node {
+            id
+            categoryType
+            base64
+            providedFileName
+          }
+        }
+      }
     }
   }
 }

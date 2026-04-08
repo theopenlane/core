@@ -180,6 +180,20 @@ func (_c *DirectorySyncRunCreate) SetNillablePlatformID(v *string) *DirectorySyn
 	return _c
 }
 
+// SetDirectoryInstanceID sets the "directory_instance_id" field.
+func (_c *DirectorySyncRunCreate) SetDirectoryInstanceID(v string) *DirectorySyncRunCreate {
+	_c.mutation.SetDirectoryInstanceID(v)
+	return _c
+}
+
+// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
+func (_c *DirectorySyncRunCreate) SetNillableDirectoryInstanceID(v *string) *DirectorySyncRunCreate {
+	if v != nil {
+		_c.SetDirectoryInstanceID(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *DirectorySyncRunCreate) SetStatus(v enums.DirectorySyncRunStatus) *DirectorySyncRunCreate {
 	_c.mutation.SetStatus(v)
@@ -573,6 +587,10 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(directorysyncrun.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
+		_spec.SetField(directorysyncrun.FieldDirectoryInstanceID, field.TypeString, value)
+		_node.DirectoryInstanceID = &value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(directorysyncrun.FieldStatus, field.TypeEnum, value)

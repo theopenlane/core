@@ -90,11 +90,8 @@ type Review struct {
 	RawPayload map[string]interface{} `json:"raw_payload,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ReviewQuery when eager-loading is set.
-	Edges                 ReviewEdges `json:"edges"`
-	finding_reviews       *string
-	remediation_reviews   *string
-	vulnerability_reviews *string
-	selectValues          sql.SelectValues
+	Edges        ReviewEdges `json:"edges"`
+	selectValues sql.SelectValues
 }
 
 // ReviewEdges holds the relations/edges for other nodes in the graph.
@@ -141,29 +138,32 @@ type ReviewEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// supporting files or evidence for the review
 	Files []*File `json:"files,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
-	namedBlockedGroups   map[string][]*Group
-	namedEditors         map[string][]*Group
-	namedViewers         map[string][]*Group
-	namedIntegrations    map[string][]*Integration
-	namedFindings        map[string][]*Finding
-	namedVulnerabilities map[string][]*Vulnerability
-	namedActionPlans     map[string][]*ActionPlan
-	namedRemediations    map[string][]*Remediation
-	namedControls        map[string][]*Control
-	namedSubcontrols     map[string][]*Subcontrol
-	namedRisks           map[string][]*Risk
-	namedPrograms        map[string][]*Program
-	namedAssets          map[string][]*Asset
-	namedEntities        map[string][]*Entity
-	namedTasks           map[string][]*Task
-	namedComments        map[string][]*Note
-	namedFiles           map[string][]*File
+	namedBlockedGroups    map[string][]*Group
+	namedEditors          map[string][]*Group
+	namedViewers          map[string][]*Group
+	namedIntegrations     map[string][]*Integration
+	namedFindings         map[string][]*Finding
+	namedVulnerabilities  map[string][]*Vulnerability
+	namedActionPlans      map[string][]*ActionPlan
+	namedRemediations     map[string][]*Remediation
+	namedControls         map[string][]*Control
+	namedSubcontrols      map[string][]*Subcontrol
+	namedRisks            map[string][]*Risk
+	namedPrograms         map[string][]*Program
+	namedAssets           map[string][]*Asset
+	namedEntities         map[string][]*Entity
+	namedTasks            map[string][]*Task
+	namedComments         map[string][]*Note
+	namedFiles            map[string][]*File
+	namedInternalPolicies map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -363,6 +363,15 @@ func (e ReviewEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e ReviewEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[21] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Review) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -378,12 +387,6 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case review.ForeignKeys[0]: // finding_reviews
-			values[i] = new(sql.NullString)
-		case review.ForeignKeys[1]: // remediation_reviews
-			values[i] = new(sql.NullString)
-		case review.ForeignKeys[2]: // vulnerability_reviews
-			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -614,27 +617,6 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field raw_payload: %w", err)
 				}
 			}
-		case review.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_reviews", values[i])
-			} else if value.Valid {
-				_m.finding_reviews = new(string)
-				*_m.finding_reviews = value.String
-			}
-		case review.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field remediation_reviews", values[i])
-			} else if value.Valid {
-				_m.remediation_reviews = new(string)
-				*_m.remediation_reviews = value.String
-			}
-		case review.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_reviews", values[i])
-			} else if value.Valid {
-				_m.vulnerability_reviews = new(string)
-				*_m.vulnerability_reviews = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -751,6 +733,11 @@ func (_m *Review) QueryComments() *NoteQuery {
 // QueryFiles queries the "files" edge of the Review entity.
 func (_m *Review) QueryFiles() *FileQuery {
 	return NewReviewClient(_m.config).QueryFiles(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the Review entity.
+func (_m *Review) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewReviewClient(_m.config).QueryInternalPolicies(_m)
 }
 
 // Update returns a builder for updating this Review.
@@ -1293,6 +1280,30 @@ func (_m *Review) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Review) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Review) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
 	}
 }
 
