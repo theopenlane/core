@@ -1,5 +1,5 @@
-mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!) {
-	createTrustCenterSetting(input: $input) {
+mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput) {
+	createTrustCenterSetting(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata, faviconFile: $faviconFile, faviconFileMetadata: $faviconFileMetadata) {
 		trustCenterSetting {
 			accentColor
 			backgroundColor
@@ -31,6 +31,15 @@ mutation CreateTrustCenterSetting ($input: CreateTrustCenterSettingInput!) {
 			updatedAt
 			updatedBy
 			logoFile {
+				id
+				name
+				metadata
+				presignedURL
+			}
+			faviconFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			heroImageFile {
@@ -174,8 +183,8 @@ query GetTrustCenterSettings ($first: Int, $last: Int, $where: TrustCenterSettin
 		}
 	}
 }
-mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload, $heroImageFile: Upload) {
-	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile, heroImageFile: $heroImageFile) {
+mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput, $faviconFile: Upload, $faviconFileMetadata: FileMetadataInput, $heroImageFile: Upload, $heroImageFileMetadata: FileMetadataInput) {
+	updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata, faviconFile: $faviconFile, faviconFileMetadata: $faviconFileMetadata, heroImageFile: $heroImageFile, heroImageFileMetadata: $heroImageFileMetadata) {
 		trustCenterSetting {
 			createdAt
 			createdBy
@@ -187,11 +196,17 @@ mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: Upd
 			updatedAt
 			updatedBy
 			logoFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			logoRemoteURL
 			logoLocalFileID
 			faviconFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			faviconRemoteURL

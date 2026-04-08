@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
@@ -114,6 +115,7 @@ func (Export) Modules() []models.OrgModule {
 // Annotations of the Export
 func (e Export) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaExport),
 		history.Annotations{
 			Exclude: true,
 		},

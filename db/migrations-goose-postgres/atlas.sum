@@ -1,4 +1,4 @@
-h1:naXeXzbYVaesdBDbBF5ZKaK2td5J9ZQUeUi7uno/Sc0=
+h1:LFcM3lOL1F6GN6unv+e6FtlV0TqetnLOiJaW3JLLjng=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -102,3 +102,5 @@ h1:naXeXzbYVaesdBDbBF5ZKaK2td5J9ZQUeUi7uno/Sc0=
 20260407225000_vulnfieldupdates_history.sql h1:/O7u/7iOHrRnrE4jPQcJ65HIt3mrcT0yYtZHo+NPnDI=
 20260408044535_risk_fields.sql h1:n9clyMuYmhF3bZdSetseLALyt7Fx5vE1dDfx8UelMpY=
 20260408044538_risk_fields_history.sql h1:ncd06MV03ae12UQ362vQ/uRvBrv00/q3YdhlumzW3k0=
+20260408153850_file_category_and_name.sql h1:rMQImG8jSUSBxu/p/GkhWqrw2HxLZ297HVY6WeGUUkM=
+20260408153858_file_category_and_name_history.sql h1:wfcszYW2Ud6UybiSLxwYfxm6DvFeOg/2f+ThhZNSro4=

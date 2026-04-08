@@ -173,6 +173,7 @@ func (InternalPolicy) Modules() []models.OrgModule {
 // Annotations of the InternalPolicy
 func (i InternalPolicy) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaInternalPolicy),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

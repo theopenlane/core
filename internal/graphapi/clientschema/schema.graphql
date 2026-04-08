@@ -44227,7 +44227,7 @@ type Mutation {
 		values of the evidence
 		"""
 		input: CreateEvidenceInput!
-	evidenceFiles: [Upload!]): EvidenceCreatePayload!
+	evidenceFiles: [Upload!], evidenceFilesMetadata: [FileMetadataInput!]): EvidenceCreatePayload!
 	"""
 	Create multiple new evidence
 	"""
@@ -44273,7 +44273,7 @@ type Mutation {
 		New values for the evidence
 		"""
 		input: UpdateEvidenceInput!
-	evidenceFiles: [Upload!]): EvidenceUpdatePayload!
+	evidenceFiles: [Upload!], evidenceFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
 	"""
 	Delete an existing evidence
 	"""
@@ -44328,7 +44328,7 @@ type Mutation {
 		Files to attach to the export
 		"""
 		exportFiles: [Upload!]
-	): ExportUpdatePayload!
+	exportFilesMetadata: [FileMetadataInput!]): ExportUpdatePayload!
 	"""
 	Delete an existing export
 	"""
@@ -44864,7 +44864,7 @@ type Mutation {
 		values of the identityHolder
 		"""
 		input: CreateIdentityHolderInput!
-	identityHolderFiles: [Upload!]): IdentityHolderCreatePayload!
+	identityHolderFiles: [Upload!], identityHolderFilesMetadata: [FileMetadataInput!]): IdentityHolderCreatePayload!
 	"""
 	Create multiple new identityHolders
 	"""
@@ -44896,7 +44896,7 @@ type Mutation {
 		New values for the identityHolder
 		"""
 		input: UpdateIdentityHolderInput!
-	identityHolderFiles: [Upload!]): IdentityHolderUpdatePayload!
+	identityHolderFiles: [Upload!], identityHolderFilesMetadata: [FileMetadataInput!]): IdentityHolderUpdatePayload!
 	"""
 	Delete an existing identityHolder
 	"""
@@ -45143,7 +45143,7 @@ type Mutation {
 		files to upload as jobResult attachments
 		"""
 		jobResultFiles: [Upload!]
-	): JobResultCreatePayload!
+	jobResultFilesMetadata: [FileMetadataInput!]): JobResultCreatePayload!
 	"""
 	Update an existing jobResult
 	"""
@@ -45162,7 +45162,7 @@ type Mutation {
 		files to upload as jobResult attachments
 		"""
 		jobResultFiles: [Upload!]
-	): JobResultUpdatePayload!
+	jobResultFilesMetadata: [FileMetadataInput!]): JobResultUpdatePayload!
 	"""
 	Delete an existing jobResult
 	"""
@@ -45586,7 +45586,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): TaskUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TaskUpdatePayload!
 	"""
 	Update an existing control comment
 	"""
@@ -45605,7 +45605,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): ControlUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): ControlUpdatePayload!
 	"""
 	Update an existing subcontrol comment
 	"""
@@ -45624,7 +45624,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): SubcontrolUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): SubcontrolUpdatePayload!
 	"""
 	Update an existing procedure comment
 	"""
@@ -45643,7 +45643,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): ProcedureUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): ProcedureUpdatePayload!
 	"""
 	Update an existing risk comment
 	"""
@@ -45662,7 +45662,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): RiskUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): RiskUpdatePayload!
 	"""
 	Update an existing internal policy comment
 	"""
@@ -45681,7 +45681,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): InternalPolicyUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): InternalPolicyUpdatePayload!
 	"""
 	Update an existing trust center FAQ comment
 	"""
@@ -45700,7 +45700,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): TrustCenterFAQUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TrustCenterFAQUpdatePayload!
 	"""
 	Update an existing trust center post
 	"""
@@ -45719,7 +45719,7 @@ type Mutation {
 		Files to attach to the post
 		"""
 		noteFiles: [Upload!]
-	): TrustCenterUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TrustCenterUpdatePayload!
 	"""
 	Update an existing evidence comment
 	"""
@@ -45738,7 +45738,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): EvidenceUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
 	"""
 	Delete an existing note
 	"""
@@ -46222,7 +46222,7 @@ type Mutation {
 		values of the platform
 		"""
 		input: CreatePlatformInput!
-	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformCreatePayload!
+	architectureDiagrams: [Upload!], architectureDiagramsMetadata: [FileMetadataInput!], dataFlowDiagrams: [Upload!], dataFlowDiagramsMetadata: [FileMetadataInput!], trustBoundaryDiagrams: [Upload!], trustBoundaryDiagramsMetadata: [FileMetadataInput!]): PlatformCreatePayload!
 	"""
 	Create multiple new platforms
 	"""
@@ -46254,7 +46254,7 @@ type Mutation {
 		New values for the platform
 		"""
 		input: UpdatePlatformInput!
-	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformUpdatePayload!
+	architectureDiagrams: [Upload!], architectureDiagramsMetadata: [FileMetadataInput!], dataFlowDiagrams: [Upload!], dataFlowDiagramsMetadata: [FileMetadataInput!], trustBoundaryDiagrams: [Upload!], trustBoundaryDiagramsMetadata: [FileMetadataInput!]): PlatformUpdatePayload!
 	"""
 	Delete an existing platform
 	"""
@@ -46651,7 +46651,7 @@ type Mutation {
 		Files to attach to the review
 		"""
 		reviewFiles: [Upload!]
-	): ReviewCreatePayload!
+	reviewFilesMetadata: [FileMetadataInput!]): ReviewCreatePayload!
 	"""
 	Create multiple new reviews
 	"""
@@ -46697,7 +46697,7 @@ type Mutation {
 		Files to attach to the review
 		"""
 		reviewFiles: [Upload!]
-	): ReviewUpdatePayload!
+	reviewFilesMetadata: [FileMetadataInput!]): ReviewUpdatePayload!
 	"""
 	Delete an existing review
 	"""
@@ -47583,7 +47583,7 @@ type Mutation {
 		values of the template
 		"""
 		input: CreateTemplateInput!
-	templateFiles: [Upload!]): TemplateCreatePayload!
+	templateFiles: [Upload!], templateFilesMetadata: [FileMetadataInput!]): TemplateCreatePayload!
 	"""
 	Create multiple new templates
 	"""
@@ -47615,7 +47615,7 @@ type Mutation {
 		New values for the template
 		"""
 		input: UpdateTemplateInput!
-	templateFiles: [Upload!]): TemplateUpdatePayload!
+	templateFiles: [Upload!], templateFilesMetadata: [FileMetadataInput!]): TemplateUpdatePayload!
 	"""
 	Delete an existing template
 	"""
@@ -48035,7 +48035,7 @@ type Mutation {
 		NDA file
 		"""
 		templateFiles: [Upload!]
-	): TrustCenterNDACreatePayload!
+	templateFilesMetadata: [FileMetadataInput!]): TrustCenterNDACreatePayload!
 	updateTrustCenterNDA(
 		"""
 		ID of the trust center
@@ -48046,7 +48046,7 @@ type Mutation {
 		NDA file
 		"""
 		templateFiles: [Upload!]
-	): TrustCenterNDAUpdatePayload!
+	templateFilesMetadata: [FileMetadataInput!]): TrustCenterNDAUpdatePayload!
 	"""
 	Submit a response to a Trust Center NDA
 	"""

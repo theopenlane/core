@@ -11,6 +11,7 @@ extend type Mutation{
         NDA file
         """
         templateFiles: [Upload!]
+        templateFilesMetadata: [FileMetadataInput!]
     ): TrustCenterNDACreatePayload!
 
     updateTrustCenterNDA(
@@ -22,6 +23,7 @@ extend type Mutation{
         NDA file
         """
         templateFiles: [Upload!]
+        templateFilesMetadata: [FileMetadataInput!]
     ): TrustCenterNDAUpdatePayload!
 
     """

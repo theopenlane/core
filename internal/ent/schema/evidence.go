@@ -236,11 +236,11 @@ func (Evidence) Modules() []models.OrgModule {
 // Annotations of the Evidence
 func (e Evidence) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaEvidence),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
-		entx.FileCategory("evidence"),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(
 				oscalgen.OSCALModelComponentDefinition,

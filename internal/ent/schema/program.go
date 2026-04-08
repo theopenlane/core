@@ -261,6 +261,7 @@ func (p Program) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FileCategory(SchemaProgram),
 		entfga.SelfAccessChecks(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(

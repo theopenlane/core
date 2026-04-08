@@ -288,6 +288,7 @@ func (IdentityHolder) Modules() []models.OrgModule {
 // Annotations of the IdentityHolder
 func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaIdentityHolder),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

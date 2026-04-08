@@ -192,16 +192,16 @@ type MutationResolver interface {
 	DeleteBulkEvent(ctx context.Context, ids []string) (*model.EventBulkDeletePayload, error)
 	UpdateBulkEvent(ctx context.Context, ids []string, input generated.UpdateEventInput) (*model.EventBulkUpdatePayload, error)
 	UpdateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkUpdatePayload, error)
-	CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error)
+	CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) (*model.EvidenceCreatePayload, error)
 	CreateBulkEvidence(ctx context.Context, input []*generated.CreateEvidenceInput) (*model.EvidenceBulkCreatePayload, error)
 	CreateBulkCSVEvidence(ctx context.Context, input graphql.Upload) (*model.EvidenceBulkCreatePayload, error)
 	UpdateBulkEvidence(ctx context.Context, ids []string, input generated.UpdateEvidenceInput) (*model.EvidenceBulkUpdatePayload, error)
-	UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
+	UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) (*model.EvidenceUpdatePayload, error)
 	DeleteEvidence(ctx context.Context, id string) (*model.EvidenceDeletePayload, error)
 	DeleteBulkEvidence(ctx context.Context, ids []string) (*model.EvidenceBulkDeletePayload, error)
 	UpdateBulkCSVEvidence(ctx context.Context, input graphql.Upload) (*model.EvidenceBulkUpdatePayload, error)
 	CreateExport(ctx context.Context, input generated.CreateExportInput) (*model.ExportCreatePayload, error)
-	UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) (*model.ExportUpdatePayload, error)
+	UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) (*model.ExportUpdatePayload, error)
 	DeleteExport(ctx context.Context, id string) (*model.ExportDeletePayload, error)
 	DeleteBulkExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error)
 	DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error)
@@ -252,10 +252,10 @@ type MutationResolver interface {
 	DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error)
 	DeleteBulkHush(ctx context.Context, ids []string) (*model.HushBulkDeletePayload, error)
 	UpdateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkUpdatePayload, error)
-	CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderCreatePayload, error)
+	CreateIdentityHolder(ctx context.Context, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) (*model.IdentityHolderCreatePayload, error)
 	CreateBulkIdentityHolder(ctx context.Context, input []*generated.CreateIdentityHolderInput) (*model.IdentityHolderBulkCreatePayload, error)
 	CreateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkCreatePayload, error)
-	UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload) (*model.IdentityHolderUpdatePayload, error)
+	UpdateIdentityHolder(ctx context.Context, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) (*model.IdentityHolderUpdatePayload, error)
 	DeleteIdentityHolder(ctx context.Context, id string) (*model.IdentityHolderDeletePayload, error)
 	DeleteBulkIdentityHolder(ctx context.Context, ids []string) (*model.IdentityHolderBulkDeletePayload, error)
 	UpdateBulkIdentityHolder(ctx context.Context, ids []string, input generated.UpdateIdentityHolderInput) (*model.IdentityHolderBulkUpdatePayload, error)
@@ -278,8 +278,8 @@ type MutationResolver interface {
 	DeleteBulkInvite(ctx context.Context, ids []string) (*model.InviteBulkDeletePayload, error)
 	UpdateBulkInvite(ctx context.Context, ids []string, input generated.UpdateInviteInput) (*model.InviteBulkUpdatePayload, error)
 	UpdateBulkCSVInvite(ctx context.Context, input graphql.Upload) (*model.InviteBulkUpdatePayload, error)
-	CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error)
-	UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error)
+	CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) (*model.JobResultCreatePayload, error)
+	UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) (*model.JobResultUpdatePayload, error)
 	DeleteJobResult(ctx context.Context, id string) (*model.JobResultDeletePayload, error)
 	CreateJobRunner(ctx context.Context, input generated.CreateJobRunnerInput) (*model.JobRunnerCreatePayload, error)
 	UpdateJobRunner(ctx context.Context, id string, input generated.UpdateJobRunnerInput) (*model.JobRunnerUpdatePayload, error)
@@ -320,15 +320,15 @@ type MutationResolver interface {
 	DeleteBulkNarrative(ctx context.Context, ids []string) (*model.NarrativeBulkDeletePayload, error)
 	UpdateBulkNarrative(ctx context.Context, ids []string, input generated.UpdateNarrativeInput) (*model.NarrativeBulkUpdatePayload, error)
 	UpdateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkUpdatePayload, error)
-	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error)
-	UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error)
-	UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error)
-	UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ProcedureUpdatePayload, error)
-	UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.RiskUpdatePayload, error)
-	UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.InternalPolicyUpdatePayload, error)
-	UpdateTrustCenterFAQComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterFAQUpdatePayload, error)
-	UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error)
-	UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
+	UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TaskUpdatePayload, error)
+	UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ControlUpdatePayload, error)
+	UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.SubcontrolUpdatePayload, error)
+	UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ProcedureUpdatePayload, error)
+	UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.RiskUpdatePayload, error)
+	UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.InternalPolicyUpdatePayload, error)
+	UpdateTrustCenterFAQComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterFAQUpdatePayload, error)
+	UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterUpdatePayload, error)
+	UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.EvidenceUpdatePayload, error)
 	DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error)
 	CreateNotification(ctx context.Context, input generated.CreateNotificationInput) (*model.NotificationCreatePayload, error)
 	UpdateNotification(ctx context.Context, id string, input generated.UpdateNotificationInput) (*model.NotificationUpdatePayload, error)
@@ -374,10 +374,10 @@ type MutationResolver interface {
 	CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error)
 	UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error)
 	DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error)
-	CreatePlatform(ctx context.Context, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformCreatePayload, error)
+	CreatePlatform(ctx context.Context, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) (*model.PlatformCreatePayload, error)
 	CreateBulkPlatform(ctx context.Context, input []*generated.CreatePlatformInput) (*model.PlatformBulkCreatePayload, error)
 	CreateBulkCSVPlatform(ctx context.Context, input graphql.Upload) (*model.PlatformBulkCreatePayload, error)
-	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformUpdatePayload, error)
+	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) (*model.PlatformUpdatePayload, error)
 	DeletePlatform(ctx context.Context, id string) (*model.PlatformDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
 	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) (*model.ProcedureCreatePayload, error)
@@ -415,11 +415,11 @@ type MutationResolver interface {
 	UpdateBulkRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error)
 	UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkUpdatePayload, error)
 	DeleteBulkRemediation(ctx context.Context, ids []string) (*model.RemediationBulkDeletePayload, error)
-	CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewCreatePayload, error)
+	CreateReview(ctx context.Context, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) (*model.ReviewCreatePayload, error)
 	CreateBulkReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error)
 	DeleteBulkReview(ctx context.Context, ids []string) (*model.ReviewBulkDeletePayload, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error)
-	UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload) (*model.ReviewUpdatePayload, error)
+	UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) (*model.ReviewUpdatePayload, error)
 	DeleteReview(ctx context.Context, id string) (*model.ReviewDeletePayload, error)
 	UpdateBulkReview(ctx context.Context, ids []string, input generated.UpdateReviewInput) (*model.ReviewBulkUpdatePayload, error)
 	UpdateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkUpdatePayload, error)
@@ -503,10 +503,10 @@ type MutationResolver interface {
 	DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error)
 	DeleteBulkTask(ctx context.Context, ids []string) (*model.TaskBulkDeletePayload, error)
 	UpdateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkUpdatePayload, error)
-	CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateCreatePayload, error)
+	CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TemplateCreatePayload, error)
 	CreateBulkTemplate(ctx context.Context, input []*generated.CreateTemplateInput) (*model.TemplateBulkCreatePayload, error)
 	CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*model.TemplateBulkCreatePayload, error)
-	UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateUpdatePayload, error)
+	UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TemplateUpdatePayload, error)
 	DeleteTemplate(ctx context.Context, id string) (*model.TemplateDeletePayload, error)
 	DeleteBulkTemplate(ctx context.Context, ids []string) (*model.TemplateBulkDeletePayload, error)
 	UpdateBulkTemplate(ctx context.Context, ids []string, input generated.UpdateTemplateInput) (*model.TemplateBulkUpdatePayload, error)
@@ -546,8 +546,8 @@ type MutationResolver interface {
 	DeleteBulkTrustCenterFaq(ctx context.Context, ids []string) (*model.TrustCenterFAQBulkDeletePayload, error)
 	UpdateBulkTrustCenterFaq(ctx context.Context, ids []string, input generated.UpdateTrustCenterFAQInput) (*model.TrustCenterFAQBulkUpdatePayload, error)
 	UpdateBulkCSVTrustCenterFaq(ctx context.Context, input graphql.Upload) (*model.TrustCenterFAQBulkUpdatePayload, error)
-	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
-	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error)
+	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterNDACreatePayload, error)
+	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterNDAUpdatePayload, error)
 	SubmitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error)
 	CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error)
 	CreateBulkTrustCenterNDARequest(ctx context.Context, input []*generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestBulkCreatePayload, error)
@@ -2616,6 +2616,11 @@ func (ec *executionContext) field_Mutation_createEvidence_args(ctx context.Conte
 		return nil, err
 	}
 	args["evidenceFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "evidenceFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["evidenceFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -2772,6 +2777,11 @@ func (ec *executionContext) field_Mutation_createIdentityHolder_args(ctx context
 		return nil, err
 	}
 	args["identityHolderFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "identityHolderFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["identityHolderFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -2810,6 +2820,11 @@ func (ec *executionContext) field_Mutation_createJobResult_args(ctx context.Cont
 		return nil, err
 	}
 	args["jobResultFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "jobResultFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["jobResultFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -3027,16 +3042,31 @@ func (ec *executionContext) field_Mutation_createPlatform_args(ctx context.Conte
 		return nil, err
 	}
 	args["architectureDiagrams"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "architectureDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["dataFlowDiagrams"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	args["architectureDiagramsMetadata"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["trustBoundaryDiagrams"] = arg3
+	args["dataFlowDiagrams"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["dataFlowDiagramsMetadata"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagrams"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagramsMetadata"] = arg6
 	return args, nil
 }
 
@@ -3108,6 +3138,11 @@ func (ec *executionContext) field_Mutation_createReview_args(ctx context.Context
 		return nil, err
 	}
 	args["reviewFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "reviewFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["reviewFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -3287,6 +3322,11 @@ func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Conte
 		return nil, err
 	}
 	args["templateFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "templateFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["templateFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -3389,6 +3429,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterNDA_args(ctx context
 		return nil, err
 	}
 	args["templateFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "templateFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["templateFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -6996,6 +7041,11 @@ func (ec *executionContext) field_Mutation_updateControlComment_args(ctx context
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7319,6 +7369,11 @@ func (ec *executionContext) field_Mutation_updateEvidenceComment_args(ctx contex
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7340,6 +7395,11 @@ func (ec *executionContext) field_Mutation_updateEvidence_args(ctx context.Conte
 		return nil, err
 	}
 	args["evidenceFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "evidenceFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["evidenceFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7361,6 +7421,11 @@ func (ec *executionContext) field_Mutation_updateExport_args(ctx context.Context
 		return nil, err
 	}
 	args["exportFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "exportFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["exportFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7488,6 +7553,11 @@ func (ec *executionContext) field_Mutation_updateIdentityHolder_args(ctx context
 		return nil, err
 	}
 	args["identityHolderFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "identityHolderFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["identityHolderFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7509,6 +7579,11 @@ func (ec *executionContext) field_Mutation_updateInternalPolicyComment_args(ctx 
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7572,6 +7647,11 @@ func (ec *executionContext) field_Mutation_updateJobResult_args(ctx context.Cont
 		return nil, err
 	}
 	args["jobResultFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "jobResultFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["jobResultFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7795,16 +7875,31 @@ func (ec *executionContext) field_Mutation_updatePlatform_args(ctx context.Conte
 		return nil, err
 	}
 	args["architectureDiagrams"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "architectureDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["dataFlowDiagrams"] = arg3
-	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	args["architectureDiagramsMetadata"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
 	if err != nil {
 		return nil, err
 	}
-	args["trustBoundaryDiagrams"] = arg4
+	args["dataFlowDiagrams"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "dataFlowDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["dataFlowDiagramsMetadata"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagrams", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagrams"] = arg6
+	arg7, err := graphql.ProcessArgField(ctx, rawArgs, "trustBoundaryDiagramsMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["trustBoundaryDiagramsMetadata"] = arg7
 	return args, nil
 }
 
@@ -7826,6 +7921,11 @@ func (ec *executionContext) field_Mutation_updateProcedureComment_args(ctx conte
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7921,6 +8021,11 @@ func (ec *executionContext) field_Mutation_updateReview_args(ctx context.Context
 		return nil, err
 	}
 	args["reviewFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "reviewFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["reviewFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -7942,6 +8047,11 @@ func (ec *executionContext) field_Mutation_updateRiskComment_args(ctx context.Co
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -8069,6 +8179,11 @@ func (ec *executionContext) field_Mutation_updateSubcontrolComment_args(ctx cont
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -8191,6 +8306,11 @@ func (ec *executionContext) field_Mutation_updateTaskComment_args(ctx context.Co
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -8228,6 +8348,11 @@ func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Conte
 		return nil, err
 	}
 	args["templateFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "templateFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["templateFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -8327,6 +8452,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterFAQComment_args(ctx 
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -8375,6 +8505,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterNDA_args(ctx context
 		return nil, err
 	}
 	args["templateFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "templateFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["templateFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -8396,6 +8531,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPost_args(ctx contex
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "noteFilesMetadata", ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -17349,7 +17489,7 @@ func (ec *executionContext) _Mutation_createEvidence(ctx context.Context, field 
 		ec.fieldContext_Mutation_createEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateEvidence(ctx, fc.Args["input"].(generated.CreateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateEvidence(ctx, fc.Args["input"].(generated.CreateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload), fc.Args["evidenceFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload,
@@ -17531,7 +17671,7 @@ func (ec *executionContext) _Mutation_updateEvidence(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateEvidence,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateEvidence(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEvidence(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateEvidenceInput), fc.Args["evidenceFiles"].([]*graphql.Upload), fc.Args["evidenceFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload,
@@ -17758,7 +17898,7 @@ func (ec *executionContext) _Mutation_updateExport(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateExport,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateExport(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateExportInput), fc.Args["exportFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateExport(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateExportInput), fc.Args["exportFiles"].([]*graphql.Upload), fc.Args["exportFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNExportUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportUpdatePayload,
@@ -20073,7 +20213,7 @@ func (ec *executionContext) _Mutation_createIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_createIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateIdentityHolder(ctx, fc.Args["input"].(generated.CreateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload), fc.Args["identityHolderFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload,
@@ -20208,7 +20348,7 @@ func (ec *executionContext) _Mutation_updateIdentityHolder(ctx context.Context, 
 		ec.fieldContext_Mutation_updateIdentityHolder,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateIdentityHolder(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateIdentityHolderInput), fc.Args["identityHolderFiles"].([]*graphql.Upload), fc.Args["identityHolderFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNIdentityHolderUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderUpdatePayload,
@@ -21255,7 +21395,7 @@ func (ec *executionContext) _Mutation_createJobResult(ctx context.Context, field
 		ec.fieldContext_Mutation_createJobResult,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateJobResult(ctx, fc.Args["input"].(generated.CreateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateJobResult(ctx, fc.Args["input"].(generated.CreateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload), fc.Args["jobResultFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNJobResultCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobResultCreatePayload,
@@ -21300,7 +21440,7 @@ func (ec *executionContext) _Mutation_updateJobResult(ctx context.Context, field
 		ec.fieldContext_Mutation_updateJobResult,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateJobResult(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateJobResult(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateJobResultInput), fc.Args["jobResultFiles"].([]*graphql.Upload), fc.Args["jobResultFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNJobResultUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobResultUpdatePayload,
@@ -23161,7 +23301,7 @@ func (ec *executionContext) _Mutation_updateTaskComment(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateTaskComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTaskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTaskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTaskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTaskUpdatePayload,
@@ -23206,7 +23346,7 @@ func (ec *executionContext) _Mutation_updateControlComment(ctx context.Context, 
 		ec.fieldContext_Mutation_updateControlComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateControlComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateControlComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlUpdatePayload,
@@ -23251,7 +23391,7 @@ func (ec *executionContext) _Mutation_updateSubcontrolComment(ctx context.Contex
 		ec.fieldContext_Mutation_updateSubcontrolComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateSubcontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateSubcontrolComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNSubcontrolUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubcontrolUpdatePayload,
@@ -23296,7 +23436,7 @@ func (ec *executionContext) _Mutation_updateProcedureComment(ctx context.Context
 		ec.fieldContext_Mutation_updateProcedureComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateProcedureComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateProcedureComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload,
@@ -23341,7 +23481,7 @@ func (ec *executionContext) _Mutation_updateRiskComment(ctx context.Context, fie
 		ec.fieldContext_Mutation_updateRiskComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateRiskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateRiskComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRiskUpdatePayload,
@@ -23386,7 +23526,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicyComment(ctx context.Co
 		ec.fieldContext_Mutation_updateInternalPolicyComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateInternalPolicyComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateInternalPolicyComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload,
@@ -23431,7 +23571,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterFAQComment(ctx context.Co
 		ec.fieldContext_Mutation_updateTrustCenterFAQComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterFAQComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterFAQComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterFAQUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQUpdatePayload,
@@ -23476,7 +23616,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterPost(ctx context.Context,
 		ec.fieldContext_Mutation_updateTrustCenterPost,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterPost(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterPost(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterUpdatePayload,
@@ -23521,7 +23661,7 @@ func (ec *executionContext) _Mutation_updateEvidenceComment(ctx context.Context,
 		ec.fieldContext_Mutation_updateEvidenceComment,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateEvidenceComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateEvidenceComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload), fc.Args["noteFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload,
@@ -25609,7 +25749,7 @@ func (ec *executionContext) _Mutation_createPlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_createPlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreatePlatform(ctx, fc.Args["input"].(generated.CreatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["architectureDiagramsMetadata"].([]*model.FileMetadataInput), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagramsMetadata"].([]*model.FileMetadataInput), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagramsMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNPlatformCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformCreatePayload,
@@ -25744,7 +25884,7 @@ func (ec *executionContext) _Mutation_updatePlatform(ctx context.Context, field 
 		ec.fieldContext_Mutation_updatePlatform,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdatePlatform(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdatePlatformInput), fc.Args["architectureDiagrams"].([]*graphql.Upload), fc.Args["architectureDiagramsMetadata"].([]*model.FileMetadataInput), fc.Args["dataFlowDiagrams"].([]*graphql.Upload), fc.Args["dataFlowDiagramsMetadata"].([]*model.FileMetadataInput), fc.Args["trustBoundaryDiagrams"].([]*graphql.Upload), fc.Args["trustBoundaryDiagramsMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNPlatformUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPlatformUpdatePayload,
@@ -27470,7 +27610,7 @@ func (ec *executionContext) _Mutation_createReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_createReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateReview(ctx, fc.Args["input"].(generated.CreateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload), fc.Args["reviewFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload,
@@ -27650,7 +27790,7 @@ func (ec *executionContext) _Mutation_updateReview(ctx context.Context, field gr
 		ec.fieldContext_Mutation_updateReview,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateReview(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateReviewInput), fc.Args["reviewFiles"].([]*graphql.Upload), fc.Args["reviewFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload,
@@ -31466,7 +31606,7 @@ func (ec *executionContext) _Mutation_createTemplate(ctx context.Context, field 
 		ec.fieldContext_Mutation_createTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTemplate(ctx, fc.Args["input"].(generated.CreateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTemplate(ctx, fc.Args["input"].(generated.CreateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload), fc.Args["templateFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateCreatePayload,
@@ -31601,7 +31741,7 @@ func (ec *executionContext) _Mutation_updateTemplate(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateTemplate,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTemplate(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTemplateInput), fc.Args["templateFiles"].([]*graphql.Upload), fc.Args["templateFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateUpdatePayload,
@@ -33427,7 +33567,7 @@ func (ec *executionContext) _Mutation_createTrustCenterNDA(ctx context.Context, 
 		ec.fieldContext_Mutation_createTrustCenterNDA,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateTrustCenterNda(ctx, fc.Args["input"].(model.CreateTrustCenterNDAInput), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().CreateTrustCenterNda(ctx, fc.Args["input"].(model.CreateTrustCenterNDAInput), fc.Args["templateFiles"].([]*graphql.Upload), fc.Args["templateFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload,
@@ -33472,7 +33612,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterNDA(ctx context.Context, 
 		ec.fieldContext_Mutation_updateTrustCenterNDA,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateTrustCenterNda(ctx, fc.Args["id"].(string), fc.Args["templateFiles"].([]*graphql.Upload))
+			return ec.Resolvers.Mutation().UpdateTrustCenterNda(ctx, fc.Args["id"].(string), fc.Args["templateFiles"].([]*graphql.Upload), fc.Args["templateFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		ec.marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload,

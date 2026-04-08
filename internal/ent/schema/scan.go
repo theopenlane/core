@@ -212,6 +212,7 @@ func (Scan) Modules() []models.OrgModule {
 // Annotations of the Scan
 func (Scan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaScan),
 		entfga.SelfAccessChecks(),
 	}
 }

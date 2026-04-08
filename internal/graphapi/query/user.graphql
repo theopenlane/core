@@ -1,10 +1,13 @@
-mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload) {
-	createUser(input: $input, avatarFile: $avatarFile) {
+mutation CreateUser ($input: CreateUserInput!, $avatarFile: Upload, $avatarFileMetadata: FileMetadataInput) {
+	createUser(input: $input, avatarFile: $avatarFile, avatarFileMetadata: $avatarFileMetadata) {
 		user {
 			authProvider
 			avatarRemoteURL
 			avatarLocalFileID
 			avatarFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			displayID
@@ -248,13 +251,16 @@ query GetUserByIDWithOrgs ($userId: ID!) {
 		updatedBy
 	}
 }
-mutation UpdateUser ($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: Upload) {
-	updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile) {
+mutation UpdateUser ($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: Upload, $avatarFileMetadata: FileMetadataInput) {
+	updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile, avatarFileMetadata: $avatarFileMetadata) {
 		user {
 			authProvider
 			avatarRemoteURL
 			avatarLocalFileID
 			avatarFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			displayID

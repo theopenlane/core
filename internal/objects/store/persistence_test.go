@@ -41,28 +41,23 @@ func TestFileCategory(t *testing.T) {
 			want: "evidence",
 		},
 		{
-			name: "user maps to avatar",
+			name: "user maps to user",
 			file: objects.File{CorrelatedObjectType: "User"},
-			want: "avatar",
+			want: "user",
 		},
 		{
-			name: "organization maps to avatar",
+			name: "organization maps to organization",
 			file: objects.File{CorrelatedObjectType: "Organization"},
-			want: "avatar",
+			want: "organization",
 		},
 		{
-			name: "trust center setting maps to logo",
+			name: "trust center setting maps to trust center setting",
 			file: objects.File{CorrelatedObjectType: "TrustCenterSetting"},
-			want: "logo",
-		},
-		{
-			name: "subprocessor maps to logo",
-			file: objects.File{CorrelatedObjectType: "Subprocessor"},
-			want: "logo",
+			want: "trust_center_setting",
 		},
 		{
 			name: "unmapped file has no category",
-			file: objects.File{CorrelatedObjectType: "Entity", FieldName: "entityFiles"},
+			file: objects.File{CorrelatedObjectType: "Unknown"},
 			want: "",
 		},
 	}

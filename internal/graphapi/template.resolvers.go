@@ -19,7 +19,7 @@ import (
 )
 
 // CreateTemplate is the resolver for the createTemplate field.
-func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateCreatePayload, error) {
+func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TemplateCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -95,7 +95,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 }
 
 // UpdateTemplate is the resolver for the updateTemplate field.
-func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateUpdatePayload, error) {
+func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) (*model.TemplateUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Template.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})

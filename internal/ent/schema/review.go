@@ -278,6 +278,7 @@ func (Review) Hooks() []ent.Hook {
 // Annotations of the Review
 func (Review) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaReview),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

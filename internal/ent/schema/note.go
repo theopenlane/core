@@ -185,6 +185,7 @@ func (Note) Modules() []models.OrgModule {
 // Annotations of the Note
 func (n Note) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaNote),
 		entfga.SelfAccessChecks(),
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),

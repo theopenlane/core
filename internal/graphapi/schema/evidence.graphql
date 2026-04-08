@@ -47,6 +47,7 @@ extend type Mutation{
         """
         input: CreateEvidenceInput!
         evidenceFiles: [Upload!]
+        evidenceFilesMetadata: [FileMetadataInput!]
     ): EvidenceCreatePayload!
     """
     Create multiple new evidence
@@ -92,6 +93,7 @@ extend type Mutation{
         """
         input: UpdateEvidenceInput!
         evidenceFiles: [Upload!]
+        evidenceFilesMetadata: [FileMetadataInput!]
     ): EvidenceUpdatePayload!
     """
     Delete an existing evidence

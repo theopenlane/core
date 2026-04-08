@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -176,6 +177,7 @@ func (TrustCenterWatermarkConfig) Indexes() []ent.Index {
 // Annotations of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaTrustCenterWatermarkConfig),
 		entfga.SettingsChecks("trust_center"),
 		entsql.Annotation{
 			Checks: map[string]string{

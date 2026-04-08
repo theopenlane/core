@@ -166,11 +166,11 @@ func (t Subprocessor) Interceptors() []ent.Interceptor {
 // Annotations of the Subprocessor
 func (Subprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaSubprocessor),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 			entx.WithSystemOwned(),
 		),
-		entx.FileCategory("logo"),
 	}
 }

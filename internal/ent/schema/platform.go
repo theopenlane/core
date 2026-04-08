@@ -351,6 +351,7 @@ func (Platform) Modules() []models.OrgModule {
 // Annotations of the Platform
 func (Platform) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaPlatform),
 		entfga.SelfAccessChecks(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),

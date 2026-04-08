@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateExport(ctx context.Context, input generated.Cre
 }
 
 // UpdateExport is the resolver for the updateExport field.
-func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) (*model.ExportUpdatePayload, error) {
+func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) (*model.ExportUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Export.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "export"})

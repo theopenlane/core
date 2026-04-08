@@ -239,6 +239,7 @@ func (EmailTemplate) Policy() ent.Policy {
 // Annotations of the EmailTemplate
 func (EmailTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaEmailTemplate),
 		entfga.SelfAccessChecks(),
 	}
 }

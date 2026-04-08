@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -78,6 +79,7 @@ func (Event) Modules() []models.OrgModule {
 // Annotations of the Event
 func (e Event) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaEvent),
 		history.Annotations{
 			Exclude: true,
 		},

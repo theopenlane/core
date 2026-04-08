@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -87,6 +88,7 @@ func (DocumentData) Modules() []models.OrgModule {
 // Annotations of the DocumentData
 func (d DocumentData) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaDocumentData),
 		entfga.SelfAccessChecks(),
 	}
 }

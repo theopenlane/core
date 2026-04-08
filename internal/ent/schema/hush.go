@@ -3,9 +3,11 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -135,6 +137,13 @@ func (Hush) Policy() ent.Policy {
 		),
 	)
 }
+
+func (Hush) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.FileCategory(SchemaHush),
+	}
+}
+
 func (Hush) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
