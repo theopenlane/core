@@ -1017,6 +1017,10 @@ func (_c *EntityHistoryCreate) defaults() error {
 		v := entityhistory.DefaultLinks
 		_c.mutation.SetLinks(v)
 	}
+	if _, ok := _c.mutation.Tier(); !ok {
+		v := entityhistory.DefaultTier
+		_c.mutation.SetTier(v)
+	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {
 		v := entityhistory.DefaultReviewFrequency
 		_c.mutation.SetReviewFrequency(v)

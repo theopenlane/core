@@ -7,11 +7,25 @@
 {{ $pkg := base $.Config.Package }}
 {{ template "header" $ }}
 
+import (
+	"github.com/theopenlane/core/internal/ent/hooks/contextx"
+)
+
 	{{/* For each schema */}}
 	{{- range $node := $.Nodes }}
 			{{/* create an EdgeCleanup function accepting an ID */}}
 				func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
 					ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")))
+
+			{{- if eq $node.Name "Organization" }}
+				ctx = contextx.WithSkipEnumInUseCheck(ctx)
+				if exists, err := FromContext(ctx).CustomTypeEnum.Query().Where((customtypeenum.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+					if customtypeenumCount, err := FromContext(ctx).CustomTypeEnum.Delete().Where(customtypeenum.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+						logx.FromContext(ctx).Error().Err(err).Int("count", customtypeenumCount).Msg("error deleting customtypeenum")
+						return err
+					}
+				}
+			{{- end }}
 
 			   {{/* For each edge */}}
 			   {{- range $edge := $node.Edges }}

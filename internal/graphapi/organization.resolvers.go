@@ -9,13 +9,12 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
@@ -85,12 +84,6 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to delete organization")
 
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "organization"})
-	}
-
-	if err := generated.OrganizationEdgeCleanup(ctx, id); err != nil {
-		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to cascade delete organization edges")
-
-		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrganizationDeletePayload{

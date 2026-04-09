@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -246,6 +247,12 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 			ids := getMutationIDs(ctx, m)
 			if len(ids) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			// skip the "in use" error/check when deleting via organization cascade
+			// the organization edge cleanup would deletion order properly via cascades
+			if ctx.Value(contextx.SkipCustomEnumInUseCheck) == true {
 				return next.Mutate(ctx, m)
 			}
 

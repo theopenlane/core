@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
-
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
@@ -77,6 +76,13 @@ func handleOrganizationDeleteGala(ctx gala.HandlerContext, payload eventqueue.Mu
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
 		return nil
+	}
+
+	cleanupContext := entgen.NewContext(inv.Context(), inv.client)
+	if err := entgen.OrganizationEdgeCleanup(cleanupContext, inv.orgID); err != nil {
+		inv.Logger().Error().Err(err).Str("organization_id", inv.orgID).
+			Msg("failed to cascade delete organization edges")
+		return err
 	}
 
 	org, err := inv.client.Organization.Query().Where(
