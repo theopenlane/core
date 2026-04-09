@@ -130,10 +130,10 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"REPOSITORY"`},
-	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"github"`},
+	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"IMPORTED"`},
 	{Key: integrationgenerated.IntegrationMappingAssetWebsite, Expr: "payload.URL"},
 	{Key: integrationgenerated.IntegrationMappingAssetObservedAt, Expr: "payload.UpdatedAt"},
-	{Key: integrationgenerated.IntegrationMappingAssetCategories, Expr: `payload.IsPrivate ? ["private"] : ["public"]`},
+	{Key: integrationgenerated.IntegrationMappingAssetCategories, Expr: `payload.IsPrivate ? ["private", "repository"] : ["public", "repository"]`},
 })
 
 // mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads mapped to DirectoryAccount
