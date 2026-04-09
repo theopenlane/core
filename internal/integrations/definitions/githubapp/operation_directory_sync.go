@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // orgMemberNode is a single organization member record returned by the GitHub GraphQL API
@@ -47,6 +48,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("githubapp_directorysync: failed to query viewer organizations")
 		return nil, err
 	}
 
@@ -55,8 +57,11 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 	for _, org := range orgs {
 		members, err := queryOrganizationMembers(ctx, client, org.Login)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msgf("githubapp_directorysync: failed to query members for organization %s", org.Login)
 			return nil, err
 		}
+
+		logx.FromContext(ctx).Info().Str("org", org.Login).Int("member_count", len(members)).Msg("githubapp_directorysync: queried organization members")
 
 		for _, member := range members {
 			member.Org = org.Login
@@ -65,12 +70,15 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 
 			envelope, err := providerkit.MarshalEnvelope(resource, member, ErrIngestPayloadEncode)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Interface("member", member).Msg("githubapp_directorysync: failed to marshal member into ingest envelope")
 				return nil, err
 			}
 
 			envelopes = append(envelopes, envelope)
 		}
 	}
+
+	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(envelopes)).Msg("githubapp_directorysync: collected organization members for directory sync")
 
 	return []types.IngestPayloadSet{
 		{
