@@ -48,7 +48,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to query viewer organizations")
+		logx.FromContext(ctx).Error().Err(err).Msg("githubapp_directorysync: failed to query viewer organizations")
 		return nil, err
 	}
 
@@ -57,7 +57,7 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 	for _, org := range orgs {
 		members, err := queryOrganizationMembers(ctx, client, org.Login)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msgf("failed to query members for organization %s", org.Login)
+			logx.FromContext(ctx).Error().Err(err).Msgf("githubapp_directorysync: failed to query members for organization %s", org.Login)
 			return nil, err
 		}
 
