@@ -975,10 +975,12 @@ type ComplexityRoot struct {
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
 		Name                   func(childComplexity int) int
+		NextReviewAt           func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RenewalDate            func(childComplexity int) int
+		ReviewFrequency        func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
 		Source                 func(childComplexity int) int
@@ -8595,6 +8597,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceHistory.Name(childComplexity), true
 
+	case "EvidenceHistory.nextReviewAt":
+		if e.ComplexityRoot.EvidenceHistory.NextReviewAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.NextReviewAt(childComplexity), true
+
 	case "EvidenceHistory.operation":
 		if e.ComplexityRoot.EvidenceHistory.Operation == nil {
 			break
@@ -8622,6 +8631,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.RenewalDate(childComplexity), true
+
+	case "EvidenceHistory.reviewFrequency":
+		if e.ComplexityRoot.EvidenceHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ReviewFrequency(childComplexity), true
 
 	case "EvidenceHistory.scopeID":
 		if e.ComplexityRoot.EvidenceHistory.ScopeID == nil {
@@ -34547,6 +34563,14 @@ type EvidenceHistory implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceHistoryEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceHistoryFrequency
+  """
+  when the evidence is due for review
+  """
+  nextReviewAt: DateTime
 }
 """
 A connection to a list of items.
@@ -34593,6 +34617,16 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
   REJECTED
 }
 """
+EvidenceHistoryFrequency is enum for the field review_frequency
+"""
+enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 EvidenceHistoryOpType is enum for the field operation
 """
 enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -34624,6 +34658,8 @@ enum EvidenceHistoryOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
+  NEXT_REVIEW_AT
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -35003,6 +35039,28 @@ input EvidenceHistoryWhereInput {
   statusNotIn: [EvidenceHistoryEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceHistoryFrequency
+  reviewFrequencyNEQ: EvidenceHistoryFrequency
+  reviewFrequencyIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_at field predicates
+  """
+  nextReviewAt: DateTime
+  nextReviewAtNEQ: DateTime
+  nextReviewAtIn: [DateTime!]
+  nextReviewAtNotIn: [DateTime!]
+  nextReviewAtGT: DateTime
+  nextReviewAtGTE: DateTime
+  nextReviewAtLT: DateTime
+  nextReviewAtLTE: DateTime
+  nextReviewAtIsNil: Boolean
+  nextReviewAtNotNil: Boolean
 }
 type FileHistory implements Node {
   id: ID!

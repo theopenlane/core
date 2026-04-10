@@ -1156,6 +1156,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldIsAutomated:            {Type: field.TypeBool, Column: evidence.FieldIsAutomated},
 			evidence.FieldURL:                    {Type: field.TypeString, Column: evidence.FieldURL},
 			evidence.FieldStatus:                 {Type: field.TypeEnum, Column: evidence.FieldStatus},
+			evidence.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidence.FieldReviewFrequency},
+			evidence.FieldNextReviewAt:           {Type: field.TypeTime, Column: evidence.FieldNextReviewAt},
 		},
 	}
 	graph.Nodes[27] = &sqlgraph.Node{
@@ -25976,6 +25978,16 @@ func (f *EvidenceFilter) WhereURL(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *EvidenceFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldStatus))
+}
+
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *EvidenceFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldReviewFrequency))
+}
+
+// WhereNextReviewAt applies the entql time.Time predicate on the next_review_at field.
+func (f *EvidenceFilter) WhereNextReviewAt(p entql.TimeP) {
+	f.Where(p.Field(evidence.FieldNextReviewAt))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

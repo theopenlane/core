@@ -414,6 +414,46 @@ func (_u *EvidenceHistoryUpdate) ClearStatus() *EvidenceHistoryUpdate {
 	return _u
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EvidenceHistoryUpdate) SetReviewFrequency(v enums.Frequency) *EvidenceHistoryUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EvidenceHistoryUpdate) ClearReviewFrequency() *EvidenceHistoryUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EvidenceHistoryUpdate) SetNextReviewAt(v models.DateTime) *EvidenceHistoryUpdate {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableNextReviewAt(v *models.DateTime) *EvidenceHistoryUpdate {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EvidenceHistoryUpdate) ClearNextReviewAt() *EvidenceHistoryUpdate {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
 // Mutation returns the EvidenceHistoryMutation object of the builder.
 func (_u *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
 	return _u.mutation
@@ -466,6 +506,11 @@ func (_u *EvidenceHistoryUpdate) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := evidencehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -619,6 +664,18 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(evidencehistory.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(evidencehistory.FieldNextReviewAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1022,6 +1079,46 @@ func (_u *EvidenceHistoryUpdateOne) ClearStatus() *EvidenceHistoryUpdateOne {
 	return _u
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EvidenceHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EvidenceHistoryUpdateOne) ClearReviewFrequency() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EvidenceHistoryUpdateOne) SetNextReviewAt(v models.DateTime) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableNextReviewAt(v *models.DateTime) *EvidenceHistoryUpdateOne {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EvidenceHistoryUpdateOne) ClearNextReviewAt() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
 // Mutation returns the EvidenceHistoryMutation object of the builder.
 func (_u *EvidenceHistoryUpdateOne) Mutation() *EvidenceHistoryMutation {
 	return _u.mutation
@@ -1087,6 +1184,11 @@ func (_u *EvidenceHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := evidencehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -1257,6 +1359,18 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(evidencehistory.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(evidencehistory.FieldNextReviewAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

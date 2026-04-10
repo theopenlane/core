@@ -1,4 +1,4 @@
-h1:naXeXzbYVaesdBDbBF5ZKaK2td5J9ZQUeUi7uno/Sc0=
+h1:46ZW2vY92H5xERS1rcBDCYNKSRZ1cFlFEsiHIKxN8Ic=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -102,3 +102,5 @@ h1:naXeXzbYVaesdBDbBF5ZKaK2td5J9ZQUeUi7uno/Sc0=
 20260407225000_vulnfieldupdates_history.sql h1:/O7u/7iOHrRnrE4jPQcJ65HIt3mrcT0yYtZHo+NPnDI=
 20260408044535_risk_fields.sql h1:n9clyMuYmhF3bZdSetseLALyt7Fx5vE1dDfx8UelMpY=
 20260408044538_risk_fields_history.sql h1:ncd06MV03ae12UQ362vQ/uRvBrv00/q3YdhlumzW3k0=
+20260410131221_evidence_reviw_frequency.sql h1:FmZzqXlIoENx50dmK2Ml99cJhwayCmPlvk73uBBU+GI=
+20260410131232_evidence_reviw_frequency_history.sql h1:ImppUJXx1Z4f2Ndd7GCXyANkBOSvWsg648ju4IF+19U=

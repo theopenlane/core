@@ -76,7 +76,11 @@ type EvidenceHistory struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status       enums.EvidenceStatus `json:"status,omitempty"`
+	Status enums.EvidenceStatus `json:"status,omitempty"`
+	// the cadence for reviewing the evidence
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// when the evidence is due for review
+	NextReviewAt *models.DateTime `json:"next_review_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -85,7 +89,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case evidencehistory.FieldCreationDate, evidencehistory.FieldRenewalDate:
+		case evidencehistory.FieldCreationDate, evidencehistory.FieldRenewalDate, evidencehistory.FieldNextReviewAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case evidencehistory.FieldTags:
 			values[i] = new([]byte)
@@ -93,7 +97,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case evidencehistory.FieldWorkflowEligibleMarker, evidencehistory.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
+		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus, evidencehistory.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -285,6 +289,19 @@ func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = enums.EvidenceStatus(value.String)
 			}
+		case evidencehistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case evidencehistory.FieldNextReviewAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field next_review_at", values[i])
+			} else if value.Valid {
+				_m.NextReviewAt = new(models.DateTime)
+				*_m.NextReviewAt = *value.S.(*models.DateTime)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -407,6 +424,14 @@ func (_m *EvidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	if v := _m.NextReviewAt; v != nil {
+		builder.WriteString("next_review_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

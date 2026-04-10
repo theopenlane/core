@@ -1989,11 +1989,13 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		IsAutomated             func(childComplexity int) int
 		Name                    func(childComplexity int) int
+		NextReviewAt            func(childComplexity int) int
 		Owner                   func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
+		ReviewFrequency         func(childComplexity int) int
 		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                   func(childComplexity int) int
 		ScopeID                 func(childComplexity int) int
@@ -17351,6 +17353,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Evidence.Name(childComplexity), true
 
+	case "Evidence.nextReviewAt":
+		if e.ComplexityRoot.Evidence.NextReviewAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.NextReviewAt(childComplexity), true
+
 	case "Evidence.owner":
 		if e.ComplexityRoot.Evidence.Owner == nil {
 			break
@@ -17395,6 +17404,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.RenewalDate(childComplexity), true
+
+	case "Evidence.reviewFrequency":
+		if e.ComplexityRoot.Evidence.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.ReviewFrequency(childComplexity), true
 
 	case "Evidence.scans":
 		if e.ComplexityRoot.Evidence.Scans == nil {
@@ -68012,6 +68028,14 @@ input CreateEvidenceInput {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  """
+  when the evidence is due for review
+  """
+  nextReviewAt: DateTime
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -81670,6 +81694,14 @@ type Evidence implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  """
+  when the evidence is due for review
+  """
+  nextReviewAt: DateTime
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -82060,6 +82092,16 @@ enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/
   REJECTED
 }
 """
+EvidenceFrequency is enum for the field review_frequency
+"""
+enum EvidenceFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Evidence connections
 """
 input EvidenceOrder {
@@ -82082,6 +82124,8 @@ enum EvidenceOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
+  NEXT_REVIEW_AT
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -82425,6 +82469,28 @@ input EvidenceWhereInput {
   statusNotIn: [EvidenceEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceFrequency
+  reviewFrequencyNEQ: EvidenceFrequency
+  reviewFrequencyIn: [EvidenceFrequency!]
+  reviewFrequencyNotIn: [EvidenceFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
+  """
+  next_review_at field predicates
+  """
+  nextReviewAt: DateTime
+  nextReviewAtNEQ: DateTime
+  nextReviewAtIn: [DateTime!]
+  nextReviewAtNotIn: [DateTime!]
+  nextReviewAtGT: DateTime
+  nextReviewAtGTE: DateTime
+  nextReviewAtLT: DateTime
+  nextReviewAtLTE: DateTime
+  nextReviewAtIsNil: Boolean
+  nextReviewAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -130028,6 +130094,16 @@ input UpdateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   clearStatus: Boolean
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  clearReviewFrequency: Boolean
+  """
+  when the evidence is due for review
+  """
+  nextReviewAt: DateTime
+  clearNextReviewAt: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID

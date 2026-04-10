@@ -139,6 +139,22 @@ func (Evidence) Fields() []ent.Field {
 			).
 			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
 			Optional(),
+		field.Enum("review_frequency").
+			Comment("the cadence for reviewing the evidence").
+			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("REVIEW_FREQUENCY"),
+			),
+		field.Time("next_review_at").
+			Comment("when the evidence is due for review").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("NEXT_REVIEW_AT"),
+			),
 	}
 }
 

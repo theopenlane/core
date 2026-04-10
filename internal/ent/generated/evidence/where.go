@@ -179,6 +179,11 @@ func URL(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEQ(FieldURL, v))
 }
 
+// NextReviewAt applies equality check predicate on the "next_review_at" field. It's identical to NextReviewAtEQ.
+func NextReviewAt(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldNextReviewAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEQ(FieldCreatedAt, v))
@@ -1612,6 +1617,96 @@ func StatusIsNil() predicate.Evidence {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Evidence {
 	return predicate.Evidence(sql.FieldNotNull(FieldStatus))
+}
+
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.Evidence {
+	vc := v
+	return predicate.Evidence(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.Evidence {
+	vc := v
+	return predicate.Evidence(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.Evidence {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Evidence(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.Evidence {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Evidence(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// NextReviewAtEQ applies the EQ predicate on the "next_review_at" field.
+func NextReviewAtEQ(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldNextReviewAt, v))
+}
+
+// NextReviewAtNEQ applies the NEQ predicate on the "next_review_at" field.
+func NextReviewAtNEQ(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldNEQ(FieldNextReviewAt, v))
+}
+
+// NextReviewAtIn applies the In predicate on the "next_review_at" field.
+func NextReviewAtIn(vs ...models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldIn(FieldNextReviewAt, vs...))
+}
+
+// NextReviewAtNotIn applies the NotIn predicate on the "next_review_at" field.
+func NextReviewAtNotIn(vs ...models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotIn(FieldNextReviewAt, vs...))
+}
+
+// NextReviewAtGT applies the GT predicate on the "next_review_at" field.
+func NextReviewAtGT(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldGT(FieldNextReviewAt, v))
+}
+
+// NextReviewAtGTE applies the GTE predicate on the "next_review_at" field.
+func NextReviewAtGTE(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldGTE(FieldNextReviewAt, v))
+}
+
+// NextReviewAtLT applies the LT predicate on the "next_review_at" field.
+func NextReviewAtLT(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldLT(FieldNextReviewAt, v))
+}
+
+// NextReviewAtLTE applies the LTE predicate on the "next_review_at" field.
+func NextReviewAtLTE(v models.DateTime) predicate.Evidence {
+	return predicate.Evidence(sql.FieldLTE(FieldNextReviewAt, v))
+}
+
+// NextReviewAtIsNil applies the IsNil predicate on the "next_review_at" field.
+func NextReviewAtIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldNextReviewAt))
+}
+
+// NextReviewAtNotNil applies the NotNil predicate on the "next_review_at" field.
+func NextReviewAtNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldNextReviewAt))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

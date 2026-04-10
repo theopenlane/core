@@ -424,6 +424,46 @@ func (_u *EvidenceUpdate) ClearStatus() *EvidenceUpdate {
 	return _u
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EvidenceUpdate) SetReviewFrequency(v enums.Frequency) *EvidenceUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EvidenceUpdate) ClearReviewFrequency() *EvidenceUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EvidenceUpdate) SetNextReviewAt(v models.DateTime) *EvidenceUpdate {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableNextReviewAt(v *models.DateTime) *EvidenceUpdate {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EvidenceUpdate) ClearNextReviewAt() *EvidenceUpdate {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdate) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -906,6 +946,11 @@ func (_u *EvidenceUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := evidence.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Evidence.review_frequency": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1039,6 +1084,18 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(evidence.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(evidence.FieldNextReviewAt, field.TypeTime)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2032,6 +2089,46 @@ func (_u *EvidenceUpdateOne) ClearStatus() *EvidenceUpdateOne {
 	return _u
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EvidenceUpdateOne) SetReviewFrequency(v enums.Frequency) *EvidenceUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EvidenceUpdateOne) ClearReviewFrequency() *EvidenceUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EvidenceUpdateOne) SetNextReviewAt(v models.DateTime) *EvidenceUpdateOne {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableNextReviewAt(v *models.DateTime) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EvidenceUpdateOne) ClearNextReviewAt() *EvidenceUpdateOne {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdateOne) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2527,6 +2624,11 @@ func (_u *EvidenceUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := evidence.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Evidence.review_frequency": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2677,6 +2779,18 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidence.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(evidence.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(evidence.FieldNextReviewAt, field.TypeTime)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
