@@ -2709,6 +2709,8 @@ func init() {
 	evidence.Hooks[10] = evidenceHooks[0]
 
 	evidence.Hooks[11] = evidenceHooks[1]
+
+	evidence.Hooks[12] = evidenceHooks[2]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]

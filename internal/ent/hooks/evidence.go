@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -14,6 +15,63 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
+
+// HookEvidenceReviewDate runs on evidence mutations and calculate the next review time based
+// on creation date + review frequency
+func HookEvidenceReviewDate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
+			creationDate, creationDateMutated := m.CreationDate()
+			frequency, frequencyMutated := m.ReviewFrequency()
+
+			if !creationDateMutated && !frequencyMutated {
+				return next.Mutate(ctx, m)
+			}
+
+			switch {
+			case m.Op().Is(ent.OpCreate):
+				if !creationDateMutated {
+					creationDate = evidence.DefaultCreationDate()
+				}
+
+				if !frequencyMutated {
+					frequency = evidence.DefaultReviewFrequency
+				}
+			case m.Op().Is(ent.OpUpdateOne):
+				if !creationDateMutated {
+					oldCreationDate, err := m.OldCreationDate(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldCreationDate != nil {
+						creationDate = *oldCreationDate
+					}
+				}
+
+				if !frequencyMutated {
+					oldFrequency, err := m.OldReviewFrequency(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					frequency = oldFrequency
+				}
+			default:
+				return next.Mutate(ctx, m)
+			}
+
+			if frequency == enums.FrequencyNone || time.Time(creationDate).IsZero() {
+				m.ClearNextReviewAt()
+				return next.Mutate(ctx, m)
+			}
+
+			m.SetNextReviewAt(getNextReviewDate(frequency, models.DateTime(creationDate)))
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
 
 // HookEvidenceFiles runs on evidence mutations to check for uploaded files
 func HookEvidenceFiles() ent.Hook {
