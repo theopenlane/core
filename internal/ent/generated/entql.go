@@ -2329,6 +2329,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
 			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
+			organizationsetting.FieldPendingDeletionAt:                {Type: field.TypeTime, Column: organizationsetting.FieldPendingDeletionAt},
 		},
 	}
 	graph.Nodes[63] = &sqlgraph.Node{
@@ -36485,6 +36486,11 @@ func (f *OrganizationSettingFilter) WhereComplianceWebhookToken(p entql.StringP)
 // WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
 func (f *OrganizationSettingFilter) WherePaymentMethodAdded(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldPaymentMethodAdded))
+}
+
+// WherePendingDeletionAt applies the entql time.Time predicate on the pending_deletion_at field.
+func (f *OrganizationSettingFilter) WherePendingDeletionAt(p entql.TimeP) {
+	f.Where(p.Field(organizationsetting.FieldPendingDeletionAt))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.

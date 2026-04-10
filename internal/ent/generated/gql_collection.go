@@ -53602,6 +53602,11 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldPaymentMethodAdded)
 				fieldSeen[organizationsetting.FieldPaymentMethodAdded] = struct{}{}
 			}
+		case "pendingDeletionAt":
+			if _, ok := fieldSeen[organizationsetting.FieldPendingDeletionAt]; !ok {
+				selectedFields = append(selectedFields, organizationsetting.FieldPendingDeletionAt)
+				fieldSeen[organizationsetting.FieldPendingDeletionAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

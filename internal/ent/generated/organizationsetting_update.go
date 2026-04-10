@@ -598,6 +598,26 @@ func (_u *OrganizationSettingUpdate) SetNillablePaymentMethodAdded(v *bool) *Org
 	return _u
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_u *OrganizationSettingUpdate) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingUpdate {
+	_u.mutation.SetPendingDeletionAt(v)
+	return _u
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_u *OrganizationSettingUpdate) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingUpdate {
+	if v != nil {
+		_u.SetPendingDeletionAt(*v)
+	}
+	return _u
+}
+
+// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
+func (_u *OrganizationSettingUpdate) ClearPendingDeletionAt() *OrganizationSettingUpdate {
+	_u.mutation.ClearPendingDeletionAt()
+	return _u
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationSettingUpdate) SetOrganization(v *Organization) *OrganizationSettingUpdate {
 	return _u.SetOrganizationID(v.ID)
@@ -932,6 +952,12 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsetting.FieldPendingDeletionAt, field.TypeTime, value)
+	}
+	if _u.mutation.PendingDeletionAtCleared() {
+		_spec.ClearField(organizationsetting.FieldPendingDeletionAt, field.TypeTime)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1598,6 +1624,26 @@ func (_u *OrganizationSettingUpdateOne) SetNillablePaymentMethodAdded(v *bool) *
 	return _u
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_u *OrganizationSettingUpdateOne) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingUpdateOne {
+	_u.mutation.SetPendingDeletionAt(v)
+	return _u
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_u *OrganizationSettingUpdateOne) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingUpdateOne {
+	if v != nil {
+		_u.SetPendingDeletionAt(*v)
+	}
+	return _u
+}
+
+// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
+func (_u *OrganizationSettingUpdateOne) ClearPendingDeletionAt() *OrganizationSettingUpdateOne {
+	_u.mutation.ClearPendingDeletionAt()
+	return _u
+}
+
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationSettingUpdateOne) SetOrganization(v *Organization) *OrganizationSettingUpdateOne {
 	return _u.SetOrganizationID(v.ID)
@@ -1962,6 +2008,12 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsetting.FieldPendingDeletionAt, field.TypeTime, value)
+	}
+	if _u.mutation.PendingDeletionAtCleared() {
+		_spec.ClearField(organizationsetting.FieldPendingDeletionAt, field.TypeTime)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{

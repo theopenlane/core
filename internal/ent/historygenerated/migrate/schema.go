@@ -1937,6 +1937,7 @@ var (
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
+		{Name: "pending_deletion_at", Type: field.TypeTime, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

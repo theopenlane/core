@@ -9274,6 +9274,11 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldPaymentMethodAdded)
 				fieldSeen[organizationsettinghistory.FieldPaymentMethodAdded] = struct{}{}
 			}
+		case "pendingDeletionAt":
+			if _, ok := fieldSeen[organizationsettinghistory.FieldPendingDeletionAt]; !ok {
+				selectedFields = append(selectedFields, organizationsettinghistory.FieldPendingDeletionAt)
+				fieldSeen[organizationsettinghistory.FieldPendingDeletionAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

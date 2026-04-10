@@ -25213,9 +25213,11 @@ type OrganizationSetting struct {
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
-	PaymentMethodAdded bool            `json:"paymentMethodAdded"`
-	Organization       *Organization   `json:"organization,omitempty"`
-	Files              *FileConnection `json:"files"`
+	PaymentMethodAdded bool `json:"paymentMethodAdded"`
+	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	PendingDeletionAt *models.DateTime `json:"pendingDeletionAt,omitempty"`
+	Organization      *Organization    `json:"organization,omitempty"`
+	Files             *FileConnection  `json:"files"`
 }
 
 func (OrganizationSetting) IsNode() {}
@@ -25612,6 +25614,17 @@ type OrganizationSettingWhereInput struct {
 	ComplianceWebhookTokenNotNil       *bool    `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
+	// pending_deletion_at field predicates
+	PendingDeletionAt       *models.DateTime   `json:"pendingDeletionAt,omitempty"`
+	PendingDeletionAtNeq    *models.DateTime   `json:"pendingDeletionAtNEQ,omitempty"`
+	PendingDeletionAtIn     []*models.DateTime `json:"pendingDeletionAtIn,omitempty"`
+	PendingDeletionAtNotIn  []*models.DateTime `json:"pendingDeletionAtNotIn,omitempty"`
+	PendingDeletionAtGt     *models.DateTime   `json:"pendingDeletionAtGT,omitempty"`
+	PendingDeletionAtGte    *models.DateTime   `json:"pendingDeletionAtGTE,omitempty"`
+	PendingDeletionAtLt     *models.DateTime   `json:"pendingDeletionAtLT,omitempty"`
+	PendingDeletionAtLte    *models.DateTime   `json:"pendingDeletionAtLTE,omitempty"`
+	PendingDeletionAtIsNil  *bool              `json:"pendingDeletionAtIsNil,omitempty"`
+	PendingDeletionAtNotNil *bool              `json:"pendingDeletionAtNotNil,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`

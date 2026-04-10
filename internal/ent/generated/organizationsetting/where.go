@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -196,6 +197,11 @@ func ComplianceWebhookToken(v string) predicate.OrganizationSetting {
 // PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
 func PaymentMethodAdded(v bool) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldEQ(FieldPaymentMethodAdded, v))
+}
+
+// PendingDeletionAt applies equality check predicate on the "pending_deletion_at" field. It's identical to PendingDeletionAtEQ.
+func PendingDeletionAt(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldPendingDeletionAt, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1821,6 +1827,56 @@ func PaymentMethodAddedEQ(v bool) predicate.OrganizationSetting {
 // PaymentMethodAddedNEQ applies the NEQ predicate on the "payment_method_added" field.
 func PaymentMethodAddedNEQ(v bool) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(sql.FieldNEQ(FieldPaymentMethodAdded, v))
+}
+
+// PendingDeletionAtEQ applies the EQ predicate on the "pending_deletion_at" field.
+func PendingDeletionAtEQ(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldEQ(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtNEQ applies the NEQ predicate on the "pending_deletion_at" field.
+func PendingDeletionAtNEQ(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNEQ(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtIn applies the In predicate on the "pending_deletion_at" field.
+func PendingDeletionAtIn(vs ...models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldIn(FieldPendingDeletionAt, vs...))
+}
+
+// PendingDeletionAtNotIn applies the NotIn predicate on the "pending_deletion_at" field.
+func PendingDeletionAtNotIn(vs ...models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNotIn(FieldPendingDeletionAt, vs...))
+}
+
+// PendingDeletionAtGT applies the GT predicate on the "pending_deletion_at" field.
+func PendingDeletionAtGT(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldGT(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtGTE applies the GTE predicate on the "pending_deletion_at" field.
+func PendingDeletionAtGTE(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldGTE(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtLT applies the LT predicate on the "pending_deletion_at" field.
+func PendingDeletionAtLT(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldLT(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtLTE applies the LTE predicate on the "pending_deletion_at" field.
+func PendingDeletionAtLTE(v models.DateTime) predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldLTE(FieldPendingDeletionAt, v))
+}
+
+// PendingDeletionAtIsNil applies the IsNil predicate on the "pending_deletion_at" field.
+func PendingDeletionAtIsNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldIsNull(FieldPendingDeletionAt))
+}
+
+// PendingDeletionAtNotNil applies the NotNil predicate on the "pending_deletion_at" field.
+func PendingDeletionAtNotNil() predicate.OrganizationSetting {
+	return predicate.OrganizationSetting(sql.FieldNotNull(FieldPendingDeletionAt))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

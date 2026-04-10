@@ -4463,6 +4463,7 @@ type ComplexityRoot struct {
 		Organization                     func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
+		PendingDeletionAt                func(childComplexity int) int
 		SamlCert                         func(childComplexity int) int
 		SamlIssuer                       func(childComplexity int) int
 		SamlSigninURL                    func(childComplexity int) int
@@ -34538,6 +34539,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSetting.PaymentMethodAdded(childComplexity), true
+
+	case "OrganizationSetting.pendingDeletionAt":
+		if e.ComplexityRoot.OrganizationSetting.PendingDeletionAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSetting.PendingDeletionAt(childComplexity), true
 
 	case "OrganizationSetting.samlCert":
 		if e.ComplexityRoot.OrganizationSetting.SamlCert == nil {
@@ -101873,6 +101881,10 @@ type OrganizationSetting implements Node {
   whether or not a payment method has been added to the account
   """
   paymentMethodAdded: Boolean!
+  """
+  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  """
+  pendingDeletionAt: DateTime
   organization: Organization
   files(
     """
@@ -102359,6 +102371,19 @@ input OrganizationSettingWhereInput {
   complianceWebhookTokenNotNil: Boolean
   complianceWebhookTokenEqualFold: String
   complianceWebhookTokenContainsFold: String
+  """
+  pending_deletion_at field predicates
+  """
+  pendingDeletionAt: DateTime
+  pendingDeletionAtNEQ: DateTime
+  pendingDeletionAtIn: [DateTime!]
+  pendingDeletionAtNotIn: [DateTime!]
+  pendingDeletionAtGT: DateTime
+  pendingDeletionAtGTE: DateTime
+  pendingDeletionAtLT: DateTime
+  pendingDeletionAtLTE: DateTime
+  pendingDeletionAtIsNil: Boolean
+  pendingDeletionAtNotNil: Boolean
   """
   organization edge predicates
   """

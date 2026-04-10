@@ -59,6 +59,7 @@ query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 		oidcDiscoveryEndpoint
 		organizationID
 		paymentMethodAdded
+		pendingDeletionAt
 		samlCert
 		samlIssuer
 		samlSigninURL
@@ -134,6 +135,7 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 			oidcDiscoveryEndpoint
 			organizationID
 			paymentMethodAdded
+			pendingDeletionAt
 			samlCert
 			samlIssuer
 			samlSigninURL

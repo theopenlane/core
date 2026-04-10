@@ -9,6 +9,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,8 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
@@ -156,6 +157,14 @@ func (OrganizationSetting) Fields() []ent.Field {
 			).
 			Default(false).
 			Comment("whether or not a payment method has been added to the account"),
+		field.Time("pending_deletion_at").
+			Comment("when will this organization be deleted? usually this is after org has not added a payment method afte n period").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			),
 	}
 }
 
