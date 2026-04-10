@@ -1,70 +1,56 @@
-query GetAllVendorScoringConfigHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigHistoryOrder!]) {
-  vendorScoringConfigHistories(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        historyTime
-        id
-        operation
-        ownerID
-        questions
-        ref
-        riskThresholds
-        scoringMode
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetAllVendorScoringConfigHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigHistoryOrder!]) {
+	vendorScoringConfigHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ownerID
+				questions
+				ref
+				riskThresholds
+				scoringMode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
-
-query GetVendorScoringConfigHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigHistoryOrder!], $where: VendorScoringConfigHistoryWhereInput) {
-  vendorScoringConfigHistories(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-    where: $where
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        createdAt
-        createdBy
-        historyTime
-        id
-        operation
-        ownerID
-        questions
-        ref
-        riskThresholds
-        scoringMode
-        tags
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetVendorScoringConfigHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [VendorScoringConfigHistoryOrder!], $where: VendorScoringConfigHistoryWhereInput) {
+	vendorScoringConfigHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				historyTime
+				id
+				operation
+				ownerID
+				questions
+				ref
+				riskThresholds
+				scoringMode
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }

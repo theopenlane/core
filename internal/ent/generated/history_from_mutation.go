@@ -11224,6 +11224,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetAlternateEmail(alternateEmail)
 	}
 
+	if emailAliases, exists := m.EmailAliases(); exists {
+		create = create.SetEmailAliases(emailAliases)
+	}
+
 	if phoneNumber, exists := m.PhoneNumber(); exists {
 		create = create.SetPhoneNumber(phoneNumber)
 	}
@@ -11439,6 +11443,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetAlternateEmail(identityholder.AlternateEmail)
 		}
 
+		if emailAliases, exists := m.EmailAliases(); exists {
+			create = create.SetEmailAliases(emailAliases)
+		} else {
+			create = create.SetEmailAliases(identityholder.EmailAliases)
+		}
+
 		if phoneNumber, exists := m.PhoneNumber(); exists {
 			create = create.SetPhoneNumber(phoneNumber)
 		} else {
@@ -11590,6 +11600,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetFullName(identityholder.FullName).
 			SetEmail(identityholder.Email).
 			SetAlternateEmail(identityholder.AlternateEmail).
+			SetEmailAliases(identityholder.EmailAliases).
 			SetPhoneNumber(identityholder.PhoneNumber).
 			SetIsOpenlaneUser(identityholder.IsOpenlaneUser).
 			SetUserID(identityholder.UserID).

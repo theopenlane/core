@@ -12173,6 +12173,7 @@ type CreateIdentityHolderInput struct {
 	FullName               string
 	Email                  string
 	AlternateEmail         *string
+	EmailAliases           []string
 	PhoneNumber            *string
 	IsOpenlaneUser         *bool
 	IdentityHolderType     *enums.IdentityHolderType
@@ -12236,6 +12237,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	m.SetEmail(i.Email)
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
 	}
 	if v := i.PhoneNumber; v != nil {
 		m.SetPhoneNumber(*v)
@@ -12382,6 +12386,9 @@ type UpdateIdentityHolderInput struct {
 	Email                       *string
 	ClearAlternateEmail         bool
 	AlternateEmail              *string
+	ClearEmailAliases           bool
+	EmailAliases                []string
+	AppendEmailAliases          []string
 	ClearPhoneNumber            bool
 	PhoneNumber                 *string
 	ClearIsOpenlaneUser         bool
@@ -12524,6 +12531,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
+	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
 	}
 	if i.ClearPhoneNumber {
 		m.ClearPhoneNumber()

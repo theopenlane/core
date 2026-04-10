@@ -86,9 +86,6 @@ func (IdentityHolder) Fields() []ent.Field {
 		field.Strings("email_aliases").
 			Comment("alternate email address for the identity holder in an array").
 			Optional().
-			Annotations(
-				entgql.OrderField("email_aliases"),
-			).
 			Default([]string{}),
 		field.String("phone_number").
 			Comment("phone number for the identity holder").

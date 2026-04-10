@@ -34970,6 +34970,11 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, identityholder.FieldAlternateEmail)
 				fieldSeen[identityholder.FieldAlternateEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[identityholder.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, identityholder.FieldEmailAliases)
+				fieldSeen[identityholder.FieldEmailAliases] = struct{}{}
+			}
 		case "phoneNumber":
 			if _, ok := fieldSeen[identityholder.FieldPhoneNumber]; !ok {
 				selectedFields = append(selectedFields, identityholder.FieldPhoneNumber)

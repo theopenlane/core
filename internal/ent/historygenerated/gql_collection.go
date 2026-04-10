@@ -6682,6 +6682,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, identityholderhistory.FieldAlternateEmail)
 				fieldSeen[identityholderhistory.FieldAlternateEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[identityholderhistory.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldEmailAliases)
+				fieldSeen[identityholderhistory.FieldEmailAliases] = struct{}{}
+			}
 		case "phoneNumber":
 			if _, ok := fieldSeen[identityholderhistory.FieldPhoneNumber]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldPhoneNumber)

@@ -3,9 +3,9 @@ package googleworkspace
 import (
 	"context"
 
+	"golang.org/x/oauth2"
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
-	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )
