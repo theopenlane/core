@@ -42186,13 +42186,16 @@ type UpdateOrganizationSettingInput struct {
 	MultifactorAuthEnforced      *bool `json:"multifactorAuthEnforced,omitempty"`
 	ClearMultifactorAuthEnforced *bool `json:"clearMultifactorAuthEnforced,omitempty"`
 	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken      *string  `json:"complianceWebhookToken,omitempty"`
-	ClearComplianceWebhookToken *bool    `json:"clearComplianceWebhookToken,omitempty"`
-	OrganizationID              *string  `json:"organizationID,omitempty"`
-	ClearOrganization           *bool    `json:"clearOrganization,omitempty"`
-	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
+	ComplianceWebhookToken      *string `json:"complianceWebhookToken,omitempty"`
+	ClearComplianceWebhookToken *bool   `json:"clearComplianceWebhookToken,omitempty"`
+	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	PendingDeletionAt      *models.DateTime `json:"pendingDeletionAt,omitempty"`
+	ClearPendingDeletionAt *bool            `json:"clearPendingDeletionAt,omitempty"`
+	OrganizationID         *string          `json:"organizationID,omitempty"`
+	ClearOrganization      *bool            `json:"clearOrganization,omitempty"`
+	AddFileIDs             []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs          []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles             *bool            `json:"clearFiles,omitempty"`
 }
 
 // UpdatePersonalAccessTokenInput is used for update PersonalAccessToken object.

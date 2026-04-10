@@ -132386,6 +132386,11 @@ input UpdateOrganizationSettingInput {
   """
   complianceWebhookToken: String
   clearComplianceWebhookToken: Boolean
+  """
+  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  """
+  pendingDeletionAt: DateTime
+  clearPendingDeletionAt: Boolean
   organizationID: ID
   clearOrganization: Boolean
   addFileIDs: [ID!]
