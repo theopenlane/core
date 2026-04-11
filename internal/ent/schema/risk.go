@@ -106,7 +106,6 @@ func (Risk) Fields() []ent.Field {
 			Comment("status of the risk - identified, mitigated, accepted, closed, transferred, and archived."),
 		field.Enum("impact").
 			GoType(enums.RiskImpact("")).
-			Default(enums.RiskImpactModerate.String()).
 			Annotations(
 				entgql.OrderField("IMPACT"),
 			).
@@ -356,6 +355,7 @@ func (Risk) Hooks() []ent.Hook {
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
 		hooks.HookSlateJSON(),
+		hooks.HookRisks(),
 	}
 }
 

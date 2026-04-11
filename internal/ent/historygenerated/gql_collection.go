@@ -10733,6 +10733,11 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, reviewhistory.FieldState)
 				fieldSeen[reviewhistory.FieldState] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[reviewhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldStatus)
+				fieldSeen[reviewhistory.FieldStatus] = struct{}{}
+			}
 		case "category":
 			if _, ok := fieldSeen[reviewhistory.FieldCategory]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldCategory)

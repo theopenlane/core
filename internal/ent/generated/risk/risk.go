@@ -422,7 +422,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [17]ent.Hook
+	Hooks        [18]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -456,8 +456,6 @@ func StatusValidator(s enums.RiskStatus) error {
 		return fmt.Errorf("risk: invalid enum value for status field: %q", s)
 	}
 }
-
-const DefaultImpact enums.RiskImpact = "MODERATE"
 
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
@@ -493,12 +491,12 @@ func ReviewFrequencyValidator(rf enums.Frequency) error {
 	}
 }
 
-const DefaultRiskDecision enums.RiskDecision = " NONE"
+const DefaultRiskDecision enums.RiskDecision = "NONE"
 
 // RiskDecisionValidator is a validator for the "risk_decision" field enum values. It is called by the builders before save.
 func RiskDecisionValidator(rd enums.RiskDecision) error {
 	switch rd.String() {
-	case "AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE":
+	case "AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("risk: invalid enum value for risk_decision field: %q", rd)

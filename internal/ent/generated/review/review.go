@@ -3,11 +3,14 @@
 package review
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -53,6 +56,8 @@ const (
 	FieldTitle = "title"
 	// FieldState holds the string denoting the state field in the database.
 	FieldState = "state"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
 	// FieldCategory holds the string denoting the category field in the database.
 	FieldCategory = "category"
 	// FieldClassification holds the string denoting the classification field in the database.
@@ -287,6 +292,7 @@ var Columns = []string{
 	FieldExternalOwnerID,
 	FieldTitle,
 	FieldState,
+	FieldStatus,
 	FieldCategory,
 	FieldClassification,
 	FieldSummary,
@@ -371,6 +377,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultStatus enums.ReviewStatus = "OPEN"
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s enums.ReviewStatus) error {
+	switch s.String() {
+	case "OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO":
+		return nil
+	default:
+		return fmt.Errorf("review: invalid enum value for status field: %q", s)
+	}
+}
 
 // OrderOption defines the ordering options for the Review queries.
 type OrderOption func(*sql.Selector)
@@ -468,6 +486,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 // ByState orders the results by the state field.
 func ByState(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldState, opts...).ToFunc()
+}
+
+// ByStatus orders the results by the status field.
+func ByStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
 // ByCategory orders the results by the category field.
@@ -963,3 +986,10 @@ func newInternalPoliciesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 	)
 }
+
+var (
+	// enums.ReviewStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.ReviewStatus)(nil)
+	// enums.ReviewStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.ReviewStatus)(nil)
+)

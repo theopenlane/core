@@ -8249,6 +8249,8 @@ type CreateReviewInput struct {
 	Title string `json:"title"`
 	// state of the review
 	State *string `json:"state,omitempty"`
+	// status of the review
+	Status *enums.ReviewStatus `json:"status,omitempty"`
 	// category for the review record
 	Category *string `json:"category,omitempty"`
 	// classification or sensitivity of the review record
@@ -29534,6 +29536,8 @@ type Review struct {
 	Title string `json:"title"`
 	// state of the review
 	State *string `json:"state,omitempty"`
+	// status of the review
+	Status *enums.ReviewStatus `json:"status,omitempty"`
 	// category for the review record
 	Category *string `json:"category,omitempty"`
 	// classification or sensitivity of the review record
@@ -29903,6 +29907,13 @@ type ReviewWhereInput struct {
 	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
 	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
 	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// status field predicates
+	Status       *enums.ReviewStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ReviewStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ReviewStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ReviewStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                `json:"statusNotNil,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -42849,6 +42860,9 @@ type UpdateReviewInput struct {
 	// state of the review
 	State      *string `json:"state,omitempty"`
 	ClearState *bool   `json:"clearState,omitempty"`
+	// status of the review
+	Status      *enums.ReviewStatus `json:"status,omitempty"`
+	ClearStatus *bool               `json:"clearStatus,omitempty"`
 	// category for the review record
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`

@@ -28842,6 +28842,10 @@ type ReviewHistory implements Node {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewHistoryReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -28960,6 +28964,16 @@ enum ReviewHistoryOrderField {
 	external_owner_id
 	title
 	state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -29283,6 +29297,15 @@ input ReviewHistoryWhereInput {
 	stateNotNil: Boolean
 	stateEqualFold: String
 	stateContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: ReviewHistoryReviewStatus
+	statusNEQ: ReviewHistoryReviewStatus
+	statusIn: [ReviewHistoryReviewStatus!]
+	statusNotIn: [ReviewHistoryReviewStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	category field predicates
 	"""

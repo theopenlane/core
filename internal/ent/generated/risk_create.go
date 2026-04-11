@@ -944,10 +944,6 @@ func (_c *RiskCreate) defaults() error {
 		v := risk.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.Impact(); !ok {
-		v := risk.DefaultImpact
-		_c.mutation.SetImpact(v)
-	}
 	if _, ok := _c.mutation.Likelihood(); !ok {
 		v := risk.DefaultLikelihood
 		_c.mutation.SetLikelihood(v)

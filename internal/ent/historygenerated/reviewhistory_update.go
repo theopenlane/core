@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
@@ -316,6 +317,26 @@ func (_u *ReviewHistoryUpdate) SetNillableState(v *string) *ReviewHistoryUpdate 
 // ClearState clears the value of the "state" field.
 func (_u *ReviewHistoryUpdate) ClearState() *ReviewHistoryUpdate {
 	_u.mutation.ClearState()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *ReviewHistoryUpdate) SetStatus(v enums.ReviewStatus) *ReviewHistoryUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ReviewHistoryUpdate) SetNillableStatus(v *enums.ReviewStatus) *ReviewHistoryUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ReviewHistoryUpdate) ClearStatus() *ReviewHistoryUpdate {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -630,6 +651,16 @@ func (_u *ReviewHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ReviewHistoryUpdate) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := reviewhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReviewHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *ReviewHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReviewHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -637,6 +668,9 @@ func (_u *ReviewHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *
 }
 
 func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(reviewhistory.Table, reviewhistory.Columns, sqlgraph.NewFieldSpec(reviewhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -751,6 +785,12 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(reviewhistory.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(reviewhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(reviewhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(reviewhistory.FieldCategory, field.TypeString, value)
@@ -1144,6 +1184,26 @@ func (_u *ReviewHistoryUpdateOne) ClearState() *ReviewHistoryUpdateOne {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *ReviewHistoryUpdateOne) SetStatus(v enums.ReviewStatus) *ReviewHistoryUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ReviewHistoryUpdateOne) SetNillableStatus(v *enums.ReviewStatus) *ReviewHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ReviewHistoryUpdateOne) ClearStatus() *ReviewHistoryUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetCategory sets the "category" field.
 func (_u *ReviewHistoryUpdateOne) SetCategory(v string) *ReviewHistoryUpdateOne {
 	_u.mutation.SetCategory(v)
@@ -1468,6 +1528,16 @@ func (_u *ReviewHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ReviewHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.Status(); ok {
+		if err := reviewhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReviewHistory.status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *ReviewHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReviewHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1475,6 +1545,9 @@ func (_u *ReviewHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(reviewhistory.Table, reviewhistory.Columns, sqlgraph.NewFieldSpec(reviewhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1606,6 +1679,12 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(reviewhistory.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(reviewhistory.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(reviewhistory.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(reviewhistory.FieldCategory, field.TypeString, value)

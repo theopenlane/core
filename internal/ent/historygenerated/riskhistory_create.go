@@ -665,10 +665,6 @@ func (_c *RiskHistoryCreate) defaults() error {
 		v := riskhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.Impact(); !ok {
-		v := riskhistory.DefaultImpact
-		_c.mutation.SetImpact(v)
-	}
 	if _, ok := _c.mutation.Likelihood(); !ok {
 		v := riskhistory.DefaultLikelihood
 		_c.mutation.SetLikelihood(v)

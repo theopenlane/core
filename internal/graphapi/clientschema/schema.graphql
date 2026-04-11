@@ -15018,6 +15018,10 @@ input CreateReviewInput {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -68883,6 +68887,10 @@ type Review implements Node {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -69608,6 +69616,16 @@ enum ReviewOrderField {
 	state
 }
 """
+ReviewReviewStatus is enum for the field status
+"""
+enum ReviewReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
+}
+"""
 Return response for updateReview mutation
 """
 type ReviewUpdatePayload {
@@ -69902,6 +69920,15 @@ input ReviewWhereInput {
 	stateNotNil: Boolean
 	stateEqualFold: String
 	stateContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: ReviewReviewStatus
+	statusNEQ: ReviewReviewStatus
+	statusIn: [ReviewReviewStatus!]
+	statusNotIn: [ReviewReviewStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	category field predicates
 	"""
@@ -90873,6 +90900,11 @@ input UpdateReviewInput {
 	"""
 	state: String
 	clearState: Boolean
+	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	clearStatus: Boolean
 	"""
 	category for the review record
 	"""

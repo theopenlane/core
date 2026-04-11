@@ -2172,6 +2172,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
@@ -15636,6 +15637,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.State(childComplexity), true
+
+	case "ReviewHistory.status":
+		if e.ComplexityRoot.ReviewHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.Status(childComplexity), true
 
 	case "ReviewHistory.summary":
 		if e.ComplexityRoot.ReviewHistory.Summary == nil {
@@ -50871,6 +50879,10 @@ type ReviewHistory implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewHistoryReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -50989,6 +51001,16 @@ enum ReviewHistoryOrderField {
   external_owner_id
   title
   state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -51312,6 +51334,15 @@ input ReviewHistoryWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewHistoryReviewStatus
+  statusNEQ: ReviewHistoryReviewStatus
+  statusIn: [ReviewHistoryReviewStatus!]
+  statusNotIn: [ReviewHistoryReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
