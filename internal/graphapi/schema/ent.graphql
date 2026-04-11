@@ -12371,6 +12371,10 @@ input CreateIdentityHolderInput {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -32643,6 +32647,10 @@ type IdentityHolder implements Node {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -34039,6 +34047,10 @@ input IdentityHolderWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -74676,6 +74688,12 @@ input UpdateIdentityHolderInput {
   """
   alternateEmail: String
   clearAlternateEmail: Boolean
+  """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
   """
   phone number for the identity holder
   """

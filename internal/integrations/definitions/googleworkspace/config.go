@@ -7,5 +7,5 @@ type Config struct {
 	// ClientSecret is the Google OAuth application client secret
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Google application
-	RedirectURL string `json:"redirecturl" koanf:"redirecturl"`
+	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
 }

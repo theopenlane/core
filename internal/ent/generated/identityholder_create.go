@@ -289,6 +289,12 @@ func (_c *IdentityHolderCreate) SetNillableAlternateEmail(v *string) *IdentityHo
 	return _c
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_c *IdentityHolderCreate) SetEmailAliases(v []string) *IdentityHolderCreate {
+	_c.mutation.SetEmailAliases(v)
+	return _c
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (_c *IdentityHolderCreate) SetPhoneNumber(v string) *IdentityHolderCreate {
 	_c.mutation.SetPhoneNumber(v)
@@ -912,6 +918,10 @@ func (_c *IdentityHolderCreate) defaults() error {
 		v := identityholder.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
+	if _, ok := _c.mutation.EmailAliases(); !ok {
+		v := identityholder.DefaultEmailAliases
+		_c.mutation.SetEmailAliases(v)
+	}
 	if _, ok := _c.mutation.IsOpenlaneUser(); !ok {
 		v := identityholder.DefaultIsOpenlaneUser
 		_c.mutation.SetIsOpenlaneUser(v)
@@ -1093,6 +1103,10 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AlternateEmail(); ok {
 		_spec.SetField(identityholder.FieldAlternateEmail, field.TypeString, value)
 		_node.AlternateEmail = value
+	}
+	if value, ok := _c.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholder.FieldEmailAliases, field.TypeJSON, value)
+		_node.EmailAliases = value
 	}
 	if value, ok := _c.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholder.FieldPhoneNumber, field.TypeString, value)

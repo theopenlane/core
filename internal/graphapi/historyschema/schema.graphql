@@ -16410,6 +16410,10 @@ type IdentityHolderHistory implements Node {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String

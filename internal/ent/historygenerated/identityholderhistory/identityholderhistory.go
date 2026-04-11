@@ -66,6 +66,8 @@ const (
 	FieldEmail = "email"
 	// FieldAlternateEmail holds the string denoting the alternate_email field in the database.
 	FieldAlternateEmail = "alternate_email"
+	// FieldEmailAliases holds the string denoting the email_aliases field in the database.
+	FieldEmailAliases = "email_aliases"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
 	// FieldIsOpenlaneUser holds the string denoting the is_openlane_user field in the database.
@@ -128,6 +130,7 @@ var Columns = []string{
 	FieldFullName,
 	FieldEmail,
 	FieldAlternateEmail,
+	FieldEmailAliases,
 	FieldPhoneNumber,
 	FieldIsOpenlaneUser,
 	FieldUserID,
@@ -177,6 +180,8 @@ var (
 	DefaultTags []string
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
+	// DefaultEmailAliases holds the default value on creation for the "email_aliases" field.
+	DefaultEmailAliases []string
 	// DefaultIsOpenlaneUser holds the default value on creation for the "is_openlane_user" field.
 	DefaultIsOpenlaneUser bool
 	// DefaultIsActive holds the default value on creation for the "is_active" field.

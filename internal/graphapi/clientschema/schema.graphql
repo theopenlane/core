@@ -13351,6 +13351,10 @@ input CreateIdentityHolderInput {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -35089,6 +35093,10 @@ type IdentityHolder implements Node {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -36559,6 +36567,10 @@ input IdentityHolderWhereInput {
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
+	"""
+	Filter for emailAliasesHas to contain a specific value
+	"""
+	emailAliasesHas: String
 }
 """
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
@@ -88526,6 +88538,12 @@ input UpdateIdentityHolderInput {
 	"""
 	alternateEmail: String
 	clearAlternateEmail: Boolean
+	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	appendEmailAliases: [String!]
+	clearEmailAliases: Boolean
 	"""
 	phone number for the identity holder
 	"""
