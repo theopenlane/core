@@ -95,12 +95,12 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
-	github.com/theopenlane/core/common v1.0.17
+	github.com/theopenlane/core/common v1.0.18
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.6
 	github.com/theopenlane/entx v0.24.0
-	github.com/theopenlane/go-client v0.9.3
+	github.com/theopenlane/go-client v0.9.4
 	github.com/theopenlane/gqlgen-plugins v0.14.6
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.27.5
