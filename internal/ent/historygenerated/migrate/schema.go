@@ -1386,6 +1386,7 @@ var (
 		{Name: "full_name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "alternate_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "is_openlane_user", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},

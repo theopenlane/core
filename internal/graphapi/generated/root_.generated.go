@@ -2642,6 +2642,7 @@ type ComplexityRoot struct {
 		DisplayID               func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email                   func(childComplexity int) int
+		EmailAliases            func(childComplexity int) int
 		Employer                func(childComplexity int) int
 		EmployerEntityID        func(childComplexity int) int
 		EndDate                 func(childComplexity int) int
@@ -20805,6 +20806,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Email(childComplexity), true
+
+	case "IdentityHolder.emailAliases":
+		if e.ComplexityRoot.IdentityHolder.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.EmailAliases(childComplexity), true
 
 	case "IdentityHolder.employer":
 		if e.ComplexityRoot.IdentityHolder.Employer == nil {
@@ -68623,6 +68631,10 @@ input CreateIdentityHolderInput {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -88895,6 +88907,10 @@ type IdentityHolder implements Node {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -90291,6 +90307,10 @@ input IdentityHolderWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -130928,6 +130948,12 @@ input UpdateIdentityHolderInput {
   """
   alternateEmail: String
   clearAlternateEmail: Boolean
+  """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
   """
   phone number for the identity holder
   """

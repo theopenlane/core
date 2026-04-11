@@ -1361,6 +1361,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholderhistory.FieldFullName:               {Type: field.TypeString, Column: identityholderhistory.FieldFullName},
 			identityholderhistory.FieldEmail:                  {Type: field.TypeString, Column: identityholderhistory.FieldEmail},
 			identityholderhistory.FieldAlternateEmail:         {Type: field.TypeString, Column: identityholderhistory.FieldAlternateEmail},
+			identityholderhistory.FieldEmailAliases:           {Type: field.TypeJSON, Column: identityholderhistory.FieldEmailAliases},
 			identityholderhistory.FieldPhoneNumber:            {Type: field.TypeString, Column: identityholderhistory.FieldPhoneNumber},
 			identityholderhistory.FieldIsOpenlaneUser:         {Type: field.TypeBool, Column: identityholderhistory.FieldIsOpenlaneUser},
 			identityholderhistory.FieldUserID:                 {Type: field.TypeString, Column: identityholderhistory.FieldUserID},
@@ -8893,6 +8894,11 @@ func (f *IdentityHolderHistoryFilter) WhereEmail(p entql.StringP) {
 // WhereAlternateEmail applies the entql string predicate on the alternate_email field.
 func (f *IdentityHolderHistoryFilter) WhereAlternateEmail(p entql.StringP) {
 	f.Where(p.Field(identityholderhistory.FieldAlternateEmail))
+}
+
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *IdentityHolderHistoryFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(identityholderhistory.FieldEmailAliases))
 }
 
 // WherePhoneNumber applies the entql string predicate on the phone_number field.

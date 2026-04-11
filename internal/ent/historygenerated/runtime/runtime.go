@@ -1434,12 +1434,16 @@ func init() {
 	identityholderhistoryDescWorkflowEligibleMarker := identityholderhistoryFields[20].Descriptor()
 	// identityholderhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	identityholderhistory.DefaultWorkflowEligibleMarker = identityholderhistoryDescWorkflowEligibleMarker.Default.(bool)
+	// identityholderhistoryDescEmailAliases is the schema descriptor for email_aliases field.
+	identityholderhistoryDescEmailAliases := identityholderhistoryFields[24].Descriptor()
+	// identityholderhistory.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	identityholderhistory.DefaultEmailAliases = identityholderhistoryDescEmailAliases.Default.([]string)
 	// identityholderhistoryDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[25].Descriptor()
+	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[26].Descriptor()
 	// identityholderhistory.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholderhistory.DefaultIsOpenlaneUser = identityholderhistoryDescIsOpenlaneUser.Default.(bool)
 	// identityholderhistoryDescIsActive is the schema descriptor for is_active field.
-	identityholderhistoryDescIsActive := identityholderhistoryFields[29].Descriptor()
+	identityholderhistoryDescIsActive := identityholderhistoryFields[30].Descriptor()
 	// identityholderhistory.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholderhistory.DefaultIsActive = identityholderhistoryDescIsActive.Default.(bool)
 	// identityholderhistoryDescID is the schema descriptor for id field.

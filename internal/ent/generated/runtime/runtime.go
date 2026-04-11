@@ -3477,16 +3477,20 @@ func init() {
 	identityholderDescAlternateEmail := identityholderFields[2].Descriptor()
 	// identityholder.AlternateEmailValidator is a validator for the "alternate_email" field. It is called by the builders before save.
 	identityholder.AlternateEmailValidator = identityholderDescAlternateEmail.Validators[0].(func(string) error)
+	// identityholderDescEmailAliases is the schema descriptor for email_aliases field.
+	identityholderDescEmailAliases := identityholderFields[3].Descriptor()
+	// identityholder.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	identityholder.DefaultEmailAliases = identityholderDescEmailAliases.Default.([]string)
 	// identityholderDescPhoneNumber is the schema descriptor for phone_number field.
-	identityholderDescPhoneNumber := identityholderFields[3].Descriptor()
+	identityholderDescPhoneNumber := identityholderFields[4].Descriptor()
 	// identityholder.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	identityholder.PhoneNumberValidator = identityholderDescPhoneNumber.Validators[0].(func(string) error)
 	// identityholderDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderDescIsOpenlaneUser := identityholderFields[4].Descriptor()
+	identityholderDescIsOpenlaneUser := identityholderFields[5].Descriptor()
 	// identityholder.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholder.DefaultIsOpenlaneUser = identityholderDescIsOpenlaneUser.Default.(bool)
 	// identityholderDescIsActive is the schema descriptor for is_active field.
-	identityholderDescIsActive := identityholderFields[8].Descriptor()
+	identityholderDescIsActive := identityholderFields[9].Descriptor()
 	// identityholder.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholder.DefaultIsActive = identityholderDescIsActive.Default.(bool)
 	// identityholderDescID is the schema descriptor for id field.

@@ -1,114 +1,110 @@
-mutation DeleteIntegration($deleteIntegrationId: ID!) {
-  deleteIntegration(id: $deleteIntegrationId) {
-    deletedID
-  }
+mutation DeleteIntegration ($deleteIntegrationId: ID!) {
+	deleteIntegration(id: $deleteIntegrationId) {
+		deletedID
+	}
 }
-
 query GetAllIntegrations {
-  integrations {
-    edges {
-      node {
-        description
-        id
-        kind
-        name
-        ownerID
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-        integrationType
-        metadata
-      }
-    }
-  }
+	integrations {
+		edges {
+			node {
+				description
+				id
+				kind
+				name
+				ownerID
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+				integrationType
+				metadata
+			}
+		}
+	}
 }
-
-query GetIntegrationByID($integrationId: ID!) {
-  integration(id: $integrationId) {
-    createdAt
-    createdBy
-    definitionID
-    definitionSlug
-    definitionVersion
-    description
-    environmentID
-    environmentName
-    family
-    id
-    integrationType
-    internalNotes
-    kind
-    metadata
-    name
-    ownerID
-    platformID
-    primaryDirectory
-    providerMetadataSnapshot
-    scopeID
-    scopeName
-    status
-    systemInternalID
-    systemOwned
-    tags
-    updatedAt
-    updatedBy
-  }
+query GetIntegrationByID ($integrationId: ID!) {
+	integration(id: $integrationId) {
+		createdAt
+		createdBy
+		definitionID
+		definitionSlug
+		definitionVersion
+		description
+		environmentID
+		environmentName
+		family
+		id
+		integrationType
+		internalNotes
+		kind
+		metadata
+		name
+		ownerID
+		platformID
+		primaryDirectory
+		providerMetadataSnapshot
+		scopeID
+		scopeName
+		status
+		systemInternalID
+		systemOwned
+		tags
+		updatedAt
+		updatedBy
+	}
 }
-
-query GetIntegrationByIDWithSecrets($integrationId: ID!) {
-  integration(id: $integrationId) {
-    description
-    id
-    kind
-    name
-    ownerID
-    secrets {
-      edges {
-        node {
-          id
-          name
-          kind
-        }
-      }
-    }
-    createdAt
-    createdBy
-    updatedAt
-    updatedBy
-    integrationType
-    metadata
-  }
+query GetIntegrationByIDWithSecrets ($integrationId: ID!) {
+	integration(id: $integrationId) {
+		description
+		id
+		kind
+		name
+		ownerID
+		secrets {
+			edges {
+				node {
+					id
+					name
+					kind
+				}
+			}
+		}
+		createdAt
+		createdBy
+		updatedAt
+		updatedBy
+		integrationType
+		metadata
+	}
 }
-
-query GetIntegrations($where: IntegrationWhereInput) {
-  integrations(where: $where) {
-    edges {
-      node {
-        description
-        id
-        kind
-        name
-        ownerID
-        owner {
-          id
-        }
-        secrets {
-          edges {
-            node {
-              id
-              name
-              kind
-            }
-          }
-        }
-        createdAt
-        createdBy
-        updatedAt
-        updatedBy
-        integrationType
-        metadata
-      }
-    }
-  }
+query GetIntegrations ($where: IntegrationWhereInput) {
+	integrations(where: $where) {
+		edges {
+			node {
+				description
+				id
+				kind
+				name
+				ownerID
+				owner {
+					id
+				}
+				secrets {
+					edges {
+						node {
+							id
+							name
+							kind
+						}
+					}
+				}
+				createdAt
+				createdBy
+				updatedAt
+				updatedBy
+				integrationType
+				metadata
+			}
+		}
+	}
 }

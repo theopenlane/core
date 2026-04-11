@@ -1282,6 +1282,7 @@ type ComplexityRoot struct {
 		Department             func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Email                  func(childComplexity int) int
+		EmailAliases           func(childComplexity int) int
 		EmployerEntityID       func(childComplexity int) int
 		EndDate                func(childComplexity int) int
 		EnvironmentID          func(childComplexity int) int
@@ -10239,6 +10240,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.Email(childComplexity), true
+
+	case "IdentityHolderHistory.emailAliases":
+		if e.ComplexityRoot.IdentityHolderHistory.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.EmailAliases(childComplexity), true
 
 	case "IdentityHolderHistory.employerEntityID":
 		if e.ComplexityRoot.IdentityHolderHistory.EmployerEntityID == nil {
@@ -38450,6 +38458,10 @@ type IdentityHolderHistory implements Node {
   alternate email address for the identity holder
   """
   alternateEmail: String
+  """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
   """
   phone number for the identity holder
   """

@@ -3628,6 +3628,7 @@ var (
 		{Name: "full_name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "alternate_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "is_openlane_user", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "identity_holder_type", Type: field.TypeEnum, Enums: []string{"EMPLOYEE", "CONTRACTOR", "UNSPECIFIED", "INTERN", "SERVICE", "PARTNER"}, Default: "UNSPECIFIED"},
@@ -3658,43 +3659,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "identity_holders_users_internal_owner_user",
-				Columns:    []*schema.Column{IdentityHoldersColumns[30]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[31]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_groups_internal_owner_group",
-				Columns:    []*schema.Column{IdentityHoldersColumns[31]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[32]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_custom_type_enums_environment",
-				Columns:    []*schema.Column{IdentityHoldersColumns[32]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "identity_holders_custom_type_enums_scope",
 				Columns:    []*schema.Column{IdentityHoldersColumns[33]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "identity_holders_entities_employer",
+				Symbol:     "identity_holders_custom_type_enums_scope",
 				Columns:    []*schema.Column{IdentityHoldersColumns[34]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "identity_holders_entities_employer",
+				Columns:    []*schema.Column{IdentityHoldersColumns[35]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_organizations_identity_holders",
-				Columns:    []*schema.Column{IdentityHoldersColumns[35]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[36]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_users_identity_holder_profiles",
-				Columns:    []*schema.Column{IdentityHoldersColumns[36]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[37]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3703,12 +3704,12 @@ var (
 			{
 				Name:    "identityholder_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[7], IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[7], IdentityHoldersColumns[36]},
 			},
 			{
 				Name:    "identityholder_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[36]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3716,7 +3717,7 @@ var (
 			{
 				Name:    "identityholder_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[14], IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[14], IdentityHoldersColumns[36]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3724,12 +3725,12 @@ var (
 			{
 				Name:    "identityholder_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[36]},
+				Columns: []*schema.Column{IdentityHoldersColumns[37]},
 			},
 			{
 				Name:    "identityholder_external_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[27]},
+				Columns: []*schema.Column{IdentityHoldersColumns[28]},
 			},
 		},
 	}
@@ -8165,7 +8166,7 @@ var (
 			},
 			{
 				Name:    "vulnerability_cve_id_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",

@@ -7197,6 +7197,8 @@ type CreateIdentityHolderInput struct {
 	Email string `json:"email"`
 	// alternate email address for the identity holder
 	AlternateEmail *string `json:"alternateEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"emailAliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// whether the identity holder record is linked to an Openlane user account
@@ -19105,6 +19107,8 @@ type IdentityHolder struct {
 	Email string `json:"email"`
 	// alternate email address for the identity holder
 	AlternateEmail *string `json:"alternateEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"emailAliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// whether the identity holder record is linked to an Openlane user account
@@ -19765,6 +19769,8 @@ type IdentityHolderWhereInput struct {
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for emailAliasesHas to contain a specific value
+	EmailAliasesHas *string `json:"emailAliasesHas,omitempty"`
 }
 
 type Integration struct {
@@ -41062,6 +41068,10 @@ type UpdateIdentityHolderInput struct {
 	// alternate email address for the identity holder
 	AlternateEmail      *string `json:"alternateEmail,omitempty"`
 	ClearAlternateEmail *bool   `json:"clearAlternateEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases       []string `json:"emailAliases,omitempty"`
+	AppendEmailAliases []string `json:"appendEmailAliases,omitempty"`
+	ClearEmailAliases  *bool    `json:"clearEmailAliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber      *string `json:"phoneNumber,omitempty"`
 	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
