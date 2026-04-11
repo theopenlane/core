@@ -197,20 +197,24 @@ func TestMutationCreateRisk(t *testing.T) {
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name          string
-		request       testclient.CreateRiskInput
-		addGroupToOrg bool
-		client        *testclient.TestClient
-		ctx           context.Context
-		expectedErr   string
+		name           string
+		request        testclient.CreateRiskInput
+		addGroupToOrg  bool
+		client         *testclient.TestClient
+		ctx            context.Context
+		expectedErr    string
+		expectedStatus enums.RiskStatus
+		expectedImpact enums.RiskImpact
 	}{
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "happy path, all input",
@@ -231,6 +235,17 @@ func TestMutationCreateRisk(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, hook defaults are applied",
+			request: testclient.CreateRiskInput{
+				Name:  "Another Risk",
+				Score: lo.ToPtr(int64(19)),
+			},
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactCritical,
+		},
+		{
 			name: "add groups",
 			request: testclient.CreateRiskInput{
 				Name:            "Test Risk",
@@ -238,8 +253,10 @@ func TestMutationCreateRisk(t *testing.T) {
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:         suite.client.api,
+			ctx:            testUser1.UserCtx,
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "happy path, using pat",
@@ -247,16 +264,20 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:    "Risk",
 				OwnerID: &testUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client:         suite.client.apiWithPAT,
+			ctx:            context.Background(),
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "using api token",
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			client: suite.client.apiWithToken,
-			ctx:    context.Background(),
+			client:         suite.client.apiWithToken,
+			ctx:            context.Background(),
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "user not authorized, not enough permissions",
@@ -272,9 +293,11 @@ func TestMutationCreateRisk(t *testing.T) {
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			addGroupToOrg: true,
-			client:        suite.client.api,
-			ctx:           groupMemberCtx,
+			addGroupToOrg:  true,
+			client:         suite.client.api,
+			ctx:            groupMemberCtx,
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "user authorized, they were added to the program",
@@ -282,8 +305,10 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:       "Risk",
 				ProgramIDs: []string{program1.ID},
 			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			client:         suite.client.api,
+			ctx:            adminUser.UserCtx,
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
 		},
 		{
 			name: "user authorized, user not authorized to one of the programs",
@@ -355,7 +380,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			if tc.request.Status != nil {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateRisk.Risk.Status))
 			} else {
-				assert.Check(t, is.Equal(enums.RiskIdentified, *resp.CreateRisk.Risk.Status))
+				assert.Check(t, is.Equal(tc.expectedStatus, *resp.CreateRisk.Risk.Status))
 			}
 
 			if tc.request.BusinessCosts != nil {
@@ -367,7 +392,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			if tc.request.Impact != nil {
 				assert.Check(t, is.Equal(*tc.request.Impact, *resp.CreateRisk.Risk.Impact))
 			} else {
-				assert.Check(t, is.Equal(enums.RiskImpactModerate, *resp.CreateRisk.Risk.Impact))
+				assert.Check(t, is.Equal(tc.expectedImpact, *resp.CreateRisk.Risk.Impact))
 			}
 
 			if tc.request.Likelihood != nil {
@@ -491,6 +516,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 				Impact:        &enums.RiskImpactModerate,
 				Likelihood:    &enums.RiskLikelihoodLow,
 				StakeholderID: &anotherStakeholderGroup.ID,
+				RiskDecision:  &enums.RiskDecisionTransfer,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -553,6 +579,10 @@ func TestMutationUpdateRisk(t *testing.T) {
 
 			if tc.request.Score != nil {
 				assert.Check(t, is.Equal(*tc.request.Score, *resp.UpdateRisk.Risk.Score))
+			}
+
+			if tc.request.RiskDecision != nil {
+				assert.Check(t, is.Equal(*tc.request.RiskDecision, *resp.UpdateRisk.Risk.RiskDecision))
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {

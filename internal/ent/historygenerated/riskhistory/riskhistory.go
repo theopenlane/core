@@ -218,8 +218,6 @@ func StatusValidator(s enums.RiskStatus) error {
 	}
 }
 
-const DefaultImpact enums.RiskImpact = "MODERATE"
-
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
 	switch i.String() {
@@ -254,12 +252,12 @@ func ReviewFrequencyValidator(rf enums.Frequency) error {
 	}
 }
 
-const DefaultRiskDecision enums.RiskDecision = " NONE"
+const DefaultRiskDecision enums.RiskDecision = "NONE"
 
 // RiskDecisionValidator is a validator for the "risk_decision" field enum values. It is called by the builders before save.
 func RiskDecisionValidator(rd enums.RiskDecision) error {
 	switch rd.String() {
-	case "AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE":
+	case "AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for risk_decision field: %q", rd)

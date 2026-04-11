@@ -1,4 +1,4 @@
-h1:Ynfsx5scAnSUYaumAEXidTDQEwfZbp+9grLvbtyRH8U=
+h1:ivLkG6ty3Z3XVTVISViwqfw6FSFxqj1Wozzej8u75D4=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -104,3 +104,5 @@ h1:Ynfsx5scAnSUYaumAEXidTDQEwfZbp+9grLvbtyRH8U=
 20260408044531_risk_fields_history.sql h1:LDW+Dm5eg6AX5/0dN4c2FW9GZnv6aTVJasHmXCsji+k=
 20260410220654_integrationsupdates.sql h1:9Wri+lEWbuDM/GXVCsUcuxpCAEOjvBQN2HnYFa0hJeg=
 20260410220656_integrationsupdates_history.sql h1:Av7MNI3zh9u370gebeyBXz5h+YE/ugw62uyMb/sskU4=
+20260411061304_risk_status.sql h1:r3O0/V6Wg0kutBX5jxjictfAsQyXcMBYkxvX9Njc6YQ=
+20260411061307_risk_status_history.sql h1:XnlsrxnAq/IkUALVJKesGQpWXaxOGFzM3O6I+VpY5nE=

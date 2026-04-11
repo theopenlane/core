@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -60,6 +61,8 @@ type Review struct {
 	Title string `json:"title,omitempty"`
 	// state of the review
 	State string `json:"state,omitempty"`
+	// status of the review
+	Status enums.ReviewStatus `json:"status,omitempty"`
 	// category for the review record
 	Category string `json:"category,omitempty"`
 	// classification or sensitivity of the review record
@@ -383,7 +386,7 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case review.FieldSystemOwned, review.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldDeletedBy, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
+		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldDeletedBy, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldStatus, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -525,6 +528,12 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
 			} else if value.Valid {
 				_m.State = value.String
+			}
+		case review.FieldStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field status", values[i])
+			} else if value.Valid {
+				_m.Status = enums.ReviewStatus(value.String)
 			}
 		case review.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -823,6 +832,9 @@ func (_m *Review) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(_m.State)
+	builder.WriteString(", ")
+	builder.WriteString("status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
 	builder.WriteString(_m.Category)

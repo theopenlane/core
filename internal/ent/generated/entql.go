@@ -2646,6 +2646,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			review.FieldExternalOwnerID:  {Type: field.TypeString, Column: review.FieldExternalOwnerID},
 			review.FieldTitle:            {Type: field.TypeString, Column: review.FieldTitle},
 			review.FieldState:            {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:           {Type: field.TypeEnum, Column: review.FieldStatus},
 			review.FieldCategory:         {Type: field.TypeString, Column: review.FieldCategory},
 			review.FieldClassification:   {Type: field.TypeString, Column: review.FieldClassification},
 			review.FieldSummary:          {Type: field.TypeString, Column: review.FieldSummary},
@@ -39509,6 +39510,11 @@ func (f *ReviewFilter) WhereTitle(p entql.StringP) {
 // WhereState applies the entql string predicate on the state field.
 func (f *ReviewFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(review.FieldState))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ReviewFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(review.FieldStatus))
 }
 
 // WhereCategory applies the entql string predicate on the category field.

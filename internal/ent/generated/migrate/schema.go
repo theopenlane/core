@@ -6030,6 +6030,7 @@ var (
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "classification", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -6056,25 +6057,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "reviews_organizations_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[30]},
+				Columns:    []*schema.Column{ReviewsColumns[31]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_custom_type_enums_environment",
-				Columns:    []*schema.Column{ReviewsColumns[31]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "reviews_custom_type_enums_scope",
 				Columns:    []*schema.Column{ReviewsColumns[32]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "reviews_users_reviewer",
+				Symbol:     "reviews_custom_type_enums_scope",
 				Columns:    []*schema.Column{ReviewsColumns[33]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_users_reviewer",
+				Columns:    []*schema.Column{ReviewsColumns[34]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6083,7 +6084,7 @@ var (
 			{
 				Name:    "review_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ReviewsColumns[30]},
+				Columns: []*schema.Column{ReviewsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6091,7 +6092,7 @@ var (
 			{
 				Name:    "review_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[30]},
+				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6119,7 +6120,7 @@ var (
 		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}},
 		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
 		{Name: "score", Type: field.TypeInt, Nullable: true},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -6134,7 +6135,7 @@ var (
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_due_at", Type: field.TypeTime, Nullable: true},
 		{Name: "residual_score", Type: field.TypeInt, Nullable: true},
-		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE"}, Default: " NONE"},
+		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE"}, Default: "NONE"},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risk_categories", Type: field.TypeString, Nullable: true},

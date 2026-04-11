@@ -20880,6 +20880,7 @@ type CreateReviewInput struct {
 	ExternalOwnerID   *string
 	Title             string
 	State             *string
+	Status            *enums.ReviewStatus
 	Category          *string
 	Classification    *string
 	Summary           *string
@@ -20943,6 +20944,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	m.SetTitle(i.Title)
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -21077,6 +21081,8 @@ type UpdateReviewInput struct {
 	Title                   *string
 	ClearState              bool
 	State                   *string
+	ClearStatus             bool
+	Status                  *enums.ReviewStatus
 	ClearCategory           bool
 	Category                *string
 	ClearClassification     bool
@@ -21220,6 +21226,12 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()

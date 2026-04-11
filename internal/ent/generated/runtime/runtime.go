@@ -6210,7 +6210,7 @@ func init() {
 	// review.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	review.TitleValidator = reviewDescTitle.Validators[0].(func(string) error)
 	// reviewDescApproved is the schema descriptor for approved field.
-	reviewDescApproved := reviewFields[9].Descriptor()
+	reviewDescApproved := reviewFields[10].Descriptor()
 	// review.DefaultApproved holds the default value on creation for the approved field.
 	review.DefaultApproved = reviewDescApproved.Default.(bool)
 	// reviewDescID is the schema descriptor for id field.
@@ -6270,6 +6270,8 @@ func init() {
 	risk.Hooks[15] = riskHooks[1]
 
 	risk.Hooks[16] = riskHooks[2]
+
+	risk.Hooks[17] = riskHooks[3]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]

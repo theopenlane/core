@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -286,6 +287,20 @@ func (_c *ReviewCreate) SetState(v string) *ReviewCreate {
 func (_c *ReviewCreate) SetNillableState(v *string) *ReviewCreate {
 	if v != nil {
 		_c.SetState(*v)
+	}
+	return _c
+}
+
+// SetStatus sets the "status" field.
+func (_c *ReviewCreate) SetStatus(v enums.ReviewStatus) *ReviewCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *ReviewCreate) SetNillableStatus(v *enums.ReviewStatus) *ReviewCreate {
+	if v != nil {
+		_c.SetStatus(*v)
 	}
 	return _c
 }
@@ -833,6 +848,10 @@ func (_c *ReviewCreate) defaults() error {
 		v := review.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := review.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.Approved(); !ok {
 		v := review.DefaultApproved
 		_c.mutation.SetApproved(v)
@@ -860,6 +879,11 @@ func (_c *ReviewCreate) check() error {
 	if v, ok := _c.mutation.Title(); ok {
 		if err := review.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Review.title": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := review.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Review.status": %w`, err)}
 		}
 	}
 	return nil
@@ -961,6 +985,10 @@ func (_c *ReviewCreate) createSpec() (*Review, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(review.FieldState, field.TypeString, value)
 		_node.State = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(review.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(review.FieldCategory, field.TypeString, value)

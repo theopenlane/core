@@ -18174,6 +18174,10 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetState(state)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -18375,6 +18379,12 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetState(review.State)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(review.Status)
+		}
+
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -18513,6 +18523,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
 			SetState(review.State).
+			SetStatus(review.Status).
 			SetCategory(review.Category).
 			SetClassification(review.Classification).
 			SetSummary(review.Summary).
