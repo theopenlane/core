@@ -4,12 +4,13 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func Test_impactLevelFromScore(t *testing.T) {
 	tests := []struct {
-		name string // description of this test case
-		// Named input parameters for target function.
+		name  string
 		score int
 		want  enums.RiskImpact
 	}{
@@ -57,9 +58,7 @@ func Test_impactLevelFromScore(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := impactLevelFromScore(tt.score)
-			if got != tt.want {
-				t.Errorf("impactLevelFromScore() = %v, want %v", got, tt.want)
-			}
+			assert.Check(t, is.Equal(got, tt.want))
 		})
 	}
 }
