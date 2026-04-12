@@ -175,7 +175,6 @@ func (Risk) Fields() []ent.Field {
 				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
 			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
-
 		field.Time("mitigated_at").
 			GoType(models.DateTime{}).
 			Optional().

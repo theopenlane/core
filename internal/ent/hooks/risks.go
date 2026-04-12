@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -200,8 +199,6 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 		return false
 	}
 
-	log.Error().Interface("edges", edges).Msg("edges added in risk mutation")
-
 	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "remediations") }) {
 		return false
 	}
@@ -216,6 +213,7 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 	remediations, err := m.Client().Remediation.Query().Where(remediation.IDIn(addedIDs...)).All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to query remediations for added remediation edges in risk mutation")
+
 		return false
 	}
 
@@ -313,6 +311,7 @@ func setImpactFromScore(ctx context.Context, m *generated.RiskMutation) []*gener
 		score, err := m.OldScore(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old score from risk mutation")
+
 			return nil
 		}
 
@@ -433,6 +432,7 @@ func setNextReviewDate(ctx context.Context, m *generated.RiskMutation) (updates 
 		oldFrequency, err := m.OldReviewFrequency(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old review frequency")
+
 			return nil
 		}
 
@@ -489,6 +489,7 @@ func updateNextReviewDate(ctx context.Context, m *generated.RiskMutation, update
 			SetNextReviewDueAt(models.DateTime(nextReviewDueAt)).Exec(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update next review due at timestamp for related risks after risk update")
+
 			return err
 		}
 
@@ -515,6 +516,7 @@ func updateLevelFromScore(ctx context.Context, m *generated.RiskMutation, update
 			SetImpact(level).Exec(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update impact level based on residual risk score for related risks after risk update")
+
 			return err
 		}
 
@@ -544,6 +546,7 @@ func determineUpdateAll(ctx context.Context, m *generated.RiskMutation, field st
 	oldVals, err := fetchOldRiskValue(ctx, m, field)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch old risk values for update")
+
 		return nil, false
 	}
 
@@ -593,6 +596,7 @@ func determineUpdateAll(ctx context.Context, m *generated.RiskMutation, field st
 		val, err := r.Value(field)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old risk value for update")
+
 			return nil, false
 		}
 
