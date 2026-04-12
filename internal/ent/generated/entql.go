@@ -2712,6 +2712,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldReviewRequired:    {Type: field.TypeBool, Column: risk.FieldReviewRequired},
 			risk.FieldLastReviewedAt:    {Type: field.TypeTime, Column: risk.FieldLastReviewedAt},
 			risk.FieldReviewFrequency:   {Type: field.TypeEnum, Column: risk.FieldReviewFrequency},
+			risk.FieldDueDate:           {Type: field.TypeTime, Column: risk.FieldDueDate},
 			risk.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: risk.FieldNextReviewDueAt},
 			risk.FieldResidualScore:     {Type: field.TypeInt, Column: risk.FieldResidualScore},
 			risk.FieldRiskDecision:      {Type: field.TypeEnum, Column: risk.FieldRiskDecision},
@@ -40123,6 +40124,11 @@ func (f *RiskFilter) WhereLastReviewedAt(p entql.TimeP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *RiskFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(risk.FieldReviewFrequency))
+}
+
+// WhereDueDate applies the entql time.Time predicate on the due_date field.
+func (f *RiskFilter) WhereDueDate(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldDueDate))
 }
 
 // WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.

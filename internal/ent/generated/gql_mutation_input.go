@@ -21531,6 +21531,7 @@ type CreateRiskInput struct {
 	ReviewRequired    *bool
 	LastReviewedAt    *models.DateTime
 	ReviewFrequency   *enums.Frequency
+	DueDate           *models.DateTime
 	NextReviewDueAt   *models.DateTime
 	ResidualScore     *int
 	RiskDecision      *enums.RiskDecision
@@ -21632,6 +21633,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if v := i.NextReviewDueAt; v != nil {
 		m.SetNextReviewDueAt(*v)
@@ -21778,6 +21782,8 @@ type UpdateRiskInput struct {
 	LastReviewedAt          *models.DateTime
 	ClearReviewFrequency    bool
 	ReviewFrequency         *enums.Frequency
+	ClearDueDate            bool
+	DueDate                 *models.DateTime
 	ClearNextReviewDueAt    bool
 	NextReviewDueAt         *models.DateTime
 	ClearResidualScore      bool
@@ -22006,6 +22012,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if i.ClearNextReviewDueAt {
 		m.ClearNextReviewDueAt()

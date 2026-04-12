@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -452,6 +453,14 @@ func TestMutationCreateRisk(t *testing.T) {
 				assert.Check(t, is.Nil(resp.CreateRisk.Risk.Delegate))
 			}
 
+			// check due date based on the sla config, which should be 60 days from now for a risk with low impact
+			if tc.request.Impact != nil && *tc.request.Impact == enums.RiskImpactLow {
+				assert.Check(t, resp.CreateRisk.Risk.DueDate != nil)
+				due := time.Time(*resp.CreateRisk.Risk.DueDate)
+				assert.Check(t, due.After(time.Now().Add(59*24*time.Hour)), "due date is not after 59 days from now %s", due.String())
+				assert.Check(t, due.Before(time.Now().Add(61*24*time.Hour)), "due date is not before 61 days from now %s", due.String())
+			}
+
 			// ensure the org owner has access to the risk that was created by an api token
 			if tc.client == suite.client.apiWithToken {
 				res, err := suite.client.api.GetRiskByID(testUser1.UserCtx, resp.CreateRisk.Risk.ID)
@@ -489,6 +498,25 @@ func TestMutationUpdateRisk(t *testing.T) {
 	_, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
+	createRemediation, err := suite.client.api.CreateRemediation(testUser1.UserCtx, testclient.CreateRemediationInput{
+		Title:   lo.ToPtr("Test Remediation"),
+		Summary: lo.ToPtr("Test summary for query"),
+		Status:  &enums.RemediationStatusCompleted,
+	})
+	assert.NilError(t, err)
+
+	createActionPlan, err := suite.client.api.CreateActionPlan(testUser1.UserCtx, testclient.CreateActionPlanInput{
+		Name:  "Test Action Plan",
+		Title: "Test Action Plan",
+	})
+	assert.NilError(t, err)
+
+	createReview, err := suite.client.api.CreateReview(adminUser.UserCtx, testclient.CreateReviewInput{
+		Title:  "Test Review",
+		Status: &enums.ReviewStatusCompleted,
+	})
+	assert.NilError(t, err)
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateRiskInput
@@ -503,6 +531,15 @@ func TestMutationUpdateRisk(t *testing.T) {
 				AddViewerIDs:  []string{groupMember.GroupID},
 				StakeholderID: &stakeholderGroup.ID,
 				DelegateID:    &delegateGroup.ID,
+				Status:        &enums.RiskOpen,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, add action plan, status should be set to in progress",
+			request: testclient.UpdateRiskInput{
+				AddActionPlanIDs: []string{createActionPlan.CreateActionPlan.ActionPlan.ID},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -510,13 +547,38 @@ func TestMutationUpdateRisk(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateRiskInput{
-				Status:        &enums.RiskArchived,
-				Tags:          []string{"tag1", "tag2"},
-				Mitigation:    lo.ToPtr("Updated mitigation"),
-				Impact:        &enums.RiskImpactModerate,
-				Likelihood:    &enums.RiskLikelihoodLow,
-				StakeholderID: &anotherStakeholderGroup.ID,
-				RiskDecision:  &enums.RiskDecisionTransfer,
+				Tags:              []string{"tag1", "tag2"},
+				Mitigation:        lo.ToPtr("Updated mitigation"),
+				Impact:            &enums.RiskImpactModerate,
+				Likelihood:        &enums.RiskLikelihoodLow,
+				StakeholderID:     &anotherStakeholderGroup.ID,
+				RiskDecision:      &enums.RiskDecisionTransfer,
+				AddRemediationIDs: []string{createRemediation.CreateRemediation.Remediation.ID},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, set status to mitigated, timestamp should be updated",
+			request: testclient.UpdateRiskInput{
+				Status:          &enums.RiskMitigated,
+				ReviewFrequency: &enums.FrequencyYearly,
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, add completed review, last reviewed timestamp should be updated",
+			request: testclient.UpdateRiskInput{
+				AddReviewIDs: []string{createReview.CreateReview.Review.ID},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, update review frequency, next review timestamp should be updated",
+			request: testclient.UpdateRiskInput{
+				ReviewFrequency: &enums.FrequencyMonthly,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -583,6 +645,44 @@ func TestMutationUpdateRisk(t *testing.T) {
 
 			if tc.request.RiskDecision != nil {
 				assert.Check(t, is.Equal(*tc.request.RiskDecision, *resp.UpdateRisk.Risk.RiskDecision))
+			}
+
+			if len(tc.request.AddActionPlanIDs) > 0 {
+				// risk should be set to in progress when an action plan is added
+				assert.Check(t, is.Equal(*resp.UpdateRisk.Risk.Status, enums.RiskInProgress))
+			}
+
+			if len(tc.request.AddRemediationIDs) > 0 {
+				// risk should be set to mitigated when a completed remediation is added
+				assert.Check(t, is.Equal(*resp.UpdateRisk.Risk.Status, enums.RiskMitigated))
+			}
+
+			if len(tc.request.AddReviewIDs) > 0 {
+				// last reviewed at should be updated when a completed review is added
+				assert.Check(t, resp.UpdateRisk.Risk.LastReviewedAt != nil)
+				assert.Check(t, resp.UpdateRisk.Risk.NextReviewDueAt != nil)
+				due := time.Time(*resp.UpdateRisk.Risk.NextReviewDueAt)
+				// ensure the next review due at is approximately one year from now based on the default review frequency
+				assert.Check(t, due.After(time.Now().Add(365*24*time.Hour-time.Hour)), "next review due at is not after one year from now %s", due.String())
+				assert.Check(t, due.Before(time.Now().Add(365*24*time.Hour+time.Hour)), "next review due at is not before one year and one hour from now %s", due.String())
+			}
+
+			if tc.request.Status != nil && *tc.request.Status == enums.RiskMitigated {
+				assert.Check(t, resp.UpdateRisk.Risk.MitigatedAt != nil)
+			}
+
+			if tc.request.ReviewFrequency != nil {
+				// next review due at should be updated when the review frequency is updated
+				// this is based on the previous test case that added a completed review, so the next review due at should be approximately one month from now
+				if *tc.request.ReviewFrequency == enums.FrequencyMonthly {
+					assert.Check(t, resp.UpdateRisk.Risk.NextReviewDueAt != nil)
+					// ensure the next review due at is approximately one month from now
+					due := time.Time(*resp.UpdateRisk.Risk.NextReviewDueAt)
+
+					assert.Check(t, due.After(time.Now().Add(28*24*time.Hour)))
+					assert.Check(t, due.Before(time.Now().Add(31*24*time.Hour)))
+				}
+
 			}
 
 			if len(tc.request.AddViewerIDs) > 0 {

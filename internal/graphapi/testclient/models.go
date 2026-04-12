@@ -8351,6 +8351,8 @@ type CreateRiskInput struct {
 	// the time when the risk was last reviewed
 	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate *models.DateTime `json:"dueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
@@ -30219,6 +30221,8 @@ type Risk struct {
 	// the time when the risk was last reviewed
 	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate *models.DateTime `json:"dueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
@@ -30768,6 +30772,17 @@ type RiskWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// due_date field predicates
+	DueDate       *models.DateTime   `json:"dueDate,omitempty"`
+	DueDateNeq    *models.DateTime   `json:"dueDateNEQ,omitempty"`
+	DueDateIn     []*models.DateTime `json:"dueDateIn,omitempty"`
+	DueDateNotIn  []*models.DateTime `json:"dueDateNotIn,omitempty"`
+	DueDateGt     *models.DateTime   `json:"dueDateGT,omitempty"`
+	DueDateGte    *models.DateTime   `json:"dueDateGTE,omitempty"`
+	DueDateLt     *models.DateTime   `json:"dueDateLT,omitempty"`
+	DueDateLte    *models.DateTime   `json:"dueDateLTE,omitempty"`
+	DueDateIsNil  *bool              `json:"dueDateIsNil,omitempty"`
+	DueDateNotNil *bool              `json:"dueDateNotNil,omitempty"`
 	// next_review_due_at field predicates
 	NextReviewDueAt       *models.DateTime   `json:"nextReviewDueAt,omitempty"`
 	NextReviewDueAtNeq    *models.DateTime   `json:"nextReviewDueAtNEQ,omitempty"`
@@ -43041,6 +43056,9 @@ type UpdateRiskInput struct {
 	ClearLastReviewedAt  *bool            `json:"clearLastReviewedAt,omitempty"`
 	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
 	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate      *models.DateTime `json:"dueDate,omitempty"`
+	ClearDueDate *bool            `json:"clearDueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt      *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	ClearNextReviewDueAt *bool            `json:"clearNextReviewDueAt,omitempty"`
@@ -53524,6 +53542,7 @@ const (
 	RiskOrderFieldReviewRequired  RiskOrderField = "review_required"
 	RiskOrderFieldLastReviewedAt  RiskOrderField = "last_reviewed_at"
 	RiskOrderFieldReviewFrequency RiskOrderField = "review_frequency"
+	RiskOrderFieldDueDate         RiskOrderField = "due_date"
 	RiskOrderFieldNextReviewDueAt RiskOrderField = "next_review_due_at"
 	RiskOrderFieldResidualScore   RiskOrderField = "residual_score"
 	RiskOrderFieldRiskDecision    RiskOrderField = "risk_decision"
@@ -53544,6 +53563,7 @@ var AllRiskOrderField = []RiskOrderField{
 	RiskOrderFieldReviewRequired,
 	RiskOrderFieldLastReviewedAt,
 	RiskOrderFieldReviewFrequency,
+	RiskOrderFieldDueDate,
 	RiskOrderFieldNextReviewDueAt,
 	RiskOrderFieldResidualScore,
 	RiskOrderFieldRiskDecision,
@@ -53551,7 +53571,7 @@ var AllRiskOrderField = []RiskOrderField{
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts, RiskOrderFieldMitigatedAt, RiskOrderFieldReviewRequired, RiskOrderFieldLastReviewedAt, RiskOrderFieldReviewFrequency, RiskOrderFieldNextReviewDueAt, RiskOrderFieldResidualScore, RiskOrderFieldRiskDecision:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts, RiskOrderFieldMitigatedAt, RiskOrderFieldReviewRequired, RiskOrderFieldLastReviewedAt, RiskOrderFieldReviewFrequency, RiskOrderFieldDueDate, RiskOrderFieldNextReviewDueAt, RiskOrderFieldResidualScore, RiskOrderFieldRiskDecision:
 		return true
 	}
 	return false

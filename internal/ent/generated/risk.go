@@ -99,6 +99,8 @@ type Risk struct {
 	LastReviewedAt *models.DateTime `json:"last_reviewed_at,omitempty"`
 	// ReviewFrequency holds the value of the "review_frequency" field.
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate *models.DateTime `json:"due_date,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt *models.DateTime `json:"next_review_due_at,omitempty"`
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
@@ -438,7 +440,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case risk.FieldObservedAt, risk.FieldMitigatedAt, risk.FieldLastReviewedAt, risk.FieldNextReviewDueAt:
+		case risk.FieldObservedAt, risk.FieldMitigatedAt, risk.FieldLastReviewedAt, risk.FieldDueDate, risk.FieldNextReviewDueAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case risk.FieldTags, risk.FieldMitigationJSON, risk.FieldDetailsJSON, risk.FieldBusinessCostsJSON:
 			values[i] = new([]byte)
@@ -720,6 +722,13 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case risk.FieldDueDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field due_date", values[i])
+			} else if value.Valid {
+				_m.DueDate = new(models.DateTime)
+				*_m.DueDate = *value.S.(*models.DateTime)
 			}
 		case risk.FieldNextReviewDueAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -1057,6 +1066,11 @@ func (_m *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	if v := _m.DueDate; v != nil {
+		builder.WriteString("due_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	if v := _m.NextReviewDueAt; v != nil {
 		builder.WriteString("next_review_due_at=")

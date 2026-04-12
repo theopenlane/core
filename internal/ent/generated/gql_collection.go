@@ -66568,6 +66568,11 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, risk.FieldReviewFrequency)
 				fieldSeen[risk.FieldReviewFrequency] = struct{}{}
 			}
+		case "dueDate":
+			if _, ok := fieldSeen[risk.FieldDueDate]; !ok {
+				selectedFields = append(selectedFields, risk.FieldDueDate)
+				fieldSeen[risk.FieldDueDate] = struct{}{}
+			}
 		case "nextReviewDueAt":
 			if _, ok := fieldSeen[risk.FieldNextReviewDueAt]; !ok {
 				selectedFields = append(selectedFields, risk.FieldNextReviewDueAt)

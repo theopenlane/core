@@ -2202,6 +2202,7 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DetailsJSON       func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
 		ExternalID        func(childComplexity int) int
@@ -15784,6 +15785,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.DisplayID(childComplexity), true
+
+	case "RiskHistory.dueDate":
+		if e.ComplexityRoot.RiskHistory.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.DueDate(childComplexity), true
 
 	case "RiskHistory.environmentID":
 		if e.ComplexityRoot.RiskHistory.EnvironmentID == nil {
@@ -51669,6 +51677,10 @@ type RiskHistory implements Node {
   lastReviewedAt: DateTime
   reviewFrequency: RiskHistoryFrequency
   """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  """
   the time when the next review is due for the risk
   """
   nextReviewDueAt: DateTime
@@ -51761,6 +51773,7 @@ enum RiskHistoryOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -52358,6 +52371,19 @@ input RiskHistoryWhereInput {
   reviewFrequencyNotIn: [RiskHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """
