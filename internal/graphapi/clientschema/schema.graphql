@@ -15195,6 +15195,10 @@ input CreateRiskInput {
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskFrequency
 	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	"""
 	the time when the next review is due for the risk
 	"""
 	nextReviewDueAt: DateTime
@@ -70366,6 +70370,10 @@ type Risk implements Node {
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskFrequency
 	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	"""
 	the time when the next review is due for the risk
 	"""
 	nextReviewDueAt: DateTime
@@ -71069,6 +71077,7 @@ enum RiskOrderField {
 	review_required
 	last_reviewed_at
 	review_frequency
+	due_date
 	next_review_due_at
 	residual_score
 	risk_decision
@@ -71643,6 +71652,19 @@ input RiskWhereInput {
 	reviewFrequencyNotIn: [RiskFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: DateTime
+	dueDateNEQ: DateTime
+	dueDateIn: [DateTime!]
+	dueDateNotIn: [DateTime!]
+	dueDateGT: DateTime
+	dueDateGTE: DateTime
+	dueDateLT: DateTime
+	dueDateLTE: DateTime
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
 	"""
 	next_review_due_at field predicates
 	"""
@@ -91156,6 +91178,11 @@ input UpdateRiskInput {
 	clearLastReviewedAt: Boolean
 	reviewFrequency: RiskFrequency
 	clearReviewFrequency: Boolean
+	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	clearDueDate: Boolean
 	"""
 	the time when the next review is due for the risk
 	"""

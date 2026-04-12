@@ -5399,6 +5399,7 @@ type ComplexityRoot struct {
 		DetailsJSON       func(childComplexity int) int
 		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment       func(childComplexity int) int
@@ -41311,6 +41312,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Risk.DisplayID(childComplexity), true
 
+	case "Risk.dueDate":
+		if e.ComplexityRoot.Risk.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.DueDate(childComplexity), true
+
 	case "Risk.editors":
 		if e.ComplexityRoot.Risk.Editors == nil {
 			break
@@ -70435,6 +70443,10 @@ input CreateRiskInput {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -114081,6 +114093,10 @@ type Risk implements Node {
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
   """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  """
   the time when the next review is due for the risk
   """
   nextReviewDueAt: DateTime
@@ -114735,6 +114751,7 @@ enum RiskOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -115296,6 +115313,19 @@ input RiskWhereInput {
   reviewFrequencyNotIn: [RiskFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """
@@ -133557,6 +133587,11 @@ input UpdateRiskInput {
   clearLastReviewedAt: Boolean
   reviewFrequency: RiskFrequency
   clearReviewFrequency: Boolean
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  clearDueDate: Boolean
   """
   the time when the next review is due for the risk
   """

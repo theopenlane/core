@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"strings"
 	"time"
@@ -28,23 +29,26 @@ func HookRisks() ent.Hook {
 			if isDeleteOp(ctx, m) {
 				return next.Mutate(ctx, m)
 			}
-			// if review edge added, set the last reviewed at timestamp + update next review date
+
+			// set last reviewed at timestamp if a completed review is added
 			setLastReviewedAt(ctx, m)
 
-			// if remediation edge added/update and status COMPLETED, and status is OPEN or INPROGRESS, set status to MITIGATED
-			statusSet := setStatusBasedOnRemediation(ctx, m)
-
-			if !statusSet {
+			if !setStatusBasedOnRemediation(ctx, m) {
 				// if action plan edge added, and status is OPEN, set status to IN_PROGRESS
-				setStatusBasedOnActionPlan(ctx, m)
+				if !setStatusBasedOnActionPlan(ctx, m) && m.Op().Is(ent.OpCreate) {
+					// default status to IDENTIFIED on create if not set
+					m.SetStatus(enums.RiskIdentified)
+				}
+
 			}
 
+			// set mitigated at timestamp if status is set to MITIGATED
 			postUpdatesMitigationTimestamp, shouldClear := setMitigatedTimestamp(ctx, m)
-			// if review frequency is changed, set the next review date based on the last reviewed at timestamp + frequency
 
+			// set next review date based on review edges
 			reviewUpdates := setNextReviewDate(ctx, m)
 
-			// if residual risk is set, update severity level based on the residual risk score, instead of the inherent risk score
+			// set impact based on score
 			scoreUpdates := setImpactFromScore(ctx, m)
 			if len(scoreUpdates) > 0 {
 				return next.Mutate(ctx, m)
@@ -89,11 +93,11 @@ func setLastReviewedAt(ctx context.Context, m *generated.RiskMutation) {
 		return
 	}
 
-	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "risk") }) {
+	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "reviews") }) {
 		return
 	}
 
-	addedReviewEdges := m.AddedIDs("review")
+	addedReviewEdges := m.AddedIDs("reviews")
 
 	addedIDs := make([]string, len(addedReviewEdges))
 	for i, id := range addedReviewEdges {
@@ -141,11 +145,11 @@ func setStatusBasedOnActionPlan(ctx context.Context, m *generated.RiskMutation) 
 		return false
 	}
 
-	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "action_plan") }) {
+	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "action_plans") }) {
 		return false
 	}
 
-	addedActionPlanEdges := m.AddedIDs("action_plan")
+	addedActionPlanEdges := m.AddedIDs("action_plans")
 
 	addedIDs := make([]string, len(addedActionPlanEdges))
 	for i, id := range addedActionPlanEdges {
@@ -166,16 +170,16 @@ func setStatusBasedOnActionPlan(ctx context.Context, m *generated.RiskMutation) 
 	return false
 }
 
-// setStatusBasedOnRemediation checks if a remediation edge is added or updated to completed, and if the risk status is OPEN or IN_PROGRESS, sets it to MITIGATED
+// setStatusBasedOnRemediation checks if a remediation edge is added or updated to completed, and if the risk status is IDENTIFIED, OPEN or IN_PROGRESS, sets it to MITIGATED
 // returns true if the status was updated, false otherwise
 func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation) bool {
-	if !m.Op().Is(ent.OpUpdateOne) {
-		return false
+	// if the status is already set, no need to update, return true to indicate that we handled the status update
+	_, ok := m.Status()
+	if ok {
+		return true
 	}
 
-	statusToCheck := []enums.RiskStatus{enums.RiskOpen, enums.RiskInProgress}
-	status, ok := m.Status()
-	if ok && !slices.Contains(statusToCheck, enums.RiskStatus(status)) {
+	if !m.Op().Is(ent.OpUpdateOne) {
 		return false
 	}
 
@@ -185,6 +189,7 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 		return false
 	}
 
+	statusToCheck := []enums.RiskStatus{enums.RiskIdentified, enums.RiskOpen, enums.RiskInProgress}
 	if !slices.Contains(statusToCheck, oldStatus) {
 		return false
 	}
@@ -194,11 +199,11 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 		return false
 	}
 
-	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "remediation") }) {
+	if !slices.ContainsFunc(edges, func(e string) bool { return strings.EqualFold(e, "remediations") }) {
 		return false
 	}
 
-	addedRemediationEdges := m.AddedIDs("remediation")
+	addedRemediationEdges := m.AddedIDs("remediations")
 
 	addedIDs := make([]string, len(addedRemediationEdges))
 	for i, id := range addedRemediationEdges {
@@ -208,6 +213,7 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 	remediations, err := m.Client().Remediation.Query().Where(remediation.IDIn(addedIDs...)).All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to query remediations for added remediation edges in risk mutation")
+
 		return false
 	}
 
@@ -236,7 +242,7 @@ func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) 
 	for _, sla := range slaConfig {
 		if riskToSeverityLevel(impact) == sla.SecurityLevel {
 			dueDate := time.Now().Add(time.Duration(sla.SLADays) * 24 * time.Hour)
-			m.SetNextReviewDueAt(models.DateTime(dueDate))
+			m.SetDueDate(models.DateTime(dueDate))
 
 			return nil
 		}
@@ -305,6 +311,7 @@ func setImpactFromScore(ctx context.Context, m *generated.RiskMutation) []*gener
 		score, err := m.OldScore(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old score from risk mutation")
+
 			return nil
 		}
 
@@ -358,11 +365,11 @@ func setMitigatedTimestamp(ctx context.Context, m *generated.RiskMutation) (upda
 		case ent.OpCreate:
 			m.SetMitigatedAt(models.DateTime(time.Now()))
 			return nil, false
-		case ent.OpUpdate:
+		case ent.OpUpdate, ent.OpUpdateOne:
 			// look to see if all the old risks have the same old value, if the old value is
 			// not mitigated, then we can update all, this allows us to follow the same path for
 			// update and updateOne
-			updates, updateAll := determineUpdateAll(ctx, m, risk.FieldStatus, string(enums.RiskMitigated), false)
+			updates, updateAll := determineUpdateAll(ctx, m, risk.FieldStatus, enums.RiskMitigated.String(), false)
 
 			if updateAll {
 				setMitigatedTimestamp()
@@ -377,7 +384,7 @@ func setMitigatedTimestamp(ctx context.Context, m *generated.RiskMutation) (upda
 	default:
 		switch m.Op() {
 		case ent.OpUpdateOne, ent.OpUpdate:
-			updates, updateAll := determineUpdateAll(ctx, m, risk.FieldStatus, string(enums.RiskMitigated), true)
+			updates, updateAll := determineUpdateAll(ctx, m, risk.FieldStatus, enums.RiskMitigated.String(), true)
 
 			if updateAll {
 				m.ClearMitigatedAt()
@@ -425,6 +432,7 @@ func setNextReviewDate(ctx context.Context, m *generated.RiskMutation) (updates 
 		oldFrequency, err := m.OldReviewFrequency(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old review frequency")
+
 			return nil
 		}
 
@@ -481,6 +489,7 @@ func updateNextReviewDate(ctx context.Context, m *generated.RiskMutation, update
 			SetNextReviewDueAt(models.DateTime(nextReviewDueAt)).Exec(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update next review due at timestamp for related risks after risk update")
+
 			return err
 		}
 
@@ -507,6 +516,7 @@ func updateLevelFromScore(ctx context.Context, m *generated.RiskMutation, update
 			SetImpact(level).Exec(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to update impact level based on residual risk score for related risks after risk update")
+
 			return err
 		}
 
@@ -536,26 +546,37 @@ func determineUpdateAll(ctx context.Context, m *generated.RiskMutation, field st
 	oldVals, err := fetchOldRiskValue(ctx, m, field)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch old risk values for update")
+
 		return nil, false
 	}
 
 	uniqueValues := []string{}
 
 	for _, val := range oldVals {
-		val, err := val.Value(field)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old risk value for update")
+		var value string
+		switch field {
+		case risk.FieldStatus:
+			value = val.Status.String()
+		case risk.FieldReviewFrequency:
+			value = val.ReviewFrequency.String()
+		case risk.FieldScore:
+			value = fmt.Sprintf("%d", val.Score)
+		case risk.FieldResidualScore:
+			value = fmt.Sprintf("%d", val.ResidualScore)
+		default:
 			return nil, false
 		}
 
-		if !slices.Contains(uniqueValues, val.(string)) {
-			uniqueValues = append(uniqueValues, val.(string))
+		if !slices.Contains(uniqueValues, value) {
+			uniqueValues = append(uniqueValues, value)
 		}
 	}
 
 	if len(uniqueValues) == 1 {
 		// if they should equal to do the update, and the unique value is equal to the compare value, then we can update all
 		if shouldEqual && uniqueValues[0] == compareValue {
+			return nil, true
+		} else if !shouldEqual && uniqueValues[0] != compareValue {
 			return nil, true
 		}
 
@@ -575,6 +596,7 @@ func determineUpdateAll(ctx context.Context, m *generated.RiskMutation, field st
 		val, err := r.Value(field)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to get old risk value for update")
+
 			return nil, false
 		}
 
@@ -596,7 +618,7 @@ var fetchOldRiskValue = func(ctx context.Context, m *generated.RiskMutation, fie
 		return nil, err
 	}
 
-	oldValues, err := m.Client().Risk.Query().Where(risk.IDIn(ids...)).Select(field).Select(risk.FieldID, risk.FieldStatus).All(ctx)
+	oldValues, err := m.Client().Risk.Query().Where(risk.IDIn(ids...)).Select(risk.FieldID, field).All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get old risk status")
 		return nil, err

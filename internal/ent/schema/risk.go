@@ -98,7 +98,6 @@ func (Risk) Fields() []ent.Field {
 			Comment("the name of the risk"),
 		field.Enum("status").
 			GoType(enums.RiskStatus("")).
-			Default(enums.RiskIdentified.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			).
@@ -206,6 +205,14 @@ func (Risk) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("review_frequency"),
 			),
+		field.Time("due_date").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("due_date"),
+			).
+			Comment("the time when the risk is due to be resolved by, based on the sla config but can be manually updated"),
 		field.Time("next_review_due_at").
 			GoType(models.DateTime{}).
 			Optional().

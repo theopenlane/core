@@ -126,6 +126,8 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "dueDate":
+				return ec.fieldContext_Risk_dueDate(ctx, field)
 			case "nextReviewDueAt":
 				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
 			case "residualScore":
@@ -316,6 +318,8 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "dueDate":
+				return ec.fieldContext_Risk_dueDate(ctx, field)
 			case "nextReviewDueAt":
 				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
 			case "residualScore":
@@ -506,6 +510,8 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "dueDate":
+				return ec.fieldContext_Risk_dueDate(ctx, field)
 			case "nextReviewDueAt":
 				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
 			case "residualScore":
@@ -696,6 +702,8 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
+			case "dueDate":
+				return ec.fieldContext_Risk_dueDate(ctx, field)
 			case "nextReviewDueAt":
 				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
 			case "residualScore":

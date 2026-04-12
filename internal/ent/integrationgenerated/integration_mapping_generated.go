@@ -429,6 +429,7 @@ const (
 	IntegrationMappingRiskBusinessCostsJSON = "businessCostsJSON"
 	IntegrationMappingRiskDetails           = "details"
 	IntegrationMappingRiskDetailsJSON       = "detailsJSON"
+	IntegrationMappingRiskDueDate           = "dueDate"
 	IntegrationMappingRiskEnvironmentID     = "environmentID"
 	IntegrationMappingRiskEnvironmentName   = "environmentName"
 	IntegrationMappingRiskExternalID        = "externalID"
@@ -2965,6 +2966,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "dueDate",
+				GoField:   "DueDate",
+				EntField:  "due_date",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "environmentID",
 				GoField:   "EnvironmentID",
 				EntField:  "environment_id",
@@ -3222,6 +3232,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"businessCostsJSON": {},
 			"details":           {},
 			"detailsJSON":       {},
+			"dueDate":           {},
 			"environmentID":     {},
 			"environmentName":   {},
 			"externalID":        {},

@@ -716,6 +716,26 @@ func (_u *RiskUpdate) ClearReviewFrequency() *RiskUpdate {
 	return _u
 }
 
+// SetDueDate sets the "due_date" field.
+func (_u *RiskUpdate) SetDueDate(v models.DateTime) *RiskUpdate {
+	_u.mutation.SetDueDate(v)
+	return _u
+}
+
+// SetNillableDueDate sets the "due_date" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableDueDate(v *models.DateTime) *RiskUpdate {
+	if v != nil {
+		_u.SetDueDate(*v)
+	}
+	return _u
+}
+
+// ClearDueDate clears the value of the "due_date" field.
+func (_u *RiskUpdate) ClearDueDate() *RiskUpdate {
+	_u.mutation.ClearDueDate()
+	return _u
+}
+
 // SetNextReviewDueAt sets the "next_review_due_at" field.
 func (_u *RiskUpdate) SetNextReviewDueAt(v models.DateTime) *RiskUpdate {
 	_u.mutation.SetNextReviewDueAt(v)
@@ -1790,6 +1810,12 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(risk.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.DueDate(); ok {
+		_spec.SetField(risk.FieldDueDate, field.TypeTime, value)
+	}
+	if _u.mutation.DueDateCleared() {
+		_spec.ClearField(risk.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.NextReviewDueAt(); ok {
 		_spec.SetField(risk.FieldNextReviewDueAt, field.TypeTime, value)
@@ -3551,6 +3577,26 @@ func (_u *RiskUpdateOne) ClearReviewFrequency() *RiskUpdateOne {
 	return _u
 }
 
+// SetDueDate sets the "due_date" field.
+func (_u *RiskUpdateOne) SetDueDate(v models.DateTime) *RiskUpdateOne {
+	_u.mutation.SetDueDate(v)
+	return _u
+}
+
+// SetNillableDueDate sets the "due_date" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableDueDate(v *models.DateTime) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDueDate(*v)
+	}
+	return _u
+}
+
+// ClearDueDate clears the value of the "due_date" field.
+func (_u *RiskUpdateOne) ClearDueDate() *RiskUpdateOne {
+	_u.mutation.ClearDueDate()
+	return _u
+}
+
 // SetNextReviewDueAt sets the "next_review_due_at" field.
 func (_u *RiskUpdateOne) SetNextReviewDueAt(v models.DateTime) *RiskUpdateOne {
 	_u.mutation.SetNextReviewDueAt(v)
@@ -4655,6 +4701,12 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(risk.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.DueDate(); ok {
+		_spec.SetField(risk.FieldDueDate, field.TypeTime, value)
+	}
+	if _u.mutation.DueDateCleared() {
+		_spec.ClearField(risk.FieldDueDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.NextReviewDueAt(); ok {
 		_spec.SetField(risk.FieldNextReviewDueAt, field.TypeTime, value)

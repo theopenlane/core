@@ -18715,6 +18715,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetNillableDueDate(&dueDate)
+	}
+
 	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
 		create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
 	}
@@ -18986,6 +18990,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(risk.ReviewFrequency)
 		}
 
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetNillableDueDate(&dueDate)
+		} else {
+			create = create.SetNillableDueDate(risk.DueDate)
+		}
+
 		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
 			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
 		} else {
@@ -19077,6 +19087,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetReviewRequired(risk.ReviewRequired).
 			SetNillableLastReviewedAt(risk.LastReviewedAt).
 			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableDueDate(risk.DueDate).
 			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
 			SetResidualScore(risk.ResidualScore).
 			SetRiskDecision(risk.RiskDecision).
