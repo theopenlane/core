@@ -62,11 +62,11 @@ func HookEvidenceReviewDate() ent.Hook {
 			}
 
 			if frequency == enums.FrequencyNone || time.Time(creationDate).IsZero() {
-				m.ClearNextReviewAt()
+				m.ClearRenewalDate()
 				return next.Mutate(ctx, m)
 			}
 
-			m.SetNextReviewAt(getNextReviewDate(frequency, models.DateTime(creationDate)))
+			m.SetRenewalDate(getNextReviewDate(frequency, models.DateTime(creationDate)))
 
 			return next.Mutate(ctx, m)
 		})

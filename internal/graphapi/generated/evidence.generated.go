@@ -100,8 +100,6 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Evidence_nextReviewAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "environment":
@@ -246,8 +244,6 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Evidence_nextReviewAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "environment":
@@ -392,8 +388,6 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Evidence_nextReviewAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "environment":
@@ -538,8 +532,6 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_status(ctx, field)
 			case "reviewFrequency":
 				return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Evidence_nextReviewAt(ctx, field)
 			case "owner":
 				return ec.fieldContext_Evidence_owner(ctx, field)
 			case "environment":

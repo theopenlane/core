@@ -6802,9 +6802,7 @@ type CreateEvidenceInput struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status *enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// when the evidence is due for review
-	NextReviewAt             *models.DateTime `json:"nextReviewAt,omitempty"`
+	ReviewFrequency          *enums.Frequency `json:"reviewFrequency,omitempty"`
 	OwnerID                  *string          `json:"ownerID,omitempty"`
 	EnvironmentID            *string          `json:"environmentID,omitempty"`
 	ScopeID                  *string          `json:"scopeID,omitempty"`
@@ -15368,9 +15366,7 @@ type Evidence struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status *enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
-	// when the evidence is due for review
-	NextReviewAt           *models.DateTime                 `json:"nextReviewAt,omitempty"`
+	ReviewFrequency        *enums.Frequency                 `json:"reviewFrequency,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
@@ -15764,17 +15760,6 @@ type EvidenceWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
-	// next_review_at field predicates
-	NextReviewAt       *models.DateTime   `json:"nextReviewAt,omitempty"`
-	NextReviewAtNeq    *models.DateTime   `json:"nextReviewAtNEQ,omitempty"`
-	NextReviewAtIn     []*models.DateTime `json:"nextReviewAtIn,omitempty"`
-	NextReviewAtNotIn  []*models.DateTime `json:"nextReviewAtNotIn,omitempty"`
-	NextReviewAtGt     *models.DateTime   `json:"nextReviewAtGT,omitempty"`
-	NextReviewAtGte    *models.DateTime   `json:"nextReviewAtGTE,omitempty"`
-	NextReviewAtLt     *models.DateTime   `json:"nextReviewAtLT,omitempty"`
-	NextReviewAtLte    *models.DateTime   `json:"nextReviewAtLTE,omitempty"`
-	NextReviewAtIsNil  *bool              `json:"nextReviewAtIsNil,omitempty"`
-	NextReviewAtNotNil *bool              `json:"nextReviewAtNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -40428,11 +40413,8 @@ type UpdateEvidenceInput struct {
 	Status      *enums.EvidenceStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
-	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
-	// when the evidence is due for review
-	NextReviewAt                   *models.DateTime `json:"nextReviewAt,omitempty"`
-	ClearNextReviewAt              *bool            `json:"clearNextReviewAt,omitempty"`
+	ReviewFrequency                *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency           *bool            `json:"clearReviewFrequency,omitempty"`
 	EnvironmentID                  *string          `json:"environmentID,omitempty"`
 	ClearEnvironment               *bool            `json:"clearEnvironment,omitempty"`
 	ScopeID                        *string          `json:"scopeID,omitempty"`
@@ -51179,7 +51161,6 @@ const (
 	EvidenceOrderFieldRenewalDate     EvidenceOrderField = "renewal_date"
 	EvidenceOrderFieldStatus          EvidenceOrderField = "STATUS"
 	EvidenceOrderFieldReviewFrequency EvidenceOrderField = "REVIEW_FREQUENCY"
-	EvidenceOrderFieldNextReviewAt    EvidenceOrderField = "NEXT_REVIEW_AT"
 )
 
 var AllEvidenceOrderField = []EvidenceOrderField{
@@ -51190,12 +51171,11 @@ var AllEvidenceOrderField = []EvidenceOrderField{
 	EvidenceOrderFieldRenewalDate,
 	EvidenceOrderFieldStatus,
 	EvidenceOrderFieldReviewFrequency,
-	EvidenceOrderFieldNextReviewAt,
 }
 
 func (e EvidenceOrderField) IsValid() bool {
 	switch e {
-	case EvidenceOrderFieldCreatedAt, EvidenceOrderFieldUpdatedAt, EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus, EvidenceOrderFieldReviewFrequency, EvidenceOrderFieldNextReviewAt:
+	case EvidenceOrderFieldCreatedAt, EvidenceOrderFieldUpdatedAt, EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus, EvidenceOrderFieldReviewFrequency:
 		return true
 	}
 	return false

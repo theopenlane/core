@@ -8492,10 +8492,6 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
-	if nextReviewAt, exists := m.NextReviewAt(); exists {
-		create = create.SetNillableNextReviewAt(&nextReviewAt)
-	}
-
 	_, err := create.Save(ctx)
 
 	return err
@@ -8677,12 +8673,6 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(evidence.ReviewFrequency)
 		}
 
-		if nextReviewAt, exists := m.NextReviewAt(); exists {
-			create = create.SetNillableNextReviewAt(&nextReviewAt)
-		} else {
-			create = create.SetNillableNextReviewAt(evidence.NextReviewAt)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8743,7 +8733,6 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetURL(evidence.URL).
 			SetStatus(evidence.Status).
 			SetReviewFrequency(evidence.ReviewFrequency).
-			SetNillableNextReviewAt(evidence.NextReviewAt).
 			Save(ctx)
 		if err != nil {
 			return err

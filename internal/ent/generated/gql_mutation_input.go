@@ -8748,7 +8748,6 @@ type CreateEvidenceInput struct {
 	URL                      *string
 	Status                   *enums.EvidenceStatus
 	ReviewFrequency          *enums.Frequency
-	NextReviewAt             *models.DateTime
 	OwnerID                  *string
 	EnvironmentID            *string
 	ScopeID                  *string
@@ -8809,9 +8808,6 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if v := i.NextReviewAt; v != nil {
-		m.SetNextReviewAt(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8894,8 +8890,6 @@ type UpdateEvidenceInput struct {
 	Status                         *enums.EvidenceStatus
 	ClearReviewFrequency           bool
 	ReviewFrequency                *enums.Frequency
-	ClearNextReviewAt              bool
-	NextReviewAt                   *models.DateTime
 	ClearEnvironment               bool
 	EnvironmentID                  *string
 	ClearScope                     bool
@@ -9023,12 +9017,6 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
-	}
-	if i.ClearNextReviewAt {
-		m.ClearNextReviewAt()
-	}
-	if v := i.NextReviewAt; v != nil {
-		m.SetNextReviewAt(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

@@ -1989,7 +1989,6 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		IsAutomated             func(childComplexity int) int
 		Name                    func(childComplexity int) int
-		NextReviewAt            func(childComplexity int) int
 		Owner                   func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
@@ -17355,13 +17354,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.Name(childComplexity), true
-
-	case "Evidence.nextReviewAt":
-		if e.ComplexityRoot.Evidence.NextReviewAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Evidence.NextReviewAt(childComplexity), true
 
 	case "Evidence.owner":
 		if e.ComplexityRoot.Evidence.Owner == nil {
@@ -68056,10 +68048,6 @@ input CreateEvidenceInput {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
-  """
-  when the evidence is due for review
-  """
-  nextReviewAt: DateTime
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -81734,10 +81722,6 @@ type Evidence implements Node {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
-  """
-  when the evidence is due for review
-  """
-  nextReviewAt: DateTime
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -82161,7 +82145,6 @@ enum EvidenceOrderField {
   renewal_date
   STATUS
   REVIEW_FREQUENCY
-  NEXT_REVIEW_AT
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -82514,19 +82497,6 @@ input EvidenceWhereInput {
   reviewFrequencyNotIn: [EvidenceFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
-  """
-  next_review_at field predicates
-  """
-  nextReviewAt: DateTime
-  nextReviewAtNEQ: DateTime
-  nextReviewAtIn: [DateTime!]
-  nextReviewAtNotIn: [DateTime!]
-  nextReviewAtGT: DateTime
-  nextReviewAtGTE: DateTime
-  nextReviewAtLT: DateTime
-  nextReviewAtLTE: DateTime
-  nextReviewAtIsNil: Boolean
-  nextReviewAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -130184,11 +130154,6 @@ input UpdateEvidenceInput {
   """
   reviewFrequency: EvidenceFrequency
   clearReviewFrequency: Boolean
-  """
-  when the evidence is due for review
-  """
-  nextReviewAt: DateTime
-  clearNextReviewAt: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID

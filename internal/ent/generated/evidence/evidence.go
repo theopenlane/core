@@ -69,8 +69,6 @@ const (
 	FieldStatus = "status"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldNextReviewAt holds the string denoting the next_review_at field in the database.
-	FieldNextReviewAt = "next_review_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -213,7 +211,6 @@ var Columns = []string{
 	FieldURL,
 	FieldStatus,
 	FieldReviewFrequency,
-	FieldNextReviewAt,
 }
 
 var (
@@ -438,11 +435,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByNextReviewAt orders the results by the next_review_at field.
-func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNextReviewAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

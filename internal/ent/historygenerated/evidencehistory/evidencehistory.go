@@ -77,8 +77,6 @@ const (
 	FieldStatus = "status"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
-	// FieldNextReviewAt holds the string denoting the next_review_at field in the database.
-	FieldNextReviewAt = "next_review_at"
 	// Table holds the table name of the evidencehistory in the database.
 	Table = "evidence_history"
 )
@@ -114,7 +112,6 @@ var Columns = []string{
 	FieldURL,
 	FieldStatus,
 	FieldReviewFrequency,
-	FieldNextReviewAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -331,11 +328,6 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
-}
-
-// ByNextReviewAt orders the results by the next_review_at field.
-func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNextReviewAt, opts...).ToFunc()
 }
 
 var (

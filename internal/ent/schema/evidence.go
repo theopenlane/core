@@ -147,14 +147,6 @@ func (Evidence) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("REVIEW_FREQUENCY"),
 			),
-		field.Time("next_review_at").
-			Comment("when the evidence is due for review").
-			GoType(models.DateTime{}).
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("NEXT_REVIEW_AT"),
-			),
 	}
 }
 

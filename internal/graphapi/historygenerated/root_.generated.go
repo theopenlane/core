@@ -975,7 +975,6 @@ type ComplexityRoot struct {
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
 		Name                   func(childComplexity int) int
-		NextReviewAt           func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
@@ -8599,13 +8598,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.Name(childComplexity), true
-
-	case "EvidenceHistory.nextReviewAt":
-		if e.ComplexityRoot.EvidenceHistory.NextReviewAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EvidenceHistory.NextReviewAt(childComplexity), true
 
 	case "EvidenceHistory.operation":
 		if e.ComplexityRoot.EvidenceHistory.Operation == nil {
@@ -34591,10 +34583,6 @@ type EvidenceHistory implements Node {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceHistoryFrequency
-  """
-  when the evidence is due for review
-  """
-  nextReviewAt: DateTime
 }
 """
 A connection to a list of items.
@@ -34683,7 +34671,6 @@ enum EvidenceHistoryOrderField {
   renewal_date
   STATUS
   REVIEW_FREQUENCY
-  NEXT_REVIEW_AT
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -35072,19 +35059,6 @@ input EvidenceHistoryWhereInput {
   reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
-  """
-  next_review_at field predicates
-  """
-  nextReviewAt: DateTime
-  nextReviewAtNEQ: DateTime
-  nextReviewAtIn: [DateTime!]
-  nextReviewAtNotIn: [DateTime!]
-  nextReviewAtGT: DateTime
-  nextReviewAtGTE: DateTime
-  nextReviewAtLT: DateTime
-  nextReviewAtLTE: DateTime
-  nextReviewAtIsNil: Boolean
-  nextReviewAtNotNil: Boolean
 }
 type FileHistory implements Node {
   id: ID!

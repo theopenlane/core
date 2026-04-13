@@ -12428,10 +12428,6 @@ type EvidenceHistory implements Node {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceHistoryFrequency
-  """
-  when the evidence is due for review
-  """
-  nextReviewAt: DateTime
 }
 """
 A connection to a list of items.
@@ -12520,7 +12516,6 @@ enum EvidenceHistoryOrderField {
   renewal_date
   STATUS
   REVIEW_FREQUENCY
-  NEXT_REVIEW_AT
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -12909,19 +12904,6 @@ input EvidenceHistoryWhereInput {
   reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
-  """
-  next_review_at field predicates
-  """
-  nextReviewAt: DateTime
-  nextReviewAtNEQ: DateTime
-  nextReviewAtIn: [DateTime!]
-  nextReviewAtNotIn: [DateTime!]
-  nextReviewAtGT: DateTime
-  nextReviewAtGTE: DateTime
-  nextReviewAtLT: DateTime
-  nextReviewAtLTE: DateTime
-  nextReviewAtIsNil: Boolean
-  nextReviewAtNotNil: Boolean
 }
 type FileHistory implements Node {
   id: ID!

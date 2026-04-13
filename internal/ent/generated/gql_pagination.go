@@ -12524,33 +12524,6 @@ var (
 			}
 		},
 	}
-	// EvidenceOrderFieldNextReviewAt orders Evidence by next_review_at.
-	EvidenceOrderFieldNextReviewAt = &EvidenceOrderField{
-		Value: func(_m *Evidence) (ent.Value, error) {
-			// allow for nil values for fields
-			if _m.NextReviewAt == nil {
-				return nil, nil
-			}
-			return _m.NextReviewAt, nil
-		},
-		column: evidence.FieldNextReviewAt,
-		toTerm: func(opts ...sql.OrderTermOption) evidence.OrderOption {
-			opts = append(opts, sql.OrderNullsLast())
-			return evidence.ByNextReviewAt(opts...)
-		},
-		toCursor: func(_m *Evidence) Cursor {
-			if _m.NextReviewAt == nil {
-				return Cursor{
-					ID:    _m.ID,
-					Value: nil, // handle nil values for fields
-				}
-			}
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.NextReviewAt,
-			}
-		},
-	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12571,8 +12544,6 @@ func (f EvidenceOrderField) String() string {
 		str = "STATUS"
 	case EvidenceOrderFieldReviewFrequency.column:
 		str = "REVIEW_FREQUENCY"
-	case EvidenceOrderFieldNextReviewAt.column:
-		str = "NEXT_REVIEW_AT"
 	}
 	return str
 }
@@ -12603,8 +12574,6 @@ func (f *EvidenceOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceOrderFieldStatus
 	case "REVIEW_FREQUENCY":
 		*f = *EvidenceOrderFieldReviewFrequency
-	case "NEXT_REVIEW_AT":
-		*f = *EvidenceOrderFieldNextReviewAt
 	default:
 		return fmt.Errorf("%s is not a valid EvidenceOrderField", str)
 	}

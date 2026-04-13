@@ -361,20 +361,6 @@ func (_c *EvidenceCreate) SetNillableReviewFrequency(v *enums.Frequency) *Eviden
 	return _c
 }
 
-// SetNextReviewAt sets the "next_review_at" field.
-func (_c *EvidenceCreate) SetNextReviewAt(v models.DateTime) *EvidenceCreate {
-	_c.mutation.SetNextReviewAt(v)
-	return _c
-}
-
-// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
-func (_c *EvidenceCreate) SetNillableNextReviewAt(v *models.DateTime) *EvidenceCreate {
-	if v != nil {
-		_c.SetNextReviewAt(*v)
-	}
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *EvidenceCreate) SetID(v string) *EvidenceCreate {
 	_c.mutation.SetID(v)
@@ -824,10 +810,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
 		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
-	}
-	if value, ok := _c.mutation.NextReviewAt(); ok {
-		_spec.SetField(evidence.FieldNextReviewAt, field.TypeTime, value)
-		_node.NextReviewAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

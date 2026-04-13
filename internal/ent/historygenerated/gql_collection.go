@@ -5065,11 +5065,6 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, evidencehistory.FieldReviewFrequency)
 				fieldSeen[evidencehistory.FieldReviewFrequency] = struct{}{}
 			}
-		case "nextReviewAt":
-			if _, ok := fieldSeen[evidencehistory.FieldNextReviewAt]; !ok {
-				selectedFields = append(selectedFields, evidencehistory.FieldNextReviewAt)
-				fieldSeen[evidencehistory.FieldNextReviewAt] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:

@@ -13,7 +13,6 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			id
 			isAutomated
 			name
-			nextReviewAt
 			ownerID
 			renewalDate
 			reviewFrequency
@@ -200,7 +199,6 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		id
 		isAutomated
 		name
-		nextReviewAt
 		ownerID
 		renewalDate
 		reviewFrequency
