@@ -1,643 +1,622 @@
-mutation CreateBulkCSVRisk($input: Upload!) {
-  createBulkCSVRisk(input: $input) {
-    risks {
-      businessCosts
-      businessCostsJSON
-      createdAt
-      createdBy
-      delegateID
-      details
-      detailsJSON
-      displayID
-      dueDate
-      environmentID
-      environmentName
-      externalID
-      externalUUID
-      id
-      impact
-      integrationID
-      lastReviewedAt
-      likelihood
-      mitigatedAt
-      mitigation
-      mitigationJSON
-      name
-      nextReviewDueAt
-      observedAt
-      ownerID
-      residualScore
-      reviewFrequency
-      reviewRequired
-      riskCategoryID
-      riskCategoryName
-      riskDecision
-      riskKindID
-      riskKindName
-      scopeID
-      scopeName
-      score
-      stakeholderID
-      status
-      tags
-      updatedAt
-      updatedBy
-      stakeholder {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkCSVRisk ($input: Upload!) {
+	createBulkCSVRisk(input: $input) {
+		risks {
+			businessCosts
+			businessCostsJSON
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			displayID
+			dueDate
+			environmentID
+			environmentName
+			externalID
+			externalUUID
+			id
+			impact
+			integrationID
+			lastReviewedAt
+			likelihood
+			mitigatedAt
+			mitigation
+			mitigationJSON
+			name
+			nextReviewDueAt
+			observedAt
+			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
+			riskCategoryID
+			riskCategoryName
+			riskDecision
+			riskKindID
+			riskKindName
+			scopeID
+			scopeName
+			score
+			stakeholderID
+			status
+			tags
+			updatedAt
+			updatedBy
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateBulkRisk($input: [CreateRiskInput!]) {
-  createBulkRisk(input: $input) {
-    risks {
-      businessCosts
-      businessCostsJSON
-      createdAt
-      createdBy
-      delegateID
-      details
-      detailsJSON
-      displayID
-      dueDate
-      environmentID
-      environmentName
-      externalID
-      externalUUID
-      id
-      impact
-      integrationID
-      lastReviewedAt
-      likelihood
-      mitigatedAt
-      mitigation
-      mitigationJSON
-      name
-      nextReviewDueAt
-      observedAt
-      ownerID
-      residualScore
-      reviewFrequency
-      reviewRequired
-      riskCategoryID
-      riskCategoryName
-      riskDecision
-      riskKindID
-      riskKindName
-      scopeID
-      scopeName
-      score
-      stakeholderID
-      status
-      tags
-      updatedAt
-      updatedBy
-      stakeholder {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
+	createBulkRisk(input: $input) {
+		risks {
+			businessCosts
+			businessCostsJSON
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			displayID
+			dueDate
+			environmentID
+			environmentName
+			externalID
+			externalUUID
+			id
+			impact
+			integrationID
+			lastReviewedAt
+			likelihood
+			mitigatedAt
+			mitigation
+			mitigationJSON
+			name
+			nextReviewDueAt
+			observedAt
+			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
+			riskCategoryID
+			riskCategoryName
+			riskDecision
+			riskKindID
+			riskKindName
+			scopeID
+			scopeName
+			score
+			stakeholderID
+			status
+			tags
+			updatedAt
+			updatedBy
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation CreateRisk($input: CreateRiskInput!) {
-  createRisk(input: $input) {
-    risk {
-      businessCosts
-      businessCostsJSON
-      createdAt
-      createdBy
-      delegateID
-      details
-      detailsJSON
-      displayID
-      dueDate
-      environmentID
-      environmentName
-      externalID
-      externalUUID
-      id
-      impact
-      integrationID
-      lastReviewedAt
-      likelihood
-      mitigatedAt
-      mitigation
-      mitigationJSON
-      name
-      nextReviewDueAt
-      observedAt
-      ownerID
-      residualScore
-      reviewFrequency
-      reviewRequired
-      riskCategoryID
-      riskCategoryName
-      riskDecision
-      riskKindID
-      riskKindName
-      scopeID
-      scopeName
-      score
-      stakeholderID
-      status
-      tags
-      updatedAt
-      updatedBy
-      programs {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      stakeholder {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation CreateRisk ($input: CreateRiskInput!) {
+	createRisk(input: $input) {
+		risk {
+			businessCosts
+			businessCostsJSON
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			displayID
+			dueDate
+			environmentID
+			environmentName
+			externalID
+			externalUUID
+			id
+			impact
+			integrationID
+			lastReviewedAt
+			likelihood
+			mitigatedAt
+			mitigation
+			mitigationJSON
+			name
+			nextReviewDueAt
+			observedAt
+			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
+			riskCategoryID
+			riskCategoryName
+			riskDecision
+			riskKindID
+			riskKindName
+			scopeID
+			scopeName
+			score
+			stakeholderID
+			status
+			tags
+			updatedAt
+			updatedBy
+			programs {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
-
-mutation DeleteRisk($deleteRiskId: ID!) {
-  deleteRisk(id: $deleteRiskId) {
-    deletedID
-  }
+mutation DeleteRisk ($deleteRiskId: ID!) {
+	deleteRisk(id: $deleteRiskId) {
+		deletedID
+	}
 }
-
-query GetAllRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!]) {
-  risks(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        businessCosts
-        businessCostsJSON
-        createdAt
-        createdBy
-        delegateID
-        details
-        detailsJSON
-        displayID
-        dueDate
-        environmentID
-        environmentName
-        externalID
-        externalUUID
-        id
-        impact
-        integrationID
-        lastReviewedAt
-        likelihood
-        mitigatedAt
-        mitigation
-        mitigationJSON
-        name
-        nextReviewDueAt
-        observedAt
-        ownerID
-        residualScore
-        reviewFrequency
-        reviewRequired
-        riskCategoryID
-        riskCategoryName
-        riskDecision
-        riskKindID
-        riskKindName
-        scopeID
-        scopeName
-        score
-        stakeholderID
-        status
-        tags
-        updatedAt
-        updatedBy
-        programs {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        stakeholder {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!]) {
+	risks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				businessCosts
+				businessCostsJSON
+				createdAt
+				createdBy
+				delegateID
+				details
+				detailsJSON
+				displayID
+				dueDate
+				environmentID
+				environmentName
+				externalID
+				externalUUID
+				id
+				impact
+				integrationID
+				lastReviewedAt
+				likelihood
+				mitigatedAt
+				mitigation
+				mitigationJSON
+				name
+				nextReviewDueAt
+				observedAt
+				ownerID
+				residualScore
+				reviewFrequency
+				reviewRequired
+				riskCategoryID
+				riskCategoryName
+				riskDecision
+				riskKindID
+				riskKindName
+				scopeID
+				scopeName
+				score
+				stakeholderID
+				status
+				tags
+				updatedAt
+				updatedBy
+				programs {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				stakeholder {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-query GetRiskByID($riskId: ID!) {
-  risk(id: $riskId) {
-    businessCosts
-    businessCostsJSON
-    createdAt
-    createdBy
-    delegateID
-    details
-    detailsJSON
-    displayID
-    dueDate
-    environmentID
-    environmentName
-    externalID
-    externalUUID
-    id
-    impact
-    integrationID
-    lastReviewedAt
-    likelihood
-    mitigatedAt
-    mitigation
-    mitigationJSON
-    name
-    nextReviewDueAt
-    observedAt
-    ownerID
-    residualScore
-    reviewFrequency
-    reviewRequired
-    riskCategoryID
-    riskCategoryName
-    riskDecision
-    riskKindID
-    riskKindName
-    scopeID
-    scopeName
-    score
-    stakeholderID
-    status
-    tags
-    updatedAt
-    updatedBy
-    programs {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    editors {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    viewers {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    blockedGroups {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-    stakeholder {
-      id
-      name
-    }
-    delegate {
-      id
-      name
-    }
-  }
+query GetRiskByID ($riskId: ID!) {
+	risk(id: $riskId) {
+		businessCosts
+		businessCostsJSON
+		createdAt
+		createdBy
+		delegateID
+		details
+		detailsJSON
+		displayID
+		dueDate
+		environmentID
+		environmentName
+		externalID
+		externalUUID
+		id
+		impact
+		integrationID
+		lastReviewedAt
+		likelihood
+		mitigatedAt
+		mitigation
+		mitigationJSON
+		name
+		nextReviewDueAt
+		observedAt
+		ownerID
+		residualScore
+		reviewFrequency
+		reviewRequired
+		riskCategoryID
+		riskCategoryName
+		riskDecision
+		riskKindID
+		riskKindName
+		scopeID
+		scopeName
+		score
+		stakeholderID
+		status
+		tags
+		updatedAt
+		updatedBy
+		programs {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		viewers {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		stakeholder {
+			id
+			name
+		}
+		delegate {
+			id
+			name
+		}
+	}
 }
-
-query GetRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!], $where: RiskWhereInput) {
-  risks(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-    where: $where
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        businessCosts
-        businessCostsJSON
-        createdAt
-        createdBy
-        delegateID
-        details
-        detailsJSON
-        displayID
-        dueDate
-        environmentID
-        environmentName
-        externalID
-        externalUUID
-        id
-        impact
-        integrationID
-        lastReviewedAt
-        likelihood
-        mitigatedAt
-        mitigation
-        mitigationJSON
-        name
-        nextReviewDueAt
-        observedAt
-        ownerID
-        residualScore
-        reviewFrequency
-        reviewRequired
-        riskCategoryID
-        riskCategoryName
-        riskDecision
-        riskKindID
-        riskKindName
-        scopeID
-        scopeName
-        score
-        stakeholderID
-        status
-        tags
-        updatedAt
-        updatedBy
-        programs {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        editors {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        viewers {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        blockedGroups {
-          edges {
-            node {
-              id
-              name
-            }
-          }
-        }
-        stakeholder {
-          id
-          name
-        }
-        delegate {
-          id
-          name
-        }
-      }
-    }
-  }
+query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [RiskOrder!], $where: RiskWhereInput) {
+	risks(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				businessCosts
+				businessCostsJSON
+				createdAt
+				createdBy
+				delegateID
+				details
+				detailsJSON
+				displayID
+				dueDate
+				environmentID
+				environmentName
+				externalID
+				externalUUID
+				id
+				impact
+				integrationID
+				lastReviewedAt
+				likelihood
+				mitigatedAt
+				mitigation
+				mitigationJSON
+				name
+				nextReviewDueAt
+				observedAt
+				ownerID
+				residualScore
+				reviewFrequency
+				reviewRequired
+				riskCategoryID
+				riskCategoryName
+				riskDecision
+				riskKindID
+				riskKindName
+				scopeID
+				scopeName
+				score
+				stakeholderID
+				status
+				tags
+				updatedAt
+				updatedBy
+				programs {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				stakeholder {
+					id
+					name
+				}
+				delegate {
+					id
+					name
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateBulkRisk($ids: [ID!]!, $input: UpdateRiskInput!) {
-  updateBulkRisk(ids: $ids, input: $input) {
-    risks {
-      businessCosts
-      businessCostsJSON
-      createdAt
-      createdBy
-      delegateID
-      details
-      detailsJSON
-      displayID
-      dueDate
-      environmentID
-      environmentName
-      externalID
-      externalUUID
-      id
-      impact
-      integrationID
-      lastReviewedAt
-      likelihood
-      mitigatedAt
-      mitigation
-      mitigationJSON
-      name
-      nextReviewDueAt
-      observedAt
-      ownerID
-      residualScore
-      reviewFrequency
-      reviewRequired
-      riskCategoryID
-      riskCategoryName
-      riskDecision
-      riskKindID
-      riskKindName
-      scopeID
-      scopeName
-      score
-      stakeholderID
-      status
-      tags
-      updatedAt
-      updatedBy
-      stakeholder {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
+mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
+	updateBulkRisk(ids: $ids, input: $input) {
+		risks {
+			businessCosts
+			businessCostsJSON
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			displayID
+			dueDate
+			environmentID
+			environmentName
+			externalID
+			externalUUID
+			id
+			impact
+			integrationID
+			lastReviewedAt
+			likelihood
+			mitigatedAt
+			mitigation
+			mitigationJSON
+			name
+			nextReviewDueAt
+			observedAt
+			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
+			riskCategoryID
+			riskCategoryName
+			riskDecision
+			riskKindID
+			riskKindName
+			scopeID
+			scopeName
+			score
+			stakeholderID
+			status
+			tags
+			updatedAt
+			updatedBy
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+		updatedIDs
+	}
 }
-
-mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
-  updateRisk(id: $updateRiskId, input: $input) {
-    risk {
-      businessCosts
-      businessCostsJSON
-      createdAt
-      createdBy
-      delegateID
-      details
-      detailsJSON
-      displayID
-      dueDate
-      environmentID
-      environmentName
-      externalID
-      externalUUID
-      id
-      impact
-      integrationID
-      lastReviewedAt
-      likelihood
-      mitigatedAt
-      mitigation
-      mitigationJSON
-      name
-      nextReviewDueAt
-      observedAt
-      ownerID
-      residualScore
-      reviewFrequency
-      reviewRequired
-      riskCategoryID
-      riskCategoryName
-      riskDecision
-      riskKindID
-      riskKindName
-      scopeID
-      scopeName
-      score
-      stakeholderID
-      status
-      tags
-      updatedAt
-      updatedBy
-      programs {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      editors {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      viewers {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      blockedGroups {
-        edges {
-          node {
-            id
-            name
-          }
-        }
-      }
-      stakeholder {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-  }
+mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
+	updateRisk(id: $updateRiskId, input: $input) {
+		risk {
+			businessCosts
+			businessCostsJSON
+			createdAt
+			createdBy
+			delegateID
+			details
+			detailsJSON
+			displayID
+			dueDate
+			environmentID
+			environmentName
+			externalID
+			externalUUID
+			id
+			impact
+			integrationID
+			lastReviewedAt
+			likelihood
+			mitigatedAt
+			mitigation
+			mitigationJSON
+			name
+			nextReviewDueAt
+			observedAt
+			ownerID
+			residualScore
+			reviewFrequency
+			reviewRequired
+			riskCategoryID
+			riskCategoryName
+			riskDecision
+			riskKindID
+			riskKindName
+			scopeID
+			scopeName
+			score
+			stakeholderID
+			status
+			tags
+			updatedAt
+			updatedBy
+			programs {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			stakeholder {
+				id
+				name
+			}
+			delegate {
+				id
+				name
+			}
+		}
+	}
 }
