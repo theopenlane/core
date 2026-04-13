@@ -11,13 +11,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman/compose"
-
-	"github.com/theopenlane/core/internal/emailruntime"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -102,21 +101,20 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			ownerID, overrides, err := buildTrustCenterNDARequestEmailPayload(ctx, request.ID, request.Email, request.TrustCenterID)
+			orgName, ndaURL, err := buildTrustCenterNDARequestEmailPayload(ctx, request.ID, request.Email, request.TrustCenterID)
 			if err != nil {
 				return nil, err
 			}
-			if overrides == nil {
+			if ndaURL == "" {
 				return v, nil
 			}
 
-			tx := transactionFromContext(ctx)
-
-			if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
-				compose.Recipient{Email: request.Email},
-				overrides,
-			); err != nil {
-				return nil, err
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
+				OrgName:       orgName,
+				NDAURL:        ndaURL,
+			}, gala.Headers{}); receipt.Err != nil {
+				return nil, receipt.Err
 			}
 
 			return v, nil
@@ -125,42 +123,42 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 }
 
 func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
-	tx := transactionFromContext(ctx)
-
 	switch existing.Status {
 	case enums.TrustCenterNDARequestStatusSigned:
 		// if already signed, resend auth email
-		ownerID, overrides, err := buildTrustCenterAuthEmailPayload(ctx, existing.ID, existing.Email, existing.TrustCenterID)
+		orgName, authURL, err := buildTrustCenterAuthEmailPayload(ctx, existing.ID, existing.Email, existing.TrustCenterID)
 		if err != nil {
 			return nil, err
 		}
-		if overrides == nil {
+		if authURL == "" {
 			return existing, nil
 		}
 
-		if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterAuth,
-			compose.Recipient{Email: existing.Email},
-			overrides,
-		); err != nil {
-			return nil, err
+		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCAuthOp().Topic(), emaildef.TrustCenterAuthEmail{
+			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
+			OrgName:       orgName,
+			AuthURL:       authURL,
+		}, gala.Headers{}); receipt.Err != nil {
+			return nil, receipt.Err
 		}
 
 		return existing, nil
 	case enums.TrustCenterNDARequestStatusApproved, enums.TrustCenterNDARequestStatusRequested:
 		// if its approved, or requested (no authorization required), resend NDA email
-		ownerID, overrides, err := buildTrustCenterNDARequestEmailPayload(ctx, existing.ID, existing.Email, existing.TrustCenterID)
+		orgName, ndaURL, err := buildTrustCenterNDARequestEmailPayload(ctx, existing.ID, existing.Email, existing.TrustCenterID)
 		if err != nil {
 			return nil, err
 		}
-		if overrides == nil {
+		if ndaURL == "" {
 			return existing, nil
 		}
 
-		if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
-			compose.Recipient{Email: existing.Email},
-			overrides,
-		); err != nil {
-			return nil, err
+		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
+			OrgName:       orgName,
+			NDAURL:        ndaURL,
+		}, gala.Headers{}); receipt.Err != nil {
+			return nil, receipt.Err
 		}
 
 		return existing, nil
@@ -268,21 +266,20 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			ownerID, overrides, err := buildTrustCenterNDARequestEmailPayload(ctx, request.ID, request.Email, request.TrustCenterID)
+			orgName, ndaURL, err := buildTrustCenterNDARequestEmailPayload(ctx, request.ID, request.Email, request.TrustCenterID)
 			if err != nil {
 				return nil, err
 			}
-			if overrides == nil {
+			if ndaURL == "" {
 				return v, nil
 			}
 
-			tx := transactionFromContext(ctx)
-
-			if err := emailruntime.Send(ctx, tx.Client(), ownerID, emailruntime.TemplateKeyTrustCenterNDARequest,
-				compose.Recipient{Email: request.Email},
-				overrides,
-			); err != nil {
-				return nil, err
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
+				OrgName:       orgName,
+				NDAURL:        ndaURL,
+			}, gala.Headers{}); receipt.Err != nil {
+				return nil, receipt.Err
 			}
 
 			return v, nil
@@ -359,15 +356,15 @@ func createNDARequestNotification(ctx context.Context, ndaRequest *generated.Tru
 	return err
 }
 
-func buildTrustCenterNDARequestEmailPayload(ctx context.Context, requestID, emailAddress, trustCenterID string) (string, *emailruntime.TemplateData, error) {
+func buildTrustCenterNDARequestEmailPayload(ctx context.Context, requestID, emailAddress, trustCenterID string) (orgName string, ndaURL string, err error) {
 	if trustCenterID == "" || emailAddress == "" {
 		logx.FromContext(ctx).Info().Msg("missing trust center ID or email for auth email")
-		return "", nil, nil
+		return "", "", nil
 	}
 
 	if requestID == "" {
 		logx.FromContext(ctx).Error().Msg("created NDA request has empty ID, unable to set sub for JWT and send email")
-		return "", nil, ErrMissingIDForTrustCenterNDARequest
+		return "", "", ErrMissingIDForTrustCenterNDARequest
 	}
 
 	tc, err := transactionFromContext(ctx).TrustCenter.Query().
@@ -378,43 +375,37 @@ func buildTrustCenterNDARequestEmailPayload(ctx context.Context, requestID, emai
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get trust center for NDA email")
 
-		return "", nil, err
+		return "", "", err
 	}
 
 	accessToken, err := generateTrustCenterJWT(ctx, tc, requestID, emailAddress)
 	if err != nil {
-		return "", nil, err
+		return "", "", err
 	}
 
 	fullURL, err := addTokenToURLAndShorten(ctx, buildNDATrustCenterURL(tc), accessToken)
 	if err != nil {
-		return "", nil, err
+		return "", "", err
 	}
 
-	organizationName := ""
 	if tc.Edges.Setting != nil {
-		organizationName = tc.Edges.Setting.CompanyName
+		orgName = tc.Edges.Setting.CompanyName
 	}
 
-	return tc.OwnerID, emailruntime.NewTemplateData().
-		WithField("OrganizationName", organizationName).
-		WithField("TrustCenterNDAURL", fullURL), nil
+	return orgName, fullURL, nil
 }
 
-func buildTrustCenterAuthEmailPayload(ctx context.Context, requestID, emailAddress, trustCenterID string) (string, *emailruntime.TemplateData, error) {
+func buildTrustCenterAuthEmailPayload(ctx context.Context, requestID, emailAddress, trustCenterID string) (orgName string, authURL string, err error) {
 	fullURL, tc, err := buildTrustCenterAuthURL(ctx, requestID, emailAddress, trustCenterID)
 	if err != nil {
-		return "", nil, err
+		return "", "", err
 	}
 
-	organizationName := ""
 	if tc.Edges.Setting != nil {
-		organizationName = tc.Edges.Setting.CompanyName
+		orgName = tc.Edges.Setting.CompanyName
 	}
 
-	return tc.OwnerID, emailruntime.NewTemplateData().
-		WithField("OrganizationName", organizationName).
-		WithField("TrustCenterAuthURL", fullURL), nil
+	return orgName, fullURL, nil
 }
 
 func buildTrustCenterAuthURL(ctx context.Context, requestID, emailAddress, trustCenterID string) (string, *generated.TrustCenter, error) {

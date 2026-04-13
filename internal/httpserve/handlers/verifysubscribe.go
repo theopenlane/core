@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -13,9 +12,10 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -137,15 +137,13 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 				return err
 			}
 
-			if err := h.sendEmail(ctxWithToken, entSubscriber.OwnerID, emailruntime.TemplateKeySubscribe,
-				compose.Recipient{Email: entSubscriber.Email},
-				emailruntime.NewTemplateData().
-					WithField("OrganizationName", org.DisplayName).
-					WithTokenURL(emailruntime.TemplateURLVerifySubscriber, tokenValue),
-			); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
+			if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctxWithToken), email.SubscribeOp().Topic(), email.SubscribeRequest{
+				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
+				Token:         tokenValue,
+			}, gala.Headers{}); receipt.Err != nil {
+				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending subscriber email")
 
-				return err
+				return receipt.Err
 			}
 		}
 

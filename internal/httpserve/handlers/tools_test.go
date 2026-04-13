@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
@@ -227,7 +226,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Emailer(&emailtemplates.Config{CompanyName: "Meow Inc."}),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&galaSessionConfig),
 		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
@@ -299,9 +297,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Emailer(&compose.Config{
-			CompanyName: "Meow Inc.",
-		}),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{

@@ -1,0 +1,406 @@
+/* Openlane Standard Email Theme */
+
+body {
+    background-color: #cdfaee;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+    line-height: 1.625;
+    margin: 0;
+    padding: 0;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    color: #505f6f;
+    box-sizing: border-box;
+}
+
+table {
+    border-collapse: separate;
+    min-width: 100%;
+    width: 100%;
+}
+
+table td {
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.email-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    padding: 45px 20px;
+    background-color: #cdfaee;
+    border: 0;
+    text-align: center;
+}
+
+.email-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 36px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.email-logo {
+    display: block;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 24px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #082930;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+h1 {
+    font-size: 32px;
+    text-transform: capitalize;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+p {
+    font-size: 16px;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: 16px;
+    color: #505f6f;
+    line-height: 1.625;
+}
+
+a,
+a:active,
+a:hover,
+a:visited {
+    color: #082930;
+    text-decoration: none;
+}
+
+.justify {
+    text-align: left;
+}
+
+/* Preheader (hidden preview text) */
+.preheader {
+    display: none;
+    overflow: hidden;
+    line-height: 1px;
+    opacity: 0;
+    max-height: 0;
+    max-width: 0;
+}
+
+/* Buttons */
+.button {
+    display: inline-block;
+    background-color: #082930;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    padding: 14px 64px;
+    border-radius: 5px;
+    border: 1px solid #082930;
+    line-height: 1.0;
+    text-align: center;
+}
+
+.button:hover,
+.button:active {
+    text-decoration: underline;
+}
+
+.body-action {
+    width: 100%;
+    margin: 16px auto;
+    padding: 0;
+    text-align: center;
+}
+
+/* Invite Code */
+.invite-code {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: monospace;
+    letter-spacing: 4px;
+    color: #082930;
+    background-color: #f0fdf9;
+    border: 2px dashed #3fc2b4;
+    border-radius: 5px;
+}
+
+.invite-code-table {
+    margin: 16px auto;
+    text-align: center;
+}
+
+.invite-code-cell {
+    padding: 14px 32px;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: monospace;
+    letter-spacing: 4px;
+    color: #082930;
+    background-color: #f0fdf9;
+    border: 2px dashed #3fc2b4;
+    border-radius: 5px;
+}
+
+/* Dictionary */
+.body-dictionary {
+    margin: 16px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.body-dictionary dt {
+    font-weight: 500;
+    color: #082930;
+    padding: 4px 0 2px 0;
+}
+
+.body-dictionary dd {
+    margin: 0 0 8px 0;
+    padding: 0;
+    color: #505f6f;
+}
+
+/* Data Tables */
+.data-table-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #082930;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.data-table-title-unsafe {
+    font-size: 18px;
+    font-weight: 500;
+    color: #082930;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.data-wrapper {
+    margin: 16px 0;
+    padding: 0;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background-color: #f0fdf9;
+    border-bottom: 2px solid #3fc2b4;
+    font-weight: 500;
+    font-size: 14px;
+    color: #082930;
+}
+
+.data-table th p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 14px;
+    color: #082930;
+}
+
+.data-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e0e8ec;
+    font-size: 14px;
+    color: #505f6f;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.table-footer {
+    font-size: 12px;
+    color: #6d7f85;
+    margin-top: 8px;
+    text-align: left;
+}
+
+/* Signature */
+.signature-divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #e0e8ec;
+    margin-bottom: 24px;
+}
+
+.signature-text {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 10px;
+    margin-top: 16px;
+    color: #505f6f;
+}
+
+.signature-img {
+    display: block;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Help */
+.help-divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #e0e8ec;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.help-text {
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 24px;
+    margin-top: 16px;
+    color: #aabec5;
+}
+
+.help-link {
+    color: #3f76ff;
+    text-decoration: none;
+}
+
+/* Trouble Text */
+.body-sub {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e0e8ec;
+}
+
+.body-sub p.sub {
+    font-size: 12px;
+    color: #6d7f85;
+}
+
+.body-sub a {
+    color: #3fc2b4;
+    word-break: break-all;
+}
+
+/* Footer */
+.footer-links a {
+    color: #052e2a;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.footer-address {
+    font-size: 14px;
+    margin: 0;
+    color: #6d7f85;
+    padding-top: 20px;
+}
+
+.footer-copyright {
+    font-size: 14px;
+    margin: 0;
+    color: #6d7f85;
+    padding-bottom: 20px;
+}
+
+.social-icon {
+    display: inline-block;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* VML fallback button wrapper */
+.vml-button-wrapper {
+    margin: 16px auto;
+    text-align: center;
+}
+
+.invite-code-container {
+    margin: 16px auto;
+    text-align: center;
+}
+
+/* FreeMarkdown styling */
+.free-markdown {
+    text-align: left;
+}
+
+.free-markdown p {
+    margin-bottom: 16px;
+}
+
+.free-markdown ul,
+.free-markdown ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}
+
+.free-markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.free-markdown th {
+    text-align: left;
+    padding: 8px;
+    background-color: #f0fdf9;
+    border-bottom: 2px solid #3fc2b4;
+    font-weight: 500;
+    color: #082930;
+}
+
+.free-markdown td {
+    padding: 8px;
+    border-bottom: 1px solid #e0e8ec;
+}

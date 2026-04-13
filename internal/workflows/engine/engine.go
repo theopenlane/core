@@ -40,6 +40,8 @@ type WorkflowEngine struct {
 	proposalManager *ProposalManager
 	// scopeEvaluator evaluates CEL scope conditions for integration actions; initialized by SetIntegrationDeps
 	scopeEvaluator *IntegrationScopeEvaluator
+	// runtimeDefs holds in-memory runtime workflow definitions that participate in trigger matching
+	runtimeDefs *workflows.RuntimeDefinitionRegistry
 }
 
 // NewWorkflowEngine creates a new workflow engine using the provided configuration options
@@ -74,6 +76,7 @@ func NewWorkflowEngineWithConfig(client *generated.Client, runtime *gala.Gala, c
 		config:          config,
 		celEvaluator:    celEvaluator,
 		proposalManager: proposalManager,
+		runtimeDefs:     config.RuntimeDefinitions,
 	}, nil
 }
 

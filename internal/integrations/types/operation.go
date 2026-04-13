@@ -51,6 +51,8 @@ type OperationRequest struct {
 	// LastRunAt is the finish time of the most recent successful run for this operation,
 	// used by handlers that support incremental/delta fetches
 	LastRunAt *time.Time
+	// DB is the ent client for operations that need database access
+	DB *generated.Client
 }
 
 // OperationHandler executes one definition operation
@@ -58,6 +60,37 @@ type OperationHandler func(ctx context.Context, request OperationRequest) (json.
 
 // IngestHandler executes one definition operation and returns typed ingest payload sets for pipeline routing
 type IngestHandler func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error)
+
+// MutationListenerHandler is called when a matching entity mutation event is received.
+// The handler receives the mutation payload and returns the operation config to dispatch.
+// Return nil config to skip dispatch for this event
+type MutationListenerHandler func(ctx context.Context, payload MutationPayload) (json.RawMessage, error)
+
+// MutationPayload is the subset of mutation event data exposed to listener handlers
+type MutationPayload struct {
+	// EntityID is the mutated entity identifier
+	EntityID string
+	// Operation is the mutation operation (create, update_one, etc.)
+	Operation string
+	// ChangedFields lists fields that were modified
+	ChangedFields []string
+	// ProposedChanges captures field-level proposed values
+	ProposedChanges map[string]any
+}
+
+// MutationListenerRegistration declares a listener that reacts to entity mutations by dispatching an integration operation
+type MutationListenerRegistration struct {
+	// Name is a stable listener identifier
+	Name string
+	// SchemaType is the ent schema type to listen for (e.g. "Campaign")
+	SchemaType string
+	// DefinitionID is the definition this listener belongs to, populated by the registry at registration time
+	DefinitionID string
+	// OperationName is the operation to dispatch when the handler returns config
+	OperationName string
+	// Handle evaluates the mutation and returns operation config, or nil to skip
+	Handle MutationListenerHandler
+}
 
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {

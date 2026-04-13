@@ -7,14 +7,14 @@ import (
 	"time"
 
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -176,12 +176,11 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	if err := h.sendEmail(ctx, "", emailruntime.TemplateKeyVerifyEmail,
-		compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
-		emailruntime.NewTemplateData().
-			WithTokenURL(emailruntime.TemplateURLVerify, meowtoken.Token),
-	); err != nil {
-		return nil, err
+	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctx), email.VerifyEmailOp().Topic(), email.VerifyEmailRequest{
+		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		Token:         meowtoken.Token,
+	}, gala.Headers{}); receipt.Err != nil {
+		return nil, receipt.Err
 	}
 
 	return meowtoken, nil

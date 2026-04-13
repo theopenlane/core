@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/iam/sessions"
@@ -239,7 +238,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
-		ent.Emailer(&compose.Config{}), // add noop email config
 		ent.TOTP(&totp.Client{
 			Manager: otpMan,
 		}),

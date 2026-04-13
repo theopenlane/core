@@ -28,6 +28,32 @@ func SchemaFrom[T any]() json.RawMessage {
 	return out
 }
 
+// PropertyNames reflects a Go type and returns the top-level JSON property names
+// from the generated JSON schema. Properties from embedded structs are promoted
+// by the reflector and appear as top-level names
+func PropertyNames[T any]() []string {
+	schema := schemaReflector.Reflect(new(T))
+
+	if schema.Ref != "" {
+		defKey := path.Base(schema.Ref)
+		if def, ok := schema.Definitions[defKey]; ok {
+			schema = def
+		}
+	}
+
+	if schema.Properties == nil {
+		return nil
+	}
+
+	names := make([]string, 0, schema.Properties.Len())
+
+	for pair := schema.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		names = append(names, pair.Key)
+	}
+
+	return names
+}
+
 // SchemaID extracts the definition key from a reflected JSON schema's $ref path
 func SchemaID(schema json.RawMessage) string {
 	var doc struct {
@@ -113,4 +139,12 @@ func WebhookEventSchema[T any]() (json.RawMessage, types.WebhookEventRef[T]) {
 	schema := SchemaFrom[T]()
 
 	return schema, types.NewWebhookEventRef[T](SchemaID(schema))
+}
+
+// RuntimeIntegrationSchema reflects a runtime integration config type and returns both the
+// JSON schema and a typed runtime integration ref whose identity is derived from the schema definition key
+func RuntimeIntegrationSchema[T any]() (json.RawMessage, types.RuntimeIntegrationRef[T]) {
+	schema := SchemaFrom[T]()
+
+	return schema, types.NewRuntimeIntegrationRef[T](SchemaID(schema), schema)
 }

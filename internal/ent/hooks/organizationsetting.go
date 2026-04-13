@@ -9,11 +9,10 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/newman/compose"
-
-	"github.com/theopenlane/core/internal/emailruntime"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
@@ -206,7 +205,7 @@ func HookBillingEmailChange() ent.Hook {
 				return retVal, nil
 			}
 
-			if err := sendBillingEmailChangeNotifications(ctx, m, orgName, oldEmail, newEmail); err != nil {
+			if err := sendBillingEmailChangeNotifications(ctx, orgName, oldEmail, newEmail); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notifications")
 			}
 
@@ -220,28 +219,22 @@ func HookBillingEmailChange() ent.Hook {
 	)
 }
 
-func sendBillingEmailChangeNotifications(ctx context.Context, m *generated.OrganizationSettingMutation, orgName, previousEmail, newEmail string) error {
-	if m.Client().Job == nil {
-		logx.FromContext(ctx).Info().Msg("no job client, skipping billing email change notifications")
-		return nil
-	}
-
-	changedAt := time.Now()
+func sendBillingEmailChangeNotifications(ctx context.Context, orgName, previousEmail, newEmail string) error {
+	changedAt := time.Now().UTC().Format(time.RFC3339)
 
 	for _, currentEmail := range []string{previousEmail, newEmail} {
 		if currentEmail == "" {
 			continue
 		}
 
-		if err := emailruntime.Send(ctx, m.Client(), "", emailruntime.TemplateKeyBillingEmailChanged,
-			compose.Recipient{Email: currentEmail},
-			emailruntime.NewTemplateData().
-				WithField("OrganizationName", orgName).
-				WithField("OldEmail", previousEmail).
-				WithField("NewEmail", newEmail).
-				WithField("ChangedAt", changedAt),
-		); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notification")
+		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.BillingEmailChangedOp().Topic(), emaildef.BillingEmailChangedEmail{
+			RecipientInfo:   emaildef.RecipientInfo{Email: currentEmail},
+			OrgName:         orgName,
+			OldBillingEmail: previousEmail,
+			NewBillingEmail: newEmail,
+			ChangedAt:       changedAt,
+		}, gala.Headers{}); receipt.Err != nil {
+			logx.FromContext(ctx).Error().Err(receipt.Err).Msg("failed to send billing email change notification")
 		}
 	}
 

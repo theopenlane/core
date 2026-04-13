@@ -9,15 +9,12 @@ import (
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman/compose"
-
-	"github.com/theopenlane/core/internal/emailruntime"
-	"github.com/theopenlane/newman"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
@@ -25,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -143,7 +141,7 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 		return nil, err
 	}
 
-	if err := createResponseEmail(ctx, m, updatedResponse.ID); err != nil {
+	if err := createResponseEmail(ctx, m); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
 	}
 
@@ -189,12 +187,7 @@ func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentRes
 		return value, nil
 	}
 
-	var responseID string
-	if resp, ok := value.(*generated.AssessmentResponse); ok && resp != nil {
-		responseID = resp.ID
-	}
-
-	if err := createResponseEmail(ctx, m, responseID); err != nil {
+	if err := createResponseEmail(ctx, m); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
 	}
 
@@ -235,8 +228,9 @@ func isUniqueConstraintError(err error) bool {
 	return generated.IsConstraintError(err)
 }
 
-// createResponseEmail builds and queues the assessment response email for a recipient.
-func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation, responseID string) error {
+// createResponseEmail builds a JWT token and questionnaire auth URL, then emits
+// a typed email operation event for the assessment response recipient
+func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation) error {
 	orgIDValue, ownerOK := m.OwnerID()
 	orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
 	if err != nil {
@@ -255,14 +249,7 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
-	campaignID, _ := m.CampaignID()
-
-	orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
-	if err != nil {
-		return err
-	}
-
-	assessmentData, err := m.Client().Assessment.Query().
+	assessmentObj, err := m.Client().Assessment.Query().
 		Where(assessment.ID(assessmentID)).
 		Select(assessment.FieldName).
 		Only(ctx)
@@ -272,7 +259,9 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, ulids.New().String())
 
-	newClaims := &tokens.Claims{
+	duration := m.Client().TokenManager.Config().AssessmentAccessDuration
+
+	accessToken, _, err := m.Client().TokenManager.CreateTokenPair(&tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject: anonUserID,
 		},
@@ -280,60 +269,28 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		OrgID:        orgID,
 		AssessmentID: assessmentID,
 		Email:        emailAddress,
-	}
-
-	duration := m.Client().TokenManager.Config().AssessmentAccessDuration
-
-	accessToken, _, err := m.TokenManager.CreateTokenPair(newClaims, tokens.WithAccessDuration(duration))
+	}, tokens.WithAccessDuration(duration))
 	if err != nil {
 		return err
 	}
 
-	baseURL, err := url.Parse(m.Emailer.URLS.Questionnaire)
+	baseURL, err := url.Parse(emailConfig.ProductURL + "/questionnaire")
 	if err != nil {
 		return err
 	}
 
-	fullURL, err := addTokenToURLAndShorten(ctx, *baseURL, accessToken)
+	authURL, err := addTokenToURLAndShorten(ctx, *baseURL, accessToken)
 	if err != nil {
 		return err
 	}
 
-	tags := []newman.Tag{}
-	if responseID != "" {
-		tags = append(tags, newman.Tag{Name: "assessment_response_id", Value: responseID})
-	}
+	receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.QuestionnaireAuthOp().Topic(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress},
+		AssessmentName: assessmentObj.Name,
+		AuthURL:        authURL,
+	}, gala.Headers{})
 
-	if campaignID != "" {
-		tags = append(tags, newman.Tag{Name: "campaign_id", Value: campaignID})
-	}
-
-	if isTest, ok := m.IsTest(); ok && isTest {
-		tags = append(tags, newman.Tag{Name: "is_test", Value: "true"})
-	}
-
-	if ctxData, ok := CampaignEmailContextFrom(ctx); ok {
-		if ctxData.CampaignID != "" && campaignID == "" {
-			tags = append(tags, newman.Tag{Name: "campaign_id", Value: ctxData.CampaignID})
-		}
-		if ctxData.CampaignTargetID != "" {
-			tags = append(tags, newman.Tag{Name: "campaign_target_id", Value: ctxData.CampaignTargetID})
-		}
-	}
-
-	opts := []emailruntime.SendOption{}
-	if len(tags) > 0 {
-		opts = append(opts, emailruntime.WithTags(tags...))
-	}
-
-	return emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeyQuestionnaireAuth,
-		compose.Recipient{Email: emailAddress},
-		emailruntime.NewTemplateData().
-			WithField("CompanyName", orgName).
-			WithField("AssessmentName", assessmentData.Name).
-			WithField("QuestionnaireAuthURL", fullURL),
-		opts...,
-	)
+	return receipt.Err
 }
 
 // HookUpdateAssessmentResponse validates status transitions and checks if the assessment response

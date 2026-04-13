@@ -7,9 +7,9 @@ import (
 	"entgo.io/ent"
 	"github.com/microcosm-cc/bluemonday"
 
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // HookNotificationTemplateSanitize sanitizes template content fields on create and update
@@ -51,45 +51,11 @@ func HookNotificationTemplateSanitize() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-// HookPopulateNotificationJsonconfigFromTemplateContext seeds jsonconfig with the reflected
-// JSON Schema for the assigned template_context. Context schema properties form the base layer;
-// any existing or subsequently extracted properties take precedence. This hook runs after
-// sanitization and before variable extraction.
-func HookPopulateNotificationJsonconfigFromTemplateContext() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.NotificationTemplateFunc(func(ctx context.Context, m *generated.NotificationTemplateMutation) (generated.Value, error) {
-			templateCtx, exists := m.TemplateContext()
-			if !exists {
-				return next.Mutate(ctx, m)
-			}
-
-			contextSchema := emailruntime.TemplateContextSchema(templateCtx)
-			if len(contextSchema) == 0 {
-				return next.Mutate(ctx, m)
-			}
-
-			var jsonconfig map[string]any
-
-			if v, jsExists := m.Jsonconfig(); jsExists {
-				jsonconfig = v
-			} else if !m.Op().Is(ent.OpCreate) {
-				if old, err := m.OldJsonconfig(ctx); err == nil {
-					jsonconfig = old
-				}
-			}
-
-			m.SetJsonconfig(mergeBaseSchema(jsonconfig, contextSchema))
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
 // HookExtractNotificationTemplateVariables parses template content fields on create and update,
 // extracts Go template variable references, and merges them as properties into jsonconfig.
 // Existing jsonconfig properties are preserved; only newly discovered variables are added.
-// This hook runs after HookNotificationTemplateSanitize and HookPopulateNotificationJsonconfigFromTemplateContext
-// so variables are extracted from stored content and merged on top of any context schema base.
+// System-reserved field names (CompanyName, Recipient, URLS, etc.) are filtered out so
+// jsonconfig only describes user-supplied inputs.
 // When defaults are also set in the mutation, they are validated against the finalized schema.
 func HookExtractNotificationTemplateVariables() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -137,7 +103,8 @@ func HookExtractNotificationTemplateVariables() ent.Hook {
 			m.SetJsonconfig(finalSchema)
 
 			if defaultsSet && len(defaults) > 0 {
-				if valid, err := emailruntime.ValidateJSONSchema(finalSchema, defaults); err != nil || !valid {
+				result, err := jsonx.ValidateSchema(finalSchema, defaults)
+				if err != nil || !result.Valid() {
 					return nil, ErrInvalidTemplateDefaults
 				}
 			}

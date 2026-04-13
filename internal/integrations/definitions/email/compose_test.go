@@ -1,4 +1,4 @@
-package emailruntime
+package email
 
 import (
 	"context"

@@ -10,9 +10,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman/compose"
-
-	"github.com/theopenlane/core/internal/emailruntime"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -118,15 +117,14 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
-			if err := emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeyInvite,
-				compose.Recipient{Email: emailAddress},
-				emailruntime.NewTemplateData().
-					WithField("InviterName", inviterName).
-					WithField("OrganizationName", orgName).
-					WithField("Role", string(role)).
-					WithTokenURL(emailruntime.TemplateURLInvite, tokenValue),
-			); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.InviteOp().Topic(), emaildef.InviteRequest{
+				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
+				InviterName:   inviterName,
+				OrgName:       orgName,
+				Role:          string(role),
+				Token:         tokenValue,
+			}, gala.Headers{}); receipt.Err != nil {
+				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending email to user")
 			}
 
 			return retValue, err
@@ -318,13 +316,11 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			if err := emailruntime.Send(ctx, m.Client(), ownerID, emailruntime.TemplateKeyInviteJoined,
-				compose.Recipient{Email: recipient},
-				emailruntime.NewTemplateData().
-					WithField("OrganizationName", org.DisplayName).
-					WithField("Role", string(role)),
-			); err != nil {
-				return retValue, err
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.InviteJoinedOp().Topic(), emaildef.InviteJoinedRequest{
+				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
+				OrgName:       org.DisplayName,
+			}, gala.Headers{}); receipt.Err != nil {
+				return retValue, receipt.Err
 			}
 
 			// delete the invite that has been accepted

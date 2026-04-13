@@ -10,20 +10,18 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -87,16 +85,6 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	org, err := h.DBClient.Organization.Query().
-		Where(organization.ID(assessmentResp.OwnerID)).
-		Select(organization.FieldDisplayName).
-		Only(allowCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying organization")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
 	assessmentData, err := h.DBClient.Assessment.Query().
 		Where(assessment.ID(in.AssessmentID)).
 		Select(assessment.FieldName).
@@ -135,23 +123,12 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	tags := []newman.Tag{
-		{Name: "assessment_response_id", Value: assessmentResp.ID},
-	}
-
-	if assessmentResp.CampaignID != "" {
-		tags = append(tags, newman.Tag{Name: "campaign_id", Value: assessmentResp.CampaignID})
-	}
-
-	if err = h.sendEmail(reqCtx, assessmentResp.OwnerID, emailruntime.TemplateKeyQuestionnaireAuth,
-		compose.Recipient{Email: in.Email},
-		emailruntime.NewTemplateData().
-			WithField("CompanyName", org.DisplayName).
-			WithField("AssessmentName", assessmentData.Name).
-			WithField("QuestionnaireAuthURL", authURL),
-		emailruntime.WithTags(tags...),
-	); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending questionnaire auth email")
+	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(reqCtx), email.QuestionnaireAuthOp().Topic(), email.QuestionnaireAuthEmail{
+		RecipientInfo:  email.RecipientInfo{Email: in.Email},
+		AssessmentName: assessmentData.Name,
+		AuthURL:        authURL,
+	}, gala.Headers{}); receipt.Err != nil {
+		logx.FromContext(reqCtx).Error().Err(receipt.Err).Msg("error sending questionnaire auth email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
@@ -160,7 +137,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 }
 
 func (h *Handler) shortenQuestionnaireURL(ctx context.Context, token string) (string, error) {
-	baseURL, err := url.Parse(h.Emailer.URLS.Questionnaire)
+	baseURL, err := url.Parse(h.IntegrationsConfig.Email.ProductURL + "/questionnaire")
 	if err != nil {
 		return "", err
 	}

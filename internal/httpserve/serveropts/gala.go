@@ -60,6 +60,9 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return nil
 	}
 
+	hooks.SetEmailGala(galaApp)
+	hooks.SetEmailConfig(so.Config.Settings.Integrations.Email)
+
 	galaCfg := so.Config.Settings.Workflows.Gala
 
 	closeRuntimes := func() {

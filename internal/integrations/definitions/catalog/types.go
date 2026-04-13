@@ -1,8 +1,8 @@
 package catalog
 
 import (
-	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
@@ -25,6 +25,6 @@ type Config struct {
 	MicrosoftTeams microsoftteams.Config `json:"microsoftteams" koanf:"microsoftteams"`
 	// OIDCLocal holds local Dex-backed OIDC settings for end-to-end integration auth testing
 	OIDCLocal oidclocal.Config `json:"oidclocal" koanf:"oidclocal"`
-	// AWSSecurityHub holds the oauth credentials for the AWS Security Hub definition
-	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
+	// Email holds operator-level email integration configuration
+	Email email.RuntimeEmailConfig `json:"email" koanf:"email"`
 }

@@ -1,0 +1,106 @@
+package email
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+
+	"github.com/theopenlane/newman"
+	"github.com/theopenlane/newman/render"
+
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
+)
+
+// HasRecipient is implemented by all email operation input types to provide
+// recipient information for message addressing
+type HasRecipient interface {
+	GetRecipient() RecipientInfo
+}
+
+// RecipientInfo holds recipient addressing fields embedded in every email operation input
+type RecipientInfo struct {
+	// Email is the recipient email address
+	Email string `json:"email" jsonschema:"required,description=Recipient email address"`
+	// FirstName is the recipient first name
+	FirstName string `json:"first_name,omitempty" jsonschema:"description=Recipient first name"`
+	// LastName is the recipient last name
+	LastName string `json:"last_name,omitempty" jsonschema:"description=Recipient last name"`
+}
+
+// GetRecipient returns the recipient info, satisfying the HasRecipient interface
+func (r RecipientInfo) GetRecipient() RecipientInfo { return r }
+
+// EmailOperation defines a single system email type as a registered integration operation.
+// Each email is one value of this type — identity, schema, subject, theme, and content
+// are all derived from the Go type T via providerkit.OperationSchema
+type EmailOperation[T HasRecipient] struct {
+	// Op is the typed operation ref with name derived from the schema definition key
+	Op types.OperationRef[T]
+	// Schema is the reflected JSON schema for the input type
+	Schema json.RawMessage
+	// Subject returns the rendered subject line for the email
+	Subject func(cfg RuntimeEmailConfig, input T) string
+	// Theme is the newman render theme applied to this email
+	Theme render.Theme
+	// Content returns the structured email content for newman rendering
+	Content func(cfg RuntimeEmailConfig, input T) render.EmailContent
+}
+
+// Registration returns the types.OperationRegistration for wiring into the definition builder
+func (e EmailOperation[T]) Registration() types.OperationRegistration {
+	return types.OperationRegistration{
+		Name:         e.Op.Name(),
+		Topic:        definitionID.OperationTopic(e.Op.Name()),
+		ClientRef:    emailClientRef.ID(),
+		ConfigSchema: e.Schema,
+		Handle:       e.handler(),
+	}
+}
+
+// handler returns the typed operation handler that renders and sends the email
+func (e EmailOperation[T]) handler() types.OperationHandler {
+	return providerkit.WithClientConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
+		func(ctx context.Context, client *EmailClient, input T) (json.RawMessage, error) {
+			return renderAndSend(ctx, client, e.Theme,
+				input.GetRecipient(),
+				e.Subject(client.Config, input),
+				e.Content(client.Config, input),
+			)
+		},
+	)
+}
+
+// renderAndSend renders an email using the newman render engine and sends it through the client
+func renderAndSend(ctx context.Context, client *EmailClient, theme render.Theme, recipient RecipientInfo, subject string, content render.EmailContent) (json.RawMessage, error) {
+	r := render.NewRenderer(
+		render.WithTheme(theme),
+		render.WithBranding(BrandingFromConfig(client.Config)),
+	)
+
+	htmlBody, err := r.GenerateHTML(content)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	textBody, err := r.GeneratePlainText(content)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	message := newman.NewEmailMessageWithOptions(
+		newman.WithFrom(client.Config.FromEmail),
+		newman.WithTo([]string{recipient.Email}),
+		newman.WithSubject(subject),
+		newman.WithHTML(htmlBody),
+		newman.WithText(textBody),
+	)
+
+	if err := client.Sender.SendEmailWithContext(ctx, message); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("op", subject).Msg("failed sending email")
+		return nil, fmt.Errorf("%w: %w", ErrSendFailed, err)
+	}
+
+	return nil, nil
+}

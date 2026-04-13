@@ -36090,6 +36090,10 @@ type TemplateContextEntry struct {
 	// JSON Schema describing the template data shape for this context.
 	// For UI tooling only — not used for runtime validation.
 	Schema map[string]any `json:"schema"`
+	// Top-level template variable names injected by the system at render time.
+	// These are available in templates but are not user-supplied inputs. The UI
+	// should display them as read-only reference, not as input controls.
+	ReservedFields []string `json:"reservedFields"`
 }
 
 // Return response for createTemplate mutation

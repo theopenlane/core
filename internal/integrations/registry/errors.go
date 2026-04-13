@@ -49,4 +49,8 @@ var (
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
 	// ErrBuilderNil indicates a builder dependency was nil
 	ErrBuilderNil = errors.New("integrations/registry: builder is nil")
+	// ErrRuntimeBuildRequired indicates a runtime integration registration is missing its Build function
+	ErrRuntimeBuildRequired = errors.New("integrations/registry: runtime integration build function required")
+	// ErrRuntimeMutualExclusivity indicates a runtime integration was declared alongside operator config
+	ErrRuntimeMutualExclusivity = errors.New("integrations/registry: runtime integration is mutually exclusive with operator config")
 )

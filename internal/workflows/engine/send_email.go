@@ -11,7 +11,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/emailruntime"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
@@ -75,7 +75,12 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 		return ErrSendEmailNoRecipients
 	}
 
-	fromAddress, err := e.resolveSendEmailFromAddress(ctx, params.From, vars)
+	emailClient, err := email.ResolveClient(ctx, ownerID)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrSendEmailTemplateComposeFailed, err)
+	}
+
+	fromAddress, err := e.resolveSendEmailFromAddress(ctx, params.From, emailClient.Config.FromEmail, vars)
 	if err != nil {
 		return err
 	}
@@ -100,9 +105,9 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 	}
 
 	allowCtx := wfworkflows.AllowContext(ctx)
-	_, err = emailruntime.ComposeAndQueueFromNotificationTemplate(allowCtx, e.client, emailruntime.ComposeRequest{
+	_, err = email.ComposeAndQueueFromNotificationTemplate(allowCtx, e.client, emailClient, email.ComposeRequest{
 		OwnerID: ownerID,
-		Template: emailruntime.TemplateRef{
+		Template: email.TemplateRef{
 			ID:  templateID,
 			Key: templateKey,
 		},
@@ -115,9 +120,9 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 	}, e.client.Job)
 	if err != nil {
 		switch {
-		case errors.Is(err, emailruntime.ErrJobClientRequired):
+		case errors.Is(err, email.ErrJobClientRequired):
 			return ErrSendEmailJobClientRequired
-		case errors.Is(err, emailruntime.ErrEmailQueueInsertFailed):
+		case errors.Is(err, email.ErrQueueInsertFailed):
 			return fmt.Errorf("%w: %w", ErrSendEmailQueueInsertFailed, err)
 		default:
 			return fmt.Errorf("%w: %w", ErrSendEmailTemplateComposeFailed, err)
@@ -127,8 +132,8 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 	return nil
 }
 
-// resolveSendEmailFromAddress resolves a sender address from explicit params or default email config
-func (e *WorkflowEngine) resolveSendEmailFromAddress(ctx context.Context, rawFrom string, vars map[string]any) (string, error) {
+// resolveSendEmailFromAddress resolves a sender address from explicit params or falls back to defaultFrom
+func (e *WorkflowEngine) resolveSendEmailFromAddress(ctx context.Context, rawFrom string, defaultFrom string, vars map[string]any) (string, error) {
 	if rawFrom != "" {
 		rendered, err := renderTemplateText(ctx, e.celEvaluator, rawFrom, vars)
 		if err != nil {
@@ -143,16 +148,13 @@ func (e *WorkflowEngine) resolveSendEmailFromAddress(ctx context.Context, rawFro
 		return parsed.Address, nil
 	}
 
-	if e.client.Emailer != nil {
-		defaultFrom := e.client.Emailer.FromEmail
-		if defaultFrom != "" {
-			parsed, parseErr := mail.ParseAddress(defaultFrom)
-			if parseErr != nil {
-				return "", fmt.Errorf("%w: %w", ErrSendEmailRecipientTemplateInvalid, parseErr)
-			}
-
-			return parsed.Address, nil
+	if defaultFrom != "" {
+		parsed, parseErr := mail.ParseAddress(defaultFrom)
+		if parseErr != nil {
+			return "", fmt.Errorf("%w: %w", ErrSendEmailRecipientTemplateInvalid, parseErr)
 		}
+
+		return parsed.Address, nil
 	}
 
 	return "", nil
