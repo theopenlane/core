@@ -23,8 +23,17 @@ func HookEvidenceReviewDate() ent.Hook {
 		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
 			creationDate, creationDateMutated := m.CreationDate()
 			frequency, frequencyMutated := m.ReviewFrequency()
+			_, renewalDateMutated := m.RenewalDate()
 
-			if !creationDateMutated && !frequencyMutated {
+			if renewalDateMutated {
+				if err := validateTimeNotInPast(m.RenewalDate()); err != nil {
+					return nil, err
+				}
+
+				return next.Mutate(ctx, m)
+			}
+
+			if m.FieldCleared(evidence.FieldRenewalDate) || (!creationDateMutated && !frequencyMutated) {
 				return next.Mutate(ctx, m)
 			}
 
