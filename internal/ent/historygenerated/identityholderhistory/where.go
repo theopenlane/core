@@ -1649,6 +1649,16 @@ func AlternateEmailContainsFold(v string) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldContainsFold(FieldAlternateEmail, v))
 }
 
+// EmailAliasesIsNil applies the IsNil predicate on the "email_aliases" field.
+func EmailAliasesIsNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldIsNull(FieldEmailAliases))
+}
+
+// EmailAliasesNotNil applies the NotNil predicate on the "email_aliases" field.
+func EmailAliasesNotNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldNotNull(FieldEmailAliases))
+}
+
 // PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
 func PhoneNumberEQ(v string) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldPhoneNumber, v))

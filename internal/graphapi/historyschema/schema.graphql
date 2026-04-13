@@ -16410,6 +16410,10 @@ type IdentityHolderHistory implements Node {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -28855,6 +28859,10 @@ type ReviewHistory implements Node {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewHistoryReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -28973,6 +28981,16 @@ enum ReviewHistoryOrderField {
 	external_owner_id
 	title
 	state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -29296,6 +29314,15 @@ input ReviewHistoryWhereInput {
 	stateNotNil: Boolean
 	stateEqualFold: String
 	stateContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: ReviewHistoryReviewStatus
+	statusNEQ: ReviewHistoryReviewStatus
+	statusIn: [ReviewHistoryReviewStatus!]
+	statusNotIn: [ReviewHistoryReviewStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	category field predicates
 	"""
@@ -29622,6 +29649,10 @@ type RiskHistory implements Node {
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskHistoryFrequency
 	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	"""
 	the time when the next review is due for the risk
 	"""
 	nextReviewDueAt: DateTime
@@ -29714,6 +29745,7 @@ enum RiskHistoryOrderField {
 	review_required
 	last_reviewed_at
 	review_frequency
+	due_date
 	next_review_due_at
 	residual_score
 	risk_decision
@@ -30311,6 +30343,19 @@ input RiskHistoryWhereInput {
 	reviewFrequencyNotIn: [RiskHistoryFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: DateTime
+	dueDateNEQ: DateTime
+	dueDateIn: [DateTime!]
+	dueDateNotIn: [DateTime!]
+	dueDateGT: DateTime
+	dueDateGTE: DateTime
+	dueDateLT: DateTime
+	dueDateLTE: DateTime
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
 	"""
 	next_review_due_at field predicates
 	"""

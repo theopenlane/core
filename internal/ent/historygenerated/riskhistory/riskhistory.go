@@ -102,6 +102,8 @@ const (
 	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
+	// FieldDueDate holds the string denoting the due_date field in the database.
+	FieldDueDate = "due_date"
 	// FieldNextReviewDueAt holds the string denoting the next_review_due_at field in the database.
 	FieldNextReviewDueAt = "next_review_due_at"
 	// FieldResidualScore holds the string denoting the residual_score field in the database.
@@ -156,6 +158,7 @@ var Columns = []string{
 	FieldReviewRequired,
 	FieldLastReviewedAt,
 	FieldReviewFrequency,
+	FieldDueDate,
 	FieldNextReviewDueAt,
 	FieldResidualScore,
 	FieldRiskDecision,
@@ -206,8 +209,6 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultStatus enums.RiskStatus = "IDENTIFIED"
-
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.RiskStatus) error {
 	switch s.String() {
@@ -217,8 +218,6 @@ func StatusValidator(s enums.RiskStatus) error {
 		return fmt.Errorf("riskhistory: invalid enum value for status field: %q", s)
 	}
 }
-
-const DefaultImpact enums.RiskImpact = "MODERATE"
 
 // ImpactValidator is a validator for the "impact" field enum values. It is called by the builders before save.
 func ImpactValidator(i enums.RiskImpact) error {
@@ -254,12 +253,12 @@ func ReviewFrequencyValidator(rf enums.Frequency) error {
 	}
 }
 
-const DefaultRiskDecision enums.RiskDecision = " NONE"
+const DefaultRiskDecision enums.RiskDecision = "NONE"
 
 // RiskDecisionValidator is a validator for the "risk_decision" field enum values. It is called by the builders before save.
 func RiskDecisionValidator(rd enums.RiskDecision) error {
 	switch rd.String() {
-	case "AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE":
+	case "AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE":
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for risk_decision field: %q", rd)
@@ -457,6 +456,11 @@ func ByLastReviewedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewFrequency orders the results by the review_frequency field.
 func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByDueDate orders the results by the due_date field.
+func ByDueDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDueDate, opts...).ToFunc()
 }
 
 // ByNextReviewDueAt orders the results by the next_review_due_at field.

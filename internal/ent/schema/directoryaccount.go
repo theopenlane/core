@@ -331,7 +331,7 @@ func (DirectoryAccount) Indexes() []ent.Index {
 // Hooks of the DirectoryAccount
 func (DirectoryAccount) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookDirectoryAccount(),
+		hooks.HookDirectoryAccountDelete(),
 	}
 }
 
