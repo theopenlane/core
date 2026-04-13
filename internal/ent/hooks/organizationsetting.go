@@ -220,20 +220,23 @@ func HookBillingEmailChange() ent.Hook {
 }
 
 func sendBillingEmailChangeNotifications(ctx context.Context, orgName, previousEmail, newEmail string) error {
-	changedAt := time.Now().UTC().Format(time.RFC3339)
+	changedAt := time.Now().UTC()
 
 	for _, currentEmail := range []string{previousEmail, newEmail} {
 		if currentEmail == "" {
 			continue
 		}
 
-		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.BillingEmailChangedOp().Topic(), emaildef.BillingEmailChangedEmail{
+		input := emaildef.BillingEmailChangedEmail{
 			RecipientInfo:   emaildef.RecipientInfo{Email: currentEmail},
 			OrgName:         orgName,
 			OldBillingEmail: previousEmail,
 			NewBillingEmail: newEmail,
 			ChangedAt:       changedAt,
-		}, gala.Headers{}); receipt.Err != nil {
+		}
+
+		if receipt := emailGala.EmitWithHeaders(ctx, emaildef.BillingEmailChangedOp().Topic(), input,
+			gala.NewHeaders([]string{"email", "billing"}, input)); receipt.Err != nil {
 			logx.FromContext(ctx).Error().Err(receipt.Err).Msg("failed to send billing email change notification")
 		}
 	}

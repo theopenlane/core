@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"fmt"
 
@@ -16,8 +15,8 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -108,13 +107,16 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(userCtx), email.ResetSuccessOp().Topic(), email.PasswordResetSuccessRequest{
+	input := email.PasswordResetSuccessRequest{
 		RecipientInfo: email.RecipientInfo{
 			Email:     entUser.Email,
 			FirstName: entUser.FirstName,
 			LastName:  entUser.LastName,
 		},
-	}, gala.Headers{}); receipt.Err != nil {
+	}
+
+	if receipt := h.Gala.EmitWithHeaders(userCtx, email.ResetSuccessOp().Topic(), input,
+		gala.NewHeaders([]string{"email", "auth", "password-reset"}, input)); receipt.Err != nil {
 		logx.FromContext(reqCtx).Error().Err(receipt.Err).Msg("error sending password reset success email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)

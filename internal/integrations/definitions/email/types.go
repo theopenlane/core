@@ -7,16 +7,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// DefinitionID returns the stable identifier for the email integration definition
-func DefinitionID() string {
-	return definitionID.ID()
-}
-
-// CustomerClientID returns the client identity for customer-provisioned email clients
-func CustomerClientID() types.ClientID {
-	return emailClientRef.ID()
-}
-
 var (
 	// emailUserInputSchema is the JSON schema for customer-provided email branding configuration
 	emailUserInputSchema = providerkit.SchemaFrom[EmailUserInput]()
@@ -32,31 +22,43 @@ var (
 	sendCampaignSchema, sendCampaignOp = providerkit.OperationSchema[SendCampaignRequest]()
 )
 
+// DefinitionID returns the stable identifier for the email integration definition
+func DefinitionID() string {
+	return definitionID.ID()
+}
+
+// CustomerClientID returns the client identity for customer-provisioned email clients
+func CustomerClientID() types.ClientID {
+	return emailClientRef.ID()
+}
+
 // RuntimeEmailConfig is the complete config for runtime-provisioned email.
 // Sourced from koanf/environment at startup
 type RuntimeEmailConfig struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"api_key" koanf:"apiKey"`
 	// Provider is the email service provider name (resend, sendgrid, postmark)
-	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider"`
+	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
-	FromEmail string `json:"from_email" koanf:"fromEmail"`
+	FromEmail string `json:"from_email" koanf:"fromEmail" default:"support@mail.theopenlane.io"`
 	// CompanyName is the display name of the sending company
-	CompanyName string `json:"company_name" koanf:"companyName"`
+	CompanyName string `json:"company_name" koanf:"companyName" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
-	CompanyAddress string `json:"company_address" koanf:"companyAddress"`
+	CompanyAddress string `json:"company_address" koanf:"companyAddress" default:"5150 Broadway St San Antonio, TX 78209"`
 	// Corporation is the legal corporation name
-	Corporation string `json:"corporation" koanf:"corporation"`
+	Corporation string `json:"corporation" koanf:"corporation" default:"theopenlane, Inc."`
 	// SupportEmail is the support contact email address
-	SupportEmail string `json:"support_email" koanf:"supportEmail"`
+	SupportEmail string `json:"support_email" koanf:"supportEmail" default:"support@theopenlane.io"`
 	// LogoURL is the company logo image URL
-	LogoURL string `json:"logo_url" koanf:"logoURL"`
+	LogoURL string `json:"logo_url" koanf:"logoURL" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
 	// RootURL is the root application URL used to construct email action links
-	RootURL string `json:"root_url" koanf:"rootURL"`
+	RootURL string `json:"root_url" koanf:"rootURL" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
-	ProductURL string `json:"product_url" koanf:"productURL"`
+	ProductURL string `json:"product_url" koanf:"productURL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
-	DocsURL string `json:"docs_url" koanf:"docsURL"`
+	DocsURL string `json:"docs_url" koanf:"docsURL" default:"https://docs.theopenlane.io"`
+	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
+	QuestionnaireEmail string `json:"questionnaire_email,omitempty" koanf:"questionnaireEmail" default:"no-reply@mail.theopenlane.io"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields

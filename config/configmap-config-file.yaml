@@ -688,121 +688,6 @@ data:
       maxactiveconns: {{ .Values.openlane.coreConfiguration.redis.maxactiveconns }}
       {{- end }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.email }}
-    email:
-      {{- if .Values.openlane.coreConfiguration.email.companyname }}
-      companyname: {{ .Values.openlane.coreConfiguration.email.companyname | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.companyaddress }}
-      companyaddress: {{ .Values.openlane.coreConfiguration.email.companyaddress | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.corporation }}
-      corporation: {{ .Values.openlane.coreConfiguration.email.corporation | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.year }}
-      year: {{ .Values.openlane.coreConfiguration.email.year }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.fromemail }}
-      fromemail: {{ .Values.openlane.coreConfiguration.email.fromemail | quote }}
-      {{- else if .Values.domain }}
-      fromemail: "no-reply@mail.{{ .Values.domain }}"
-      {{- else }}
-      fromemail: ""
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.supportemail }}
-      supportemail: {{ .Values.openlane.coreConfiguration.email.supportemail | quote }}
-      {{- else if .Values.domain }}
-      supportemail: "support@{{ .Values.domain }}"
-      {{- else }}
-      supportemail: ""
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.questionnaireemail }}
-      questionnaireemail: {{ .Values.openlane.coreConfiguration.email.questionnaireemail | quote }}
-      {{- else if .Values.domain }}
-      questionnaireemail: "questionnaire@{{ .Values.domain }}"
-      {{- else }}
-      questionnaireemail: ""
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.logourl }}
-      logourl: {{ .Values.openlane.coreConfiguration.email.logourl | quote }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.urls }}
-      urls:
-        {{- if .Values.openlane.coreConfiguration.email.urls.root }}
-        root: {{ .Values.openlane.coreConfiguration.email.urls.root | quote }}
-        {{- else if .Values.domain }}
-        root: "https://www.{{ .Values.domain }}"
-        {{- else }}
-        root: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.product }}
-        product: {{ .Values.openlane.coreConfiguration.email.urls.product | quote }}
-        {{- else if .Values.domain }}
-        product: "https://console.{{ .Values.domain }}"
-        {{- else }}
-        product: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.docs }}
-        docs: {{ .Values.openlane.coreConfiguration.email.urls.docs | quote }}
-        {{- else if .Values.domain }}
-        docs: "https://docs.{{ .Values.domain }}"
-        {{- else }}
-        docs: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.verify }}
-        verify: {{ .Values.openlane.coreConfiguration.email.urls.verify | quote }}
-        {{- else if .Values.domain }}
-        verify: "https://console.{{ .Values.domain }}/verify"
-        {{- else }}
-        verify: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.invite }}
-        invite: {{ .Values.openlane.coreConfiguration.email.urls.invite | quote }}
-        {{- else if .Values.domain }}
-        invite: "https://console.{{ .Values.domain }}/invite"
-        {{- else }}
-        invite: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.reset }}
-        reset: {{ .Values.openlane.coreConfiguration.email.urls.reset | quote }}
-        {{- else if .Values.domain }}
-        reset: "https://console.{{ .Values.domain }}/password-reset"
-        {{- else }}
-        reset: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.verifysubscriber }}
-        verifysubscriber: {{ .Values.openlane.coreConfiguration.email.urls.verifysubscriber | quote }}
-        {{- else if .Values.domain }}
-        verifysubscriber: "https://console.{{ .Values.domain }}/subscriber-verify"
-        {{- else }}
-        verifysubscriber: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.verifybilling }}
-        verifybilling: {{ .Values.openlane.coreConfiguration.email.urls.verifybilling | quote }}
-        {{- else if .Values.domain }}
-        verifybilling: "https://console.{{ .Values.domain }}/verify-billing"
-        {{- else }}
-        verifybilling: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.billing }}
-        billing: {{ .Values.openlane.coreConfiguration.email.urls.billing | quote }}
-        {{- else if .Values.domain }}
-        billing: "https://console.{{ .Values.domain }}/organization-settings/billing"
-        {{- else }}
-        billing: ""
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.email.urls.questionnaire }}
-        questionnaire: {{ .Values.openlane.coreConfiguration.email.urls.questionnaire | quote }}
-        {{- else if .Values.domain }}
-        questionnaire: "https://console.{{ .Values.domain }}/questionnaire"
-        {{- else }}
-        questionnaire: ""
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.email.templatespath }}
-      templatespath: {{ .Values.openlane.coreConfiguration.email.templatespath | quote }}
-      {{- end }}
-    {{- end }}
     {{- if .Values.openlane.coreConfiguration.sessions }}
     sessions:
       {{- if .Values.openlane.coreConfiguration.sessions.domain }}
@@ -1125,6 +1010,43 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrations.email }}
+      email:
+        {{- if .Values.openlane.coreConfiguration.integrations.email.apiKey }}
+        apiKey: {{ .Values.openlane.coreConfiguration.integrations.email.apiKey | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.provider }}
+        provider: {{ .Values.openlane.coreConfiguration.integrations.email.provider | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.fromEmail }}
+        fromEmail: {{ .Values.openlane.coreConfiguration.integrations.email.fromEmail | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.companyName }}
+        companyName: {{ .Values.openlane.coreConfiguration.integrations.email.companyName | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.companyAddress }}
+        companyAddress: {{ .Values.openlane.coreConfiguration.integrations.email.companyAddress | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.corporation }}
+        corporation: {{ .Values.openlane.coreConfiguration.integrations.email.corporation | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.supportEmail }}
+        supportEmail: {{ .Values.openlane.coreConfiguration.integrations.email.supportEmail | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.logoURL }}
+        logoURL: {{ .Values.openlane.coreConfiguration.integrations.email.logoURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.rootURL }}
+        rootURL: {{ .Values.openlane.coreConfiguration.integrations.email.rootURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.productURL }}
+        productURL: {{ .Values.openlane.coreConfiguration.integrations.email.productURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.docsURL }}
+        docsURL: {{ .Values.openlane.coreConfiguration.integrations.email.docsURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail }}
+        questionnaireEmail: {{ .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}

@@ -137,10 +137,14 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 				return err
 			}
 
-			if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctxWithToken), email.SubscribeOp().Topic(), email.SubscribeRequest{
+			input := email.SubscribeRequest{
 				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
+				OrgName:       org.DisplayName,
 				Token:         tokenValue,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := h.Gala.EmitWithHeaders(ctxWithToken, email.SubscribeOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "subscriber", "resend"}, input)); receipt.Err != nil {
 				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending subscriber email")
 
 				return receipt.Err

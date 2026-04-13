@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
@@ -22,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -284,11 +284,13 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
-	receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.QuestionnaireAuthOp().Topic(), emaildef.QuestionnaireAuthEmail{
+	input := emaildef.QuestionnaireAuthEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress},
 		AssessmentName: assessmentObj.Name,
 		AuthURL:        authURL,
-	}, gala.Headers{})
+	}
+
+	receipt := emailGala.EmitWithHeaders(ctx, emaildef.QuestionnaireAuthOp().Topic(), input, gala.NewHeaders([]string{"email", "questionnaire"}, input))
 
 	return receipt.Err
 }

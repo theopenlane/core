@@ -123,11 +123,14 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(reqCtx), email.QuestionnaireAuthOp().Topic(), email.QuestionnaireAuthEmail{
+	input := email.QuestionnaireAuthEmail{
 		RecipientInfo:  email.RecipientInfo{Email: in.Email},
 		AssessmentName: assessmentData.Name,
 		AuthURL:        authURL,
-	}, gala.Headers{}); receipt.Err != nil {
+	}
+
+	if receipt := h.Gala.EmitWithHeaders(reqCtx, email.QuestionnaireAuthOp().Topic(), input,
+		gala.NewHeaders([]string{"email", "questionnaire", "resend"}, input)); receipt.Err != nil {
 		logx.FromContext(reqCtx).Error().Err(receipt.Err).Msg("error sending questionnaire auth email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)

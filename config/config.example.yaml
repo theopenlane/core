@@ -103,27 +103,6 @@ db:
     runmigrations: true
     secondarydbsource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
 domain: ""
-email:
-    companyaddress: ""
-    companyname: ""
-    corporation: ""
-    fromemail: ""
-    logourl: ""
-    questionnaireemail: ""
-    supportemail: ""
-    templatespath: ""
-    urls:
-        billing: ""
-        docs: ""
-        invite: ""
-        product: ""
-        questionnaire: ""
-        reset: ""
-        root: ""
-        verify: ""
-        verifybilling: ""
-        verifysubscriber: ""
-    year: 0
 entconfig:
     billing:
         bypassemaildomains: null
@@ -176,6 +155,19 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    email:
+        api_key: ""
+        company_address: 5150 Broadway St San Antonio, TX 78209
+        company_name: Openlane
+        corporation: theopenlane, Inc.
+        docs_url: https://docs.theopenlane.io
+        from_email: support@mail.theopenlane.io
+        logo_url: https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public
+        product_url: https://console.theopenlane.io
+        provider: resend
+        questionnaire_email: no-reply@mail.theopenlane.io
+        root_url: https://www.theopenlane.io
+        support_email: support@theopenlane.io
     githubapp:
         appid: ""
         appslug: ""

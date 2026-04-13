@@ -46,6 +46,9 @@ type EmailOperation[T HasRecipient] struct {
 	Theme render.Theme
 	// Content returns the structured email content for newman rendering
 	Content func(cfg RuntimeEmailConfig, input T) render.EmailContent
+	// MessageOptions returns additional newman message options for per-operation
+	// customization such as attachment or from-address overrides. May be nil
+	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 }
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder
@@ -63,17 +66,23 @@ func (e EmailOperation[T]) Registration() types.OperationRegistration {
 func (e EmailOperation[T]) handler() types.OperationHandler {
 	return providerkit.WithClientConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
 		func(ctx context.Context, client *EmailClient, input T) (json.RawMessage, error) {
+			var extraOpts []newman.MessageOption
+			if e.MessageOptions != nil {
+				extraOpts = e.MessageOptions(client.Config, input)
+			}
+
 			return renderAndSend(ctx, client, e.Theme,
 				input.GetRecipient(),
 				e.Subject(client.Config, input),
 				e.Content(client.Config, input),
+				extraOpts...,
 			)
 		},
 	)
 }
 
 // renderAndSend renders an email using the newman render engine and sends it through the client
-func renderAndSend(ctx context.Context, client *EmailClient, theme render.Theme, recipient RecipientInfo, subject string, content render.EmailContent) (json.RawMessage, error) {
+func renderAndSend(ctx context.Context, client *EmailClient, theme render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (json.RawMessage, error) {
 	r := render.NewRenderer(
 		render.WithTheme(theme),
 		render.WithBranding(BrandingFromConfig(client.Config)),
@@ -89,13 +98,16 @@ func renderAndSend(ctx context.Context, client *EmailClient, theme render.Theme,
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
-	message := newman.NewEmailMessageWithOptions(
+	opts := []newman.MessageOption{
 		newman.WithFrom(client.Config.FromEmail),
 		newman.WithTo([]string{recipient.Email}),
 		newman.WithSubject(subject),
 		newman.WithHTML(htmlBody),
 		newman.WithText(textBody),
-	)
+	}
+	opts = append(opts, extraOpts...)
+
+	message := newman.NewEmailMessageWithOptions(opts...)
 
 	if err := client.Sender.SendEmailWithContext(ctx, message); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("op", subject).Msg("failed sending email")
