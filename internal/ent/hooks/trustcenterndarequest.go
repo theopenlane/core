@@ -109,11 +109,14 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+			input := emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "trust-center", "nda-request"}, input)); receipt.Err != nil {
 				return nil, receipt.Err
 			}
 
@@ -134,11 +137,14 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCAuthOp().Topic(), emaildef.TrustCenterAuthEmail{
+		input := emaildef.TrustCenterAuthEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			AuthURL:       authURL,
-		}, gala.Headers{}); receipt.Err != nil {
+		}
+
+		if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCAuthOp().Topic(), input,
+			gala.NewHeaders([]string{"email", "trust-center", "auth"}, input)); receipt.Err != nil {
 			return nil, receipt.Err
 		}
 
@@ -153,11 +159,14 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+		input := emaildef.TrustCenterNDARequestEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			NDAURL:        ndaURL,
-		}, gala.Headers{}); receipt.Err != nil {
+		}
+
+		if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
+			gala.NewHeaders([]string{"email", "trust-center", "nda-request", "resend"}, input)); receipt.Err != nil {
 			return nil, receipt.Err
 		}
 
@@ -274,11 +283,14 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.TCNDARequestOp().Topic(), emaildef.TrustCenterNDARequestEmail{
+			input := emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "trust-center", "nda-request", "approved"}, input)); receipt.Err != nil {
 				return nil, receipt.Err
 			}
 

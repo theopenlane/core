@@ -84,10 +84,13 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctx), email.ResetRequestOp().Topic(), email.PasswordResetEmailRequest{
+	input := email.PasswordResetEmailRequest{
 		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 		Token:         meowtoken.Token,
-	}, gala.Headers{}); receipt.Err != nil {
+	}
+
+	if receipt := h.Gala.EmitWithHeaders(ctx, email.ResetRequestOp().Topic(), input,
+		gala.NewHeaders([]string{"email", "auth", "password-reset"}, input)); receipt.Err != nil {
 		return nil, receipt.Err
 	}
 

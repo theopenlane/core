@@ -140,13 +140,16 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.WelcomeOp().Topic(), emaildef.WelcomeRequest{
+			input := emaildef.WelcomeRequest{
 				RecipientInfo: emaildef.RecipientInfo{
 					Email:     user.Email,
 					FirstName: user.FirstName,
 					LastName:  user.LastName,
 				},
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.WelcomeOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "auth", "welcome"}, input)); receipt.Err != nil {
 				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("could not send welcome email")
 			}
 

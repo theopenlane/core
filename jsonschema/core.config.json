@@ -133,6 +133,9 @@
         },
         "oidclocal": {
           "$ref": "#/$defs/oidclocal.Config"
+        },
+        "email": {
+          "$ref": "#/$defs/email.RuntimeEmailConfig"
         }
       },
       "additionalProperties": false,
@@ -400,74 +403,56 @@
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
     },
-    "compose.Config": {
+    "email.RuntimeEmailConfig": {
       "properties": {
-        "companyname": {
+        "apiKey": {
           "type": "string"
         },
-        "companyaddress": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "resend",
+            "sendgrid",
+            "postmark"
+          ],
+          "description": "Email service provider"
+        },
+        "fromEmail": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "companyAddress": {
           "type": "string"
         },
         "corporation": {
           "type": "string"
         },
-        "year": {
-          "type": "integer"
-        },
-        "fromemail": {
+        "supportEmail": {
           "type": "string"
         },
-        "supportemail": {
+        "logoURL": {
           "type": "string"
         },
-        "questionnaireemail": {
+        "rootURL": {
           "type": "string"
         },
-        "logourl": {
+        "productURL": {
           "type": "string"
         },
-        "urls": {
-          "$ref": "#/$defs/emailtemplates.URLConfig"
+        "docsURL": {
+          "type": "string"
         },
-        "templatespath": {
+        "questionnaireEmail": {
           "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object"
-    },
-    "emailtemplates.URLConfig": {
-      "properties": {
-        "root": {
-          "type": "string"
-        },
-        "product": {
-          "type": "string"
-        },
-        "docs": {
-          "type": "string"
-        },
-        "verify": {
-          "type": "string"
-        },
-        "invite": {
-          "type": "string"
-        },
-        "reset": {
-          "type": "string"
-        },
-        "verifysubscriber": {
-          "type": "string"
-        },
-        "verifybilling": {
-          "type": "string"
-        },
-        "questionnaire": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "required": [
+        "provider"
+      ]
     },
     "entconfig.Billing": {
       "properties": {
@@ -1874,10 +1859,6 @@
     "redis": {
       "$ref": "#/$defs/cache.Config",
       "description": "Redis contains the redis configuration for the key-value store"
-    },
-    "email": {
-      "$ref": "#/$defs/compose.Config",
-      "description": "Email contains email sending configuration for the server"
     },
     "sessions": {
       "$ref": "#/$defs/sessions.Config",

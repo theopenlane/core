@@ -75,10 +75,25 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.SubscribeOp().Topic(), emaildef.SubscribeRequest{
+			orgIDValue, ownerOK := m.OwnerID()
+			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
+			if err != nil {
+				return nil, err
+			}
+
+			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
+			if err != nil {
+				return nil, err
+			}
+
+			input := emaildef.SubscribeRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
+				OrgName:       orgName,
 				Token:         tokenValue,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.SubscribeOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "subscriber"}, input)); receipt.Err != nil {
 				return nil, receipt.Err
 			}
 

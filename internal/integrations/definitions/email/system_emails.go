@@ -1,8 +1,10 @@
 package email
 
 import (
-	"html/template"
+	"strings"
+	"time"
 
+	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/definitions/email/themes"
@@ -17,8 +19,6 @@ var (
 	trustCenterTheme   = themes.TrustCenterTheme{}
 	questionnaireTheme = themes.QuestionnaireTheme{}
 )
-
-// --- Input types ---
 
 // VerifyEmailRequest is the input for the email verification operation
 type VerifyEmailRequest struct {
@@ -67,6 +67,8 @@ type PasswordResetSuccessRequest struct {
 // SubscribeRequest is the input for the subscription verification operation
 type SubscribeRequest struct {
 	RecipientInfo
+	// OrgName is the display name of the subscribing organization
+	OrgName string `json:"org_name" jsonschema:"required,description=Organization display name"`
 	// Token is the subscriber verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Subscriber verification token"`
 }
@@ -94,6 +96,10 @@ type TrustCenterNDASignedEmail struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
 	// TrustCenterURL is the URL to the trust center
 	TrustCenterURL string `json:"trust_center_url" jsonschema:"required,description=Trust center URL"`
+	// AttachmentFilename is the filename for the signed NDA attachment
+	AttachmentFilename string `json:"attachment_filename,omitempty" jsonschema:"description=Signed NDA attachment filename"`
+	// AttachmentData is the raw content of the signed NDA attachment
+	AttachmentData []byte `json:"attachment_data,omitempty" jsonschema:"description=Signed NDA attachment content"`
 }
 
 // TrustCenterAuthEmail is the input for trust center access authentication
@@ -124,67 +130,93 @@ type BillingEmailChangedEmail struct {
 	// NewBillingEmail is the new billing email address
 	NewBillingEmail string `json:"new_billing_email" jsonschema:"required,description=New billing email"`
 	// ChangedAt is the timestamp of the change
-	ChangedAt string `json:"changed_at" jsonschema:"required,description=Timestamp of the change"`
+	ChangedAt time.Time `json:"changed_at" jsonschema:"required,description=Timestamp of the change"`
 }
 
 // --- Schema + operation ref vars ---
 
 var (
-	verifyEmailSchema, verifyEmailOp                     = providerkit.OperationSchema[VerifyEmailRequest]()
-	welcomeSchema, welcomeOp                             = providerkit.OperationSchema[WelcomeRequest]()
-	inviteSchema, inviteOp                               = providerkit.OperationSchema[InviteRequest]()
-	inviteJoinedSchema, inviteJoinedOp                   = providerkit.OperationSchema[InviteJoinedRequest]()
-	resetRequestSchema, resetRequestOp                   = providerkit.OperationSchema[PasswordResetEmailRequest]()
-	resetSuccessSchema, resetSuccessOp                   = providerkit.OperationSchema[PasswordResetSuccessRequest]()
-	subscribeSchema, subscribeOp                         = providerkit.OperationSchema[SubscribeRequest]()
-	verifyBillingSchema, verifyBillingOp                 = providerkit.OperationSchema[VerifyBillingRequest]()
-	tcNDARequestSchema, tcNDARequestOp                   = providerkit.OperationSchema[TrustCenterNDARequestEmail]()
-	tcNDASignedSchema, tcNDASignedOp                     = providerkit.OperationSchema[TrustCenterNDASignedEmail]()
-	tcAuthSchema, tcAuthOp                               = providerkit.OperationSchema[TrustCenterAuthEmail]()
-	questionnaireAuthSchema, questionnaireAuthOp         = providerkit.OperationSchema[QuestionnaireAuthEmail]()
-	billingEmailChangedSchema, billingEmailChangedOp     = providerkit.OperationSchema[BillingEmailChangedEmail]()
+	verifyEmailSchema, verifyEmailOp                 = providerkit.OperationSchema[VerifyEmailRequest]()
+	welcomeSchema, welcomeOp                         = providerkit.OperationSchema[WelcomeRequest]()
+	inviteSchema, inviteOp                           = providerkit.OperationSchema[InviteRequest]()
+	inviteJoinedSchema, inviteJoinedOp               = providerkit.OperationSchema[InviteJoinedRequest]()
+	resetRequestSchema, resetRequestOp               = providerkit.OperationSchema[PasswordResetEmailRequest]()
+	resetSuccessSchema, resetSuccessOp               = providerkit.OperationSchema[PasswordResetSuccessRequest]()
+	subscribeSchema, subscribeOp                     = providerkit.OperationSchema[SubscribeRequest]()
+	verifyBillingSchema, verifyBillingOp             = providerkit.OperationSchema[VerifyBillingRequest]()
+	tcNDARequestSchema, tcNDARequestOp               = providerkit.OperationSchema[TrustCenterNDARequestEmail]()
+	tcNDASignedSchema, tcNDASignedOp                 = providerkit.OperationSchema[TrustCenterNDASignedEmail]()
+	tcAuthSchema, tcAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()
+	questionnaireAuthSchema, questionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()
+	billingEmailChangedSchema, billingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()
 )
 
 // --- Operation accessors (for emission sites) ---
 
 // VerifyEmailOp returns the operation accessor for verify email sends
-func VerifyEmailOp() OperationAccessor { return newAccessor(verifyEmailOp.Name()) }
+func VerifyEmailOp() OperationAccessor {
+	return newAccessor(verifyEmailOp.Name())
+}
 
 // WelcomeOp returns the operation accessor for welcome email sends
-func WelcomeOp() OperationAccessor { return newAccessor(welcomeOp.Name()) }
+func WelcomeOp() OperationAccessor {
+	return newAccessor(welcomeOp.Name())
+}
 
 // InviteOp returns the operation accessor for invite email sends
-func InviteOp() OperationAccessor { return newAccessor(inviteOp.Name()) }
+func InviteOp() OperationAccessor {
+	return newAccessor(inviteOp.Name())
+}
 
 // InviteJoinedOp returns the operation accessor for invite-joined email sends
-func InviteJoinedOp() OperationAccessor { return newAccessor(inviteJoinedOp.Name()) }
+func InviteJoinedOp() OperationAccessor {
+	return newAccessor(inviteJoinedOp.Name())
+}
 
 // ResetRequestOp returns the operation accessor for password reset request sends
-func ResetRequestOp() OperationAccessor { return newAccessor(resetRequestOp.Name()) }
+func ResetRequestOp() OperationAccessor {
+	return newAccessor(resetRequestOp.Name())
+}
 
 // ResetSuccessOp returns the operation accessor for password reset success sends
-func ResetSuccessOp() OperationAccessor { return newAccessor(resetSuccessOp.Name()) }
+func ResetSuccessOp() OperationAccessor {
+	return newAccessor(resetSuccessOp.Name())
+}
 
 // SubscribeOp returns the operation accessor for subscribe email sends
-func SubscribeOp() OperationAccessor { return newAccessor(subscribeOp.Name()) }
+func SubscribeOp() OperationAccessor {
+	return newAccessor(subscribeOp.Name())
+}
 
 // VerifyBillingOp returns the operation accessor for verify billing sends
-func VerifyBillingOp() OperationAccessor { return newAccessor(verifyBillingOp.Name()) }
+func VerifyBillingOp() OperationAccessor {
+	return newAccessor(verifyBillingOp.Name())
+}
 
 // TCNDARequestOp returns the operation accessor for trust center NDA request sends
-func TCNDARequestOp() OperationAccessor { return newAccessor(tcNDARequestOp.Name()) }
+func TCNDARequestOp() OperationAccessor {
+	return newAccessor(tcNDARequestOp.Name())
+}
 
 // TCNDASignedOp returns the operation accessor for trust center NDA signed sends
-func TCNDASignedOp() OperationAccessor { return newAccessor(tcNDASignedOp.Name()) }
+func TCNDASignedOp() OperationAccessor {
+	return newAccessor(tcNDASignedOp.Name())
+}
 
 // TCAuthOp returns the operation accessor for trust center auth sends
-func TCAuthOp() OperationAccessor { return newAccessor(tcAuthOp.Name()) }
+func TCAuthOp() OperationAccessor {
+	return newAccessor(tcAuthOp.Name())
+}
 
 // QuestionnaireAuthOp returns the operation accessor for questionnaire auth sends
-func QuestionnaireAuthOp() OperationAccessor { return newAccessor(questionnaireAuthOp.Name()) }
+func QuestionnaireAuthOp() OperationAccessor {
+	return newAccessor(questionnaireAuthOp.Name())
+}
 
 // BillingEmailChangedOp returns the operation accessor for billing email changed sends
-func BillingEmailChangedOp() OperationAccessor { return newAccessor(billingEmailChangedOp.Name()) }
+func BillingEmailChangedOp() OperationAccessor {
+	return newAccessor(billingEmailChangedOp.Name())
+}
 
 // OperationAccessor provides the operation name and topic for emission sites
 type OperationAccessor struct {
@@ -193,11 +225,16 @@ type OperationAccessor struct {
 }
 
 // Name returns the operation name
-func (a OperationAccessor) Name() string { return a.name }
+func (a OperationAccessor) Name() string {
+	return a.name
+}
 
 // Topic returns the gala topic for this operation
-func (a OperationAccessor) Topic() gala.TopicName { return a.topic }
+func (a OperationAccessor) Topic() gala.TopicName {
+	return a.topic
+}
 
+// newAccessor creates a new OperationAccessor for the given operation name
 func newAccessor(name string) OperationAccessor {
 	return OperationAccessor{
 		name:  name,
@@ -218,17 +255,16 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Verify Your Email Address",
+				Title: "Verify your email address",
 				Intros: []string{
-					"Welcome to " + cfg.CompanyName + " — where compliance isn't just a checkbox.",
-					"Before you get started, let's make sure it's really you. Click below to verify your email:",
+					"Thank you for registering for the " + cfg.CompanyName + " platform - in order to ensure the security of your account, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Confirm Email", Link: verifyURL},
+					Button: render.Button{Text: "Verify Email", Link: verifyURL},
 				}},
 				Outros: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
-					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
+					verifyURL,
+					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
 				},
 			},
 		}
@@ -244,21 +280,18 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Welcome to Openlane!",
+				Title: "Welcome to " + cfg.CompanyName + "!",
 				Intros: []string{
-					"We're thrilled to have you here. At Openlane, we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
-				},
-				IntrosUnsafe: []template.HTML{
-					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-						`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Go through our onboarding process to get a personalized experience</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Setup a test program to see all the features our platform has to offer</p>` +
-						`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
-						`</div>`),
+					"Welcome to the " + cfg.CompanyName + " platform - you can now log in to your account.",
+					"We've created a personal Organization just for you to help you get started - you can create additional Organizations for your businesses, or just jump right in to see all the amazing features we've cooked up for you.",
+					"Check out the starter guide at " + cfg.DocsURL + "/getting-started for more information or our end-to-end examples at " + cfg.DocsURL + "/examples for ideas and inspiration.",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
+					Button: render.Button{Text: "Login", Link: cfg.ProductURL},
 				}},
+				Outros: []string{
+					"If you have any questions, please reach out to us at " + cfg.SupportEmail + ".",
+				},
 			},
 		}
 	},
@@ -275,17 +308,17 @@ var inviteEmail = EmailOperation[InviteRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "You've been invited to join " + cfg.CompanyName + "!",
+				Title: "Join your team on " + cfg.CompanyName + "!",
 				Intros: []string{
-					"You're in — let's build trust without the busywork. " + req.InviterName + " has invited you to collaborate in " + cfg.CompanyName + ", as part of the " + req.OrgName + " organization.",
-					"To get started (and verify your email), click the link below",
+					req.InviterName + " has invited you to use " + cfg.CompanyName + " with them, in an Organization called " + req.OrgName + " with role of " + strings.ToUpper(req.Role) + ".",
+					"Accept the invitation by clicking on the following button:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Accept Invite", Link: inviteURL},
+					Button: render.Button{Text: "Join Now", Link: inviteURL},
 				}},
 				Outros: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + inviteURL,
-					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
+					"Or you can copy and paste the following URL into your browser: " + inviteURL,
+					"If you have any questions, please contact " + cfg.SupportEmail + ".",
 				},
 			},
 		}
@@ -301,25 +334,10 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "You're in — welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
+				Title: "Collaborate with your team on " + cfg.CompanyName,
 				Intros: []string{
-					"Welcome to " + cfg.CompanyName + " — we're excited to have you on board with " + req.OrgName + "!",
-					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats — without the manual overhead.",
+					"You've been successfully added to an additional Organization " + req.OrgName + ".",
 				},
-				IntrosUnsafe: []template.HTML{
-					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-						`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Complete the onboarding flow to tailor your experience</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Explore any active <a href="` + cfg.ProductURL + `/programs" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">programs</a> your team is running</p>` +
-						`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
-						`</div>`),
-				},
-				Outros: []string{
-					"When you're ready, hop into the platform and start exploring:",
-				},
-				Actions: []render.Action{{
-					Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
-				}},
 			},
 		}
 	},
@@ -336,18 +354,17 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Reset your " + cfg.CompanyName + " password",
+				Title: "Reset your password",
 				Intros: []string{
-					"We received a request to reset your " + cfg.CompanyName + " password.",
-					"If that was you, no problem — just click the button below to set a new one:",
+					"We received a password reset request for your " + cfg.CompanyName + " account. If you requested a new password, please click on the button below which links to a page where you can securely set a new password.",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Password Reset", Link: resetURL},
+					Button: render.Button{Text: "Reset Password", Link: resetURL},
 				}},
 				Outros: []string{
-					"No button? No problem — just paste this link in your browser: " + resetURL,
-					"This link will expire in 15 minutes to keep things secure.",
-					"If you didn't request a password reset, you can safely ignore this email.",
+					"Or you can copy and paste the following URL into your browser: " + resetURL,
+					"For your security, this link will expire after 15 minutes.",
+					"If you did not request a new password, please ignore this email and no action is required on your part. If you have concerns, please contact " + cfg.SupportEmail + " to report an issue - the security of your account is important to us.",
 				},
 			},
 		}
@@ -363,10 +380,10 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Your " + cfg.CompanyName + " password has been reset",
+				Title: "Your " + cfg.CompanyName + " Password Has Been Reset",
 				Intros: []string{
-					"Your password was successfully updated. If you made this change, you're all set — no further action needed.",
-					"If you didn't request a password reset, please contact our support team right away at " + cfg.SupportEmail + ". Keeping your account secure is our top priority.",
+					"Your " + cfg.CompanyName + " password has been successfully reset - no further action is required on your part if you submitted the password reset.",
+					"If you did not request a password reset, please contact our Customer Support team immediately at " + cfg.SupportEmail + " - your account security is important to us.",
 				},
 			},
 		}
@@ -384,24 +401,16 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "You're In — Early Access Secured!",
+				Title: "Thank you for subscribing",
 				Intros: []string{
-					"We're thrilled to have you as part of our early community. Your interest means the world to us as we work to build a cutting-edge solution. We can't wait to share it with you!",
-					"Please confirm your email address to ensure you receive all important updates about your early access.",
+					"Thank you for subscribing to " + req.OrgName + " - in order to confirm the subscription of future emails, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Confirm Email", Link: verifyURL},
+					Button: render.Button{Text: "Verify Email", Link: verifyURL},
 				}},
-				IntrosUnsafe: []template.HTML{
-					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-						`<p style="font-size:16px;line-height:24px;margin-bottom:15px;margin-top:16px;font-weight:500">What to Expect Next:</p>` +
-						`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">You'll hear from us soon – We'll email you as soon as your spot is ready.</p>` +
-						`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">Early access to beta features – Get a first look at everything we're building.</p>` +
-						`<p style="font-size:16px;line-height:24px;margin-bottom:0px;margin-top:16px;padding-left:20px">Help shape the future – Your feedback will directly influence the product.</p>` +
-						`</div>`),
-				},
 				Outros: []string{
-					"Thank you for being part of this journey — we're excited to have you on board!",
+					verifyURL,
+					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
 				},
 			},
 		}
@@ -419,17 +428,16 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Verify Your Billing Email Address",
+				Title: "Verify your billing contact",
 				Intros: []string{
-					"You're receiving this because the billing contact for your " + cfg.CompanyName + " account was just updated.",
-					"To help keep your account secure, please verify your email address by clicking the button below:",
+					"This email has been sent to you because the billing contact for your " + cfg.CompanyName + " account has changed. In order to ensure the security of your account, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Confirm Billing Email", Link: verifyURL},
+					Button: render.Button{Text: "Verify Email", Link: verifyURL},
 				}},
 				Outros: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
-					"If you run into any issues, feel free to reach out at " + cfg.SupportEmail + ".",
+					verifyURL,
+					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
 				},
 			},
 		}
@@ -480,6 +488,15 @@ var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
 			},
 		}
 	},
+	MessageOptions: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) []newman.MessageOption {
+		if req.AttachmentFilename == "" || len(req.AttachmentData) == 0 {
+			return nil
+		}
+
+		return []newman.MessageOption{
+			newman.WithAttachment(newman.NewAttachment(req.AttachmentFilename, req.AttachmentData)),
+		}
+	},
 }
 
 var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
@@ -528,6 +545,15 @@ var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
 			},
 		}
 	},
+	MessageOptions: func(cfg RuntimeEmailConfig, _ QuestionnaireAuthEmail) []newman.MessageOption {
+		if cfg.QuestionnaireEmail == "" {
+			return nil
+		}
+
+		return []newman.MessageOption{
+			newman.WithFrom(cfg.QuestionnaireEmail),
+		}
+	},
 }
 
 var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
@@ -545,7 +571,7 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 				Dictionary: []render.Cell{
 					{Key: "Previous email", Value: req.OldBillingEmail},
 					{Key: "New email", Value: req.NewBillingEmail},
-					{Key: "Time of action", Value: req.ChangedAt},
+					{Key: "Time of action", Value: req.ChangedAt.Format("January 2, 2006 at 3:04 PM MST")},
 				},
 				Outros: []string{
 					"If you made this change, no further action is required.",

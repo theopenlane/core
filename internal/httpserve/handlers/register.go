@@ -176,10 +176,13 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctx), email.VerifyEmailOp().Topic(), email.VerifyEmailRequest{
+	input := email.VerifyEmailRequest{
 		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 		Token:         meowtoken.Token,
-	}, gala.Headers{}); receipt.Err != nil {
+	}
+
+	if receipt := h.Gala.EmitWithHeaders(ctx, email.VerifyEmailOp().Topic(), input,
+		gala.NewHeaders([]string{"email", "auth", "verify"}, input)); receipt.Err != nil {
 		return nil, receipt.Err
 	}
 

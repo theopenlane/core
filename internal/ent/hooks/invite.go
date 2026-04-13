@@ -117,13 +117,16 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.InviteOp().Topic(), emaildef.InviteRequest{
+			input := emaildef.InviteRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				InviterName:   inviterName,
 				OrgName:       orgName,
 				Role:          string(role),
 				Token:         tokenValue,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.InviteOp().Topic(), input,
+				gala.NewHeaders([]string{"email", "invite"}, input)); receipt.Err != nil {
 				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending email to user")
 			}
 
@@ -316,10 +319,13 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.InviteJoinedOp().Topic(), emaildef.InviteJoinedRequest{
+			joinedInput := emaildef.InviteJoinedRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
 				OrgName:       org.DisplayName,
-			}, gala.Headers{}); receipt.Err != nil {
+			}
+
+			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.InviteJoinedOp().Topic(), joinedInput,
+				gala.NewHeaders([]string{"email", "invite", "joined"}, joinedInput)); receipt.Err != nil {
 				return retValue, receipt.Err
 			}
 
