@@ -3408,6 +3408,8 @@ func init() {
 	identityholder.Hooks[12] = identityholderMixinHooks10[0]
 
 	identityholder.Hooks[13] = identityholderHooks[0]
+
+	identityholder.Hooks[14] = identityholderHooks[1]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
