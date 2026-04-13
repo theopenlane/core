@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{{ .Renderer.Direction }}" lang="en">
+
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Outfit:400,500" />
+    {{ if .Renderer.Branding.Logo }}
+    <link rel="preload" as="image" href="{{ .Renderer.Branding.Logo | url }}" />
+    {{ end }}
+    <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/6ffdcca4-a4c8-4a4d-6ddd-3b394f6c7a00/public" />
+    <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/9ca24c5a-8377-4e12-9adb-14550a229800/public" />
+    <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/afbbb82c-86c8-465b-8205-e17fd5514b00/public" />
+    <style type="text/css" rel="stylesheet" media="all">
+        {{ range $selector, $props := .MergedStyles }}
+        {{ $selector }} {
+            {{ range $key, $val := $props }}
+                {{ $key }}: {{ css $val }};
+            {{ end }}
+        }
+        {{ end }}
+
+        /* Media Queries */
+        @media only screen and (max-width: {{ if .Email.Body.BodyWidth }}{{ .Email.Body.BodyWidth }}{{ else }}600px{{ end }}) {
+            .email-wrapper,
+            .email-card {
+                width: 100% !important;
+                padding: 20px 10px !important;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .button {
+                width: 100% !important;
+            }
+        }
+
+        {{ if .Email.Body.AdditionalCSS }}{{ .Email.Body.AdditionalCSS | css }}{{ end }}
+    </style>
+</head>
+
+<body class="theme-{{ .Renderer.Theme.Name }}" style="margin:0;padding:0;width:100%;font-family:'Outfit',Helvetica,Arial,sans-serif;line-height:1.625;color:#505f6f;box-sizing:border-box;">
+    <table align="center" role="presentation" cellpadding="0" cellspacing="0" width="600" class="email-wrapper"
+        style="width:100%;max-width:600px;margin:auto;padding:45px 20px;background-color:#cdfaee;border:0;text-align:center;">
+        <tbody>
+            <tr style="width:100%">
+                <td>
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation"
+                        class="email-card"
+                        style="background-color:#ffffff;border-radius:8px;padding:36px;margin-left:auto;margin-right:auto;">
+                        <tbody>
+                            <!-- Logo -->
+                            <tr style="width:100%">
+                                <td>
+                                    {{ if .Renderer.Branding.Logo }}
+                                    <a href="{{ .Renderer.Branding.Link }}" target="_blank">
+                                        <img alt="{{ .Renderer.Branding.Name }}" height="40"
+                                            src="{{ .Renderer.Branding.Logo | url }}"
+                                            class="email-logo"
+                                            style="display:block;outline:none;border:none;text-decoration:none;height:auto;margin-left:auto;margin-right:auto;margin-bottom:24px;"
+                                            width="162" />
+                                    </a>
+                                    {{ else }}
+                                    <h2 style="text-align:center;margin-bottom:24px;">
+                                        <a href="{{ .Renderer.Branding.Link }}" target="_blank" style="color:#082930;text-decoration:none;">{{ .Renderer.Branding.Name }}</a>
+                                    </h2>
+                                    {{ end }}
+                                </td>
+                            </tr>
+
+                            <!-- Content -->
+                            <tr style="width:100%">
+                                <td class="content-cell" style="text-align:left;">
+
+                                    {{/* Title or Greeting */}}
+                                    {{ if .Email.Body.Title }}
+                                    <h1>{{ .Email.Body.Title }}</h1>
+                                    {{ else if and .Email.Body.Greeting .Email.Body.Name }}
+                                    <p class="justify">{{ .Email.Body.Greeting }} {{ .Email.Body.Name }},</p>
+                                    {{ end }}
+
+                                    {{/* Intros */}}
+                                    {{ if ne .Email.Body.IntrosMarkdown "" }}
+                                        {{ .Email.Body.IntrosMarkdown.ToHTML }}
+                                    {{ else if gt (len .Email.Body.IntrosUnsafe) 0 }}
+                                        {{ range $line := .Email.Body.IntrosUnsafe }}
+                                        <p>{{ $line }}</p>
+                                        {{ end }}
+                                    {{ else }}
+                                        {{ range $line := .Email.Body.Intros }}
+                                        <p>{{ $line }}</p>
+                                        {{ end }}
+                                    {{ end }}
+
+                                    {{/* FreeMarkdown replaces structured content */}}
+                                    {{ if ne .Email.Body.FreeMarkdown "" }}
+                                        <div class="free-markdown">{{ .Email.Body.FreeMarkdown.ToHTML }}</div>
+                                    {{ else }}
+
+                                        {{/* Dictionary */}}
+                                        {{ with .Email.Body.Dictionary }}
+                                            {{ if gt (len .) 0 }}
+                                            <dl class="body-dictionary">
+                                                {{ range $entry := . }}
+                                                <div>
+                                                    <dt>{{ $entry.Key }}:</dt>
+                                                    <dd>
+                                                        {{ if gt (len $entry.Value) 0 }}
+                                                            {{ $entry.Value }}
+                                                        {{ else if gt (len $entry.UnsafeValue) 0 }}
+                                                            {{ $entry.UnsafeValue }}
+                                                        {{ else }}
+                                                            No Value Set
+                                                        {{ end }}
+                                                    </dd>
+                                                </div>
+                                                {{ end }}
+                                            </dl>
+                                            {{ end }}
+                                        {{ end }}
+
+                                        {{/* Tables */}}
+                                        {{ with .Email.Body.Tables }}
+                                            {{ if gt (len .) 0 }}
+                                                {{ range $table := . }}
+                                                    {{ $data := .Data }}
+                                                    {{ $columns := .Columns }}
+                                                    {{ if gt (len $data) 0 }}
+                                                        {{ if $table.TitleUnsafe }}
+                                                            <div class="data-table-title-unsafe">{{ $table.TitleUnsafe }}</div>
+                                                        {{ else if $table.Title }}
+                                                            <div class="data-table-title">{{ $table.Title }}</div>
+                                                        {{ end }}
+                                                        <table class="data-wrapper{{ with $table.Class }} {{ . }}{{ end }}" width="100%" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <table class="data-table" width="100%" cellpadding="0" cellspacing="0">
+                                                                        <tr>
+                                                                            {{ $col := index $data 0 }}
+                                                                            {{ range $entry := $col }}
+                                                                            <th {{ with $columns }}{{ $width := index .CustomWidth $entry.Key }}{{ with $width }} width="{{ . }}"{{ end }}{{ $align := index .CustomAlignment $entry.Key }}{{ with $align }} class="align-{{ . }}"{{ end }}{{ end }}>
+                                                                                <p>{{ $entry.Key }}</p>
+                                                                            </th>
+                                                                            {{ end }}
+                                                                        </tr>
+                                                                        {{ range $row := $data }}
+                                                                        <tr>
+                                                                            {{ range $cell := $row }}
+                                                                            <td {{ with $columns }}{{ $align := index .CustomAlignment $cell.Key }}{{ with $align }} class="align-{{ . }}"{{ end }}{{ end }}>
+                                                                                {{ if gt (len $cell.Value) 0 }}
+                                                                                    {{ $cell.Value }}
+                                                                                {{ else if gt (len $cell.UnsafeValue) 0 }}
+                                                                                    {{ $cell.UnsafeValue }}
+                                                                                {{ else }}
+                                                                                    No Value Set
+                                                                                {{ end }}
+                                                                            </td>
+                                                                            {{ end }}
+                                                                        </tr>
+                                                                        {{ end }}
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        {{ if $table.FooterUnsafe }}
+                                                            <div class="table-footer">{{ $table.FooterUnsafe }}</div>
+                                                        {{ else if $table.Footer }}
+                                                            <div class="table-footer">{{ $table.Footer }}</div>
+                                                        {{ end }}
+                                                    {{ end }}
+                                                {{ end }}
+                                            {{ end }}
+                                        {{ end }}
+
+                                        {{/* Actions */}}
+                                        {{ with .Email.Body.Actions }}
+                                            {{ if gt (len .) 0 }}
+                                                {{ $defaultColor := "#082930" }}
+                                                {{ $defaultTextColor := "#FFFFFF" }}
+                                                {{ range $action := . }}
+                                                    {{ if $action.Instructions }}
+                                                    <p>{{ $action.Instructions }}</p>
+                                                    {{ end }}
+                                                    {{ $length := len $action.Button.Text }}
+                                                    {{ $width := add (mul $length 9) 20 }}
+                                                    {{ if lt $width 200 }}{{ $width = 200 }}{{ else if gt $width 570 }}{{ $width = 570 }}{{ end }}
+                                                    {{ safe "<!--[if mso]>" }}
+                                                        {{ if $action.Button.Text }}
+                                                            <div class="vml-button-wrapper">
+                                                                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ $action.Button.Link }}" style="height:45px;v-text-anchor:middle;width:{{ $width }}px;background-color:{{ if $action.Button.Color }}{{ $action.Button.Color }}{{ else }}{{ $defaultColor }}{{ end }};" arcsize="10%" {{ if $action.Button.Color }}strokecolor="{{ $action.Button.Color }}" fillcolor="{{ $action.Button.Color }}"{{ else }}strokecolor="{{ $defaultColor }}" fillcolor="{{ $defaultColor }}"{{ end }}>
+                                                                    <w:anchorlock/>
+                                                                    <center style="color:{{ if $action.Button.TextColor }}{{ $action.Button.TextColor }}{{ else }}{{ $defaultTextColor }}{{ end }};font-size:15px;text-align:center;font-family:sans-serif;font-weight:bold;">
+                                                                        {{ $action.Button.Text }}
+                                                                    </center>
+                                                                </v:roundrect>
+                                                            </div>
+                                                        {{ end }}
+                                                        {{ if $action.InviteCode }}
+                                                            <div class="invite-code-container">
+                                                                <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
+                                                                    <tr>
+                                                                        <td align="center">
+                                                                            <table class="invite-code-table" align="center" cellpadding="0" cellspacing="0">
+                                                                                <tr>
+                                                                                    <td class="invite-code-cell">{{ $action.InviteCode }}</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        {{ end }}
+                                                    {{ safe "<![endif]-->" }}
+                                                    {{ safe "<!--[if !mso]><!-- -->" }}
+                                                        <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td align="center">
+                                                                    <div>
+                                                                        {{ if $action.Button.Text }}
+                                                                        <a href="{{ $action.Button.Link }}" class="button"
+                                                                            style="{{ with $action.Button.Color }}background-color:{{ . }};border-color:{{ . }};{{ end }}{{ with $action.Button.TextColor }}color:{{ . }};{{ end }}width:{{ $width }}px;"
+                                                                            target="_blank">
+                                                                            {{ $action.Button.Text }}
+                                                                        </a>
+                                                                        {{ end }}
+                                                                        {{ if $action.InviteCode }}
+                                                                        <span class="invite-code">{{ $action.InviteCode }}</span>
+                                                                        {{ end }}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    {{ safe "<![endif]-->" }}
+                                                {{ end }}
+                                            {{ end }}
+                                        {{ end }}
+
+                                    {{ end }}
+
+                                    {{/* Outros */}}
+                                    {{ if ne .Email.Body.OutrosMarkdown "" }}
+                                        {{ .Email.Body.OutrosMarkdown.ToHTML }}
+                                    {{ else if gt (len .Email.Body.OutrosUnsafe) 0 }}
+                                        {{ range $line := .Email.Body.OutrosUnsafe }}
+                                        <p>{{ $line }}</p>
+                                        {{ end }}
+                                    {{ else }}
+                                        {{ range $line := .Email.Body.Outros }}
+                                        <p>{{ $line }}</p>
+                                        {{ end }}
+                                    {{ end }}
+
+                                    {{/* Help Section */}}
+                                    <hr class="help-divider" style="width:100%;border:none;border-top:1px solid #e0e8ec;margin-top:24px;margin-bottom:24px;" />
+                                    <p class="help-text" style="font-size:14px;line-height:24px;margin-bottom:24px;margin-top:16px;color:#aabec5;">
+                                        If you have any questions, please contact
+                                        <a href="mailto:support@theopenlane.io" class="help-link" style="color:#3f76ff;text-decoration:none;" target="_blank">support@theopenlane.io</a>
+                                    </p>
+
+                                    {{/* Signature */}}
+                                    <hr class="signature-divider" style="width:100%;border:none;border-top:1px solid #e0e8ec;margin-bottom:24px;" />
+                                    {{ if and .Email.Body.Signature (gt (len .Email.Body.Signature) 0) }}
+                                        <p class="signature-text" style="font-size:16px;line-height:24px;margin-bottom:10px;margin-top:16px;">
+                                            <b>{{ .Email.Body.Signature }}{{ if .Email.Body.SignatureName }}<br />{{ .Email.Body.SignatureName }}{{ end }}</b>
+                                        </p>
+                                    {{ else }}
+                                        <p class="signature-text" style="font-size:16px;line-height:24px;margin-bottom:10px;margin-top:16px;">
+                                            Stay compliant,
+                                        </p>
+                                        <img alt="Signature" height="40"
+                                            src="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/6ffdcca4-a4c8-4a4d-6ddd-3b394f6c7a00/public"
+                                            class="signature-img"
+                                            style="display:block;outline:none;border:none;text-decoration:none;height:auto;margin-left:auto;margin-right:auto;"
+                                            width="128" />
+                                    {{ end }}
+
+                                    {{/* Trouble Text */}}
+                                    {{ if eq .Email.Body.FreeMarkdown "" }}
+                                        {{ with .Email.Body.Actions }}
+                                            <table class="body-sub">
+                                                <tbody>
+                                                    {{ range $action := . }}
+                                                        {{ if $action.Button.Text }}
+                                                        <tr>
+                                                            <td>
+                                                                <p class="sub" style="font-size:12px;color:#6d7f85;">{{ $.Renderer.Branding.TroubleText | replace "{ACTION}" $action.Button.Text }}</p>
+                                                                <p class="sub" style="font-size:12px;color:#6d7f85;"><a href="{{ $action.Button.Link }}" style="color:#3fc2b4;word-break:break-all;">{{ $action.Button.Link }}</a></p>
+                                                            </td>
+                                                        </tr>
+                                                        {{ end }}
+                                                    {{ end }}
+                                                </tbody>
+                                            </table>
+                                        {{ end }}
+                                    {{ end }}
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {{/* Footer */}}
+                    <table align="center" role="presentation" style="padding-top:37px;border:0;margin:auto;">
+                        <tbody>
+                            <tr style="width:100%">
+                                <td align="center" class="footer-links" style="text-align:center;">
+                                    <a href="{{ .Renderer.Branding.Link }}/legal/terms-of-service"
+                                        style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
+                                        target="_blank">Terms</a>
+                                    <a href="{{ .Renderer.Branding.Link }}/legal/privacy"
+                                        style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
+                                        target="_blank">Privacy</a>
+                                    <a href="{{ .Renderer.Branding.Link }}/unsubscribe"
+                                        style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
+                                        target="_blank">Unsubscribe</a>
+                                </td>
+                            </tr>
+                            <tr style="width:100%">
+                                <td align="center" style="text-align:center;">
+                                    <p class="footer-copyright" style="font-size:14px;margin:0;color:#6d7f85;padding-top:20px;padding-bottom:20px;">
+                                        {{ .Renderer.Branding.Copyright }}
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr style="width:100%">
+                                <td align="center" style="text-align:center;">
+                                    <a href="https://github.com/theopenlane" style="color:#067df7;text-decoration:none;" target="_blank">
+                                        <img alt="GitHub" height="24"
+                                            src="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/9ca24c5a-8377-4e12-9adb-14550a229800/public"
+                                            class="social-icon"
+                                            style="display:inline-block;outline:none;border:none;text-decoration:none;margin-left:5px;margin-right:5px;"
+                                            width="24" />
+                                    </a>
+                                    <a href="https://linkedin.com/company/theopenlane" style="color:#067df7;text-decoration:none;" target="_blank">
+                                        <img alt="LinkedIn" height="24"
+                                            src="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/afbbb82c-86c8-465b-8205-e17fd5514b00/public"
+                                            class="social-icon"
+                                            style="display:inline-block;outline:none;border:none;text-decoration:none;margin-left:5px;margin-right:5px;"
+                                            width="24" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

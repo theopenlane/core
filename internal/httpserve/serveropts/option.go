@@ -330,14 +330,6 @@ func WithMiddleware() ServerOption {
 	})
 }
 
-// WithEmailConfig sets up the email config to be used to send emails to users
-// on registration, password reset, etc
-func WithEmailConfig() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		s.Config.Handler.Emailer = s.Config.Settings.Email
-	})
-}
-
 // WithDefaultTrustCenterDomain sets up the default trust center domain for the server
 func WithDefaultTrustCenterDomain() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {

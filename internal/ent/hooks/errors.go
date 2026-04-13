@@ -193,6 +193,8 @@ var (
 	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 	// ErrVendorScoringQuestionNotFound is returned when a question key cannot be resolved in the scoring config
 	ErrVendorScoringQuestionNotFound = errors.New("vendor scoring question not found in config")
+	// ErrEmailDispatchFailed is returned when a transactional email gala event could not be emitted
+	ErrEmailDispatchFailed = errors.New("email dispatch failed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -137,7 +137,6 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
-	"github.com/theopenlane/newman/compose"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/iam/entfga"
@@ -514,7 +513,6 @@ type (
 		Authz              fgax.Client
 		TokenManager       *tokens.TokenManager
 		SessionConfig      *sessions.SessionConfig
-		Emailer            *compose.Config
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
@@ -612,13 +610,6 @@ func TokenManager(v *tokens.TokenManager) Option {
 func SessionConfig(v *sessions.SessionConfig) Option {
 	return func(c *config) {
 		c.SessionConfig = v
-	}
-}
-
-// Emailer configures the Emailer.
-func Emailer(v *compose.Config) Option {
-	return func(c *config) {
-		c.Emailer = v
 	}
 }
 

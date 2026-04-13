@@ -222,7 +222,6 @@ func (EmailTemplate) Modules() []models.OrgModule {
 func (EmailTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEmailTemplateSanitize(),
-		hooks.HookPopulateJsonconfigFromTemplateContext(),
 		hooks.HookExtractEmailTemplateVariables(),
 	}
 }

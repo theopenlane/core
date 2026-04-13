@@ -1,4 +1,4 @@
-package emailruntime
+package templatecontext
 
 import (
 	"testing"
@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// validBaseData returns a data map that satisfies the required fields in ContextData.
 func validBaseData() map[string]any {
 	return map[string]any{
 		"CompanyName": "Openlane",
@@ -30,8 +30,9 @@ func TestTemplateContextSchema_TransactionalValidData(t *testing.T) {
 	schema := TemplateContextSchema(enums.TemplateContextTransactional)
 	require.NotNil(t, schema)
 
-	err := validateTemplateData(schema, validBaseData())
-	assert.NoError(t, err)
+	result, err := jsonx.ValidateSchema(schema, validBaseData())
+	require.NoError(t, err)
+	assert.True(t, result.Valid())
 }
 
 func TestTemplateContextSchema_TransactionalMissingRequired(t *testing.T) {
@@ -41,8 +42,9 @@ func TestTemplateContextSchema_TransactionalMissingRequired(t *testing.T) {
 	data := validBaseData()
 	delete(data, "CompanyName")
 
-	err := validateTemplateData(schema, data)
-	assert.Error(t, err)
+	result, err := jsonx.ValidateSchema(schema, data)
+	require.NoError(t, err)
+	assert.False(t, result.Valid()) //nolint:testifylint
 }
 
 func TestTemplateContextSchema_CampaignValidData(t *testing.T) {
@@ -51,19 +53,21 @@ func TestTemplateContextSchema_CampaignValidData(t *testing.T) {
 
 	data := validBaseData()
 	data["Campaign"] = map[string]any{
-		"name": "Q1 Outreach",
+		"Name": "Q1 Outreach",
 	}
 
-	err := validateTemplateData(schema, data)
-	assert.NoError(t, err)
+	result, err := jsonx.ValidateSchema(schema, data)
+	require.NoError(t, err)
+	assert.True(t, result.Valid())
 }
 
 func TestTemplateContextSchema_WorkflowValidData(t *testing.T) {
 	schema := TemplateContextSchema(enums.TemplateContextWorkflowAction)
 	require.NotNil(t, schema)
 
-	err := validateTemplateData(schema, validBaseData())
-	assert.NoError(t, err)
+	result, err := jsonx.ValidateSchema(schema, validBaseData())
+	require.NoError(t, err)
+	assert.True(t, result.Valid())
 }
 
 func TestTemplateContextSchema_UnknownContextReturnsNil(t *testing.T) {

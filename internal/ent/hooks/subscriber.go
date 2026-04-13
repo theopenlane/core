@@ -7,11 +7,10 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman/compose"
-
-	"github.com/theopenlane/core/internal/emailruntime"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -64,12 +63,6 @@ func HookSubscriberCreate() ent.Hook {
 				}
 			}
 
-			orgIDValue, ownerOK := m.OwnerID()
-			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
-			if err != nil {
-				return nil, err
-			}
-
 			tokenRaw, tokenOK := m.Token()
 			tokenValue, err := requiredMutationString("token", tokenRaw, tokenOK)
 			if err != nil {
@@ -82,18 +75,11 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
-			if err != nil {
-				return nil, err
-			}
-
-			if err := emailruntime.Send(ctx, m.Client(), orgID, emailruntime.TemplateKeySubscribe,
-				compose.Recipient{Email: emailAddress},
-				emailruntime.NewTemplateData().
-					WithField("OrganizationName", orgName).
-					WithTokenURL(emailruntime.TemplateURLVerifySubscriber, tokenValue),
-			); err != nil {
-				return nil, err
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.SubscribeOp().Topic(), emaildef.SubscribeRequest{
+				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
+				Token:         tokenValue,
+			}, gala.Headers{}); receipt.Err != nil {
+				return nil, receipt.Err
 			}
 
 			return retValue, err

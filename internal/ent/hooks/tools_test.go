@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/newman/compose"
 	"github.com/theopenlane/utils/testutils"
 )
 
@@ -113,7 +112,6 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
-		generated.Emailer(&compose.Config{}),
 		generated.EntConfig(entCfg),
 		generated.EntitlementManager(entitilements),
 	}

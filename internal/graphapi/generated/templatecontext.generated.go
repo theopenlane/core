@@ -15,6 +15,10 @@ import (
 
 // region    ************************** generated!.gotpl **************************
 
+type TemplateContextEntryResolver interface {
+	Schema(ctx context.Context, obj *models.TemplateContextEntry) (map[string]any, error)
+}
+
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
@@ -121,7 +125,7 @@ func (ec *executionContext) _TemplateContextEntry_schema(ctx context.Context, fi
 		field,
 		ec.fieldContext_TemplateContextEntry_schema,
 		func(ctx context.Context) (any, error) {
-			return obj.Schema, nil
+			return ec.Resolvers.TemplateContextEntry().Schema(ctx, obj)
 		},
 		nil,
 		ec.marshalNMap2map,
@@ -134,10 +138,39 @@ func (ec *executionContext) fieldContext_TemplateContextEntry_schema(_ context.C
 	fc = &graphql.FieldContext{
 		Object:     "TemplateContextEntry",
 		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TemplateContextEntry_reservedFields(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateContextEntry_reservedFields,
+		func(ctx context.Context) (any, error) {
+			return obj.ReservedFields, nil
+		},
+		nil,
+		ec.marshalNString2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateContextEntry_reservedFields(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateContextEntry",
+		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Map does not have child fields")
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -169,22 +202,58 @@ func (ec *executionContext) _TemplateContextEntry(ctx context.Context, sel ast.S
 		case "context":
 			out.Values[i] = ec._TemplateContextEntry_context(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "label":
 			out.Values[i] = ec._TemplateContextEntry_label(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "description":
 			out.Values[i] = ec._TemplateContextEntry_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "schema":
-			out.Values[i] = ec._TemplateContextEntry_schema(ctx, field, obj)
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TemplateContextEntry_schema(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reservedFields":
+			out.Values[i] = ec._TemplateContextEntry_reservedFields(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))

@@ -1,0 +1,340 @@
+/* Openlane Questionnaire Email Theme */
+
+body {
+    background-color: #fefefe;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    color: #505f6f;
+}
+
+table {
+    border-collapse: separate;
+    min-width: 100%;
+    width: 100%;
+}
+
+table td {
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+.body {
+    background-color: #fefefe;
+    width: 100%;
+}
+
+.container {
+    width: 780px;
+    max-width: 780px;
+    padding: 16px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #082930;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-weight: 450;
+    line-height: 1.4;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+h1 {
+    font-size: 32px;
+    text-transform: capitalize;
+}
+
+.preheader {
+    color: transparent;
+    display: none;
+    height: 0;
+    max-height: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+}
+
+p {
+    font-size: 16px;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    margin: 0;
+    margin-bottom: 26px;
+}
+
+a,
+a:active,
+a:hover,
+a:visited {
+    color: #082930;
+    text-decoration: none;
+}
+
+/* Buttons */
+td.button {
+    background-color: #082930;
+    border: none;
+    color: #ffffff;
+    padding: 0;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    border-radius: 5px;
+    margin: 0;
+    margin-bottom: 26px;
+    line-height: 1.0;
+}
+
+td.button a,
+td.button a:active,
+td.button a:hover,
+td.button a:visited {
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-block;
+    padding: 14px 64px;
+    border-radius: 5px;
+    border: 1px solid #082930;
+}
+
+td.button a:hover,
+td.button a:active {
+    text-decoration: underline;
+}
+
+.button {
+    display: inline-block;
+    background-color: #082930;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Outfit', Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    padding: 14px 64px;
+    border-radius: 5px;
+    border: 1px solid #082930;
+    line-height: 1.0;
+    text-align: center;
+}
+
+.body-action {
+    width: 100%;
+    margin: 16px auto;
+    padding: 0;
+    text-align: center;
+}
+
+/* Invite Code */
+.invite-code {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: monospace;
+    letter-spacing: 4px;
+    color: #082930;
+    background-color: #f0fdf9;
+    border: 2px dashed #3fc2b4;
+    border-radius: 5px;
+}
+
+.invite-code-table {
+    margin: 16px auto;
+    text-align: center;
+}
+
+.invite-code-cell {
+    padding: 14px 32px;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: monospace;
+    letter-spacing: 4px;
+    color: #082930;
+    background-color: #f0fdf9;
+    border: 2px dashed #3fc2b4;
+    border-radius: 5px;
+}
+
+hr {
+    border: 0;
+    border-bottom: 1px solid #303E4A;
+    margin: 24px 0;
+}
+
+/* Dictionary */
+.body-dictionary {
+    margin: 16px 0;
+    padding: 0;
+    width: 100%;
+}
+
+.body-dictionary dt {
+    font-weight: 500;
+    color: #082930;
+    padding: 4px 0 2px 0;
+}
+
+.body-dictionary dd {
+    margin: 0 0 8px 0;
+    padding: 0;
+    color: #505f6f;
+}
+
+/* Data Tables */
+.data-table-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #082930;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.data-table-title-unsafe {
+    font-size: 18px;
+    font-weight: 500;
+    color: #082930;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.data-wrapper {
+    margin: 16px 0;
+    padding: 0;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background-color: #f0fdf9;
+    border-bottom: 2px solid #3fc2b4;
+    font-weight: 500;
+    font-size: 14px;
+    color: #082930;
+}
+
+.data-table th p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 14px;
+    color: #082930;
+}
+
+.data-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #505f6f;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.table-footer {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 8px;
+    text-align: left;
+}
+
+/* Trouble Text */
+.body-sub {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.body-sub p.sub {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.body-sub a {
+    color: #3fc2b4;
+    word-break: break-all;
+}
+
+/* VML fallback */
+.vml-button-wrapper {
+    margin: 16px auto;
+    text-align: center;
+}
+
+.invite-code-container {
+    margin: 16px auto;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    padding: 18px 32px 26px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e5e7eb;
+}
+
+.footer p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+    margin-bottom: 14px;
+}
+
+.footer ul {
+    padding: 0;
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+    margin-bottom: 14px;
+}
+
+.footer ul li {
+    text-decoration: none;
+    display: inline-block;
+    margin: 0;
+    margin-right: 32px;
+}
+
+.footer ul li a {
+    text-decoration: underline;
+}
+
+.footer a {
+    color: #3fc2b4;
+    text-decoration: underline;
+}
+
+/* FreeMarkdown */
+.free-markdown p {
+    margin-bottom: 16px;
+}
+
+.free-markdown ul,
+.free-markdown ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+}

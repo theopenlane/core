@@ -4,13 +4,13 @@ import (
 	"context"
 
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/newman/compose"
 
 	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/emailruntime"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -84,12 +84,11 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	if err := h.sendEmail(ctx, "", emailruntime.TemplateKeyPasswordResetRequest,
-		compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
-		emailruntime.NewTemplateData().
-			WithTokenURL(emailruntime.TemplateURLPasswordReset, meowtoken.Token),
-	); err != nil {
-		return nil, err
+	if receipt := h.Gala.EmitWithHeaders(context.WithoutCancel(ctx), email.ResetRequestOp().Topic(), email.PasswordResetEmailRequest{
+		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		Token:         meowtoken.Token,
+	}, gala.Headers{}); receipt.Err != nil {
+		return nil, receipt.Err
 	}
 
 	return meowtoken, nil

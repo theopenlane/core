@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"context"
 	"sync"
 
 	"github.com/samber/lo"
@@ -23,6 +24,10 @@ type Registry struct {
 	operationsByTopic map[gala.TopicName]types.OperationRegistration
 	// webhookEventsByTopic maps a topic name to its webhook event registration
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
+	// mutationListeners collects all mutation listener registrations across definitions
+	mutationListeners []types.MutationListenerRegistration
+	// galaListeners collects standalone gala listener registrations across definitions
+	galaListeners []types.GalaListenerRegistration
 }
 
 // definitionEntry captures the indexed details for one registered definition
@@ -39,6 +44,9 @@ type definitionEntry struct {
 	webhooks map[string]types.WebhookRegistration
 	// webhookEvents maps webhook name to a nested map of event name to event registration
 	webhookEvents map[string]map[string]types.WebhookEventRegistration
+	// runtimeClient holds the pre-built client for runtime integrations.
+	// Non-nil only when the definition has a RuntimeIntegration with populated config
+	runtimeClient any
 }
 
 // New constructs an empty registry
@@ -64,6 +72,15 @@ func (r *Registry) Register(def types.Definition) error {
 		return err
 	}
 
+	if def.RuntimeIntegration != nil && def.RuntimeIntegration.Config != nil {
+		client, buildErr := def.RuntimeIntegration.Build(context.Background(), def.RuntimeIntegration.Config)
+		if buildErr != nil {
+			return buildErr
+		}
+
+		entry.runtimeClient = client
+	}
+
 	r.definitions[def.ID] = entry
 	for _, operation := range entry.operations {
 		r.operationsByTopic[operation.Topic] = operation
@@ -74,6 +91,13 @@ func (r *Registry) Register(def types.Definition) error {
 			r.webhookEventsByTopic[event.Topic] = event
 		}
 	}
+
+	for _, listener := range def.MutationListeners {
+		listener.DefinitionID = def.ID
+		r.mutationListeners = append(r.mutationListeners, listener)
+	}
+
+	r.galaListeners = append(r.galaListeners, def.GalaListeners...)
 
 	return nil
 }
@@ -187,6 +211,16 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 
 	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
 		return ErrUserInputSchemaRequired
+	}
+
+	if def.RuntimeIntegration != nil {
+		if def.OperatorConfig != nil {
+			return ErrRuntimeMutualExclusivity
+		}
+
+		if def.RuntimeIntegration.Build == nil {
+			return ErrRuntimeBuildRequired
+		}
 	}
 
 	return nil
@@ -407,6 +441,48 @@ func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
 	defer r.mu.RUnlock()
 
 	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
+}
+
+// MutationListeners returns all registered mutation listener registrations
+func (r *Registry) MutationListeners() []types.MutationListenerRegistration {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	return append([]types.MutationListenerRegistration(nil), r.mutationListeners...)
+}
+
+// GalaListeners returns all registered standalone gala listener registrations
+func (r *Registry) GalaListeners() []types.GalaListenerRegistration {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	return append([]types.GalaListenerRegistration(nil), r.galaListeners...)
+}
+
+// RuntimeClient returns the cached runtime client for the given definition ID.
+// Returns the client and true if a runtime integration was provisioned,
+// or nil and false otherwise
+func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	entry, ok := r.definitions[definitionID]
+	if !ok || entry.runtimeClient == nil {
+		return nil, false
+	}
+
+	return entry.runtimeClient, true
+}
+
+// IsRuntimeIntegration reports whether the given definition was provisioned
+// as a runtime integration (no DB record, no keystore)
+func (r *Registry) IsRuntimeIntegration(definitionID string) bool {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	entry, ok := r.definitions[definitionID]
+
+	return ok && entry.definition.RuntimeIntegration != nil
 }
 
 // lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap; callers must hold r.mu.RLock

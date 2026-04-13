@@ -4,7 +4,6 @@ import (
 	"context"
 	"maps"
 
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/workflows"
@@ -129,11 +128,12 @@ func validateNotificationTemplateData(template *generated.NotificationTemplate, 
 		return nil
 	}
 
-	valid, err := emailruntime.ValidateJSONSchema(template.Jsonconfig, data)
+	result, err := jsonx.ValidateSchema(template.Jsonconfig, data)
 	if err != nil {
 		return err
 	}
-	if valid {
+
+	if result.Valid() {
 		return nil
 	}
 

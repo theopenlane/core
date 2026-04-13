@@ -39,29 +39,6 @@ func TestExtractTemplateVarNames_URLsExtractedAsObject(t *testing.T) {
 	assert.Equal(t, map[string]string{"URLS": "object"}, vars)
 }
 
-func TestExtractTemplateVarNames_BareIdentifier(t *testing.T) {
-	vars := extractTemplateVarNames("Hello {{ FirstName }}, welcome to {{ CompanyName }}")
-	assert.Equal(t, map[string]string{"FirstName": "string", "CompanyName": "string"}, vars)
-}
-
-func TestExtractTemplateVarNames_BareIdentifierKeywordsSkipped(t *testing.T) {
-	// go template directives must not be treated as variable names
-	vars := extractTemplateVarNames("{{ if .Active }}active{{ end }}")
-	assert.Equal(t, map[string]string{"Active": "string"}, vars)
-}
-
-func TestExtractTemplateVarNames_BareIdentifierNotDowngradedByObjectAccess(t *testing.T) {
-	// dotted access (object) must take precedence over a bare reference to the same top-level name
-	vars := extractTemplateVarNames("{{ URLS }} {{ .URLS.Verify }}")
-	assert.Equal(t, map[string]string{"URLS": "object"}, vars)
-}
-
-func TestExtractTemplateVarNames_MixedDotAndBare(t *testing.T) {
-	// bare and dot-prefixed references to different vars are both collected
-	vars := extractTemplateVarNames("{{ FirstName }} {{ .CompanyName }}")
-	assert.Equal(t, map[string]string{"FirstName": "string", "CompanyName": "string"}, vars)
-}
-
 func TestMergeTemplateVarsIntoSchema_NilSchema(t *testing.T) {
 	result := mergeTemplateVarsIntoSchema(nil, map[string]string{"SupportEmail": "string", "CompanyName": "string"})
 

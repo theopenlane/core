@@ -9,24 +9,14 @@ import (
 	"entgo.io/ent"
 	"github.com/microcosm-cc/bluemonday"
 
-	"github.com/theopenlane/core/internal/emailruntime"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/templatecontext"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // templateVarPattern matches dot-prefixed Go template variable references, e.g. {{ .Foo }} or {{ .User.Name }}.
 var templateVarPattern = regexp.MustCompile(`{{\s*\.([A-Za-z][A-Za-z0-9_.]*)\s*}}`)
-
-// bareTemplateVarPattern matches bare identifier Go template references without dot prefix, e.g. {{ Foo }}.
-// These are normalized at render time by normalizeGoTemplateShorthand; extracting them keeps jsonconfig
-// consistent with what the renderer will actually substitute.
-var bareTemplateVarPattern = regexp.MustCompile(`{{\s*([A-Za-z][A-Za-z0-9_]*)\s*}}`)
-
-// goTemplateKeywords is the set of Go template directive keywords excluded from variable extraction.
-var goTemplateKeywords = map[string]struct{}{
-	"if": {}, "else": {}, "end": {}, "range": {},
-	"with": {}, "template": {}, "define": {}, "block": {},
-}
 
 // tmplURLExpr matches Go template expressions of the form {{ .URLS.<Name> }}.
 // Only .URLS.* references are matched; arbitrary template expressions are left
@@ -77,16 +67,14 @@ func SanitizeBodyHTML(p *bluemonday.Policy, content string) string {
 	return sanitized
 }
 
-// extractTemplateVarNames scans the provided template strings for {{ .VarName }} and {{ VarName }}
-// references and returns a map of top-level variable name to JSON Schema type. Dotted paths like
-// {{ .User.Name }} yield "User" with type "object". Direct references like {{ .Name }} or {{ Name }}
-// yield type "string". Bare identifier references without a dot prefix are also extracted; they are
-// normalized to dot-access at render time by normalizeGoTemplateShorthand.
+// extractTemplateVarNames scans the provided template strings for {{ .VarName }} references
+// and returns a map of top-level variable name to JSON Schema type. Dotted paths like
+// {{ .User.Name }} yield "User" with type "object". Direct references like {{ .Name }}
+// yield type "string"
 func extractTemplateVarNames(templates ...string) map[string]string {
 	vars := map[string]string{}
 
 	for _, tmpl := range templates {
-		// dot-prefixed references: {{ .Foo }} or {{ .Foo.Bar }}
 		for _, match := range templateVarPattern.FindAllStringSubmatch(tmpl, -1) {
 			if len(match) < 2 {
 				continue
@@ -94,31 +82,10 @@ func extractTemplateVarNames(templates ...string) map[string]string {
 
 			top, rest, found := strings.Cut(match[1], ".")
 			if found && rest != "" {
-				// dotted path → object; never downgrade if already recorded as object
 				vars[top] = "object"
 			} else if _, exists := vars[top]; !exists {
 				vars[top] = "string"
 			}
-		}
-
-		// bare identifier references: {{ Foo }} (no dot, normalized at render time)
-		for _, match := range bareTemplateVarPattern.FindAllStringSubmatch(tmpl, -1) {
-			if len(match) < 2 {
-				continue
-			}
-
-			name := match[1]
-
-			if _, isKeyword := goTemplateKeywords[name]; isKeyword {
-				continue
-			}
-
-			// don't downgrade a var already marked as object via dotted access
-			if existing, ok := vars[name]; ok && existing == "object" {
-				continue
-			}
-
-			vars[name] = "string"
 		}
 	}
 
@@ -127,6 +94,8 @@ func extractTemplateVarNames(templates ...string) map[string]string {
 
 // mergeTemplateVarsIntoSchema adds discovered variable names as typed properties
 // into a JSON Schema map. Existing properties are preserved; only absent keys are added.
+// Variables whose names match system-reserved fields (injected at render time by the
+// email client config) are excluded so that jsonconfig only describes user-supplied inputs
 func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) map[string]any {
 	if schema == nil {
 		schema = map[string]any{}
@@ -141,50 +110,15 @@ func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) 
 		props = map[string]any{}
 	}
 
+	reserved := templatecontext.ReservedFieldNames()
+
 	for name, typ := range vars {
+		if _, isReserved := reserved[name]; isReserved {
+			continue
+		}
+
 		if _, exists := props[name]; !exists {
 			props[name] = map[string]any{"type": typ}
-		}
-	}
-
-	schema["properties"] = props
-
-	return schema
-}
-
-// mergeBaseSchema merges base JSON Schema properties into an existing schema map.
-// Base properties are added only when not already present in the existing schema,
-// so user-defined or previously extracted properties always take precedence.
-func mergeBaseSchema(schema map[string]any, base map[string]any) map[string]any {
-	if len(base) == 0 {
-		return schema
-	}
-
-	if schema == nil {
-		schema = map[string]any{}
-	}
-
-	if _, ok := schema["type"]; !ok {
-		if baseType, ok := base["type"]; ok {
-			schema["type"] = baseType
-		} else {
-			schema["type"] = "object"
-		}
-	}
-
-	baseProps, _ := base["properties"].(map[string]any)
-	if len(baseProps) == 0 {
-		return schema
-	}
-
-	props, _ := schema["properties"].(map[string]any)
-	if props == nil {
-		props = map[string]any{}
-	}
-
-	for k, v := range baseProps {
-		if _, exists := props[k]; !exists {
-			props[k] = v
 		}
 	}
 
@@ -236,45 +170,11 @@ func HookEmailTemplateSanitize() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-// HookPopulateJsonconfigFromTemplateContext seeds jsonconfig with the reflected JSON Schema for the
-// assigned template_context. Context schema properties form the base layer; any existing or
-// subsequently extracted properties take precedence. This hook runs after sanitization and
-// before variable extraction.
-func HookPopulateJsonconfigFromTemplateContext() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
-			templateCtx, exists := m.TemplateContext()
-			if !exists {
-				return next.Mutate(ctx, m)
-			}
-
-			contextSchema := emailruntime.TemplateContextSchema(templateCtx)
-			if len(contextSchema) == 0 {
-				return next.Mutate(ctx, m)
-			}
-
-			var jsonconfig map[string]any
-
-			if v, jsExists := m.Jsonconfig(); jsExists {
-				jsonconfig = v
-			} else if !m.Op().Is(ent.OpCreate) {
-				if old, err := m.OldJsonconfig(ctx); err == nil {
-					jsonconfig = old
-				}
-			}
-
-			m.SetJsonconfig(mergeBaseSchema(jsonconfig, contextSchema))
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
 // HookExtractEmailTemplateVariables parses template content fields on create and update,
 // extracts Go template variable references, and merges them as properties into jsonconfig.
 // Existing jsonconfig properties are preserved; only newly discovered variables are added.
-// This hook runs after HookEmailTemplateSanitize and HookPopulateJsonconfigFromTemplateContext
-// so variables are extracted from stored content and merged on top of any context schema base.
+// System-reserved field names (CompanyName, Recipient, URLS, etc.) are filtered out so
+// jsonconfig only describes user-supplied inputs.
 // When defaults are also set in the mutation, they are validated against the finalized schema.
 func HookExtractEmailTemplateVariables() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -319,7 +219,8 @@ func HookExtractEmailTemplateVariables() ent.Hook {
 			m.SetJsonconfig(finalSchema)
 
 			if defaultsSet && len(defaults) > 0 {
-				if valid, err := emailruntime.ValidateJSONSchema(finalSchema, defaults); err != nil || !valid {
+				result, err := jsonx.ValidateSchema(finalSchema, defaults)
+				if err != nil || !result.Valid() {
 					return nil, ErrInvalidTemplateDefaults
 				}
 			}

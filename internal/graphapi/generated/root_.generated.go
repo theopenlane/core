@@ -40,6 +40,7 @@ type ResolverRoot interface {
 	Query() QueryResolver
 	Subcontrol() SubcontrolResolver
 	Subscription() SubscriptionResolver
+	TemplateContextEntry() TemplateContextEntryResolver
 	WorkflowInstance() WorkflowInstanceResolver
 	WorkflowProposal() WorkflowProposalResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
@@ -6361,10 +6362,11 @@ type ComplexityRoot struct {
 	}
 
 	TemplateContextEntry struct {
-		Context     func(childComplexity int) int
-		Description func(childComplexity int) int
-		Label       func(childComplexity int) int
-		Schema      func(childComplexity int) int
+		Context        func(childComplexity int) int
+		Description    func(childComplexity int) int
+		Label          func(childComplexity int) int
+		ReservedFields func(childComplexity int) int
+		Schema         func(childComplexity int) int
 	}
 
 	TemplateCreatePayload struct {
@@ -46085,6 +46087,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateContextEntry.Label(childComplexity), true
+
+	case "TemplateContextEntry.reservedFields":
+		if e.ComplexityRoot.TemplateContextEntry.ReservedFields == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.ReservedFields(childComplexity), true
 
 	case "TemplateContextEntry.schema":
 		if e.ComplexityRoot.TemplateContextEntry.Schema == nil {
@@ -152177,6 +152186,12 @@ type TemplateContextEntry {
     For UI tooling only — not used for runtime validation.
     """
     schema: Map!
+    """
+    Top-level template variable names injected by the system at render time.
+    These are available in templates but are not user-supplied inputs. The UI
+    should display them as read-only reference, not as input controls.
+    """
+    reservedFields: [String!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {

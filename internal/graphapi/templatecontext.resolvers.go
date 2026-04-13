@@ -7,19 +7,38 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/emailruntime"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/templatecontext"
 )
 
 // TemplateContexts is the resolver for the templateContexts field.
 func (r *queryResolver) TemplateContexts(ctx context.Context) ([]*models.TemplateContextEntry, error) {
-	entries := emailruntime.TemplateContextEntries()
+	entries := templatecontext.TemplateContextEntries()
 
-	result := make([]*models.TemplateContextEntry, len(entries))
-	for i := range entries {
-		result[i] = &entries[i]
+	return lo.ToSlicePtr(entries), nil
+}
+
+// Schema is the resolver for the schema field.
+func (r *templateContextEntryResolver) Schema(ctx context.Context, obj *models.TemplateContextEntry) (map[string]any, error) {
+	if len(obj.Schema) == 0 {
+		return nil, nil
+	}
+
+	var result map[string]any
+	if err := json.Unmarshal(obj.Schema, &result); err != nil {
+		return nil, err
 	}
 
 	return result, nil
 }
+
+// TemplateContextEntry returns gqlgenerated.TemplateContextEntryResolver implementation.
+func (r *Resolver) TemplateContextEntry() gqlgenerated.TemplateContextEntryResolver {
+	return &templateContextEntryResolver{r}
+}
+
+type templateContextEntryResolver struct{ *Resolver }

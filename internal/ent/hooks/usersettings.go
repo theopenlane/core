@@ -9,9 +9,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/newman/compose"
 
-	"github.com/theopenlane/core/internal/emailruntime"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -140,13 +140,14 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if m.Client().Job == nil {
-				logx.FromContext(ctx).Info().Msg("no job client, skipping welcome email")
-			} else if err := emailruntime.Send(ctx, m.Client(), "", emailruntime.TemplateKeyWelcome,
-				compose.Recipient{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
-				nil,
-			); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
+			if receipt := emailGala.EmitWithHeaders(context.WithoutCancel(ctx), emaildef.WelcomeOp().Topic(), emaildef.WelcomeRequest{
+				RecipientInfo: emaildef.RecipientInfo{
+					Email:     user.Email,
+					FirstName: user.FirstName,
+					LastName:  user.LastName,
+				},
+			}, gala.Headers{}); receipt.Err != nil {
+				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("could not send welcome email")
 			}
 
 			return v, nil

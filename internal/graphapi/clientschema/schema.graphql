@@ -80023,6 +80023,12 @@ type TemplateContextEntry {
 	For UI tooling only — not used for runtime validation.
 	"""
 	schema: Map!
+	"""
+	Top-level template variable names injected by the system at render time.
+	These are available in templates but are not user-supplied inputs. The UI
+	should display them as read-only reference, not as input controls.
+	"""
+	reservedFields: [String!]!
 }
 """
 Return response for createTemplate mutation

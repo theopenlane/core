@@ -10,7 +10,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -279,6 +281,114 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	return completeErr
 }
 
+// ExecuteRuntimeOperation runs an operation for a runtime integration; client is retrieved from the registry directly
+func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID string, operationName string, config json.RawMessage) (json.RawMessage, error) {
+	operation, err := r.Registry().Operation(definitionID, operationName)
+	if err != nil {
+		return nil, err
+	}
+
+	client, ok := r.Registry().RuntimeClient(definitionID)
+	if !ok {
+		return nil, ErrRuntimeClientNotFound
+	}
+
+	req := types.OperationRequest{
+		Client: client,
+		Config: config,
+		DB:     r.DB(),
+	}
+
+	response, err := operation.Handle(ctx, req)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("definition_id", definitionID).Str("operation", operationName).Msg("runtime operation failed")
+
+		return response, err
+	}
+
+	return response, nil
+}
+
+// HandleMutationListener processes a mutation event for a registered mutation listener.
+// It converts the gala payload, calls the definition handler, resolves the integration
+// by owner, and dispatches the operation when the handler returns config
+func (r *Runtime) HandleMutationListener(ctx context.Context, listener types.MutationListenerRegistration, payload eventqueue.MutationGalaPayload) error {
+	mutationPayload := types.MutationPayload{
+		EntityID:        payload.EntityID,
+		Operation:       payload.Operation,
+		ChangedFields:   payload.ChangedFields,
+		ProposedChanges: payload.ProposedChanges,
+	}
+
+	config, err := listener.Handle(ctx, mutationPayload)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("listener", listener.Name).Str("entity_id", payload.EntityID).Msg("mutation listener handler failed")
+		return err
+	}
+
+	if config == nil {
+		return nil
+	}
+
+	ownerID, _ := payload.ProposedChanges["owner_id"].(string)
+	if ownerID == "" {
+		entity, entityErr := r.DB().Campaign.Get(privacy.DecisionContext(ctx, privacy.Allow), payload.EntityID)
+		if entityErr != nil {
+			logx.FromContext(ctx).Error().Err(entityErr).Str("listener", listener.Name).Str("entity_id", payload.EntityID).Msg("failed loading entity for mutation listener dispatch")
+
+			return entityErr
+		}
+
+		ownerID = entity.OwnerID
+	}
+
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	inst, instErr := r.DB().Integration.Query().Where(
+		integration.OwnerIDEQ(ownerID),
+		integration.DefinitionIDEQ(listener.DefinitionID)).Only(systemCtx)
+
+	switch {
+	case ent.IsNotFound(instErr):
+		if r.Registry().IsRuntimeIntegration(listener.DefinitionID) {
+			logx.FromContext(ctx).Debug().Str("listener", listener.Name).Str("owner_id", ownerID).Msg("no customer integration installed, executing via runtime definition")
+
+			_, runtimeErr := r.ExecuteRuntimeOperation(ctx, listener.DefinitionID, listener.OperationName, config)
+
+			return runtimeErr
+		}
+
+		return nil
+	case instErr != nil:
+		return instErr
+	}
+
+	_, dispatchErr := r.Dispatch(ctx, operations.DispatchRequest{
+		IntegrationID: inst.ID,
+		Operation:     listener.OperationName,
+		Config:        config,
+		RunType:       enums.IntegrationRunTypeEvent,
+	})
+
+	return dispatchErr
+}
+
+// BuildClientForIntegration builds a typed client for a specific integration installation.
+// It resolves credentials from the keystore and delegates to the registered client builder
+func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *ent.Integration, clientID types.ClientID) (any, error) {
+	registration, err := r.Registry().Client(integration.DefinitionID, clientID)
+	if err != nil {
+		return nil, err
+	}
+
+	credentials, err := r.loadCredentials(ctx, integration, registration.CredentialRefs)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.keystore().BuildClient(ctx, integration, registration, credentials, nil, false)
+}
+
 // executeResolvedOperation executes the given operation with the input integration and registered Operation
 // Returns the response payload, the number of ingest records processed (0 for non-ingest operations), and any error
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, int, error) {
@@ -312,12 +422,14 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		Credentials: credentials,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
+		DB:          r.DB(),
 	}
 
 	if operation.IngestHandle != nil {
 		payloadSets, err := operation.IngestHandle(ctx, req)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("ingest handle failed")
+
 			return nil, 0, err
 		}
 
