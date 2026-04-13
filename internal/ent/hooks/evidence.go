@@ -30,7 +30,12 @@ func HookEvidenceReviewDate() ent.Hook {
 					return nil, err
 				}
 
-				return next.Mutate(ctx, m)
+				// on creation, ent defaults make renewal_date and review_frequency look set even
+				// when the request omitted them. so we need to preserve the explicit/default renewal_date unless
+				// a non-default frequency is provided that would set the renewal date
+				if !m.Op().Is(ent.OpCreate) || !frequencyMutated || frequency == evidence.DefaultReviewFrequency {
+					return next.Mutate(ctx, m)
+				}
 			}
 
 			if m.FieldCleared(evidence.FieldRenewalDate) || (!creationDateMutated && !frequencyMutated) {
