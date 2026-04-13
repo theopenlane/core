@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
@@ -69,6 +70,14 @@ func WithWorkflows(workflowConfig *workflows.Config, galaRuntime *gala.Gala) Opt
 		}
 
 		hooks.RegisterGlobalHooks(c)
+	}
+}
+
+// WithIntegrationsRuntime sets the integrations runtime on the ent client so that
+// hooks and mutations can access it via the client config
+func WithIntegrationsRuntime(rt *integrationsruntime.Runtime) Option {
+	return func(c *ent.Client) {
+		c.IntegrationsRuntime = rt
 	}
 }
 

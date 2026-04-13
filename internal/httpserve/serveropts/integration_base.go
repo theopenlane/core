@@ -52,6 +52,8 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 
 		s.Config.Handler.IntegrationsRuntime = rt
 
+		// set the runtime on the ent client so hooks/mutations can access it
+		dbClient.IntegrationsRuntime = rt
 		email.SetClientResolver(buildEmailClientResolver(dbClient, rt))
 
 		if wf == nil {
