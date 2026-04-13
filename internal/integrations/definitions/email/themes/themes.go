@@ -225,11 +225,11 @@ func questionnaireHTMLOnce() (*template.Template, error) {
 
 // Interface compliance assertions
 var (
-	_ render.Theme              = StandardTheme{}
-	_ render.ParsedHTMLTheme    = StandardTheme{}
+	_ render.Theme                = StandardTheme{}
+	_ render.ParsedHTMLTheme      = StandardTheme{}
 	_ render.ParsedPlainTextTheme = StandardTheme{}
-	_ render.Theme              = TrustCenterTheme{}
-	_ render.ParsedHTMLTheme    = TrustCenterTheme{}
-	_ render.Theme              = QuestionnaireTheme{}
-	_ render.ParsedHTMLTheme    = QuestionnaireTheme{}
+	_ render.Theme                = TrustCenterTheme{}
+	_ render.ParsedHTMLTheme      = TrustCenterTheme{}
+	_ render.Theme                = QuestionnaireTheme{}
+	_ render.ParsedHTMLTheme      = QuestionnaireTheme{}
 )
