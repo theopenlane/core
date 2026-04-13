@@ -3967,7 +3967,7 @@ func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []s
 		}
 
 		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).AppendEmailAliases(input.AppendEmailAliases).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", id).Msg("failed to update identityholder in bulk operation")
 			continue
@@ -4008,7 +4008,7 @@ func (r *mutationResolver) bulkUpdateCSVIdentityHolder(ctx context.Context, inpu
 		}
 
 		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).AppendEmailAliases(input.Input.AppendEmailAliases).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("identityholder_id", input.ID).Msg("failed to update identityholder in CSV bulk operation")
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "identityholder"})

@@ -2644,6 +2644,7 @@ type ComplexityRoot struct {
 		DisplayID               func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email                   func(childComplexity int) int
+		EmailAliases            func(childComplexity int) int
 		Employer                func(childComplexity int) int
 		EmployerEntityID        func(childComplexity int) int
 		EndDate                 func(childComplexity int) int
@@ -5334,6 +5335,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
@@ -5399,6 +5401,7 @@ type ComplexityRoot struct {
 		DetailsJSON       func(childComplexity int) int
 		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment       func(childComplexity int) int
@@ -20821,6 +20824,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Email(childComplexity), true
+
+	case "IdentityHolder.emailAliases":
+		if e.ComplexityRoot.IdentityHolder.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.EmailAliases(childComplexity), true
 
 	case "IdentityHolder.employer":
 		if e.ComplexityRoot.IdentityHolder.Employer == nil {
@@ -40995,6 +41005,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Review.State(childComplexity), true
 
+	case "Review.status":
+		if e.ComplexityRoot.Review.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.Status(childComplexity), true
+
 	case "Review.subcontrols":
 		if e.ComplexityRoot.Review.Subcontrols == nil {
 			break
@@ -41310,6 +41327,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.DisplayID(childComplexity), true
+
+	case "Risk.dueDate":
+		if e.ComplexityRoot.Risk.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.DueDate(childComplexity), true
 
 	case "Risk.editors":
 		if e.ComplexityRoot.Risk.Editors == nil {
@@ -68647,6 +68671,10 @@ input CreateIdentityHolderInput {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -70263,6 +70291,10 @@ input CreateReviewInput {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -70435,6 +70467,10 @@ input CreateRiskInput {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -88961,6 +88997,10 @@ type IdentityHolder implements Node {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -90357,6 +90397,10 @@ input IdentityHolderWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -112694,6 +112738,10 @@ type Review implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -113370,6 +113418,16 @@ enum ReviewOrderField {
   state
 }
 """
+ReviewReviewStatus is enum for the field status
+"""
+enum ReviewReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
+}
+"""
 ReviewWhereInput is used for filtering Review objects.
 Input was generated by ent.
 """
@@ -113655,6 +113713,15 @@ input ReviewWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewReviewStatus
+  statusNEQ: ReviewReviewStatus
+  statusIn: [ReviewReviewStatus!]
+  statusNotIn: [ReviewReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
@@ -114091,6 +114158,10 @@ type Risk implements Node {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -114746,6 +114817,7 @@ enum RiskOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -115307,6 +115379,19 @@ input RiskWhereInput {
   reviewFrequencyNotIn: [RiskFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """
@@ -131005,6 +131090,12 @@ input UpdateIdentityHolderInput {
   alternateEmail: String
   clearAlternateEmail: Boolean
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -133317,6 +133408,11 @@ input UpdateReviewInput {
   state: String
   clearState: Boolean
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  clearStatus: Boolean
+  """
   category for the review record
   """
   category: String
@@ -133567,6 +133663,11 @@ input UpdateRiskInput {
   clearLastReviewedAt: Boolean
   reviewFrequency: RiskFrequency
   clearReviewFrequency: Boolean
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  clearDueDate: Boolean
   """
   the time when the next review is due for the risk
   """

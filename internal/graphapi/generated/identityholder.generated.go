@@ -90,6 +90,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_email(ctx, field)
 			case "alternateEmail":
 				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
 			case "phoneNumber":
 				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
 			case "isOpenlaneUser":
@@ -280,6 +282,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identit
 				return ec.fieldContext_IdentityHolder_email(ctx, field)
 			case "alternateEmail":
 				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
 			case "phoneNumber":
 				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
 			case "isOpenlaneUser":
@@ -470,6 +474,8 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_email(ctx, field)
 			case "alternateEmail":
 				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
 			case "phoneNumber":
 				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
 			case "isOpenlaneUser":
@@ -660,6 +666,8 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_email(ctx, field)
 			case "alternateEmail":
 				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
 			case "phoneNumber":
 				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
 			case "isOpenlaneUser":

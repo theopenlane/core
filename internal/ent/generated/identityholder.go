@@ -65,6 +65,8 @@ type IdentityHolder struct {
 	Email string `json:"email,omitempty"`
 	// alternate email address for the identity holder
 	AlternateEmail string `json:"alternate_email,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"email_aliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber string `json:"phone_number,omitempty"`
 	// whether the identity holder record is linked to an Openlane user account
@@ -439,7 +441,7 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case identityholder.FieldStartDate, identityholder.FieldEndDate:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case identityholder.FieldTags, identityholder.FieldMetadata:
+		case identityholder.FieldTags, identityholder.FieldEmailAliases, identityholder.FieldMetadata:
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
@@ -589,6 +591,14 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field alternate_email", values[i])
 			} else if value.Valid {
 				_m.AlternateEmail = value.String
+			}
+		case identityholder.FieldEmailAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailAliases); err != nil {
+					return fmt.Errorf("unmarshal field email_aliases: %w", err)
+				}
 			}
 		case identityholder.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -915,6 +925,9 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("alternate_email=")
 	builder.WriteString(_m.AlternateEmail)
+	builder.WriteString(", ")
+	builder.WriteString("email_aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailAliases))
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(_m.PhoneNumber)

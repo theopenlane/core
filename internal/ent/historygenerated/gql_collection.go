@@ -6692,6 +6692,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, identityholderhistory.FieldAlternateEmail)
 				fieldSeen[identityholderhistory.FieldAlternateEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[identityholderhistory.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldEmailAliases)
+				fieldSeen[identityholderhistory.FieldEmailAliases] = struct{}{}
+			}
 		case "phoneNumber":
 			if _, ok := fieldSeen[identityholderhistory.FieldPhoneNumber]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldPhoneNumber)
@@ -10738,6 +10743,11 @@ func (_q *ReviewHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, reviewhistory.FieldState)
 				fieldSeen[reviewhistory.FieldState] = struct{}{}
 			}
+		case "status":
+			if _, ok := fieldSeen[reviewhistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, reviewhistory.FieldStatus)
+				fieldSeen[reviewhistory.FieldStatus] = struct{}{}
+			}
 		case "category":
 			if _, ok := fieldSeen[reviewhistory.FieldCategory]; !ok {
 				selectedFields = append(selectedFields, reviewhistory.FieldCategory)
@@ -11086,6 +11096,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldReviewFrequency]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldReviewFrequency)
 				fieldSeen[riskhistory.FieldReviewFrequency] = struct{}{}
+			}
+		case "dueDate":
+			if _, ok := fieldSeen[riskhistory.FieldDueDate]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDueDate)
+				fieldSeen[riskhistory.FieldDueDate] = struct{}{}
 			}
 		case "nextReviewDueAt":
 			if _, ok := fieldSeen[riskhistory.FieldNextReviewDueAt]; !ok {

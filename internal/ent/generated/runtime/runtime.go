@@ -3479,16 +3479,20 @@ func init() {
 	identityholderDescAlternateEmail := identityholderFields[2].Descriptor()
 	// identityholder.AlternateEmailValidator is a validator for the "alternate_email" field. It is called by the builders before save.
 	identityholder.AlternateEmailValidator = identityholderDescAlternateEmail.Validators[0].(func(string) error)
+	// identityholderDescEmailAliases is the schema descriptor for email_aliases field.
+	identityholderDescEmailAliases := identityholderFields[3].Descriptor()
+	// identityholder.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	identityholder.DefaultEmailAliases = identityholderDescEmailAliases.Default.([]string)
 	// identityholderDescPhoneNumber is the schema descriptor for phone_number field.
-	identityholderDescPhoneNumber := identityholderFields[3].Descriptor()
+	identityholderDescPhoneNumber := identityholderFields[4].Descriptor()
 	// identityholder.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	identityholder.PhoneNumberValidator = identityholderDescPhoneNumber.Validators[0].(func(string) error)
 	// identityholderDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderDescIsOpenlaneUser := identityholderFields[4].Descriptor()
+	identityholderDescIsOpenlaneUser := identityholderFields[5].Descriptor()
 	// identityholder.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholder.DefaultIsOpenlaneUser = identityholderDescIsOpenlaneUser.Default.(bool)
 	// identityholderDescIsActive is the schema descriptor for is_active field.
-	identityholderDescIsActive := identityholderFields[8].Descriptor()
+	identityholderDescIsActive := identityholderFields[9].Descriptor()
 	// identityholder.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholder.DefaultIsActive = identityholderDescIsActive.Default.(bool)
 	// identityholderDescID is the schema descriptor for id field.
@@ -6208,7 +6212,7 @@ func init() {
 	// review.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	review.TitleValidator = reviewDescTitle.Validators[0].(func(string) error)
 	// reviewDescApproved is the schema descriptor for approved field.
-	reviewDescApproved := reviewFields[9].Descriptor()
+	reviewDescApproved := reviewFields[10].Descriptor()
 	// review.DefaultApproved holds the default value on creation for the approved field.
 	review.DefaultApproved = reviewDescApproved.Default.(bool)
 	// reviewDescID is the schema descriptor for id field.
@@ -6268,6 +6272,8 @@ func init() {
 	risk.Hooks[15] = riskHooks[1]
 
 	risk.Hooks[16] = riskHooks[2]
+
+	risk.Hooks[17] = riskHooks[3]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]

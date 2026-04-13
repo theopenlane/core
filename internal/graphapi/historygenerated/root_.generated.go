@@ -1284,6 +1284,7 @@ type ComplexityRoot struct {
 		Department             func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Email                  func(childComplexity int) int
+		EmailAliases           func(childComplexity int) int
 		EmployerEntityID       func(childComplexity int) int
 		EndDate                func(childComplexity int) int
 		EnvironmentID          func(childComplexity int) int
@@ -2173,6 +2174,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
@@ -2202,6 +2204,7 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DetailsJSON       func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
 		ExternalID        func(childComplexity int) int
@@ -10256,6 +10259,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IdentityHolderHistory.Email(childComplexity), true
 
+	case "IdentityHolderHistory.emailAliases":
+		if e.ComplexityRoot.IdentityHolderHistory.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.EmailAliases(childComplexity), true
+
 	case "IdentityHolderHistory.employerEntityID":
 		if e.ComplexityRoot.IdentityHolderHistory.EmployerEntityID == nil {
 			break
@@ -15645,6 +15655,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ReviewHistory.State(childComplexity), true
 
+	case "ReviewHistory.status":
+		if e.ComplexityRoot.ReviewHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.Status(childComplexity), true
+
 	case "ReviewHistory.summary":
 		if e.ComplexityRoot.ReviewHistory.Summary == nil {
 			break
@@ -15784,6 +15801,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.DisplayID(childComplexity), true
+
+	case "RiskHistory.dueDate":
+		if e.ComplexityRoot.RiskHistory.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.DueDate(childComplexity), true
 
 	case "RiskHistory.environmentID":
 		if e.ComplexityRoot.RiskHistory.EnvironmentID == nil {
@@ -38509,6 +38533,10 @@ type IdentityHolderHistory implements Node {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -50917,6 +50945,10 @@ type ReviewHistory implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewHistoryReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -51035,6 +51067,16 @@ enum ReviewHistoryOrderField {
   external_owner_id
   title
   state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -51358,6 +51400,15 @@ input ReviewHistoryWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewHistoryReviewStatus
+  statusNEQ: ReviewHistoryReviewStatus
+  statusIn: [ReviewHistoryReviewStatus!]
+  statusNotIn: [ReviewHistoryReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
@@ -51684,6 +51735,10 @@ type RiskHistory implements Node {
   lastReviewedAt: DateTime
   reviewFrequency: RiskHistoryFrequency
   """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  """
   the time when the next review is due for the risk
   """
   nextReviewDueAt: DateTime
@@ -51776,6 +51831,7 @@ enum RiskHistoryOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -52373,6 +52429,19 @@ input RiskHistoryWhereInput {
   reviewFrequencyNotIn: [RiskHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """

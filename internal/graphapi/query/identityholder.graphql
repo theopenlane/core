@@ -7,6 +7,7 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			department
 			displayID
 			email
+			emailAliases
 			employerEntityID
 			endDate
 			environmentID
@@ -48,6 +49,7 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			department
 			displayID
 			email
+			emailAliases
 			employerEntityID
 			endDate
 			environmentID
@@ -89,6 +91,7 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			department
 			displayID
 			email
+			emailAliases
 			employerEntityID
 			endDate
 			environmentID
@@ -143,6 +146,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				department
 				displayID
 				email
+				emailAliases
 				employerEntityID
 				endDate
 				environmentID
@@ -208,6 +212,7 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		department
 		displayID
 		email
+		emailAliases
 		employerEntityID
 		endDate
 		environmentID
@@ -266,6 +271,7 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				department
 				displayID
 				email
+				emailAliases
 				employerEntityID
 				endDate
 				environmentID
@@ -318,6 +324,7 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			department
 			displayID
 			email
+			emailAliases
 			employerEntityID
 			endDate
 			environmentID

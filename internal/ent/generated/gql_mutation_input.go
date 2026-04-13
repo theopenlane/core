@@ -12197,6 +12197,7 @@ type CreateIdentityHolderInput struct {
 	FullName               string
 	Email                  string
 	AlternateEmail         *string
+	EmailAliases           []string
 	PhoneNumber            *string
 	IsOpenlaneUser         *bool
 	IdentityHolderType     *enums.IdentityHolderType
@@ -12260,6 +12261,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	m.SetEmail(i.Email)
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
 	}
 	if v := i.PhoneNumber; v != nil {
 		m.SetPhoneNumber(*v)
@@ -12406,6 +12410,9 @@ type UpdateIdentityHolderInput struct {
 	Email                       *string
 	ClearAlternateEmail         bool
 	AlternateEmail              *string
+	ClearEmailAliases           bool
+	EmailAliases                []string
+	AppendEmailAliases          []string
 	ClearPhoneNumber            bool
 	PhoneNumber                 *string
 	ClearIsOpenlaneUser         bool
@@ -12548,6 +12555,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
+	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
 	}
 	if i.ClearPhoneNumber {
 		m.ClearPhoneNumber()
@@ -20888,6 +20904,7 @@ type CreateReviewInput struct {
 	ExternalOwnerID   *string
 	Title             string
 	State             *string
+	Status            *enums.ReviewStatus
 	Category          *string
 	Classification    *string
 	Summary           *string
@@ -20951,6 +20968,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	m.SetTitle(i.Title)
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -21085,6 +21105,8 @@ type UpdateReviewInput struct {
 	Title                   *string
 	ClearState              bool
 	State                   *string
+	ClearStatus             bool
+	Status                  *enums.ReviewStatus
 	ClearCategory           bool
 	Category                *string
 	ClearClassification     bool
@@ -21228,6 +21250,12 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -21527,6 +21555,7 @@ type CreateRiskInput struct {
 	ReviewRequired    *bool
 	LastReviewedAt    *models.DateTime
 	ReviewFrequency   *enums.Frequency
+	DueDate           *models.DateTime
 	NextReviewDueAt   *models.DateTime
 	ResidualScore     *int
 	RiskDecision      *enums.RiskDecision
@@ -21628,6 +21657,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if v := i.NextReviewDueAt; v != nil {
 		m.SetNextReviewDueAt(*v)
@@ -21774,6 +21806,8 @@ type UpdateRiskInput struct {
 	LastReviewedAt          *models.DateTime
 	ClearReviewFrequency    bool
 	ReviewFrequency         *enums.Frequency
+	ClearDueDate            bool
+	DueDate                 *models.DateTime
 	ClearNextReviewDueAt    bool
 	NextReviewDueAt         *models.DateTime
 	ClearResidualScore      bool
@@ -22002,6 +22036,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if i.ClearNextReviewDueAt {
 		m.ClearNextReviewDueAt()

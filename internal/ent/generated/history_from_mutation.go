@@ -11246,6 +11246,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetAlternateEmail(alternateEmail)
 	}
 
+	if emailAliases, exists := m.EmailAliases(); exists {
+		create = create.SetEmailAliases(emailAliases)
+	}
+
 	if phoneNumber, exists := m.PhoneNumber(); exists {
 		create = create.SetPhoneNumber(phoneNumber)
 	}
@@ -11461,6 +11465,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetAlternateEmail(identityholder.AlternateEmail)
 		}
 
+		if emailAliases, exists := m.EmailAliases(); exists {
+			create = create.SetEmailAliases(emailAliases)
+		} else {
+			create = create.SetEmailAliases(identityholder.EmailAliases)
+		}
+
 		if phoneNumber, exists := m.PhoneNumber(); exists {
 			create = create.SetPhoneNumber(phoneNumber)
 		} else {
@@ -11612,6 +11622,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetFullName(identityholder.FullName).
 			SetEmail(identityholder.Email).
 			SetAlternateEmail(identityholder.AlternateEmail).
+			SetEmailAliases(identityholder.EmailAliases).
 			SetPhoneNumber(identityholder.PhoneNumber).
 			SetIsOpenlaneUser(identityholder.IsOpenlaneUser).
 			SetUserID(identityholder.UserID).
@@ -18185,6 +18196,10 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetState(state)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -18386,6 +18401,12 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetState(review.State)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(review.Status)
+		}
+
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -18524,6 +18545,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
 			SetState(review.State).
+			SetStatus(review.Status).
 			SetCategory(review.Category).
 			SetClassification(review.Classification).
 			SetSummary(review.Summary).
@@ -18713,6 +18735,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetNillableDueDate(&dueDate)
 	}
 
 	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
@@ -18986,6 +19012,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(risk.ReviewFrequency)
 		}
 
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetNillableDueDate(&dueDate)
+		} else {
+			create = create.SetNillableDueDate(risk.DueDate)
+		}
+
 		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
 			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
 		} else {
@@ -19077,6 +19109,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetReviewRequired(risk.ReviewRequired).
 			SetNillableLastReviewedAt(risk.LastReviewedAt).
 			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableDueDate(risk.DueDate).
 			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
 			SetResidualScore(risk.ResidualScore).
 			SetRiskDecision(risk.RiskDecision).
