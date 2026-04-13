@@ -57,6 +57,54 @@ func HookEvidenceReviewDate() ent.Hook {
 
 					frequency = oldFrequency
 				}
+			case m.Op().Is(ent.OpUpdate):
+				if creationDateMutated && frequencyMutated {
+					break
+				}
+
+				ids, err := m.IDs(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				oldEvidences, err := m.Client().Evidence.Query().
+					Where(evidence.IDIn(ids...)).
+					Select(evidence.FieldID, evidence.FieldCreationDate, evidence.FieldReviewFrequency).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				v, err := next.Mutate(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				for _, ev := range oldEvidences {
+					evidenceCreationDate := creationDate
+					if !creationDateMutated && ev.CreationDate != nil {
+						evidenceCreationDate = *ev.CreationDate
+					}
+
+					evidenceFrequency := frequency
+					if !frequencyMutated {
+						evidenceFrequency = ev.ReviewFrequency
+					}
+
+					update := m.Client().Evidence.UpdateOneID(ev.ID)
+					if evidenceFrequency == enums.FrequencyNone || time.Time(evidenceCreationDate).IsZero() {
+						update.ClearRenewalDate()
+					} else {
+						update.SetRenewalDate(getNextReviewDate(evidenceFrequency, models.DateTime(evidenceCreationDate)))
+					}
+
+					err = update.Exec(ctx)
+					if err != nil {
+						return v, err
+					}
+				}
+
+				return v, nil
 			default:
 				return next.Mutate(ctx, m)
 			}
