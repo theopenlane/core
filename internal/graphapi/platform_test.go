@@ -312,12 +312,23 @@ func TestMutationCreatePlatform(t *testing.T) {
 
 			// cleanup each object created
 			(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: resp.CreatePlatform.Platform.ID}).MustDelete(testUser1.UserCtx, t)
+			// cleanup files created for the platform
+			if len(tc.archDiagrams) > 0 {
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+			}
+			if len(tc.dataFlowDiagrams) > 0 {
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.DataFlowDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+			}
+			if len(tc.trustBoundaryDiagrams) > 0 {
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.TrustBoundaryDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+			}
+
 		})
 	}
 
 	// cleanup assets and entities created for the tests
 	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, asset2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: vendor.ID}).MustDelete(testUser1.UserCtx, t)
+
 }
 
 func TestMutationUpdatePlatform(t *testing.T) {
@@ -326,13 +337,17 @@ func TestMutationUpdatePlatform(t *testing.T) {
 	vendor := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	outOfScopeAsset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	outOfScopeVendor := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	pngFile := uploadFile(t, logoFilePath)
 
+	diagramFileId := ""
 	testCases := []struct {
-		name        string
-		request     testclient.UpdatePlatformInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name          string
+		request       testclient.UpdatePlatformInput
+		archDiagrams  []*graphql.Upload
+		removeDiagram bool
+		client        *testclient.TestClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, update field as admin",
@@ -362,6 +377,20 @@ func TestMutationUpdatePlatform(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name:         "happy path, add diagram",
+			request:      testclient.UpdatePlatformInput{},
+			archDiagrams: []*graphql.Upload{pngFile},
+			client:       suite.client.api,
+			ctx:          adminUser.UserCtx,
+		},
+		{
+			name:          "happy path, remove diagram",
+			request:       testclient.UpdatePlatformInput{},
+			removeDiagram: true,
+			client:        suite.client.api,
+			ctx:           adminUser.UserCtx,
+		},
+		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdatePlatformInput{
 				Name: lo.ToPtr("New Name"),
@@ -383,7 +412,15 @@ func TestMutationUpdatePlatform(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdatePlatform(tc.ctx, platform.ID, tc.request, nil, nil, nil)
+			if len(tc.archDiagrams) > 0 {
+				expectUploadNillable(t, suite.client.mockProvider, tc.archDiagrams)
+			}
+
+			if tc.removeDiagram {
+				tc.request.RemoveArchitectureDiagramIDs = []string{diagramFileId}
+			}
+
+			resp, err := tc.client.UpdatePlatform(tc.ctx, platform.ID, tc.request, tc.archDiagrams, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -428,6 +465,19 @@ func TestMutationUpdatePlatform(t *testing.T) {
 			if len(tc.request.AddEntityIDs) > 0 {
 				assert.Check(t, is.Len(resp.UpdatePlatform.Platform.Entities.Edges, len(tc.request.AddEntityIDs)))
 			}
+
+			if len(tc.archDiagrams) > 0 {
+				assert.Check(t, is.Len(resp.UpdatePlatform.Platform.ArchitectureDiagrams.Edges, len(tc.archDiagrams)))
+
+				diagramFileId = resp.UpdatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID
+				assert.Check(t, diagramFileId != "")
+			}
+
+			if len(tc.request.RemoveArchitectureDiagramIDs) > 0 {
+				platform, err := suite.client.api.GetPlatformByID(tc.ctx, platform.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(platform.Platform.ArchitectureDiagrams.Edges, 0))
+			}
 		})
 	}
 
@@ -435,6 +485,8 @@ func TestMutationUpdatePlatform(t *testing.T) {
 	// cleanup assets and entities created for the tests
 	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, outOfScopeAsset.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{vendor.ID, outOfScopeVendor.ID}}).MustDelete(testUser1.UserCtx, t)
+	// cleanup files created for the platform
+	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: diagramFileId}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeletePlatform(t *testing.T) {

@@ -171,6 +171,23 @@ type IdentityHolderBuilder struct {
 	Location   string
 }
 
+type DirectoryAccountBuilder struct {
+	client *client
+
+	// Fields
+	ExternalID     string
+	CanonicalEmail *string
+	DisplayName    string
+	GivenName      *string
+	FamilyName     *string
+	DirectoryName  *string
+	Status         enums.DirectoryAccountStatus
+	PrimarySource  bool
+	JobTitle       *string
+	Department     *string
+	OwnerID        string
+}
+
 type ContactBuilder struct {
 	client *client
 
@@ -1015,6 +1032,40 @@ func (i *IdentityHolderBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		SetTeam(i.Team).
 		SetLocation(i.Location).
 		Save(ctx)
+	requireNoError(t, err)
+
+	return entity
+}
+
+// MustNew directory account builder is used to create, without authz checks, directory accounts in the database
+func (d *DirectoryAccountBuilder) MustNew(ctx context.Context, t *testing.T) *ent.DirectoryAccount {
+	ctx = setContext(ctx, d.client.db)
+
+	if d.ExternalID == "" {
+		d.ExternalID = ulids.New().String()
+	}
+
+	if d.Status == "" {
+		d.Status = enums.DirectoryAccountStatusActive
+	}
+
+	create := d.client.db.DirectoryAccount.Create().
+		SetExternalID(d.ExternalID).
+		SetDisplayName(d.DisplayName).
+		SetStatus(d.Status).
+		SetPrimarySource(d.PrimarySource).
+		SetNillableCanonicalEmail(d.CanonicalEmail).
+		SetNillableGivenName(d.GivenName).
+		SetNillableFamilyName(d.FamilyName).
+		SetNillableDirectoryName(d.DirectoryName).
+		SetNillableJobTitle(d.JobTitle).
+		SetNillableDepartment(d.Department)
+
+	if d.OwnerID != "" {
+		create.SetOwnerID(d.OwnerID)
+	}
+
+	entity, err := create.Save(ctx)
 	requireNoError(t, err)
 
 	return entity
