@@ -162,10 +162,10 @@ func TestQueryPrograms(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:            "admin user should see the program they created",
+			name:            "admin user should see the program they created along with the other programs in the org",
 			client:          suite.client.api,
 			ctx:             adminUser.UserCtx,
-			expectedResults: 1,
+			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "owner of the other organization should see the program they created",

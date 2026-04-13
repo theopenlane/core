@@ -13,7 +13,7 @@ type template
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_template from parent_context or can_edit from parent
@@ -59,7 +59,7 @@ type assessment
     define delegate: [user, group#member]
 
     # parent permissions derived based on `crud` permissions or parents
-    define parent_editor: can_edit from parent or can_edit_assessment from parent_context or can_edit from parent
+    define parent_editor: can_edit from parent_context or can_edit_assessment from parent_context or can_edit from parent
     define parent_viewer: can_view_assessment from parent_context or can_view from parent
     define parent_context: [organization]
     define parent: [campaign]
@@ -99,7 +99,7 @@ type campaign
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_campaign from parent_context

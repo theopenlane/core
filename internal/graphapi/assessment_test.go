@@ -87,8 +87,6 @@ func TestQueryAssessment(t *testing.T) {
 }
 
 func TestQueryAssessments(t *testing.T) {
-	t.Skip()
-
 	// assessments for the first organization
 	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -234,7 +232,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "do not have permission to perform this action",
+			errorMsg: notAuthorizedErrorMsg,
 		},
 	}
 

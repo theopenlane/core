@@ -13,7 +13,7 @@ type note
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: owner or parent_editor
     define viewer: editor or parent_viewer
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
     define owner : [user, service]
 
     # parent permissions derived based on `crud` permissions or parents
@@ -33,7 +33,7 @@ type discussion
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define editor: owner or parent_editor
     define viewer: editor or parent_viewer
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
     define owner : [user, service]
 
     # parent permissions derived based on `crud` permissions or parents

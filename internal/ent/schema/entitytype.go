@@ -94,6 +94,7 @@ func (e EntityType) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

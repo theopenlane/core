@@ -44,6 +44,14 @@ type MutationClient interface {
 	Client() *generated.Client
 }
 
+// OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
+type OrgOwnedMutation interface {
+	GenericMutation
+
+	OwnerID() (string, bool)
+	SetOwnerID(string)
+}
+
 // AuthzClientFromContext returns the authz client from the context if it exists
 // this is useful when you need to get the client from the context directly
 func AuthzClientFromContext(ctx context.Context) *fgax.Client {

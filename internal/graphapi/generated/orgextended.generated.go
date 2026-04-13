@@ -82,50 +82,144 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
 			case "stripeCustomerID":
 				return ec.fieldContext_Organization_stripeCustomerID(ctx, field)
+			case "actionPlanCreators":
+				return ec.fieldContext_Organization_actionPlanCreators(ctx, field)
+			case "apiTokenCreators":
+				return ec.fieldContext_Organization_apiTokenCreators(ctx, field)
+			case "assessmentCreators":
+				return ec.fieldContext_Organization_assessmentCreators(ctx, field)
+			case "assetCreators":
+				return ec.fieldContext_Organization_assetCreators(ctx, field)
+			case "campaignCreators":
+				return ec.fieldContext_Organization_campaignCreators(ctx, field)
+			case "campaignTargetCreators":
+				return ec.fieldContext_Organization_campaignTargetCreators(ctx, field)
+			case "contactCreators":
+				return ec.fieldContext_Organization_contactCreators(ctx, field)
 			case "controlCreators":
 				return ec.fieldContext_Organization_controlCreators(ctx, field)
 			case "controlImplementationCreators":
 				return ec.fieldContext_Organization_controlImplementationCreators(ctx, field)
 			case "controlObjectiveCreators":
 				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
+			case "discussionCreators":
+				return ec.fieldContext_Organization_discussionCreators(ctx, field)
+			case "emailBrandingCreators":
+				return ec.fieldContext_Organization_emailBrandingCreators(ctx, field)
+			case "emailTemplateCreators":
+				return ec.fieldContext_Organization_emailTemplateCreators(ctx, field)
+			case "entityCreators":
+				return ec.fieldContext_Organization_entityCreators(ctx, field)
 			case "evidenceCreators":
 				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
-			case "assetCreators":
-				return ec.fieldContext_Organization_assetCreators(ctx, field)
 			case "findingCreators":
 				return ec.fieldContext_Organization_findingCreators(ctx, field)
-			case "vulnerabilityCreators":
-				return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
 			case "groupCreators":
 				return ec.fieldContext_Organization_groupCreators(ctx, field)
+			case "identityHolderCreators":
+				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
+			case "integrationCreators":
+				return ec.fieldContext_Organization_integrationCreators(ctx, field)
+			case "integrationWebhookCreators":
+				return ec.fieldContext_Organization_integrationWebhookCreators(ctx, field)
 			case "internalPolicyCreators":
 				return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
+			case "jobRunnerCreators":
+				return ec.fieldContext_Organization_jobRunnerCreators(ctx, field)
+			case "jobRunnerRegistrationTokenCreators":
+				return ec.fieldContext_Organization_jobRunnerRegistrationTokenCreators(ctx, field)
+			case "jobRunnerTokenCreators":
+				return ec.fieldContext_Organization_jobRunnerTokenCreators(ctx, field)
+			case "jobTemplateCreators":
+				return ec.fieldContext_Organization_jobTemplateCreators(ctx, field)
 			case "mappedControlCreators":
 				return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
 			case "narrativeCreators":
 				return ec.fieldContext_Organization_narrativeCreators(ctx, field)
+			case "notificationTemplateCreators":
+				return ec.fieldContext_Organization_notificationTemplateCreators(ctx, field)
+			case "platformCreators":
+				return ec.fieldContext_Organization_platformCreators(ctx, field)
 			case "procedureCreators":
 				return ec.fieldContext_Organization_procedureCreators(ctx, field)
 			case "programCreators":
 				return ec.fieldContext_Organization_programCreators(ctx, field)
+			case "remediationCreators":
+				return ec.fieldContext_Organization_remediationCreators(ctx, field)
+			case "reviewCreators":
+				return ec.fieldContext_Organization_reviewCreators(ctx, field)
 			case "riskCreators":
 				return ec.fieldContext_Organization_riskCreators(ctx, field)
-			case "identityHolderCreators":
-				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
+			case "scanCreators":
+				return ec.fieldContext_Organization_scanCreators(ctx, field)
 			case "scheduledJobCreators":
 				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
+			case "scheduledJobRunCreators":
+				return ec.fieldContext_Organization_scheduledJobRunCreators(ctx, field)
 			case "standardCreators":
 				return ec.fieldContext_Organization_standardCreators(ctx, field)
-			case "templateCreators":
-				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "subcontrolCreators":
+				return ec.fieldContext_Organization_subcontrolCreators(ctx, field)
 			case "subprocessorCreators":
 				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
+			case "systemDetailCreators":
+				return ec.fieldContext_Organization_systemDetailCreators(ctx, field)
+			case "taskCreators":
+				return ec.fieldContext_Organization_taskCreators(ctx, field)
+			case "templateCreators":
+				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "trustCenterCreators":
+				return ec.fieldContext_Organization_trustCenterCreators(ctx, field)
+			case "trustCenterComplianceCreators":
+				return ec.fieldContext_Organization_trustCenterComplianceCreators(ctx, field)
 			case "trustCenterDocCreators":
 				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
+			case "trustCenterEntityCreators":
+				return ec.fieldContext_Organization_trustCenterEntityCreators(ctx, field)
+			case "trustCenterFaqCreators":
+				return ec.fieldContext_Organization_trustCenterFaqCreators(ctx, field)
+			case "trustCenterNdaRequestCreators":
+				return ec.fieldContext_Organization_trustCenterNdaRequestCreators(ctx, field)
 			case "trustCenterSubprocessorCreators":
 				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
-			case "actionPlanCreators":
-				return ec.fieldContext_Organization_actionPlanCreators(ctx, field)
+			case "trustCenterWatermarkConfigCreators":
+				return ec.fieldContext_Organization_trustCenterWatermarkConfigCreators(ctx, field)
+			case "userCreators":
+				return ec.fieldContext_Organization_userCreators(ctx, field)
+			case "userSettingCreators":
+				return ec.fieldContext_Organization_userSettingCreators(ctx, field)
+			case "vulnerabilityCreators":
+				return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
+			case "workflowAssignmentCreators":
+				return ec.fieldContext_Organization_workflowAssignmentCreators(ctx, field)
+			case "workflowAssignmentTargetCreators":
+				return ec.fieldContext_Organization_workflowAssignmentTargetCreators(ctx, field)
+			case "workflowDefinitionCreators":
+				return ec.fieldContext_Organization_workflowDefinitionCreators(ctx, field)
+			case "workflowEventCreators":
+				return ec.fieldContext_Organization_workflowEventCreators(ctx, field)
+			case "workflowInstanceCreators":
+				return ec.fieldContext_Organization_workflowInstanceCreators(ctx, field)
+			case "workflowObjectRefCreators":
+				return ec.fieldContext_Organization_workflowObjectRefCreators(ctx, field)
+			case "workflowProposalCreators":
+				return ec.fieldContext_Organization_workflowProposalCreators(ctx, field)
+			case "campaignsManager":
+				return ec.fieldContext_Organization_campaignsManager(ctx, field)
+			case "complianceManager":
+				return ec.fieldContext_Organization_complianceManager(ctx, field)
+			case "groupManager":
+				return ec.fieldContext_Organization_groupManager(ctx, field)
+			case "policiesManager":
+				return ec.fieldContext_Organization_policiesManager(ctx, field)
+			case "registryManager":
+				return ec.fieldContext_Organization_registryManager(ctx, field)
+			case "riskManager":
+				return ec.fieldContext_Organization_riskManager(ctx, field)
+			case "trustCenterManager":
+				return ec.fieldContext_Organization_trustCenterManager(ctx, field)
+			case "workflowsManager":
+				return ec.fieldContext_Organization_workflowsManager(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":

@@ -46,25 +46,26 @@ extend type organization
     define can_view_contact: [service, user, group#member] or can_edit_contact or can_manage_compliance or can_manage_registry or full_access
     define can_edit_contact: [service, user, group#member] or can_delete_contact or can_manage_compliance or can_manage_registry or full_access
     define can_delete_contact: [service, user, group#member] or can_manage_compliance or can_manage_registry or full_access
-    define can_create_contact: can_manage_registry or can_manage_compliance
+    define contact_creator: [group#member]
+    define can_create_contact: can_edit or can_edit_contact or contact_creator or can_manage_registry or can_manage_compliance
 
-    define can_view_control: [service, user, group#member] or auditor or can_edit_control or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_control: [service, user, group#member] or can_delete_control or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_control: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_control: [service, user, group#member] or auditor or can_edit_control or can_manage_compliance or full_access
+    define can_edit_control: [service, user, group#member] or can_delete_control or can_manage_compliance or full_access
+    define can_delete_control: [service, user, group#member] or can_manage_compliance or full_access
     define control_creator: [group#member]
-    define can_create_control: can_edit or can_edit_control or control_creator or can_manage_compliance or can_manage_compliance
+    define can_create_control: can_edit or can_edit_control or control_creator or can_manage_compliance
 
-    define can_view_control_implementation: [service, user, group#member] or can_edit_control_implementation or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_control_implementation: [service, user, group#member] or can_delete_control_implementation or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_control_implementation: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_control_implementation: [service, user, group#member] or can_edit_control_implementation or can_manage_compliance or can_view_control or full_access
+    define can_edit_control_implementation: [service, user, group#member] or can_delete_control_implementation or can_edit_control or can_manage_compliance or full_access
+    define can_delete_control_implementation: [service, user, group#member] or can_delete_control or can_manage_compliance or full_access
     define control_implementation_creator: [group#member]
-    define can_create_control_implementation: can_edit or can_edit_control_implementation or control_implementation_creator or can_manage_compliance or can_manage_compliance
+    define can_create_control_implementation: can_edit or can_edit_control_implementation or control_implementation_creator or can_manage_compliance
 
-    define can_view_control_objective: [service, user, group#member] or can_edit_control_objective or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_control_objective: [service, user, group#member] or can_delete_control_objective or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_control_objective: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_control_objective: [service, user, group#member] or can_edit_control_objective or can_manage_compliance or can_view_control or full_access
+    define can_edit_control_objective: [service, user, group#member] or can_delete_control_objective or can_edit_control or can_manage_compliance or full_access
+    define can_delete_control_objective: [service, user, group#member] or can_delete_control or can_manage_compliance or full_access
     define control_objective_creator: [group#member]
-    define can_create_control_objective: can_edit or can_edit_control_objective or control_objective_creator or can_manage_compliance or can_manage_compliance
+    define can_create_control_objective: can_edit or can_edit_control_objective or control_objective_creator or can_manage_compliance
 
     define can_view_custom_domain: [service, user, group#member] or can_edit_custom_domain or full_access
     define can_edit_custom_domain: [service, user, group#member] or can_delete_custom_domain or full_access
@@ -73,10 +74,8 @@ extend type organization
     define can_view_custom_type_enum: [service, user, group#member] or can_edit_custom_type_enum or full_access
     define can_edit_custom_type_enum: [service, user, group#member] or can_delete_custom_type_enum or full_access
     define can_delete_custom_type_enum: [service, user, group#member] or full_access
-
-    define can_view_dns_verification: [service, user, group#member] or can_edit_dns_verification or full_access
-    define can_edit_dns_verification: [service, user, group#member] or can_delete_dns_verification or full_access
-    define can_delete_dns_verification: [service, user, group#member] or full_access
+    define custom_type_enum_creator: [group#member]
+    define can_create_custom_type_enum: can_edit or can_edit_custom_type_enum or custom_type_enum_creator
 
     define can_view_directory_account: [service, user, group#member] or can_edit_directory_account or full_access
     define can_edit_directory_account: [service, user, group#member] or can_delete_directory_account or full_access
@@ -97,11 +96,8 @@ extend type organization
     define can_view_discussion: [service, user, group#member] or can_edit_discussion or full_access
     define can_edit_discussion: [service, user, group#member] or can_delete_discussion or full_access
     define can_delete_discussion: [service, user, group#member] or full_access
-    define can_create_discussion: auditor
-
-    define can_view_document_data: [service, user, group#member] or can_edit_document_data or can_manage_campaigns or full_access
-    define can_edit_document_data: [service, user, group#member] or can_delete_document_data or full_access
-    define can_delete_document_data: [service, user, group#member] or full_access
+    define discussion_creator: [group#member]
+    define can_create_discussion: can_edit or can_edit_discussion or discussion_creator or auditor
 
     define can_view_email_branding: [service, user, group#member] or can_edit_email_branding or can_manage_campaigns or full_access
     define can_edit_email_branding: [service, user, group#member] or can_delete_email_branding or can_manage_campaigns or full_access
@@ -127,24 +123,28 @@ extend type organization
     define can_view_entity_type: [service, user, group#member] or can_edit_entity_type or full_access
     define can_edit_entity_type: [service, user, group#member] or can_delete_entity_type or full_access
     define can_delete_entity_type: [service, user, group#member] or full_access
+    define entity_type_creator: [group#member]
+    define can_create_entity_type: can_edit or can_edit_entity_type or entity_type_creator
 
     define can_view_event: [service, user, group#member] or can_edit_event or full_access
     define can_edit_event: [service, user, group#member] or can_delete_event or full_access
     define can_delete_event: [service, user, group#member] or full_access
 
-    define can_view_evidence: [service, user, group#member] or auditor or can_edit_evidence or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_evidence: [service, user, group#member] or can_delete_evidence or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_evidence: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_evidence: [service, user, group#member] or auditor or can_edit_evidence or can_manage_compliance or full_access
+    define can_edit_evidence: [service, user, group#member] or can_delete_evidence or can_manage_compliance or full_access
+    define can_delete_evidence: [service, user, group#member] or can_manage_compliance or full_access
     define evidence_creator: [group#member]
-    define can_create_evidence: can_edit or can_edit_evidence or evidence_creator or auditor or can_manage_compliance or can_manage_compliance
+    define can_create_evidence: can_edit or can_edit_evidence or evidence_creator or auditor or can_manage_compliance
 
-    define can_view_export: [service, user, group#member] or can_edit_export or full_access
-    define can_edit_export: [service, user, group#member] or can_delete_export or full_access
-    define can_delete_export: [service, user, group#member] or full_access
+    define can_view_export: [service, user, group#member] or full_access
+    define export_creator: [group#member]
+    define can_create_export: can_edit or export_creator
 
     define can_view_file: [service, user, group#member] or can_edit_file or full_access
     define can_edit_file: [service, user, group#member] or can_delete_file or full_access
     define can_delete_file: [service, user, group#member] or full_access
+    define file_creator: [group#member]
+    define can_create_file: can_edit or can_edit_file or file_creator
 
     define can_view_file_download_token: [service, user, group#member] or can_edit_file_download_token or full_access
     define can_edit_file_download_token: [service, user, group#member] or can_delete_file_download_token or full_access
@@ -193,10 +193,6 @@ extend type organization
     define can_delete_integration: [service, user, group#member] or can_manage_workflows or full_access
     define can_create_integration: can_manage_workflows
 
-    define can_view_integration_run: [service, user, group#member] or can_edit_integration_run or full_access
-    define can_edit_integration_run: [service, user, group#member] or can_delete_integration_run or full_access
-    define can_delete_integration_run: [service, user, group#member] or full_access
-
     define can_view_integration_webhook: [service, user, group#member] or can_edit_integration_webhook or can_manage_workflows or full_access
     define can_edit_integration_webhook: [service, user, group#member] or can_delete_integration_webhook or can_manage_workflows or full_access
     define can_delete_integration_webhook: [service, user, group#member] or can_manage_workflows or full_access
@@ -211,10 +207,6 @@ extend type organization
     define can_view_invite: [service, user, group#member] or can_edit_invite or full_access
     define can_edit_invite: [service, user, group#member] or can_delete_invite or full_access
     define can_delete_invite: [service, user, group#member] or full_access
-
-    define can_view_job_result: [service, user, group#member] or can_edit_job_result or full_access
-    define can_edit_job_result: [service, user, group#member] or can_delete_job_result or full_access
-    define can_delete_job_result: [service, user, group#member] or full_access
 
     define can_view_job_runner: [service, user, group#member] or can_edit_job_runner or can_manage_workflows or full_access
     define can_edit_job_runner: [service, user, group#member] or can_delete_job_runner or can_manage_workflows or full_access
@@ -240,25 +232,23 @@ extend type organization
     define job_template_creator: [group#member]
     define can_create_job_template: can_edit or can_edit_job_template or job_template_creator or can_manage_workflows
 
-    define can_view_mappable_domain: [service, user, group#member] or can_edit_mappable_domain or full_access
-    define can_edit_mappable_domain: [service, user, group#member] or can_delete_mappable_domain or full_access
-    define can_delete_mappable_domain: [service, user, group#member] or full_access
-
-    define can_view_mapped_control: [service, user, group#member] or can_edit_mapped_control or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_mapped_control: [service, user, group#member] or can_delete_mapped_control or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_mapped_control: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_mapped_control: [service, user, group#member] or can_edit_mapped_control or can_manage_compliance or full_access
+    define can_edit_mapped_control: [service, user, group#member] or can_delete_mapped_control or can_manage_compliance or full_access
+    define can_delete_mapped_control: [service, user, group#member] or can_manage_compliance or full_access
     define mapped_control_creator: [group#member]
-    define can_create_mapped_control: can_edit or can_edit_mapped_control or mapped_control_creator or can_manage_compliance or can_manage_compliance
+    define can_create_mapped_control: can_edit or can_edit_mapped_control or mapped_control_creator or can_manage_compliance
 
-    define can_view_narrative: [service, user, group#member] or can_edit_narrative or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_narrative: [service, user, group#member] or can_delete_narrative or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_narrative: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_narrative: [service, user, group#member] or can_edit_narrative or can_manage_compliance or full_access
+    define can_edit_narrative: [service, user, group#member] or can_delete_narrative or can_manage_compliance or full_access
+    define can_delete_narrative: [service, user, group#member] or can_manage_compliance or full_access
     define narrative_creator: [group#member]
-    define can_create_narrative: can_edit or can_edit_narrative or narrative_creator or can_manage_compliance or can_manage_compliance
+    define can_create_narrative: can_edit or can_edit_narrative or narrative_creator or can_manage_compliance
 
     define can_view_note: [service, user, group#member] or can_edit_note or full_access
     define can_edit_note: [service, user, group#member] or can_delete_note or full_access
     define can_delete_note: [service, user, group#member] or full_access
+    define note_creator: [group#member]
+    define can_create_note: can_edit or can_edit_note or note_creator
 
     define can_view_notification: [service, user, group#member] or can_edit_notification or full_access
     define can_edit_notification: [service, user, group#member] or can_delete_notification or full_access
@@ -300,6 +290,8 @@ extend type organization
     define can_view_organization: [service, user, group#member] or can_edit_organization or full_access
     define can_edit_organization: [service, user, group#member] or can_delete_organization or full_access
     define can_delete_organization: [service, user, group#member] or owner
+    define organization_creator: [group#member]
+    define can_create_organization: can_edit or can_edit_organization or organization_creator
 
     define can_view_organization_setting: [service, user, group#member] or can_edit_organization_setting or can_view_organization or full_access
     define can_edit_organization_setting: [service, user, group#member] or can_delete_organization_setting or can_edit_organization or full_access
@@ -325,11 +317,11 @@ extend type organization
     define procedure_creator: [group#member]
     define can_create_procedure: can_edit or can_edit_procedure or procedure_creator or can_manage_policies or can_manage_compliance
 
-    define can_view_program: [service, user, group#member] or auditor or can_edit_program or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_program: [service, user, group#member] or can_delete_program or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_program: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_program: [service, user, group#member] or auditor or can_edit_program or can_manage_compliance or full_access
+    define can_edit_program: [service, user, group#member] or can_delete_program or can_manage_compliance or full_access
+    define can_delete_program: [service, user, group#member] or can_manage_compliance or full_access
     define program_creator: [group#member]
-    define can_create_program: can_edit or can_edit_program or program_creator or can_manage_compliance or can_manage_compliance
+    define can_create_program: can_edit or can_edit_program or program_creator or can_manage_compliance
 
     define can_view_program_membership: [service, user, group#member] or can_edit_program_membership or can_view_program or full_access
     define can_edit_program_membership: [service, user, group#member] or can_delete_program_membership or can_edit_program or full_access
@@ -371,17 +363,17 @@ extend type organization
     define scheduled_job_run_creator: [group#member]
     define can_create_scheduled_job_run: can_edit or can_edit_scheduled_job_run or scheduled_job_run_creator
 
-    define can_view_standard: [service, user, group#member] or can_edit_standard or can_manage_compliance or can_manage_compliance or full_access
-    define can_edit_standard: [service, user, group#member] or can_delete_standard or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_standard: [service, user, group#member] or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_standard: [service, user, group#member] or can_edit_standard or can_manage_compliance or full_access
+    define can_edit_standard: [service, user, group#member] or can_delete_standard or can_manage_compliance or full_access
+    define can_delete_standard: [service, user, group#member] or can_manage_compliance or full_access
     define standard_creator: [group#member]
-    define can_create_standard: can_edit or can_edit_standard or standard_creator or can_manage_compliance or can_manage_compliance
+    define can_create_standard: can_edit or can_edit_standard or standard_creator or can_manage_compliance
 
-    define can_view_subcontrol: [service, user, group#member] or auditor or can_edit_subcontrol or can_manage_compliance or can_manage_compliance or can_view_control or full_access
-    define can_edit_subcontrol: [service, user, group#member] or can_delete_subcontrol or can_edit_control or can_manage_compliance or can_manage_compliance or full_access
-    define can_delete_subcontrol: [service, user, group#member] or can_delete_control or can_manage_compliance or can_manage_compliance or full_access
+    define can_view_subcontrol: [service, user, group#member] or auditor or can_edit_subcontrol or can_manage_compliance or can_view_control or full_access
+    define can_edit_subcontrol: [service, user, group#member] or can_delete_subcontrol or can_edit_control or can_manage_compliance or full_access
+    define can_delete_subcontrol: [service, user, group#member] or can_delete_control or can_manage_compliance or full_access
     define subcontrol_creator: [group#member]
-    define can_create_subcontrol: can_edit or can_edit_subcontrol or subcontrol_creator or can_manage_compliance or can_manage_compliance
+    define can_create_subcontrol: can_edit or can_edit_subcontrol or subcontrol_creator or can_manage_compliance
 
     define can_view_subprocessor: [service, user, group#member] or can_edit_subprocessor or full_access
     define can_edit_subprocessor: [service, user, group#member] or can_delete_subprocessor or full_access
@@ -392,6 +384,8 @@ extend type organization
     define can_view_subscriber: [service, user, group#member] or can_edit_subscriber or full_access
     define can_edit_subscriber: [service, user, group#member] or can_delete_subscriber or full_access
     define can_delete_subscriber: [service, user, group#member] or full_access
+    define subscriber_creator: [group#member]
+    define can_create_subscriber: can_edit or can_edit_subscriber or subscriber_creator
 
     define can_view_system_detail: [service, user, group#member] or can_edit_system_detail or can_manage_compliance or can_manage_registry or full_access
     define can_edit_system_detail: [service, user, group#member] or can_delete_system_detail or can_manage_compliance or can_manage_registry or full_access
@@ -406,11 +400,14 @@ extend type organization
     define can_view_tag_definition: [service, user, group#member] or can_edit_tag_definition or full_access
     define can_edit_tag_definition: [service, user, group#member] or can_delete_tag_definition or full_access
     define can_delete_tag_definition: [service, user, group#member] or full_access
+    define tag_definition_creator: [group#member]
+    define can_create_tag_definition: can_edit or can_edit_tag_definition or tag_definition_creator
 
     define can_view_task: [service, user, group#member] or can_edit_task or full_access
     define can_edit_task: [service, user, group#member] or can_delete_task or full_access
     define can_delete_task: [service, user, group#member] or full_access
-    define can_create_task: auditor
+    define task_creator: [group#member]
+    define can_create_task: can_edit or can_edit_task or task_creator or auditor
 
     define can_view_template: [service, user, group#member] or can_edit_template or can_manage_campaigns or full_access
     define can_edit_template: [service, user, group#member] or can_delete_template or can_manage_campaigns or full_access
@@ -441,11 +438,11 @@ extend type organization
     define trust_center_entity_creator: [group#member]
     define can_create_trust_center_entity: can_edit or can_edit_trust_center_entity or trust_center_entity_creator or can_manage_trust_center
 
-    define can_view_trust_center_faq: [service, user, group#member] or can_edit_trust_center_faq or can_manage_trust_center or can_manage_trust_center or full_access
-    define can_edit_trust_center_faq: [service, user, group#member] or can_delete_trust_center_faq or can_manage_trust_center or can_manage_trust_center or full_access
-    define can_delete_trust_center_faq: [service, user, group#member] or can_manage_trust_center or can_manage_trust_center or full_access
+    define can_view_trust_center_faq: [service, user, group#member] or can_edit_trust_center_faq or can_manage_trust_center or full_access
+    define can_edit_trust_center_faq: [service, user, group#member] or can_delete_trust_center_faq or can_manage_trust_center or full_access
+    define can_delete_trust_center_faq: [service, user, group#member] or can_manage_trust_center or full_access
     define trust_center_faq_creator: [group#member]
-    define can_create_trust_center_faq: can_edit or can_edit_trust_center_faq or trust_center_faq_creator or can_manage_trust_center or can_manage_trust_center
+    define can_create_trust_center_faq: can_edit or can_edit_trust_center_faq or trust_center_faq_creator or can_manage_trust_center
 
     define can_view_trust_center_nda_request: [service, user, group#member] or can_edit_trust_center_nda_request or can_manage_trust_center or full_access
     define can_edit_trust_center_nda_request: [service, user, group#member] or can_delete_trust_center_nda_request or can_manage_trust_center or full_access

@@ -166,6 +166,8 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 		logx.FromContext(ctx).Info().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by ownership access for user in organization")
 	}
 
+	logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by ownership access for user in organization")
+
 	return generated.ErrPermissionDenied
 }
 
@@ -278,7 +280,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		logx.FromContext(ctx).Info().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", oID).Str("auth_type", string(caller.AuthenticationType))
+		logx.FromContext(ctx).Error().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", oID).Str("auth_type", string(caller.AuthenticationType))
 
 		return generated.ErrPermissionDenied
 	})

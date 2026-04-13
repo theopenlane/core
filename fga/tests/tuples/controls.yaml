@@ -44,6 +44,9 @@
 - user: control:control-1
   relation: parent
   object: control_objective:control_objective-1
+- user: control:control-1
+  relation: parent
+  object: control_implementation:control_implementation-1
 - user: subcontrol:subcontrol-1
   relation: parent
   object: control_objective:control_objective-2

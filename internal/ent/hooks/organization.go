@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v84"
 
@@ -453,6 +454,13 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
+			Where(
+				organization.IDNEQ(oldOrgID),
+			).
+			Order(
+				// order by personal orgs last so that if there is another org available it will be set as the default instead of the personal org
+				organization.ByPersonalOrg(sql.OrderAsc()),
+			).
 			FirstID(ctx)
 		if err != nil {
 			return "", err

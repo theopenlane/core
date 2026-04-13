@@ -13,7 +13,8 @@ type trust_center
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
+    define member: member from parent_context
     define system: [system]
 
     # trust_center specific permissions, used for child objects such as trust_center_docs that need to check for nda_signed
@@ -72,7 +73,7 @@ type subprocessor
     define editor: [user, service, group#member] or parent_editor or system_admin from system
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
     define system: [system]
 
     # parent permissions derived based on `crud` permissions or parents
@@ -112,7 +113,9 @@ type trust_center_doc
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
+
+    define member: member from parent
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_trust_center_doc from parent_context or can_edit from parent

@@ -165,13 +165,13 @@ func TestMutationDeleteIntegration(t *testing.T) {
 		{
 			name:          "delete integration, happy path using api token",
 			client:        suite.client.apiWithToken,
-			ctx:           testUser1.UserCtx,
+			ctx:           context.Background(),
 			integrationID: integration1.ID,
 		},
 		{
 			name:          "delete integration, happy path using personal access token",
 			client:        suite.client.apiWithPAT,
-			ctx:           testUser1.UserCtx,
+			ctx:           context.Background(),
 			integrationID: integration2.ID,
 		},
 		{

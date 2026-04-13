@@ -17,7 +17,7 @@ type group
     define member: [user] or admin
     define editor: admin or parent_editor or parent_admin
     define viewer: member or parent_viewer
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit_group from parent_context

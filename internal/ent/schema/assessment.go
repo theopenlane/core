@@ -113,6 +113,7 @@ func (Assessment) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
+			policy.CanCreateObjectsUnderParents([]string{Campaign{}.PluralName()}),
 			entfga.CheckEditAccess[*generated.AssessmentMutation](),
 		),
 	)

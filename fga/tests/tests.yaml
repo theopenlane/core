@@ -800,7 +800,7 @@ tests:
           can_delete: false
           can_edit: false
           can_view: true
-          audit_log_viewer: false
+          audit_log_viewer: true
       - user: service:ulid-of-service-editor
         object: group:cat-lovers
         assertions:
@@ -809,7 +809,7 @@ tests:
           can_delete: true
           can_edit: true
           can_view: true
-          audit_log_viewer: false
+          audit_log_viewer: true
       # private group check
       - user: user:ulid-of-member-2
         object: group:cat-haters
@@ -828,7 +828,7 @@ tests:
           can_delete: true
           can_edit: true
           can_view: true
-          audit_log_viewer: false
+          audit_log_viewer: true
     list_objects:
       - user: user:ulid-of-owner
         type: group
@@ -1456,6 +1456,14 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+      - user: user:ulid-member # has access to the evidence via the control that is linked to the evidence
+        object: evidence:evidence-2
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
       - user: user:group-editor # editor of the group that has access to the evidence
         object: evidence:evidence-1
         assertions:
@@ -1578,6 +1586,14 @@ tests:
           can_delete: true
       - user: user:ulid-of-member # member of the program that has access to the control objective via the control
         object: control_objective:control_objective-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member # member of the program that has access to the control implementation via the control
+        object: control_implementation:control_implementation-1
         context:
           email_domain: "example.com"
         assertions:
@@ -2564,3 +2580,76 @@ tests:
           can_view: true
           can_edit: false
           can_delete: false
+  - name: risk
+    description: risks are associated with the organization, but only visible to admins+ by default, and can be associated with other objects to inherit access e.g. with a program
+    tuple_file: tuples/risks.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: risk:risk-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-admin # org admin has full access
+        object: risk:risk-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member has no access by default
+        object: risk:risk-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          audit_log_viewer: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: risk:risk-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          audit_log_viewer: false
+      - user: user:ulid-member-user-1 # user should be able to view program
+        object: program:program-with-risk-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          member: false
+          admin: true
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-member-user-1 # program admin access gives admin access to risk
+        object: risk:risk-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-member-user-2 # user should be able to view program
+        object: program:program-with-risk-1
+        assertions:
+          member: true
+          can_view: true
+          can_edit: false
+          can_delete: false
+          audit_log_viewer: true
+      - user: user:ulid-member-user-2 # because user can view program, user can view risk associated with program
+        object: risk:risk-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          audit_log_viewer: true

@@ -1046,7 +1046,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name:   "update assigner to another org member, this user should still be able to see it because they originally created it",
+			name:   "update assigner to another org member, no longer see it because no parent linked",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
 				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
@@ -1061,16 +1061,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				ClearAssignee: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
-		},
-		{
-			name:   "clear assigner",
-			taskID: task.ID,
-			request: &testclient.UpdateTaskInput{
-				ClearAssigner: lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    viewOnlyUser2.UserCtx,
 		},
 	}
 
@@ -1144,11 +1135,6 @@ func TestMutationUpdateTask(t *testing.T) {
 					// make sure the assigner can see the task
 					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, err)
-					assert.Check(t, taskResp != nil)
-
-					// make sure the original creator can still see the task
-					taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
-					assert.NilError(t, err)
 					assert.Check(t, taskResp != nil)
 				}
 

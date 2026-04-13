@@ -11,7 +11,7 @@ type object_name
     define editor: [user, service, group#member] or parent_editor or system_admin from system
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
     define system: [system]
 
     # parent permissions derived based on `crud` permissions or parents

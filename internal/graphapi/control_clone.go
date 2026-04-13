@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -218,6 +219,14 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 
 	// check program access if a program is specified
 	if programID != nil {
+		exists, err := r.db.Program.Query().Where(program.ID(*programID)).Exist(allowCtx)
+		if err != nil {
+			return nil, err
+		}
+		if !exists {
+			return nil, generated.ErrPermissionDenied
+		}
+
 		allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
 			ObjectType:  generated.TypeProgram,
 			ObjectID:    *programID,

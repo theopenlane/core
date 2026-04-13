@@ -164,8 +164,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Domains:     []string{"https://appalachiatrees.com"},
 				Status:      &enums.EntityStatusUnderReview,
 				Note: &testclient.CreateNoteInput{
-					Text:    "matt is the best",
-					OwnerID: &adminUser.OrganizationID,
+					Text: "matt is the best",
 				},
 			},
 			entityTypeName: &entityType.Name,

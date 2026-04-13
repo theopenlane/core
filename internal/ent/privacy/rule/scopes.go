@@ -99,7 +99,7 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 
 	// allow organizations, as they are needed for for requests
 	// filters will be enforced elsewhere
-	if objectType == generated.TypeOrganization {
+	if objectType == generated.TypeOrganization && relation == fgax.CanView {
 		return privacy.Allow
 	}
 

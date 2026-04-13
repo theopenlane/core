@@ -13,7 +13,7 @@ type directory_sync_run
     define editor: [service]
     define viewer: [service] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_sync_run from parent_context or can_view from parent
@@ -32,7 +32,7 @@ type directory_account
     define editor: [service]
     define viewer: [service] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_account from parent_context or can_view from parent
@@ -51,7 +51,7 @@ type directory_group
     define editor: [service]
     define viewer: [service] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_account from parent_context or can_view from parent
@@ -71,7 +71,7 @@ type directory_membership
     define editor: [service]
     define viewer: [service] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_viewer: can_view from parent_context or can_view_directory_account from parent_context or can_view from parent

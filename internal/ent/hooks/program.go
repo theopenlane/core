@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -50,35 +49,6 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 			if err := createProgramMemberAdmin(ctx, objID, m); err != nil {
 				return err
 			}
-		}
-		// else {
-		// 	if err := addTokenEditPermissions(ctx, m, objID, GetObjectTypeFromEntMutation(m)); err != nil {
-		// 		return err
-		// 	}
-		// }
-	}
-
-	org, orgExists := m.OwnerID()
-	if exists && orgExists {
-		req := fgax.TupleRequest{
-			SubjectID:   org,
-			SubjectType: generated.TypeOrganization,
-			ObjectID:    objID,
-			ObjectType:  GetObjectTypeFromEntMutation(m),
-		}
-
-		logx.FromContext(ctx).Debug().Interface("request", req).
-			Msg("creating parent relationship tuples")
-
-		orgTuple, err := getTupleKeyFromRole(req, fgax.ParentRelation)
-		if err != nil {
-			return err
-		}
-
-		if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{orgTuple}, nil); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
-			return ErrInternalServerError
 		}
 	}
 

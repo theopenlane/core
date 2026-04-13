@@ -51,10 +51,17 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 
 	objectType := rule.GetFGAObjectType(q)
 
-	// skip filter if th subject has full organization view access for the object type
-	if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
-		if errors.Is(err, privacy.Allow) {
-			return nil
+	// Never skip the filter for organization queries, as we need to ensure the user has access to the organization itself
+	isOrganizationQuery := strings.EqualFold(objectType, "organization")
+
+	if !isOrganizationQuery {
+		// skip filter if the subject has full organization view access for the object type
+		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
+			logx.FromContext(ctx).Error().Str("object_type", objectType).Err(err).Msg("checking subject scope for object type")
+			if errors.Is(err, privacy.Allow) {
+				logx.FromContext(ctx).Error().Str("object_type", objectType).Msg("skipping filter because subject has full organization view access for object type")
+				return nil
+			}
 		}
 	}
 

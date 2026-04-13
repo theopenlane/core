@@ -21724,7 +21724,7 @@ type AssessmentHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -41466,6 +41466,8 @@ enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/commo
   ADMIN
   MEMBER
   OWNER
+  SUPER_ADMIN
+  AUDITOR
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -45419,6 +45421,7 @@ ProgramMembershipHistoryRole is enum for the field role
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
+  AUDITOR
 }
 """
 ProgramMembershipHistoryWhereInput is used for filtering ProgramMembershipHistory objects.

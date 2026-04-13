@@ -124,26 +124,6 @@ func (_u *AssessmentHistoryUpdate) ClearTags() *AssessmentHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentHistoryUpdate) SetOwnerID(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableOwnerID(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentHistoryUpdate) ClearOwnerID() *AssessmentHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetName sets the "name" field.
 func (_u *AssessmentHistoryUpdate) SetName(v string) *AssessmentHistoryUpdate {
 	_u.mutation.SetName(v)
@@ -335,9 +315,6 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assessmenthistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldOwnerID, field.TypeString)
 	}
@@ -482,26 +459,6 @@ func (_u *AssessmentHistoryUpdateOne) AppendTags(v []string) *AssessmentHistoryU
 // ClearTags clears the value of the "tags" field.
 func (_u *AssessmentHistoryUpdateOne) ClearTags() *AssessmentHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssessmentHistoryUpdateOne) SetOwnerID(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableOwnerID(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssessmentHistoryUpdateOne) ClearOwnerID() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -725,9 +682,6 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assessmenthistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldOwnerID, field.TypeString)

@@ -244,7 +244,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			parentOrgID:    testUser2.OrganizationID,
 			client:         suite.client.api,
 			ctx:            orgUser.UserCtx,
-			errorMsg:       notAuthorizedErrorMsg,
+			errorMsg:       notFoundErrorMsg,
 		},
 		{
 			name:           "organization with parent org using personal access token, not allowed",

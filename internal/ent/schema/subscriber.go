@@ -166,6 +166,7 @@ func (Subscriber) Policy() ent.Policy {
 		policy.WithMutationRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.VerifyToken](),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

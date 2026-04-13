@@ -7,13 +7,18 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -96,6 +101,29 @@ var defaultOrgHookFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 }
 
+// createOrgOwnerParentTuple creates the tuple for the parent org owner relationship
+func createOrgOwnerParentTuple(ctx context.Context, m ent.Mutation, objectID string) ([]fgax.TupleKey, error) {
+	var addTuples []fgax.TupleKey
+
+	// create the tuple for the parent org owner relationship without the subject id
+	// this will be filled in by getTuplesToAdd based on the owner id field
+	tr := fgax.TupleRequest{
+		SubjectType: generated.TypeOrganization,
+		ObjectID:    objectID,                              // this is the object id being created
+		ObjectType:  hooks.GetObjectTypeFromEntMutation(m), // this is the object type being created
+		Relation:    fgax.ParentContextRelation,
+	}
+
+	t, err := hooks.GetTuplesToAdd(ctx, m, tr, ownerFieldName)
+	if err != nil {
+		return nil, err
+	}
+
+	addTuples = append(addTuples, t...)
+
+	return addTuples, nil
+}
+
 // orgHookCreateFunc is a HookFunc that sets the owner on create mutations
 var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -134,6 +162,31 @@ var orgHookCreateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 			// 	return nil, err
 			// }
+
+			switch strcase.SnakeCase(m.Type()) {
+			case assessmentresponse.Label, campaigntarget.Label, trustcenterwatermarkconfig.Label, documentdata.Label:
+				return retVal, err
+			}
+
+			objectID, err := hooks.GetObjectIDFromEntValue(retVal)
+			if err != nil {
+				return nil, err
+			}
+
+			tuples, err := createOrgOwnerParentTuple(ctx, m, objectID)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization owner parent tuple")
+
+				return nil, err
+			}
+
+			if len(tuples) > 0 {
+				if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, tuples, nil); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to write organization owner parent tuples")
+
+					return nil, ErrInternalServerError
+				}
+			}
 
 			return retVal, err
 		})

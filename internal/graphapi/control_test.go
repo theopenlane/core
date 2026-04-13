@@ -471,7 +471,7 @@ func TestMutationCreateControl(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "user authorized, they were added to the program",
+			name: "admin authorized, they were added to the program",
 			request: testclient.CreateControlInput{
 				RefCode:    "A-7",
 				ProgramIDs: []string{program1.ID},
@@ -480,7 +480,7 @@ func TestMutationCreateControl(t *testing.T) {
 			ctx:    adminUser.UserCtx,
 		},
 		{
-			name: "user authorized, user not authorized to one of the programs",
+			name: "admin authorized, admin authorized to one of the programs",
 			request: testclient.CreateControlInput{
 				RefCode:    "A-8",
 				ProgramIDs: []string{program1.ID, program2.ID},

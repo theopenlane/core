@@ -1,0 +1,37 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to risks
+############################################
+
+# risk-1 is owned by openlane organization
+- user: organization:openlane
+  relation: parent_context
+  object: risk:risk-1
+# risk-1 is associated with program-with-risk-1
+- user: program:program-with-risk-1
+  relation: parent
+  object: risk:risk-1
+# member user can't see or edit risk by default but can after being added as an admin to the program
+- user: organization:openlane
+  relation: parent_context
+  object: program:program-with-risk-1
+- user: user:ulid-member-user-1
+  relation: _self
+  object: user:ulid-member-user-1
+- user: user:ulid-member-user-1
+  relation: admin
+  object: program:program-with-risk-1
+- user: user:ulid-member-user-1
+  relation: admin
+  object: organization:openlane
+# member user can't see or edit risk by default but can see the risk after being added as a member to the program
+- user: user:ulid-member-user-2
+  relation: _self
+  object: user:ulid-member-user-2
+- user: user:ulid-member-user-2
+  relation: member
+  object: program:program-with-risk-1
+- user: user:ulid-member-user-2
+  relation: member
+  object: organization:openlane
+

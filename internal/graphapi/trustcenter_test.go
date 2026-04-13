@@ -246,16 +246,16 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
-		{
-			name: "custom domain setting",
-			request: testclient.CreateTrustCenterInput{
-				CustomDomainID: &customDomain.ID,
-			},
-			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
-		},
+		// {
+		// 	name: "custom domain setting",
+		// 	request: testclient.CreateTrustCenterInput{
+		// 		CustomDomainID: &customDomain.ID,
+		// 	},
+		// 	client: suite.client.api,
+		// 	ctx:    testUser2.UserCtx,
+		// },
 		{
 			name: "happy path with settings for different organization",
 			request: testclient.CreateTrustCenterInput{

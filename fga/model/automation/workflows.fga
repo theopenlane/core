@@ -12,7 +12,7 @@ type workflow_definition
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_workflow_definition from parent_context

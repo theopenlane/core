@@ -396,13 +396,13 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherViewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, testUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the control objective
-	_, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+	_, err := suite.client.api.GetControlObjectiveByID(anotherViewUser.UserCtx, controlObjective.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	testCases := []struct {
@@ -534,7 +534,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the control objective now
-				res, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+				res, err := suite.client.api.GetControlObjectiveByID(anotherViewUser.UserCtx, controlObjective.ID)
 				assert.NilError(t, err)
 				assert.Check(t, res != nil)
 				assert.Check(t, is.Equal(controlObjective.ID, res.ControlObjective.ID))

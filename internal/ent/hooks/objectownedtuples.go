@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -38,24 +39,29 @@ func HookObjectOwnedTuples(parents []string, ownerRelation string, skipCreateUse
 
 			var addTuples []fgax.TupleKey
 
-			// if skip := skipCreateUserPermissions(ctx, m); !skip {
-			// 	// add user permissions to the object on creation
-			// 	objCaller, ok := auth.CallerFromContext(ctx)
-			// 	if !ok || objCaller == nil {
-			// 		return nil, auth.ErrNoAuthUser
-			// 	}
+			// TODO: cleanup
+			objectType := GetObjectTypeFromEntMutation(m)
 
-			// 	// add user permissions to the object as the parent on creation
-			// 	userTuple := fgax.GetTupleKey(fgax.TupleRequest{
-			// 		SubjectID:   objCaller.SubjectID,
-			// 		SubjectType: objCaller.SubjectType(),
-			// 		ObjectID:    objectID,                        // this is the object id being created
-			// 		ObjectType:  GetObjectTypeFromEntMutation(m), // this is the object type being created
-			// 		Relation:    ownerRelation,
-			// 	})
+			if ownerRelation != fgax.ParentRelation {
+				// if objectType == "note" {
+				log.Error().Str("objectType", objectType).Msg("object type is note, skipping creating user permission tuple to avoid recursive loop with the note creation in the create parent tuples function")
+				// add user permissions to the object on creation
+				objCaller, ok := auth.CallerFromContext(ctx)
+				if !ok || objCaller == nil {
+					return nil, auth.ErrNoAuthUser
+				}
 
-			// 	addTuples = append(addTuples, userTuple)
-			// }
+				// add user permissions to the object as the parent on creation
+				userTuple := fgax.GetTupleKey(fgax.TupleRequest{
+					SubjectID:   objCaller.SubjectID,
+					SubjectType: objCaller.SubjectType(),
+					ObjectID:    objectID,   // this is the object id being created
+					ObjectType:  objectType, // this is the object type being created
+					Relation:    ownerRelation,
+				})
+
+				addTuples = append(addTuples, userTuple)
+			}
 
 			additionalAddTuples, err := createParentTuples(ctx, m, objectID, parents)
 			if err != nil {

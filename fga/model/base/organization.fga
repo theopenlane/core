@@ -33,10 +33,10 @@ type organization
     define can_view_search: [service]
 
     # allow members to invite other members
-    define can_invite_members: can_view or can_edit or can_invite_members from parent
+    define can_invite_members: can_view or can_edit or can_invite_members from parent or can_edit_organization
 
     # only allow users with edit access to the org to invite other admins
-    define can_invite_admins: can_edit or can_invite_admins from parent
+    define can_invite_admins: can_edit or can_invite_admins from parent or can_edit_organization
 
     # only allow super admins and owners to invite other super admins and owners
     define can_invite_super_admins: full_access or can_invite_super_admins from parent

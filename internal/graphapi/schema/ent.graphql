@@ -1605,7 +1605,7 @@ type Assessment implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -12779,28 +12779,75 @@ input CreateOrganizationInput {
   Whether the organization has a dedicated database
   """
   dedicatedDb: Boolean
+  actionPlanCreatorIDs: [ID!]
+  apiTokenCreatorIDs: [ID!]
+  assessmentCreatorIDs: [ID!]
+  assetCreatorIDs: [ID!]
+  campaignCreatorIDs: [ID!]
+  campaignTargetCreatorIDs: [ID!]
+  contactCreatorIDs: [ID!]
   controlCreatorIDs: [ID!]
   controlImplementationCreatorIDs: [ID!]
   controlObjectiveCreatorIDs: [ID!]
+  discussionCreatorIDs: [ID!]
+  emailBrandingCreatorIDs: [ID!]
+  emailTemplateCreatorIDs: [ID!]
+  entityCreatorIDs: [ID!]
   evidenceCreatorIDs: [ID!]
-  assetCreatorIDs: [ID!]
   findingCreatorIDs: [ID!]
-  vulnerabilityCreatorIDs: [ID!]
   groupCreatorIDs: [ID!]
+  identityHolderCreatorIDs: [ID!]
+  integrationCreatorIDs: [ID!]
+  integrationWebhookCreatorIDs: [ID!]
   internalPolicyCreatorIDs: [ID!]
+  jobRunnerCreatorIDs: [ID!]
+  jobRunnerRegistrationTokenCreatorIDs: [ID!]
+  jobRunnerTokenCreatorIDs: [ID!]
+  jobTemplateCreatorIDs: [ID!]
   mappedControlCreatorIDs: [ID!]
   narrativeCreatorIDs: [ID!]
+  notificationTemplateCreatorIDs: [ID!]
+  platformCreatorIDs: [ID!]
   procedureCreatorIDs: [ID!]
   programCreatorIDs: [ID!]
+  remediationCreatorIDs: [ID!]
+  reviewCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
-  identityHolderCreatorIDs: [ID!]
+  scanCreatorIDs: [ID!]
   scheduledJobCreatorIDs: [ID!]
+  scheduledJobRunCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
-  templateCreatorIDs: [ID!]
+  subcontrolCreatorIDs: [ID!]
   subprocessorCreatorIDs: [ID!]
+  systemDetailCreatorIDs: [ID!]
+  taskCreatorIDs: [ID!]
+  templateCreatorIDs: [ID!]
+  trustCenterCreatorIDs: [ID!]
+  trustCenterComplianceCreatorIDs: [ID!]
   trustCenterDocCreatorIDs: [ID!]
+  trustCenterEntityCreatorIDs: [ID!]
+  trustCenterFaqCreatorIDs: [ID!]
+  trustCenterNdaRequestCreatorIDs: [ID!]
   trustCenterSubprocessorCreatorIDs: [ID!]
-  actionPlanCreatorIDs: [ID!]
+  trustCenterWatermarkConfigCreatorIDs: [ID!]
+  userCreatorIDs: [ID!]
+  userSettingCreatorIDs: [ID!]
+  vulnerabilityCreatorIDs: [ID!]
+  workflowAssignmentCreatorIDs: [ID!]
+  workflowAssignmentTargetCreatorIDs: [ID!]
+  workflowDefinitionCreatorIDs: [ID!]
+  workflowEventCreatorIDs: [ID!]
+  workflowInstanceCreatorIDs: [ID!]
+  workflowObjectRefCreatorIDs: [ID!]
+  workflowProposalCreatorIDs: [ID!]
+  campaignsManagerIDs: [ID!]
+  complianceManagerIDs: [ID!]
+  groupManagerIDs: [ID!]
+  policiesManagerIDs: [ID!]
+  registryManagerIDs: [ID!]
+  riskManagerIDs: [ID!]
+  trustCenterManagerIDs: [ID!]
+  workflowsManagerIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -40074,6 +40121,8 @@ enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums
   ADMIN
   MEMBER
   OWNER
+  SUPER_ADMIN
+  AUDITOR
 }
 """
 OrgMembershipWhereInput is used for filtering OrgMembership objects.
@@ -40539,6 +40588,223 @@ type Organization implements Node {
   the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
+  actionPlanCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  apiTokenCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  assessmentCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  assetCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  campaignCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  campaignTargetCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  contactCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   controlCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40632,7 +40898,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  evidenceCreators(
+  discussionCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -40663,7 +40929,100 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  assetCreators(
+  emailBrandingCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  emailTemplateCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  entityCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  evidenceCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -40725,37 +41084,6 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  vulnerabilityCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   groupCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40787,7 +41115,224 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  identityHolderCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrationCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  integrationWebhookCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   internalPolicyCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  jobRunnerCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  jobRunnerRegistrationTokenCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  jobRunnerTokenCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  jobTemplateCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -40880,6 +41425,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  notificationTemplateCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  platformCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   procedureCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40942,6 +41549,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  remediationCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  reviewCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   riskCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40973,7 +41642,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  identityHolderCreators(
+  scanCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -41035,6 +41704,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  scheduledJobRunCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   standardCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -41066,7 +41766,7 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  templateCreators(
+  subcontrolCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -41128,7 +41828,255 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  systemDetailCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  taskCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  templateCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterComplianceCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   trustCenterDocCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterEntityCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterFaqCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterNdaRequestCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -41190,7 +42138,565 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  actionPlanCreators(
+  trustCenterWatermarkConfigCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  userCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  userSettingCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  vulnerabilityCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowAssignmentCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowAssignmentTargetCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowDefinitionCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowEventCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowInstanceCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowObjectRefCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowProposalCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  campaignsManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  complianceManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  groupManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  policiesManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  registryManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  riskManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterManager(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  workflowsManager(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -44396,6 +45902,41 @@ input OrganizationWhereInput {
   avatarUpdatedAtIsNil: Boolean
   avatarUpdatedAtNotNil: Boolean
   """
+  action_plan_creators edge predicates
+  """
+  hasActionPlanCreators: Boolean
+  hasActionPlanCreatorsWith: [GroupWhereInput!]
+  """
+  api_token_creators edge predicates
+  """
+  hasAPITokenCreators: Boolean
+  hasAPITokenCreatorsWith: [GroupWhereInput!]
+  """
+  assessment_creators edge predicates
+  """
+  hasAssessmentCreators: Boolean
+  hasAssessmentCreatorsWith: [GroupWhereInput!]
+  """
+  asset_creators edge predicates
+  """
+  hasAssetCreators: Boolean
+  hasAssetCreatorsWith: [GroupWhereInput!]
+  """
+  campaign_creators edge predicates
+  """
+  hasCampaignCreators: Boolean
+  hasCampaignCreatorsWith: [GroupWhereInput!]
+  """
+  campaign_target_creators edge predicates
+  """
+  hasCampaignTargetCreators: Boolean
+  hasCampaignTargetCreatorsWith: [GroupWhereInput!]
+  """
+  contact_creators edge predicates
+  """
+  hasContactCreators: Boolean
+  hasContactCreatorsWith: [GroupWhereInput!]
+  """
   control_creators edge predicates
   """
   hasControlCreators: Boolean
@@ -44411,35 +45952,80 @@ input OrganizationWhereInput {
   hasControlObjectiveCreators: Boolean
   hasControlObjectiveCreatorsWith: [GroupWhereInput!]
   """
+  discussion_creators edge predicates
+  """
+  hasDiscussionCreators: Boolean
+  hasDiscussionCreatorsWith: [GroupWhereInput!]
+  """
+  email_branding_creators edge predicates
+  """
+  hasEmailBrandingCreators: Boolean
+  hasEmailBrandingCreatorsWith: [GroupWhereInput!]
+  """
+  email_template_creators edge predicates
+  """
+  hasEmailTemplateCreators: Boolean
+  hasEmailTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  entity_creators edge predicates
+  """
+  hasEntityCreators: Boolean
+  hasEntityCreatorsWith: [GroupWhereInput!]
+  """
   evidence_creators edge predicates
   """
   hasEvidenceCreators: Boolean
   hasEvidenceCreatorsWith: [GroupWhereInput!]
-  """
-  asset_creators edge predicates
-  """
-  hasAssetCreators: Boolean
-  hasAssetCreatorsWith: [GroupWhereInput!]
   """
   finding_creators edge predicates
   """
   hasFindingCreators: Boolean
   hasFindingCreatorsWith: [GroupWhereInput!]
   """
-  vulnerability_creators edge predicates
-  """
-  hasVulnerabilityCreators: Boolean
-  hasVulnerabilityCreatorsWith: [GroupWhereInput!]
-  """
   group_creators edge predicates
   """
   hasGroupCreators: Boolean
   hasGroupCreatorsWith: [GroupWhereInput!]
   """
+  identity_holder_creators edge predicates
+  """
+  hasIdentityHolderCreators: Boolean
+  hasIdentityHolderCreatorsWith: [GroupWhereInput!]
+  """
+  integration_creators edge predicates
+  """
+  hasIntegrationCreators: Boolean
+  hasIntegrationCreatorsWith: [GroupWhereInput!]
+  """
+  integration_webhook_creators edge predicates
+  """
+  hasIntegrationWebhookCreators: Boolean
+  hasIntegrationWebhookCreatorsWith: [GroupWhereInput!]
+  """
   internal_policy_creators edge predicates
   """
   hasInternalPolicyCreators: Boolean
   hasInternalPolicyCreatorsWith: [GroupWhereInput!]
+  """
+  job_runner_creators edge predicates
+  """
+  hasJobRunnerCreators: Boolean
+  hasJobRunnerCreatorsWith: [GroupWhereInput!]
+  """
+  job_runner_registration_token_creators edge predicates
+  """
+  hasJobRunnerRegistrationTokenCreators: Boolean
+  hasJobRunnerRegistrationTokenCreatorsWith: [GroupWhereInput!]
+  """
+  job_runner_token_creators edge predicates
+  """
+  hasJobRunnerTokenCreators: Boolean
+  hasJobRunnerTokenCreatorsWith: [GroupWhereInput!]
+  """
+  job_template_creators edge predicates
+  """
+  hasJobTemplateCreators: Boolean
+  hasJobTemplateCreatorsWith: [GroupWhereInput!]
   """
   mapped_control_creators edge predicates
   """
@@ -44451,6 +46037,16 @@ input OrganizationWhereInput {
   hasNarrativeCreators: Boolean
   hasNarrativeCreatorsWith: [GroupWhereInput!]
   """
+  notification_template_creators edge predicates
+  """
+  hasNotificationTemplateCreators: Boolean
+  hasNotificationTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  platform_creators edge predicates
+  """
+  hasPlatformCreators: Boolean
+  hasPlatformCreatorsWith: [GroupWhereInput!]
+  """
   procedure_creators edge predicates
   """
   hasProcedureCreators: Boolean
@@ -44461,50 +46057,195 @@ input OrganizationWhereInput {
   hasProgramCreators: Boolean
   hasProgramCreatorsWith: [GroupWhereInput!]
   """
+  remediation_creators edge predicates
+  """
+  hasRemediationCreators: Boolean
+  hasRemediationCreatorsWith: [GroupWhereInput!]
+  """
+  review_creators edge predicates
+  """
+  hasReviewCreators: Boolean
+  hasReviewCreatorsWith: [GroupWhereInput!]
+  """
   risk_creators edge predicates
   """
   hasRiskCreators: Boolean
   hasRiskCreatorsWith: [GroupWhereInput!]
   """
-  identity_holder_creators edge predicates
+  scan_creators edge predicates
   """
-  hasIdentityHolderCreators: Boolean
-  hasIdentityHolderCreatorsWith: [GroupWhereInput!]
+  hasScanCreators: Boolean
+  hasScanCreatorsWith: [GroupWhereInput!]
   """
   scheduled_job_creators edge predicates
   """
   hasScheduledJobCreators: Boolean
   hasScheduledJobCreatorsWith: [GroupWhereInput!]
   """
+  scheduled_job_run_creators edge predicates
+  """
+  hasScheduledJobRunCreators: Boolean
+  hasScheduledJobRunCreatorsWith: [GroupWhereInput!]
+  """
   standard_creators edge predicates
   """
   hasStandardCreators: Boolean
   hasStandardCreatorsWith: [GroupWhereInput!]
   """
-  template_creators edge predicates
+  subcontrol_creators edge predicates
   """
-  hasTemplateCreators: Boolean
-  hasTemplateCreatorsWith: [GroupWhereInput!]
+  hasSubcontrolCreators: Boolean
+  hasSubcontrolCreatorsWith: [GroupWhereInput!]
   """
   subprocessor_creators edge predicates
   """
   hasSubprocessorCreators: Boolean
   hasSubprocessorCreatorsWith: [GroupWhereInput!]
   """
+  system_detail_creators edge predicates
+  """
+  hasSystemDetailCreators: Boolean
+  hasSystemDetailCreatorsWith: [GroupWhereInput!]
+  """
+  task_creators edge predicates
+  """
+  hasTaskCreators: Boolean
+  hasTaskCreatorsWith: [GroupWhereInput!]
+  """
+  template_creators edge predicates
+  """
+  hasTemplateCreators: Boolean
+  hasTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_creators edge predicates
+  """
+  hasTrustCenterCreators: Boolean
+  hasTrustCenterCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_compliance_creators edge predicates
+  """
+  hasTrustCenterComplianceCreators: Boolean
+  hasTrustCenterComplianceCreatorsWith: [GroupWhereInput!]
+  """
   trust_center_doc_creators edge predicates
   """
   hasTrustCenterDocCreators: Boolean
   hasTrustCenterDocCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_entity_creators edge predicates
+  """
+  hasTrustCenterEntityCreators: Boolean
+  hasTrustCenterEntityCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_faq_creators edge predicates
+  """
+  hasTrustCenterFaqCreators: Boolean
+  hasTrustCenterFaqCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_nda_request_creators edge predicates
+  """
+  hasTrustCenterNdaRequestCreators: Boolean
+  hasTrustCenterNdaRequestCreatorsWith: [GroupWhereInput!]
   """
   trust_center_subprocessor_creators edge predicates
   """
   hasTrustCenterSubprocessorCreators: Boolean
   hasTrustCenterSubprocessorCreatorsWith: [GroupWhereInput!]
   """
-  action_plan_creators edge predicates
+  trust_center_watermark_config_creators edge predicates
   """
-  hasActionPlanCreators: Boolean
-  hasActionPlanCreatorsWith: [GroupWhereInput!]
+  hasTrustCenterWatermarkConfigCreators: Boolean
+  hasTrustCenterWatermarkConfigCreatorsWith: [GroupWhereInput!]
+  """
+  user_creators edge predicates
+  """
+  hasUserCreators: Boolean
+  hasUserCreatorsWith: [GroupWhereInput!]
+  """
+  user_setting_creators edge predicates
+  """
+  hasUserSettingCreators: Boolean
+  hasUserSettingCreatorsWith: [GroupWhereInput!]
+  """
+  vulnerability_creators edge predicates
+  """
+  hasVulnerabilityCreators: Boolean
+  hasVulnerabilityCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_assignment_creators edge predicates
+  """
+  hasWorkflowAssignmentCreators: Boolean
+  hasWorkflowAssignmentCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_assignment_target_creators edge predicates
+  """
+  hasWorkflowAssignmentTargetCreators: Boolean
+  hasWorkflowAssignmentTargetCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_definition_creators edge predicates
+  """
+  hasWorkflowDefinitionCreators: Boolean
+  hasWorkflowDefinitionCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_event_creators edge predicates
+  """
+  hasWorkflowEventCreators: Boolean
+  hasWorkflowEventCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_instance_creators edge predicates
+  """
+  hasWorkflowInstanceCreators: Boolean
+  hasWorkflowInstanceCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_object_ref_creators edge predicates
+  """
+  hasWorkflowObjectRefCreators: Boolean
+  hasWorkflowObjectRefCreatorsWith: [GroupWhereInput!]
+  """
+  workflow_proposal_creators edge predicates
+  """
+  hasWorkflowProposalCreators: Boolean
+  hasWorkflowProposalCreatorsWith: [GroupWhereInput!]
+  """
+  campaigns_manager edge predicates
+  """
+  hasCampaignsManager: Boolean
+  hasCampaignsManagerWith: [GroupWhereInput!]
+  """
+  compliance_manager edge predicates
+  """
+  hasComplianceManager: Boolean
+  hasComplianceManagerWith: [GroupWhereInput!]
+  """
+  group_manager edge predicates
+  """
+  hasGroupManager: Boolean
+  hasGroupManagerWith: [GroupWhereInput!]
+  """
+  policies_manager edge predicates
+  """
+  hasPoliciesManager: Boolean
+  hasPoliciesManagerWith: [GroupWhereInput!]
+  """
+  registry_manager edge predicates
+  """
+  hasRegistryManager: Boolean
+  hasRegistryManagerWith: [GroupWhereInput!]
+  """
+  risk_manager edge predicates
+  """
+  hasRiskManager: Boolean
+  hasRiskManagerWith: [GroupWhereInput!]
+  """
+  trust_center_manager edge predicates
+  """
+  hasTrustCenterManager: Boolean
+  hasTrustCenterManagerWith: [GroupWhereInput!]
+  """
+  workflows_manager edge predicates
+  """
+  hasWorkflowsManager: Boolean
+  hasWorkflowsManagerWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -49326,6 +51067,7 @@ ProgramMembershipRole is enum for the field role
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
+  AUDITOR
 }
 """
 ProgramMembershipWhereInput is used for filtering ProgramMembership objects.
@@ -68289,8 +70031,6 @@ input UpdateAssessmentInput {
   """
   responseDueDuration: Int
   clearResponseDueDuration: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -72289,6 +74029,27 @@ input UpdateOrganizationInput {
   """
   avatarUpdatedAt: Time
   clearAvatarUpdatedAt: Boolean
+  addActionPlanCreatorIDs: [ID!]
+  removeActionPlanCreatorIDs: [ID!]
+  clearActionPlanCreators: Boolean
+  addAPITokenCreatorIDs: [ID!]
+  removeAPITokenCreatorIDs: [ID!]
+  clearAPITokenCreators: Boolean
+  addAssessmentCreatorIDs: [ID!]
+  removeAssessmentCreatorIDs: [ID!]
+  clearAssessmentCreators: Boolean
+  addAssetCreatorIDs: [ID!]
+  removeAssetCreatorIDs: [ID!]
+  clearAssetCreators: Boolean
+  addCampaignCreatorIDs: [ID!]
+  removeCampaignCreatorIDs: [ID!]
+  clearCampaignCreators: Boolean
+  addCampaignTargetCreatorIDs: [ID!]
+  removeCampaignTargetCreatorIDs: [ID!]
+  clearCampaignTargetCreators: Boolean
+  addContactCreatorIDs: [ID!]
+  removeContactCreatorIDs: [ID!]
+  clearContactCreators: Boolean
   addControlCreatorIDs: [ID!]
   removeControlCreatorIDs: [ID!]
   clearControlCreators: Boolean
@@ -72298,63 +74059,183 @@ input UpdateOrganizationInput {
   addControlObjectiveCreatorIDs: [ID!]
   removeControlObjectiveCreatorIDs: [ID!]
   clearControlObjectiveCreators: Boolean
+  addDiscussionCreatorIDs: [ID!]
+  removeDiscussionCreatorIDs: [ID!]
+  clearDiscussionCreators: Boolean
+  addEmailBrandingCreatorIDs: [ID!]
+  removeEmailBrandingCreatorIDs: [ID!]
+  clearEmailBrandingCreators: Boolean
+  addEmailTemplateCreatorIDs: [ID!]
+  removeEmailTemplateCreatorIDs: [ID!]
+  clearEmailTemplateCreators: Boolean
+  addEntityCreatorIDs: [ID!]
+  removeEntityCreatorIDs: [ID!]
+  clearEntityCreators: Boolean
   addEvidenceCreatorIDs: [ID!]
   removeEvidenceCreatorIDs: [ID!]
   clearEvidenceCreators: Boolean
-  addAssetCreatorIDs: [ID!]
-  removeAssetCreatorIDs: [ID!]
-  clearAssetCreators: Boolean
   addFindingCreatorIDs: [ID!]
   removeFindingCreatorIDs: [ID!]
   clearFindingCreators: Boolean
-  addVulnerabilityCreatorIDs: [ID!]
-  removeVulnerabilityCreatorIDs: [ID!]
-  clearVulnerabilityCreators: Boolean
   addGroupCreatorIDs: [ID!]
   removeGroupCreatorIDs: [ID!]
   clearGroupCreators: Boolean
+  addIdentityHolderCreatorIDs: [ID!]
+  removeIdentityHolderCreatorIDs: [ID!]
+  clearIdentityHolderCreators: Boolean
+  addIntegrationCreatorIDs: [ID!]
+  removeIntegrationCreatorIDs: [ID!]
+  clearIntegrationCreators: Boolean
+  addIntegrationWebhookCreatorIDs: [ID!]
+  removeIntegrationWebhookCreatorIDs: [ID!]
+  clearIntegrationWebhookCreators: Boolean
   addInternalPolicyCreatorIDs: [ID!]
   removeInternalPolicyCreatorIDs: [ID!]
   clearInternalPolicyCreators: Boolean
+  addJobRunnerCreatorIDs: [ID!]
+  removeJobRunnerCreatorIDs: [ID!]
+  clearJobRunnerCreators: Boolean
+  addJobRunnerRegistrationTokenCreatorIDs: [ID!]
+  removeJobRunnerRegistrationTokenCreatorIDs: [ID!]
+  clearJobRunnerRegistrationTokenCreators: Boolean
+  addJobRunnerTokenCreatorIDs: [ID!]
+  removeJobRunnerTokenCreatorIDs: [ID!]
+  clearJobRunnerTokenCreators: Boolean
+  addJobTemplateCreatorIDs: [ID!]
+  removeJobTemplateCreatorIDs: [ID!]
+  clearJobTemplateCreators: Boolean
   addMappedControlCreatorIDs: [ID!]
   removeMappedControlCreatorIDs: [ID!]
   clearMappedControlCreators: Boolean
   addNarrativeCreatorIDs: [ID!]
   removeNarrativeCreatorIDs: [ID!]
   clearNarrativeCreators: Boolean
+  addNotificationTemplateCreatorIDs: [ID!]
+  removeNotificationTemplateCreatorIDs: [ID!]
+  clearNotificationTemplateCreators: Boolean
+  addPlatformCreatorIDs: [ID!]
+  removePlatformCreatorIDs: [ID!]
+  clearPlatformCreators: Boolean
   addProcedureCreatorIDs: [ID!]
   removeProcedureCreatorIDs: [ID!]
   clearProcedureCreators: Boolean
   addProgramCreatorIDs: [ID!]
   removeProgramCreatorIDs: [ID!]
   clearProgramCreators: Boolean
+  addRemediationCreatorIDs: [ID!]
+  removeRemediationCreatorIDs: [ID!]
+  clearRemediationCreators: Boolean
+  addReviewCreatorIDs: [ID!]
+  removeReviewCreatorIDs: [ID!]
+  clearReviewCreators: Boolean
   addRiskCreatorIDs: [ID!]
   removeRiskCreatorIDs: [ID!]
   clearRiskCreators: Boolean
-  addIdentityHolderCreatorIDs: [ID!]
-  removeIdentityHolderCreatorIDs: [ID!]
-  clearIdentityHolderCreators: Boolean
+  addScanCreatorIDs: [ID!]
+  removeScanCreatorIDs: [ID!]
+  clearScanCreators: Boolean
   addScheduledJobCreatorIDs: [ID!]
   removeScheduledJobCreatorIDs: [ID!]
   clearScheduledJobCreators: Boolean
+  addScheduledJobRunCreatorIDs: [ID!]
+  removeScheduledJobRunCreatorIDs: [ID!]
+  clearScheduledJobRunCreators: Boolean
   addStandardCreatorIDs: [ID!]
   removeStandardCreatorIDs: [ID!]
   clearStandardCreators: Boolean
-  addTemplateCreatorIDs: [ID!]
-  removeTemplateCreatorIDs: [ID!]
-  clearTemplateCreators: Boolean
+  addSubcontrolCreatorIDs: [ID!]
+  removeSubcontrolCreatorIDs: [ID!]
+  clearSubcontrolCreators: Boolean
   addSubprocessorCreatorIDs: [ID!]
   removeSubprocessorCreatorIDs: [ID!]
   clearSubprocessorCreators: Boolean
+  addSystemDetailCreatorIDs: [ID!]
+  removeSystemDetailCreatorIDs: [ID!]
+  clearSystemDetailCreators: Boolean
+  addTaskCreatorIDs: [ID!]
+  removeTaskCreatorIDs: [ID!]
+  clearTaskCreators: Boolean
+  addTemplateCreatorIDs: [ID!]
+  removeTemplateCreatorIDs: [ID!]
+  clearTemplateCreators: Boolean
+  addTrustCenterCreatorIDs: [ID!]
+  removeTrustCenterCreatorIDs: [ID!]
+  clearTrustCenterCreators: Boolean
+  addTrustCenterComplianceCreatorIDs: [ID!]
+  removeTrustCenterComplianceCreatorIDs: [ID!]
+  clearTrustCenterComplianceCreators: Boolean
   addTrustCenterDocCreatorIDs: [ID!]
   removeTrustCenterDocCreatorIDs: [ID!]
   clearTrustCenterDocCreators: Boolean
+  addTrustCenterEntityCreatorIDs: [ID!]
+  removeTrustCenterEntityCreatorIDs: [ID!]
+  clearTrustCenterEntityCreators: Boolean
+  addTrustCenterFaqCreatorIDs: [ID!]
+  removeTrustCenterFaqCreatorIDs: [ID!]
+  clearTrustCenterFaqCreators: Boolean
+  addTrustCenterNdaRequestCreatorIDs: [ID!]
+  removeTrustCenterNdaRequestCreatorIDs: [ID!]
+  clearTrustCenterNdaRequestCreators: Boolean
   addTrustCenterSubprocessorCreatorIDs: [ID!]
   removeTrustCenterSubprocessorCreatorIDs: [ID!]
   clearTrustCenterSubprocessorCreators: Boolean
-  addActionPlanCreatorIDs: [ID!]
-  removeActionPlanCreatorIDs: [ID!]
-  clearActionPlanCreators: Boolean
+  addTrustCenterWatermarkConfigCreatorIDs: [ID!]
+  removeTrustCenterWatermarkConfigCreatorIDs: [ID!]
+  clearTrustCenterWatermarkConfigCreators: Boolean
+  addUserCreatorIDs: [ID!]
+  removeUserCreatorIDs: [ID!]
+  clearUserCreators: Boolean
+  addUserSettingCreatorIDs: [ID!]
+  removeUserSettingCreatorIDs: [ID!]
+  clearUserSettingCreators: Boolean
+  addVulnerabilityCreatorIDs: [ID!]
+  removeVulnerabilityCreatorIDs: [ID!]
+  clearVulnerabilityCreators: Boolean
+  addWorkflowAssignmentCreatorIDs: [ID!]
+  removeWorkflowAssignmentCreatorIDs: [ID!]
+  clearWorkflowAssignmentCreators: Boolean
+  addWorkflowAssignmentTargetCreatorIDs: [ID!]
+  removeWorkflowAssignmentTargetCreatorIDs: [ID!]
+  clearWorkflowAssignmentTargetCreators: Boolean
+  addWorkflowDefinitionCreatorIDs: [ID!]
+  removeWorkflowDefinitionCreatorIDs: [ID!]
+  clearWorkflowDefinitionCreators: Boolean
+  addWorkflowEventCreatorIDs: [ID!]
+  removeWorkflowEventCreatorIDs: [ID!]
+  clearWorkflowEventCreators: Boolean
+  addWorkflowInstanceCreatorIDs: [ID!]
+  removeWorkflowInstanceCreatorIDs: [ID!]
+  clearWorkflowInstanceCreators: Boolean
+  addWorkflowObjectRefCreatorIDs: [ID!]
+  removeWorkflowObjectRefCreatorIDs: [ID!]
+  clearWorkflowObjectRefCreators: Boolean
+  addWorkflowProposalCreatorIDs: [ID!]
+  removeWorkflowProposalCreatorIDs: [ID!]
+  clearWorkflowProposalCreators: Boolean
+  addCampaignsManagerIDs: [ID!]
+  removeCampaignsManagerIDs: [ID!]
+  clearCampaignsManager: Boolean
+  addComplianceManagerIDs: [ID!]
+  removeComplianceManagerIDs: [ID!]
+  clearComplianceManager: Boolean
+  addGroupManagerIDs: [ID!]
+  removeGroupManagerIDs: [ID!]
+  clearGroupManager: Boolean
+  addPoliciesManagerIDs: [ID!]
+  removePoliciesManagerIDs: [ID!]
+  clearPoliciesManager: Boolean
+  addRegistryManagerIDs: [ID!]
+  removeRegistryManagerIDs: [ID!]
+  clearRegistryManager: Boolean
+  addRiskManagerIDs: [ID!]
+  removeRiskManagerIDs: [ID!]
+  clearRiskManager: Boolean
+  addTrustCenterManagerIDs: [ID!]
+  removeTrustCenterManagerIDs: [ID!]
+  clearTrustCenterManager: Boolean
+  addWorkflowsManagerIDs: [ID!]
+  removeWorkflowsManagerIDs: [ID!]
+  clearWorkflowsManager: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]

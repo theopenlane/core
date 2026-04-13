@@ -401,7 +401,7 @@ func (m *ProgramMembershipMutation) CreateTuplesFromCreate(ctx context.Context) 
 		return err
 	}
 
-	log.Debug().Interface("tuple_request", tuple).Msg("created relationship tuple")
+	log.Error().Interface("tuple_request", tuple).Msg("created relationship tuple")
 
 	return nil
 }

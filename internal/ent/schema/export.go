@@ -126,7 +126,7 @@ func (e Export) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
 		),
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(ent.OpCreate,
 			policy.AllowCreate(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,

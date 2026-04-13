@@ -15,7 +15,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -1926,27 +1925,6 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(t, err)
-
-	// Create the organization parent tuple for the trust center
-	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
-	orgCaller, orgCallerOk := auth.CallerFromContext(ctx)
-	if !orgCallerOk || orgCaller == nil {
-		requireNoError(t, auth.ErrNoAuthUser)
-	}
-	orgID := orgCaller.OrganizationID
-
-	parentReq := fgax.TupleRequest{
-		SubjectID:   orgID,
-		SubjectType: "organization",
-		ObjectID:    trustCenter.ID,
-		ObjectType:  "trust_center",
-		Relation:    "parent",
-	}
-
-	tuple := fgax.GetTupleKey(parentReq)
-	if _, err := tc.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(t, err)
-	}
 
 	return trustCenter
 }

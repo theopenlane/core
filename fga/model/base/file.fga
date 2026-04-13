@@ -14,10 +14,10 @@ type file
     define editor: [user, service, group#member] or parent_editor or deleter
     define viewer: [user, service, group#member] or editor or parent_viewer or tc_doc_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # special handling for trust center documents - only NDA signed users can view files
-    define tc_doc_viewer: nda_signed from tc_doc_parent
+    define tc_doc_viewer: nda_signed from tc_doc_parent or member from tc_doc_parent
     define tc_doc_editor: can_edit from tc_doc_parent
     define tc_doc_deleter: can_delete from tc_doc_parent
 

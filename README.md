@@ -193,8 +193,10 @@ These are also created automatically when you setup the test user using `task cl
 ### OpenFGA Playground
 
 You can load up a local openFGA environment with the compose setup in this
-repository; `task fga:up` - this will launch an interactive playground where you
+repository; `task docker:fga:up` - this will launch an interactive playground where you
 can model permissions model(s) or changes to the models
+
+If you have issues with CORS + loopback error, see this [issue](https://github.com/openfga/openfga/issues/338#issuecomment-3511304207) on openfga for a workaround.
 
 ### Creating a new Schema
 

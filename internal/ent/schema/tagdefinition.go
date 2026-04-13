@@ -145,6 +145,7 @@ func (TagDefinition) Policy() ent.Policy {
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

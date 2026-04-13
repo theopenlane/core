@@ -140,14 +140,6 @@ type SystemOwnedMutation interface {
 	SetInternalNotes(string)
 }
 
-// OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
-type OrgOwnedMutation interface {
-	utils.GenericMutation
-
-	OwnerID() (string, bool)
-	SetOwnerID(string)
-}
-
 // HookSystemOwnedCreate will automatically set the system_owned field to true if the user is a system admin
 // and ensure there is an owner id when creating not system owned objects
 func HookSystemOwnedCreate() ent.Hook {
@@ -170,7 +162,7 @@ func HookSystemOwnedCreate() ent.Hook {
 			mut.SetSystemOwned(false)
 
 			// ensure there is an owner id set for non system owned objects
-			orgMut, ok := m.(OrgOwnedMutation)
+			orgMut, ok := m.(utils.OrgOwnedMutation)
 			if !ok && orgMut == nil {
 				return next.Mutate(ctx, m)
 			}

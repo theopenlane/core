@@ -55,7 +55,7 @@ func TestQueryGroupMembers(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
 			expected:    nil, // no results are returned because the group provided is not found for that user
-			errExpected: false,
+			errExpected: true,
 		},
 		{
 			name:        "invalid-id",

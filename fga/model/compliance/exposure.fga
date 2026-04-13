@@ -17,10 +17,11 @@ type risk
     define editor: [user, service, group#member] or parent_editor or stakeholder or delegate
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_risk from parent_context or can_edit from parent
-    define parent_viewer: can_view from parent_context or can_view_risk from parent_context or can_view from parent
+    define parent_viewer: can_view_risk from parent_context or can_view from parent
     define parent_context: [organization]
     define parent: [program, control, control_objective, subcontrol, procedure, internal_policy]
 
@@ -36,7 +37,7 @@ type finding
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
      # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_finding from parent_context or can_edit from parent
@@ -56,7 +57,7 @@ type vulnerability
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_view_vulnerability from parent_context or can_edit from parent
@@ -76,7 +77,7 @@ type review
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_review from parent_context or can_edit from parent
@@ -96,7 +97,7 @@ type remediation
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_remediation from parent_context or can_edit from parent
@@ -116,7 +117,7 @@ type scan
     define editor: [user, service, group#member] or parent_editor
     define viewer: [user, service, group#member] or editor or parent_viewer
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
      # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent_context or can_edit_scan from parent_context or can_edit from parent

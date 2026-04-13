@@ -34,3 +34,9 @@
 - user: user:group-editor
   relation: member
   object: organization:openlane
+- user: control:control-with-evidence
+  relation: parent
+  object: evidence:evidence-2
+- user: organization:openlane
+  relation: parent_context
+  object: control:control-with-evidence

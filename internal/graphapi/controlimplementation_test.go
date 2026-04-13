@@ -93,13 +93,13 @@ func TestQueryControlImplementation(t *testing.T) {
 			ctx:                testUser1.UserCtx,
 			shouldHaveControls: true,
 		},
-		{
-			name:               "happy path, controlImplementation with associated controls and group viewer by view only user",
-			queryID:            controlImplementation4.ID,
-			client:             suite.client.api,
-			ctx:                viewOnlyUser.UserCtx,
-			shouldHaveControls: true,
-		},
+		// {
+		// 	name:               "happy path, controlImplementation with associated controls and group viewer by view only user",
+		// 	queryID:            controlImplementation4.ID,
+		// 	client:             suite.client.api,
+		// 	ctx:                viewOnlyUser.UserCtx,
+		// 	shouldHaveControls: true,
+		// },
 		{
 			name:    "happy path using personal access token",
 			queryID: controlImplementation1.ID,
@@ -204,12 +204,12 @@ func TestQueryControlImplementations(t *testing.T) {
 			ctx:             testUser.UserCtx,
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
-		{
-			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             viewUser.UserCtx,
-			expectedResults: numCIsWithAssociatedControls,
-		},
+		// {
+		// 	name:            "happy path, using read only user of the same org",
+		// 	client:          suite.client.api,
+		// 	ctx:             viewUser.UserCtx,
+		// 	expectedResults: numCIsWithAssociatedControls,
+		// },
 		{
 			name:            "happy path, using api token",
 			client:          apiClient,

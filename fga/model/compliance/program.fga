@@ -12,11 +12,11 @@ type program
     define editor: [user, service, group#member] or admin or parent_editor
     define viewer: [user, service, group#member] or member or editor or parent_viewer or auditor
     define blocked: [user, service, group#member]
-    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent_context) and can_view
+    define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
 
     # roles in the program membership
-    define admin: ([user] or full_access from parent_context) and member from parent_context
-    define member: [user] and member from parent_context
+    define admin: ([user] or full_access from parent_context)
+    define member: [user]
     define auditor: [user]
 
     # allow members to invite other members

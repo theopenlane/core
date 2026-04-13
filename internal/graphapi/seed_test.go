@@ -111,7 +111,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 
 		// add the user to the organization
 		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
-		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
+		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleMember, testUser1.OrganizationID)
 
 		// setup a test user that is an admin of an organization
 		adminUser = suite.userBuilder(ctx, t)

@@ -18,6 +18,7 @@ import (
 )
 
 func TestQueryEvidence(t *testing.T) {
+	evidenceNoParent := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	program := (&ProgramBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
 	(&ProgramMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID, ProgramID: program.ID}).MustNew(adminUser.UserCtx, t)
@@ -41,7 +42,13 @@ func TestQueryEvidence(t *testing.T) {
 		errorMsg string
 	}{
 		{
-			name:    "happy path, creator of the evidence",
+			name:    "happy path, creator of the evidence no parent",
+			queryID: evidenceNoParent.ID,
+			client:  suite.client.api,
+			ctx:     adminUser.UserCtx,
+		},
+		{
+			name:    "happy path, creator of the evidence with program parent",
 			queryID: evidence.ID,
 			client:  suite.client.api,
 			ctx:     adminUser.UserCtx,
@@ -65,8 +72,22 @@ func TestQueryEvidence(t *testing.T) {
 			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
-			name:     "read only user in organization, no access",
+			name:     "read only user in organization, no access given via parent",
 			queryID:  evidence.ID,
+			client:   suite.client.api,
+			ctx:      viewOnlyUser2.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "read only user in organization, no access",
+			queryID:  evidenceNoParent.ID,
+			client:   suite.client.api,
+			ctx:      viewOnlyUser.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "read only user 2 in organization, no access",
+			queryID:  evidenceNoParent.ID,
 			client:   suite.client.api,
 			ctx:      viewOnlyUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
@@ -84,14 +105,14 @@ func TestQueryEvidence(t *testing.T) {
 			ctx:     context.Background(),
 		},
 		{
-			name:     "Evidence not found, invalid ID",
+			name:     "evidence not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:     "Evidence not found, using not authorized user",
+			name:     "evidence not found, using not authorized user",
 			queryID:  evidence.ID,
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
@@ -129,7 +150,7 @@ func TestQueryEvidence(t *testing.T) {
 	}
 
 	// delete created evidence
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID, evidenceNoParent.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 }

@@ -16,26 +16,31 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 )
 
 // parentObjectMap is used to add additional object types to the parent type
 // for example, having edit to a group should also allow edit access to the group settings and group membership, but these are not separate schemas in ent, so they would not be picked up by the generator without this map
 var parentObjectMap = map[string][]string{
-	"group_setting":        {"group"},
-	"group_membership":     {"group"},
-	"organization_setting": {"organization"},
-	"org_membership":       {"organization"},
-	"program_membership":   {"program"},
-	"subcontrol":           {"control"},
-	"user_setting":         {"user"},
+	"group_setting":          {"group"},
+	"group_membership":       {"group"},
+	"organization_setting":   {"organization"},
+	"org_membership":         {"organization"},
+	"program_membership":     {"program"},
+	"subcontrol":             {"control"},
+	"control_implementation": {"control"},
+	"control_objective":      {"control"},
+	"user_setting":           {"user"},
 }
 
 // schemaInfo holds information about an ent schema that is relevant for generating FGA permissions, such as the name of the schema and whether it has create access rules defined in its Policy function.
 type schemaInfo struct {
-	name                 string
-	canCreateAccess      bool
-	canCreateServiceOnly bool
+	name                  string
+	canCreateAccess       bool
+	canCreateServiceOnly  bool
+	excludeFromGeneration bool
+	onlyAllowCreate       bool
 }
 
 const (
@@ -43,6 +48,12 @@ const (
 	checkServiceCreateAccess = "CheckServiceCreateAccess"
 	// checkCreateAccess is the name of the function in the policy that checks if the user has create access (either service or user)
 	checkCreateAccess = "CheckCreateAccess"
+	// allowCreate is the name of the function in the policy that allows create access to everyone, this is used to determine if a schema should have a can_create relation defined for it with no access rules since it is open to everyone
+	allowCreate = "AllowCreate"
+	// allowForSystemAdmin is the name of the function in the policy that allows access for system admins, if a schema only has this function in its policy and no other access rules, we will exclude it from generation since it does not have any organization-level access rules defined
+	allowForSystemAdmin = "AllowMutationIfSystemAdmin"
+	// allowForSystemAdminQuery is the name of the function in the policy that allows query access for system admins, if a schema only has this function in its policy and no other access rules, we will exclude it from generation since it does not have any organization-level access rules defined
+	allowForSystemAdminQuery = "AllowQueryIfSystemAdmin"
 	// fullAccessRelation is the name of the relation for org owners and super admins
 	fullAccessRelation = "full_access"
 	// ownerRelation is the name of the relation for only organization owner
@@ -77,7 +88,11 @@ func main() {
 	for i, typeName := range types {
 		fgaType := strcase.SnakeCase(typeName.name)
 
-		canViewRelations := []string{fmt.Sprintf("can_edit_%s", fgaType)}
+		canViewRelations := []string{}
+		if !typeName.onlyAllowCreate {
+			canViewRelations = append(canViewRelations, fmt.Sprintf("can_edit_%s", fgaType))
+		}
+
 		canEditRelations := []string{fmt.Sprintf("can_delete_%s", fgaType)}
 		canDeleteRelations := []string{}
 		creatorRelations := []string{fmt.Sprintf("%s_creator", fgaType)}
@@ -115,13 +130,17 @@ func main() {
 		slices.Sort(creatorRelations)
 
 		buf.WriteString(fmt.Sprintf("    define can_view_%s: [service, user, group#member] or %s\n", fgaType, strings.Join(canViewRelations, " or ")))
-		buf.WriteString(fmt.Sprintf("    define can_edit_%s: [service, user, group#member] or %s\n", fgaType, strings.Join(canEditRelations, " or ")))
-		if len(canDeleteRelations) > 0 {
 
-			buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user, group#member] or %s\n", fgaType, strings.Join(canDeleteRelations, " or ")))
-		} else {
-			buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user, group#member]\n", fgaType))
+		if !typeName.onlyAllowCreate {
+			buf.WriteString(fmt.Sprintf("    define can_edit_%s: [service, user, group#member] or %s\n", fgaType, strings.Join(canEditRelations, " or ")))
+			if len(canDeleteRelations) > 0 {
+
+				buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user, group#member] or %s\n", fgaType, strings.Join(canDeleteRelations, " or ")))
+			} else {
+				buf.WriteString(fmt.Sprintf("    define can_delete_%s: [service, user, group#member]\n", fgaType))
+			}
 		}
+
 		if typeName.canCreateAccess {
 			buf.WriteString(fmt.Sprintf("    define %s_creator: [group#member]\n", fgaType))
 		}
@@ -129,7 +148,13 @@ func main() {
 		var createExpr []string
 		if typeName.canCreateAccess {
 			// add access for org level can_edit and can_edit_object for the object, this allows api tokens to create objects if they have "write" access to the object type.
-			createExpr = append(createExpr, "can_edit", fmt.Sprintf("can_edit_%s", fgaType), fmt.Sprintf("%s_creator", fgaType))
+			createExpr = append(createExpr, "can_edit")
+
+			if !typeName.onlyAllowCreate {
+				createExpr = append(createExpr, fmt.Sprintf("can_edit_%s", fgaType))
+			}
+
+			createExpr = append(createExpr, fmt.Sprintf("%s_creator", fgaType))
 		}
 
 		createExpr = append(createExpr, roles.createRoles[fgaType]...)
@@ -276,6 +301,19 @@ func (r *roleInfo) addInheritedRoles() {
 			}
 		}
 	}
+
+	// deduplicate roles for each object
+	for obj := range r.crudRoles {
+		r.crudRoles[obj] = lo.Uniq(r.crudRoles[obj])
+	}
+
+	for obj := range r.viewRoles {
+		r.viewRoles[obj] = lo.Uniq(r.viewRoles[obj])
+	}
+
+	for obj := range r.createRoles {
+		r.createRoles[obj] = lo.Uniq(r.createRoles[obj])
+	}
 }
 
 // findAllSchemas looks for all checks in the ent schemas directory in order to get all schemas
@@ -338,7 +376,11 @@ func findAllSchemas(schemaDir string) ([]schemaInfo, error) {
 			schema.functionContainsCheckCreateAccess(fn.Body)
 		}
 
-		if schema.name != "" {
+		if schema.excludeFromGeneration {
+			fmt.Println("excluding schema from generation due to only having system admin access:", schema.name)
+		}
+
+		if schema.name != "" && !schema.excludeFromGeneration {
 			schemas = append(schemas, schema)
 		}
 	}
@@ -389,6 +431,9 @@ func receiverTypeName(fn *ast.FuncDecl) (string, bool) {
 }
 
 func (s *schemaInfo) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
+	hasSystemAdminPolicy := false
+	alwaysAllowCreate := false
+	countPolicy := 0
 	ast.Inspect(body, func(n ast.Node) bool {
 		if n == nil {
 			return false
@@ -409,19 +454,43 @@ func (s *schemaInfo) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
 			return true
 		}
 
-		if pkgIdent.Name == "policy" && sel.Sel != nil && sel.Sel.Name == checkServiceCreateAccess {
-			s.canCreateServiceOnly = true
-			s.canCreateAccess = false
-			return false
-
+		if (pkgIdent.Name != "policy" && pkgIdent.Name != "rule") || sel.Sel == nil {
+			return true
 		}
 
-		if pkgIdent.Name == "policy" && sel.Sel != nil && sel.Sel.Name == checkCreateAccess {
+		currentIsAdmin := false
+		switch sel.Sel.Name {
+		case checkServiceCreateAccess:
+			s.canCreateServiceOnly = true
+			s.canCreateAccess = false
+		case checkCreateAccess:
 			s.canCreateServiceOnly = false
 			s.canCreateAccess = true
-			return false
+		case allowCreate:
+			alwaysAllowCreate = true
+			s.canCreateAccess = true
+		case allowForSystemAdmin:
+			hasSystemAdminPolicy = true
+			currentIsAdmin = true
+		}
+
+		// if the function is not the top level "New Policy or an "With" function (e.g. WithMutationRules), update the count
+		// this is to ensure we exclude anything that is just a system admin allowed mutation
+		if !strings.HasPrefix(sel.Sel.Name, "NewPolicy") && !strings.HasPrefix(sel.Sel.Name, "With") && !currentIsAdmin && sel.Sel.Name != allowForSystemAdminQuery {
+			countPolicy++
 		}
 
 		return true
 	})
+
+	// do not generate permissions for schemas that only have system admin access since they do not have any organization-level access rules defined
+	if countPolicy == 0 && hasSystemAdminPolicy {
+		s.excludeFromGeneration = true
+	}
+
+	// if there is only a create policy and no edit, and include admin only relations, this should be allowed to create but skip crud edit
+	// and delete tuples
+	if countPolicy == 1 && hasSystemAdminPolicy && (s.canCreateAccess || s.canCreateServiceOnly || alwaysAllowCreate) {
+		s.onlyAllowCreate = true
+	}
 }

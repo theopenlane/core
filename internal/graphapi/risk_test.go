@@ -17,11 +17,14 @@ import (
 )
 
 func TestQueryRisk(t *testing.T) {
+	viewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &viewUser, enums.RoleMember, testUser1.OrganizationID)
+
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	// add adminUser to the program so that they can create a Risk
+	// add viewer user to the program so that they can see/edit risk
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
+		UserID: viewUser.ID, Role: enums.RoleAdmin.String()}).
 		MustNew(testUser1.UserCtx, t)
 	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
@@ -42,13 +45,18 @@ func TestQueryRisk(t *testing.T) {
 		{
 			name:     "read only user, same org, no access to the program",
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      viewOnlyUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
-			name:   "admin user, access to the program",
+			name:   "admin user, has full access to risks",
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
+		},
+		{
+			name:   "member user, but has access to the program",
+			client: suite.client.api,
+			ctx:    viewUser.UserCtx,
 		},
 		{
 			name:   "happy path using personal access token",
@@ -448,12 +456,12 @@ func TestMutationUpdateRisk(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
 	risk := (&RiskBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
+	// create another viewer user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherViewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, testUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -461,7 +469,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 	anotherStakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the risk
-	_, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
+	_, err := suite.client.api.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	testCases := []struct {
@@ -568,7 +576,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the risk now
-				res, err := suite.client.api.GetRiskByID(anotherAdminUser.UserCtx, risk.ID)
+				res, err := suite.client.api.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(risk.ID, res.Risk.ID))
