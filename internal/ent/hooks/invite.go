@@ -7,11 +7,11 @@ import (
 
 	"entgo.io/ent"
 
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"

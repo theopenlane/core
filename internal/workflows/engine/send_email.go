@@ -11,10 +11,10 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 )
 

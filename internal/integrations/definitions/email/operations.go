@@ -17,4 +17,3 @@ var handleSendCampaign = providerkit.WithClientRequestConfig(emailClientRef, sen
 
 	return nil, nil
 })
-

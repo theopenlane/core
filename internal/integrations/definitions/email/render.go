@@ -28,7 +28,6 @@ type renderedEnvelope struct {
 	Text string
 }
 
-
 // renderDBEnvelope renders a DB-sourced email template using Go template execution.
 // Subject and body templates are executed against the data map; the body is optionally
 // composed with a system base template when the metadata specifies a base template key.
@@ -81,7 +80,6 @@ func renderDBEnvelope(ctx context.Context, db *generated.Client, emailRecord *ge
 
 	return &renderedEnvelope{Subject: subject, HTML: htmlBody, Text: textBody}, nil
 }
-
 
 // executeTextTemplate parses and executes a text/template string against the data map
 func executeTextTemplate(name, tmplStr string, data map[string]any) (string, error) {
@@ -193,5 +191,3 @@ var emailSanitizePolicy = func() *bluemonday.Policy {
 func renderTimeHTMLSanitize(html string) string {
 	return emailSanitizePolicy.Sanitize(html)
 }
-
-
