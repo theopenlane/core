@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/oklog/ulid/v2"
 	echo "github.com/theopenlane/echox"
@@ -17,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -41,7 +42,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	ctxWithToken := token.NewContextWithResetToken(reqCtx, req.Token)
 
 	// lookup user from db based on provided token
-	entUser, resetTokenRecord, err := h.getUserByResetToken(ctxWithToken, req.Token)
+	entUser, err := h.getUserByResetToken(ctxWithToken, req.Token)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user token")
 
@@ -52,10 +53,17 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
-	if resetTokenRecord.TTL == nil || resetTokenRecord.Secret == nil {
-		logx.FromContext(reqCtx).Error().Msg("reset token missing required fields")
+	// ent user to &User for funcs
+	user := &User{
+		ID:    entUser.ID,
+		Email: entUser.Email,
+	}
 
-		return h.BadRequest(ctx, ErrPassWordResetTokenInvalid, openapi)
+	// set tokens for request
+	if err := user.setResetTokens(entUser, req.Token); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set reset tokens for request")
+
+		return h.BadRequest(ctx, err, openapi)
 	}
 
 	// Construct the user token from the database fields
@@ -69,10 +77,15 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	token := &tokens.ResetToken{
 		UserID: uid,
 	}
-	token.ExpiresAt = *resetTokenRecord.TTL
+
+	if token.ExpiresAt, err = user.GetPasswordResetExpires(); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
+
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+	}
 
 	// Verify the token is valid with the stored secret
-	if err = token.Verify(resetTokenRecord.Token, *resetTokenRecord.Secret); err != nil {
+	if err = token.Verify(user.GetPasswordResetToken(), user.PasswordResetSecret); err != nil {
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			errMsg := "reset token is expired, please request a new token using forgot-password"
 
@@ -101,23 +114,20 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	if err := h.expireAllResetTokensUserByEmail(userCtx, entUser.Email); err != nil {
+	if err := h.expireAllResetTokensUserByEmail(userCtx, user.Email); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error expiring existing tokens")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	input := email.PasswordResetSuccessRequest{
+	if err := h.sendEmail(userCtx, email.ResetSuccessOp(), email.PasswordResetSuccessRequest{
 		RecipientInfo: email.RecipientInfo{
 			Email:     entUser.Email,
 			FirstName: entUser.FirstName,
 			LastName:  entUser.LastName,
 		},
-	}
-
-	if receipt := h.Gala.EmitWithHeaders(userCtx, email.ResetSuccessOp().Topic(), input,
-		gala.NewHeaders([]string{"email", "auth", "password-reset"}, input)); receipt.Err != nil {
-		logx.FromContext(reqCtx).Error().Err(receipt.Err).Msg("error sending password reset success email")
+	}); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending password reset success email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
@@ -128,4 +138,23 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	}
 
 	return h.Success(ctx, out, openapi)
+}
+
+// setResetTokens sets the fields for the password reset
+func (u *User) setResetTokens(user *generated.User, reqToken string) error {
+	tokens := user.Edges.PasswordResetTokens
+	for _, t := range tokens {
+		if t.Token == reqToken {
+			u.PasswordResetToken = sql.NullString{String: t.Token, Valid: true}
+			u.PasswordResetSecret = *t.Secret
+			u.PasswordResetExpires = sql.NullString{String: t.TTL.Format(time.RFC3339Nano), Valid: true}
+
+			return nil
+		}
+	}
+
+	// This should only happen on a race condition with two request
+	// otherwise, since we get the user by the token, it should always
+	// be there
+	return ErrPassWordResetTokenInvalid
 }

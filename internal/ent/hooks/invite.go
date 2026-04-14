@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
@@ -117,17 +116,14 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
-			input := emaildef.InviteRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteOp(), emaildef.InviteRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				InviterName:   inviterName,
 				OrgName:       orgName,
 				Role:          string(role),
 				Token:         tokenValue,
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.InviteOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "invite"}, input)); receipt.Err != nil {
-				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending email to user")
+			}); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 			}
 
 			return retValue, err
@@ -319,14 +315,11 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			joinedInput := emaildef.InviteJoinedRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteJoinedOp(), emaildef.InviteJoinedRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
 				OrgName:       org.DisplayName,
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.InviteJoinedOp().Topic(), joinedInput,
-				gala.NewHeaders([]string{"email", "invite", "joined"}, joinedInput)); receipt.Err != nil {
-				return retValue, receipt.Err
+			}); err != nil {
+				return retValue, err
 			}
 
 			// delete the invite that has been accepted

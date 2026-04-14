@@ -55,14 +55,6 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: emailUserInputSchema,
 			},
-			MutationListeners: []types.MutationListenerRegistration{
-				{
-					Name:          "email.campaign.active",
-					SchemaType:    "Campaign",
-					OperationName: sendCampaignOp.Name(),
-					Handle:        handleCampaignActivation,
-				},
-			},
 			Operations: append(AllEmailOperations(), types.OperationRegistration{
 				Name:         sendCampaignOp.Name(),
 				Description:  "Dispatch a full email campaign",

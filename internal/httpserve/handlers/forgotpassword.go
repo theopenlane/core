@@ -10,7 +10,6 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -84,14 +83,11 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	input := email.PasswordResetEmailRequest{
+	if err := h.sendEmail(ctx, email.ResetRequestOp(), email.PasswordResetEmailRequest{
 		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 		Token:         meowtoken.Token,
-	}
-
-	if receipt := h.Gala.EmitWithHeaders(ctx, email.ResetRequestOp().Topic(), input,
-		gala.NewHeaders([]string{"email", "auth", "password-reset"}, input)); receipt.Err != nil {
-		return nil, receipt.Err
+	}); err != nil {
+		return nil, err
 	}
 
 	return meowtoken, nil

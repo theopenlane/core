@@ -36094,6 +36094,11 @@ type TemplateContextEntry struct {
 	// These are available in templates but are not user-supplied inputs. The UI
 	// should display them as read-only reference, not as input controls.
 	ReservedFields []string `json:"reservedFields"`
+	// System-provided template variables available in this context, with
+	// human-readable descriptions for the UI variable picker. Each entry
+	// includes the variable name (as used in {{ .name }} syntax) and a
+	// description of what the variable contains.
+	Variables []*TemplateVariable `json:"variables"`
 }
 
 // Return response for createTemplate mutation
@@ -36128,6 +36133,15 @@ type TemplateOrder struct {
 type TemplateUpdatePayload struct {
 	// Updated template
 	Template *Template `json:"template"`
+}
+
+// TemplateVariable describes a single system-provided template variable
+// available for use in email templates.
+type TemplateVariable struct {
+	// The variable key as used in templates (e.g. "companyName" for {{ .companyName }}).
+	Name string `json:"name"`
+	// Human-readable description of what the variable contains.
+	Description string `json:"description"`
 }
 
 // TemplateWhereInput is used for filtering Template objects.

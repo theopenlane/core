@@ -1,24 +1,49 @@
 package hooks
 
 import (
+	"context"
+	"encoding/json"
+
+	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
-var emailGala *gala.Gala
+// sendSystemEmail marshals the input and executes a system email operation via
+// the integration runtime on the ent client
+func sendSystemEmail(ctx context.Context, client *generated.Client, op email.OperationAccessor, input any) error {
+	rt := intruntime.FromClient(ctx, client)
+	if rt == nil {
+		return nil
+	}
 
-// emailConfig holds the runtime email configuration used by hooks that need
-// to construct URLs (e.g. questionnaire auth links). Set during server startup
-var emailConfig email.RuntimeEmailConfig
+	config, err := json.Marshal(input)
+	if err != nil {
+		return err
+	}
 
-// SetEmailGala configures the gala runtime used by hooks to dispatch transactional
-// email events. Must be called during server startup before any hooks fire
-func SetEmailGala(g *gala.Gala) {
-	emailGala = g
+	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID(), op.Name(), config)
+
+	return err
 }
 
-// SetEmailConfig configures the runtime email config used by hooks that need
-// access to email-related URLs. Must be called during server startup before any hooks fire
-func SetEmailConfig(cfg email.RuntimeEmailConfig) {
-	emailConfig = cfg
+// emailProductURL extracts the ProductURL from the runtime email config on the
+// ent client. Returns empty string if the runtime is not configured
+func emailProductURL(ctx context.Context, client *generated.Client) string {
+	rt := intruntime.FromClient(ctx, client)
+	if rt == nil {
+		return ""
+	}
+
+	rc, ok := rt.Registry().RuntimeClient(email.DefinitionID())
+	if !ok {
+		return ""
+	}
+
+	ec, ok := rc.(*email.EmailClient)
+	if !ok {
+		return ""
+	}
+
+	return ec.Config.ProductURL
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -321,51 +320,22 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID stri
 	return response, nil
 }
 
-// HandleMutationListener processes a mutation event for a registered mutation listener.
-// It converts the gala payload, calls the definition handler, resolves the integration
-// by owner, and dispatches the operation when the handler returns config
-func (r *Runtime) HandleMutationListener(ctx context.Context, listener types.MutationListenerRegistration, payload eventqueue.MutationGalaPayload) error {
-	mutationPayload := types.MutationPayload{
-		EntityID:        payload.EntityID,
-		Operation:       payload.Operation,
-		ChangedFields:   payload.ChangedFields,
-		ProposedChanges: payload.ProposedChanges,
-	}
-
-	config, err := listener.Handle(ctx, mutationPayload)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("listener", listener.Name).Str("entity_id", payload.EntityID).Msg("mutation listener handler failed")
-		return err
-	}
-
-	if config == nil {
-		return nil
-	}
-
-	ownerID, _ := payload.ProposedChanges["owner_id"].(string)
-	if ownerID == "" {
-		entity, entityErr := r.DB().Campaign.Get(privacy.DecisionContext(ctx, privacy.Allow), payload.EntityID)
-		if entityErr != nil {
-			logx.FromContext(ctx).Error().Err(entityErr).Str("listener", listener.Name).Str("entity_id", payload.EntityID).Msg("failed loading entity for mutation listener dispatch")
-
-			return entityErr
-		}
-
-		ownerID = entity.OwnerID
-	}
-
+// DispatchForOwner resolves an integration for the given owner and dispatches an operation.
+// When no customer installation exists but the definition is runtime-provisioned,
+// execution falls back to the runtime path
+func (r *Runtime) DispatchForOwner(ctx context.Context, definitionID string, operationName string, ownerID string, config json.RawMessage) error {
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	inst, instErr := r.DB().Integration.Query().Where(
 		integration.OwnerIDEQ(ownerID),
-		integration.DefinitionIDEQ(listener.DefinitionID)).Only(systemCtx)
+		integration.DefinitionIDEQ(definitionID)).Only(systemCtx)
 
 	switch {
 	case ent.IsNotFound(instErr):
-		if r.Registry().IsRuntimeIntegration(listener.DefinitionID) {
-			logx.FromContext(ctx).Debug().Str("listener", listener.Name).Str("owner_id", ownerID).Msg("no customer integration installed, executing via runtime definition")
+		if r.Registry().IsRuntimeIntegration(definitionID) {
+			logx.FromContext(ctx).Debug().Str("definition_id", definitionID).Str("owner_id", ownerID).Msg("no customer integration installed, executing via runtime definition")
 
-			_, runtimeErr := r.ExecuteRuntimeOperation(ctx, listener.DefinitionID, listener.OperationName, config)
+			_, runtimeErr := r.ExecuteRuntimeOperation(ctx, definitionID, operationName, config)
 
 			return runtimeErr
 		}
@@ -377,7 +347,7 @@ func (r *Runtime) HandleMutationListener(ctx context.Context, listener types.Mut
 
 	_, dispatchErr := r.Dispatch(ctx, operations.DispatchRequest{
 		IntegrationID: inst.ID,
-		Operation:     listener.OperationName,
+		Operation:     operationName,
 		Config:        config,
 		RunType:       enums.IntegrationRunTypeEvent,
 	})

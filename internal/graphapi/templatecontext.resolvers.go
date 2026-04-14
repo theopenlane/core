@@ -12,14 +12,21 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/templatecontext"
+	"github.com/theopenlane/core/internal/graphapi/model"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 // TemplateContexts is the resolver for the templateContexts field.
 func (r *queryResolver) TemplateContexts(ctx context.Context) ([]*models.TemplateContextEntry, error) {
-	entries := templatecontext.TemplateContextEntries()
+	vars := emaildef.TemplateVariables()
 
-	return lo.ToSlicePtr(entries), nil
+	entries := lo.Map(vars, func(v models.TemplateVariable, _ int) *models.TemplateContextEntry {
+		return &models.TemplateContextEntry{
+			Description: v.Description,
+		}
+	})
+
+	return entries, nil
 }
 
 // Schema is the resolver for the schema field.
@@ -34,6 +41,16 @@ func (r *templateContextEntryResolver) Schema(ctx context.Context, obj *models.T
 	}
 
 	return result, nil
+}
+
+// Variables is the resolver for the variables field.
+func (r *templateContextEntryResolver) Variables(ctx context.Context, obj *models.TemplateContextEntry) ([]*model.TemplateVariable, error) {
+	return lo.Map(obj.Variables, func(v models.TemplateVariable, _ int) *model.TemplateVariable {
+		return &model.TemplateVariable{
+			Name:        v.Name,
+			Description: v.Description,
+		}
+	}), nil
 }
 
 // TemplateContextEntry returns gqlgenerated.TemplateContextEntryResolver implementation.

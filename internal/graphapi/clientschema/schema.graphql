@@ -81513,6 +81513,13 @@ type TemplateContextEntry {
 	should display them as read-only reference, not as input controls.
 	"""
 	reservedFields: [String!]!
+	"""
+	System-provided template variables available in this context, with
+	human-readable descriptions for the UI variable picker. Each entry
+	includes the variable name (as used in {{ .name }} syntax) and a
+	description of what the variable contains.
+	"""
+	variables: [TemplateVariable!]!
 }
 """
 Return response for createTemplate mutation
@@ -81590,6 +81597,20 @@ type TemplateUpdatePayload {
 	Updated template
 	"""
 	template: Template!
+}
+"""
+TemplateVariable describes a single system-provided template variable
+available for use in email templates.
+"""
+type TemplateVariable {
+	"""
+	The variable key as used in templates (e.g. "companyName" for {{ .companyName }}).
+	"""
+	name: String!
+	"""
+	Human-readable description of what the variable contains.
+	"""
+	description: String!
 }
 """
 TemplateWhereInput is used for filtering Template objects.

@@ -24,8 +24,6 @@ type Registry struct {
 	operationsByTopic map[gala.TopicName]types.OperationRegistration
 	// webhookEventsByTopic maps a topic name to its webhook event registration
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
-	// mutationListeners collects all mutation listener registrations across definitions
-	mutationListeners []types.MutationListenerRegistration
 	// galaListeners collects standalone gala listener registrations across definitions
 	galaListeners []types.GalaListenerRegistration
 }
@@ -90,11 +88,6 @@ func (r *Registry) Register(def types.Definition) error {
 		for _, event := range events {
 			r.webhookEventsByTopic[event.Topic] = event
 		}
-	}
-
-	for _, listener := range def.MutationListeners {
-		listener.DefinitionID = def.ID
-		r.mutationListeners = append(r.mutationListeners, listener)
 	}
 
 	r.galaListeners = append(r.galaListeners, def.GalaListeners...)
@@ -441,14 +434,6 @@ func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
 	defer r.mu.RUnlock()
 
 	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
-}
-
-// MutationListeners returns all registered mutation listener registrations
-func (r *Registry) MutationListeners() []types.MutationListenerRegistration {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	return append([]types.MutationListenerRegistration(nil), r.mutationListeners...)
 }
 
 // GalaListeners returns all registered standalone gala listener registrations

@@ -9,7 +9,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/templatecontext"
 )
 
 // BrandingFromConfig converts a RuntimeEmailConfig into a render.Branding for use with the
@@ -47,30 +46,6 @@ func fontFamilyCSS(font enums.Font) string {
 	default:
 		return ""
 	}
-}
-
-// brandingTemplateData converts an EmailBranding entity to a typed BrandingData struct
-// for template variable access. Templates reference branding values via {{.Branding.PrimaryColor}} etc
-func brandingTemplateData(eb *generated.EmailBranding) *templatecontext.BrandingData {
-	bd := &templatecontext.BrandingData{
-		Name:            eb.Name,
-		BrandName:       eb.BrandName,
-		PrimaryColor:    eb.PrimaryColor,
-		SecondaryColor:  eb.SecondaryColor,
-		BackgroundColor: eb.BackgroundColor,
-		TextColor:       eb.TextColor,
-		ButtonColor:     eb.ButtonColor,
-		ButtonTextColor: eb.ButtonTextColor,
-		LinkColor:       eb.LinkColor,
-		FontFamily:      fontFamilyCSS(eb.FontFamily),
-		IsDefault:       eb.IsDefault,
-	}
-
-	if eb.LogoRemoteURL != nil {
-		bd.Logo = *eb.LogoRemoteURL
-	}
-
-	return bd
 }
 
 // brandingCSS generates CSS rules from EmailBranding color and font fields for injection

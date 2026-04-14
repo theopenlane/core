@@ -1,6 +1,7 @@
 package email
 
 import (
+	"html/template"
 	"strings"
 	"time"
 
@@ -255,16 +256,17 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Verify your email address",
+				Title: "Verify Your Email Address",
 				Intros: []string{
-					"Thank you for registering for the " + cfg.CompanyName + " platform - in order to ensure the security of your account, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
+					"Welcome to " + cfg.CompanyName + " — where compliance isn't just a checkbox.",
+					"Before you get started, let's make sure it's really you. Click below to verify your email:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Verify Email", Link: verifyURL},
+					Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 				}},
 				Outros: []string{
-					verifyURL,
-					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
+					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
+					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
 				},
 			},
 		}
@@ -282,16 +284,19 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 				Name:  req.FirstName,
 				Title: "Welcome to " + cfg.CompanyName + "!",
 				Intros: []string{
-					"Welcome to the " + cfg.CompanyName + " platform - you can now log in to your account.",
-					"We've created a personal Organization just for you to help you get started - you can create additional Organizations for your businesses, or just jump right in to see all the amazing features we've cooked up for you.",
-					"Check out the starter guide at " + cfg.DocsURL + "/getting-started for more information or our end-to-end examples at " + cfg.DocsURL + "/examples for ideas and inspiration.",
+					"We're thrilled to have you here. At " + cfg.CompanyName + ", we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
+				},
+				IntrosUnsafe: []template.HTML{
+					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
+						`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
+						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Go through our onboarding process to get a personalized experience</p>` +
+						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Setup a test program to see all the features our platform has to offer</p>` +
+						`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
+						`</div>`),
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Login", Link: cfg.ProductURL},
+					Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
 				}},
-				Outros: []string{
-					"If you have any questions, please reach out to us at " + cfg.SupportEmail + ".",
-				},
 			},
 		}
 	},
@@ -305,20 +310,27 @@ var inviteEmail = EmailOperation[InviteRequest]{
 	Content: func(cfg RuntimeEmailConfig, req InviteRequest) render.EmailContent {
 		inviteURL := cfg.ProductURL + "/invite?token=" + req.Token
 
+		intro := "You're in — let's build trust without the busywork. " + req.InviterName + " has invited you to collaborate in " + cfg.CompanyName + ", as part of the " + req.OrgName + " organization"
+		if req.Role != "" {
+			intro += " with the role of " + strings.ToUpper(req.Role)
+		}
+
+		intro += "."
+
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Join your team on " + cfg.CompanyName + "!",
+				Title: "You've been invited to join " + cfg.CompanyName + "!",
 				Intros: []string{
-					req.InviterName + " has invited you to use " + cfg.CompanyName + " with them, in an Organization called " + req.OrgName + " with role of " + strings.ToUpper(req.Role) + ".",
-					"Accept the invitation by clicking on the following button:",
+					intro,
+					"To get started (and verify your email), click the link below:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Join Now", Link: inviteURL},
+					Button: render.Button{Text: "Accept Invite", Link: inviteURL},
 				}},
 				Outros: []string{
-					"Or you can copy and paste the following URL into your browser: " + inviteURL,
-					"If you have any questions, please contact " + cfg.SupportEmail + ".",
+					"Or, if you're feeling old school, copy and paste this link into your browser: " + inviteURL,
+					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
 				},
 			},
 		}
@@ -334,10 +346,25 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Collaborate with your team on " + cfg.CompanyName,
+				Title: "You're in — welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
 				Intros: []string{
-					"You've been successfully added to an additional Organization " + req.OrgName + ".",
+					"Welcome to " + cfg.CompanyName + " — we're excited to have you on board with " + req.OrgName + "!",
+					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats — without the manual overhead.",
 				},
+				IntrosUnsafe: []template.HTML{
+					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
+						`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
+						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Complete the onboarding flow to tailor your experience</p>` +
+						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Explore any active <a href="` + cfg.ProductURL + `/programs" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">programs</a> your team is running</p>` +
+						`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
+						`</div>`),
+				},
+				Outros: []string{
+					"When you're ready, hop into the platform and start exploring:",
+				},
+				Actions: []render.Action{{
+					Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
+				}},
 			},
 		}
 	},
@@ -354,17 +381,18 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Reset your password",
+				Title: "Reset your " + cfg.CompanyName + " password",
 				Intros: []string{
-					"We received a password reset request for your " + cfg.CompanyName + " account. If you requested a new password, please click on the button below which links to a page where you can securely set a new password.",
+					"We received a request to reset your " + cfg.CompanyName + " password.",
+					"If that was you, no problem — just click the button below to set a new one:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Reset Password", Link: resetURL},
+					Button: render.Button{Text: "Password Reset", Link: resetURL},
 				}},
 				Outros: []string{
-					"Or you can copy and paste the following URL into your browser: " + resetURL,
-					"For your security, this link will expire after 15 minutes.",
-					"If you did not request a new password, please ignore this email and no action is required on your part. If you have concerns, please contact " + cfg.SupportEmail + " to report an issue - the security of your account is important to us.",
+					"No button? No problem — just paste this link in your browser: " + resetURL,
+					"This link will expire in 15 minutes to keep things secure.",
+					"If you didn't request a password reset, you can safely ignore this email.",
 				},
 			},
 		}
@@ -380,10 +408,10 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Your " + cfg.CompanyName + " Password Has Been Reset",
+				Title: "Your " + cfg.CompanyName + " password has been reset",
 				Intros: []string{
-					"Your " + cfg.CompanyName + " password has been successfully reset - no further action is required on your part if you submitted the password reset.",
-					"If you did not request a password reset, please contact our Customer Support team immediately at " + cfg.SupportEmail + " - your account security is important to us.",
+					"Your password was successfully updated. If you made this change, you're all set — no further action needed.",
+					"If you didn't request a password reset, please contact our support team right away at " + cfg.SupportEmail + ". Keeping your account secure is our top priority.",
 				},
 			},
 		}
@@ -401,16 +429,24 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Thank you for subscribing",
+				Title: "You're In — Early Access Secured!",
 				Intros: []string{
-					"Thank you for subscribing to " + req.OrgName + " - in order to confirm the subscription of future emails, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
+					"We're thrilled to have you as part of our early community. Your interest means the world to us as we work to build a cutting-edge solution. We can't wait to share it with you!",
+					"Please confirm your email address to ensure you receive all important updates about your early access.",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Verify Email", Link: verifyURL},
+					Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 				}},
+				IntrosUnsafe: []template.HTML{
+					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
+						`<p style="font-size:16px;line-height:24px;margin-bottom:15px;margin-top:16px;font-weight:500">What to Expect Next:</p>` +
+						`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">You'll hear from us soon – We'll email you as soon as your spot is ready.</p>` +
+						`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">Early access to beta features – Get a first look at everything we're building.</p>` +
+						`<p style="font-size:16px;line-height:24px;margin-bottom:0px;margin-top:16px;padding-left:20px">Help shape the future – Your feedback will directly influence the product.</p>` +
+						`</div>`),
+				},
 				Outros: []string{
-					verifyURL,
-					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
+					"Thank you for being part of this journey — we're excited to have you on board!",
 				},
 			},
 		}
@@ -428,16 +464,17 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 		return render.EmailContent{
 			Body: render.ContentBody{
 				Name:  req.FirstName,
-				Title: "Verify your billing contact",
+				Title: "Verify Your Billing Email Address",
 				Intros: []string{
-					"This email has been sent to you because the billing contact for your " + cfg.CompanyName + " account has changed. In order to ensure the security of your account, please verify your email address by clicking the button below, or copy and paste the linked URL into your browser:",
+					"You're receiving this because the billing contact for your " + cfg.CompanyName + " account was just updated.",
+					"To help keep your account secure, please verify your email address by clicking the button below:",
 				},
 				Actions: []render.Action{{
-					Button: render.Button{Text: "Verify Email", Link: verifyURL},
+					Button: render.Button{Text: "Confirm Billing Email", Link: verifyURL},
 				}},
 				Outros: []string{
-					verifyURL,
-					"If you are having trouble verifying your email address, please contact us at " + cfg.SupportEmail + ".",
+					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
+					"If you run into any issues, feel free to reach out at " + cfg.SupportEmail + ".",
 				},
 			},
 		}

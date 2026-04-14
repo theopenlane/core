@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -412,8 +411,7 @@ func (r *mutationResolver) recordCampaignDispatchEvent(ctx context.Context, camp
 		input.UserIDs = []string{caller.SubjectID}
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	if err := withTransactionalMutation(allowCtx).Event.Create().SetInput(input).Exec(allowCtx); err != nil {
+	if err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed to record campaign dispatch event")
 	}
 }

@@ -3085,6 +3085,15 @@ type TemplateUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// TemplateVariable describes a single system-provided template variable
+// available for use in email templates.
+type TemplateVariable struct {
+	// The variable key as used in templates (e.g. "companyName" for {{ .companyName }}).
+	Name string `json:"name"`
+	// Human-readable description of what the variable contains.
+	Description string `json:"description"`
+}
+
 // Return response for requestNewTrustCenterToken mutation
 type TrustCenterAccessTokenPayload struct {
 	Success bool `json:"success"`

@@ -27,6 +27,8 @@ type RecipientInfo struct {
 	FirstName string `json:"first_name,omitempty" jsonschema:"description=Recipient first name"`
 	// LastName is the recipient last name
 	LastName string `json:"last_name,omitempty" jsonschema:"description=Recipient last name"`
+	// Tags are delivery tracking tags forwarded to the email provider for webhook correlation
+	Tags []newman.Tag `json:"tags,omitempty" jsonschema:"description=Delivery tracking tags"`
 }
 
 // GetRecipient returns the recipient info, satisfying the HasRecipient interface
@@ -71,8 +73,13 @@ func (e EmailOperation[T]) handler() types.OperationHandler {
 				extraOpts = e.MessageOptions(client.Config, input)
 			}
 
+			recipient := input.GetRecipient()
+			for _, tag := range recipient.Tags {
+				extraOpts = append(extraOpts, newman.WithTag(tag))
+			}
+
 			return renderAndSend(ctx, client, e.Theme,
-				input.GetRecipient(),
+				recipient,
 				e.Subject(client.Config, input),
 				e.Content(client.Config, input),
 				extraOpts...,

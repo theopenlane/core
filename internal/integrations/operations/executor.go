@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/riverqueue/river"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -12,11 +11,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// MutationListenerFunc handles a mutation event for a registered mutation listener
-type MutationListenerFunc func(ctx context.Context, listener types.MutationListenerRegistration, payload eventqueue.MutationGalaPayload) error
-
 // RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
-func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, mutationHandle MutationListenerFunc) error {
+func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, dispatchForOwner types.DispatchForOwnerFunc) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -65,22 +61,8 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 		return err
 	}
 
-	for _, listener := range reg.MutationListeners() {
-		topic := eventqueue.MutationTopic(eventqueue.MutationConcernDirect, listener.SchemaType)
-
-		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: topic,
-			Name:  listener.Name,
-			Handle: func(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-				return mutationHandle(ctx.Context, listener, payload)
-			},
-		}); err != nil {
-			return err
-		}
-	}
-
 	for _, listener := range reg.GalaListeners() {
-		if _, err := listener.Register(runtime.Registry()); err != nil {
+		if _, err := listener.Register(runtime.Registry(), dispatchForOwner); err != nil {
 			return err
 		}
 	}
