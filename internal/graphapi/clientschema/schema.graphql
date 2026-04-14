@@ -13351,6 +13351,10 @@ input CreateIdentityHolderInput {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -15014,6 +15018,10 @@ input CreateReviewInput {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -15186,6 +15194,10 @@ input CreateRiskInput {
 	"""
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskFrequency
+	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
 	"""
 	the time when the next review is due for the risk
 	"""
@@ -35089,6 +35101,10 @@ type IdentityHolder implements Node {
 	"""
 	alternateEmail: String
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -36559,6 +36575,10 @@ input IdentityHolderWhereInput {
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
+	"""
+	Filter for emailAliasesHas to contain a specific value
+	"""
+	emailAliasesHas: String
 }
 """
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
@@ -68871,6 +68891,10 @@ type Review implements Node {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -69596,6 +69620,16 @@ enum ReviewOrderField {
 	state
 }
 """
+ReviewReviewStatus is enum for the field status
+"""
+enum ReviewReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
+}
+"""
 Return response for updateReview mutation
 """
 type ReviewUpdatePayload {
@@ -69890,6 +69924,15 @@ input ReviewWhereInput {
 	stateNotNil: Boolean
 	stateEqualFold: String
 	stateContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: ReviewReviewStatus
+	statusNEQ: ReviewReviewStatus
+	statusIn: [ReviewReviewStatus!]
+	statusNotIn: [ReviewReviewStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	category field predicates
 	"""
@@ -70326,6 +70369,10 @@ type Risk implements Node {
 	"""
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskFrequency
+	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
 	"""
 	the time when the next review is due for the risk
 	"""
@@ -71030,6 +71077,7 @@ enum RiskOrderField {
 	review_required
 	last_reviewed_at
 	review_frequency
+	due_date
 	next_review_due_at
 	residual_score
 	risk_decision
@@ -71604,6 +71652,19 @@ input RiskWhereInput {
 	reviewFrequencyNotIn: [RiskFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: DateTime
+	dueDateNEQ: DateTime
+	dueDateIn: [DateTime!]
+	dueDateNotIn: [DateTime!]
+	dueDateGT: DateTime
+	dueDateGTE: DateTime
+	dueDateLT: DateTime
+	dueDateLTE: DateTime
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
 	"""
 	next_review_due_at field predicates
 	"""
@@ -88527,6 +88588,12 @@ input UpdateIdentityHolderInput {
 	alternateEmail: String
 	clearAlternateEmail: Boolean
 	"""
+	alternate email address for the identity holder in an array
+	"""
+	emailAliases: [String!]
+	appendEmailAliases: [String!]
+	clearEmailAliases: Boolean
+	"""
 	phone number for the identity holder
 	"""
 	phoneNumber: String
@@ -90856,6 +90923,11 @@ input UpdateReviewInput {
 	state: String
 	clearState: Boolean
 	"""
+	status of the review
+	"""
+	status: ReviewReviewStatus
+	clearStatus: Boolean
+	"""
 	category for the review record
 	"""
 	category: String
@@ -91106,6 +91178,11 @@ input UpdateRiskInput {
 	clearLastReviewedAt: Boolean
 	reviewFrequency: RiskFrequency
 	clearReviewFrequency: Boolean
+	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	clearDueDate: Boolean
 	"""
 	the time when the next review is due for the risk
 	"""

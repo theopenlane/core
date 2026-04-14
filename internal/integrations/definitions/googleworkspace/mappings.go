@@ -10,14 +10,14 @@ import (
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `'primaryEmail' in payload ? payload.primaryEmail : ""`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'name' in payload && payload.name != null && 'fullName' in payload.name && payload.name.fullName != "" ? payload.name.fullName : ('primaryEmail' in payload ? payload.primaryEmail : "")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `'name' in payload && payload.name != null && 'givenName' in payload.name ? payload.name.givenName : ""`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'name' in payload && payload.name != null && 'familyName' in payload.name ? payload.name.familyName : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'name' in payload && 'fullName' in payload.name ? payload.name.fullName : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `'name' in payload && 'givenName' in payload.name ? payload.name.givenName : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'name' in payload && 'familyName' in payload.name ? payload.name.familyName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `'customerId' in payload ? payload.customerId : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountOrganizationUnit, Expr: `'orgUnitPath' in payload ? payload.orgUnitPath : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('deletionTime' in payload && payload.deletionTime != "" ? "DELETED" : ('suspended' in payload && payload.suspended ? "SUSPENDED" : ('archived' in payload && payload.archived ? "INACTIVE" : "ACTIVE")))`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountMfaState, Expr: `dyn('isEnforcedIn2Sv' in payload && payload.isEnforcedIn2Sv ? "ENFORCED" : ('isEnrolledIn2Sv' in payload && payload.isEnrolledIn2Sv ? "ENABLED" : "DISABLED"))`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountLastLoginAt, Expr: `'lastLoginTime' in payload && payload.lastLoginTime != "" ? payload.lastLoginTime : null`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountLastLoginAt, Expr: `'lastLoginTime' in payload ? payload.lastLoginTime : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
 })
 
@@ -25,18 +25,18 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryGroupExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryGroupEmail, Expr: `'email' in payload ? payload.email : ""`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryGroupDisplayName, Expr: `'name' in payload ? payload.name : ('email' in payload ? payload.email : "")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupDisplayName, Expr: `'name' in payload ? payload.name : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryGroupClassification, Expr: `dyn('adminCreated' in payload && payload.adminCreated ? "TEAM" : "DISTRIBUTION")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryGroupStatus, Expr: `dyn("ACTIVE")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupStatus, Expr: `"ACTIVE"`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryGroupSourceVersion, Expr: `'etag' in payload ? payload.etag : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryGroupProfile, Expr: "payload"},
 })
 
 // mapExprDirectoryMembership is the CEL mapping expression for Google Workspace membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, Expr: `'member' in payload && payload.member != null && 'id' in payload.member && payload.member.id != "" ? payload.member.id : ('member' in payload && payload.member != null && 'email' in payload.member ? payload.member.email : "")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, Expr: `'group' in payload && payload.group != null && 'id' in payload.group && payload.group.id != "" ? payload.group.id : ('group' in payload && payload.group != null && 'email' in payload.group ? payload.group.email : "")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipRole, Expr: `dyn('member' in payload && payload.member != null && 'role' in payload.member && payload.member.role != "" ? (payload.member.role == "OWNER" ? "OWNER" : (payload.member.role == "MANAGER" ? "MANAGER" : "MEMBER")) : "MEMBER")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, Expr: `'email' in payload ? payload.email : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, Expr: `resource`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipRole, Expr: `'role' in payload ? payload.role : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipSource, Expr: `dyn("google_workspace")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipMetadata, Expr: "payload"},
 })

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
@@ -1581,6 +1582,46 @@ func StateEqualFold(v string) predicate.ReviewHistory {
 // StateContainsFold applies the ContainsFold predicate on the "state" field.
 func StateContainsFold(v string) predicate.ReviewHistory {
 	return predicate.ReviewHistory(sql.FieldContainsFold(FieldState, v))
+}
+
+// StatusEQ applies the EQ predicate on the "status" field.
+func StatusEQ(v enums.ReviewStatus) predicate.ReviewHistory {
+	vc := v
+	return predicate.ReviewHistory(sql.FieldEQ(FieldStatus, vc))
+}
+
+// StatusNEQ applies the NEQ predicate on the "status" field.
+func StatusNEQ(v enums.ReviewStatus) predicate.ReviewHistory {
+	vc := v
+	return predicate.ReviewHistory(sql.FieldNEQ(FieldStatus, vc))
+}
+
+// StatusIn applies the In predicate on the "status" field.
+func StatusIn(vs ...enums.ReviewStatus) predicate.ReviewHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ReviewHistory(sql.FieldIn(FieldStatus, v...))
+}
+
+// StatusNotIn applies the NotIn predicate on the "status" field.
+func StatusNotIn(vs ...enums.ReviewStatus) predicate.ReviewHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ReviewHistory(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// StatusIsNil applies the IsNil predicate on the "status" field.
+func StatusIsNil() predicate.ReviewHistory {
+	return predicate.ReviewHistory(sql.FieldIsNull(FieldStatus))
+}
+
+// StatusNotNil applies the NotNil predicate on the "status" field.
+func StatusNotNil() predicate.ReviewHistory {
+	return predicate.ReviewHistory(sql.FieldNotNull(FieldStatus))
 }
 
 // CategoryEQ applies the EQ predicate on the "category" field.

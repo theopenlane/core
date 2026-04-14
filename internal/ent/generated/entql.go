@@ -1495,6 +1495,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldFullName:               {Type: field.TypeString, Column: identityholder.FieldFullName},
 			identityholder.FieldEmail:                  {Type: field.TypeString, Column: identityholder.FieldEmail},
 			identityholder.FieldAlternateEmail:         {Type: field.TypeString, Column: identityholder.FieldAlternateEmail},
+			identityholder.FieldEmailAliases:           {Type: field.TypeJSON, Column: identityholder.FieldEmailAliases},
 			identityholder.FieldPhoneNumber:            {Type: field.TypeString, Column: identityholder.FieldPhoneNumber},
 			identityholder.FieldIsOpenlaneUser:         {Type: field.TypeBool, Column: identityholder.FieldIsOpenlaneUser},
 			identityholder.FieldUserID:                 {Type: field.TypeString, Column: identityholder.FieldUserID},
@@ -2645,6 +2646,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			review.FieldExternalOwnerID:  {Type: field.TypeString, Column: review.FieldExternalOwnerID},
 			review.FieldTitle:            {Type: field.TypeString, Column: review.FieldTitle},
 			review.FieldState:            {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:           {Type: field.TypeEnum, Column: review.FieldStatus},
 			review.FieldCategory:         {Type: field.TypeString, Column: review.FieldCategory},
 			review.FieldClassification:   {Type: field.TypeString, Column: review.FieldClassification},
 			review.FieldSummary:          {Type: field.TypeString, Column: review.FieldSummary},
@@ -2710,6 +2712,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldReviewRequired:    {Type: field.TypeBool, Column: risk.FieldReviewRequired},
 			risk.FieldLastReviewedAt:    {Type: field.TypeTime, Column: risk.FieldLastReviewedAt},
 			risk.FieldReviewFrequency:   {Type: field.TypeEnum, Column: risk.FieldReviewFrequency},
+			risk.FieldDueDate:           {Type: field.TypeTime, Column: risk.FieldDueDate},
 			risk.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: risk.FieldNextReviewDueAt},
 			risk.FieldResidualScore:     {Type: field.TypeInt, Column: risk.FieldResidualScore},
 			risk.FieldRiskDecision:      {Type: field.TypeEnum, Column: risk.FieldRiskDecision},
@@ -29187,6 +29190,11 @@ func (f *IdentityHolderFilter) WhereAlternateEmail(p entql.StringP) {
 	f.Where(p.Field(identityholder.FieldAlternateEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *IdentityHolderFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(identityholder.FieldEmailAliases))
+}
+
 // WherePhoneNumber applies the entql string predicate on the phone_number field.
 func (f *IdentityHolderFilter) WherePhoneNumber(p entql.StringP) {
 	f.Where(p.Field(identityholder.FieldPhoneNumber))
@@ -39505,6 +39513,11 @@ func (f *ReviewFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(review.FieldState))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ReviewFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(review.FieldStatus))
+}
+
 // WhereCategory applies the entql string predicate on the category field.
 func (f *ReviewFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(review.FieldCategory))
@@ -40111,6 +40124,11 @@ func (f *RiskFilter) WhereLastReviewedAt(p entql.TimeP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *RiskFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(risk.FieldReviewFrequency))
+}
+
+// WhereDueDate applies the entql time.Time predicate on the due_date field.
+func (f *RiskFilter) WhereDueDate(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldDueDate))
 }
 
 // WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.

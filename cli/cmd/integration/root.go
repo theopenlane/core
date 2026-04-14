@@ -9,8 +9,10 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	api "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/utils/cli/tables"
 
+	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -45,6 +47,18 @@ func consoleOutput(e any) error {
 		e = v.Integration
 	case *graphclient.DeleteIntegration:
 		deletedTableOutput(v)
+		return nil
+	case *openlane.IntegrationProvidersResponse:
+		providersTableOutput(v)
+		return nil
+	case *api.ConfigureIntegrationResponse:
+		configureTableOutput(v)
+		return nil
+	case *api.DeleteIntegrationResponse:
+		disconnectTableOutput(v)
+		return nil
+	case *api.RunIntegrationOperationResponse:
+		operationTableOutput(v)
 		return nil
 	}
 
@@ -90,6 +104,56 @@ func deletedTableOutput(e *graphclient.DeleteIntegration) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
 
 	writer.AddRow(e.DeleteIntegration.DeletedID)
+
+	writer.Render()
+}
+
+// providerDefinition is a lightweight projection of the definition response used for table rendering
+type providerDefinition struct {
+	Spec struct {
+		ID          string `json:"id"`
+		DisplayName string `json:"displayName"`
+		Category    string `json:"category"`
+		Active      bool   `json:"active"`
+	} `json:"spec"`
+}
+
+// providersTableOutput prints integration providers in a table format
+func providersTableOutput(e *openlane.IntegrationProvidersResponse) {
+	var providers []providerDefinition
+
+	if err := json.Unmarshal(e.Providers, &providers); err != nil {
+		cobra.CheckErr(err)
+	}
+
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayName", "Category", "Active")
+	for _, p := range providers {
+		writer.AddRow(p.Spec.ID, p.Spec.DisplayName, p.Spec.Category, p.Spec.Active)
+	}
+
+	writer.Render()
+}
+
+// configureTableOutput prints the configure integration response in a table format
+func configureTableOutput(e *api.ConfigureIntegrationResponse) {
+	writer := tables.NewTableWriter(command.OutOrStdout(), "Provider", "IntegrationID", "HealthStatus", "HealthSummary", "WebhookEndpointURL")
+	writer.AddRow(e.Provider, e.IntegrationID, e.HealthStatus, e.HealthSummary, e.WebhookEndpointURL)
+
+	writer.Render()
+}
+
+// disconnectTableOutput prints the disconnect integration response in a table format
+func disconnectTableOutput(e *api.DeleteIntegrationResponse) {
+	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID", "Message")
+	writer.AddRow(e.DeletedID, e.Message)
+
+	writer.Render()
+}
+
+// operationTableOutput prints the run operation response in a table format
+func operationTableOutput(e *api.RunIntegrationOperationResponse) {
+	writer := tables.NewTableWriter(command.OutOrStdout(), "Provider", "Operation", "Status", "Summary")
+	writer.AddRow(e.Provider, e.Operation, e.Status, e.Summary)
 
 	writer.Render()
 }

@@ -219,6 +219,11 @@ func LastReviewedAt(v models.DateTime) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldLastReviewedAt, v))
 }
 
+// DueDate applies equality check predicate on the "due_date" field. It's identical to DueDateEQ.
+func DueDate(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDueDate, v))
+}
+
 // NextReviewDueAt applies equality check predicate on the "next_review_due_at" field. It's identical to NextReviewDueAtEQ.
 func NextReviewDueAt(v models.DateTime) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldNextReviewDueAt, v))
@@ -2427,6 +2432,56 @@ func ReviewFrequencyIsNil() predicate.Risk {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.Risk {
 	return predicate.Risk(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// DueDateEQ applies the EQ predicate on the "due_date" field.
+func DueDateEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDueDate, v))
+}
+
+// DueDateNEQ applies the NEQ predicate on the "due_date" field.
+func DueDateNEQ(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDueDate, v))
+}
+
+// DueDateIn applies the In predicate on the "due_date" field.
+func DueDateIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDueDate, vs...))
+}
+
+// DueDateNotIn applies the NotIn predicate on the "due_date" field.
+func DueDateNotIn(vs ...models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDueDate, vs...))
+}
+
+// DueDateGT applies the GT predicate on the "due_date" field.
+func DueDateGT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDueDate, v))
+}
+
+// DueDateGTE applies the GTE predicate on the "due_date" field.
+func DueDateGTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDueDate, v))
+}
+
+// DueDateLT applies the LT predicate on the "due_date" field.
+func DueDateLT(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDueDate, v))
+}
+
+// DueDateLTE applies the LTE predicate on the "due_date" field.
+func DueDateLTE(v models.DateTime) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDueDate, v))
+}
+
+// DueDateIsNil applies the IsNil predicate on the "due_date" field.
+func DueDateIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDueDate))
+}
+
+// DueDateNotNil applies the NotNil predicate on the "due_date" field.
+func DueDateNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDueDate))
 }
 
 // NextReviewDueAtEQ applies the EQ predicate on the "next_review_due_at" field.

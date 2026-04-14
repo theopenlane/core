@@ -358,6 +358,36 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 						}
 					}
 				}
+				architectureDiagrams {
+					edges {
+						node {
+							id
+							categoryType
+							base64
+							providedFileName
+						}
+					}
+				}
+				dataFlowDiagrams {
+					edges {
+						node {
+							id
+							categoryType
+							base64
+							providedFileName
+						}
+					}
+				}
+				trustBoundaryDiagrams {
+					edges {
+						node {
+							id
+							categoryType
+							base64
+							providedFileName
+						}
+					}
+				}
 			}
 		}
 	}
@@ -420,6 +450,36 @@ query GetPlatformByID ($platformId: ID!) {
 		updatedAt
 		updatedBy
 		workflowEligibleMarker
+		architectureDiagrams {
+			edges {
+				node {
+					id
+					categoryType
+					base64
+					providedFileName
+				}
+			}
+		}
+		dataFlowDiagrams {
+			edges {
+				node {
+					id
+					categoryType
+					base64
+					providedFileName
+				}
+			}
+		}
+		trustBoundaryDiagrams {
+			edges {
+				node {
+					id
+					categoryType
+					base64
+					providedFileName
+				}
+			}
+		}
 	}
 }
 query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [PlatformOrder!], $where: PlatformWhereInput) {

@@ -2917,15 +2917,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "architecture_diagrams": {
-	ObjectType:      "architecture_diagram",
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "data_flow_diagrams": {
-	ObjectType:      "data_flow_diagram",
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "trust_boundary_diagrams": {
-	ObjectType:      "trust_boundary_diagram",
+	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "risks": {

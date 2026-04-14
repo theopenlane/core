@@ -88,6 +88,8 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_title(ctx, field)
 			case "state":
 				return ec.fieldContext_Review_state(ctx, field)
+			case "status":
+				return ec.fieldContext_Review_status(ctx, field)
 			case "category":
 				return ec.fieldContext_Review_category(ctx, field)
 			case "classification":
@@ -256,6 +258,8 @@ func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_reviews(_ conte
 				return ec.fieldContext_Review_title(ctx, field)
 			case "state":
 				return ec.fieldContext_Review_state(ctx, field)
+			case "status":
+				return ec.fieldContext_Review_status(ctx, field)
 			case "category":
 				return ec.fieldContext_Review_category(ctx, field)
 			case "classification":
@@ -424,6 +428,8 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_title(ctx, field)
 			case "state":
 				return ec.fieldContext_Review_state(ctx, field)
+			case "status":
+				return ec.fieldContext_Review_status(ctx, field)
 			case "category":
 				return ec.fieldContext_Review_category(ctx, field)
 			case "classification":
@@ -592,6 +598,8 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_title(ctx, field)
 			case "state":
 				return ec.fieldContext_Review_state(ctx, field)
+			case "status":
+				return ec.fieldContext_Review_status(ctx, field)
 			case "category":
 				return ec.fieldContext_Review_category(ctx, field)
 			case "classification":

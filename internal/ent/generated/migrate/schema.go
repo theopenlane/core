@@ -2511,7 +2511,7 @@ var (
 			},
 			{
 				Name:    "evidence_external_uuid_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{EvidencesColumns[12], EvidencesColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
@@ -3628,6 +3628,7 @@ var (
 		{Name: "full_name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "alternate_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "is_openlane_user", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "identity_holder_type", Type: field.TypeEnum, Enums: []string{"EMPLOYEE", "CONTRACTOR", "UNSPECIFIED", "INTERN", "SERVICE", "PARTNER"}, Default: "UNSPECIFIED"},
@@ -3658,43 +3659,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "identity_holders_users_internal_owner_user",
-				Columns:    []*schema.Column{IdentityHoldersColumns[30]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[31]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_groups_internal_owner_group",
-				Columns:    []*schema.Column{IdentityHoldersColumns[31]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[32]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_custom_type_enums_environment",
-				Columns:    []*schema.Column{IdentityHoldersColumns[32]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "identity_holders_custom_type_enums_scope",
 				Columns:    []*schema.Column{IdentityHoldersColumns[33]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "identity_holders_entities_employer",
+				Symbol:     "identity_holders_custom_type_enums_scope",
 				Columns:    []*schema.Column{IdentityHoldersColumns[34]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "identity_holders_entities_employer",
+				Columns:    []*schema.Column{IdentityHoldersColumns[35]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_organizations_identity_holders",
-				Columns:    []*schema.Column{IdentityHoldersColumns[35]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[36]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_users_identity_holder_profiles",
-				Columns:    []*schema.Column{IdentityHoldersColumns[36]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[37]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3703,12 +3704,12 @@ var (
 			{
 				Name:    "identityholder_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[7], IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[7], IdentityHoldersColumns[36]},
 			},
 			{
 				Name:    "identityholder_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[36]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3716,7 +3717,7 @@ var (
 			{
 				Name:    "identityholder_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[14], IdentityHoldersColumns[35]},
+				Columns: []*schema.Column{IdentityHoldersColumns[14], IdentityHoldersColumns[36]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3724,12 +3725,12 @@ var (
 			{
 				Name:    "identityholder_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[36]},
+				Columns: []*schema.Column{IdentityHoldersColumns[37]},
 			},
 			{
 				Name:    "identityholder_external_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[27]},
+				Columns: []*schema.Column{IdentityHoldersColumns[28]},
 			},
 		},
 	}
@@ -6029,6 +6030,7 @@ var (
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "classification", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -6055,25 +6057,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "reviews_organizations_reviews",
-				Columns:    []*schema.Column{ReviewsColumns[30]},
+				Columns:    []*schema.Column{ReviewsColumns[31]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "reviews_custom_type_enums_environment",
-				Columns:    []*schema.Column{ReviewsColumns[31]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "reviews_custom_type_enums_scope",
 				Columns:    []*schema.Column{ReviewsColumns[32]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "reviews_users_reviewer",
+				Symbol:     "reviews_custom_type_enums_scope",
 				Columns:    []*schema.Column{ReviewsColumns[33]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_users_reviewer",
+				Columns:    []*schema.Column{ReviewsColumns[34]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6082,7 +6084,7 @@ var (
 			{
 				Name:    "review_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ReviewsColumns[30]},
+				Columns: []*schema.Column{ReviewsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6090,7 +6092,7 @@ var (
 			{
 				Name:    "review_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[30]},
+				Columns: []*schema.Column{ReviewsColumns[13], ReviewsColumns[14], ReviewsColumns[31]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6117,8 +6119,8 @@ var (
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}},
 		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
 		{Name: "score", Type: field.TypeInt, Nullable: true},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -6131,9 +6133,10 @@ var (
 		{Name: "review_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "last_reviewed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "next_review_due_at", Type: field.TypeTime, Nullable: true},
 		{Name: "residual_score", Type: field.TypeInt, Nullable: true},
-		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE"}, Default: " NONE"},
+		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE"}, Default: "NONE"},
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risk_categories", Type: field.TypeString, Nullable: true},
@@ -6155,73 +6158,73 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[35]},
+				Columns:    []*schema.Column{RisksColumns[36]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risks",
-				Columns:    []*schema.Column{RisksColumns[36]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_custom_type_enums_risk_categories",
 				Columns:    []*schema.Column{RisksColumns[37]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_findings_risks",
+				Symbol:     "risks_custom_type_enums_risk_categories",
 				Columns:    []*schema.Column{RisksColumns[38]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_findings_risks",
+				Columns:    []*schema.Column{RisksColumns[39]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_organizations_risks",
-				Columns:    []*schema.Column{RisksColumns[39]},
+				Columns:    []*schema.Column{RisksColumns[40]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risk_kind",
-				Columns:    []*schema.Column{RisksColumns[40]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_custom_type_enums_risk_category",
 				Columns:    []*schema.Column{RisksColumns[41]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_environment",
+				Symbol:     "risks_custom_type_enums_risk_category",
 				Columns:    []*schema.Column{RisksColumns[42]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_scope",
+				Symbol:     "risks_custom_type_enums_environment",
 				Columns:    []*schema.Column{RisksColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_groups_stakeholder",
+				Symbol:     "risks_custom_type_enums_scope",
 				Columns:    []*schema.Column{RisksColumns[44]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_groups_delegate",
+				Symbol:     "risks_groups_stakeholder",
 				Columns:    []*schema.Column{RisksColumns[45]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_vulnerabilities_risks",
+				Symbol:     "risks_groups_delegate",
 				Columns:    []*schema.Column{RisksColumns[46]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_vulnerabilities_risks",
+				Columns:    []*schema.Column{RisksColumns[47]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6230,12 +6233,12 @@ var (
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[7], RisksColumns[39]},
+				Columns: []*schema.Column{RisksColumns[7], RisksColumns[40]},
 			},
 			{
 				Name:    "risk_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[39]},
+				Columns: []*schema.Column{RisksColumns[40]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6243,7 +6246,7 @@ var (
 			{
 				Name:    "risk_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[16], RisksColumns[39]},
+				Columns: []*schema.Column{RisksColumns[16], RisksColumns[40]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8165,7 +8168,7 @@ var (
 			},
 			{
 				Name:    "vulnerability_cve_id_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{VulnerabilitiesColumns[18], VulnerabilitiesColumns[56]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",

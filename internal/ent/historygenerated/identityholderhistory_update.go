@@ -334,6 +334,24 @@ func (_u *IdentityHolderHistoryUpdate) ClearAlternateEmail() *IdentityHolderHist
 	return _u
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) SetEmailAliases(v []string) *IdentityHolderHistoryUpdate {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) AppendEmailAliases(v []string) *IdentityHolderHistoryUpdate {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) ClearEmailAliases() *IdentityHolderHistoryUpdate {
+	_u.mutation.ClearEmailAliases()
+	return _u
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (_u *IdentityHolderHistoryUpdate) SetPhoneNumber(v string) *IdentityHolderHistoryUpdate {
 	_u.mutation.SetPhoneNumber(v)
@@ -815,6 +833,17 @@ func (_u *IdentityHolderHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.AlternateEmailCleared() {
 		_spec.ClearField(identityholderhistory.FieldAlternateEmail, field.TypeString)
 	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholderhistory.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, identityholderhistory.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(identityholderhistory.FieldEmailAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholderhistory.FieldPhoneNumber, field.TypeString, value)
 	}
@@ -1221,6 +1250,24 @@ func (_u *IdentityHolderHistoryUpdateOne) SetNillableAlternateEmail(v *string) *
 // ClearAlternateEmail clears the value of the "alternate_email" field.
 func (_u *IdentityHolderHistoryUpdateOne) ClearAlternateEmail() *IdentityHolderHistoryUpdateOne {
 	_u.mutation.ClearAlternateEmail()
+	return _u
+}
+
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) SetEmailAliases(v []string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) AppendEmailAliases(v []string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) ClearEmailAliases() *IdentityHolderHistoryUpdateOne {
+	_u.mutation.ClearEmailAliases()
 	return _u
 }
 
@@ -1734,6 +1781,17 @@ func (_u *IdentityHolderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.AlternateEmailCleared() {
 		_spec.ClearField(identityholderhistory.FieldAlternateEmail, field.TypeString)
+	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholderhistory.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, identityholderhistory.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(identityholderhistory.FieldEmailAliases, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholderhistory.FieldPhoneNumber, field.TypeString, value)

@@ -26,6 +26,7 @@ mutation CreateBulkCSVReview ($input: Upload!) {
 			scopeName
 			source
 			state
+			status
 			summary
 			systemInternalID
 			systemOwned
@@ -64,6 +65,7 @@ mutation CreateBulkReview ($input: [CreateReviewInput!]) {
 			scopeName
 			source
 			state
+			status
 			summary
 			systemInternalID
 			systemOwned
@@ -102,6 +104,7 @@ mutation CreateReview ($input: CreateReviewInput!) {
 			scopeName
 			source
 			state
+			status
 			summary
 			systemInternalID
 			systemOwned
@@ -188,6 +191,7 @@ query GetReviewByID ($reviewId: ID!) {
 		scopeName
 		source
 		state
+		status
 		summary
 		systemInternalID
 		systemOwned
@@ -264,6 +268,7 @@ mutation UpdateBulkCSVReview ($input: Upload!) {
 			scopeName
 			source
 			state
+			status
 			summary
 			systemInternalID
 			systemOwned
@@ -303,6 +308,7 @@ mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
 			scopeName
 			source
 			state
+			status
 			summary
 			systemInternalID
 			systemOwned

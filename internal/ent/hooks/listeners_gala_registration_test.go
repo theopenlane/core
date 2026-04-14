@@ -95,6 +95,21 @@ func TestRegisterGalaVendorScoringListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
 }
 
+func TestRegisterGalaIdentityResolutionListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaIdentityResolutionListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 2)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeDirectoryAccount)
+	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+}
+
 func TestRegisterGalaNotificationListeners(t *testing.T) {
 	t.Parallel()
 
