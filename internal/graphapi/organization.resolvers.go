@@ -9,12 +9,13 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
@@ -74,7 +75,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 
 // DeleteOrganization is the resolver for the deleteOrganization field.
 func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error) {
-	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
+	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication && !auth.IsSystemAdminFromContext(ctx) {
 		logx.FromContext(ctx).Info().Msg("organization attempted to be deleted with non-JWT auth type")
 
 		return nil, common.ErrResourceNotAccessibleWithToken

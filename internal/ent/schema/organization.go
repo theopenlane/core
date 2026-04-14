@@ -666,6 +666,7 @@ func (Organization) Policy() ent.Policy {
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
 			policy.AllowCreate(),        // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),
