@@ -44886,6 +44886,11 @@ input OrganizationSettingHistoryWhereInput {
   complianceWebhookTokenEqualFold: String
   complianceWebhookTokenContainsFold: String
   """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  """
   pending_deletion_at field predicates
   """
   pendingDeletionAt: DateTime

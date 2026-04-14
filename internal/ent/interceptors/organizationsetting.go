@@ -17,6 +17,10 @@ import (
 // InterceptorOrganizationSetting is middleware to change the org setting query
 func InterceptorOrganizationSetting() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
 		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil
 		}

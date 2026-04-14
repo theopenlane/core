@@ -25624,6 +25624,9 @@ type OrganizationSettingWhereInput struct {
 	ComplianceWebhookTokenNotNil       *bool    `json:"complianceWebhookTokenNotNil,omitempty"`
 	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
 	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
+	// payment_method_added field predicates
+	PaymentMethodAdded    *bool `json:"paymentMethodAdded,omitempty"`
+	PaymentMethodAddedNeq *bool `json:"paymentMethodAddedNEQ,omitempty"`
 	// pending_deletion_at field predicates
 	PendingDeletionAt       *models.DateTime   `json:"pendingDeletionAt,omitempty"`
 	PendingDeletionAtNeq    *models.DateTime   `json:"pendingDeletionAtNEQ,omitempty"`

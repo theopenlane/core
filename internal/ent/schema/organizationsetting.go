@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -151,9 +152,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			}),
 		field.Bool("payment_method_added").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput |
-					entgql.SkipMutationUpdateInput |
-					entgql.SkipWhereInput | entgql.SkipOrderField),
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput | entgql.SkipOrderField),
 			).
 			Default(false).
 			Comment("whether or not a payment method has been added to the account"),
@@ -215,8 +214,10 @@ func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			policy.CheckOrgReadAccess(), // access based on auth context
+			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),
 			policy.CheckOrgWriteAccess(), // access based on auth context
 		),
