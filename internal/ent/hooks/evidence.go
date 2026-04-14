@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"entgo.io/ent"
@@ -20,6 +21,10 @@ func HookEvidenceFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
 			if !isDeleteOp(ctx, m) {
+				if uuid, ok := m.ExternalUUID(); ok {
+					m.SetExternalUUID(strings.TrimSpace(uuid))
+				}
+
 				// validate creation date if only
 				// - it is a create operation
 				// - it was provided in an update operation

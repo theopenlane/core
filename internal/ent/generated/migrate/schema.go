@@ -2511,7 +2511,7 @@ var (
 			},
 			{
 				Name:    "evidence_external_uuid_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{EvidencesColumns[12], EvidencesColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
