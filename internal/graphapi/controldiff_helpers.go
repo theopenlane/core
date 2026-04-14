@@ -52,7 +52,7 @@ func (r *Resolver) controlDiff(ctx context.Context, input model.ControlDiffInput
 		return nil, err
 	}
 
-	revisionDiffCutoff, err := getNextTimestampOfRevison(ctx, historyClient, input.StandardID, input.NewRevision, newRevisionTime)
+	revisionDiffCutoff, err := getNextTimestampOfRevision(ctx, historyClient, input.StandardID, input.NewRevision, newRevisionTime)
 	if err != nil {
 		return nil, err
 	}
@@ -105,9 +105,9 @@ func getTimestampOfRevision(ctx context.Context, hc *historygenerated.Client, st
 	return history.HistoryTime, nil
 }
 
-// getNextTimestampOfRevison finds the timestamp of the next standard revision change
+// getNextTimestampOfRevision finds the timestamp of the next standard revision change
 // after afterTime. if the current revision is still the latest, returns time.Now().
-func getNextTimestampOfRevison(
+func getNextTimestampOfRevision(
 	ctx context.Context, hc *historygenerated.Client, standardID, currentRevision string, pastTime time.Time) (time.Time, error) {
 	history, err := hc.StandardHistory.Query().
 		Where(

@@ -6367,6 +6367,7 @@ type ComplexityRoot struct {
 		Label          func(childComplexity int) int
 		ReservedFields func(childComplexity int) int
 		Schema         func(childComplexity int) int
+		Variables      func(childComplexity int) int
 	}
 
 	TemplateCreatePayload struct {
@@ -6384,6 +6385,11 @@ type ComplexityRoot struct {
 
 	TemplateUpdatePayload struct {
 		Template func(childComplexity int) int
+	}
+
+	TemplateVariable struct {
+		Description func(childComplexity int) int
+		Name        func(childComplexity int) int
 	}
 
 	TrustCenter struct {
@@ -46102,6 +46108,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TemplateContextEntry.Schema(childComplexity), true
 
+	case "TemplateContextEntry.variables":
+		if e.ComplexityRoot.TemplateContextEntry.Variables == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateContextEntry.Variables(childComplexity), true
+
 	case "TemplateCreatePayload.template":
 		if e.ComplexityRoot.TemplateCreatePayload.Template == nil {
 			break
@@ -46136,6 +46149,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateUpdatePayload.Template(childComplexity), true
+
+	case "TemplateVariable.description":
+		if e.ComplexityRoot.TemplateVariable.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateVariable.Description(childComplexity), true
+
+	case "TemplateVariable.name":
+		if e.ComplexityRoot.TemplateVariable.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateVariable.Name(childComplexity), true
 
 	case "TrustCenter.blockedGroups":
 		if e.ComplexityRoot.TrustCenter.BlockedGroups == nil {
@@ -152192,6 +152219,28 @@ type TemplateContextEntry {
     should display them as read-only reference, not as input controls.
     """
     reservedFields: [String!]!
+    """
+    System-provided template variables available in this context, with
+    human-readable descriptions for the UI variable picker. Each entry
+    includes the variable name (as used in {{ .name }} syntax) and a
+    description of what the variable contains.
+    """
+    variables: [TemplateVariable!]!
+}
+
+"""
+TemplateVariable describes a single system-provided template variable
+available for use in email templates.
+"""
+type TemplateVariable {
+    """
+    The variable key as used in templates (e.g. "companyName" for {{ .companyName }}).
+    """
+    name: String!
+    """
+    Human-readable description of what the variable contains.
+    """
+    description: String!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tfaextended.graphql", Input: `extend type TFASettingUpdatePayload {

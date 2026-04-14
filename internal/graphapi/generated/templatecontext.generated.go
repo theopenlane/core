@@ -5,11 +5,13 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -17,6 +19,8 @@ import (
 
 type TemplateContextEntryResolver interface {
 	Schema(ctx context.Context, obj *models.TemplateContextEntry) (map[string]any, error)
+
+	Variables(ctx context.Context, obj *models.TemplateContextEntry) ([]*model.TemplateVariable, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -176,6 +180,99 @@ func (ec *executionContext) fieldContext_TemplateContextEntry_reservedFields(_ c
 	return fc, nil
 }
 
+func (ec *executionContext) _TemplateContextEntry_variables(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateContextEntry_variables,
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.TemplateContextEntry().Variables(ctx, obj)
+		},
+		nil,
+		ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateContextEntry_variables(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateContextEntry",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_TemplateVariable_name(ctx, field)
+			case "description":
+				return ec.fieldContext_TemplateVariable_description(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TemplateVariable", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TemplateVariable_name(ctx context.Context, field graphql.CollectedField, obj *model.TemplateVariable) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateVariable_name,
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateVariable_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateVariable",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TemplateVariable_description(ctx context.Context, field graphql.CollectedField, obj *model.TemplateVariable) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_TemplateVariable_description,
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_TemplateVariable_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TemplateVariable",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -255,6 +352,86 @@ func (ec *executionContext) _TemplateContextEntry(ctx context.Context, sel ast.S
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "variables":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TemplateContextEntry_variables(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.Deferrable != nil {
+				dfs, ok := deferred[field.Deferrable.Label]
+				di := 0
+				if ok {
+					dfs.AddField(field)
+					di = len(dfs.Values) - 1
+				} else {
+					dfs = graphql.NewFieldSet([]graphql.CollectedField{field})
+					deferred[field.Deferrable.Label] = dfs
+				}
+				dfs.Concurrently(di, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, dfs)
+				})
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.ProcessDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var templateVariableImplementors = []string{"TemplateVariable"}
+
+func (ec *executionContext) _TemplateVariable(ctx context.Context, sel ast.SelectionSet, obj *model.TemplateVariable) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, templateVariableImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TemplateVariable")
+		case "name":
+			out.Values[i] = ec._TemplateVariable_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "description":
+			out.Values[i] = ec._TemplateVariable_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -306,6 +483,32 @@ func (ec *executionContext) marshalNTemplateContextEntry2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._TemplateContextEntry(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx context.Context, sel ast.SelectionSet, v *model.TemplateVariable) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TemplateVariable(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

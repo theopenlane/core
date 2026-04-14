@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -123,15 +122,12 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	input := email.QuestionnaireAuthEmail{
+	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp(), email.QuestionnaireAuthEmail{
 		RecipientInfo:  email.RecipientInfo{Email: in.Email},
 		AssessmentName: assessmentData.Name,
 		AuthURL:        authURL,
-	}
-
-	if receipt := h.Gala.EmitWithHeaders(reqCtx, email.QuestionnaireAuthOp().Topic(), input,
-		gala.NewHeaders([]string{"email", "questionnaire", "resend"}, input)); receipt.Err != nil {
-		logx.FromContext(reqCtx).Error().Err(receipt.Err).Msg("error sending questionnaire auth email")
+	}); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending questionnaire auth email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}

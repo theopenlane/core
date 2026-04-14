@@ -57,7 +57,6 @@ require (
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/gqlgo/gqlgenc v0.35.1
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/inbucket/html2text v1.0.0
 	github.com/invopop/jsonschema v0.13.0
 	github.com/invopop/yaml v0.3.1
 	github.com/jackc/pgx/v5 v5.9.1
@@ -112,7 +111,6 @@ require (
 	github.com/theopenlane/utils v0.7.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.8.0
-	github.com/vanng822/go-premailer v1.33.0
 	github.com/vektah/gqlparser/v2 v2.5.32
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.46.0
@@ -135,6 +133,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.12.0 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.5 // indirect
+	github.com/inbucket/html2text v1.0.0 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
@@ -157,6 +156,7 @@ require (
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.3 // indirect
 	github.com/tinylib/msgp v1.6.3 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
+	github.com/vanng822/go-premailer v1.33.0 // indirect
 	github.com/yuin/goldmark v1.8.2 // indirect
 )
 

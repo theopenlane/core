@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -86,15 +85,12 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			input := emaildef.SubscribeRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp(), emaildef.SubscribeRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				OrgName:       orgName,
 				Token:         tokenValue,
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.SubscribeOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "subscriber"}, input)); receipt.Err != nil {
-				return nil, receipt.Err
+			}); err != nil {
+				return nil, err
 			}
 
 			return retValue, err

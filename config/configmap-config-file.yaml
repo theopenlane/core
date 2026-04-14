@@ -1007,6 +1007,8 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.email }}
       email:
         {{- if .Values.openlane.coreConfiguration.integrations.email.apiKey }}

@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -137,17 +136,14 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 				return err
 			}
 
-			input := email.SubscribeRequest{
+			if err := h.sendEmail(ctxWithToken, email.SubscribeOp(), email.SubscribeRequest{
 				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
 				OrgName:       org.DisplayName,
 				Token:         tokenValue,
-			}
+			}); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
 
-			if receipt := h.Gala.EmitWithHeaders(ctxWithToken, email.SubscribeOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "subscriber", "resend"}, input)); receipt.Err != nil {
-				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("error sending subscriber email")
-
-				return receipt.Err
+				return err
 			}
 		}
 

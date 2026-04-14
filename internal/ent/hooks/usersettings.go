@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -140,17 +139,14 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			input := emaildef.WelcomeRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.WelcomeOp(), emaildef.WelcomeRequest{
 				RecipientInfo: emaildef.RecipientInfo{
 					Email:     user.Email,
 					FirstName: user.FirstName,
 					LastName:  user.LastName,
 				},
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.WelcomeOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "auth", "welcome"}, input)); receipt.Err != nil {
-				logx.FromContext(ctx).Error().Err(receipt.Err).Msg("could not send welcome email")
+			}); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
 			}
 
 			return v, nil

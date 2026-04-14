@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/domain"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -68,7 +67,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if existingRequest != nil {
-				return handleExistingNDARequest(ctx, queryCtx, existingRequest)
+				return handleExistingNDARequest(ctx, queryCtx, m.Client(), existingRequest)
 			}
 
 			tc, err := m.Client().TrustCenter.Query().
@@ -109,15 +108,12 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			input := emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "trust-center", "nda-request"}, input)); receipt.Err != nil {
-				return nil, receipt.Err
+			}); err != nil {
+				return nil, err
 			}
 
 			return v, nil
@@ -125,7 +121,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
-func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
+func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.Client, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
 	switch existing.Status {
 	case enums.TrustCenterNDARequestStatusSigned:
 		// if already signed, resend auth email
@@ -137,15 +133,12 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		input := emaildef.TrustCenterAuthEmail{
+		if err := sendSystemEmail(ctx, client, emaildef.TCAuthOp(), emaildef.TrustCenterAuthEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			AuthURL:       authURL,
-		}
-
-		if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCAuthOp().Topic(), input,
-			gala.NewHeaders([]string{"email", "trust-center", "auth"}, input)); receipt.Err != nil {
-			return nil, receipt.Err
+		}); err != nil {
+			return nil, err
 		}
 
 		return existing, nil
@@ -159,15 +152,12 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, existing *generated
 			return existing, nil
 		}
 
-		input := emaildef.TrustCenterNDARequestEmail{
+		if err := sendSystemEmail(ctx, client, emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			NDAURL:        ndaURL,
-		}
-
-		if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
-			gala.NewHeaders([]string{"email", "trust-center", "nda-request", "resend"}, input)); receipt.Err != nil {
-			return nil, receipt.Err
+		}); err != nil {
+			return nil, err
 		}
 
 		return existing, nil
@@ -283,15 +273,12 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			input := emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,
-			}
-
-			if receipt := emailGala.EmitWithHeaders(ctx, emaildef.TCNDARequestOp().Topic(), input,
-				gala.NewHeaders([]string{"email", "trust-center", "nda-request", "approved"}, input)); receipt.Err != nil {
-				return nil, receipt.Err
+			}); err != nil {
+				return nil, err
 			}
 
 			return v, nil

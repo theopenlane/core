@@ -52,8 +52,6 @@ type Definition struct {
 	Mappings []MappingRegistration `json:"mappings,omitempty"`
 	// Webhooks lists the webhook contracts exposed by the definition
 	Webhooks []WebhookRegistration `json:"webhooks,omitempty"`
-	// MutationListeners declares ent mutation listeners that trigger operation dispatch
-	MutationListeners []MutationListenerRegistration `json:"mutationListeners,omitempty"`
 	// GalaListeners declares standalone gala listeners registered on the integration runtime
 	GalaListeners []GalaListenerRegistration `json:"-"`
 	// RuntimeIntegration declares that this definition can be fully provisioned from a single runtime config struct
@@ -64,8 +62,10 @@ type Definition struct {
 type GalaListenerRegistration struct {
 	// Name is a stable listener identifier for diagnostics
 	Name string
-	// Register registers the listener on the supplied gala registry
-	Register func(*gala.Registry) ([]gala.ListenerID, error)
+	// Register registers the listener on the supplied gala registry.
+	// The dispatch function allows listeners to trigger operation execution
+	// by resolving the integration for a given owner
+	Register func(registry *gala.Registry, dispatch DispatchForOwnerFunc) ([]gala.ListenerID, error)
 }
 
 // OperatorConfigRegistration describes operator-owned configuration for a definition

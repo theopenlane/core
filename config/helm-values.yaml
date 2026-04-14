@@ -530,21 +530,20 @@ coreConfiguration:
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
-      redirecturl: ""  # @schema type:string
     email:
-      api_key: ""  # @schema type:string
+      apiKey: ""  # @schema type:string
       # -- Email service provider
       provider: "resend"  # @schema type:string; default:resend
-      from_email: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
-      company_name: "Openlane"  # @schema type:string; default:Openlane
-      company_address: "5150 Broadway St San Antonio, TX 78209"  # @schema type:string; default:5150 Broadway St San Antonio, TX 78209
+      fromEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      companyName: "Openlane"  # @schema type:string; default:Openlane
+      companyAddress: "5150 Broadway St San Antonio, TX 78209"  # @schema type:string; default:5150 Broadway St San Antonio, TX 78209
       corporation: "theopenlane, Inc."  # @schema type:string; default:theopenlane, Inc.
-      support_email: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
-      logo_url: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"  # @schema type:string; default:https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public
-      root_url: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
-      product_url: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
-      docs_url: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
-      questionnaire_email: "no-reply@mail.theopenlane.io"  # @schema type:string; default:no-reply@mail.theopenlane.io
+      supportEmail: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
+      logoURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"  # @schema type:string; default:https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public
+      rootURL: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
+      productURL: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
+      docsURL: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
+      questionnaireEmail: "no-reply@mail.theopenlane.io"  # @schema type:string; default:no-reply@mail.theopenlane.io
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

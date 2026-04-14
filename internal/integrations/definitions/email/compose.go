@@ -6,7 +6,6 @@ import (
 	"maps"
 
 	"github.com/theopenlane/newman"
-	"github.com/theopenlane/newman/scrubber"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
@@ -15,8 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/templatecontext"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -44,14 +41,33 @@ func ComposeFromNotificationTemplate(ctx context.Context, db *generated.Client, 
 		return nil, ErrMissingSenderAddress
 	}
 
-	notificationRecord, err := loadNotificationTemplate(ctx, db, request.OwnerID, request.Template.ID, request.Template.Key, request.OwnerOnly)
+	notificationRecord, err := loadNotificationTemplate(ctx, db, request.OwnerID, request.Template.ID, request.Template.Key)
 	if err != nil {
 		return nil, err
 	}
 
-	emailRecord, err := loadEmailTemplate(ctx, db, request.OwnerID, notificationRecord, request.OwnerOnly)
-	if err != nil {
-		return nil, err
+	var emailRecord *generated.EmailTemplate
+
+	switch {
+	case notificationRecord.EmailTemplateID != "":
+		emailRecord, err = loadEmailTemplate(ctx, db, request.OwnerID, notificationRecord.EmailTemplateID)
+		if err != nil {
+			return nil, err
+		}
+	default:
+		emailRecord = &generated.EmailTemplate{
+			Key:             notificationRecord.Key,
+			Name:            notificationRecord.Name,
+			Format:          notificationRecord.Format,
+			Locale:          notificationRecord.Locale,
+			SubjectTemplate: notificationRecord.SubjectTemplate,
+			BodyTemplate:    notificationRecord.BodyTemplate,
+			Jsonconfig:      mapx.DeepCloneMapAny(notificationRecord.Jsonconfig),
+			Uischema:        mapx.DeepCloneMapAny(notificationRecord.Uischema),
+			Metadata:        mapx.DeepCloneMapAny(notificationRecord.Metadata),
+			Active:          notificationRecord.Active,
+			SystemOwned:     notificationRecord.SystemOwned,
+		}
 	}
 
 	vars := make(map[string]any, len(emailRecord.Defaults)+len(notificationRecord.Defaults)+len(request.Data))
@@ -59,34 +75,18 @@ func ComposeFromNotificationTemplate(ctx context.Context, db *generated.Client, 
 	maps.Copy(vars, notificationRecord.Defaults)
 	maps.Copy(vars, request.Data)
 
-	td := &templatecontext.ContextData{
-		CompanyName:    emailClient.Config.CompanyName,
-		CompanyAddress: emailClient.Config.CompanyAddress,
-		Corporation:    emailClient.Config.Corporation,
-		FromEmail:      emailClient.Config.FromEmail,
-		SupportEmail:   emailClient.Config.SupportEmail,
-		LogoURL:        emailClient.Config.LogoURL,
-		RootURL:        emailClient.Config.RootURL,
-		ProductURL:     emailClient.Config.ProductURL,
-		DocsURL:        emailClient.Config.DocsURL,
-		Vars:           vars,
-	}
-
-	eb := selectDefaultBranding(emailRecord.Edges.EmailBranding)
-	if eb != nil {
-		td.Branding = brandingTemplateData(eb)
-	}
-
-	data, err := td.ToTemplateData()
+	data, err := buildTemplateData(emailClient.Config, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
+
+	eb := selectDefaultBranding(emailRecord.Edges.EmailBranding)
 
 	if err := validateTemplateData(emailRecord.Jsonconfig, data); err != nil {
 		return nil, err
 	}
 
-	rendered, err := renderDBEnvelope(ctx, db, emailRecord, data, eb)
+	rendered, err := renderDBEnvelope(emailRecord, data, eb)
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +98,6 @@ func ComposeFromNotificationTemplate(ctx context.Context, db *generated.Client, 
 		newman.WithHTML(rendered.HTML),
 		newman.WithText(rendered.Text),
 	)
-
-	message.SetCustomHTMLScrubber(scrubber.ScrubberFunc(renderTimeHTMLSanitize))
 
 	if request.ReplyTo != "" {
 		message.ReplyTo = request.ReplyTo
@@ -144,26 +142,17 @@ func ComposeAndQueueFromNotificationTemplate(ctx context.Context, db *generated.
 	return message, nil
 }
 
-// loadNotificationTemplate resolves an active notification template by ID or key for email channel delivery.
-// When ownerOnly is true, the lookup is scoped to owner-scoped templates only.
-// When ownerOnly is false, the lookup is scoped to system-owned templates only
-func loadNotificationTemplate(ctx context.Context, client *generated.Client, ownerID string, templateID string, templateKey string, ownerOnly bool) (*generated.NotificationTemplate, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+// loadNotificationTemplate resolves an active notification template by ID or key for email channel delivery
+func loadNotificationTemplate(ctx context.Context, client *generated.Client, ownerID string, templateID string, templateKey string) (*generated.NotificationTemplate, error) {
 	query := client.NotificationTemplate.Query().
 		Where(
 			notificationtemplate.ChannelEQ(enums.ChannelEmail),
 			notificationtemplate.ActiveEQ(true),
+			notificationtemplate.OwnerIDEQ(ownerID),
 		)
 
-	if ownerOnly {
-		query = query.Where(notificationtemplate.OwnerIDEQ(ownerID))
-	} else {
-		query = query.Where(notificationtemplate.SystemOwnedEQ(true))
-	}
-
 	if templateID != "" {
-		record, err := query.Where(notificationtemplate.IDEQ(templateID)).Only(allowCtx)
+		record, err := query.Where(notificationtemplate.IDEQ(templateID)).Only(ctx)
 		if generated.IsNotFound(err) {
 			return nil, ErrNotificationTemplateNotFound
 		}
@@ -176,7 +165,7 @@ func loadNotificationTemplate(ctx context.Context, client *generated.Client, own
 		return record, nil
 	}
 
-	record, err := query.Where(notificationtemplate.KeyEQ(templateKey)).Only(allowCtx)
+	record, err := query.Where(notificationtemplate.KeyEQ(templateKey)).Only(ctx)
 	if generated.IsNotFound(err) {
 		return nil, ErrNotificationTemplateNotFound
 	}
@@ -189,55 +178,13 @@ func loadNotificationTemplate(ctx context.Context, client *generated.Client, own
 	return record, nil
 }
 
-// loadBaseTemplateContent loads the body_template from a system-owned email template by key
-func loadBaseTemplateContent(ctx context.Context, client *generated.Client, key string) (string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
+// loadEmailTemplate resolves an active email template by ID for the given owner
+func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, emailTemplateID string) (*generated.EmailTemplate, error) {
 	record, err := client.EmailTemplate.Query().
 		Where(
-			emailtemplate.KeyEQ(key),
-			emailtemplate.SystemOwnedEQ(true),
+			emailtemplate.IDEQ(emailTemplateID),
 			emailtemplate.ActiveEQ(true),
-		).
-		Only(allowCtx)
-	if generated.IsNotFound(err) {
-		return "", ErrEmailTemplateNotFound
-	}
-
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("base_template_key", key).Msg("failed loading base email template")
-		return "", ErrEmailTemplateNotFound
-	}
-
-	return record.BodyTemplate, nil
-}
-
-// loadEmailTemplate resolves the email template referenced by a notification template.
-// When ownerOnly is true, the lookup is scoped to owner-scoped templates only.
-// When ownerOnly is false, the lookup is scoped to system-owned templates only
-func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, notificationRecord *generated.NotificationTemplate, ownerOnly bool) (*generated.EmailTemplate, error) {
-	if notificationRecord.EmailTemplateID == "" {
-		return &generated.EmailTemplate{
-			Key:             notificationRecord.Key,
-			Name:            notificationRecord.Name,
-			Format:          notificationRecord.Format,
-			Locale:          notificationRecord.Locale,
-			SubjectTemplate: notificationRecord.SubjectTemplate,
-			BodyTemplate:    notificationRecord.BodyTemplate,
-			Jsonconfig:      mapx.DeepCloneMapAny(notificationRecord.Jsonconfig),
-			Uischema:        mapx.DeepCloneMapAny(notificationRecord.Uischema),
-			Metadata:        mapx.DeepCloneMapAny(notificationRecord.Metadata),
-			Active:          notificationRecord.Active,
-			SystemOwned:     notificationRecord.SystemOwned,
-		}, nil
-	}
-
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	query := client.EmailTemplate.Query().
-		Where(
-			emailtemplate.IDEQ(notificationRecord.EmailTemplateID),
-			emailtemplate.ActiveEQ(true),
+			emailtemplate.OwnerIDEQ(ownerID),
 		).
 		WithEmailBranding().
 		WithFiles(func(q *generated.FileQuery) {
@@ -247,21 +194,14 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 				file.FieldDetectedMimeType,
 				file.FieldFileContents,
 			)
-		})
-
-	if ownerOnly {
-		query = query.Where(emailtemplate.OwnerIDEQ(ownerID))
-	} else {
-		query = query.Where(emailtemplate.SystemOwnedEQ(true))
-	}
-
-	record, err := query.Only(allowCtx)
+		}).
+		Only(ctx)
 	if generated.IsNotFound(err) {
 		return nil, ErrEmailTemplateNotFound
 	}
 
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("email_template_id", notificationRecord.EmailTemplateID).Msg("failed loading email template")
+		logx.FromContext(ctx).Error().Err(err).Str("email_template_id", emailTemplateID).Msg("failed loading email template")
 		return nil, ErrEmailTemplateNotFound
 	}
 

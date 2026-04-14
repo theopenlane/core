@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 )
@@ -50,17 +49,6 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 	if err != nil {
 		return err
 	}
-
-	def, err := e.client.WorkflowDefinition.Query().
-		Where(workflowdefinition.IDEQ(instance.WorkflowDefinitionID)).
-		Only(wfworkflows.AllowContext(ctx))
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrFailedToLoadWorkflowDefinition, err)
-	}
-
-	// system-owned workflow definitions may reference system-owned templates;
-	// org-owned workflow definitions are restricted to owner-scoped templates only
-	ownerOnly := !def.SystemOwned
 
 	vars, data, err := e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
 	if err != nil {
@@ -111,12 +99,11 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 			ID:  templateID,
 			Key: templateKey,
 		},
-		To:        recipients,
-		From:      fromAddress,
-		ReplyTo:   replyTo,
-		Data:      data,
-		Headers:   params.Headers,
-		OwnerOnly: ownerOnly,
+		To:      recipients,
+		From:    fromAddress,
+		ReplyTo: replyTo,
+		Data:    data,
+		Headers: params.Headers,
 	}, e.client.Job)
 	if err != nil {
 		switch {

@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/templatecontext"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -110,7 +110,7 @@ func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) 
 		props = map[string]any{}
 	}
 
-	reserved := templatecontext.ReservedFieldNames()
+	reserved := emaildef.ReservedFieldNames()
 
 	for name, typ := range vars {
 		if _, isReserved := reserved[name]; isReserved {
