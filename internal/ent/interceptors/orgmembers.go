@@ -17,6 +17,10 @@ import (
 // TraverseOrgMembers is middleware to change the Org Members query
 func TraverseOrgMembers() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
 		// bypass filter if the request is internal and already set to allowed
 		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil
