@@ -43,25 +43,29 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		runType = enums.IntegrationRunTypeManual
 	}
 
-	runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
-		IntegrationID:      req.IntegrationID,
-		Operation:          req.Operation,
-		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild,
-		RunType:            runType,
-	})
-	if err != nil {
-		return DispatchResult{}, err
-	}
-
 	metadata := types.ExecutionMetadata{
 		OwnerID:       installationRecord.OwnerID,
 		IntegrationID: installationRecord.ID,
 		DefinitionID:  installationRecord.DefinitionID,
 		Operation:     req.Operation,
-		RunID:         runRecord.ID,
 		RunType:       runType,
 		Workflow:      req.Workflow,
+	}
+
+	// Create a run record unless the operation policy opts out
+	if !operation.Policy.SkipRunRecord {
+		runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
+			IntegrationID:      req.IntegrationID,
+			Operation:          req.Operation,
+			Config:             jsonx.CloneRawMessage(req.Config),
+			ForceClientRebuild: req.ForceClientRebuild,
+			RunType:            runType,
+		})
+		if err != nil {
+			return DispatchResult{}, err
+		}
+
+		metadata.RunID = runRecord.ID
 	}
 
 	// Inherit webhook/event context from the parent execution when dispatching
@@ -88,25 +92,27 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
 	}, gala.Headers{
-		IdempotencyKey: runRecord.ID,
+		IdempotencyKey: metadata.RunID,
 		Properties:     metadata.Properties(),
 		Tags:           tags,
 	})
 
 	if receipt.Err != nil {
-		if completeErr := CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
-			Status:  enums.IntegrationRunStatusFailed,
-			Summary: "dispatch failed",
-			Error:   receipt.Err.Error(),
-		}); completeErr != nil {
-			return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+		if metadata.RunID != "" {
+			if completeErr := CompleteRun(ctx, db, metadata.RunID, time.Now(), RunResult{
+				Status:  enums.IntegrationRunStatusFailed,
+				Summary: "dispatch failed",
+				Error:   receipt.Err.Error(),
+			}); completeErr != nil {
+				return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+			}
 		}
 
 		return DispatchResult{}, receipt.Err
 	}
 
 	return DispatchResult{
-		RunID:   runRecord.ID,
+		RunID:   metadata.RunID,
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil

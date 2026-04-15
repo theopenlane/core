@@ -234,16 +234,19 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	startedAt := time.Now()
 	db := r.DB()
+	tracked := envelope.RunID != ""
 
 	failRun := func(execErr error, response json.RawMessage) error {
-		if completeErr := operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
-			Status: enums.IntegrationRunStatusFailed,
-			Error:  execErr.Error(),
-			Metrics: map[string]any{
-				"response": jsonx.DecodeAnyOrNil(response),
-			},
-		}); completeErr != nil {
-			execErr = errors.Join(execErr, completeErr)
+		if tracked {
+			if completeErr := operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
+				Status: enums.IntegrationRunStatusFailed,
+				Error:  execErr.Error(),
+				Metrics: map[string]any{
+					"response": jsonx.DecodeAnyOrNil(response),
+				},
+			}); completeErr != nil {
+				execErr = errors.Join(execErr, completeErr)
+			}
 		}
 
 		if r.postExecutionHook != nil {
@@ -255,8 +258,10 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation started")
 
-	if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
-		return err
+	if tracked {
+		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
+			return err
+		}
 	}
 
 	if bootstrapErr != nil {
@@ -277,13 +282,17 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation completed")
 
-	completeErr := operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: "operation completed",
-		Metrics: map[string]any{
-			"response": jsonx.DecodeAnyOrNil(response),
-		},
-	})
+	var completeErr error
+
+	if tracked {
+		completeErr = operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
+			Status:  enums.IntegrationRunStatusSuccess,
+			Summary: "operation completed",
+			Metrics: map[string]any{
+				"response": jsonx.DecodeAnyOrNil(response),
+			},
+		})
+	}
 
 	if r.postExecutionHook != nil {
 		r.postExecutionHook(ctx, envelope, completeErr)

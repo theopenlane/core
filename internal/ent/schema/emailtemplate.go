@@ -152,9 +152,6 @@ func (EmailTemplate) Indexes() []ent.Index {
 		index.Fields(ownerFieldName, "key").
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("key").
-			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL and system_owned = true")),
 	}
 }
 

@@ -2,6 +2,7 @@ package email
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"maps"
 	"strings"
@@ -14,15 +15,31 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// SendCampaignEmails iterates all pending campaign targets and queues one templated email per recipient.
-// Targets with sent_at already set are skipped. Failed sends are logged and processing continues
-// so a single bad address does not abort the entire dispatch
-func SendCampaignEmails(ctx context.Context, db *generated.Client, emailClient *EmailClient, campaignID string) error {
-	camp, err := db.Campaign.Query().
-		Where(campaign.IDEQ(campaignID)).
+// SendCampaignRequest is the operation config for dispatching a full campaign
+type SendCampaignRequest struct {
+	// CampaignID is the identifier of the campaign to dispatch
+	CampaignID string `json:"campaignId" jsonschema:"required,description=Campaign identifier"`
+}
+
+// SendCampaign dispatches templated emails to all pending campaign targets
+type SendCampaign struct{}
+
+// Handle returns the typed operation handler for builder registration
+func (s SendCampaign) Handle() types.OperationHandler {
+	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
+}
+
+// Run loads the campaign, iterates pending targets, renders and sends one email per target.
+// Targets with sent_at already set are skipped. Failed sends are logged and processing
+// continues so a single bad address does not abort the entire dispatch
+func (SendCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendCampaignRequest) (json.RawMessage, error) {
+	camp, err := req.DB.Campaign.Query().
+		Where(campaign.IDEQ(cfg.CampaignID)).
 		WithEmailBranding().
 		WithEmailTemplate(func(q *generated.EmailTemplateQuery) {
 			q.WithFiles(func(fq *generated.FileQuery) {
@@ -37,41 +54,41 @@ func SendCampaignEmails(ctx context.Context, db *generated.Client, emailClient *
 		Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return ErrCampaignNotFound
+			return nil, ErrCampaignNotFound
 		}
 
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed loading campaign for email dispatch")
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign for email dispatch")
 
-		return ErrCampaignNotFound
+		return nil, ErrCampaignNotFound
 	}
 
 	emailRecord := camp.Edges.EmailTemplate
 	if emailRecord == nil {
-		return nil
+		return nil, nil
 	}
 
-	targets, err := db.CampaignTarget.Query().
+	targets, err := req.DB.CampaignTarget.Query().
 		Where(
-			campaigntarget.CampaignIDEQ(campaignID),
+			campaigntarget.CampaignIDEQ(cfg.CampaignID),
 			campaigntarget.SentAtIsNil(),
 		).
 		All(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed loading campaign targets")
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign targets")
 
-		return err
+		return nil, err
 	}
 
 	for _, target := range targets {
-		if err := sendAndMarkTarget(ctx, db, emailClient, camp, emailRecord, target); err != nil {
+		if err := sendAndMarkTarget(ctx, req.DB, client, camp, emailRecord, target); err != nil {
 			logx.FromContext(ctx).Error().Err(err).
-				Str("campaign_id", campaignID).
+				Str("campaign_id", cfg.CampaignID).
 				Str("target_id", target.ID).
 				Msg("failed dispatching campaign email to target")
 		}
 	}
 
-	return nil
+	return nil, nil
 }
 
 // sendAndMarkTarget sends a single campaign email then marks the target as sent.
@@ -92,8 +109,7 @@ func sendAndMarkTarget(ctx context.Context, db *generated.Client, emailClient *E
 }
 
 // sendCampaignTargetEmail renders and sends one email for a single campaign target
-// through the integration framework's email client. This ensures customer-configured
-// email providers are used when installed
+// through the integration framework's email client
 func sendCampaignTargetEmail(ctx context.Context, emailClient *EmailClient, camp *generated.Campaign, emailRecord *generated.EmailTemplate, target *generated.CampaignTarget) error {
 	first, last := splitFullName(target.FullName)
 

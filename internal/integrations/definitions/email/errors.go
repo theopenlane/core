@@ -37,6 +37,4 @@ var (
 	ErrCampaignNotFound = errors.New("email: campaign not found")
 	// ErrSenderNotConfigured indicates the email client has no sender configured
 	ErrSenderNotConfigured = errors.New("email: sender not configured")
-	// ErrClientResolverNotConfigured indicates no client resolver has been wired at startup
-	ErrClientResolverNotConfigured = errors.New("email: client resolver not configured")
 )

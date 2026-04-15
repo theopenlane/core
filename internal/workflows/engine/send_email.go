@@ -2,8 +2,6 @@ package engine
 
 import (
 	"context"
-	"encoding/json"
-	"errors"
 	"fmt"
 	"net/mail"
 	"strings"
@@ -13,110 +11,13 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 )
 
-// executeSendEmail composes and queues an email from a notification/email template reference
-func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
-	var params wfworkflows.SendEmailActionParams
-
-	if len(action.Params) == 0 {
-		return ErrSendEmailTemplateRequired
-	}
-
-	if err := json.Unmarshal(action.Params, &params); err != nil {
-		return fmt.Errorf("%w: %w", ErrUnmarshalParams, err)
-	}
-
-	templateID := params.TemplateID
-	templateKey := params.TemplateKey
-	if templateID != "" && templateKey != "" {
-		return ErrSendEmailTemplateReferenceConflict
-	}
-	if templateID == "" && templateKey == "" {
-		return ErrSendEmailTemplateRequired
-	}
-
-	if obj == nil {
-		return ErrObjectRefMissingID
-	}
-	if instance == nil {
-		return ErrInstanceNotFound
-	}
-
-	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
-	if err != nil {
-		return err
-	}
-
-	vars, data, err := e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
-	if err != nil {
-		return err
-	}
-
-	recipients, err := e.resolveSendEmailRecipients(ctx, obj, action, params, vars)
-	if err != nil {
-		return err
-	}
-	if len(recipients) == 0 {
-		return ErrSendEmailNoRecipients
-	}
-
-	emailClient, err := email.ResolveClient(ctx, ownerID)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrSendEmailTemplateComposeFailed, err)
-	}
-
-	fromAddress, err := e.resolveSendEmailFromAddress(ctx, params.From, emailClient.Config.FromEmail, vars)
-	if err != nil {
-		return err
-	}
-	if fromAddress == "" {
-		return ErrSendEmailSenderMissing
-	}
-
-	replyTo := ""
-	if params.ReplyTo != "" {
-		replyTo, err = renderTemplateText(ctx, e.celEvaluator, params.ReplyTo, vars)
-		if err != nil {
-			return fmt.Errorf("%w: %w", ErrSendEmailRecipientTemplateInvalid, err)
-		}
-		replyTo = strings.TrimSpace(replyTo)
-		if replyTo != "" {
-			parsed, parseErr := mail.ParseAddress(replyTo)
-			if parseErr != nil {
-				return fmt.Errorf("%w: %w", ErrSendEmailRecipientTemplateInvalid, parseErr)
-			}
-			replyTo = parsed.Address
-		}
-	}
-
-	allowCtx := wfworkflows.AllowContext(ctx)
-	_, err = email.ComposeAndQueueFromNotificationTemplate(allowCtx, e.client, emailClient, email.ComposeRequest{
-		OwnerID: ownerID,
-		Template: email.TemplateRef{
-			ID:  templateID,
-			Key: templateKey,
-		},
-		To:      recipients,
-		From:    fromAddress,
-		ReplyTo: replyTo,
-		Data:    data,
-		Headers: params.Headers,
-	}, e.client.Job)
-	if err != nil {
-		switch {
-		case errors.Is(err, email.ErrJobClientRequired):
-			return ErrSendEmailJobClientRequired
-		case errors.Is(err, email.ErrQueueInsertFailed):
-			return fmt.Errorf("%w: %w", ErrSendEmailQueueInsertFailed, err)
-		default:
-			return fmt.Errorf("%w: %w", ErrSendEmailTemplateComposeFailed, err)
-		}
-	}
-
-	return nil
+// executeSendEmail should dispatch through the integration framework via QueueIntegrationOperation.
+// Stubbed pending refactor to route through the SendEmail operation instead of manually resolving clients
+func (e *WorkflowEngine) executeSendEmail(_ context.Context, _ models.WorkflowAction, _ *generated.WorkflowInstance, _ *wfworkflows.Object) error {
+	return fmt.Errorf("%w: send_email action pending integration framework refactor", ErrActionExecutionFailed)
 }
 
 // resolveSendEmailFromAddress resolves a sender address from explicit params or falls back to defaultFrom

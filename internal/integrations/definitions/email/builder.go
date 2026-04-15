@@ -17,7 +17,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
+				ID:          DefinitionID.ID(),
 				Family:      "email",
 				DisplayName: "Email",
 				Description: "Send templated transactional and campaign emails via resend, sendgrid, or postmark.",
@@ -55,15 +55,35 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 			UserInput: &types.UserInputRegistration{
 				Schema: emailUserInputSchema,
 			},
-			Operations: append(AllEmailOperations(), types.OperationRegistration{
-				Name:         sendCampaignOp.Name(),
-				Description:  "Dispatch a full email campaign",
-				Topic:        definitionID.OperationTopic(sendCampaignOp.Name()),
-				ClientRef:    emailClientRef.ID(),
-				ConfigSchema: sendCampaignSchema,
-				Policy:       types.ExecutionPolicy{Reconcile: true},
-				Handle:       handleSendCampaign,
-			}),
+			Operations: append(AllEmailOperations(),
+				types.OperationRegistration{
+					Name:         healthCheckOp.Name(),
+					Description:  "Validate the email provider credentials are functional",
+					Topic:        DefinitionID.OperationTopic(healthCheckOp.Name()),
+					ClientRef:    emailClientRef.ID(),
+					ConfigSchema: healthCheckSchema,
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+				},
+				types.OperationRegistration{
+					Name:         sendEmailOp.Name(),
+					Description:  "Send a single templated email",
+					Topic:        DefinitionID.OperationTopic(sendEmailOp.Name()),
+					ClientRef:    emailClientRef.ID(),
+					ConfigSchema: sendEmailSchema,
+					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
+					Handle:       SendEmail{}.Handle(),
+				},
+				types.OperationRegistration{
+					Name:         SendCampaignOp.Name(),
+					Description:  "Dispatch a full email campaign to all pending targets",
+					Topic:        DefinitionID.OperationTopic(SendCampaignOp.Name()),
+					ClientRef:    emailClientRef.ID(),
+					ConfigSchema: sendCampaignSchema,
+					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
+					Handle:       SendCampaign{}.Handle(),
+				},
+			),
 		}
 
 		if cfg.Provisioned() {
