@@ -57237,6 +57237,7 @@ enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/commo
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -64080,6 +64081,7 @@ enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -92290,6 +92292,7 @@ enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/c
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -106397,6 +106400,7 @@ enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
