@@ -45,7 +45,7 @@ type EmailOperation[T HasRecipient] struct {
 	// Subject returns the rendered subject line for the email
 	Subject func(cfg RuntimeEmailConfig, input T) string
 	// Theme is the newman render theme applied to this email
-	Theme render.Theme
+	Theme *render.Theme
 	// Content returns the structured email content for newman rendering
 	Content func(cfg RuntimeEmailConfig, input T) render.EmailContent
 	// MessageOptions returns additional newman message options for per-operation
@@ -89,10 +89,10 @@ func (e EmailOperation[T]) handler() types.OperationHandler {
 }
 
 // renderAndSend renders an email using the newman render engine and sends it through the client
-func renderAndSend(ctx context.Context, client *EmailClient, theme render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (json.RawMessage, error) {
+func renderAndSend(ctx context.Context, client *EmailClient, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (json.RawMessage, error) {
 	r := render.NewRenderer(
 		render.WithTheme(theme),
-		render.WithBranding(BrandingFromConfig(client.Config)),
+		render.WithBranding(BrandingFromConfig(client.Config, recipient.Email)),
 	)
 
 	htmlBody, err := r.GenerateHTML(content)

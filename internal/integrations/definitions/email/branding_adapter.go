@@ -2,7 +2,7 @@ package email
 
 import (
 	"fmt"
-	"strings"
+	"net/url"
 	"time"
 
 	"github.com/theopenlane/newman/render"
@@ -11,9 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
-// BrandingFromConfig converts a RuntimeEmailConfig into a render.Branding for use with the
-// newman rendering engine
-func BrandingFromConfig(config RuntimeEmailConfig) render.Branding {
+// BrandingFromConfig converts RuntimeEmailConfig into render.Branding for use with the newman rendering engine
+func BrandingFromConfig(config RuntimeEmailConfig, recipientEmail string) render.Branding {
 	year := time.Now().Year()
 
 	corp := config.Corporation
@@ -21,14 +20,19 @@ func BrandingFromConfig(config RuntimeEmailConfig) render.Branding {
 		corp = config.CompanyName
 	}
 
-	copyright := fmt.Sprintf("Copyright (c) %d %s. All rights reserved", year, corp)
+	copyright := fmt.Sprintf("\u00A9 %d %s All rights reserved.", year, corp)
+
+	unsubscribeURL := fmt.Sprintf("%s/unsubscribe?email=%s", config.ProductURL, url.QueryEscape(recipientEmail))
 
 	return render.Branding{
-		Name:        config.CompanyName,
-		Link:        config.ProductURL,
-		Logo:        config.LogoURL,
-		Copyright:   copyright,
-		TroubleText: "If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser",
+		Name:           config.CompanyName,
+		Link:           config.ProductURL,
+		Logo:           config.LogoURL,
+		Copyright:      copyright,
+		TroubleText:    "If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser",
+		CompanyAddress: config.CompanyAddress,
+		RootURL:        config.RootURL,
+		UnsubscribeURL: unsubscribeURL,
 	}
 }
 
@@ -46,47 +50,6 @@ func fontFamilyCSS(font enums.Font) string {
 	default:
 		return ""
 	}
-}
-
-// brandingCSS generates CSS rules from EmailBranding color and font fields for injection
-// into rendered HTML before CSS inlining. Uses common email-safe element selectors for
-// broad applicability across customer-authored templates
-func brandingCSS(eb *generated.EmailBranding) string {
-	var b strings.Builder
-
-	if eb.BackgroundColor != "" {
-		fmt.Fprintf(&b, "body { background-color: %s; }\n", eb.BackgroundColor)
-	}
-
-	if eb.TextColor != "" {
-		fmt.Fprintf(&b, "body, p, td, li { color: %s; }\n", eb.TextColor)
-	}
-
-	if eb.FontFamily != "" {
-		if fontCSS := fontFamilyCSS(eb.FontFamily); fontCSS != "" {
-			fmt.Fprintf(&b, "body, p, td { font-family: %s; }\n", fontCSS)
-		}
-	}
-
-	if eb.LinkColor != "" {
-		fmt.Fprintf(&b, "a { color: %s; }\n", eb.LinkColor)
-	}
-
-	if eb.ButtonColor != "" || eb.ButtonTextColor != "" {
-		b.WriteString(".button, .btn {")
-
-		if eb.ButtonColor != "" {
-			fmt.Fprintf(&b, " background-color: %s;", eb.ButtonColor)
-		}
-
-		if eb.ButtonTextColor != "" {
-			fmt.Fprintf(&b, " color: %s;", eb.ButtonTextColor)
-		}
-
-		b.WriteString(" }\n")
-	}
-
-	return b.String()
 }
 
 // selectDefaultBranding picks the default EmailBranding from a slice, falling back to the

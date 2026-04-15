@@ -15,8 +15,6 @@ body {
 
 table {
     border-collapse: separate;
-    min-width: 100%;
-    width: 100%;
 }
 
 table td {
@@ -103,9 +101,9 @@ td.button a:visited {
     color: #ffffff;
     text-decoration: none;
     display: inline-block;
-    padding: 14px 64px;
-    border-radius: 5px;
-    border: 1px solid #082930;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
 }
 
 td.button a:hover,
@@ -115,17 +113,18 @@ td.button a:active {
 
 .button {
     display: inline-block;
-    background-color: #082930;
+    background-color: #3fc2b4;
     color: #ffffff;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 700;
     font-family: 'Outfit', Helvetica, Arial, sans-serif;
     text-decoration: none;
-    padding: 14px 64px;
-    border-radius: 5px;
-    border: 1px solid #082930;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
     line-height: 1.0;
     text-align: center;
+    box-shadow: 0 6px 14px rgba(63, 194, 180, 0.35);
 }
 
 .body-action {
