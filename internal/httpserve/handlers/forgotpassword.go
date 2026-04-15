@@ -83,7 +83,7 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	if err := h.sendEmail(ctx, email.ResetRequestOp(), email.PasswordResetEmailRequest{
+	if err := h.sendEmail(ctx, email.ResetRequestOp.Name(), email.PasswordResetEmailRequest{
 		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 		Token:         meowtoken.Token,
 	}); err != nil {

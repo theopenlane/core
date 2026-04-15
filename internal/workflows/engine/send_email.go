@@ -2,22 +2,141 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/mail"
 	"strings"
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/types"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
-// executeSendEmail should dispatch through the integration framework via QueueIntegrationOperation.
-// Stubbed pending refactor to route through the SendEmail operation instead of manually resolving clients
-func (e *WorkflowEngine) executeSendEmail(_ context.Context, _ models.WorkflowAction, _ *generated.WorkflowInstance, _ *wfworkflows.Object) error {
-	return fmt.Errorf("%w: send_email action pending integration framework refactor", ErrActionExecutionFailed)
+// executeSendEmail dispatches a workflow send_email action through the integration
+// framework via QueueIntegrationOperation. It resolves the notification template,
+// recipients, and sender address, then routes through either a linked integration
+// installation or the runtime email definition
+func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
+	if e.integrationRuntime == nil {
+		return ErrIntegrationOperationsRequired
+	}
+
+	var params wfworkflows.SendEmailActionParams
+	if err := jsonx.RoundTrip(action.Params, &params); err != nil {
+		return errors.Join(ErrUnmarshalParams, err)
+	}
+
+	// validate template reference
+	hasID := params.TemplateID != ""
+	hasKey := params.TemplateKey != ""
+
+	switch {
+	case hasID && hasKey:
+		return ErrSendEmailTemplateReferenceConflict
+	case !hasID && !hasKey:
+		return ErrSendEmailTemplateRequired
+	}
+
+	ownerID := instance.OwnerID
+	if ownerID == "" {
+		caller, callerOk := auth.CallerFromContext(ctx)
+		if !callerOk || caller == nil || caller.OrganizationID == "" {
+			return ErrIntegrationOwnerRequired
+		}
+
+		ownerID = caller.OrganizationID
+	}
+
+	// render the notification template
+	rendered, err := e.renderNotificationTemplate(ctx, instance, obj, action.Key, wfworkflows.NotificationActionParams{
+		TemplateID:  params.TemplateID,
+		TemplateKey: params.TemplateKey,
+		Data:        params.Data,
+	}, ownerID)
+	if err != nil {
+		return err
+	}
+	if rendered == nil || rendered.Template == nil {
+		return ErrNotificationTemplateNotFound
+	}
+
+	// resolve recipients
+	recipients, err := e.resolveSendEmailRecipients(ctx, obj, action, params, rendered.Vars)
+	if err != nil {
+		return err
+	}
+	if len(recipients) == 0 {
+		return ErrSendEmailNoRecipients
+	}
+
+	// resolve from address: explicit param → runtime config default
+	fromAddress, err := e.resolveSendEmailFromAddress(ctx, params.From, "", rendered.Vars)
+	if err != nil {
+		return err
+	}
+
+	// build the operation config from the rendered template
+	config := buildRenderedTemplateConfig(rendered)
+	config["to"] = recipients
+	if fromAddress != "" {
+		config["from"] = fromAddress
+	}
+	if params.ReplyTo != "" {
+		config["reply_to"] = params.ReplyTo
+	}
+
+	configBytes, err := json.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrMarshalPayload, err)
+	}
+
+	// dispatch through the notification template's linked integration when available
+	if rendered.Template.IntegrationID != "" {
+		meta := &types.WorkflowMeta{
+			InstanceID:  instance.ID,
+			ActionKey:   action.Key,
+			ActionIndex: actionIndexForKey(instance.DefinitionSnapshot.Actions, action.Key),
+		}
+		if obj != nil {
+			meta.ObjectID = obj.ID
+			meta.ObjectType = obj.Type
+		}
+
+		_, queueErr := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
+			OrgID:          ownerID,
+			InstallationID: rendered.Template.IntegrationID,
+			Operation:      emaildef.SendEmailOp.Name(), // reuse the send operation
+			Config:         configBytes,
+			RunType:        enums.IntegrationRunTypeEvent,
+			Workflow:       meta,
+		})
+
+		if queueErr != nil {
+			return queueErr
+		}
+
+		markIntegrationQueued(ctx)
+
+		return nil
+	}
+
+	// no integration linked — execute directly via the runtime email definition
+	if _, err := e.integrationRuntime.ExecuteRuntimeOperation(ctx, emaildef.DefinitionID.ID(), emaildef.SendEmailOp.Name(), configBytes); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("send_email runtime execution failed")
+		return err
+	}
+
+	return nil
 }
 
 // resolveSendEmailFromAddress resolves a sender address from explicit params or falls back to defaultFrom

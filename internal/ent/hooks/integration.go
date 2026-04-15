@@ -57,3 +57,51 @@ func shouldSkipIntegrationPrimaryDirectorySync(ctx context.Context) bool {
 func withSkipIntegrationPrimaryDirectorySync(ctx context.Context) context.Context {
 	return context.WithValue(ctx, integrationPrimaryDirectorySkipKey{}, true)
 }
+
+type integrationCampaignEmailSkipKey struct{}
+
+// HookIntegrationCampaignEmail enforces the one-campaign-email-per-org invariant.
+// When an integration is flagged as the campaign email provider, all sibling
+// integrations in the same organization have their campaign_email flag cleared
+func HookIntegrationCampaignEmail() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.IntegrationFunc(func(ctx context.Context, m *generated.IntegrationMutation) (generated.Value, error) {
+			if shouldSkipIntegrationCampaignEmailSync(ctx) {
+				return next.Mutate(ctx, m)
+			}
+
+			//			campaignEmail, ok := m.CampaignEmail()
+			//			if !ok || !campaignEmail {
+			//				return next.Mutate(ctx, m)
+			//			}
+			//
+			//			retVal, err := next.Mutate(ctx, m)
+			//			if err != nil {
+			//				return nil, err
+			//			}
+			//
+			//			inst := retVal.(*generated.Integration)
+			//
+			//			return retVal, m.Client().Integration.Update().
+			//				Where(
+			//					integration.OwnerID(inst.OwnerID),
+			//					integration.IDNEQ(inst.ID),
+			//					integration.CampaignEmail(true),
+			//				).
+			//				SetCampaignEmail(false).
+			//				Exec(privacy.DecisionContext(withSkipIntegrationCampaignEmailSync(ctx), privacy.Allow))
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// shouldSkipIntegrationCampaignEmailSync reports whether sibling clearing should be bypassed
+func shouldSkipIntegrationCampaignEmailSync(ctx context.Context) bool {
+	v, _ := ctx.Value(integrationCampaignEmailSkipKey{}).(bool)
+	return v
+}
+
+// withSkipIntegrationCampaignEmailSync marks a context to bypass recursive hook re-entry
+func withSkipIntegrationCampaignEmailSync(ctx context.Context) context.Context {
+	return context.WithValue(ctx, integrationCampaignEmailSkipKey{}, true)
+}

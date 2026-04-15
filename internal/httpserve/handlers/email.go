@@ -9,7 +9,7 @@ import (
 
 // sendEmail dispatches a system email operation via the integrations runtime,
 // following the same pattern as hooks.sendSystemEmail
-func (h *Handler) sendEmail(ctx context.Context, op email.OperationAccessor, input any) error {
+func (h *Handler) sendEmail(ctx context.Context, operationName string, input any) error {
 	if h.IntegrationsRuntime == nil {
 		return nil
 	}
@@ -19,7 +19,7 @@ func (h *Handler) sendEmail(ctx context.Context, op email.OperationAccessor, inp
 		return err
 	}
 
-	_, err = h.IntegrationsRuntime.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), op.Name(), config)
+	_, err = h.IntegrationsRuntime.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), operationName, config)
 
 	return err
 }

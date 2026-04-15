@@ -63,11 +63,6 @@ type OperationHandler func(ctx context.Context, request OperationRequest) (json.
 // IngestHandler executes one definition operation and returns typed ingest payload sets for pipeline routing
 type IngestHandler func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error)
 
-// DispatchForOwnerFunc resolves an integration for the given owner and dispatches
-// an operation. When no customer installation exists but the definition is
-// runtime-provisioned, execution falls back to the runtime path
-type DispatchForOwnerFunc func(ctx context.Context, definitionID string, operationName string, ownerID string, config json.RawMessage) error
-
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {
 	// Name is the stable operation identifier within the definition

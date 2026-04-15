@@ -139,7 +139,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.WelcomeOp(), emaildef.WelcomeRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.WelcomeOp.Name(), emaildef.WelcomeRequest{
 				RecipientInfo: emaildef.RecipientInfo{
 					Email:     user.Email,
 					FirstName: user.FirstName,

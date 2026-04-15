@@ -136,7 +136,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 				return err
 			}
 
-			if err := h.sendEmail(ctxWithToken, email.SubscribeOp(), email.SubscribeRequest{
+			if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
 				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
 				OrgName:       org.DisplayName,
 				Token:         tokenValue,

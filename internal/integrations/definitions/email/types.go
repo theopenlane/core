@@ -21,7 +21,7 @@ var (
 	// healthCheckSchema is the operation schema for the health check operation
 	healthCheckSchema, healthCheckOp = providerkit.OperationSchema[HealthCheck]()
 	// sendEmailSchema is the operation schema for the generic send-email operation
-	sendEmailSchema, sendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
+	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
 	// sendCampaignSchema is the operation schema for the send-campaign operation
 	sendCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendCampaignRequest]()
 )

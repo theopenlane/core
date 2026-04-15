@@ -122,7 +122,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp(), email.QuestionnaireAuthEmail{
+	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp.Name(), email.QuestionnaireAuthEmail{
 		RecipientInfo:  email.RecipientInfo{Email: in.Email},
 		AssessmentName: assessmentData.Name,
 		AuthURL:        authURL,

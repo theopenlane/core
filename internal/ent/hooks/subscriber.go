@@ -85,7 +85,7 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp(), emaildef.SubscribeRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				OrgName:       orgName,
 				Token:         tokenValue,

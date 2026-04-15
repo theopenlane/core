@@ -63,10 +63,8 @@ type Definition struct {
 type GalaListenerRegistration struct {
 	// Name is a stable listener identifier for diagnostics
 	Name string
-	// Register registers the listener on the supplied gala registry.
-	// The dispatch function allows listeners to trigger operation execution
-	// by resolving the integration for a given owner
-	Register func(registry *gala.Registry, dispatch DispatchForOwnerFunc) ([]gala.ListenerID, error)
+	// Register registers the listener on the supplied gala registry
+	Register func(registry *gala.Registry) ([]gala.ListenerID, error)
 }
 
 // OperatorConfigRegistration describes operator-owned configuration for a definition

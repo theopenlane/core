@@ -6,13 +6,12 @@ import (
 	"github.com/riverqueue/river"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
 // RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
-func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, dispatchForOwner types.DispatchForOwnerFunc) error {
+func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -62,7 +61,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 	}
 
 	for _, listener := range reg.GalaListeners() {
-		if _, err := listener.Register(runtime.Registry(), dispatchForOwner); err != nil {
+		if _, err := listener.Register(runtime.Registry()); err != nil {
 			return err
 		}
 	}
