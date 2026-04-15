@@ -154,7 +154,7 @@ func (Evidence) Fields() []ent.Field {
 func (Evidence) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
