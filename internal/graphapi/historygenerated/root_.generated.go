@@ -979,6 +979,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RenewalDate            func(childComplexity int) int
+		ReviewFrequency        func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
 		Source                 func(childComplexity int) int
@@ -8625,6 +8626,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.RenewalDate(childComplexity), true
+
+	case "EvidenceHistory.reviewFrequency":
+		if e.ComplexityRoot.EvidenceHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ReviewFrequency(childComplexity), true
 
 	case "EvidenceHistory.scopeID":
 		if e.ComplexityRoot.EvidenceHistory.ScopeID == nil {
@@ -34571,6 +34579,10 @@ type EvidenceHistory implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceHistoryEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceHistoryFrequency
 }
 """
 A connection to a list of items.
@@ -34617,6 +34629,16 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
   REJECTED
 }
 """
+EvidenceHistoryFrequency is enum for the field review_frequency
+"""
+enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 EvidenceHistoryOpType is enum for the field operation
 """
 enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -34648,6 +34670,7 @@ enum EvidenceHistoryOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -35027,6 +35050,15 @@ input EvidenceHistoryWhereInput {
   statusNotIn: [EvidenceHistoryEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceHistoryFrequency
+  reviewFrequencyNEQ: EvidenceHistoryFrequency
+  reviewFrequencyIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
 }
 type FileHistory implements Node {
   id: ID!

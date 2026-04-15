@@ -347,6 +347,20 @@ func (_c *EvidenceCreate) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceCr
 	return _c
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *EvidenceCreate) SetReviewFrequency(v enums.Frequency) *EvidenceCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EvidenceCreate) SetID(v string) *EvidenceCreate {
 	_c.mutation.SetID(v)
@@ -618,6 +632,10 @@ func (_c *EvidenceCreate) defaults() error {
 		v := evidence.DefaultIsAutomated
 		_c.mutation.SetIsAutomated(v)
 	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := evidence.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if evidence.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized evidence.DefaultID (forgotten import generated/runtime?)")
@@ -662,6 +680,11 @@ func (_c *EvidenceCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := evidence.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Evidence.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := evidence.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Evidence.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -783,6 +806,10 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(evidence.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

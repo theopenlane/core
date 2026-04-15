@@ -1614,6 +1614,46 @@ func StatusNotNil() predicate.Evidence {
 	return predicate.Evidence(sql.FieldNotNull(FieldStatus))
 }
 
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.Evidence {
+	vc := v
+	return predicate.Evidence(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.Evidence {
+	vc := v
+	return predicate.Evidence(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.Evidence {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Evidence(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.Evidence {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Evidence(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldReviewFrequency))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Evidence {
 	return predicate.Evidence(func(s *sql.Selector) {

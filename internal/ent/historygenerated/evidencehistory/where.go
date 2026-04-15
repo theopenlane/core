@@ -1759,6 +1759,46 @@ func StatusNotNil() predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNotNull(FieldStatus))
 }
 
+// ReviewFrequencyEQ applies the EQ predicate on the "review_frequency" field.
+func ReviewFrequencyEQ(v enums.Frequency) predicate.EvidenceHistory {
+	vc := v
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyNEQ applies the NEQ predicate on the "review_frequency" field.
+func ReviewFrequencyNEQ(v enums.Frequency) predicate.EvidenceHistory {
+	vc := v
+	return predicate.EvidenceHistory(sql.FieldNEQ(FieldReviewFrequency, vc))
+}
+
+// ReviewFrequencyIn applies the In predicate on the "review_frequency" field.
+func ReviewFrequencyIn(vs ...enums.Frequency) predicate.EvidenceHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EvidenceHistory(sql.FieldIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyNotIn applies the NotIn predicate on the "review_frequency" field.
+func ReviewFrequencyNotIn(vs ...enums.Frequency) predicate.EvidenceHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.EvidenceHistory(sql.FieldNotIn(FieldReviewFrequency, v...))
+}
+
+// ReviewFrequencyIsNil applies the IsNil predicate on the "review_frequency" field.
+func ReviewFrequencyIsNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIsNull(FieldReviewFrequency))
+}
+
+// ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
+func ReviewFrequencyNotNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotNull(FieldReviewFrequency))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.EvidenceHistory) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.AndPredicates(predicates...))

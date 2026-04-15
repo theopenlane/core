@@ -15,6 +15,7 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			name
 			ownerID
 			renewalDate
+			reviewFrequency
 			scopeID
 			scopeName
 			source
@@ -200,6 +201,7 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		name
 		ownerID
 		renewalDate
+		reviewFrequency
 		scopeID
 		scopeName
 		source
@@ -338,6 +340,37 @@ query GetEvidences ($where: EvidenceWhereInput) {
 				}
 			}
 		}
+	}
+}
+mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
+	updateBulkEvidence(ids: $ids, input: $input) {
+		evidences {
+			collectionProcedure
+			createdAt
+			createdBy
+			creationDate
+			description
+			displayID
+			environmentID
+			environmentName
+			externalUUID
+			id
+			isAutomated
+			name
+			ownerID
+			renewalDate
+			reviewFrequency
+			scopeID
+			scopeName
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+			url
+			workflowEligibleMarker
+		}
+		updatedIDs
 	}
 }
 mutation UpdateEvidence ($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {

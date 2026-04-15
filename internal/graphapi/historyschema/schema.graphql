@@ -12494,6 +12494,10 @@ type EvidenceHistory implements Node {
 	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	"""
 	status: EvidenceHistoryEvidenceStatus
+	"""
+	the cadence for reviewing the evidence
+	"""
+	reviewFrequency: EvidenceHistoryFrequency
 }
 """
 A connection to a list of items.
@@ -12540,6 +12544,16 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
 	REJECTED
 }
 """
+EvidenceHistoryFrequency is enum for the field review_frequency
+"""
+enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+	NONE
+}
+"""
 EvidenceHistoryOpType is enum for the field operation
 """
 enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -12571,6 +12585,7 @@ enum EvidenceHistoryOrderField {
 	creation_date
 	renewal_date
 	STATUS
+	REVIEW_FREQUENCY
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -12950,6 +12965,15 @@ input EvidenceHistoryWhereInput {
 	statusNotIn: [EvidenceHistoryEvidenceStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: EvidenceHistoryFrequency
+	reviewFrequencyNEQ: EvidenceHistoryFrequency
+	reviewFrequencyIn: [EvidenceHistoryFrequency!]
+	reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
 }
 """
 The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control

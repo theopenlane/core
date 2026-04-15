@@ -1994,6 +1994,7 @@ type ComplexityRoot struct {
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
+		ReviewFrequency         func(childComplexity int) int
 		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                   func(childComplexity int) int
 		ScopeID                 func(childComplexity int) int
@@ -17398,6 +17399,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.RenewalDate(childComplexity), true
+
+	case "Evidence.reviewFrequency":
+		if e.ComplexityRoot.Evidence.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.ReviewFrequency(childComplexity), true
 
 	case "Evidence.scans":
 		if e.ComplexityRoot.Evidence.Scans == nil {
@@ -68036,6 +68044,10 @@ input CreateEvidenceInput {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -81706,6 +81718,10 @@ type Evidence implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -82096,6 +82112,16 @@ enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/
   REJECTED
 }
 """
+EvidenceFrequency is enum for the field review_frequency
+"""
+enum EvidenceFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Evidence connections
 """
 input EvidenceOrder {
@@ -82118,6 +82144,7 @@ enum EvidenceOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -82461,6 +82488,15 @@ input EvidenceWhereInput {
   statusNotIn: [EvidenceEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceFrequency
+  reviewFrequencyNEQ: EvidenceFrequency
+  reviewFrequencyIn: [EvidenceFrequency!]
+  reviewFrequencyNotIn: [EvidenceFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
   """
   owner edge predicates
   """
@@ -130113,6 +130149,11 @@ input UpdateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   clearStatus: Boolean
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  clearReviewFrequency: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID

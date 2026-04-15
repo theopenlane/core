@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -15,6 +16,125 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/objects"
 )
+
+// HookEvidenceReviewDate runs on evidence mutations and calculate the next review time based
+// on creation date + review frequency
+func HookEvidenceReviewDate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.EvidenceFunc(func(ctx context.Context, m *generated.EvidenceMutation) (generated.Value, error) {
+			creationDate, creationDateMutated := m.CreationDate()
+			frequency, frequencyMutated := m.ReviewFrequency()
+			_, renewalDateMutated := m.RenewalDate()
+
+			if renewalDateMutated {
+				if err := validateTimeNotInPast(m.RenewalDate()); err != nil {
+					return nil, err
+				}
+
+				// on creation, ent defaults make renewal_date and review_frequency look set even
+				// when the request omitted them. so we need to preserve the explicit/default renewal_date unless
+				// a non-default frequency is provided that would set the renewal date
+				if !m.Op().Is(ent.OpCreate) || !frequencyMutated || frequency == evidence.DefaultReviewFrequency {
+					return next.Mutate(ctx, m)
+				}
+			}
+
+			if m.FieldCleared(evidence.FieldRenewalDate) || (!creationDateMutated && !frequencyMutated) {
+				return next.Mutate(ctx, m)
+			}
+
+			switch {
+			case m.Op().Is(ent.OpCreate):
+				if !creationDateMutated {
+					creationDate = evidence.DefaultCreationDate()
+				}
+
+				if !frequencyMutated {
+					frequency = evidence.DefaultReviewFrequency
+				}
+			case m.Op().Is(ent.OpUpdateOne):
+				if !creationDateMutated {
+					oldCreationDate, err := m.OldCreationDate(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldCreationDate != nil {
+						creationDate = *oldCreationDate
+					}
+				}
+
+				if !frequencyMutated {
+					oldFrequency, err := m.OldReviewFrequency(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					frequency = oldFrequency
+				}
+			case m.Op().Is(ent.OpUpdate):
+				if creationDateMutated && frequencyMutated {
+					break
+				}
+
+				ids, err := m.IDs(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				oldEvidences, err := m.Client().Evidence.Query().
+					Where(evidence.IDIn(ids...)).
+					Select(evidence.FieldID, evidence.FieldCreationDate, evidence.FieldReviewFrequency).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				v, err := next.Mutate(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				for _, ev := range oldEvidences {
+					evidenceCreationDate := creationDate
+					if !creationDateMutated && ev.CreationDate != nil {
+						evidenceCreationDate = *ev.CreationDate
+					}
+
+					evidenceFrequency := frequency
+					if !frequencyMutated {
+						evidenceFrequency = ev.ReviewFrequency
+					}
+
+					update := m.Client().Evidence.UpdateOneID(ev.ID)
+					if evidenceFrequency == enums.FrequencyNone || time.Time(evidenceCreationDate).IsZero() {
+						update.ClearRenewalDate()
+					} else {
+						update.SetRenewalDate(getNextReviewDate(evidenceFrequency, models.DateTime(evidenceCreationDate)))
+					}
+
+					err = update.Exec(ctx)
+					if err != nil {
+						return v, err
+					}
+				}
+
+				return v, nil
+			default:
+				return next.Mutate(ctx, m)
+			}
+
+			if frequency == enums.FrequencyNone || time.Time(creationDate).IsZero() {
+				m.ClearRenewalDate()
+				return next.Mutate(ctx, m)
+			}
+
+			m.SetRenewalDate(getNextReviewDate(frequency, models.DateTime(creationDate)))
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
 
 // HookEvidenceFiles runs on evidence mutations to check for uploaded files
 func HookEvidenceFiles() ent.Hook {
