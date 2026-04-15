@@ -110,6 +110,22 @@ func TestRegisterGalaIdentityResolutionListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
 }
 
+func TestRegisterGalaDocumentAssociationListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaDocumentAssociationListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 3)
+
+	for _, schemaType := range []string{entgen.TypeActionPlan, entgen.TypeInternalPolicy, entgen.TypeProcedure} {
+		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType)
+		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+	}
+}
+
 func TestRegisterGalaNotificationListeners(t *testing.T) {
 	t.Parallel()
 
