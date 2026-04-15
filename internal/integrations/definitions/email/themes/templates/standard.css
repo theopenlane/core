@@ -16,8 +16,6 @@ body {
 
 table {
     border-collapse: separate;
-    min-width: 100%;
-    width: 100%;
 }
 
 table td {
@@ -68,8 +66,12 @@ h4 {
 }
 
 h1 {
-    font-size: 32px;
-    text-transform: capitalize;
+    font-size: 24px;
+    font-weight: 400;
+    color: #505f6f;
+    margin-top: 16px;
+    margin-bottom: 21px;
+    line-height: 24px;
 }
 
 h2 {
@@ -85,9 +87,19 @@ p {
     font-family: 'Outfit', Helvetica, Arial, sans-serif;
     font-weight: normal;
     margin: 0;
-    margin-bottom: 16px;
+    margin-top: 16px;
+    margin-bottom: 21px;
     color: #505f6f;
-    line-height: 1.625;
+    line-height: 24px;
+    text-align: center;
+}
+
+/* Icon container */
+.content-icon {
+    width: 105px;
+    height: 105px;
+    background-color: #f0fdf9;
+    border-radius: 52.5px;
 }
 
 a,
@@ -115,17 +127,18 @@ a:visited {
 /* Buttons */
 .button {
     display: inline-block;
-    background-color: #082930;
-    color: #ffffff;
-    font-size: 16px;
+    background-color: #60e8c9;
+    color: #082930;
+    font-size: 14px;
     font-weight: 500;
     font-family: 'Outfit', Helvetica, Arial, sans-serif;
     text-decoration: none;
-    padding: 14px 64px;
-    border-radius: 5px;
-    border: 1px solid #082930;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: 1px solid #60e8c9;
     line-height: 1.0;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .button:hover,
