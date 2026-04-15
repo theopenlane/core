@@ -244,7 +244,7 @@ const DefaultStatus enums.DocumentStatus = "DRAFT"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.DocumentStatus) error {
 	switch s.String() {
-	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED":
+	case "PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING":
 		return nil
 	default:
 		return fmt.Errorf("actionplanhistory: invalid enum value for status field: %q", s)

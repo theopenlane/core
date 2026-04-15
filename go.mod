@@ -48,7 +48,6 @@ require (
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
-	github.com/gomarkdown/markdown v0.0.0-20260217112301-37c66b85d6ab
 	github.com/google/go-github/v84 v84.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
@@ -111,6 +110,7 @@ require (
 	github.com/urfave/cli/v3 v3.8.0
 	github.com/vektah/gqlparser/v2 v2.5.32
 	github.com/xeipuuv/gojsonschema v1.2.0
+	github.com/yuin/goldmark v1.8.2
 	github.com/zitadel/oidc/v3 v3.46.0
 	gocloud.dev v0.45.0
 	golang.org/x/crypto v0.50.0
