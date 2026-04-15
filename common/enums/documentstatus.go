@@ -10,6 +10,8 @@ var (
 	DocumentPublished DocumentStatus = "PUBLISHED"
 	// DocumentDraft indicates that the document is in draft status
 	DocumentDraft DocumentStatus = "DRAFT"
+	// DocumentPending indicates that the document is pending review
+	DocumentPending DocumentStatus = "PENDING"
 	// DocumentNeedsApproval indicates that the document needs approval
 	DocumentNeedsApproval DocumentStatus = "NEEDS_APPROVAL"
 	// DocumentApproved indicates that the document has been approved and is ready to be published
@@ -26,6 +28,7 @@ var documentStatusValues = []DocumentStatus{
 	DocumentNeedsApproval,
 	DocumentApproved,
 	DocumentArchived,
+	DocumentPending,
 }
 
 // Values returns a slice of strings that represents all the possible values of the DocumentStatus enum.
