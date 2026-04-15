@@ -4707,6 +4707,10 @@ type Campaign implements Node {
 	the email template associated with the campaign
 	"""
 	emailTemplateID: ID
+	"""
+	the email template associated with the campaign
+	"""
+	integrationID: ID
 	owner: Organization
 	blockedGroups(
 		"""
@@ -4806,6 +4810,7 @@ type Campaign implements Node {
 	assessment: Assessment
 	template: Template
 	emailBranding: EmailBranding
+	integration: Integration
 	emailTemplate: EmailTemplate
 	entity: Entity
 	campaignTargets(
@@ -6236,6 +6241,24 @@ input CampaignWhereInput {
 	emailTemplateIDEqualFold: ID
 	emailTemplateIDContainsFold: ID
 	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDGT: ID
+	integrationIDGTE: ID
+	integrationIDLT: ID
+	integrationIDLTE: ID
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -6280,6 +6303,11 @@ input CampaignWhereInput {
 	"""
 	hasEmailBranding: Boolean
 	hasEmailBrandingWith: [EmailBrandingWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
 	"""
 	email_template edge predicates
 	"""
@@ -11288,6 +11316,7 @@ input CreateCampaignInput {
 	assessmentID: ID
 	templateID: ID
 	emailBrandingID: ID
+	integrationID: ID
 	emailTemplateID: ID
 	entityID: ID
 	campaignTargetIDs: [ID!]
@@ -37181,6 +37210,37 @@ type Integration implements Node {
 		"""
 		where: EmailTemplateWhereInput
 	): EmailTemplateConnection!
+	campaigns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Campaigns returned from the connection.
+		"""
+		orderBy: [CampaignOrder!]
+
+		"""
+		Filtering options for Campaigns returned from the connection.
+		"""
+		where: CampaignWhereInput
+	): CampaignConnection!
 	entities(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -37761,6 +37821,11 @@ input IntegrationWhereInput {
 	"""
 	hasEmailTemplates: Boolean
 	hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+	"""
+	campaigns edge predicates
+	"""
+	hasCampaigns: Boolean
+	hasCampaignsWith: [CampaignWhereInput!]
 	"""
 	entities edge predicates
 	"""
@@ -85789,6 +85854,8 @@ input UpdateCampaignInput {
 	clearTemplate: Boolean
 	emailBrandingID: ID
 	clearEmailBranding: Boolean
+	integrationID: ID
+	clearIntegration: Boolean
 	emailTemplateID: ID
 	clearEmailTemplate: Boolean
 	entityID: ID

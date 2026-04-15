@@ -346,6 +346,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaignhistory.FieldMetadata:               {Type: field.TypeJSON, Column: campaignhistory.FieldMetadata},
 			campaignhistory.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailBrandingID},
 			campaignhistory.FieldEmailTemplateID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailTemplateID},
+			campaignhistory.FieldIntegrationID:          {Type: field.TypeString, Column: campaignhistory.FieldIntegrationID},
 		},
 	}
 	graph.Nodes[5] = &sqlgraph.Node{
@@ -4446,6 +4447,11 @@ func (f *CampaignHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
 // WhereEmailTemplateID applies the entql string predicate on the email_template_id field.
 func (f *CampaignHistoryFilter) WhereEmailTemplateID(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldEmailTemplateID))
+}
+
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *CampaignHistoryFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(campaignhistory.FieldIntegrationID))
 }
 
 // addPredicate implements the predicateAdder interface.

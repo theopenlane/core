@@ -1342,6 +1342,11 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldEmailTemplateID)
 				fieldSeen[campaignhistory.FieldEmailTemplateID] = struct{}{}
 			}
+		case "integrationID":
+			if _, ok := fieldSeen[campaignhistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldIntegrationID)
+				fieldSeen[campaignhistory.FieldIntegrationID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

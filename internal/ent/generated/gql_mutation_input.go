@@ -1936,6 +1936,7 @@ type CreateCampaignInput struct {
 	AssessmentID           *string
 	TemplateID             *string
 	EmailBrandingID        *string
+	IntegrationID          *string
 	EmailTemplateID        *string
 	EntityID               *string
 	CampaignTargetIDs      []string
@@ -2047,6 +2048,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.EmailBrandingID; v != nil {
 		m.SetEmailBrandingID(*v)
 	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
+	}
 	if v := i.EmailTemplateID; v != nil {
 		m.SetEmailTemplateID(*v)
 	}
@@ -2150,6 +2154,8 @@ type UpdateCampaignInput struct {
 	TemplateID                  *string
 	ClearEmailBranding          bool
 	EmailBrandingID             *string
+	ClearIntegration            bool
+	IntegrationID               *string
 	ClearEmailTemplate          bool
 	EmailTemplateID             *string
 	ClearEntity                 bool
@@ -2370,6 +2376,12 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.EmailBrandingID; v != nil {
 		m.SetEmailBrandingID(*v)
+	}
+	if i.ClearIntegration {
+		m.ClearIntegration()
+	}
+	if v := i.IntegrationID; v != nil {
+		m.SetIntegrationID(*v)
 	}
 	if i.ClearEmailTemplate {
 		m.ClearEmailTemplate()

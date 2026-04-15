@@ -96,6 +96,8 @@ const (
 	FieldEmailBrandingID = "email_branding_id"
 	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
 	FieldEmailTemplateID = "email_template_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -114,6 +116,8 @@ const (
 	EdgeTemplate = "template"
 	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
 	EdgeEmailBranding = "email_branding"
+	// EdgeIntegration holds the string denoting the integration edge name in mutations.
+	EdgeIntegration = "integration"
 	// EdgeEmailTemplate holds the string denoting the email_template edge name in mutations.
 	EdgeEmailTemplate = "email_template"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
@@ -193,6 +197,13 @@ const (
 	EmailBrandingInverseTable = "email_brandings"
 	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
 	EmailBrandingColumn = "email_branding_id"
+	// IntegrationTable is the table that holds the integration relation/edge.
+	IntegrationTable = "campaigns"
+	// IntegrationInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationInverseTable = "integrations"
+	// IntegrationColumn is the table column denoting the integration relation/edge.
+	IntegrationColumn = "integration_id"
 	// EmailTemplateTable is the table that holds the email_template relation/edge.
 	EmailTemplateTable = "campaigns"
 	// EmailTemplateInverseTable is the table name for the EmailTemplate entity.
@@ -297,6 +308,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldEmailBrandingID,
 	FieldEmailTemplateID,
+	FieldIntegrationID,
 }
 
 var (
@@ -608,6 +620,11 @@ func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
 }
 
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -689,6 +706,13 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByIntegrationField orders the results by integration field.
+func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -878,6 +902,13 @@ func newEmailBrandingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailBrandingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
+	)
+}
+func newIntegrationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
 func newEmailTemplateStep() *sqlgraph.Step {

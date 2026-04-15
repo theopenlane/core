@@ -104,6 +104,8 @@ const (
 	FieldEmailBrandingID = "email_branding_id"
 	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
 	FieldEmailTemplateID = "email_template_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
 	// Table holds the table name of the campaignhistory in the database.
 	Table = "campaign_history"
 )
@@ -153,6 +155,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldEmailBrandingID,
 	FieldEmailTemplateID,
+	FieldIntegrationID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -452,6 +455,11 @@ func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
 // ByEmailTemplateID orders the results by the email_template_id field.
 func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
 }
 
 var (

@@ -500,6 +500,8 @@ type ComplexityRoot struct {
 		HasWorkflowHistory      func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		IdentityHolders         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		Integration             func(childComplexity int) int
+		IntegrationID           func(childComplexity int) int
 		InternalOwner           func(childComplexity int) int
 		InternalOwnerGroup      func(childComplexity int) int
 		InternalOwnerGroupID    func(childComplexity int) int
@@ -2734,6 +2736,7 @@ type ComplexityRoot struct {
 	Integration struct {
 		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		Campaigns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DefinitionID             func(childComplexity int) int
@@ -9986,6 +9989,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Campaign.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+
+	case "Campaign.integration":
+		if e.ComplexityRoot.Campaign.Integration == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Campaign.Integration(childComplexity), true
+
+	case "Campaign.integrationID":
+		if e.ComplexityRoot.Campaign.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Campaign.IntegrationID(childComplexity), true
 
 	case "Campaign.internalOwner":
 		if e.ComplexityRoot.Campaign.InternalOwner == nil {
@@ -21337,6 +21354,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Integration.campaigns":
+		if e.ComplexityRoot.Integration.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Integration.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
 
 	case "Integration.createdAt":
 		if e.ComplexityRoot.Integration.CreatedAt == nil {
@@ -60749,6 +60778,10 @@ type Campaign implements Node {
   the email template associated with the campaign
   """
   emailTemplateID: ID
+  """
+  the email template associated with the campaign
+  """
+  integrationID: ID
   owner: Organization
   blockedGroups(
     """
@@ -60848,6 +60881,7 @@ type Campaign implements Node {
   assessment: Assessment
   template: Template
   emailBranding: EmailBranding
+  integration: Integration
   emailTemplate: EmailTemplate
   entity: Entity
   campaignTargets(
@@ -62127,6 +62161,24 @@ input CampaignWhereInput {
   emailTemplateIDEqualFold: ID
   emailTemplateIDContainsFold: ID
   """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -62171,6 +62223,11 @@ input CampaignWhereInput {
   """
   hasEmailBranding: Boolean
   hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
   """
   email_template edge predicates
   """
@@ -66692,6 +66749,7 @@ input CreateCampaignInput {
   assessmentID: ID
   templateID: ID
   emailBrandingID: ID
+  integrationID: ID
   emailTemplateID: ID
   entityID: ID
   campaignTargetIDs: [ID!]
@@ -91012,6 +91070,37 @@ type Integration implements Node {
     """
     where: EmailTemplateWhereInput
   ): EmailTemplateConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -91582,6 +91671,11 @@ input IntegrationWhereInput {
   """
   hasEmailTemplates: Boolean
   hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
   """
   entities edge predicates
   """
@@ -128268,6 +128362,8 @@ input UpdateCampaignInput {
   clearTemplate: Boolean
   emailBrandingID: ID
   clearEmailBranding: Boolean
+  integrationID: ID
+  clearIntegration: Boolean
   emailTemplateID: ID
   clearEmailTemplate: Boolean
   entityID: ID

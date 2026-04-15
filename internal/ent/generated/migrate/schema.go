@@ -603,6 +603,7 @@ var (
 		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
@@ -649,14 +650,20 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "campaigns_organizations_campaigns",
+				Symbol:     "campaigns_integrations_campaigns",
 				Columns:    []*schema.Column{CampaignsColumns[38]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "campaigns_organizations_campaigns",
+				Columns:    []*schema.Column{CampaignsColumns[39]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_templates_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[39]},
+				Columns:    []*schema.Column{CampaignsColumns[40]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -665,12 +672,12 @@ var (
 			{
 				Name:    "campaign_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{CampaignsColumns[7], CampaignsColumns[38]},
+				Columns: []*schema.Column{CampaignsColumns[7], CampaignsColumns[39]},
 			},
 			{
 				Name:    "campaign_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[38]},
+				Columns: []*schema.Column{CampaignsColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -678,7 +685,7 @@ var (
 			{
 				Name:    "campaign_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{CampaignsColumns[11], CampaignsColumns[38]},
+				Columns: []*schema.Column{CampaignsColumns[11], CampaignsColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -760,7 +767,7 @@ var (
 			},
 			{
 				Name:    "campaigntarget_campaign_id_email",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{CampaignTargetsColumns[14], CampaignTargetsColumns[8]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
@@ -2089,14 +2096,6 @@ var (
 				Columns: []*schema.Column{EmailTemplatesColumns[28], EmailTemplatesColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
-				},
-			},
-			{
-				Name:    "emailtemplate_key",
-				Unique:  true,
-				Columns: []*schema.Column{EmailTemplatesColumns[11]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL and system_owned = true",
 				},
 			},
 		},
@@ -13992,8 +13991,9 @@ func init() {
 	CampaignsTable.ForeignKeys[3].RefTable = EmailBrandingsTable
 	CampaignsTable.ForeignKeys[4].RefTable = EmailTemplatesTable
 	CampaignsTable.ForeignKeys[5].RefTable = EntitiesTable
-	CampaignsTable.ForeignKeys[6].RefTable = OrganizationsTable
-	CampaignsTable.ForeignKeys[7].RefTable = TemplatesTable
+	CampaignsTable.ForeignKeys[6].RefTable = IntegrationsTable
+	CampaignsTable.ForeignKeys[7].RefTable = OrganizationsTable
+	CampaignsTable.ForeignKeys[8].RefTable = TemplatesTable
 	CampaignTargetsTable.ForeignKeys[0].RefTable = CampaignsTable
 	CampaignTargetsTable.ForeignKeys[1].RefTable = ContactsTable
 	CampaignTargetsTable.ForeignKeys[2].RefTable = GroupsTable

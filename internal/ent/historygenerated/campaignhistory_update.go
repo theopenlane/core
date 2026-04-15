@@ -709,6 +709,26 @@ func (_u *CampaignHistoryUpdate) ClearEmailTemplateID() *CampaignHistoryUpdate {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CampaignHistoryUpdate) SetIntegrationID(v string) *CampaignHistoryUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdate) SetNillableIntegrationID(v *string) *CampaignHistoryUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CampaignHistoryUpdate) ClearIntegrationID() *CampaignHistoryUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdate) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -1019,6 +1039,12 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.EmailTemplateIDCleared() {
 		_spec.ClearField(campaignhistory.FieldEmailTemplateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(campaignhistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(campaignhistory.FieldIntegrationID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1717,6 +1743,26 @@ func (_u *CampaignHistoryUpdateOne) ClearEmailTemplateID() *CampaignHistoryUpdat
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CampaignHistoryUpdateOne) SetIntegrationID(v string) *CampaignHistoryUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CampaignHistoryUpdateOne) SetNillableIntegrationID(v *string) *CampaignHistoryUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CampaignHistoryUpdateOne) ClearIntegrationID() *CampaignHistoryUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // Mutation returns the CampaignHistoryMutation object of the builder.
 func (_u *CampaignHistoryUpdateOne) Mutation() *CampaignHistoryMutation {
 	return _u.mutation
@@ -2057,6 +2103,12 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.EmailTemplateIDCleared() {
 		_spec.ClearField(campaignhistory.FieldEmailTemplateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationID(); ok {
+		_spec.SetField(campaignhistory.FieldIntegrationID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationIDCleared() {
+		_spec.ClearField(campaignhistory.FieldIntegrationID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.CampaignHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

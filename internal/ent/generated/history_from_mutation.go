@@ -2051,6 +2051,10 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEmailTemplateID(emailTemplateID)
 	}
 
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -2316,6 +2320,12 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEmailTemplateID(campaign.EmailTemplateID)
 		}
 
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(campaign.IntegrationID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2390,6 +2400,7 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMetadata(campaign.Metadata).
 			SetEmailBrandingID(campaign.EmailBrandingID).
 			SetEmailTemplateID(campaign.EmailTemplateID).
+			SetIntegrationID(campaign.IntegrationID).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -128,6 +128,8 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
 			case "emailTemplateID":
 				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Campaign_integrationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -146,6 +148,8 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_template(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "integration":
+				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":
 				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":
@@ -281,6 +285,8 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
 			case "emailTemplateID":
 				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Campaign_integrationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -299,6 +305,8 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_template(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "integration":
+				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":
 				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":
@@ -463,6 +471,8 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
 			case "emailTemplateID":
 				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
+			case "integrationID":
+				return ec.fieldContext_Campaign_integrationID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
 			case "blockedGroups":
@@ -481,6 +491,8 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_template(ctx, field)
 			case "emailBranding":
 				return ec.fieldContext_Campaign_emailBranding(ctx, field)
+			case "integration":
+				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":
 				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
 			case "entity":

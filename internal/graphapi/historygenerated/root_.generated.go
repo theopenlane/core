@@ -247,6 +247,7 @@ type ComplexityRoot struct {
 		EntityID               func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
+		IntegrationID          func(childComplexity int) int
 		InternalOwner          func(childComplexity int) int
 		InternalOwnerGroupID   func(childComplexity int) int
 		InternalOwnerUserID    func(childComplexity int) int
@@ -4572,6 +4573,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.ID(childComplexity), true
+
+	case "CampaignHistory.integrationID":
+		if e.ComplexityRoot.CampaignHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.IntegrationID(childComplexity), true
 
 	case "CampaignHistory.internalOwner":
 		if e.ComplexityRoot.CampaignHistory.InternalOwner == nil {
@@ -24953,6 +24961,10 @@ type CampaignHistory implements Node {
   the email template associated with the campaign
   """
   emailTemplateID: String
+  """
+  the email template associated with the campaign
+  """
+  integrationID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -25594,6 +25606,24 @@ input CampaignHistoryWhereInput {
   emailTemplateIDNotNil: Boolean
   emailTemplateIDEqualFold: String
   emailTemplateIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!

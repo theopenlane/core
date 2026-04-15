@@ -3451,6 +3451,25 @@ func (c *CampaignClient) QueryEmailBranding(_m *Campaign) *EmailBrandingQuery {
 	return query
 }
 
+// QueryIntegration queries the integration edge of a Campaign.
+func (c *CampaignClient) QueryIntegration(_m *Campaign) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.IntegrationTable, campaign.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEmailTemplate queries the email_template edge of a Campaign.
 func (c *CampaignClient) QueryEmailTemplate(_m *Campaign) *EmailTemplateQuery {
 	query := (&EmailTemplateClient{config: c.config}).Query()
@@ -15270,6 +15289,25 @@ func (c *IntegrationClient) QueryEmailTemplates(_m *Integration) *EmailTemplateQ
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.EmailTemplate
 		step.Edge.Schema = schemaConfig.EmailTemplate
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Integration.
+func (c *IntegrationClient) QueryCampaigns(_m *Integration) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.CampaignsTable, integration.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
