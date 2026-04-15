@@ -1,12 +1,12 @@
 package summarizer
 
 import (
+	"bytes"
 	"context"
 
-	"github.com/gomarkdown/markdown"
-	"github.com/gomarkdown/markdown/html"
-	"github.com/gomarkdown/markdown/parser"
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/yuin/goldmark"
+	goldmarkparser "github.com/yuin/goldmark/parser"
 )
 
 type summarizer interface {
@@ -63,15 +63,16 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 }
 
 func mdToHTML(md []byte) []byte {
-	// create markdown parser with extensions
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
-	p := parser.NewWithExtensions(extensions)
-	doc := p.Parse(md)
+	gm := goldmark.New(
+		goldmark.WithParserOptions(
+			goldmarkparser.WithAutoHeadingID(),
+		),
+	)
 
-	// create HTML renderer with extensions
-	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.SkipImages | html.SkipLinks | html.SkipHTML
-	opts := html.RendererOptions{Flags: htmlFlags}
-	renderer := html.NewRenderer(opts)
+	var buf bytes.Buffer
+	if err := gm.Convert(md, &buf); err != nil {
+		return md
+	}
 
-	return markdown.Render(doc, renderer)
+	return buf.Bytes()
 }
