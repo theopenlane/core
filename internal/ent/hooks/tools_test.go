@@ -79,7 +79,11 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	version, err := fgaversion.GetVersion()
 	require.NoError(suite.T(), err)
 
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(), fgatest.WithModelFile(fgaModelFile), fgatest.WithVersion(version))
+	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
+		fgatest.WithVersion(version),
+	)
 	ctx := context.Background()
 
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)

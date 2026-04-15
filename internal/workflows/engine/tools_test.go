@@ -101,11 +101,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
 		fgatest.WithModelFile(fgaModelFile),
-		fgatest.WithEnvVars(map[string]string{
-			"OPENFGA_MAX_CHECKS_PER_BATCH_CHECK":          "100",
-			"OPENFGA_CHECK_ITERATOR_CACHE_ENABLED":        "false",
-			"OPENFGA_LIST_OBJECTS_ITERATOR_CACHE_ENABLED": "false",
-		}),
+		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)
 
