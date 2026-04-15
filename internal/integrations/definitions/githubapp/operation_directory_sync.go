@@ -268,6 +268,7 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 
 	for {
 		if err := ctx.Err(); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("githubapp: error checking context for github member query")
 			return nil, err
 		}
 
@@ -287,16 +288,20 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 		}
 
 		if err := client.Query(ctx, &query, variables); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Interface("org_member_node", members).Interface("variables", variables).Msg("githubapp: error querying github organization members")
+
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
 		members = append(members, query.Organization.MembersWithRole.Nodes...)
 
-		if !query.Organization.MembersWithRole.PageInfo.HasNextPage || query.Organization.MembersWithRole.PageInfo.EndCursor == "" {
+		if !query.Organization.MembersWithRole.PageInfo.HasNextPage {
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Organization.MembersWithRole.PageInfo.EndCursor))
+		cursor := githubv4.String(query.Organization.MembersWithRole.PageInfo.EndCursor)
+
+		after = &cursor
 	}
 
 	return members, nil
