@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -315,41 +314,6 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID stri
 	}
 
 	return response, nil
-}
-
-// DispatchForOwner resolves an integration for the given owner and dispatches an operation.
-// When no customer installation exists but the definition is runtime-provisioned,
-// execution falls back to the runtime path
-func (r *Runtime) DispatchForOwner(ctx context.Context, definitionID string, operationName string, ownerID string, config json.RawMessage) error {
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	inst, instErr := r.DB().Integration.Query().Where(
-		integration.OwnerIDEQ(ownerID),
-		integration.DefinitionIDEQ(definitionID)).Only(systemCtx)
-
-	switch {
-	case ent.IsNotFound(instErr):
-		if r.Registry().IsRuntimeIntegration(definitionID) {
-			logx.FromContext(ctx).Debug().Str("definition_id", definitionID).Str("owner_id", ownerID).Msg("no customer integration installed, executing via runtime definition")
-
-			_, runtimeErr := r.ExecuteRuntimeOperation(ctx, definitionID, operationName, config)
-
-			return runtimeErr
-		}
-
-		return nil
-	case instErr != nil:
-		return instErr
-	}
-
-	_, dispatchErr := r.Dispatch(ctx, operations.DispatchRequest{
-		IntegrationID: inst.ID,
-		Operation:     operationName,
-		Config:        config,
-		RunType:       enums.IntegrationRunTypeEvent,
-	})
-
-	return dispatchErr
 }
 
 // BuildClientForIntegration builds a typed client for a specific integration installation.

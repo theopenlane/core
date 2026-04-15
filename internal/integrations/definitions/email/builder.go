@@ -66,9 +66,9 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 					Handle:       HealthCheck{}.Handle(),
 				},
 				types.OperationRegistration{
-					Name:         sendEmailOp.Name(),
+					Name:         SendEmailOp.Name(),
 					Description:  "Send a single templated email",
-					Topic:        DefinitionID.OperationTopic(sendEmailOp.Name()),
+					Topic:        DefinitionID.OperationTopic(SendEmailOp.Name()),
 					ClientRef:    emailClientRef.ID(),
 					ConfigSchema: sendEmailSchema,
 					Policy:       types.ExecutionPolicy{SkipRunRecord: true},

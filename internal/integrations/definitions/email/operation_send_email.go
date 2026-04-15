@@ -34,7 +34,7 @@ type SendEmail struct{}
 
 // Handle returns the typed operation handler for builder registration
 func (s SendEmail) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, sendEmailOp, ErrTemplateRenderFailed, s.Run)
+	return providerkit.WithClientRequestConfig(emailClientRef, SendEmailOp, ErrTemplateRenderFailed, s.Run)
 }
 
 // Run resolves the email template, renders it, and sends through the provided client

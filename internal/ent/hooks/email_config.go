@@ -11,7 +11,7 @@ import (
 
 // sendSystemEmail marshals the input and executes a system email operation via
 // the integration runtime on the ent client
-func sendSystemEmail(ctx context.Context, client *generated.Client, op email.OperationAccessor, input any) error {
+func sendSystemEmail(ctx context.Context, client *generated.Client, operationName string, input any) error {
 	rt := intruntime.FromClient(ctx, client)
 	if rt == nil {
 		return nil
@@ -22,7 +22,7 @@ func sendSystemEmail(ctx context.Context, client *generated.Client, op email.Ope
 		return err
 	}
 
-	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), op.Name(), config)
+	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), operationName, config)
 
 	return err
 }

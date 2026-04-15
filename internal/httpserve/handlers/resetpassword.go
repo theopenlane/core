@@ -120,7 +120,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.BadRequest(ctx, err, openapi)
 	}
 
-	if err := h.sendEmail(userCtx, email.ResetSuccessOp(), email.PasswordResetSuccessRequest{
+	if err := h.sendEmail(userCtx, email.ResetSuccessOp.Name(), email.PasswordResetSuccessRequest{
 		RecipientInfo: email.RecipientInfo{
 			Email:     entUser.Email,
 			FirstName: entUser.FirstName,

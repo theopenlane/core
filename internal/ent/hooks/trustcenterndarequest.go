@@ -108,7 +108,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,
@@ -133,7 +133,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			return existing, nil
 		}
 
-		if err := sendSystemEmail(ctx, client, emaildef.TCAuthOp(), emaildef.TrustCenterAuthEmail{
+		if err := sendSystemEmail(ctx, client, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			AuthURL:       authURL,
@@ -152,7 +152,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 			return existing, nil
 		}
 
-		if err := sendSystemEmail(ctx, client, emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
+		if err := sendSystemEmail(ctx, client, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			OrgName:       orgName,
 			NDAURL:        ndaURL,
@@ -273,7 +273,7 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp(), emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				OrgName:       orgName,
 				NDAURL:        ndaURL,

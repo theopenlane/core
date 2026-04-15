@@ -292,7 +292,7 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 
 	tags := buildAssessmentResponseTags(ctx, m, responseID)
 
-	return sendSystemEmail(ctx, m.Client(), emaildef.QuestionnaireAuthOp(), emaildef.QuestionnaireAuthEmail{
+	return sendSystemEmail(ctx, m.Client(), emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress, Tags: tags},
 		AssessmentName: assessmentObj.Name,
 		AuthURL:        authURL,

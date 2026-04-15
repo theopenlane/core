@@ -244,7 +244,7 @@ func (Campaign) Fields() []ent.Field {
 			Comment("the email template associated with the campaign").
 			Optional(),
 		field.String("integration_id").
-			Comment("the email template associated with the campaign").
+			Comment("the email integration used for campaign dispatch").
 			Optional(),
 	}
 }
@@ -361,6 +361,7 @@ func (Campaign) Annotations() []schema.Annotation {
 // Hooks of the Campaign
 func (Campaign) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookCampaignResolveEmailIntegration(),
 		hooks.HookCampaignDispatchOnActive(),
 	}
 }
