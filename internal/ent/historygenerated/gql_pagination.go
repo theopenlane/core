@@ -10308,6 +10308,20 @@ var (
 			}
 		},
 	}
+	// EvidenceHistoryOrderFieldReviewFrequency orders EvidenceHistory by review_frequency.
+	EvidenceHistoryOrderFieldReviewFrequency = &EvidenceHistoryOrderField{
+		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: evidencehistory.FieldReviewFrequency,
+		toTerm: evidencehistory.ByReviewFrequency,
+		toCursor: func(_m *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -10328,6 +10342,8 @@ func (f EvidenceHistoryOrderField) String() string {
 		str = "renewal_date"
 	case EvidenceHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case EvidenceHistoryOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -10358,6 +10374,8 @@ func (f *EvidenceHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceHistoryOrderFieldRenewalDate
 	case "STATUS":
 		*f = *EvidenceHistoryOrderFieldStatus
+	case "REVIEW_FREQUENCY":
+		*f = *EvidenceHistoryOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid EvidenceHistoryOrderField", str)
 	}
@@ -21834,6 +21852,33 @@ var (
 			}
 		},
 	}
+	// RiskHistoryOrderFieldDueDate orders RiskHistory by due_date.
+	RiskHistoryOrderFieldDueDate = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DueDate == nil {
+				return nil, nil
+			}
+			return _m.DueDate, nil
+		},
+		column: riskhistory.FieldDueDate,
+		toTerm: func(opts ...sql.OrderTermOption) riskhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return riskhistory.ByDueDate(opts...)
+		},
+		toCursor: func(_m *RiskHistory) Cursor {
+			if _m.DueDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
 	// RiskHistoryOrderFieldNextReviewDueAt orders RiskHistory by next_review_due_at.
 	RiskHistoryOrderFieldNextReviewDueAt = &RiskHistoryOrderField{
 		Value: func(_m *RiskHistory) (ent.Value, error) {
@@ -21925,6 +21970,8 @@ func (f RiskHistoryOrderField) String() string {
 		str = "last_reviewed_at"
 	case RiskHistoryOrderFieldReviewFrequency.column:
 		str = "review_frequency"
+	case RiskHistoryOrderFieldDueDate.column:
+		str = "due_date"
 	case RiskHistoryOrderFieldNextReviewDueAt.column:
 		str = "next_review_due_at"
 	case RiskHistoryOrderFieldResidualScore.column:
@@ -21977,6 +22024,8 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldLastReviewedAt
 	case "review_frequency":
 		*f = *RiskHistoryOrderFieldReviewFrequency
+	case "due_date":
+		*f = *RiskHistoryOrderFieldDueDate
 	case "next_review_due_at":
 		*f = *RiskHistoryOrderFieldNextReviewDueAt
 	case "residual_score":

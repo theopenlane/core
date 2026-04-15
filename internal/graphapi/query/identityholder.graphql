@@ -1,379 +1,439 @@
-mutation CreateBulkCSVIdentityHolder($input: Upload!) {
-  createBulkCSVIdentityHolder(input: $input) {
-    identityHolders {
-      alternateEmail
-      createdAt
-      createdBy
-      department
-      displayID
-      email
-      emailAliases
-      employerEntityID
-      endDate
-      environmentID
-      environmentName
-      externalReferenceID
-      externalUserID
-      fullName
-      id
-      identityHolderType
-      internalOwner
-      internalOwnerGroupID
-      internalOwnerUserID
-      isActive
-      isOpenlaneUser
-      location
-      metadata
-      ownerID
-      phoneNumber
-      scopeID
-      scopeName
-      startDate
-      status
-      tags
-      team
-      title
-      updatedAt
-      updatedBy
-      userID
-      workflowEligibleMarker
-    }
-  }
+mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
+	createBulkCSVIdentityHolder(input: $input) {
+		identityHolders {
+			alternateEmail
+			createdAt
+			createdBy
+			department
+			displayID
+			email
+			emailAliases
+			employerEntityID
+			endDate
+			environmentID
+			environmentName
+			externalReferenceID
+			externalUserID
+			fullName
+			id
+			identityHolderType
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerUserID
+			isActive
+			isOpenlaneUser
+			location
+			metadata
+			ownerID
+			phoneNumber
+			scopeID
+			scopeName
+			startDate
+			status
+			tags
+			team
+			title
+			updatedAt
+			updatedBy
+			userID
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation CreateBulkIdentityHolder($input: [CreateIdentityHolderInput!]) {
-  createBulkIdentityHolder(input: $input) {
-    identityHolders {
-      alternateEmail
-      createdAt
-      createdBy
-      department
-      displayID
-      email
-      emailAliases
-      employerEntityID
-      endDate
-      environmentID
-      environmentName
-      externalReferenceID
-      externalUserID
-      fullName
-      id
-      identityHolderType
-      internalOwner
-      internalOwnerGroupID
-      internalOwnerUserID
-      isActive
-      isOpenlaneUser
-      location
-      metadata
-      ownerID
-      phoneNumber
-      scopeID
-      scopeName
-      startDate
-      status
-      tags
-      team
-      title
-      updatedAt
-      updatedBy
-      userID
-      workflowEligibleMarker
-    }
-  }
+mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
+	createBulkIdentityHolder(input: $input) {
+		identityHolders {
+			alternateEmail
+			createdAt
+			createdBy
+			department
+			displayID
+			email
+			emailAliases
+			employerEntityID
+			endDate
+			environmentID
+			environmentName
+			externalReferenceID
+			externalUserID
+			fullName
+			id
+			identityHolderType
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerUserID
+			isActive
+			isOpenlaneUser
+			location
+			metadata
+			ownerID
+			phoneNumber
+			scopeID
+			scopeName
+			startDate
+			status
+			tags
+			team
+			title
+			updatedAt
+			updatedBy
+			userID
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation CreateIdentityHolder($input: CreateIdentityHolderInput!) {
-  createIdentityHolder(input: $input) {
-    identityHolder {
-      alternateEmail
-      createdAt
-      createdBy
-      department
-      displayID
-      email
-      emailAliases
-      employerEntityID
-      endDate
-      environmentID
-      environmentName
-      externalReferenceID
-      externalUserID
-      fullName
-      id
-      identityHolderType
-      internalOwner
-      internalOwnerGroupID
-      internalOwnerUserID
-      isActive
-      isOpenlaneUser
-      location
-      metadata
-      ownerID
-      phoneNumber
-      scopeID
-      scopeName
-      startDate
-      status
-      tags
-      team
-      title
-      updatedAt
-      updatedBy
-      userID
-      workflowEligibleMarker
-    }
-  }
+mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
+	createIdentityHolder(input: $input) {
+		identityHolder {
+			alternateEmail
+			createdAt
+			createdBy
+			department
+			displayID
+			email
+			emailAliases
+			employerEntityID
+			endDate
+			environmentID
+			environmentName
+			externalReferenceID
+			externalUserID
+			fullName
+			id
+			identityHolderType
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerUserID
+			isActive
+			isOpenlaneUser
+			location
+			metadata
+			ownerID
+			phoneNumber
+			scopeID
+			scopeName
+			startDate
+			status
+			tags
+			team
+			title
+			updatedAt
+			updatedBy
+			userID
+			workflowEligibleMarker
+		}
+	}
 }
-
-mutation DeleteIdentityHolder($deleteIdentityHolderId: ID!) {
-  deleteIdentityHolder(id: $deleteIdentityHolderId) {
-    deletedID
-  }
+mutation DeleteIdentityHolder ($deleteIdentityHolderId: ID!) {
+	deleteIdentityHolder(id: $deleteIdentityHolderId) {
+		deletedID
+	}
 }
-
-query GetAllIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!]) {
-  identityHolders(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        alternateEmail
-        createdAt
-        createdBy
-        department
-        displayID
-        email
-        emailAliases
-        employerEntityID
-        endDate
-        environmentID
-        environmentName
-        externalReferenceID
-        externalUserID
-        fullName
-        id
-        identityHolderType
-        internalOwner
-        internalOwnerGroupID
-        internalOwnerUserID
-        isActive
-        isOpenlaneUser
-        location
-        metadata
-        ownerID
-        phoneNumber
-        scopeID
-        scopeName
-        startDate
-        status
-        tags
-        team
-        title
-        updatedAt
-        updatedBy
-        userID
-        workflowEligibleMarker
-        campaigns {
-          edges {
-            node {
-              id
-              name
-              status
-              displayID
-            }
-          }
-        }
-        directoryAccounts {
-          edges {
-            node {
-              id
-              integrationID
-              externalID
-              canonicalEmail
-              displayName
-              directoryName
-              avatarRemoteURL
-              avatarLocalFileID
-            }
-          }
-        }
-      }
-    }
-  }
+query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!]) {
+	identityHolders(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				alternateEmail
+				createdAt
+				createdBy
+				department
+				displayID
+				email
+				emailAliases
+				employerEntityID
+				endDate
+				environmentID
+				environmentName
+				externalReferenceID
+				externalUserID
+				fullName
+				id
+				identityHolderType
+				internalOwner
+				internalOwnerGroupID
+				internalOwnerUserID
+				isActive
+				isOpenlaneUser
+				location
+				metadata
+				ownerID
+				phoneNumber
+				scopeID
+				scopeName
+				startDate
+				status
+				tags
+				team
+				title
+				updatedAt
+				updatedBy
+				userID
+				workflowEligibleMarker
+				campaigns {
+					edges {
+						node {
+							id
+							name
+							status
+							displayID
+						}
+					}
+				}
+				directoryAccounts {
+					edges {
+						node {
+							id
+							integrationID
+							externalID
+							canonicalEmail
+							displayName
+							directoryName
+							avatarRemoteURL
+							avatarLocalFileID
+						}
+					}
+				}
+			}
+		}
+	}
 }
-
-query GetIdentityHolderByID($identityHolderId: ID!) {
-  identityHolder(id: $identityHolderId) {
-    alternateEmail
-    createdAt
-    createdBy
-    department
-    displayID
-    email
-    emailAliases
-    employerEntityID
-    endDate
-    environmentID
-    environmentName
-    externalReferenceID
-    externalUserID
-    fullName
-    id
-    identityHolderType
-    internalOwner
-    internalOwnerGroupID
-    internalOwnerUserID
-    isActive
-    isOpenlaneUser
-    location
-    metadata
-    ownerID
-    phoneNumber
-    scopeID
-    scopeName
-    startDate
-    status
-    tags
-    team
-    title
-    updatedAt
-    updatedBy
-    userID
-    workflowEligibleMarker
-    campaigns {
-      edges {
-        node {
-          id
-          name
-          status
-          displayID
-        }
-      }
-    }
-  }
+query GetIdentityHolderByID ($identityHolderId: ID!) {
+	identityHolder(id: $identityHolderId) {
+		alternateEmail
+		createdAt
+		createdBy
+		department
+		displayID
+		email
+		emailAliases
+		employerEntityID
+		endDate
+		environmentID
+		environmentName
+		externalReferenceID
+		externalUserID
+		fullName
+		id
+		identityHolderType
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerUserID
+		isActive
+		isOpenlaneUser
+		location
+		metadata
+		ownerID
+		phoneNumber
+		scopeID
+		scopeName
+		startDate
+		status
+		tags
+		team
+		title
+		updatedAt
+		updatedBy
+		userID
+		workflowEligibleMarker
+		campaigns {
+			edges {
+				node {
+					id
+					name
+					status
+					displayID
+				}
+			}
+		}
+		directoryAccounts {
+			edges {
+				node {
+					id
+					integrationID
+					externalID
+					canonicalEmail
+					displayName
+					directoryName
+					avatarRemoteURL
+					avatarLocalFileID
+				}
+			}
+		}
+	}
 }
-
-query GetIdentityHolders($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!], $where: IdentityHolderWhereInput) {
-  identityHolders(
-    first: $first
-    last: $last
-    after: $after
-    before: $before
-    orderBy: $orderBy
-    where: $where
-  ) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        alternateEmail
-        createdAt
-        createdBy
-        department
-        displayID
-        email
-        emailAliases
-        employerEntityID
-        endDate
-        environmentID
-        environmentName
-        externalReferenceID
-        externalUserID
-        fullName
-        id
-        identityHolderType
-        internalOwner
-        internalOwnerGroupID
-        internalOwnerUserID
-        isActive
-        isOpenlaneUser
-        location
-        metadata
-        ownerID
-        phoneNumber
-        scopeID
-        scopeName
-        startDate
-        status
-        tags
-        team
-        title
-        updatedAt
-        updatedBy
-        userID
-        workflowEligibleMarker
-        campaigns {
-          edges {
-            node {
-              id
-              name
-              status
-              displayID
-            }
-          }
-        }
-      }
-    }
-  }
+query GetIdentityHolderDirectoryAccounts ($identityHolderId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [DirectoryAccountOrder!], $where: DirectoryAccountWhereInput) {
+	identityHolder(id: $identityHolderId) {
+		id
+		email
+		fullName
+		directoryAccounts(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+			totalCount
+			pageInfo {
+				startCursor
+				endCursor
+				hasPreviousPage
+				hasNextPage
+			}
+			edges {
+				node {
+					accountType
+					addedAt
+					avatarLocalFileID
+					avatarRemoteURL
+					avatarUpdatedAt
+					canonicalEmail
+					createdAt
+					createdBy
+					department
+					directoryInstanceID
+					directoryName
+					directorySyncRunID
+					displayID
+					displayName
+					environmentID
+					environmentName
+					externalID
+					familyName
+					firstSeenAt
+					givenName
+					id
+					identityHolderID
+					integrationID
+					jobTitle
+					lastLoginAt
+					lastSeenAt
+					lastSeenIP
+					metadata
+					mfaState
+					observedAt
+					organizationUnit
+					ownerID
+					platformID
+					primarySource
+					profile
+					profileHash
+					rawProfileFileID
+					removedAt
+					scopeID
+					scopeName
+					secondaryKey
+					sourceVersion
+					status
+					tags
+					updatedAt
+					updatedBy
+				}
+			}
+		}
+	}
 }
-
-mutation UpdateIdentityHolder($updateIdentityHolderId: ID!, $input: UpdateIdentityHolderInput!) {
-  updateIdentityHolder(id: $updateIdentityHolderId, input: $input) {
-    identityHolder {
-      alternateEmail
-      createdAt
-      createdBy
-      department
-      displayID
-      email
-      emailAliases
-      employerEntityID
-      endDate
-      environmentID
-      environmentName
-      externalReferenceID
-      externalUserID
-      fullName
-      id
-      identityHolderType
-      internalOwner
-      internalOwnerGroupID
-      internalOwnerUserID
-      isActive
-      isOpenlaneUser
-      location
-      metadata
-      ownerID
-      phoneNumber
-      scopeID
-      scopeName
-      startDate
-      status
-      tags
-      team
-      title
-      updatedAt
-      updatedBy
-      userID
-      workflowEligibleMarker
-    }
-  }
+query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [IdentityHolderOrder!], $where: IdentityHolderWhereInput) {
+	identityHolders(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				alternateEmail
+				createdAt
+				createdBy
+				department
+				displayID
+				email
+				emailAliases
+				employerEntityID
+				endDate
+				environmentID
+				environmentName
+				externalReferenceID
+				externalUserID
+				fullName
+				id
+				identityHolderType
+				internalOwner
+				internalOwnerGroupID
+				internalOwnerUserID
+				isActive
+				isOpenlaneUser
+				location
+				metadata
+				ownerID
+				phoneNumber
+				scopeID
+				scopeName
+				startDate
+				status
+				tags
+				team
+				title
+				updatedAt
+				updatedBy
+				userID
+				workflowEligibleMarker
+				campaigns {
+					edges {
+						node {
+							id
+							name
+							status
+							displayID
+						}
+					}
+				}
+			}
+		}
+	}
+}
+mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdentityHolderInput!) {
+	updateIdentityHolder(id: $updateIdentityHolderId, input: $input) {
+		identityHolder {
+			alternateEmail
+			createdAt
+			createdBy
+			department
+			displayID
+			email
+			emailAliases
+			employerEntityID
+			endDate
+			environmentID
+			environmentName
+			externalReferenceID
+			externalUserID
+			fullName
+			id
+			identityHolderType
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerUserID
+			isActive
+			isOpenlaneUser
+			location
+			metadata
+			ownerID
+			phoneNumber
+			scopeID
+			scopeName
+			startDate
+			status
+			tags
+			team
+			title
+			updatedAt
+			updatedBy
+			userID
+			workflowEligibleMarker
+		}
+	}
 }

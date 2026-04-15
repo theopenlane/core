@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
@@ -332,6 +333,26 @@ func (_u *ReviewUpdate) SetNillableState(v *string) *ReviewUpdate {
 // ClearState clears the value of the "state" field.
 func (_u *ReviewUpdate) ClearState() *ReviewUpdate {
 	_u.mutation.ClearState()
+	return _u
+}
+
+// SetStatus sets the "status" field.
+func (_u *ReviewUpdate) SetStatus(v enums.ReviewStatus) *ReviewUpdate {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ReviewUpdate) SetNillableStatus(v *enums.ReviewStatus) *ReviewUpdate {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ReviewUpdate) ClearStatus() *ReviewUpdate {
+	_u.mutation.ClearStatus()
 	return _u
 }
 
@@ -1334,6 +1355,11 @@ func (_u *ReviewUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Review.title": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := review.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Review.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1443,6 +1469,12 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(review.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(review.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(review.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(review.FieldCategory, field.TypeString, value)
@@ -2787,6 +2819,26 @@ func (_u *ReviewUpdateOne) ClearState() *ReviewUpdateOne {
 	return _u
 }
 
+// SetStatus sets the "status" field.
+func (_u *ReviewUpdateOne) SetStatus(v enums.ReviewStatus) *ReviewUpdateOne {
+	_u.mutation.SetStatus(v)
+	return _u
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_u *ReviewUpdateOne) SetNillableStatus(v *enums.ReviewStatus) *ReviewUpdateOne {
+	if v != nil {
+		_u.SetStatus(*v)
+	}
+	return _u
+}
+
+// ClearStatus clears the value of the "status" field.
+func (_u *ReviewUpdateOne) ClearStatus() *ReviewUpdateOne {
+	_u.mutation.ClearStatus()
+	return _u
+}
+
 // SetCategory sets the "category" field.
 func (_u *ReviewUpdateOne) SetCategory(v string) *ReviewUpdateOne {
 	_u.mutation.SetCategory(v)
@@ -3799,6 +3851,11 @@ func (_u *ReviewUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Review.title": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Status(); ok {
+		if err := review.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Review.status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3925,6 +3982,12 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(review.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(review.FieldStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.StatusCleared() {
+		_spec.ClearField(review.FieldStatus, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(review.FieldCategory, field.TypeString, value)

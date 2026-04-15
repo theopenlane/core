@@ -8488,6 +8488,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8663,6 +8667,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(evidence.Status)
 		}
 
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(evidence.ReviewFrequency)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8722,6 +8732,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
 			SetStatus(evidence.Status).
+			SetReviewFrequency(evidence.ReviewFrequency).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -18174,6 +18185,10 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetState(state)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -18375,6 +18390,12 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetState(review.State)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(review.Status)
+		}
+
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -18513,6 +18534,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
 			SetState(review.State).
+			SetStatus(review.Status).
 			SetCategory(review.Category).
 			SetClassification(review.Classification).
 			SetSummary(review.Summary).
@@ -18702,6 +18724,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetNillableDueDate(&dueDate)
 	}
 
 	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
@@ -18975,6 +19001,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(risk.ReviewFrequency)
 		}
 
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetNillableDueDate(&dueDate)
+		} else {
+			create = create.SetNillableDueDate(risk.DueDate)
+		}
+
 		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
 			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
 		} else {
@@ -19066,6 +19098,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetReviewRequired(risk.ReviewRequired).
 			SetNillableLastReviewedAt(risk.LastReviewedAt).
 			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableDueDate(risk.DueDate).
 			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
 			SetResidualScore(risk.ResidualScore).
 			SetRiskDecision(risk.RiskDecision).

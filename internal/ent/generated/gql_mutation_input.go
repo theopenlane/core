@@ -8747,6 +8747,7 @@ type CreateEvidenceInput struct {
 	IsAutomated              *bool
 	URL                      *string
 	Status                   *enums.EvidenceStatus
+	ReviewFrequency          *enums.Frequency
 	OwnerID                  *string
 	EnvironmentID            *string
 	ScopeID                  *string
@@ -8804,6 +8805,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8884,6 +8888,8 @@ type UpdateEvidenceInput struct {
 	URL                            *string
 	ClearStatus                    bool
 	Status                         *enums.EvidenceStatus
+	ClearReviewFrequency           bool
+	ReviewFrequency                *enums.Frequency
 	ClearEnvironment               bool
 	EnvironmentID                  *string
 	ClearScope                     bool
@@ -9005,6 +9011,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -20880,6 +20892,7 @@ type CreateReviewInput struct {
 	ExternalOwnerID   *string
 	Title             string
 	State             *string
+	Status            *enums.ReviewStatus
 	Category          *string
 	Classification    *string
 	Summary           *string
@@ -20943,6 +20956,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	m.SetTitle(i.Title)
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -21077,6 +21093,8 @@ type UpdateReviewInput struct {
 	Title                   *string
 	ClearState              bool
 	State                   *string
+	ClearStatus             bool
+	Status                  *enums.ReviewStatus
 	ClearCategory           bool
 	Category                *string
 	ClearClassification     bool
@@ -21220,6 +21238,12 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -21519,6 +21543,7 @@ type CreateRiskInput struct {
 	ReviewRequired    *bool
 	LastReviewedAt    *models.DateTime
 	ReviewFrequency   *enums.Frequency
+	DueDate           *models.DateTime
 	NextReviewDueAt   *models.DateTime
 	ResidualScore     *int
 	RiskDecision      *enums.RiskDecision
@@ -21620,6 +21645,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if v := i.NextReviewDueAt; v != nil {
 		m.SetNextReviewDueAt(*v)
@@ -21766,6 +21794,8 @@ type UpdateRiskInput struct {
 	LastReviewedAt          *models.DateTime
 	ClearReviewFrequency    bool
 	ReviewFrequency         *enums.Frequency
+	ClearDueDate            bool
+	DueDate                 *models.DateTime
 	ClearNextReviewDueAt    bool
 	NextReviewDueAt         *models.DateTime
 	ClearResidualScore      bool
@@ -21994,6 +22024,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if i.ClearNextReviewDueAt {
 		m.ClearNextReviewDueAt()

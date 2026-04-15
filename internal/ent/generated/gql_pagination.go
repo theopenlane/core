@@ -12510,6 +12510,20 @@ var (
 			}
 		},
 	}
+	// EvidenceOrderFieldReviewFrequency orders Evidence by review_frequency.
+	EvidenceOrderFieldReviewFrequency = &EvidenceOrderField{
+		Value: func(_m *Evidence) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: evidence.FieldReviewFrequency,
+		toTerm: evidence.ByReviewFrequency,
+		toCursor: func(_m *Evidence) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12528,6 +12542,8 @@ func (f EvidenceOrderField) String() string {
 		str = "renewal_date"
 	case EvidenceOrderFieldStatus.column:
 		str = "STATUS"
+	case EvidenceOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -12556,6 +12572,8 @@ func (f *EvidenceOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceOrderFieldRenewalDate
 	case "STATUS":
 		*f = *EvidenceOrderFieldStatus
+	case "REVIEW_FREQUENCY":
+		*f = *EvidenceOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid EvidenceOrderField", str)
 	}
@@ -28107,6 +28125,33 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldDueDate orders Risk by due_date.
+	RiskOrderFieldDueDate = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DueDate == nil {
+				return nil, nil
+			}
+			return _m.DueDate, nil
+		},
+		column: risk.FieldDueDate,
+		toTerm: func(opts ...sql.OrderTermOption) risk.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return risk.ByDueDate(opts...)
+		},
+		toCursor: func(_m *Risk) Cursor {
+			if _m.DueDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
 	// RiskOrderFieldNextReviewDueAt orders Risk by next_review_due_at.
 	RiskOrderFieldNextReviewDueAt = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -28196,6 +28241,8 @@ func (f RiskOrderField) String() string {
 		str = "last_reviewed_at"
 	case RiskOrderFieldReviewFrequency.column:
 		str = "review_frequency"
+	case RiskOrderFieldDueDate.column:
+		str = "due_date"
 	case RiskOrderFieldNextReviewDueAt.column:
 		str = "next_review_due_at"
 	case RiskOrderFieldResidualScore.column:
@@ -28246,6 +28293,8 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldLastReviewedAt
 	case "review_frequency":
 		*f = *RiskOrderFieldReviewFrequency
+	case "due_date":
+		*f = *RiskOrderFieldDueDate
 	case "next_review_due_at":
 		*f = *RiskOrderFieldNextReviewDueAt
 	case "residual_score":

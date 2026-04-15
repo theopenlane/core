@@ -979,6 +979,7 @@ type ComplexityRoot struct {
 		OwnerID                func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		RenewalDate            func(childComplexity int) int
+		ReviewFrequency        func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
 		Source                 func(childComplexity int) int
@@ -2172,6 +2173,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
@@ -2201,6 +2203,7 @@ type ComplexityRoot struct {
 		Details           func(childComplexity int) int
 		DetailsJSON       func(childComplexity int) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		EnvironmentID     func(childComplexity int) int
 		EnvironmentName   func(childComplexity int) int
 		ExternalID        func(childComplexity int) int
@@ -8623,6 +8626,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.RenewalDate(childComplexity), true
+
+	case "EvidenceHistory.reviewFrequency":
+		if e.ComplexityRoot.EvidenceHistory.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ReviewFrequency(childComplexity), true
 
 	case "EvidenceHistory.scopeID":
 		if e.ComplexityRoot.EvidenceHistory.ScopeID == nil {
@@ -15637,6 +15647,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ReviewHistory.State(childComplexity), true
 
+	case "ReviewHistory.status":
+		if e.ComplexityRoot.ReviewHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.Status(childComplexity), true
+
 	case "ReviewHistory.summary":
 		if e.ComplexityRoot.ReviewHistory.Summary == nil {
 			break
@@ -15776,6 +15793,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.DisplayID(childComplexity), true
+
+	case "RiskHistory.dueDate":
+		if e.ComplexityRoot.RiskHistory.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.DueDate(childComplexity), true
 
 	case "RiskHistory.environmentID":
 		if e.ComplexityRoot.RiskHistory.EnvironmentID == nil {
@@ -22316,6 +22340,7 @@ enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/cor
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -27489,6 +27514,7 @@ enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theo
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -34555,6 +34581,10 @@ type EvidenceHistory implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceHistoryEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceHistoryFrequency
 }
 """
 A connection to a list of items.
@@ -34601,6 +34631,16 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
   REJECTED
 }
 """
+EvidenceHistoryFrequency is enum for the field review_frequency
+"""
+enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 EvidenceHistoryOpType is enum for the field operation
 """
 enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -34632,6 +34672,7 @@ enum EvidenceHistoryOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -35011,6 +35052,15 @@ input EvidenceHistoryWhereInput {
   statusNotIn: [EvidenceHistoryEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceHistoryFrequency
+  reviewFrequencyNEQ: EvidenceHistoryFrequency
+  reviewFrequencyIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
 }
 type FileHistory implements Node {
   id: ID!
@@ -39922,6 +39972,7 @@ enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -46237,6 +46288,7 @@ enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -50871,6 +50923,10 @@ type ReviewHistory implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewHistoryReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -50989,6 +51045,16 @@ enum ReviewHistoryOrderField {
   external_owner_id
   title
   state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -51312,6 +51378,15 @@ input ReviewHistoryWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewHistoryReviewStatus
+  statusNEQ: ReviewHistoryReviewStatus
+  statusIn: [ReviewHistoryReviewStatus!]
+  statusNotIn: [ReviewHistoryReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
@@ -51638,6 +51713,10 @@ type RiskHistory implements Node {
   lastReviewedAt: DateTime
   reviewFrequency: RiskHistoryFrequency
   """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  """
   the time when the next review is due for the risk
   """
   nextReviewDueAt: DateTime
@@ -51730,6 +51809,7 @@ enum RiskHistoryOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -52327,6 +52407,19 @@ input RiskHistoryWhereInput {
   reviewFrequencyNotIn: [RiskHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """

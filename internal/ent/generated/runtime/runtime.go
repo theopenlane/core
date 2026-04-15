@@ -2709,6 +2709,8 @@ func init() {
 	evidence.Hooks[10] = evidenceHooks[0]
 
 	evidence.Hooks[11] = evidenceHooks[1]
+
+	evidence.Hooks[12] = evidenceHooks[2]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]
@@ -3408,6 +3410,8 @@ func init() {
 	identityholder.Hooks[12] = identityholderMixinHooks10[0]
 
 	identityholder.Hooks[13] = identityholderHooks[0]
+
+	identityholder.Hooks[14] = identityholderHooks[1]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
@@ -6210,7 +6214,7 @@ func init() {
 	// review.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	review.TitleValidator = reviewDescTitle.Validators[0].(func(string) error)
 	// reviewDescApproved is the schema descriptor for approved field.
-	reviewDescApproved := reviewFields[9].Descriptor()
+	reviewDescApproved := reviewFields[10].Descriptor()
 	// review.DefaultApproved holds the default value on creation for the approved field.
 	review.DefaultApproved = reviewDescApproved.Default.(bool)
 	// reviewDescID is the schema descriptor for id field.
@@ -6270,6 +6274,8 @@ func init() {
 	risk.Hooks[15] = riskHooks[1]
 
 	risk.Hooks[16] = riskHooks[2]
+
+	risk.Hooks[17] = riskHooks[3]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]

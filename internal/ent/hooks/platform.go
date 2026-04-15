@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
@@ -22,6 +23,9 @@ func HookPlatformFiles() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// permissions to the files are not added until after the mutation is processed
+			// allow the category to be updated
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
 			if len(fileIDs) > 0 {
 				var err error
@@ -41,7 +45,7 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddArchitectureDiagramIDs(archFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(archFiles...)).SetCategoryType("architecture_diagram").Exec(ctx); err != nil {
+						if err := m.Client().File.Update().Where(file.IDIn(archFiles...)).SetCategoryType("architecture_diagram").Exec(allowCtx); err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for architecture diagram files")
 							return nil, err
 						}
@@ -53,7 +57,7 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddDataFlowDiagramIDs(dataFlowFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(dataFlowFiles...)).SetCategoryType("data_flow_diagram").Exec(ctx); err != nil {
+						if err := m.Client().File.Update().Where(file.IDIn(dataFlowFiles...)).SetCategoryType("data_flow_diagram").Exec(allowCtx); err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for data flow diagram files")
 							return nil, err
 						}
@@ -65,7 +69,7 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddTrustBoundaryDiagramIDs(trustBoundaryFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(trustBoundaryFiles...)).SetCategoryType("trust_boundary_diagram").Exec(ctx); err != nil {
+						if err := m.Client().File.Update().Where(file.IDIn(trustBoundaryFiles...)).SetCategoryType("trust_boundary_diagram").Exec(allowCtx); err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for trust boundary diagram files")
 							return nil, err
 						}

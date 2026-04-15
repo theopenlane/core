@@ -1156,6 +1156,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldIsAutomated:            {Type: field.TypeBool, Column: evidence.FieldIsAutomated},
 			evidence.FieldURL:                    {Type: field.TypeString, Column: evidence.FieldURL},
 			evidence.FieldStatus:                 {Type: field.TypeEnum, Column: evidence.FieldStatus},
+			evidence.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidence.FieldReviewFrequency},
 		},
 	}
 	graph.Nodes[27] = &sqlgraph.Node{
@@ -2646,6 +2647,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			review.FieldExternalOwnerID:  {Type: field.TypeString, Column: review.FieldExternalOwnerID},
 			review.FieldTitle:            {Type: field.TypeString, Column: review.FieldTitle},
 			review.FieldState:            {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:           {Type: field.TypeEnum, Column: review.FieldStatus},
 			review.FieldCategory:         {Type: field.TypeString, Column: review.FieldCategory},
 			review.FieldClassification:   {Type: field.TypeString, Column: review.FieldClassification},
 			review.FieldSummary:          {Type: field.TypeString, Column: review.FieldSummary},
@@ -2711,6 +2713,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldReviewRequired:    {Type: field.TypeBool, Column: risk.FieldReviewRequired},
 			risk.FieldLastReviewedAt:    {Type: field.TypeTime, Column: risk.FieldLastReviewedAt},
 			risk.FieldReviewFrequency:   {Type: field.TypeEnum, Column: risk.FieldReviewFrequency},
+			risk.FieldDueDate:           {Type: field.TypeTime, Column: risk.FieldDueDate},
 			risk.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: risk.FieldNextReviewDueAt},
 			risk.FieldResidualScore:     {Type: field.TypeInt, Column: risk.FieldResidualScore},
 			risk.FieldRiskDecision:      {Type: field.TypeEnum, Column: risk.FieldRiskDecision},
@@ -25979,6 +25982,11 @@ func (f *EvidenceFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldStatus))
 }
 
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *EvidenceFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldReviewFrequency))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *EvidenceFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -39511,6 +39519,11 @@ func (f *ReviewFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(review.FieldState))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ReviewFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(review.FieldStatus))
+}
+
 // WhereCategory applies the entql string predicate on the category field.
 func (f *ReviewFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(review.FieldCategory))
@@ -40117,6 +40130,11 @@ func (f *RiskFilter) WhereLastReviewedAt(p entql.TimeP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *RiskFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(risk.FieldReviewFrequency))
+}
+
+// WhereDueDate applies the entql time.Time predicate on the due_date field.
+func (f *RiskFilter) WhereDueDate(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldDueDate))
 }
 
 // WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.

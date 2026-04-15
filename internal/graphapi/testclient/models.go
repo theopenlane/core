@@ -6800,21 +6800,23 @@ type CreateEvidenceInput struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
-	OwnerID                  *string               `json:"ownerID,omitempty"`
-	EnvironmentID            *string               `json:"environmentID,omitempty"`
-	ScopeID                  *string               `json:"scopeID,omitempty"`
-	ControlIDs               []string              `json:"controlIDs,omitempty"`
-	SubcontrolIDs            []string              `json:"subcontrolIDs,omitempty"`
-	ControlObjectiveIDs      []string              `json:"controlObjectiveIDs,omitempty"`
-	ControlImplementationIDs []string              `json:"controlImplementationIDs,omitempty"`
-	FileIDs                  []string              `json:"fileIDs,omitempty"`
-	ProgramIDs               []string              `json:"programIDs,omitempty"`
-	TaskIDs                  []string              `json:"taskIDs,omitempty"`
-	PlatformIDs              []string              `json:"platformIDs,omitempty"`
-	ScanIDs                  []string              `json:"scanIDs,omitempty"`
-	CommentIDs               []string              `json:"commentIDs,omitempty"`
-	WorkflowObjectRefIDs     []string              `json:"workflowObjectRefIDs,omitempty"`
+	Status *enums.EvidenceStatus `json:"status,omitempty"`
+	// the cadence for reviewing the evidence
+	ReviewFrequency          *enums.Frequency `json:"reviewFrequency,omitempty"`
+	OwnerID                  *string          `json:"ownerID,omitempty"`
+	EnvironmentID            *string          `json:"environmentID,omitempty"`
+	ScopeID                  *string          `json:"scopeID,omitempty"`
+	ControlIDs               []string         `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string         `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs      []string         `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string         `json:"controlImplementationIDs,omitempty"`
+	FileIDs                  []string         `json:"fileIDs,omitempty"`
+	ProgramIDs               []string         `json:"programIDs,omitempty"`
+	TaskIDs                  []string         `json:"taskIDs,omitempty"`
+	PlatformIDs              []string         `json:"platformIDs,omitempty"`
+	ScanIDs                  []string         `json:"scanIDs,omitempty"`
+	CommentIDs               []string         `json:"commentIDs,omitempty"`
+	WorkflowObjectRefIDs     []string         `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateExportInput is used for create Export object.
@@ -8249,6 +8251,8 @@ type CreateReviewInput struct {
 	Title string `json:"title"`
 	// state of the review
 	State *string `json:"state,omitempty"`
+	// status of the review
+	Status *enums.ReviewStatus `json:"status,omitempty"`
 	// category for the review record
 	Category *string `json:"category,omitempty"`
 	// classification or sensitivity of the review record
@@ -8349,6 +8353,8 @@ type CreateRiskInput struct {
 	// the time when the risk was last reviewed
 	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate *models.DateTime `json:"dueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
@@ -15358,7 +15364,9 @@ type Evidence struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL *string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status                 *enums.EvidenceStatus            `json:"status,omitempty"`
+	Status *enums.EvidenceStatus `json:"status,omitempty"`
+	// the cadence for reviewing the evidence
+	ReviewFrequency        *enums.Frequency                 `json:"reviewFrequency,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
@@ -15745,6 +15753,13 @@ type EvidenceWhereInput struct {
 	StatusNotIn  []enums.EvidenceStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// review_frequency field predicates
+	ReviewFrequency       *enums.Frequency  `json:"reviewFrequency,omitempty"`
+	ReviewFrequencyNeq    *enums.Frequency  `json:"reviewFrequencyNEQ,omitempty"`
+	ReviewFrequencyIn     []enums.Frequency `json:"reviewFrequencyIn,omitempty"`
+	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
+	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
+	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -29534,6 +29549,8 @@ type Review struct {
 	Title string `json:"title"`
 	// state of the review
 	State *string `json:"state,omitempty"`
+	// status of the review
+	Status *enums.ReviewStatus `json:"status,omitempty"`
 	// category for the review record
 	Category *string `json:"category,omitempty"`
 	// classification or sensitivity of the review record
@@ -29903,6 +29920,13 @@ type ReviewWhereInput struct {
 	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
 	StateEqualFold    *string  `json:"stateEqualFold,omitempty"`
 	StateContainsFold *string  `json:"stateContainsFold,omitempty"`
+	// status field predicates
+	Status       *enums.ReviewStatus  `json:"status,omitempty"`
+	StatusNeq    *enums.ReviewStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.ReviewStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.ReviewStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  *bool                `json:"statusIsNil,omitempty"`
+	StatusNotNil *bool                `json:"statusNotNil,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -30208,6 +30232,8 @@ type Risk struct {
 	// the time when the risk was last reviewed
 	LastReviewedAt  *models.DateTime `json:"lastReviewedAt,omitempty"`
 	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate *models.DateTime `json:"dueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	// score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)
@@ -30757,6 +30783,17 @@ type RiskWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// due_date field predicates
+	DueDate       *models.DateTime   `json:"dueDate,omitempty"`
+	DueDateNeq    *models.DateTime   `json:"dueDateNEQ,omitempty"`
+	DueDateIn     []*models.DateTime `json:"dueDateIn,omitempty"`
+	DueDateNotIn  []*models.DateTime `json:"dueDateNotIn,omitempty"`
+	DueDateGt     *models.DateTime   `json:"dueDateGT,omitempty"`
+	DueDateGte    *models.DateTime   `json:"dueDateGTE,omitempty"`
+	DueDateLt     *models.DateTime   `json:"dueDateLT,omitempty"`
+	DueDateLte    *models.DateTime   `json:"dueDateLTE,omitempty"`
+	DueDateIsNil  *bool              `json:"dueDateIsNil,omitempty"`
+	DueDateNotNil *bool              `json:"dueDateNotNil,omitempty"`
 	// next_review_due_at field predicates
 	NextReviewDueAt       *models.DateTime   `json:"nextReviewDueAt,omitempty"`
 	NextReviewDueAtNeq    *models.DateTime   `json:"nextReviewDueAtNEQ,omitempty"`
@@ -40373,47 +40410,50 @@ type UpdateEvidenceInput struct {
 	URL      *string `json:"url,omitempty"`
 	ClearURL *bool   `json:"clearURL,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status                         *enums.EvidenceStatus `json:"status,omitempty"`
-	ClearStatus                    *bool                 `json:"clearStatus,omitempty"`
-	EnvironmentID                  *string               `json:"environmentID,omitempty"`
-	ClearEnvironment               *bool                 `json:"clearEnvironment,omitempty"`
-	ScopeID                        *string               `json:"scopeID,omitempty"`
-	ClearScope                     *bool                 `json:"clearScope,omitempty"`
-	AddControlIDs                  []string              `json:"addControlIDs,omitempty"`
-	RemoveControlIDs               []string              `json:"removeControlIDs,omitempty"`
-	ClearControls                  *bool                 `json:"clearControls,omitempty"`
-	AddSubcontrolIDs               []string              `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs            []string              `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols               *bool                 `json:"clearSubcontrols,omitempty"`
-	AddControlObjectiveIDs         []string              `json:"addControlObjectiveIDs,omitempty"`
-	RemoveControlObjectiveIDs      []string              `json:"removeControlObjectiveIDs,omitempty"`
-	ClearControlObjectives         *bool                 `json:"clearControlObjectives,omitempty"`
-	AddControlImplementationIDs    []string              `json:"addControlImplementationIDs,omitempty"`
-	RemoveControlImplementationIDs []string              `json:"removeControlImplementationIDs,omitempty"`
-	ClearControlImplementations    *bool                 `json:"clearControlImplementations,omitempty"`
-	AddFileIDs                     []string              `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                  []string              `json:"removeFileIDs,omitempty"`
-	ClearFiles                     *bool                 `json:"clearFiles,omitempty"`
-	AddProgramIDs                  []string              `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs               []string              `json:"removeProgramIDs,omitempty"`
-	ClearPrograms                  *bool                 `json:"clearPrograms,omitempty"`
-	AddTaskIDs                     []string              `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs                  []string              `json:"removeTaskIDs,omitempty"`
-	ClearTasks                     *bool                 `json:"clearTasks,omitempty"`
-	AddPlatformIDs                 []string              `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs              []string              `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms                 *bool                 `json:"clearPlatforms,omitempty"`
-	AddScanIDs                     []string              `json:"addScanIDs,omitempty"`
-	RemoveScanIDs                  []string              `json:"removeScanIDs,omitempty"`
-	ClearScans                     *bool                 `json:"clearScans,omitempty"`
-	AddCommentIDs                  []string              `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs               []string              `json:"removeCommentIDs,omitempty"`
-	ClearComments                  *bool                 `json:"clearComments,omitempty"`
-	AddWorkflowObjectRefIDs        []string              `json:"addWorkflowObjectRefIDs,omitempty"`
-	RemoveWorkflowObjectRefIDs     []string              `json:"removeWorkflowObjectRefIDs,omitempty"`
-	ClearWorkflowObjectRefs        *bool                 `json:"clearWorkflowObjectRefs,omitempty"`
-	AddComment                     *CreateNoteInput      `json:"addComment,omitempty"`
-	DeleteComment                  *string               `json:"deleteComment,omitempty"`
+	Status      *enums.EvidenceStatus `json:"status,omitempty"`
+	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// the cadence for reviewing the evidence
+	ReviewFrequency                *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency           *bool            `json:"clearReviewFrequency,omitempty"`
+	EnvironmentID                  *string          `json:"environmentID,omitempty"`
+	ClearEnvironment               *bool            `json:"clearEnvironment,omitempty"`
+	ScopeID                        *string          `json:"scopeID,omitempty"`
+	ClearScope                     *bool            `json:"clearScope,omitempty"`
+	AddControlIDs                  []string         `json:"addControlIDs,omitempty"`
+	RemoveControlIDs               []string         `json:"removeControlIDs,omitempty"`
+	ClearControls                  *bool            `json:"clearControls,omitempty"`
+	AddSubcontrolIDs               []string         `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs            []string         `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols               *bool            `json:"clearSubcontrols,omitempty"`
+	AddControlObjectiveIDs         []string         `json:"addControlObjectiveIDs,omitempty"`
+	RemoveControlObjectiveIDs      []string         `json:"removeControlObjectiveIDs,omitempty"`
+	ClearControlObjectives         *bool            `json:"clearControlObjectives,omitempty"`
+	AddControlImplementationIDs    []string         `json:"addControlImplementationIDs,omitempty"`
+	RemoveControlImplementationIDs []string         `json:"removeControlImplementationIDs,omitempty"`
+	ClearControlImplementations    *bool            `json:"clearControlImplementations,omitempty"`
+	AddFileIDs                     []string         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs                  []string         `json:"removeFileIDs,omitempty"`
+	ClearFiles                     *bool            `json:"clearFiles,omitempty"`
+	AddProgramIDs                  []string         `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs               []string         `json:"removeProgramIDs,omitempty"`
+	ClearPrograms                  *bool            `json:"clearPrograms,omitempty"`
+	AddTaskIDs                     []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                  []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks                     *bool            `json:"clearTasks,omitempty"`
+	AddPlatformIDs                 []string         `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs              []string         `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms                 *bool            `json:"clearPlatforms,omitempty"`
+	AddScanIDs                     []string         `json:"addScanIDs,omitempty"`
+	RemoveScanIDs                  []string         `json:"removeScanIDs,omitempty"`
+	ClearScans                     *bool            `json:"clearScans,omitempty"`
+	AddCommentIDs                  []string         `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs               []string         `json:"removeCommentIDs,omitempty"`
+	ClearComments                  *bool            `json:"clearComments,omitempty"`
+	AddWorkflowObjectRefIDs        []string         `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs     []string         `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs        *bool            `json:"clearWorkflowObjectRefs,omitempty"`
+	AddComment                     *CreateNoteInput `json:"addComment,omitempty"`
+	DeleteComment                  *string          `json:"deleteComment,omitempty"`
 }
 
 // UpdateExportInput is used for update Export object.
@@ -42849,6 +42889,9 @@ type UpdateReviewInput struct {
 	// state of the review
 	State      *string `json:"state,omitempty"`
 	ClearState *bool   `json:"clearState,omitempty"`
+	// status of the review
+	Status      *enums.ReviewStatus `json:"status,omitempty"`
+	ClearStatus *bool               `json:"clearStatus,omitempty"`
 	// category for the review record
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`
@@ -43027,6 +43070,9 @@ type UpdateRiskInput struct {
 	ClearLastReviewedAt  *bool            `json:"clearLastReviewedAt,omitempty"`
 	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
 	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	DueDate      *models.DateTime `json:"dueDate,omitempty"`
+	ClearDueDate *bool            `json:"clearDueDate,omitempty"`
 	// the time when the next review is due for the risk
 	NextReviewDueAt      *models.DateTime `json:"nextReviewDueAt,omitempty"`
 	ClearNextReviewDueAt *bool            `json:"clearNextReviewDueAt,omitempty"`
@@ -51108,12 +51154,13 @@ func (e EventOrderField) MarshalJSON() ([]byte, error) {
 type EvidenceOrderField string
 
 const (
-	EvidenceOrderFieldCreatedAt    EvidenceOrderField = "created_at"
-	EvidenceOrderFieldUpdatedAt    EvidenceOrderField = "updated_at"
-	EvidenceOrderFieldName         EvidenceOrderField = "name"
-	EvidenceOrderFieldCreationDate EvidenceOrderField = "creation_date"
-	EvidenceOrderFieldRenewalDate  EvidenceOrderField = "renewal_date"
-	EvidenceOrderFieldStatus       EvidenceOrderField = "STATUS"
+	EvidenceOrderFieldCreatedAt       EvidenceOrderField = "created_at"
+	EvidenceOrderFieldUpdatedAt       EvidenceOrderField = "updated_at"
+	EvidenceOrderFieldName            EvidenceOrderField = "name"
+	EvidenceOrderFieldCreationDate    EvidenceOrderField = "creation_date"
+	EvidenceOrderFieldRenewalDate     EvidenceOrderField = "renewal_date"
+	EvidenceOrderFieldStatus          EvidenceOrderField = "STATUS"
+	EvidenceOrderFieldReviewFrequency EvidenceOrderField = "REVIEW_FREQUENCY"
 )
 
 var AllEvidenceOrderField = []EvidenceOrderField{
@@ -51123,11 +51170,12 @@ var AllEvidenceOrderField = []EvidenceOrderField{
 	EvidenceOrderFieldCreationDate,
 	EvidenceOrderFieldRenewalDate,
 	EvidenceOrderFieldStatus,
+	EvidenceOrderFieldReviewFrequency,
 }
 
 func (e EvidenceOrderField) IsValid() bool {
 	switch e {
-	case EvidenceOrderFieldCreatedAt, EvidenceOrderFieldUpdatedAt, EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus:
+	case EvidenceOrderFieldCreatedAt, EvidenceOrderFieldUpdatedAt, EvidenceOrderFieldName, EvidenceOrderFieldCreationDate, EvidenceOrderFieldRenewalDate, EvidenceOrderFieldStatus, EvidenceOrderFieldReviewFrequency:
 		return true
 	}
 	return false
@@ -53510,6 +53558,7 @@ const (
 	RiskOrderFieldReviewRequired  RiskOrderField = "review_required"
 	RiskOrderFieldLastReviewedAt  RiskOrderField = "last_reviewed_at"
 	RiskOrderFieldReviewFrequency RiskOrderField = "review_frequency"
+	RiskOrderFieldDueDate         RiskOrderField = "due_date"
 	RiskOrderFieldNextReviewDueAt RiskOrderField = "next_review_due_at"
 	RiskOrderFieldResidualScore   RiskOrderField = "residual_score"
 	RiskOrderFieldRiskDecision    RiskOrderField = "risk_decision"
@@ -53530,6 +53579,7 @@ var AllRiskOrderField = []RiskOrderField{
 	RiskOrderFieldReviewRequired,
 	RiskOrderFieldLastReviewedAt,
 	RiskOrderFieldReviewFrequency,
+	RiskOrderFieldDueDate,
 	RiskOrderFieldNextReviewDueAt,
 	RiskOrderFieldResidualScore,
 	RiskOrderFieldRiskDecision,
@@ -53537,7 +53587,7 @@ var AllRiskOrderField = []RiskOrderField{
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts, RiskOrderFieldMitigatedAt, RiskOrderFieldReviewRequired, RiskOrderFieldLastReviewedAt, RiskOrderFieldReviewFrequency, RiskOrderFieldNextReviewDueAt, RiskOrderFieldResidualScore, RiskOrderFieldRiskDecision:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldExternalID, RiskOrderFieldObservedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts, RiskOrderFieldMitigatedAt, RiskOrderFieldReviewRequired, RiskOrderFieldLastReviewedAt, RiskOrderFieldReviewFrequency, RiskOrderFieldDueDate, RiskOrderFieldNextReviewDueAt, RiskOrderFieldResidualScore, RiskOrderFieldRiskDecision:
 		return true
 	}
 	return false

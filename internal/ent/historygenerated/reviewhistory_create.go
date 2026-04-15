@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/entx/history"
@@ -308,6 +309,20 @@ func (_c *ReviewHistoryCreate) SetNillableState(v *string) *ReviewHistoryCreate 
 	return _c
 }
 
+// SetStatus sets the "status" field.
+func (_c *ReviewHistoryCreate) SetStatus(v enums.ReviewStatus) *ReviewHistoryCreate {
+	_c.mutation.SetStatus(v)
+	return _c
+}
+
+// SetNillableStatus sets the "status" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableStatus(v *enums.ReviewStatus) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetStatus(*v)
+	}
+	return _c
+}
+
 // SetCategory sets the "category" field.
 func (_c *ReviewHistoryCreate) SetCategory(v string) *ReviewHistoryCreate {
 	_c.mutation.SetCategory(v)
@@ -568,6 +583,10 @@ func (_c *ReviewHistoryCreate) defaults() error {
 		v := reviewhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.Status(); !ok {
+		v := reviewhistory.DefaultStatus
+		_c.mutation.SetStatus(v)
+	}
 	if _, ok := _c.mutation.Approved(); !ok {
 		v := reviewhistory.DefaultApproved
 		_c.mutation.SetApproved(v)
@@ -597,6 +616,11 @@ func (_c *ReviewHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`historygenerated: missing required field "ReviewHistory.title"`)}
+	}
+	if v, ok := _c.mutation.Status(); ok {
+		if err := reviewhistory.StatusValidator(v); err != nil {
+			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReviewHistory.status": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -721,6 +745,10 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.State(); ok {
 		_spec.SetField(reviewhistory.FieldState, field.TypeString, value)
 		_node.State = value
+	}
+	if value, ok := _c.mutation.Status(); ok {
+		_spec.SetField(reviewhistory.FieldStatus, field.TypeEnum, value)
+		_node.Status = value
 	}
 	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(reviewhistory.FieldCategory, field.TypeString, value)

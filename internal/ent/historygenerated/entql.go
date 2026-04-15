@@ -1053,6 +1053,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidencehistory.FieldIsAutomated:            {Type: field.TypeBool, Column: evidencehistory.FieldIsAutomated},
 			evidencehistory.FieldURL:                    {Type: field.TypeString, Column: evidencehistory.FieldURL},
 			evidencehistory.FieldStatus:                 {Type: field.TypeEnum, Column: evidencehistory.FieldStatus},
+			evidencehistory.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidencehistory.FieldReviewFrequency},
 		},
 	}
 	graph.Nodes[22] = &sqlgraph.Node{
@@ -2139,6 +2140,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			reviewhistory.FieldExternalOwnerID:  {Type: field.TypeString, Column: reviewhistory.FieldExternalOwnerID},
 			reviewhistory.FieldTitle:            {Type: field.TypeString, Column: reviewhistory.FieldTitle},
 			reviewhistory.FieldState:            {Type: field.TypeString, Column: reviewhistory.FieldState},
+			reviewhistory.FieldStatus:           {Type: field.TypeEnum, Column: reviewhistory.FieldStatus},
 			reviewhistory.FieldCategory:         {Type: field.TypeString, Column: reviewhistory.FieldCategory},
 			reviewhistory.FieldClassification:   {Type: field.TypeString, Column: reviewhistory.FieldClassification},
 			reviewhistory.FieldSummary:          {Type: field.TypeString, Column: reviewhistory.FieldSummary},
@@ -2207,6 +2209,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldReviewRequired:    {Type: field.TypeBool, Column: riskhistory.FieldReviewRequired},
 			riskhistory.FieldLastReviewedAt:    {Type: field.TypeTime, Column: riskhistory.FieldLastReviewedAt},
 			riskhistory.FieldReviewFrequency:   {Type: field.TypeEnum, Column: riskhistory.FieldReviewFrequency},
+			riskhistory.FieldDueDate:           {Type: field.TypeTime, Column: riskhistory.FieldDueDate},
 			riskhistory.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: riskhistory.FieldNextReviewDueAt},
 			riskhistory.FieldResidualScore:     {Type: field.TypeInt, Column: riskhistory.FieldResidualScore},
 			riskhistory.FieldRiskDecision:      {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
@@ -7556,6 +7559,11 @@ func (f *EvidenceHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(evidencehistory.FieldStatus))
 }
 
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *EvidenceHistoryFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(evidencehistory.FieldReviewFrequency))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *FileHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -12311,6 +12319,11 @@ func (f *ReviewHistoryFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(reviewhistory.FieldState))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ReviewHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldStatus))
+}
+
 // WhereCategory applies the entql string predicate on the category field.
 func (f *ReviewHistoryFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(reviewhistory.FieldCategory))
@@ -12624,6 +12637,11 @@ func (f *RiskHistoryFilter) WhereLastReviewedAt(p entql.TimeP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *RiskHistoryFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldReviewFrequency))
+}
+
+// WhereDueDate applies the entql time.Time predicate on the due_date field.
+func (f *RiskHistoryFilter) WhereDueDate(p entql.TimeP) {
+	f.Where(p.Field(riskhistory.FieldDueDate))
 }
 
 // WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.

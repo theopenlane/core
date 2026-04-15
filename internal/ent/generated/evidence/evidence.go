@@ -67,6 +67,8 @@ const (
 	FieldURL = "url"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -208,6 +210,7 @@ var Columns = []string{
 	FieldIsAutomated,
 	FieldURL,
 	FieldStatus,
+	FieldReviewFrequency,
 }
 
 var (
@@ -253,7 +256,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -291,6 +294,18 @@ func StatusValidator(s enums.EvidenceStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("evidence: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("evidence: invalid enum value for review_frequency field: %q", rf)
 	}
 }
 
@@ -415,6 +430,11 @@ func ByURL(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -695,4 +715,11 @@ var (
 	_ graphql.Marshaler = (*enums.EvidenceStatus)(nil)
 	// enums.EvidenceStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EvidenceStatus)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
 )

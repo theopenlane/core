@@ -211,6 +211,7 @@ enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/cor
 	NEEDS_APPROVAL
 	APPROVED
 	ARCHIVED
+	PENDING
 }
 """
 An edge in a connection.
@@ -5420,6 +5421,7 @@ enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theo
 	NEEDS_APPROVAL
 	APPROVED
 	ARCHIVED
+	PENDING
 }
 """
 An edge in a connection.
@@ -12494,6 +12496,10 @@ type EvidenceHistory implements Node {
 	the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	"""
 	status: EvidenceHistoryEvidenceStatus
+	"""
+	the cadence for reviewing the evidence
+	"""
+	reviewFrequency: EvidenceHistoryFrequency
 }
 """
 A connection to a list of items.
@@ -12540,6 +12546,16 @@ enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/
 	REJECTED
 }
 """
+EvidenceHistoryFrequency is enum for the field review_frequency
+"""
+enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+	YEARLY
+	QUARTERLY
+	BIANNUALLY
+	MONTHLY
+	NONE
+}
+"""
 EvidenceHistoryOpType is enum for the field operation
 """
 enum EvidenceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
@@ -12571,6 +12587,7 @@ enum EvidenceHistoryOrderField {
 	creation_date
 	renewal_date
 	STATUS
+	REVIEW_FREQUENCY
 }
 """
 EvidenceHistoryWhereInput is used for filtering EvidenceHistory objects.
@@ -12950,6 +12967,15 @@ input EvidenceHistoryWhereInput {
 	statusNotIn: [EvidenceHistoryEvidenceStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	review_frequency field predicates
+	"""
+	reviewFrequency: EvidenceHistoryFrequency
+	reviewFrequencyNEQ: EvidenceHistoryFrequency
+	reviewFrequencyIn: [EvidenceHistoryFrequency!]
+	reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
+	reviewFrequencyIsNil: Boolean
+	reviewFrequencyNotNil: Boolean
 }
 """
 The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control
@@ -17877,6 +17903,7 @@ enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane
 	NEEDS_APPROVAL
 	APPROVED
 	ARCHIVED
+	PENDING
 }
 """
 An edge in a connection.
@@ -24204,6 +24231,7 @@ enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core
 	NEEDS_APPROVAL
 	APPROVED
 	ARCHIVED
+	PENDING
 }
 """
 An edge in a connection.
@@ -28842,6 +28870,10 @@ type ReviewHistory implements Node {
 	"""
 	state: String
 	"""
+	status of the review
+	"""
+	status: ReviewHistoryReviewStatus
+	"""
 	category for the review record
 	"""
 	category: String
@@ -28960,6 +28992,16 @@ enum ReviewHistoryOrderField {
 	external_owner_id
 	title
 	state
+}
+"""
+ReviewHistoryReviewStatus is enum for the field status
+"""
+enum ReviewHistoryReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+	OPEN
+	IN_PROGRESS
+	IN_REVIEW
+	COMPLETED
+	WONT_DO
 }
 """
 ReviewHistoryWhereInput is used for filtering ReviewHistory objects.
@@ -29283,6 +29325,15 @@ input ReviewHistoryWhereInput {
 	stateNotNil: Boolean
 	stateEqualFold: String
 	stateContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: ReviewHistoryReviewStatus
+	statusNEQ: ReviewHistoryReviewStatus
+	statusIn: [ReviewHistoryReviewStatus!]
+	statusNotIn: [ReviewHistoryReviewStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
 	"""
 	category field predicates
 	"""
@@ -29609,6 +29660,10 @@ type RiskHistory implements Node {
 	lastReviewedAt: DateTime
 	reviewFrequency: RiskHistoryFrequency
 	"""
+	the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+	"""
+	dueDate: DateTime
+	"""
 	the time when the next review is due for the risk
 	"""
 	nextReviewDueAt: DateTime
@@ -29701,6 +29756,7 @@ enum RiskHistoryOrderField {
 	review_required
 	last_reviewed_at
 	review_frequency
+	due_date
 	next_review_due_at
 	residual_score
 	risk_decision
@@ -30298,6 +30354,19 @@ input RiskHistoryWhereInput {
 	reviewFrequencyNotIn: [RiskHistoryFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	due_date field predicates
+	"""
+	dueDate: DateTime
+	dueDateNEQ: DateTime
+	dueDateIn: [DateTime!]
+	dueDateNotIn: [DateTime!]
+	dueDateGT: DateTime
+	dueDateGTE: DateTime
+	dueDateLT: DateTime
+	dueDateLTE: DateTime
+	dueDateIsNil: Boolean
+	dueDateNotNil: Boolean
 	"""
 	next_review_due_at field predicates
 	"""

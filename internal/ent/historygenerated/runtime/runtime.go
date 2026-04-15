@@ -2299,7 +2299,7 @@ func init() {
 	// reviewhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	reviewhistory.DefaultSystemOwned = reviewhistoryDescSystemOwned.Default.(bool)
 	// reviewhistoryDescApproved is the schema descriptor for approved field.
-	reviewhistoryDescApproved := reviewhistoryFields[28].Descriptor()
+	reviewhistoryDescApproved := reviewhistoryFields[29].Descriptor()
 	// reviewhistory.DefaultApproved holds the default value on creation for the approved field.
 	reviewhistory.DefaultApproved = reviewhistoryDescApproved.Default.(bool)
 	// reviewhistoryDescID is the schema descriptor for id field.

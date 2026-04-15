@@ -1994,6 +1994,7 @@ type ComplexityRoot struct {
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
+		ReviewFrequency         func(childComplexity int) int
 		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                   func(childComplexity int) int
 		ScopeID                 func(childComplexity int) int
@@ -5333,6 +5334,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
@@ -5398,6 +5400,7 @@ type ComplexityRoot struct {
 		DetailsJSON       func(childComplexity int) int
 		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment       func(childComplexity int) int
@@ -17396,6 +17399,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.RenewalDate(childComplexity), true
+
+	case "Evidence.reviewFrequency":
+		if e.ComplexityRoot.Evidence.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.ReviewFrequency(childComplexity), true
 
 	case "Evidence.scans":
 		if e.ComplexityRoot.Evidence.Scans == nil {
@@ -40987,6 +40997,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Review.State(childComplexity), true
 
+	case "Review.status":
+		if e.ComplexityRoot.Review.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.Status(childComplexity), true
+
 	case "Review.subcontrols":
 		if e.ComplexityRoot.Review.Subcontrols == nil {
 			break
@@ -41302,6 +41319,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.DisplayID(childComplexity), true
+
+	case "Risk.dueDate":
+		if e.ComplexityRoot.Risk.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.DueDate(childComplexity), true
 
 	case "Risk.editors":
 		if e.ComplexityRoot.Risk.Editors == nil {
@@ -57205,6 +57229,7 @@ enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/commo
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -64048,6 +64073,7 @@ enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -68020,6 +68046,10 @@ input CreateEvidenceInput {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -70251,6 +70281,10 @@ input CreateReviewInput {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -70423,6 +70457,10 @@ input CreateRiskInput {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -81682,6 +81720,10 @@ type Evidence implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -82072,6 +82114,16 @@ enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/
   REJECTED
 }
 """
+EvidenceFrequency is enum for the field review_frequency
+"""
+enum EvidenceFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Evidence connections
 """
 input EvidenceOrder {
@@ -82094,6 +82146,7 @@ enum EvidenceOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -82437,6 +82490,15 @@ input EvidenceWhereInput {
   statusNotIn: [EvidenceEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceFrequency
+  reviewFrequencyNEQ: EvidenceFrequency
+  reviewFrequencyIn: [EvidenceFrequency!]
+  reviewFrequencyNotIn: [EvidenceFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
   """
   owner edge predicates
   """
@@ -92222,6 +92284,7 @@ enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/c
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -106307,6 +106370,7 @@ enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -112648,6 +112712,10 @@ type Review implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -113324,6 +113392,16 @@ enum ReviewOrderField {
   state
 }
 """
+ReviewReviewStatus is enum for the field status
+"""
+enum ReviewReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
+}
+"""
 ReviewWhereInput is used for filtering Review objects.
 Input was generated by ent.
 """
@@ -113609,6 +113687,15 @@ input ReviewWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewReviewStatus
+  statusNEQ: ReviewReviewStatus
+  statusIn: [ReviewReviewStatus!]
+  statusNotIn: [ReviewReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
@@ -114045,6 +114132,10 @@ type Risk implements Node {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -114700,6 +114791,7 @@ enum RiskOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -115261,6 +115353,19 @@ input RiskWhereInput {
   reviewFrequencyNotIn: [RiskFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """
@@ -130048,6 +130153,11 @@ input UpdateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   clearStatus: Boolean
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  clearReviewFrequency: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -133267,6 +133377,11 @@ input UpdateReviewInput {
   state: String
   clearState: Boolean
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  clearStatus: Boolean
+  """
   category for the review record
   """
   category: String
@@ -133517,6 +133632,11 @@ input UpdateRiskInput {
   clearLastReviewedAt: Boolean
   reviewFrequency: RiskFrequency
   clearReviewFrequency: Boolean
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  clearDueDate: Boolean
   """
   the time when the next review is due for the risk
   """
