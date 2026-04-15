@@ -974,3 +974,83 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 		})
 	}
 }
+
+func TestEvidence_NextReviewDate(t *testing.T) {
+	now := time.Now().UTC().Truncate(time.Second)
+	initialCreationDate := models.DateTime(now.AddDate(0, 0, -14))
+	updatedCreationDate := models.DateTime(now.AddDate(0, 0, -7))
+	monthlyFreq := enums.FrequencyMonthly
+	quarterlyFreq := enums.FrequencyQuarterly
+
+	createResp, err := suite.client.api.CreateEvidence(adminUser.UserCtx, testclient.CreateEvidenceInput{
+		Name:            "Evidence review date",
+		CreationDate:    lo.ToPtr(initialCreationDate),
+		ReviewFrequency: lo.ToPtr(monthlyFreq),
+	}, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, createResp != nil)
+
+	id := createResp.CreateEvidence.Evidence.ID
+
+	bulkUpdateResp, err := suite.client.api.CreateEvidence(adminUser.UserCtx, testclient.CreateEvidenceInput{
+		Name:            "Bulk evidence review date",
+		CreationDate:    lo.ToPtr(initialCreationDate),
+		ReviewFrequency: lo.ToPtr(quarterlyFreq),
+	}, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, bulkUpdateResp != nil)
+
+	bulkUpdateID := bulkUpdateResp.CreateEvidence.Evidence.ID
+
+	resp, err := suite.client.api.GetEvidenceByID(adminUser.UserCtx, id)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.Evidence.RenewalDate != nil)
+	assert.Check(t, is.Equal(time.Time(initialCreationDate).AddDate(0, 1, 0), time.Time(*resp.Evidence.RenewalDate)))
+	assert.Assert(t, resp.Evidence.ReviewFrequency != nil)
+	assert.Check(t, is.Equal(monthlyFreq, *resp.Evidence.ReviewFrequency))
+
+	_, err = suite.client.api.UpdateEvidence(adminUser.UserCtx, id, testclient.UpdateEvidenceInput{
+		CreationDate: lo.ToPtr(updatedCreationDate),
+	}, nil)
+	assert.NilError(t, err)
+
+	resp, err = suite.client.api.GetEvidenceByID(adminUser.UserCtx, id)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.Evidence.RenewalDate != nil)
+	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 1, 0), time.Time(*resp.Evidence.RenewalDate)))
+
+	_, err = suite.client.api.UpdateEvidence(adminUser.UserCtx, id, testclient.UpdateEvidenceInput{
+		ReviewFrequency: lo.ToPtr(quarterlyFreq),
+	}, nil)
+	assert.NilError(t, err)
+
+	resp, err = suite.client.api.GetEvidenceByID(adminUser.UserCtx, id)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.Evidence.RenewalDate != nil)
+	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 3, 0), time.Time(*resp.Evidence.RenewalDate)))
+
+	updateBulkResp, err := suite.client.api.UpdateBulkEvidence(adminUser.UserCtx, []string{id, bulkUpdateID}, testclient.UpdateEvidenceInput{
+		ReviewFrequency: lo.ToPtr(monthlyFreq),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, updateBulkResp != nil)
+	assert.Check(t, is.Len(updateBulkResp.UpdateBulkEvidence.UpdatedIDs, 2))
+
+	expectedRenewalDates := map[string]time.Time{
+		id:           time.Time(updatedCreationDate).AddDate(0, 1, 0),
+		bulkUpdateID: time.Time(initialCreationDate).AddDate(0, 1, 0),
+	}
+
+	for evidenceID, expectedRenewalDate := range expectedRenewalDates {
+		resp, err = suite.client.api.GetEvidenceByID(adminUser.UserCtx, evidenceID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Evidence.RenewalDate != nil)
+		assert.Check(t, is.Equal(expectedRenewalDate, time.Time(*resp.Evidence.RenewalDate)))
+	}
+
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{id, bulkUpdateID}}).MustDelete(adminUser.UserCtx, t)
+}

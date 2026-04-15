@@ -23729,6 +23729,11 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, evidence.FieldStatus)
 				fieldSeen[evidence.FieldStatus] = struct{}{}
 			}
+		case "reviewFrequency":
+			if _, ok := fieldSeen[evidence.FieldReviewFrequency]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldReviewFrequency)
+				fieldSeen[evidence.FieldReviewFrequency] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

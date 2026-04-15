@@ -139,6 +139,14 @@ func (Evidence) Fields() []ent.Field {
 			).
 			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
 			Optional(),
+		field.Enum("review_frequency").
+			Comment("the cadence for reviewing the evidence").
+			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("REVIEW_FREQUENCY"),
+			),
 	}
 }
 
@@ -254,6 +262,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 // Hooks of the Evidence
 func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookEvidenceReviewDate(),
 		hooks.HookEvidenceFiles(),
 		hooks.HookSystemOwnedControls(),
 	}

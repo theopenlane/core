@@ -8488,6 +8488,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8663,6 +8667,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(evidence.Status)
 		}
 
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(evidence.ReviewFrequency)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8722,6 +8732,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
 			SetStatus(evidence.Status).
+			SetReviewFrequency(evidence.ReviewFrequency).
 			Save(ctx)
 		if err != nil {
 			return err

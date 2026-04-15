@@ -1053,6 +1053,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidencehistory.FieldIsAutomated:            {Type: field.TypeBool, Column: evidencehistory.FieldIsAutomated},
 			evidencehistory.FieldURL:                    {Type: field.TypeString, Column: evidencehistory.FieldURL},
 			evidencehistory.FieldStatus:                 {Type: field.TypeEnum, Column: evidencehistory.FieldStatus},
+			evidencehistory.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidencehistory.FieldReviewFrequency},
 		},
 	}
 	graph.Nodes[22] = &sqlgraph.Node{
@@ -7557,6 +7558,11 @@ func (f *EvidenceHistoryFilter) WhereURL(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *EvidenceHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(evidencehistory.FieldStatus))
+}
+
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *EvidenceHistoryFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(evidencehistory.FieldReviewFrequency))
 }
 
 // addPredicate implements the predicateAdder interface.

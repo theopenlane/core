@@ -75,6 +75,8 @@ const (
 	FieldURL = "url"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
 	// Table holds the table name of the evidencehistory in the database.
 	Table = "evidence_history"
 )
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldIsAutomated,
 	FieldURL,
 	FieldStatus,
+	FieldReviewFrequency,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -169,6 +172,18 @@ func StatusValidator(s enums.EvidenceStatus) error {
 		return nil
 	default:
 		return fmt.Errorf("evidencehistory: invalid enum value for status field: %q", s)
+	}
+}
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("evidencehistory: invalid enum value for review_frequency field: %q", rf)
 	}
 }
 
@@ -310,6 +325,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
 }
 
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -322,4 +342,11 @@ var (
 	_ graphql.Marshaler = (*enums.EvidenceStatus)(nil)
 	// enums.EvidenceStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.EvidenceStatus)(nil)
+)
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
 )

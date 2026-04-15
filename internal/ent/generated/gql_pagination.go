@@ -12510,6 +12510,20 @@ var (
 			}
 		},
 	}
+	// EvidenceOrderFieldReviewFrequency orders Evidence by review_frequency.
+	EvidenceOrderFieldReviewFrequency = &EvidenceOrderField{
+		Value: func(_m *Evidence) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: evidence.FieldReviewFrequency,
+		toTerm: evidence.ByReviewFrequency,
+		toCursor: func(_m *Evidence) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -12528,6 +12542,8 @@ func (f EvidenceOrderField) String() string {
 		str = "renewal_date"
 	case EvidenceOrderFieldStatus.column:
 		str = "STATUS"
+	case EvidenceOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
 	}
 	return str
 }
@@ -12556,6 +12572,8 @@ func (f *EvidenceOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceOrderFieldRenewalDate
 	case "STATUS":
 		*f = *EvidenceOrderFieldStatus
+	case "REVIEW_FREQUENCY":
+		*f = *EvidenceOrderFieldReviewFrequency
 	default:
 		return fmt.Errorf("%s is not a valid EvidenceOrderField", str)
 	}
