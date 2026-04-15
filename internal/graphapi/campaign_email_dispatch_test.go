@@ -3,13 +3,11 @@
 package graphapi_test
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -17,17 +15,15 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/newman/providers/mock"
 )
 
-// TestCampaignEmailDispatch verifies that SendCampaignEmails renders
+// TestCampaignEmailDispatch verifies that SendCampaign renders
 // campaign emails with the correct branding, template variables, and
-// metadata, then enqueues one river job per target
+// metadata, then sends one email per target via the mock sender
 func TestCampaignEmailDispatch(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
-
-	// clear any pending jobs
-	err := suite.client.db.Job.TruncateRiverTables(ctx)
-	assert.NilError(t, err)
 
 	// --- fixtures ---
 
@@ -79,7 +75,6 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		SetOwnerID(testUser1.OrganizationID).
 		SaveX(ctx)
 
-	// cleanup at end
 	defer func() {
 		(&Cleanup[*generated.CampaignTargetDeleteOne]{
 			client: suite.client.db.CampaignTarget,
@@ -99,9 +94,13 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 
-	// --- dispatch ---
+	// --- dispatch via SendCampaign operation ---
+
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
 
 	emailClient := &email.EmailClient{
+		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:      "test@mail.example.com",
 			CompanyName:    "TestCorp",
@@ -114,29 +113,36 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	err = email.SendCampaignEmails(ctx, suite.client.db, emailClient, campaignObj.ID)
-	assert.NilError(t, err)
-
-	// --- verify river jobs ---
-
-	insertedJobs := rivertest.RequireManyInserted(ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{Args: jobs.EmailArgs{}},
-			{Args: jobs.EmailArgs{}},
-		})
-	assert.Assert(t, is.Len(insertedJobs, 2))
-
-	// collect encoded args for content verification
-	var allArgs []string
-	for _, j := range insertedJobs {
-		allArgs = append(allArgs, string(j.EncodedArgs))
+	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.client.db,
 	}
 
-	combined := strings.Join(allArgs, "\n")
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
+	assert.NilError(t, err)
+
+	// --- verify sent messages ---
+
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 2))
+
+	var allHTML, allSubjects, allTo []string
+	for _, msg := range messages {
+		allHTML = append(allHTML, msg.HTML)
+		allSubjects = append(allSubjects, msg.Subject)
+		allTo = append(allTo, msg.To...)
+	}
+
+	combined := strings.Join(allHTML, "\n") + "\n" + strings.Join(allSubjects, "\n")
 
 	t.Run("subject contains recipient first name", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, "Hello Alice") || strings.Contains(combined, "Hello Bob"),
-			"expected subject with first name, got: %s", combined)
+		assert.Assert(t, strings.Contains(strings.Join(allSubjects, " "), "Hello Alice") || strings.Contains(strings.Join(allSubjects, " "), "Hello Bob"),
+			"expected subject with first name")
 	})
 
 	t.Run("body contains campaign name", func(t *testing.T) {
@@ -165,32 +171,28 @@ func TestCampaignEmailDispatch(t *testing.T) {
 			"expected brand name in rendered HTML")
 	})
 
-	t.Run("each target gets its own job", func(t *testing.T) {
-		aliceFound := false
-		bobFound := false
-
-		for _, args := range allArgs {
-			if strings.Contains(args, "alice@test.example") {
-				aliceFound = true
-			}
-
-			if strings.Contains(args, "bob@test.example") {
-				bobFound = true
-			}
-		}
-
-		assert.Assert(t, aliceFound, "expected job for alice@test.example")
-		assert.Assert(t, bobFound, "expected job for bob@test.example")
+	t.Run("each target gets its own message", func(t *testing.T) {
+		allToStr := strings.Join(allTo, " ")
+		assert.Assert(t, strings.Contains(allToStr, "alice@test.example"), "expected message for alice")
+		assert.Assert(t, strings.Contains(allToStr, "bob@test.example"), "expected message for bob")
 	})
 
 	t.Run("campaign target tag present", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, email.TagCampaignTargetID),
-			"expected campaign_target_id tag in email args")
+		found := false
+		for _, msg := range messages {
+			for _, tag := range msg.Tags {
+				if tag.Name == email.TagCampaignTargetID {
+					found = true
+				}
+			}
+		}
+		assert.Assert(t, found, "expected campaign_target_id tag")
 	})
 
 	t.Run("from address matches config", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, "test@mail.example.com"),
-			"expected from address in email args")
+		for _, msg := range messages {
+			assert.Equal(t, msg.From, "test@mail.example.com")
+		}
 	})
 
 	t.Run("sent_at marked on targets", func(t *testing.T) {
@@ -209,9 +211,6 @@ func TestCampaignEmailDispatch(t *testing.T) {
 func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
 
-	err := suite.client.db.Job.TruncateRiverTables(ctx)
-	assert.NilError(t, err)
-
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Skip Sent Test Template").
 		SetKey("skip-sent-test").
@@ -227,7 +226,6 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
 
-	// target already sent
 	sentTarget := suite.client.db.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
 		SetEmail("already-sent@test.example").
@@ -235,13 +233,11 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		SetOwnerID(testUser1.OrganizationID).
 		SaveX(ctx)
 
-	// mark as sent
 	sentAt := models.DateTime(time.Now())
 	suite.client.db.CampaignTarget.UpdateOneID(sentTarget.ID).
 		SetSentAt(sentAt).
 		SaveX(ctx)
 
-	// unsent target
 	unsentTarget := suite.client.db.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
 		SetEmail("unsent@test.example").
@@ -264,7 +260,11 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
 	emailClient := &email.EmailClient{
+		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "test@mail.example.com",
 			CompanyName: "TestCorp",
@@ -272,28 +272,28 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	err = email.SendCampaignEmails(ctx, suite.client.db, emailClient, campaignObj.ID)
+	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.client.db,
+	}
+
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
-	insertedJobs := rivertest.RequireManyInserted(ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{Args: jobs.EmailArgs{}},
-		})
-	assert.Assert(t, is.Len(insertedJobs, 1))
-
-	assert.Assert(t, strings.Contains(string(insertedJobs[0].EncodedArgs), "unsent@test.example"),
-		"expected only unsent target to receive email")
-	assert.Assert(t, !strings.Contains(string(insertedJobs[0].EncodedArgs), "already-sent@test.example"),
-		"already-sent target should not receive email")
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 1))
+	assert.Assert(t, strings.Contains(strings.Join(messages[0].To, " "), "unsent@test.example"))
 }
 
 // TestCampaignEmailDispatchNoBranding verifies dispatch works without
 // an EmailBranding record attached to the campaign
 func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
-
-	err := suite.client.db.Job.TruncateRiverTables(ctx)
-	assert.NilError(t, err)
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("No Branding Test Template").
@@ -332,7 +332,11 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
 	emailClient := &email.EmailClient{
+		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "noreply@test.example",
 			CompanyName: "NoBrandCo",
@@ -340,27 +344,29 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	err = email.SendCampaignEmails(ctx, suite.client.db, emailClient, campaignObj.ID)
+	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.client.db,
+	}
+
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
-	insertedJobs := rivertest.RequireManyInserted(ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{Args: jobs.EmailArgs{}},
-		})
-	assert.Assert(t, is.Len(insertedJobs, 1))
-
-	args := string(insertedJobs[0].EncodedArgs)
-	assert.Assert(t, strings.Contains(args, "Hello Charlie"), "expected rendered subject")
-	assert.Assert(t, strings.Contains(args, "charlie@test.example"), "expected target email")
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 1))
+	assert.Assert(t, strings.Contains(messages[0].Subject, "Hello Charlie"))
+	assert.Assert(t, strings.Contains(strings.Join(messages[0].To, " "), "charlie@test.example"))
 }
 
 // TestCampaignEmailDispatchNoTemplate verifies dispatch is a no-op
 // when no email template is linked to the campaign
 func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
-
-	err := suite.client.db.Job.TruncateRiverTables(ctx)
-	assert.NilError(t, err)
 
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("No Template Campaign").
@@ -386,7 +392,11 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
 	emailClient := &email.EmailClient{
+		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "noreply@test.example",
 			CompanyName: "TestCorp",
@@ -394,8 +404,19 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	err = email.SendCampaignEmails(ctx, suite.client.db, emailClient, campaignObj.ID)
+	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.client.db,
+	}
+
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
-	rivertest.RequireNotInserted(ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 0))
 }

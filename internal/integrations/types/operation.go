@@ -29,6 +29,8 @@ type ExecutionPolicy struct {
 	Inline bool `json:"inline,omitempty"`
 	// Reconcile indicates the operation should be dispatched on a recurring schedule
 	Reconcile bool `json:"reconcile,omitempty"`
+	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
+	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
 }
 
 // IngestContract declares one ingest target emitted by an operation
@@ -75,7 +77,7 @@ type OperationRegistration struct {
 	// ConfigSchema is the JSON schema for operation configuration
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 	// Policy controls synchronous execution behavior for the operation
-	Policy ExecutionPolicy `json:"policy,omitempty"`
+	Policy ExecutionPolicy `json:"policy"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads

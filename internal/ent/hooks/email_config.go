@@ -22,7 +22,7 @@ func sendSystemEmail(ctx context.Context, client *generated.Client, op email.Ope
 		return err
 	}
 
-	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID(), op.Name(), config)
+	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), op.Name(), config)
 
 	return err
 }
@@ -35,7 +35,7 @@ func emailProductURL(ctx context.Context, client *generated.Client) string {
 		return ""
 	}
 
-	rc, ok := rt.Registry().RuntimeClient(email.DefinitionID())
+	rc, ok := rt.Registry().RuntimeClient(email.DefinitionID.ID())
 	if !ok {
 		return ""
 	}

@@ -253,7 +253,7 @@ func (a OperationAccessor) Topic() gala.TopicName {
 func newAccessor(name string) OperationAccessor {
 	return OperationAccessor{
 		name:  name,
-		topic: definitionID.OperationTopic(name),
+		topic: DefinitionID.OperationTopic(name),
 	}
 }
 

@@ -57,7 +57,7 @@ type EmailOperation[T HasRecipient] struct {
 func (e EmailOperation[T]) Registration() types.OperationRegistration {
 	return types.OperationRegistration{
 		Name:         e.Op.Name(),
-		Topic:        definitionID.OperationTopic(e.Op.Name()),
+		Topic:        DefinitionID.OperationTopic(e.Op.Name()),
 		ClientRef:    emailClientRef.ID(),
 		ConfigSchema: e.Schema,
 		Handle:       e.handler(),

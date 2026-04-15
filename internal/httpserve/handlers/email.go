@@ -19,7 +19,7 @@ func (h *Handler) sendEmail(ctx context.Context, op email.OperationAccessor, inp
 		return err
 	}
 
-	_, err = h.IntegrationsRuntime.ExecuteRuntimeOperation(ctx, email.DefinitionID(), op.Name(), config)
+	_, err = h.IntegrationsRuntime.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), op.Name(), config)
 
 	return err
 }

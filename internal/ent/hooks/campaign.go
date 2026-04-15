@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -36,16 +37,20 @@ func HookCampaignDispatchOnActive() ent.Hook {
 
 			campaignID, _ := m.ID()
 
-			ownerID, _ := m.OwnerID()
-
 			config, err := json.Marshal(emaildef.SendCampaignRequest{CampaignID: campaignID})
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed marshaling campaign dispatch config")
 				return v, nil
 			}
 
-			if err := rt.DispatchForOwner(ctx, emaildef.DefinitionID(), emaildef.SendCampaignOpName(), ownerID, config); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed dispatching campaign send operation")
+			// TODO: resolve integration_id from campaign edge once codegen adds the field
+			if _, dispatchErr := rt.Dispatch(ctx, operations.DispatchRequest{
+				IntegrationID: "",
+				Operation:     emaildef.SendCampaignOp.Name(),
+				Config:        config,
+				RunType:       enums.IntegrationRunTypeEvent,
+			}); dispatchErr != nil {
+				logx.FromContext(ctx).Error().Err(dispatchErr).Str("campaign_id", campaignID).Msg("failed dispatching campaign send operation")
 			}
 
 			return v, nil

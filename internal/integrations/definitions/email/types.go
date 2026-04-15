@@ -10,16 +10,20 @@ import (
 var (
 	// emailUserInputSchema is the JSON schema for customer-provided email branding configuration
 	emailUserInputSchema = providerkit.SchemaFrom[EmailUserInput]()
-	// definitionID is the stable identifier for the email integration definition
-	definitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
+	// DefinitionID is the stable identifier for the email integration definition
+	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
 	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeIntegrationSchema[RuntimeEmailConfig]()
 	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
 	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[EmailCredential]()
 	// emailClientRef is the client ref for the email client used by this definition
 	emailClientRef = types.NewClientRef[*EmailClient]()
+	// healthCheckSchema is the operation schema for the health check operation
+	healthCheckSchema, healthCheckOp = providerkit.OperationSchema[HealthCheck]()
+	// sendEmailSchema is the operation schema for the generic send-email operation
+	sendEmailSchema, sendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
 	// sendCampaignSchema is the operation schema for the send-campaign operation
-	sendCampaignSchema, sendCampaignOp = providerkit.OperationSchema[SendCampaignRequest]()
+	sendCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendCampaignRequest]()
 )
 
 // Tag key constants for email delivery tracking via provider webhooks
@@ -31,21 +35,6 @@ const (
 	// TagIsTest marks a message as a test send to prevent cascade updates
 	TagIsTest = "is_test"
 )
-
-// DefinitionID returns the stable identifier for the email integration definition
-func DefinitionID() string {
-	return definitionID.ID()
-}
-
-// SendCampaignOpName returns the operation name for campaign email dispatch
-func SendCampaignOpName() string {
-	return sendCampaignOp.Name()
-}
-
-// CustomerClientID returns the client identity for customer-provisioned email clients
-func CustomerClientID() types.ClientID {
-	return emailClientRef.ID()
-}
 
 // RuntimeEmailConfig is the complete config for runtime-provisioned email.
 // Sourced from koanf/environment at startup
@@ -128,12 +117,6 @@ func (u EmailUserInput) ToRuntimeConfig() RuntimeEmailConfig {
 		ProductURL:     u.ProductURL,
 		DocsURL:        u.DocsURL,
 	}
-}
-
-// SendCampaignRequest is the operation config for dispatching a full campaign
-type SendCampaignRequest struct {
-	// CampaignID is the identifier of the campaign to dispatch
-	CampaignID string `json:"campaign_id" jsonschema:"required"`
 }
 
 // TemplateRef selects a notification template by stable key or explicit record ID

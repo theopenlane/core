@@ -189,6 +189,7 @@ func (i Integration) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(i, NotificationTemplate{}),
 		defaultEdgeToWithPagination(i, EmailTemplate{}),
+		defaultEdgeToWithPagination(i, Campaign{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: IntegrationWebhook{},
