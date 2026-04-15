@@ -14,23 +14,13 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// addControlsMutation allows for adding to the controls edge in a mutation
-type addControlsMutation interface {
-	AddControlIDs(ids ...string)
-}
-
-// addSubcontrolsMutation allows for adding to the subcontrols edge in a mutation
-type addSubcontrolsMutation interface {
-	AddSubcontrolIDs(ids ...string)
-}
-
 // versionMutation allows for setting the revision field in a mutation
 type versionMutation interface {
 	SetRevision(revision string)
 }
 
 // HookDetailsVersion is an ent hook that parses the versions from the details of a document
-// creation 
+// creation
 func HookDetailsVersion() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -56,7 +46,6 @@ func HookDetailsVersion() ent.Hook {
 
 // edgeLinks is a struct that holds the IDs of associated entities that should be linked to the document being created or updated, such as controlIDs
 type edgeLinks struct {
-	version       string
 	controlIDs    []string
 	subcontrolIDs []string
 }
