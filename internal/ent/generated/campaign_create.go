@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -550,6 +551,20 @@ func (_c *CampaignCreate) SetNillableEmailTemplateID(v *string) *CampaignCreate 
 	return _c
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_c *CampaignCreate) SetIntegrationID(v string) *CampaignCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableIntegrationID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CampaignCreate) SetID(v string) *CampaignCreate {
 	_c.mutation.SetID(v)
@@ -637,6 +652,11 @@ func (_c *CampaignCreate) SetTemplate(v *Template) *CampaignCreate {
 // SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
 func (_c *CampaignCreate) SetEmailBranding(v *EmailBranding) *CampaignCreate {
 	return _c.SetEmailBrandingID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_c *CampaignCreate) SetIntegration(v *Integration) *CampaignCreate {
+	return _c.SetIntegrationID(v.ID)
 }
 
 // SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
@@ -1247,6 +1267,24 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.EmailBrandingID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EmailTemplateIDs(); len(nodes) > 0 {

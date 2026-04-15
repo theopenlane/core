@@ -271,6 +271,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "email_branding_id", Type: field.TypeString, Nullable: true},
 		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
 	}
 	// CampaignHistoryTable holds the schema information for the "campaign_history" table.
 	CampaignHistoryTable = &schema.Table{

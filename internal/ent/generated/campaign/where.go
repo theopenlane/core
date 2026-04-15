@@ -239,6 +239,11 @@ func EmailTemplateID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldEmailTemplateID, v))
 }
 
+// IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
+func IntegrationID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldIntegrationID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldCreatedAt, v))
@@ -2359,6 +2364,81 @@ func EmailTemplateIDContainsFold(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldContainsFold(FieldEmailTemplateID, v))
 }
 
+// IntegrationIDEQ applies the EQ predicate on the "integration_id" field.
+func IntegrationIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDNEQ applies the NEQ predicate on the "integration_id" field.
+func IntegrationIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDIn applies the In predicate on the "integration_id" field.
+func IntegrationIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDNotIn applies the NotIn predicate on the "integration_id" field.
+func IntegrationIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDGT applies the GT predicate on the "integration_id" field.
+func IntegrationIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldIntegrationID, v))
+}
+
+// IntegrationIDGTE applies the GTE predicate on the "integration_id" field.
+func IntegrationIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDLT applies the LT predicate on the "integration_id" field.
+func IntegrationIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldIntegrationID, v))
+}
+
+// IntegrationIDLTE applies the LTE predicate on the "integration_id" field.
+func IntegrationIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDContains applies the Contains predicate on the "integration_id" field.
+func IntegrationIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasPrefix applies the HasPrefix predicate on the "integration_id" field.
+func IntegrationIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasSuffix applies the HasSuffix predicate on the "integration_id" field.
+func IntegrationIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldIntegrationID, v))
+}
+
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldIntegrationID))
+}
+
+// IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
+func IntegrationIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldIntegrationID, v))
+}
+
+// IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
+func IntegrationIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
@@ -2611,6 +2691,35 @@ func HasEmailBrandingWith(preds ...predicate.EmailBranding) predicate.Campaign {
 		step := newEmailBrandingStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailBranding
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIntegration applies the HasEdge predicate on the "integration" edge.
+func HasIntegration() predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationWith applies the HasEdge predicate on the "integration" edge with a given conditions (other predicates).
+func HasIntegrationWith(preds ...predicate.Integration) predicate.Campaign {
+	return predicate.Campaign(func(s *sql.Selector) {
+		step := newIntegrationStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

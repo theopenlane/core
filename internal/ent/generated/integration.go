@@ -139,6 +139,8 @@ type IntegrationEdges struct {
 	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
 	// EmailTemplates holds the value of the email_templates edge.
 	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// IntegrationWebhooks holds the value of the integration_webhooks edge.
 	IntegrationWebhooks []*IntegrationWebhook `json:"integration_webhooks,omitempty"`
 	// IntegrationRuns holds the value of the integration_runs edge.
@@ -168,6 +170,7 @@ type IntegrationEdges struct {
 	namedCheckResults          map[string][]*CheckResult
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedEmailTemplates        map[string][]*EmailTemplate
+	namedCampaigns             map[string][]*Campaign
 	namedIntegrationWebhooks   map[string][]*IntegrationWebhook
 	namedIntegrationRuns       map[string][]*IntegrationRun
 	namedEntities              map[string][]*Entity
@@ -368,6 +371,15 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
+}
+
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[20] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
 }
 
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
@@ -773,6 +785,11 @@ func (_m *Integration) QueryNotificationTemplates() *NotificationTemplateQuery {
 // QueryEmailTemplates queries the "email_templates" edge of the Integration entity.
 func (_m *Integration) QueryEmailTemplates() *EmailTemplateQuery {
 	return NewIntegrationClient(_m.config).QueryEmailTemplates(_m)
+}
+
+// QueryCampaigns queries the "campaigns" edge of the Integration entity.
+func (_m *Integration) QueryCampaigns() *CampaignQuery {
+	return NewIntegrationClient(_m.config).QueryCampaigns(_m)
 }
 
 // QueryIntegrationWebhooks queries the "integration_webhooks" edge of the Integration entity.
@@ -1321,6 +1338,30 @@ func (_m *Integration) appendNamedEmailTemplates(name string, edges ...*EmailTem
 		_m.Edges.namedEmailTemplates[name] = []*EmailTemplate{}
 	} else {
 		_m.Edges.namedEmailTemplates[name] = append(_m.Edges.namedEmailTemplates[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
 	}
 }
 

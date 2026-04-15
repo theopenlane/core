@@ -573,6 +573,20 @@ func (_c *CampaignHistoryCreate) SetNillableEmailTemplateID(v *string) *Campaign
 	return _c
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_c *CampaignHistoryCreate) SetIntegrationID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableIntegrationID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CampaignHistoryCreate) SetID(v string) *CampaignHistoryCreate {
 	_c.mutation.SetID(v)
@@ -949,6 +963,10 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.EmailTemplateID(); ok {
 		_spec.SetField(campaignhistory.FieldEmailTemplateID, field.TypeString, value)
 		_node.EmailTemplateID = value
+	}
+	if value, ok := _c.mutation.IntegrationID(); ok {
+		_spec.SetField(campaignhistory.FieldIntegrationID, field.TypeString, value)
+		_node.IntegrationID = value
 	}
 	return _node, _spec
 }

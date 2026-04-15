@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -720,6 +721,26 @@ func (_u *CampaignUpdate) ClearEmailTemplateID() *CampaignUpdate {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CampaignUpdate) SetIntegrationID(v string) *CampaignUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CampaignUpdate) SetNillableIntegrationID(v *string) *CampaignUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CampaignUpdate) ClearIntegrationID() *CampaignUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdate) AddBlockedGroupIDs(ids ...string) *CampaignUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -788,6 +809,11 @@ func (_u *CampaignUpdate) SetTemplate(v *Template) *CampaignUpdate {
 // SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
 func (_u *CampaignUpdate) SetEmailBranding(v *EmailBranding) *CampaignUpdate {
 	return _u.SetEmailBrandingID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *CampaignUpdate) SetIntegration(v *Integration) *CampaignUpdate {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
@@ -1015,6 +1041,12 @@ func (_u *CampaignUpdate) ClearTemplate() *CampaignUpdate {
 // ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
 func (_u *CampaignUpdate) ClearEmailBranding() *CampaignUpdate {
 	_u.mutation.ClearEmailBranding()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *CampaignUpdate) ClearIntegration() *CampaignUpdate {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -1757,6 +1789,37 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign
@@ -2908,6 +2971,26 @@ func (_u *CampaignUpdateOne) ClearEmailTemplateID() *CampaignUpdateOne {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CampaignUpdateOne) SetIntegrationID(v string) *CampaignUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CampaignUpdateOne) SetNillableIntegrationID(v *string) *CampaignUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CampaignUpdateOne) ClearIntegrationID() *CampaignUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CampaignUpdateOne) AddBlockedGroupIDs(ids ...string) *CampaignUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -2976,6 +3059,11 @@ func (_u *CampaignUpdateOne) SetTemplate(v *Template) *CampaignUpdateOne {
 // SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
 func (_u *CampaignUpdateOne) SetEmailBranding(v *EmailBranding) *CampaignUpdateOne {
 	return _u.SetEmailBrandingID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *CampaignUpdateOne) SetIntegration(v *Integration) *CampaignUpdateOne {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
@@ -3203,6 +3291,12 @@ func (_u *CampaignUpdateOne) ClearTemplate() *CampaignUpdateOne {
 // ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
 func (_u *CampaignUpdateOne) ClearEmailBranding() *CampaignUpdateOne {
 	_u.mutation.ClearEmailBranding()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *CampaignUpdateOne) ClearIntegration() *CampaignUpdateOne {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -3975,6 +4069,37 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign

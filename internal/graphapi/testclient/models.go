@@ -2625,7 +2625,9 @@ type Campaign struct {
 	// the email branding associated with the campaign
 	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
 	// the email template associated with the campaign
-	EmailTemplateID     *string                       `json:"emailTemplateID,omitempty"`
+	EmailTemplateID *string `json:"emailTemplateID,omitempty"`
+	// the email template associated with the campaign
+	IntegrationID       *string                       `json:"integrationID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -2635,6 +2637,7 @@ type Campaign struct {
 	Assessment          *Assessment                   `json:"assessment,omitempty"`
 	Template            *Template                     `json:"template,omitempty"`
 	EmailBranding       *EmailBranding                `json:"emailBranding,omitempty"`
+	Integration         *Integration                  `json:"integration,omitempty"`
 	EmailTemplate       *EmailTemplate                `json:"emailTemplate,omitempty"`
 	Entity              *Entity                       `json:"entity,omitempty"`
 	CampaignTargets     *CampaignTargetConnection     `json:"campaignTargets"`
@@ -3488,6 +3491,22 @@ type CampaignWhereInput struct {
 	EmailTemplateIDNotNil       *bool    `json:"emailTemplateIDNotNil,omitempty"`
 	EmailTemplateIDEqualFold    *string  `json:"emailTemplateIDEqualFold,omitempty"`
 	EmailTemplateIDContainsFold *string  `json:"emailTemplateIDContainsFold,omitempty"`
+	// integration_id field predicates
+	IntegrationID             *string  `json:"integrationID,omitempty"`
+	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
+	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
+	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
+	IntegrationIdgt           *string  `json:"integrationIDGT,omitempty"`
+	IntegrationIdgte          *string  `json:"integrationIDGTE,omitempty"`
+	IntegrationIdlt           *string  `json:"integrationIDLT,omitempty"`
+	IntegrationIdlte          *string  `json:"integrationIDLTE,omitempty"`
+	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
+	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
+	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
+	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
+	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
+	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
+	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -3515,6 +3534,9 @@ type CampaignWhereInput struct {
 	// email_branding edge predicates
 	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
 	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
+	// integration edge predicates
+	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
+	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
 	// email_template edge predicates
 	HasEmailTemplate     *bool                      `json:"hasEmailTemplate,omitempty"`
 	HasEmailTemplateWith []*EmailTemplateWhereInput `json:"hasEmailTemplateWith,omitempty"`
@@ -6256,6 +6278,7 @@ type CreateCampaignInput struct {
 	AssessmentID          *string        `json:"assessmentID,omitempty"`
 	TemplateID            *string        `json:"templateID,omitempty"`
 	EmailBrandingID       *string        `json:"emailBrandingID,omitempty"`
+	IntegrationID         *string        `json:"integrationID,omitempty"`
 	EmailTemplateID       *string        `json:"emailTemplateID,omitempty"`
 	EntityID              *string        `json:"entityID,omitempty"`
 	CampaignTargetIDs     []string       `json:"campaignTargetIDs,omitempty"`
@@ -20438,6 +20461,7 @@ type Integration struct {
 	Platform              *Platform                       `json:"platform,omitempty"`
 	NotificationTemplates *NotificationTemplateConnection `json:"notificationTemplates"`
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
+	Campaigns             *CampaignConnection             `json:"campaigns"`
 	Entities              *EntityConnection               `json:"entities"`
 	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
 	Credentials           json.RawMessage                 `json:"credentials,omitempty"`
@@ -20863,6 +20887,9 @@ type IntegrationWhereInput struct {
 	// email_templates edge predicates
 	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
 	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
 	// entities edge predicates
 	HasEntities     *bool               `json:"hasEntities,omitempty"`
 	HasEntitiesWith []*EntityWhereInput `json:"hasEntitiesWith,omitempty"`
@@ -39766,6 +39793,8 @@ type UpdateCampaignInput struct {
 	ClearTemplate               *bool          `json:"clearTemplate,omitempty"`
 	EmailBrandingID             *string        `json:"emailBrandingID,omitempty"`
 	ClearEmailBranding          *bool          `json:"clearEmailBranding,omitempty"`
+	IntegrationID               *string        `json:"integrationID,omitempty"`
+	ClearIntegration            *bool          `json:"clearIntegration,omitempty"`
 	EmailTemplateID             *string        `json:"emailTemplateID,omitempty"`
 	ClearEmailTemplate          *bool          `json:"clearEmailTemplate,omitempty"`
 	EntityID                    *string        `json:"entityID,omitempty"`

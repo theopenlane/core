@@ -22,6 +22,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				entityID
 				historyTime
 				id
+				integrationID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerUserID
@@ -78,6 +79,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				entityID
 				historyTime
 				id
+				integrationID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerUserID

@@ -391,6 +391,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaign.FieldMetadata:               {Type: field.TypeJSON, Column: campaign.FieldMetadata},
 			campaign.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaign.FieldEmailBrandingID},
 			campaign.FieldEmailTemplateID:        {Type: field.TypeString, Column: campaign.FieldEmailTemplateID},
+			campaign.FieldIntegrationID:          {Type: field.TypeString, Column: campaign.FieldIntegrationID},
 		},
 	}
 	graph.Nodes[6] = &sqlgraph.Node{
@@ -4768,6 +4769,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Campaign",
 		"EmailBranding",
+	)
+	graph.MustAddE(
+		"integration",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
+			Bidi:    false,
+		},
+		"Campaign",
+		"Integration",
 	)
 	graph.MustAddE(
 		"email_template",
@@ -9544,6 +9557,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"EmailTemplate",
+	)
+	graph.MustAddE(
+		"campaigns",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"Campaign",
 	)
 	graph.MustAddE(
 		"integration_webhooks",
@@ -19727,6 +19752,11 @@ func (f *CampaignFilter) WhereEmailTemplateID(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldEmailTemplateID))
 }
 
+// WhereIntegrationID applies the entql string predicate on the integration_id field.
+func (f *CampaignFilter) WhereIntegrationID(p entql.StringP) {
+	f.Where(p.Field(campaign.FieldIntegrationID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *CampaignFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -19847,6 +19877,20 @@ func (f *CampaignFilter) WhereHasEmailBranding() {
 // WhereHasEmailBrandingWith applies a predicate to check if query has an edge email_branding with a given conditions (other predicates).
 func (f *CampaignFilter) WhereHasEmailBrandingWith(preds ...predicate.EmailBranding) {
 	f.Where(entql.HasEdgeWith("email_branding", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegration applies a predicate to check if query has an edge integration.
+func (f *CampaignFilter) WhereHasIntegration() {
+	f.Where(entql.HasEdge("integration"))
+}
+
+// WhereHasIntegrationWith applies a predicate to check if query has an edge integration with a given conditions (other predicates).
+func (f *CampaignFilter) WhereHasIntegrationWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integration", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -30729,6 +30773,20 @@ func (f *IntegrationFilter) WhereHasEmailTemplates() {
 // WhereHasEmailTemplatesWith applies a predicate to check if query has an edge email_templates with a given conditions (other predicates).
 func (f *IntegrationFilter) WhereHasEmailTemplatesWith(preds ...predicate.EmailTemplate) {
 	f.Where(entql.HasEdgeWith("email_templates", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasCampaigns applies a predicate to check if query has an edge campaigns.
+func (f *IntegrationFilter) WhereHasCampaigns() {
+	f.Where(entql.HasEdge("campaigns"))
+}
+
+// WhereHasCampaignsWith applies a predicate to check if query has an edge campaigns with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasCampaignsWith(preds ...predicate.Campaign) {
+	f.Where(entql.HasEdgeWith("campaigns", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

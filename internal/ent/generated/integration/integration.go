@@ -124,6 +124,8 @@ const (
 	EdgeNotificationTemplates = "notification_templates"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
 	EdgeEmailTemplates = "email_templates"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
 	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
 	EdgeIntegrationWebhooks = "integration_webhooks"
 	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
@@ -265,6 +267,13 @@ const (
 	EmailTemplatesInverseTable = "email_templates"
 	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
 	EmailTemplatesColumn = "integration_id"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "integration_id"
 	// IntegrationWebhooksTable is the table that holds the integration_webhooks relation/edge.
 	IntegrationWebhooksTable = "integration_webhooks"
 	// IntegrationWebhooksInverseTable is the table name for the IntegrationWebhook entity.
@@ -812,6 +821,20 @@ func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByIntegrationWebhooksCount orders the results by integration_webhooks count.
 func ByIntegrationWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -998,6 +1021,13 @@ func newEmailTemplatesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
 	)
 }
 func newIntegrationWebhooksStep() *sqlgraph.Step {

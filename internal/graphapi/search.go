@@ -353,6 +353,7 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				},
 				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
 				campaign.EmailTemplateIDContainsFold(query), // search by EmailTemplateID
+				campaign.IntegrationIDContainsFold(query),   // search by IntegrationID
 			),
 		)
 

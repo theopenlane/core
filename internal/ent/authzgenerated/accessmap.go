@@ -300,6 +300,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "email_branding",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "email_template": {
 	ObjectType:      "email_template",
 	SkipEditCheck:   true,
@@ -1924,6 +1928,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "email_templates": {
 	ObjectType:      "email_template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integration_webhooks": {

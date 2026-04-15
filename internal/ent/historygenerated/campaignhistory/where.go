@@ -249,6 +249,11 @@ func EmailTemplateID(v string) predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldEQ(FieldEmailTemplateID, v))
 }
 
+// IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
+func IntegrationID(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2502,6 +2507,81 @@ func EmailTemplateIDEqualFold(v string) predicate.CampaignHistory {
 // EmailTemplateIDContainsFold applies the ContainsFold predicate on the "email_template_id" field.
 func EmailTemplateIDContainsFold(v string) predicate.CampaignHistory {
 	return predicate.CampaignHistory(sql.FieldContainsFold(FieldEmailTemplateID, v))
+}
+
+// IntegrationIDEQ applies the EQ predicate on the "integration_id" field.
+func IntegrationIDEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDNEQ applies the NEQ predicate on the "integration_id" field.
+func IntegrationIDNEQ(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNEQ(FieldIntegrationID, v))
+}
+
+// IntegrationIDIn applies the In predicate on the "integration_id" field.
+func IntegrationIDIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDNotIn applies the NotIn predicate on the "integration_id" field.
+func IntegrationIDNotIn(vs ...string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotIn(FieldIntegrationID, vs...))
+}
+
+// IntegrationIDGT applies the GT predicate on the "integration_id" field.
+func IntegrationIDGT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGT(FieldIntegrationID, v))
+}
+
+// IntegrationIDGTE applies the GTE predicate on the "integration_id" field.
+func IntegrationIDGTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldGTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDLT applies the LT predicate on the "integration_id" field.
+func IntegrationIDLT(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLT(FieldIntegrationID, v))
+}
+
+// IntegrationIDLTE applies the LTE predicate on the "integration_id" field.
+func IntegrationIDLTE(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldLTE(FieldIntegrationID, v))
+}
+
+// IntegrationIDContains applies the Contains predicate on the "integration_id" field.
+func IntegrationIDContains(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContains(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasPrefix applies the HasPrefix predicate on the "integration_id" field.
+func IntegrationIDHasPrefix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasPrefix(FieldIntegrationID, v))
+}
+
+// IntegrationIDHasSuffix applies the HasSuffix predicate on the "integration_id" field.
+func IntegrationIDHasSuffix(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldHasSuffix(FieldIntegrationID, v))
+}
+
+// IntegrationIDIsNil applies the IsNil predicate on the "integration_id" field.
+func IntegrationIDIsNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldIsNull(FieldIntegrationID))
+}
+
+// IntegrationIDNotNil applies the NotNil predicate on the "integration_id" field.
+func IntegrationIDNotNil() predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldNotNull(FieldIntegrationID))
+}
+
+// IntegrationIDEqualFold applies the EqualFold predicate on the "integration_id" field.
+func IntegrationIDEqualFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldEqualFold(FieldIntegrationID, v))
+}
+
+// IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
+func IntegrationIDContainsFold(v string) predicate.CampaignHistory {
+	return predicate.CampaignHistory(sql.FieldContainsFold(FieldIntegrationID, v))
 }
 
 // And groups predicates with the AND operator between them.
