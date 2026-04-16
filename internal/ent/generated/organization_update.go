@@ -303,6 +303,14 @@ func (_u *OrganizationUpdate) SetAvatarUpdatedAt(v time.Time) *OrganizationUpdat
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationUpdate {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *OrganizationUpdate) ClearAvatarUpdatedAt() *OrganizationUpdate {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -4360,13 +4368,6 @@ func (_u *OrganizationUpdate) defaults() error {
 		}
 		v := organization.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if organization.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := organization.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
@@ -10009,6 +10010,14 @@ func (_u *OrganizationUpdateOne) SetAvatarUpdatedAt(v time.Time) *OrganizationUp
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationUpdateOne {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *OrganizationUpdateOne) ClearAvatarUpdatedAt() *OrganizationUpdateOne {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -14079,13 +14088,6 @@ func (_u *OrganizationUpdateOne) defaults() error {
 		}
 		v := organization.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if organization.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized organization.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := organization.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }

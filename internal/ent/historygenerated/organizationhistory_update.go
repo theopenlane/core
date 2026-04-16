@@ -218,6 +218,14 @@ func (_u *OrganizationHistoryUpdate) SetAvatarUpdatedAt(v time.Time) *Organizati
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdate) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *OrganizationHistoryUpdate) ClearAvatarUpdatedAt() *OrganizationHistoryUpdate {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -301,13 +309,6 @@ func (_u *OrganizationHistoryUpdate) defaults() error {
 		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }
@@ -624,6 +625,14 @@ func (_u *OrganizationHistoryUpdateOne) SetAvatarUpdatedAt(v time.Time) *Organiz
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *OrganizationHistoryUpdateOne) SetNillableAvatarUpdatedAt(v *time.Time) *OrganizationHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *OrganizationHistoryUpdateOne) ClearAvatarUpdatedAt() *OrganizationHistoryUpdateOne {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -720,13 +729,6 @@ func (_u *OrganizationHistoryUpdateOne) defaults() error {
 		}
 		v := organizationhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if organizationhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized organizationhistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := organizationhistory.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	return nil
 }

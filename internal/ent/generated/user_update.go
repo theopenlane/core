@@ -261,6 +261,14 @@ func (_u *UserUpdate) SetAvatarUpdatedAt(v time.Time) *UserUpdate {
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableAvatarUpdatedAt(v *time.Time) *UserUpdate {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *UserUpdate) ClearAvatarUpdatedAt() *UserUpdate {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -1458,13 +1466,6 @@ func (_u *UserUpdate) defaults() error {
 		}
 		v := user.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if user.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized user.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := user.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if user.UpdateDefaultLastSeen == nil {
@@ -3229,6 +3230,14 @@ func (_u *UserUpdateOne) SetAvatarUpdatedAt(v time.Time) *UserUpdateOne {
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableAvatarUpdatedAt(v *time.Time) *UserUpdateOne {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *UserUpdateOne) ClearAvatarUpdatedAt() *UserUpdateOne {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -4439,13 +4448,6 @@ func (_u *UserUpdateOne) defaults() error {
 		}
 		v := user.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if user.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized user.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := user.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if user.UpdateDefaultLastSeen == nil {

@@ -218,6 +218,12 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	// make sure the customer id is set on the org
 	if cust.StripeCustomerID != "" && (org.StripeCustomerID == nil || *org.StripeCustomerID != cust.StripeCustomerID) {
 		if err := r.db.Organization.UpdateOneID(cust.OrganizationID).
+			Where(
+				organization.Or(
+					organization.StripeCustomerIDIsNil(),
+					organization.StripeCustomerIDNEQ(cust.StripeCustomerID),
+				),
+			).
 			SetStripeCustomerID(cust.StripeCustomerID).
 			Exec(internalCtx); err != nil {
 

@@ -304,6 +304,8 @@ func StatusValidator(s enums.EntityStatus) error {
 	}
 }
 
+const DefaultTier enums.VendorTier = "STANDARD"
+
 // TierValidator is a validator for the "tier" field enum values. It is called by the builders before save.
 func TierValidator(t enums.VendorTier) error {
 	switch t.String() {
