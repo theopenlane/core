@@ -7,29 +7,21 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// addControlsMutation allows for adding to the controls edge in a mutation
-type addControlsMutation interface {
-	AddControlIDs(ids ...string)
-}
-
-// addSubcontrolsMutation allows for adding to the subcontrols edge in a mutation
-type addSubcontrolsMutation interface {
-	AddSubcontrolIDs(ids ...string)
-}
 
 // versionMutation allows for setting the revision field in a mutation
 type versionMutation interface {
 	SetRevision(revision string)
 }
 
-// HookParseAssociations is an ent hook that parses associations from a document
-// such as referenced controls and adds the necessary edges
-func HookParseAssociations() ent.Hook {
+// HookDetailsVersion is an ent hook that parses the versions from the details of a document
+// creation
+func HookDetailsVersion() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			mut := m.(detailsMutation)
@@ -39,30 +31,10 @@ func HookParseAssociations() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			edgeLinks := getDocumentAssociations(ctx, mut)
-
-			if edgeLinks == nil {
-				return next.Mutate(ctx, m)
-			}
-
-			if len(edgeLinks.controlIDs) > 0 {
-				conMut, ok := mut.(addControlsMutation)
-				if ok {
-					conMut.AddControlIDs(edgeLinks.controlIDs...)
-				}
-			}
-
-			if len(edgeLinks.subcontrolIDs) > 0 {
-				subconMut, ok := mut.(addSubcontrolsMutation)
-				if ok {
-					subconMut.AddSubcontrolIDs(edgeLinks.subcontrolIDs...)
-				}
-			}
-
-			if edgeLinks.version != "" {
+			if version := findVersion(details); version != "" {
 				verMut, ok := mut.(versionMutation)
 				if ok {
-					verMut.SetRevision(edgeLinks.version)
+					verMut.SetRevision(version)
 				}
 			}
 
@@ -74,29 +46,8 @@ func HookParseAssociations() ent.Hook {
 
 // edgeLinks is a struct that holds the IDs of associated entities that should be linked to the document being created or updated, such as controlIDs
 type edgeLinks struct {
-	version       string
 	controlIDs    []string
 	subcontrolIDs []string
-}
-
-// getDocumentAssociations will read text details and try to extract any associations to other entities in the system, such as referenced control IDs, asset IDs, and identity holder IDs. This is a placeholder implementation and should be replaced with actual parsing logic based on the expected format of the details text.
-func getDocumentAssociations(ctx context.Context, m detailsMutation) *edgeLinks {
-	orgControls := getOrganizationControls(ctx, m)
-
-	if orgControls == nil {
-		return nil
-	}
-
-	details, ok := m.Details()
-	if !ok || details == "" {
-		return nil
-	}
-
-	edgeLinks := findControlMatches(details, orgControls)
-
-	edgeLinks.version = findVersion(details)
-
-	return edgeLinks
 }
 
 // findVersion attempts to find the version of the document in the details by
@@ -178,9 +129,9 @@ type controlInfo struct {
 // controlMapping contains the refCode with additional info
 type controlMapping map[string]controlInfo
 
-func getOrganizationControls(ctx context.Context, m detailsMutation) controlMapping {
+func getOrganizationControlsFromClient(ctx context.Context, client *generated.Client) controlMapping {
 	result := controlMapping{}
-	controls, err := m.Client().Control.Query().Where(
+	controls, err := client.Control.Query().Where(
 		control.IsTrustCenterControl(false),
 		control.SystemOwned(false),
 	).WithSubcontrols().All(ctx)
