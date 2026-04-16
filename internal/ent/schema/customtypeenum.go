@@ -156,7 +156,8 @@ func (CustomTypeEnum) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name", "object_type", "field", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("object_type"),
+		index.Fields("object_type").Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("name", "field").Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

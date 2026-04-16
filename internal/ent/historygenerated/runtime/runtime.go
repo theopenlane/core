@@ -1951,8 +1951,6 @@ func init() {
 	organizationhistoryDescAvatarUpdatedAt := organizationhistoryFields[18].Descriptor()
 	// organizationhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	organizationhistory.DefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// organizationhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	organizationhistory.UpdateDefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationhistoryDescDedicatedDb is the schema descriptor for dedicated_db field.
 	organizationhistoryDescDedicatedDb := organizationhistoryFields[19].Descriptor()
 	// organizationhistory.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
@@ -3062,8 +3060,6 @@ func init() {
 	userhistoryDescAvatarUpdatedAt := userhistoryFields[18].Descriptor()
 	// userhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	userhistory.DefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// userhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	userhistory.UpdateDefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userhistoryDescLastSeen is the schema descriptor for last_seen field.
 	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
 	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.

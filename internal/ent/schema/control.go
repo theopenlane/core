@@ -180,11 +180,17 @@ func (Control) Indexes() []ent.Index {
 		// ref_code should be unique for controls inside an organization that are not associated with a standard
 		index.Fields("ref_code", "owner_id").
 			Unique().Annotations(
-			entsql.IndexWhere("deleted_at is NULL AND owner_id is not NULL and standard_id is NULL"),
+			entsql.IndexWhere("deleted_at is NULL AND owner_id is not NULL AND standard_id is NULL"),
 		),
-		index.Fields("standard_id", "deleted_at", "owner_id"),
-		index.Fields("reference_id", "deleted_at", "owner_id"),
-		index.Fields("auditor_reference_id", "deleted_at", "owner_id"),
+		index.Fields("ref_code").Annotations(
+			entsql.IndexWhere("deleted_at IS NULL AND owner_id IS NOT NULL AND status != 'ARCHIVED'"),
+		),
+		index.Fields("reference_id").Annotations(
+			entsql.IndexWhere("deleted_at is NULL"),
+		),
+		index.Fields("auditor_reference_id").Annotations(
+			entsql.IndexWhere("deleted_at is NULL"),
+		),
 	}
 }
 
