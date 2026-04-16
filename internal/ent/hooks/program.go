@@ -154,34 +154,42 @@ func HookProgramValidation() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			switch {
-			case m.Op().Is(ent.OpUpdate):
-				ids, err := m.IDs(ctx)
-				if err != nil {
-					return nil, ErrFailedToGetIDsForProgramUpdate
-				}
-
-				for _, id := range ids {
-					// Note: preserves original behavior (returns on first ID)
-					if err := updateProgramByID(ctx, id, m, endSet, startSet, startDate, endDate); err != nil {
-						return nil, err
-					}
-				}
-
-			case m.Op().Is(ent.OpCreate):
-				if startSet && endSet && startDate.Compare(endDate) == 1 {
-					return nil, ErrStartDateLaterThanEndDate
-				}
-
-			case m.Op().Is(ent.OpUpdateOne):
-				if err := updateProgram(ctx, m, endSet, startSet, startDate, endDate); err != nil {
-					return nil, err
-				}
+			if err := validateProgram(ctx, m, endSet, startSet, startDate, endDate); err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}
+}
+
+// validateProgram validates that the start date is before the end date when a program is created or updated
+func validateProgram(ctx context.Context, m *generated.ProgramMutation, endSet bool, startSet bool, startDate time.Time, endDate time.Time) error {
+	switch {
+	case m.Op().Is(ent.OpUpdate):
+		ids, err := m.IDs(ctx)
+		if err != nil {
+			return ErrFailedToGetIDsForProgramUpdate
+		}
+
+		for _, id := range ids {
+			// Note: preserves original behavior (returns on first ID)
+			if err := updateProgramByID(ctx, id, m, endSet, startSet, startDate, endDate); err != nil {
+				return err
+			}
+		}
+
+	case m.Op().Is(ent.OpCreate):
+		if startSet && endSet && startDate.Compare(endDate) == 1 {
+			return ErrStartDateLaterThanEndDate
+		}
+
+	case m.Op().Is(ent.OpUpdateOne):
+		if err := updateProgram(ctx, m, endSet, startSet, startDate, endDate); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // updateProgramByID validates the start and end date on a program by its id upon update
