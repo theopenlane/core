@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
@@ -131,6 +132,110 @@ func checkArchivedProgram(ctx context.Context, m *generated.ProgramMutation) err
 
 	if status == enums.ProgramStatusArchived {
 		return ErrArchivedProgramUpdateNotAllowed
+	}
+
+	return nil
+}
+
+// HookProgramValidation validates that the start date is before the end date on program's created and updated
+func HookProgramValidation() ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return hook.ProgramFunc(func(ctx context.Context, m *generated.ProgramMutation) (ent.Value, error) {
+			// Skip soft delete
+			if isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
+			}
+
+			startDate, startSet := m.StartDate()
+			endDate, endSet := m.EndDate()
+
+			// Nothing to validate
+			if !startSet && !endSet {
+				return next.Mutate(ctx, m)
+			}
+
+			switch {
+			case m.Op().Is(ent.OpUpdate):
+				ids, err := m.IDs(ctx)
+				if err != nil {
+					return nil, ErrFailedToGetIDsForProgramUpdate
+				}
+
+				for _, id := range ids {
+					// Note: preserves original behavior (returns on first ID)
+					if err := updateProgramByID(ctx, id, m, endSet, startSet, startDate, endDate); err != nil {
+						return nil, err
+					}
+				}
+
+			case m.Op().Is(ent.OpCreate):
+				if startSet && endSet && startDate.Compare(endDate) == 1 {
+					return nil, ErrStartDateLaterThanEndDate
+				}
+
+			case m.Op().Is(ent.OpUpdateOne):
+				if err := updateProgram(ctx, m, endSet, startSet, startDate, endDate); err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}
+}
+
+// updateProgramByID validates the start and end date on a program by its id upon update
+func updateProgramByID(ctx context.Context, id string, m *generated.ProgramMutation, endSet bool, startSet bool, startDate time.Time, endDate time.Time) error {
+	currP, err := m.Client().Program.Get(ctx, id)
+	if err != nil {
+		return ErrFailedToGetProgramByID
+	}
+
+	if !endSet {
+		if oldEndDate := currP.EndDate; startDate.Compare(oldEndDate) == 1 {
+			return ErrStartDateLaterThanEndDate
+		}
+	}
+
+	if !startSet {
+		if oldStartDate := currP.StartDate; oldStartDate.Compare(endDate) == 1 {
+			return ErrStartDateLaterThanEndDate
+		}
+	}
+
+	if startDate.Compare(endDate) == 1 {
+		return ErrStartDateLaterThanEndDate
+	}
+
+	return nil
+}
+
+// updateProgram validates the start and end date on a program upon update
+func updateProgram(ctx context.Context, m *generated.ProgramMutation, endSet bool, startSet bool, startDate time.Time, endDate time.Time) error {
+	if !endSet {
+		oldEndDate, err := m.OldEndDate(ctx)
+		if err != nil {
+			return ErrFailedToGetOldEndDate
+		}
+
+		if startDate.Compare(oldEndDate) == 1 {
+			return ErrStartDateLaterThanEndDate
+		}
+	}
+
+	if !startSet {
+		oldStartDate, err := m.OldStartDate(ctx)
+		if err != nil {
+			return ErrFailedToGetOldStartDate
+		}
+
+		if oldStartDate.Compare(endDate) == 1 {
+			return ErrStartDateLaterThanEndDate
+		}
+	}
+
+	if startDate.Compare(endDate) == 1 {
+		return ErrStartDateLaterThanEndDate
 	}
 
 	return nil

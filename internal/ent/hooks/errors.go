@@ -191,6 +191,16 @@ var (
 	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 	// ErrVendorScoringQuestionNotFound is returned when a question key cannot be resolved in the scoring config
 	ErrVendorScoringQuestionNotFound = errors.New("vendor scoring question not found in config")
+	// ErrStartDateLaterThanEndDate is returned when a program mutation has a start date that is later than the end date
+	ErrStartDateLaterThanEndDate = errors.New("mutation's start date cannot be later than end date")
+	// ErrFailedToGetOldEndDate is returned when a program mutation's old end date cannot be retrieved, which is necessary to validate that the start date is not later than the old end date
+	ErrFailedToGetOldEndDate = errors.New("could not get old end date for mutation")
+	// ErrFailedToGetStartDate is returned when a program mutation's start date cannot be retrieved, which is necessary to validate that the old start date is not later than the end date
+	ErrFailedToGetOldStartDate = errors.New("could not get old start date for mutation")
+	// ErrFailedToGetProgramByID is returned when a program cannot be retrieved by ID when updating
+	ErrFailedToGetProgramByID = errors.New("could not get program by id when updating")
+	// ErrFailedToGetIdsForProgramUpdate is returned when a program mutation's ids cannot be retrieved, which is necessary to validate bulk updates
+	ErrFailedToGetIDsForProgramUpdate = errors.New("could not get ids for mutation program update")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
