@@ -3,7 +3,6 @@ package hooks
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -62,12 +61,14 @@ func HookSummarizeDetails() ent.Hook {
 
 			summarizer := mut.Client().Summarizer
 			if summarizer == nil {
-				return nil, errors.New("summarizer client not found") //nolint:err113
+				logx.FromContext(ctx).Info().Msg("summarizer client not found, skipping summary generation")
+				return next.Mutate(ctx, m)
 			}
 
 			summary, err := summarizer.Summarize(ctx, details)
 			if err != nil {
-				return nil, err
+				log.Error().Err(err).Msg("failed to summarize details, skipping summary generation")
+				return next.Mutate(ctx, m)
 			}
 
 			mut.SetSummary(summary)
