@@ -61,11 +61,11 @@ func resolveEmailIntegrationForOwner(ctx context.Context, client *generated.Clie
 	}
 
 	// multiple email integrations — prefer the one flagged for campaigns
-	//for _, inst := range integrations {
-	//	if inst.CampaignEmail {
-	//		return inst.ID
-	//	}
-	//}
+	for _, inst := range integrations {
+		if inst.CampaignEmail {
+			return inst.ID
+		}
+	}
 
 	return ""
 }

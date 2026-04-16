@@ -2736,6 +2736,7 @@ type ComplexityRoot struct {
 	Integration struct {
 		ActionPlans              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Assets                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		CampaignEmail            func(childComplexity int) int
 		Campaigns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
@@ -21354,6 +21355,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "Integration.campaignEmail":
+		if e.ComplexityRoot.Integration.CampaignEmail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.CampaignEmail(childComplexity), true
 
 	case "Integration.campaigns":
 		if e.ComplexityRoot.Integration.Campaigns == nil {
@@ -60779,7 +60787,7 @@ type Campaign implements Node {
   """
   emailTemplateID: ID
   """
-  the email template associated with the campaign
+  the email integration used for campaign dispatch
   """
   integrationID: ID
   owner: Organization
@@ -90567,6 +90575,10 @@ type Integration implements Node {
   designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
   """
   primaryDirectory: Boolean!
+  """
+  designates this email integration as the one to use for campaign dispatch within its owner organization
+  """
+  campaignEmail: Boolean!
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -91571,6 +91583,11 @@ input IntegrationWhereInput {
   """
   primaryDirectory: Boolean
   primaryDirectoryNEQ: Boolean
+  """
+  campaign_email field predicates
+  """
+  campaignEmail: Boolean
+  campaignEmailNEQ: Boolean
   """
   owner edge predicates
   """

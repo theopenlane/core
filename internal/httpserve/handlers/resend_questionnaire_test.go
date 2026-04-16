@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -9,14 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -90,8 +86,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
-		rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{{Args: jobs.EmailArgs{}}})
+		msgs := suite.mockEmailSender().Messages()
+		require.Len(t, msgs, 1)
 
 		suite.ClearTestData()
 
@@ -101,8 +97,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		assert.Equal(t, true, out["success"])
 		assert.NotEmpty(t, out["message"])
 
-		rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{{Args: jobs.EmailArgs{}}})
+		msgs = suite.mockEmailSender().Messages()
+		require.Len(t, msgs, 1)
 
 		suite.db.AssessmentResponse.DeleteOneID(assessmentResp.ID).Exec(ctx)
 	})
@@ -145,8 +141,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
-		rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{{Args: jobs.EmailArgs{}}})
+		msgs := suite.mockEmailSender().Messages()
+		require.Len(t, msgs, 1)
 
 		completedResp, err = suite.db.AssessmentResponse.UpdateOneID(completedResp.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
@@ -178,8 +174,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
-		rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{{Args: jobs.EmailArgs{}}})
+		msgs := suite.mockEmailSender().Messages()
+		require.Len(t, msgs, 1)
 
 		overdueResp, err = suite.db.AssessmentResponse.UpdateOneID(overdueResp.ID).
 			SetDueDate(time.Now().Add(-24 * time.Hour)).
@@ -210,8 +206,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
-		rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{{Args: jobs.EmailArgs{}}})
+		msgs := suite.mockEmailSender().Messages()
+		require.Len(t, msgs, 1)
 
 		suite.ClearTestData()
 

@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// HasRecipient is implemented by all email operation input types to provide
-// recipient information for message addressing
+// HasRecipient is implemented by all email operation input types to provide recipient information
 type HasRecipient interface {
+	// GetRecipient returns the RecipientInfo
 	GetRecipient() RecipientInfo
 }
 
@@ -32,11 +32,12 @@ type RecipientInfo struct {
 }
 
 // GetRecipient returns the recipient info, satisfying the HasRecipient interface
-func (r RecipientInfo) GetRecipient() RecipientInfo { return r }
+func (r RecipientInfo) GetRecipient() RecipientInfo {
+	return r
+}
 
-// EmailOperation defines a single system email type as a registered integration operation.
-// Each email is one value of this type — identity, schema, subject, theme, and content
-// are all derived from the Go type T via providerkit.OperationSchema
+// EmailOperation is a generic helper which defines a single system email type as a registered integration operation
+// this allows us to do AllEmailOperations() in the builder rather than manually wiring each
 type EmailOperation[T HasRecipient] struct {
 	// Op is the typed operation ref with name derived from the schema definition key
 	Op types.OperationRef[T]
@@ -48,8 +49,7 @@ type EmailOperation[T HasRecipient] struct {
 	Theme *render.Theme
 	// Content returns the structured email content for newman rendering
 	Content func(cfg RuntimeEmailConfig, input T) render.EmailContent
-	// MessageOptions returns additional newman message options for per-operation
-	// customization such as attachment or from-address overrides. May be nil
+	// MessageOptions returns additional newman message options for per-operation customization such as attachment
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 }
 
@@ -92,7 +92,7 @@ func (e EmailOperation[T]) handler() types.OperationHandler {
 func renderAndSend(ctx context.Context, client *EmailClient, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (json.RawMessage, error) {
 	r := render.NewRenderer(
 		render.WithTheme(theme),
-		render.WithBranding(BrandingFromConfig(client.Config, recipient.Email)),
+		render.WithBranding(BrandingFromConfig(client.Config)),
 	)
 
 	htmlBody, err := r.GenerateHTML(content)

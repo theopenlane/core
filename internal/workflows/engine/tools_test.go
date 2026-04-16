@@ -22,6 +22,8 @@ import (
 	dbtestutils "github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/fga/fgaversion"
@@ -41,6 +43,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/mutations"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
@@ -74,6 +80,7 @@ type WorkflowEngineTestSuite struct {
 	stripeMockBackend *mocks.MockStripeBackend
 	ofgaTF            *fgatest.OpenFGATestFixture
 	galaRuntime       *gala.Gala
+	integrationsRT    *intruntime.Runtime
 }
 
 // TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
@@ -208,7 +215,35 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.client = db
 	s.galaRuntime = runtime
 
+	// wire integration runtime with mock email provider
+	credStore, err := keystore.NewStore(db)
+	s.Require().NoError(err)
+
+	rt, err := intruntime.New(intruntime.Config{
+		DB:       db,
+		Gala:     runtime,
+		Keystore: credStore,
+		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
+		},
+	})
+	s.Require().NoError(err)
+
+	db.IntegrationsRuntime = rt
+	s.integrationsRT = rt
+
 	s.requireWorkflowSetup(workflowCfg, runtime)
+}
+
+// mockEmailSender returns the mock email sender from the integration runtime
+func (s *WorkflowEngineTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := s.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	s.Require().True(ok, "email runtime client not found")
+
+	ms := emaildef.MockSenderFromClient(rc)
+	s.Require().NotNil(ms, "mock sender not found")
+
+	return ms
 }
 
 // TearDownSuite cleans up test dependencies

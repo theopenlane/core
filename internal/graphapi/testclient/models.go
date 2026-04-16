@@ -2609,7 +2609,7 @@ type Campaign struct {
 	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID *string `json:"emailTemplateID,omitempty"`
-	// the email template associated with the campaign
+	// the email integration used for campaign dispatch
 	IntegrationID       *string                       `json:"integrationID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
@@ -19849,7 +19849,9 @@ type Integration struct {
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]any `json:"providerMetadataSnapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
-	PrimaryDirectory     bool                           `json:"primaryDirectory"`
+	PrimaryDirectory bool `json:"primaryDirectory"`
+	// designates this email integration as the one to use for campaign dispatch within its owner organization
+	CampaignEmail        bool                           `json:"campaignEmail"`
 	Owner                *Organization                  `json:"owner,omitempty"`
 	Environment          *CustomTypeEnum                `json:"environment,omitempty"`
 	Scope                *CustomTypeEnum                `json:"scope,omitempty"`
@@ -20232,6 +20234,9 @@ type IntegrationWhereInput struct {
 	// primary_directory field predicates
 	PrimaryDirectory    *bool `json:"primaryDirectory,omitempty"`
 	PrimaryDirectoryNeq *bool `json:"primaryDirectoryNEQ,omitempty"`
+	// campaign_email field predicates
+	CampaignEmail    *bool `json:"campaignEmail,omitempty"`
+	CampaignEmailNeq *bool `json:"campaignEmailNEQ,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/newman"
+	"github.com/theopenlane/newman/providers/mock"
 	"github.com/theopenlane/newman/providers/postmark"
 	"github.com/theopenlane/newman/providers/resend"
 	"github.com/theopenlane/newman/providers/sendgrid"
@@ -23,6 +24,9 @@ type EmailClient struct {
 // HTML sanitization, preserving email-safe layout elements while stripping dangerous content
 var emailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
 
+// ProviderMock is the provider name for the mock email sender used in tests
+const ProviderMock = "mock"
+
 // buildSender constructs a newman.EmailSender for the given provider
 func buildSender(provider string, apiKey string) (newman.EmailSender, error) {
 	switch provider {
@@ -32,6 +36,8 @@ func buildSender(provider string, apiKey string) (newman.EmailSender, error) {
 		return sendgrid.New(apiKey, sendgrid.WithHTMLScrubber(emailHTMLScrubber))
 	case "postmark":
 		return postmark.New(apiKey, postmark.WithHTMLScrubber(emailHTMLScrubber))
+	case ProviderMock:
+		return mock.New("")
 	default:
 		return nil, fmt.Errorf("%w: %s", ErrProviderNotSupported, provider)
 	}

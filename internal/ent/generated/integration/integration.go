@@ -82,6 +82,8 @@ const (
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
 	FieldPrimaryDirectory = "primary_directory"
+	// FieldCampaignEmail holds the string denoting the campaign_email field in the database.
+	FieldCampaignEmail = "campaign_email"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -321,6 +323,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldProviderMetadataSnapshot,
 	FieldPrimaryDirectory,
+	FieldCampaignEmail,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "integrations"
@@ -378,7 +381,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -397,6 +400,8 @@ var (
 	PlatformIDValidator func(string) error
 	// DefaultPrimaryDirectory holds the default value on creation for the "primary_directory" field.
 	DefaultPrimaryDirectory bool
+	// DefaultCampaignEmail holds the default value on creation for the "campaign_email" field.
+	DefaultCampaignEmail bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -544,6 +549,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryDirectory orders the results by the primary_directory field.
 func ByPrimaryDirectory(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryDirectory, opts...).ToFunc()
+}
+
+// ByCampaignEmail orders the results by the campaign_email field.
+func ByCampaignEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignEmail, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

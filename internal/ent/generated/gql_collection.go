@@ -36989,6 +36989,11 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldPrimaryDirectory)
 				fieldSeen[integration.FieldPrimaryDirectory] = struct{}{}
 			}
+		case "campaignEmail":
+			if _, ok := fieldSeen[integration.FieldCampaignEmail]; !ok {
+				selectedFields = append(selectedFields, integration.FieldCampaignEmail)
+				fieldSeen[integration.FieldCampaignEmail] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

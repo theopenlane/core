@@ -59,4 +59,3 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 		}
 	})
 }
-

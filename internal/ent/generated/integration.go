@@ -87,6 +87,8 @@ type Integration struct {
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
 	PrimaryDirectory bool `json:"primary_directory,omitempty"`
+	// designates this email integration as the one to use for campaign dispatch within its owner organization
+	CampaignEmail bool `json:"campaign_email,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationQuery when eager-loading is set.
 	Edges              IntegrationEdges `json:"edges"`
@@ -404,7 +406,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
-		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory:
+		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
 		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -642,6 +644,12 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field primary_directory", values[i])
 			} else if value.Valid {
 				_m.PrimaryDirectory = value.Bool
+			}
+		case integration.FieldCampaignEmail:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_email", values[i])
+			} else if value.Valid {
+				_m.CampaignEmail = value.Bool
 			}
 		case integration.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -912,6 +920,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("primary_directory=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PrimaryDirectory))
+	builder.WriteString(", ")
+	builder.WriteString("campaign_email=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CampaignEmail))
 	builder.WriteByte(')')
 	return builder.String()
 }

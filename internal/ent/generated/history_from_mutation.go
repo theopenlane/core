@@ -11781,6 +11781,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPrimaryDirectory(primaryDirectory)
 	}
 
+	if campaignEmail, exists := m.CampaignEmail(); exists {
+		create = create.SetCampaignEmail(campaignEmail)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -12004,6 +12008,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPrimaryDirectory(integration.PrimaryDirectory)
 		}
 
+		if campaignEmail, exists := m.CampaignEmail(); exists {
+			create = create.SetCampaignEmail(campaignEmail)
+		} else {
+			create = create.SetCampaignEmail(integration.CampaignEmail)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12071,6 +12081,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetStatus(integration.Status).
 			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
 			SetPrimaryDirectory(integration.PrimaryDirectory).
+			SetCampaignEmail(integration.CampaignEmail).
 			Save(ctx)
 		if err != nil {
 			return err

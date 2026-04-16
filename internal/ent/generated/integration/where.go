@@ -188,6 +188,11 @@ func PrimaryDirectory(v bool) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldPrimaryDirectory, v))
 }
 
+// CampaignEmail applies equality check predicate on the "campaign_email" field. It's identical to CampaignEmailEQ.
+func CampaignEmail(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldCreatedAt, v))
@@ -1881,6 +1886,16 @@ func PrimaryDirectoryEQ(v bool) predicate.Integration {
 // PrimaryDirectoryNEQ applies the NEQ predicate on the "primary_directory" field.
 func PrimaryDirectoryNEQ(v bool) predicate.Integration {
 	return predicate.Integration(sql.FieldNEQ(FieldPrimaryDirectory, v))
+}
+
+// CampaignEmailEQ applies the EQ predicate on the "campaign_email" field.
+func CampaignEmailEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
+// CampaignEmailNEQ applies the NEQ predicate on the "campaign_email" field.
+func CampaignEmailNEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldCampaignEmail, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

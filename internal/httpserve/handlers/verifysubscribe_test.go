@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,11 +9,8 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -99,17 +95,11 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 				assert.NotEmpty(t, out.Message)
 			}
 
-			// ensure email job was created
+			// verify email was sent through the mock sender
 			if tc.emailExpected {
-				job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-
-						{
-							Args: jobs.EmailArgs{},
-						},
-					})
-				require.NotNil(t, job)
-				assert.Contains(t, string(job[0].EncodedArgs), "You've been subscribed to") // second email is the accepted invite email
+				msgs := suite.mockEmailSender().Messages()
+				require.NotEmpty(t, msgs)
+				assert.Contains(t, msgs[0].Subject, "subscribed")
 			}
 		})
 	}

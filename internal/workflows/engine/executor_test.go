@@ -10,9 +10,6 @@ import (
 	"net/http/httptest"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -304,11 +301,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().NoError(err)
 
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), riverpgxv5.New(s.client.Job.GetPool()), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{"person@example.com"}, job.Args.Message.To)
-	s.Equal("Hello Ada", job.Args.Message.Subject)
-	s.Contains(job.Args.Message.Text, "Hi Ada")
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"person@example.com"}, msgs[0].To)
+	s.Equal("Hello Ada", msgs[0].Subject)
+	s.Contains(msgs[0].Text, "Hi Ada")
 
 	// Cleanup seed templates so tests don't conflict on key uniqueness.
 	_, err = s.client.NotificationTemplate.Delete().Where(notificationtemplate.KeyEQ(templateKey)).Exec(seedCtx)

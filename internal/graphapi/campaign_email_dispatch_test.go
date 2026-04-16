@@ -32,7 +32,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		SetKey("campaign-dispatch-test").
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
 		SetSubjectTemplate("Hello {{ .recipientFirstName }}").
-		SetBodyTemplate("<h1>Welcome {{ .recipientFirstName }}</h1><p>Campaign: {{ .campaignName }}</p><p>{{ .promoCode }}</p>").
+		SetBodyTemplate("# Welcome {{ .recipientFirstName }}\n\nCampaign: {{ .campaignName }}\n\n{{ .promoCode }}").
 		SetTextTemplate("Welcome {{ .recipientFirstName }} - Campaign: {{ .campaignName }}").
 		SetDefaults(map[string]any{
 			"promoCode": "DEFAULT123",
@@ -158,8 +158,9 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	})
 
 	t.Run("branding colors applied to HTML", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, "#ff5500"),
-			"expected button color in rendered HTML")
+		// FreeMarkdown templates have no .button elements, so button colors
+		// are not inlined. Background and text colors are applied to wrapper
+		// and paragraph elements that exist in the rendered structure
 		assert.Assert(t, strings.Contains(combined, "#f0f0f0"),
 			"expected background color in rendered HTML")
 		assert.Assert(t, strings.Contains(combined, "#333333"),

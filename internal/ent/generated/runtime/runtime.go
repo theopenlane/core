@@ -703,6 +703,8 @@ func init() {
 	campaign.Hooks[10] = campaignMixinHooks8[0]
 
 	campaign.Hooks[11] = campaignHooks[0]
+
+	campaign.Hooks[12] = campaignHooks[1]
 	campaignMixinInters1 := campaignMixin[1].Interceptors()
 	campaignMixinInters5 := campaignMixin[5].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters1[0]
@@ -3577,6 +3579,8 @@ func init() {
 	integration.Hooks[7] = integrationMixinHooks8[0]
 
 	integration.Hooks[8] = integrationHooks[0]
+
+	integration.Hooks[9] = integrationHooks[1]
 	integrationMixinInters1 := integrationMixin[1].Interceptors()
 	integrationMixinInters5 := integrationMixin[5].Interceptors()
 	integration.Interceptors[0] = integrationMixinInters1[0]
@@ -3621,6 +3625,10 @@ func init() {
 	integrationDescPrimaryDirectory := integrationFields[16].Descriptor()
 	// integration.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integration.DefaultPrimaryDirectory = integrationDescPrimaryDirectory.Default.(bool)
+	// integrationDescCampaignEmail is the schema descriptor for campaign_email field.
+	integrationDescCampaignEmail := integrationFields[17].Descriptor()
+	// integration.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
+	integration.DefaultCampaignEmail = integrationDescCampaignEmail.Default.(bool)
 	// integrationDescID is the schema descriptor for id field.
 	integrationDescID := integrationMixinFields2[0].Descriptor()
 	// integration.DefaultID holds the default value on creation for the id field.

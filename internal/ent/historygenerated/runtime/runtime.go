@@ -1489,6 +1489,10 @@ func init() {
 	integrationhistoryDescPrimaryDirectory := integrationhistoryFields[35].Descriptor()
 	// integrationhistory.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integrationhistory.DefaultPrimaryDirectory = integrationhistoryDescPrimaryDirectory.Default.(bool)
+	// integrationhistoryDescCampaignEmail is the schema descriptor for campaign_email field.
+	integrationhistoryDescCampaignEmail := integrationhistoryFields[36].Descriptor()
+	// integrationhistory.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
+	integrationhistory.DefaultCampaignEmail = integrationhistoryDescCampaignEmail.Default.(bool)
 	// integrationhistoryDescID is the schema descriptor for id field.
 	integrationhistoryDescID := integrationhistoryFields[9].Descriptor()
 	// integrationhistory.DefaultID holds the default value on creation for the id field.

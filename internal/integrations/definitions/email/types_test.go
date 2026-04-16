@@ -7,30 +7,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestTemplateRefValidate_Missing(t *testing.T) {
-	ref := TemplateRef{}
-
-	err := ref.Validate()
-	assert.ErrorIs(t, err, ErrMissingTemplateReference)
-}
-
-func TestTemplateRefValidate_Conflict(t *testing.T) {
-	ref := TemplateRef{
-		ID:  "template-id",
-		Key: "some-key",
-	}
-
-	err := ref.Validate()
-	assert.ErrorIs(t, err, ErrTemplateReferenceConflict)
-}
-
-func TestTemplateRefValidate_KeyOnly(t *testing.T) {
-	ref := TemplateRef{Key: "some-key"}
-
-	err := ref.Validate()
-	assert.NoError(t, err)
-}
-
 func TestRuntimeEmailConfig_Provisioned(t *testing.T) {
 	tests := []struct {
 		name     string

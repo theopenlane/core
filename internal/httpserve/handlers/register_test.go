@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -9,12 +8,8 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -323,53 +318,24 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				assert.Contains(t, out.Error, tc.expectedErrMessage)
 			}
 
-			// wait for messages
+			// verify emails sent through mock sender
+			msgs := suite.mockEmailSender().Messages()
 			if tc.emailExpected {
-				if tc.invitationType == "invitation" {
-					// the actual invite email
-					// user registration email
-					// user invite acceptance email
-					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{},
-							},
-							{
-								Args: jobs.EmailArgs{},
-							},
-							{
-								Args: jobs.EmailArgs{},
-							},
-						})
-					require.NotNil(t, job)
-
-				} else if strings.Contains(tc.invitationType, "invitation") {
-					// only the invitation email is sent
-					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{},
-							},
-						})
-					require.NotNil(t, job)
-
-				} else {
-					// For regular registration, expect both verification and welcome emails
-					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{
-									Message: *newman.NewEmailMessageWithOptions(
-										newman.WithSubject("Please verify your email address to login to Meow Inc."),
-										newman.WithTo([]string{tc.email}),
-									),
-								},
-							},
-						})
-					require.NotNil(t, job)
+				switch {
+				case tc.invitationType == "invitation":
+					// invite + registration + invite acceptance
+					require.Len(t, msgs, 3)
+				case strings.Contains(tc.invitationType, "invitation"):
+					// only the invitation email
+					require.Len(t, msgs, 1)
+				default:
+					// regular registration — verification email
+					require.NotEmpty(t, msgs)
+					assert.Contains(t, msgs[0].Subject, "Please verify your email address")
+					assert.Equal(t, []string{tc.email}, msgs[0].To)
 				}
 			} else {
-				rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				assert.Empty(t, msgs)
 			}
 		})
 	}

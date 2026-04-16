@@ -47,11 +47,9 @@ func (SendCampaign) Run(ctx context.Context, req types.OperationRequest, client 
 					file.FieldProvidedFileName,
 					file.FieldProvidedFileExtension,
 					file.FieldDetectedMimeType,
-					file.FieldFileContents,
-				)
+					file.FieldFileContents)
 			})
-		}).
-		Only(ctx)
+		}).Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil, ErrCampaignNotFound
@@ -81,10 +79,7 @@ func (SendCampaign) Run(ctx context.Context, req types.OperationRequest, client 
 
 	for _, target := range targets {
 		if err := sendAndMarkTarget(ctx, req.DB, client, camp, emailRecord, target); err != nil {
-			logx.FromContext(ctx).Error().Err(err).
-				Str("campaign_id", cfg.CampaignID).
-				Str("target_id", target.ID).
-				Msg("failed dispatching campaign email to target")
+			logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Str("target_id", target.ID).Msg("failed dispatching campaign email to target")
 		}
 	}
 
@@ -150,10 +145,7 @@ func sendCampaignTargetEmail(ctx context.Context, emailClient *EmailClient, camp
 	message := newman.NewEmailMessageWithOptions(opts...)
 
 	if err := emailClient.Sender.SendEmailWithContext(ctx, message); err != nil {
-		logx.FromContext(ctx).Error().Err(err).
-			Str("campaign_id", camp.ID).
-			Str("target_id", target.ID).
-			Msg("failed sending campaign email")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed sending campaign email")
 
 		return fmt.Errorf("%w: %w", ErrSendFailed, err)
 	}

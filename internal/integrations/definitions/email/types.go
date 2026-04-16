@@ -1,8 +1,6 @@
 package email
 
 import (
-	"github.com/theopenlane/newman"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -63,6 +61,12 @@ type RuntimeEmailConfig struct {
 	DocsURL string `json:"docsURL" koanf:"docsURL" default:"https://docs.theopenlane.io"`
 	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
 	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" default:"no-reply@mail.theopenlane.io"`
+	// Copyright is the copyright notice for email footers
+	Copyright string `json:"copyright,omitempty" koanf:"copyright" default:"© theopenlane, Inc. All rights reserved."`
+	// TroubleText is the fallback help text shown below action buttons; {ACTION} is replaced with button text at render time
+	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
+	// UnsubscribeURL is the unsubscribe link for email footers
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" default:"https://console.theopenlane.io/unsubscribe"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields
@@ -101,6 +105,12 @@ type EmailUserInput struct {
 	ProductURL string `json:"productURL,omitempty" jsonschema:"description=Product home URL"`
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsURL,omitempty" jsonschema:"description=Documentation URL"`
+	// Copyright is the copyright notice for email footers
+	Copyright string `json:"copyright,omitempty" jsonschema:"description=Copyright notice for email footers; auto-generated from corporation and year when empty"`
+	// TroubleText is the fallback help text shown below action buttons
+	TroubleText string `json:"troubleText,omitempty" jsonschema:"description=Help text shown below action buttons; {ACTION} is replaced with button text"`
+	// UnsubscribeURL is the unsubscribe link for email footers
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe URL for email footers; auto-generated from product URL when empty"`
 }
 
 // ToRuntimeConfig converts customer user input to a RuntimeEmailConfig for rendering.
@@ -116,50 +126,8 @@ func (u EmailUserInput) ToRuntimeConfig() RuntimeEmailConfig {
 		RootURL:        u.RootURL,
 		ProductURL:     u.ProductURL,
 		DocsURL:        u.DocsURL,
+		Copyright:      u.Copyright,
+		TroubleText:    u.TroubleText,
+		UnsubscribeURL: u.UnsubscribeURL,
 	}
-}
-
-// TemplateRef selects a notification template by stable key or explicit record ID
-type TemplateRef struct {
-	// ID references a notification template by database ID
-	ID string
-	// Key references a notification template by stable key
-	Key string
-}
-
-// Validate checks that the reference contains exactly one selector
-func (r TemplateRef) Validate() error {
-	hasID := r.ID != ""
-	hasKey := r.Key != ""
-
-	switch {
-	case hasID && hasKey:
-		return ErrTemplateReferenceConflict
-	case !hasID && !hasKey:
-		return ErrMissingTemplateReference
-	default:
-		return nil
-	}
-}
-
-// ComposeRequest defines the input required to compose a message from notification/email templates
-type ComposeRequest struct {
-	// OwnerID is the organization owner context for owner-scoped template lookup
-	OwnerID string
-	// Template identifies the notification template to resolve
-	Template TemplateRef
-	// To contains recipient email addresses
-	To []string
-	// From is the sender email address
-	From string
-	// ReplyTo is an optional reply-to email address
-	ReplyTo string
-	// Data contains template rendering variables
-	Data map[string]any
-	// Tags are delivery metadata tags
-	Tags []newman.Tag
-	// Headers are optional custom email headers
-	Headers map[string]string
-	// Attachments are dynamic per-send attachments appended to the composed message
-	Attachments []*newman.Attachment
 }

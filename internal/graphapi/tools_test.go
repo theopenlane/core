@@ -34,6 +34,8 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
@@ -46,6 +48,10 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/config"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/validators"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -88,6 +94,8 @@ type GraphTestSuite struct {
 	ofgaTF             *fgatest.OpenFGATestFixture
 	stripeMockBackend  *mocks.MockStripeBackend
 	cacheRefreshServer *httptest.Server
+	integrationsRT     *intruntime.Runtime
+	galaRuntime        *gala.Gala
 }
 
 // client contains all the clients the test need to interact with
@@ -267,6 +275,39 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	requireNoError(t, err)
 
+	// durable gala runtime for integration dispatch
+	galaInstance, err := gala.NewGala(ctx, gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         "graphapi_integration_test",
+		WorkerCount:       5,  //nolint:mnd
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+	})
+	requireNoError(t, err)
+
+	requireNoError(t, galaInstance.StartWorkers(ctx))
+
+	suite.galaRuntime = galaInstance
+
+	// wire integration runtime with mock email provider
+	credStore, err := keystore.NewStore(c.db)
+	requireNoError(t, err)
+
+	rt, err := intruntime.New(intruntime.Config{
+		DB:       c.db,
+		Gala:     galaInstance,
+		Keystore: credStore,
+		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
+		},
+	})
+	requireNoError(t, err)
+
+	c.db.IntegrationsRuntime = rt
+	suite.integrationsRT = rt
+
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		PreviewZoneID:            previewZoneTestID,
@@ -278,6 +319,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 }
 
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
+	if suite.galaRuntime != nil {
+		_ = suite.galaRuntime.StopWorkers(context.Background())
+		_ = suite.galaRuntime.Close()
+	}
+
 	// close the database connection
 	err := suite.client.db.Close()
 	requireNoError(t, err)
@@ -293,6 +339,21 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	if suite.cacheRefreshServer != nil {
 		suite.cacheRefreshServer.Close()
 	}
+}
+
+// mockEmailSender returns the mock email sender from the integration runtime
+func (suite *GraphTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	if !ok {
+		panic("email runtime client not found in graphapi test suite")
+	}
+
+	ms := emaildef.MockSenderFromClient(rc)
+	if ms == nil {
+		panic("mock sender not found in graphapi test suite")
+	}
+
+	return ms
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
