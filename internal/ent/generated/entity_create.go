@@ -1398,6 +1398,10 @@ func (_c *EntityCreate) defaults() error {
 		v := entity.DefaultLinks
 		_c.mutation.SetLinks(v)
 	}
+	if _, ok := _c.mutation.Tier(); !ok {
+		v := entity.DefaultTier
+		_c.mutation.SetTier(v)
+	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {
 		v := entity.DefaultReviewFrequency
 		_c.mutation.SetReviewFrequency(v)

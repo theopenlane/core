@@ -3,10 +3,12 @@ package summarizer
 import (
 	"bytes"
 	"context"
+	"strings"
 
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/yuin/goldmark"
 	goldmarkparser "github.com/yuin/goldmark/parser"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 )
 
 type summarizer interface {
@@ -55,7 +57,7 @@ func (s *Client) Summarize(ctx context.Context, sentence string) (string, error)
 
 	sanitizedSentence = s.sanitizer.Sanitize(sanitizedSentence)
 
-	if sanitizedSentence == "" {
+	if strings.TrimSpace(sanitizedSentence) == "" {
 		return "", nil
 	}
 
@@ -66,6 +68,9 @@ func mdToHTML(md []byte) []byte {
 	gm := goldmark.New(
 		goldmark.WithParserOptions(
 			goldmarkparser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(
+			goldmarkhtml.WithUnsafe(),
 		),
 	)
 

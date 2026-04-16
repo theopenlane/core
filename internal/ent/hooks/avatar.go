@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"time"
 
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
@@ -11,6 +12,7 @@ type AvatarMutation interface {
 	pkgobjects.Mutation
 
 	SetAvatarLocalFileID(s string)
+	SetAvatarUpdatedAt(t time.Time)
 }
 
 // checkAvatarFile checks if an avatar file is provided and sets the local file ID
@@ -28,6 +30,7 @@ func checkAvatarFile[T AvatarMutation](ctx context.Context, m T) (context.Contex
 	}
 
 	m.SetAvatarLocalFileID(files[0].ID)
+	m.SetAvatarUpdatedAt(time.Now())
 
 	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }
