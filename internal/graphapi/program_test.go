@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
-const ErrStartDateLaterThanEndDate = "mutation's start date cannot be later than end date"
+const errStartDateLaterThanEndDate = "mutation's start date cannot be later than end date"
 
 func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
@@ -423,7 +423,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: ErrStartDateLaterThanEndDate,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 	}
 
@@ -807,7 +807,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: ErrStartDateLaterThanEndDate,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
 			name:      "invalid start update",
@@ -818,7 +818,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: ErrStartDateLaterThanEndDate,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
 			name:      "invalid end update",
@@ -829,7 +829,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
-			expectedErr: ErrStartDateLaterThanEndDate,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
 			name:      "update edge - procedure - not allowed to access procedure",
