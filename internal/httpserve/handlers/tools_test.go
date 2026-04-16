@@ -38,6 +38,9 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -251,6 +254,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		Gala:     suite.galaRuntime,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
 			registry.Builder(buildTestOAuthDefinition),
 			githubapp.Builder(defaultGitHubAppSpec()),
 			configTestDefinitionBuilder(configTestProviderID, false),
@@ -324,7 +328,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 	err = db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
 
-	// add db to test client
+	// add db to test client and wire integration runtime so email dispatch works
+	db.IntegrationsRuntime = suite.sharedIntegrationsRT
 	suite.db = db
 
 	// add the client
@@ -435,6 +440,8 @@ func (suite *HandlerTestSuite) TearDownTest() {
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
 	require.NoError(suite.T(), err)
+
+	suite.mockEmailSender().Reset()
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
@@ -497,6 +504,17 @@ var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
+}
+
+// mockEmailSender returns the mock email sender from the shared integration runtime
+func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.sharedIntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	suite.Require().True(ok, "email runtime client not found")
+
+	ms := emaildef.MockSenderFromClient(rc)
+	suite.Require().NotNil(ms, "mock sender not found")
+
+	return ms
 }
 
 func buildTestOAuthDefinition() (types.Definition, error) {

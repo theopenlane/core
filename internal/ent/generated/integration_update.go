@@ -573,6 +573,20 @@ func (_u *IntegrationUpdate) SetNillablePrimaryDirectory(v *bool) *IntegrationUp
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationUpdate) SetCampaignEmail(v bool) *IntegrationUpdate {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableCampaignEmail(v *bool) *IntegrationUpdate {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1596,6 +1610,9 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3238,6 +3255,20 @@ func (_u *IntegrationUpdateOne) SetNillablePrimaryDirectory(v *bool) *Integratio
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationUpdateOne) SetCampaignEmail(v bool) *IntegrationUpdateOne {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableCampaignEmail(v *bool) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -4291,6 +4322,9 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

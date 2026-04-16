@@ -2,7 +2,6 @@ package handlers_test
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,14 +10,11 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -298,13 +294,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{
-				Args: jobs.EmailArgs{},
-			},
-		})
-	require.NotNil(t, job)
+	msgs := suite.mockEmailSender().Messages()
+	require.Len(t, msgs, 1)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, anonUser)
@@ -751,13 +742,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{
-				Args: jobs.EmailArgs{},
-			},
-		})
-	require.NotNil(t, job)
+	msgs := suite.mockEmailSender().Messages()
+	require.Len(t, msgs, 1)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, anonUser)

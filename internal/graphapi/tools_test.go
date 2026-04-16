@@ -48,6 +48,10 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/config"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/validators"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -268,6 +272,39 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
 	requireNoError(t, err)
+
+	// durable gala runtime for integration dispatch
+	galaInstance, err := gala.NewGala(ctx, gala.Config{
+		DispatchMode:      gala.DispatchModeDurable,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         "graphapi_integration_test",
+		WorkerCount:       5, //nolint:mnd
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+	})
+	requireNoError(t, err)
+
+	requireNoError(t, galaInstance.StartWorkers(ctx))
+
+	suite.galaRuntime = galaInstance
+
+	// wire integration runtime with mock email provider
+	credStore, err := keystore.NewStore(c.db)
+	requireNoError(t, err)
+
+	rt, err := intruntime.New(intruntime.Config{
+		DB:       c.db,
+		Gala:     galaInstance,
+		Keystore: credStore,
+		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
+		},
+	})
+	requireNoError(t, err)
+
+	c.db.IntegrationsRuntime = rt
+	suite.integrationsRT = rt
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{

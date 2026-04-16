@@ -7,15 +7,11 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -207,9 +203,11 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs
+			// Clear any existing jobs and emails
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
+
+			suite.mockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -233,34 +231,26 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				assert.Equal(t, *tc.input.Reason, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Reason)
 			}
 
-			// Verify the job was or was not created based on expectation
+			// Verify the email was or was not sent based on expectation
 			if tc.expectEmailSent != "" {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
-				found := false
-				for _, v := range jobs {
-					if strings.Contains(string(v.EncodedArgs), tc.expectEmailSent) {
-						found = true
-						break
-					}
-				}
-
+				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
+					strings.Contains(msgs[0].HTML, tc.expectEmailSent) ||
+					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
 			if tc.setStatus != nil || tc.setEmptyStatus {
-				// Clear any existing jobs
+				// Clear any existing jobs and emails
 				err = suite.client.db.Job.TruncateRiverTables(tc.ctx)
 				assert.NilError(t, err)
+
+				suite.mockEmailSender().Reset()
 
 				resp, err := suite.client.api.UpdateTrustCenterNDARequest(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 					Status: tc.setStatus,
@@ -279,26 +269,16 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				}
 
 				if tc.expectedSecondaryEmail != "" {
-					jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{},
-							},
-						})
-					assert.Assert(t, jobs != nil)
-					assert.Assert(t, is.Len(jobs, 1))
+					msgs := suite.mockEmailSender().Messages()
+					assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
-					found := false
-
-					for _, v := range jobs {
-						if strings.Contains(string(v.EncodedArgs), tc.expectedSecondaryEmail) {
-							found = true
-							break
-						}
-					}
+					found := strings.Contains(msgs[0].Subject, tc.expectedSecondaryEmail) ||
+						strings.Contains(msgs[0].HTML, tc.expectedSecondaryEmail) ||
+						strings.Contains(msgs[0].Text, tc.expectedSecondaryEmail)
 					assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectedSecondaryEmail)
 				} else {
-					rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+					msgs := suite.mockEmailSender().Messages()
+					assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 				}
 			}
 
@@ -546,9 +526,11 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs
+			// Clear any existing jobs and emails
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
+
+			suite.mockEmailSender().Reset()
 
 			resp, err := tc.client.UpdateTrustCenterNDARequest(tc.ctx, ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, tc.input)
 			if tc.expectedErr != "" {
@@ -571,18 +553,13 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 				}
 			}
 
-			// Verify the job was or was not created based on expectation
+			// Verify the email was or was not sent based on expectation
 			if tc.expectEmailSent {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})
 	}
@@ -672,9 +649,11 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs
+			// Clear any existing jobs and emails
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
+
+			suite.mockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -690,18 +669,13 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			assert.Equal(t, tc.input.Email, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Email)
 			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
-			// Verify the job was or was not created based on expectation
+			// Verify the email was or was not sent based on expectation
 			if tc.expectEmailSent {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
 			if tc.testResponse {
@@ -1026,9 +1000,11 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs
+			// Clear any existing jobs and emails
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
+
+			suite.mockEmailSender().Reset()
 
 			resp, err := tc.client.RequestNewTrustCenterToken(tc.ctx, tc.email)
 			if tc.expectedErr != "" {
@@ -1041,28 +1017,18 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 
 			assert.Check(t, resp.RequestNewTrustCenterToken.Success == true)
 
-			// Verify the job was or was not created based on expectation
+			// Verify the email was or was not sent based on expectation
 			if tc.expectEmailSent != "" {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobs.EmailArgs{},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
-				found := false
-				for _, v := range jobs {
-					if strings.Contains(string(v.EncodedArgs), tc.expectEmailSent) {
-						found = true
-						break
-					}
-				}
-
+				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
+					strings.Contains(msgs[0].HTML, tc.expectEmailSent) ||
+					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				msgs := suite.mockEmailSender().Messages()
+				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})
 	}

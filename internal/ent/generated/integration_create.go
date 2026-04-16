@@ -462,6 +462,20 @@ func (_c *IntegrationCreate) SetNillablePrimaryDirectory(v *bool) *IntegrationCr
 	return _c
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_c *IntegrationCreate) SetCampaignEmail(v bool) *IntegrationCreate {
+	_c.mutation.SetCampaignEmail(v)
+	return _c
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableCampaignEmail(v *bool) *IntegrationCreate {
+	if v != nil {
+		_c.SetCampaignEmail(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationCreate) SetID(v string) *IntegrationCreate {
 	_c.mutation.SetID(v)
@@ -878,6 +892,10 @@ func (_c *IntegrationCreate) defaults() error {
 		v := integration.DefaultPrimaryDirectory
 		_c.mutation.SetPrimaryDirectory(v)
 	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		v := integration.DefaultCampaignEmail
+		_c.mutation.SetCampaignEmail(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
@@ -913,6 +931,9 @@ func (_c *IntegrationCreate) check() error {
 	}
 	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
 		return &ValidationError{Name: "primary_directory", err: errors.New(`generated: missing required field "Integration.primary_directory"`)}
+	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		return &ValidationError{Name: "campaign_email", err: errors.New(`generated: missing required field "Integration.campaign_email"`)}
 	}
 	return nil
 }
@@ -1061,6 +1082,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 		_node.PrimaryDirectory = value
+	}
+	if value, ok := _c.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
+		_node.CampaignEmail = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

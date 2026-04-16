@@ -3,14 +3,10 @@
 package engine_test
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -30,15 +26,12 @@ func (s *WorkflowEngineTestSuite) mustMarshalSendEmailParams(params workflows.Se
 	return b
 }
 
-// riverPool returns the underlying pgx pool for rivertest assertions.
-func (s *WorkflowEngineTestSuite) riverPool() *riverpgxv5.Driver {
-	return riverpgxv5.New(s.client.Job.GetPool())
-}
-
-// truncateRiverTables clears queued jobs so rivertest assertions find exactly one job.
-func (s *WorkflowEngineTestSuite) truncateRiverTables() {
-	err := s.client.Job.TruncateRiverTables(context.Background())
+// clearEmailState truncates river tables and resets the mock email sender
+func (s *WorkflowEngineTestSuite) clearEmailState() {
+	err := s.client.Job.TruncateRiverTables(s.ctx)
 	s.Require().NoError(err)
+
+	s.mockEmailSender().Reset()
 }
 
 // createLinkedEmailTemplates creates an EmailTemplate and NotificationTemplate (email channel)
@@ -98,7 +91,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Hello Workflow", "Body text")
 	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
 
-	s.truncateRiverTables()
+	s.clearEmailState()
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -129,11 +122,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().NoError(err)
 
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), s.riverPool(), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{"recipient@example.com"}, job.Args.Message.To)
-	s.Equal("Hello Workflow", job.Args.Message.Subject)
-	s.Equal("sender@example.com", job.Args.Message.From)
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"recipient@example.com"}, msgs[0].To)
+	s.Equal("Hello Workflow", msgs[0].Subject)
+	s.Equal("sender@example.com", msgs[0].From)
 }
 
 // TestExecuteSendEmail_ByID verifies that a send_email action resolves a notification template
@@ -146,7 +139,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Resolved by ID", "Content by ID")
 	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
 
-	s.truncateRiverTables()
+	s.clearEmailState()
 
 	seedCtx := s.SeedContext(userID, orgID)
 	notifRecord, err := s.client.NotificationTemplate.Query().
@@ -183,10 +176,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().NoError(err)
 
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), s.riverPool(), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{"byid@example.com"}, job.Args.Message.To)
-	s.Equal("Resolved by ID", job.Args.Message.Subject)
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"byid@example.com"}, msgs[0].To)
+	s.Equal("Resolved by ID", msgs[0].Subject)
 }
 
 // TestExecuteSendEmail_WithTargetUser verifies that recipients are resolved from Targets when
@@ -199,7 +192,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Target User Email", "Body for target")
 	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
 
-	s.truncateRiverTables()
+	s.clearEmailState()
 
 	// Load the test user's email to assert it appears in the queued job
 	seedCtx := s.SeedContext(userID, orgID)
@@ -239,10 +232,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().NoError(err)
 
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), s.riverPool(), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{testUser.Email}, job.Args.Message.To)
-	s.Equal("Target User Email", job.Args.Message.Subject)
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{testUser.Email}, msgs[0].To)
+	s.Equal("Target User Email", msgs[0].Subject)
 }
 
 // TestExecuteSendEmail_WorkflowDefinitionWithSendEmail verifies end-to-end that a workflow
@@ -256,7 +249,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 	s.createLinkedEmailTemplates(userID, orgID, templateKey, "E2E Subject", "E2E body text")
 	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
 
-	s.truncateRiverTables()
+	s.clearEmailState()
 
 	sendEmailAction := models.WorkflowAction{
 		Key:  "notify_via_email",
@@ -308,12 +301,12 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 	err = wfEngine.ProcessAction(userCtx, instance, sendEmailAction)
 	s.Require().NoError(err)
 
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), s.riverPool(), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{"e2e@example.com"}, job.Args.Message.To)
-	s.Equal("E2E Subject", job.Args.Message.Subject)
-	s.Equal("noreply@example.com", job.Args.Message.From)
-	s.Contains(job.Args.Message.Text, "E2E body text")
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"e2e@example.com"}, msgs[0].To)
+	s.Equal("E2E Subject", msgs[0].Subject)
+	s.Equal("noreply@example.com", msgs[0].From)
+	s.Contains(msgs[0].Text, "E2E body text")
 }
 
 // TestExecuteSendEmail_NoTemplateReference verifies that a send_email action with no template
@@ -511,7 +504,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Async Subject", "Async body text")
 	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
 
-	s.truncateRiverTables()
+	s.clearEmailState()
 
 	sendEmailAction := models.WorkflowAction{
 		Key:  "send_email_async",
@@ -578,13 +571,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	s.Require().NotNil(instance)
 	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
 
-	// Verify the email job was inserted in River with the correct composed message.
-	job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), s.T(), s.riverPool(), &jobs.EmailArgs{}, nil)
-	s.Require().NotNil(job)
-	s.Equal([]string{"async@example.com"}, job.Args.Message.To)
-	s.Equal("Async Subject", job.Args.Message.Subject)
-	s.Equal("noreply@example.com", job.Args.Message.From)
-	s.Contains(job.Args.Message.Text, "Async body text")
+	// Verify the email was sent with the correct composed message.
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"async@example.com"}, msgs[0].To)
+	s.Equal("Async Subject", msgs[0].Subject)
+	s.Equal("noreply@example.com", msgs[0].From)
+	s.Contains(msgs[0].Text, "Async body text")
 }
 
 // TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate verifies that org-owned workflow definitions

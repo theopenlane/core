@@ -15,12 +15,6 @@ var (
 	ErrTemplateRenderFailed = errors.New("email: template render failed")
 	// ErrSendFailed indicates the email provider returned an error during send
 	ErrSendFailed = errors.New("email: send failed")
-	// ErrQueueInsertFailed indicates the email job could not be enqueued
-	ErrQueueInsertFailed = errors.New("email: queue insert failed")
-	// ErrMissingTemplateReference indicates no notification template identifier was provided
-	ErrMissingTemplateReference = errors.New("email: missing notification template reference")
-	// ErrTemplateReferenceConflict indicates both template ID and key were provided
-	ErrTemplateReferenceConflict = errors.New("email: template reference conflict")
 	// ErrMissingRecipientAddress indicates no recipient email address was provided
 	ErrMissingRecipientAddress = errors.New("email: missing recipient email address")
 	// ErrMissingSenderAddress indicates no sender email address was provided
@@ -31,8 +25,6 @@ var (
 	ErrEmailTemplateNotFound = errors.New("email: email template not found")
 	// ErrTemplateDataInvalid indicates provided data does not satisfy template jsonschema
 	ErrTemplateDataInvalid = errors.New("email: template data invalid")
-	// ErrJobClientRequired indicates queueing was requested without a job client
-	ErrJobClientRequired = errors.New("email: job client required")
 	// ErrCampaignNotFound indicates a campaign cannot be found for email dispatch
 	ErrCampaignNotFound = errors.New("email: campaign not found")
 	// ErrSenderNotConfigured indicates the email client has no sender configured

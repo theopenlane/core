@@ -1,20 +1,15 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/httpsling"
@@ -90,18 +85,10 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
 		assert.Equal(t, "Bearer", out.TokenType)
 
-		job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-			[]rivertest.ExpectedJob{
-				{
-					Args: jobs.EmailArgs{
-						Message: *newman.NewEmailMessageWithOptions(
-							newman.WithSubject("Welcome to Meow Inc.!"),
-							newman.WithTo([]string{email}),
-						),
-					},
-				},
-			})
-		require.NotNil(t, job)
+		msgs := suite.mockEmailSender().Messages()
+		require.NotEmpty(t, msgs)
+		assert.Contains(t, msgs[0].Subject, "Welcome to")
+		assert.Equal(t, []string{email}, msgs[0].To)
 	})
 
 	// Keep "same user" within a single subtest so job-queue assertions don't
@@ -131,7 +118,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		assert.Equal(t, http.StatusOK, recorder.Code)
 		assert.True(t, out.Success)
 
-		rivertest.RequireNotInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+		msgs := suite.mockEmailSender().Messages()
+		assert.Empty(t, msgs)
 	})
 
 	t.Run("mismatch email", func(t *testing.T) {

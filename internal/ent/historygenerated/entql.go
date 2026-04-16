@@ -1467,6 +1467,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldStatus:                   {Type: field.TypeEnum, Column: integrationhistory.FieldStatus},
 			integrationhistory.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadataSnapshot},
 			integrationhistory.FieldPrimaryDirectory:         {Type: field.TypeBool, Column: integrationhistory.FieldPrimaryDirectory},
+			integrationhistory.FieldCampaignEmail:            {Type: field.TypeBool, Column: integrationhistory.FieldCampaignEmail},
 		},
 	}
 	graph.Nodes[32] = &sqlgraph.Node{
@@ -9414,6 +9415,11 @@ func (f *IntegrationHistoryFilter) WhereProviderMetadataSnapshot(p entql.BytesP)
 // WherePrimaryDirectory applies the entql bool predicate on the primary_directory field.
 func (f *IntegrationHistoryFilter) WherePrimaryDirectory(p entql.BoolP) {
 	f.Where(p.Field(integrationhistory.FieldPrimaryDirectory))
+}
+
+// WhereCampaignEmail applies the entql bool predicate on the campaign_email field.
+func (f *IntegrationHistoryFilter) WhereCampaignEmail(p entql.BoolP) {
+	f.Where(p.Field(integrationhistory.FieldCampaignEmail))
 }
 
 // addPredicate implements the predicateAdder interface.

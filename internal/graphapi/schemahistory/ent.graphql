@@ -2808,7 +2808,7 @@ type CampaignHistory implements Node {
   """
   emailTemplateID: String
   """
-  the email template associated with the campaign
+  the email integration used for campaign dispatch
   """
   integrationID: String
 }
@@ -17691,6 +17691,10 @@ type IntegrationHistory implements Node {
   designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
   """
   primaryDirectory: Boolean!
+  """
+  designates this email integration as the one to use for campaign dispatch within its owner organization
+  """
+  campaignEmail: Boolean!
 }
 """
 A connection to a list of items.
@@ -18175,6 +18179,11 @@ input IntegrationHistoryWhereInput {
   """
   primaryDirectory: Boolean
   primaryDirectoryNEQ: Boolean
+  """
+  campaign_email field predicates
+  """
+  campaignEmail: Boolean
+  campaignEmailNEQ: Boolean
 }
 type InternalPolicyHistory implements Node {
   id: ID!

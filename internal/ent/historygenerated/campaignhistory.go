@@ -107,7 +107,7 @@ type CampaignHistory struct {
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID string `json:"email_template_id,omitempty"`
-	// the email template associated with the campaign
+	// the email integration used for campaign dispatch
 	IntegrationID string `json:"integration_id,omitempty"`
 	selectValues  sql.SelectValues
 }

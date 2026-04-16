@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,14 +9,11 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -121,14 +117,14 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 				assert.False(t, out.Success)
 			}
 
-			// ensure email was added to the job queue
+			// verify email was sent through the mock sender
+			msgs := suite.mockEmailSender().Messages()
 			if tc.emailExpected {
-				job := rivertest.RequireInserted[*riverpgxv5.Driver](context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
-				require.NotNil(t, job)
-				assert.Equal(t, []string{tc.email}, job.Args.Message.To)
-				assert.Contains(t, job.Args.Message.Subject, "Password Reset - Action Required")
+				require.Len(t, msgs, 1)
+				assert.Equal(t, []string{tc.email}, msgs[0].To)
+				assert.Contains(t, msgs[0].Subject, "Password Reset - Action Required")
 			} else {
-				rivertest.RequireNotInserted(ctx, t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{}, nil)
+				assert.Empty(t, msgs)
 			}
 		})
 	}

@@ -1,7 +1,6 @@
 package handlers_test
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,15 +10,11 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -178,18 +173,10 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 					assert.NotEmpty(t, claims["org"])
 				} else {
-					job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-						[]rivertest.ExpectedJob{
-							{
-								Args: jobs.EmailArgs{
-									Message: *newman.NewEmailMessageWithOptions(
-										newman.WithSubject("Welcome to Meow Inc.!"),
-										newman.WithTo([]string{tc.email}),
-									),
-								},
-							},
-						})
-					require.NotNil(t, job)
+					msgs := suite.mockEmailSender().Messages()
+					require.NotEmpty(t, msgs)
+					assert.Contains(t, msgs[0].Subject, "Welcome to")
+					assert.Equal(t, []string{tc.email}, msgs[0].To)
 				}
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)

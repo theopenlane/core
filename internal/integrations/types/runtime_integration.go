@@ -17,13 +17,19 @@ func NewRuntimeIntegrationID(name string) RuntimeIntegrationID {
 }
 
 // Name returns the stable identifier
-func (id RuntimeIntegrationID) Name() string { return id.name }
+func (id RuntimeIntegrationID) Name() string {
+	return id.name
+}
 
 // String returns the stable identifier
-func (id RuntimeIntegrationID) String() string { return id.name }
+func (id RuntimeIntegrationID) String() string {
+	return id.name
+}
 
 // Valid reports whether the ID was initialized
-func (id RuntimeIntegrationID) Valid() bool { return id.name != "" }
+func (id RuntimeIntegrationID) Valid() bool {
+	return id.name != ""
+}
 
 // RuntimeIntegrationRef is a typed reference to a runtime integration config.
 // When populated, the definition operates entirely in memory with no Integration
@@ -46,19 +52,29 @@ func NewRuntimeIntegrationRef[T any](name string, schema json.RawMessage) Runtim
 }
 
 // ID returns the stable identifier
-func (r RuntimeIntegrationRef[T]) ID() RuntimeIntegrationID { return r.id }
+func (r RuntimeIntegrationRef[T]) ID() RuntimeIntegrationID {
+	return r.id
+}
 
 // Schema returns the reflected JSON schema
-func (r RuntimeIntegrationRef[T]) Schema() json.RawMessage { return r.schema }
+func (r RuntimeIntegrationRef[T]) Schema() json.RawMessage {
+	return r.schema
+}
 
 // SetConfig sets the runtime config. When set, the registry will call Build at registration time
-func (r *RuntimeIntegrationRef[T]) SetConfig(cfg *T) { r.config = cfg }
+func (r *RuntimeIntegrationRef[T]) SetConfig(cfg *T) {
+	r.config = cfg
+}
 
 // Config returns the runtime config, if set
-func (r RuntimeIntegrationRef[T]) Config() *T { return r.config }
+func (r RuntimeIntegrationRef[T]) Config() *T {
+	return r.config
+}
 
 // Provisioned reports whether runtime config has been provided
-func (r RuntimeIntegrationRef[T]) Provisioned() bool { return r.config != nil }
+func (r RuntimeIntegrationRef[T]) Provisioned() bool {
+	return r.config != nil
+}
 
 // MarshalConfig marshals the config to JSON for passing to the Build function
 func (r RuntimeIntegrationRef[T]) MarshalConfig() (json.RawMessage, error) {

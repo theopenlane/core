@@ -1624,6 +1624,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldStatus:                   {Type: field.TypeEnum, Column: integration.FieldStatus},
 			integration.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integration.FieldProviderMetadataSnapshot},
 			integration.FieldPrimaryDirectory:         {Type: field.TypeBool, Column: integration.FieldPrimaryDirectory},
+			integration.FieldCampaignEmail:            {Type: field.TypeBool, Column: integration.FieldCampaignEmail},
 		},
 	}
 	graph.Nodes[40] = &sqlgraph.Node{
@@ -30483,6 +30484,11 @@ func (f *IntegrationFilter) WhereProviderMetadataSnapshot(p entql.BytesP) {
 // WherePrimaryDirectory applies the entql bool predicate on the primary_directory field.
 func (f *IntegrationFilter) WherePrimaryDirectory(p entql.BoolP) {
 	f.Where(p.Field(integration.FieldPrimaryDirectory))
+}
+
+// WhereCampaignEmail applies the entql bool predicate on the campaign_email field.
+func (f *IntegrationFilter) WhereCampaignEmail(p entql.BoolP) {
+	f.Where(p.Field(integration.FieldCampaignEmail))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

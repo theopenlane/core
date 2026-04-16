@@ -198,6 +198,11 @@ func PrimaryDirectory(v bool) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldPrimaryDirectory, v))
 }
 
+// CampaignEmail applies equality check predicate on the "campaign_email" field. It's identical to CampaignEmailEQ.
+func CampaignEmail(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2026,6 +2031,16 @@ func PrimaryDirectoryEQ(v bool) predicate.IntegrationHistory {
 // PrimaryDirectoryNEQ applies the NEQ predicate on the "primary_directory" field.
 func PrimaryDirectoryNEQ(v bool) predicate.IntegrationHistory {
 	return predicate.IntegrationHistory(sql.FieldNEQ(FieldPrimaryDirectory, v))
+}
+
+// CampaignEmailEQ applies the EQ predicate on the "campaign_email" field.
+func CampaignEmailEQ(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
+// CampaignEmailNEQ applies the NEQ predicate on the "campaign_email" field.
+func CampaignEmailNEQ(v bool) predicate.IntegrationHistory {
+	return predicate.IntegrationHistory(sql.FieldNEQ(FieldCampaignEmail, v))
 }
 
 // And groups predicates with the AND operator between them.

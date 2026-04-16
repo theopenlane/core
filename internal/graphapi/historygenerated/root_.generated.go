@@ -1370,6 +1370,7 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
+		CampaignEmail            func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DefinitionID             func(childComplexity int) int
@@ -10769,6 +10770,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistoryEdge.Node(childComplexity), true
+
+	case "IntegrationHistory.campaignEmail":
+		if e.ComplexityRoot.IntegrationHistory.CampaignEmail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.CampaignEmail(childComplexity), true
 
 	case "IntegrationHistory.createdAt":
 		if e.ComplexityRoot.IntegrationHistory.CreatedAt == nil {
@@ -25248,7 +25256,7 @@ type CampaignHistory implements Node {
   """
   emailTemplateID: String
   """
-  the email template associated with the campaign
+  the email integration used for campaign dispatch
   """
   integrationID: String
 }
@@ -40131,6 +40139,10 @@ type IntegrationHistory implements Node {
   designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
   """
   primaryDirectory: Boolean!
+  """
+  designates this email integration as the one to use for campaign dispatch within its owner organization
+  """
+  campaignEmail: Boolean!
 }
 """
 A connection to a list of items.
@@ -40615,6 +40627,11 @@ input IntegrationHistoryWhereInput {
   """
   primaryDirectory: Boolean
   primaryDirectoryNEQ: Boolean
+  """
+  campaign_email field predicates
+  """
+  campaignEmail: Boolean
+  campaignEmailNEQ: Boolean
 }
 type InternalPolicyHistory implements Node {
   id: ID!
