@@ -7656,7 +7656,7 @@ type CreateNotificationTemplateInput struct {
 	// description of the template
 	Description *string `json:"description,omitempty"`
 	// channel this template is intended for
-	Channel enums.Channel `json:"channel"`
+	Channel *enums.Channel `json:"channel,omitempty"`
 	// template format for rendering
 	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US
@@ -24076,7 +24076,7 @@ type NotificationTemplate struct {
 	// description of the template
 	Description *string `json:"description,omitempty"`
 	// channel this template is intended for
-	Channel enums.Channel `json:"channel"`
+	Channel *enums.Channel `json:"channel,omitempty"`
 	// template format for rendering
 	Format enums.NotificationTemplateFormat `json:"format"`
 	// locale for the template, e.g. en-US
@@ -24371,10 +24371,12 @@ type NotificationTemplateWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// channel field predicates
-	Channel      *enums.Channel  `json:"channel,omitempty"`
-	ChannelNeq   *enums.Channel  `json:"channelNEQ,omitempty"`
-	ChannelIn    []enums.Channel `json:"channelIn,omitempty"`
-	ChannelNotIn []enums.Channel `json:"channelNotIn,omitempty"`
+	Channel       *enums.Channel  `json:"channel,omitempty"`
+	ChannelNeq    *enums.Channel  `json:"channelNEQ,omitempty"`
+	ChannelIn     []enums.Channel `json:"channelIn,omitempty"`
+	ChannelNotIn  []enums.Channel `json:"channelNotIn,omitempty"`
+	ChannelIsNil  *bool           `json:"channelIsNil,omitempty"`
+	ChannelNotNil *bool           `json:"channelNotNil,omitempty"`
 	// format field predicates
 	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
 	FormatNeq   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
@@ -41819,7 +41821,8 @@ type UpdateNotificationTemplateInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// channel this template is intended for
-	Channel *enums.Channel `json:"channel,omitempty"`
+	Channel      *enums.Channel `json:"channel,omitempty"`
+	ClearChannel *bool          `json:"clearChannel,omitempty"`
 	// template format for rendering
 	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US

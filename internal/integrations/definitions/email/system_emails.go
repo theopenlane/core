@@ -94,13 +94,20 @@ type VerifyBillingRequest struct {
 	Token string `json:"token" jsonschema:"required,description=Billing verification token"`
 }
 
-// TrustCenterNDARequestEmail is the input for the trust center NDA signing request
+// TrustCenterNDARequestEmail is the input for the trust center NDA signing request.
+// Callers may pass either the pre-built NDAURL or the RequestID + TrustCenterID pair;
+// when NDAURL is empty the operation resolves it from RequestID and TrustCenterID.
+// OrgName is resolved from TrustCenterID when empty
 type TrustCenterNDARequestEmail struct {
 	RecipientInfo
-	// OrgName is the organization requesting the NDA
-	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
-	// NDAURL is the direct URL to the NDA signing page
-	NDAURL string `json:"nda_url" jsonschema:"required,description=NDA signing URL"`
+	// OrgName is the organization requesting the NDA; resolved from TrustCenterID when empty
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
+	// RequestID is the NDA request identifier used for JWT subject construction
+	RequestID string `json:"requestId,omitempty" jsonschema:"description=NDA request ID for token generation"`
+	// TrustCenterID is the trust center identifier used for URL construction
+	TrustCenterID string `json:"trustCenterId,omitempty" jsonschema:"description=Trust center ID for URL construction"`
+	// NDAURL is the direct URL to the NDA signing page; when empty the operation constructs it from RequestID and TrustCenterID
+	NDAURL string `json:"ndaUrl,omitempty" jsonschema:"description=NDA signing URL"`
 }
 
 // TrustCenterNDASignedEmail is the input for the NDA signed confirmation
@@ -116,13 +123,20 @@ type TrustCenterNDASignedEmail struct {
 	AttachmentData []byte `json:"attachment_data,omitempty" jsonschema:"description=Signed NDA attachment content"`
 }
 
-// TrustCenterAuthEmail is the input for trust center access authentication
+// TrustCenterAuthEmail is the input for trust center access authentication.
+// Callers may pass either the pre-built AuthURL or the RequestID + TrustCenterID pair;
+// when AuthURL is empty the operation resolves it from RequestID and TrustCenterID.
+// OrgName is resolved from TrustCenterID when empty
 type TrustCenterAuthEmail struct {
 	RecipientInfo
-	// OrgName is the organization whose trust center is being accessed
-	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
-	// AuthURL is the authentication URL for trust center access
-	AuthURL string `json:"auth_url" jsonschema:"required,description=Trust center auth URL"`
+	// OrgName is the organization whose trust center is being accessed; resolved from TrustCenterID when empty
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
+	// RequestID is the NDA request identifier used for JWT subject construction
+	RequestID string `json:"requestId,omitempty" jsonschema:"description=NDA request ID for token generation"`
+	// TrustCenterID is the trust center identifier used for URL construction
+	TrustCenterID string `json:"trustCenterId,omitempty" jsonschema:"description=Trust center ID for URL construction"`
+	// AuthURL is the authentication URL for trust center access; when empty the operation constructs it from RequestID and TrustCenterID
+	AuthURL string `json:"authUrl,omitempty" jsonschema:"description=Trust center auth URL"`
 }
 
 // QuestionnaireAuthEmail is the input for questionnaire access authentication
@@ -417,6 +431,7 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 
 var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
 	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: trustCenterTheme,
+	PreHook: resolveTrustCenterNDARequestFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDARequestEmail) string {
 		return req.OrgName + " Trust Center NDA Request"
 	},
@@ -472,6 +487,7 @@ var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
 
 var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
 	Op: TCAuthOp, Schema: tcAuthSchema, Theme: trustCenterTheme,
+	PreHook: resolveTrustCenterAuthFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterAuthEmail) string {
 		return "Access " + req.OrgName + "'s Trust Center"
 	},

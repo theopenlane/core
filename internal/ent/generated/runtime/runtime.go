@@ -703,8 +703,6 @@ func init() {
 	campaign.Hooks[10] = campaignMixinHooks8[0]
 
 	campaign.Hooks[11] = campaignHooks[0]
-
-	campaign.Hooks[12] = campaignHooks[1]
 	campaignMixinInters1 := campaignMixin[1].Interceptors()
 	campaignMixinInters5 := campaignMixin[5].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters1[0]

@@ -15427,7 +15427,7 @@ type CreateNotificationTemplateInput struct {
 	Key                  string
 	Name                 string
 	Description          *string
-	Channel              enums.Channel
+	Channel              *enums.Channel
 	Format               *enums.NotificationTemplateFormat
 	Locale               *string
 	TopicPattern         string
@@ -15466,7 +15466,9 @@ func (i *CreateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
-	m.SetChannel(i.Channel)
+	if v := i.Channel; v != nil {
+		m.SetChannel(*v)
+	}
 	if v := i.Format; v != nil {
 		m.SetFormat(*v)
 	}
@@ -15545,6 +15547,7 @@ type UpdateNotificationTemplateInput struct {
 	Name                    *string
 	ClearDescription        bool
 	Description             *string
+	ClearChannel            bool
 	Channel                 *enums.Channel
 	Format                  *enums.NotificationTemplateFormat
 	Locale                  *string
@@ -15614,6 +15617,9 @@ func (i *UpdateNotificationTemplateInput) Mutate(m *NotificationTemplateMutation
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearChannel {
+		m.ClearChannel()
 	}
 	if v := i.Channel; v != nil {
 		m.SetChannel(*v)

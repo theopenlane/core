@@ -29,4 +29,8 @@ var (
 	ErrCampaignNotFound = errors.New("email: campaign not found")
 	// ErrSenderNotConfigured indicates the email client has no sender configured
 	ErrSenderNotConfigured = errors.New("email: sender not configured")
+	// ErrCampaignMissingAssessment indicates a questionnaire campaign has no linked assessment
+	ErrCampaignMissingAssessment = errors.New("email: campaign has no assessment ID")
+	// ErrAssessmentNotFound indicates the assessment linked to a campaign cannot be found
+	ErrAssessmentNotFound = errors.New("email: assessment not found")
 )

@@ -26,24 +26,3 @@ func sendSystemEmail(ctx context.Context, client *generated.Client, operationNam
 
 	return err
 }
-
-// emailProductURL extracts the ProductURL from the runtime email config on the
-// ent client. Returns empty string if the runtime is not configured
-func emailProductURL(ctx context.Context, client *generated.Client) string {
-	rt := intruntime.FromClient(ctx, client)
-	if rt == nil {
-		return ""
-	}
-
-	rc, ok := rt.Registry().RuntimeClient(email.DefinitionID.ID())
-	if !ok {
-		return ""
-	}
-
-	ec, ok := rc.(*email.EmailClient)
-	if !ok {
-		return ""
-	}
-
-	return ec.Config.ProductURL
-}

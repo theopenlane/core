@@ -133,17 +133,11 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			fullURL, _, err := buildTrustCenterAuthURL(ctx, ndaRequestID, caller.SubjectEmail, tcID)
-			if err != nil {
-				return nil, err
-			}
-
 			if err := enqueueJob(ctx, m.Job, jobspec.AttestNDARequestArgs{
-				NDARequestID:          ndaRequestID,
-				TrustCenterNDAFullURL: fullURL,
+				NDARequestID:  ndaRequestID,
+				TrustCenterID: tcID,
 			}, nil); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("nda_request_id", ndaRequestID).
-					Msg("failed to enqueue attest nda request job")
+				logx.FromContext(ctx).Error().Err(err).Str("nda_request_id", ndaRequestID).Msg("failed to enqueue attest nda request job")
 
 				return nil, err
 			}

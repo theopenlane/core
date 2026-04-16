@@ -69482,7 +69482,7 @@ input CreateNotificationTemplateInput {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateChannel!
+  channel: NotificationTemplateChannel
   """
   template format for rendering
   """
@@ -97561,7 +97561,7 @@ type NotificationTemplate implements Node {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateChannel!
+  channel: NotificationTemplateChannel
   """
   template format for rendering
   """
@@ -97970,6 +97970,8 @@ input NotificationTemplateWhereInput {
   channelNEQ: NotificationTemplateChannel
   channelIn: [NotificationTemplateChannel!]
   channelNotIn: [NotificationTemplateChannel!]
+  channelIsNil: Boolean
+  channelNotNil: Boolean
   """
   format field predicates
   """
@@ -132099,6 +132101,7 @@ input UpdateNotificationTemplateInput {
   channel this template is intended for
   """
   channel: NotificationTemplateChannel
+  clearChannel: Boolean
   """
   template format for rendering
   """

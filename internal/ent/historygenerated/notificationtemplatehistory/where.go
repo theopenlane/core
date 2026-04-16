@@ -1263,6 +1263,16 @@ func ChannelNotIn(vs ...enums.Channel) predicate.NotificationTemplateHistory {
 	return predicate.NotificationTemplateHistory(sql.FieldNotIn(FieldChannel, v...))
 }
 
+// ChannelIsNil applies the IsNil predicate on the "channel" field.
+func ChannelIsNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldIsNull(FieldChannel))
+}
+
+// ChannelNotNil applies the NotNil predicate on the "channel" field.
+func ChannelNotNil() predicate.NotificationTemplateHistory {
+	return predicate.NotificationTemplateHistory(sql.FieldNotNull(FieldChannel))
+}
+
 // FormatEQ applies the EQ predicate on the "format" field.
 func FormatEQ(v enums.NotificationTemplateFormat) predicate.NotificationTemplateHistory {
 	vc := v

@@ -20,24 +20,24 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// SendCampaignRequest is the operation config for dispatching a full campaign
-type SendCampaignRequest struct {
+// SendBrandedCampaignRequest is the operation config for dispatching a branded email campaign
+type SendBrandedCampaignRequest struct {
 	// CampaignID is the identifier of the campaign to dispatch
 	CampaignID string `json:"campaignId" jsonschema:"required,description=Campaign identifier"`
 }
 
-// SendCampaign dispatches templated emails to all pending campaign targets
-type SendCampaign struct{}
+// SendBrandedCampaign dispatches templated branded emails to all pending campaign targets
+type SendBrandedCampaign struct{}
 
 // Handle returns the typed operation handler for builder registration
-func (s SendCampaign) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
+func (s SendBrandedCampaign) Handle() types.OperationHandler {
+	return providerkit.WithClientRequestConfig(emailClientRef, SendBrandedCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
 // Run loads the campaign, iterates pending targets, renders and sends one email per target.
 // Targets with sent_at already set are skipped. Failed sends are logged and processing
 // continues so a single bad address does not abort the entire dispatch
-func (SendCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendCampaignRequest) (json.RawMessage, error) {
+func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, err := req.DB.Campaign.Query().
 		Where(campaign.IDEQ(cfg.CampaignID)).
 		WithEmailBranding().

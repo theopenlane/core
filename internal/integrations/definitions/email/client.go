@@ -20,9 +20,16 @@ type EmailClient struct {
 	Config RuntimeEmailConfig
 }
 
-// emailHTMLScrubber is the shared scrubber instance used by email providers for render-time
+// EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time
 // HTML sanitization, preserving email-safe layout elements while stripping dangerous content
-var emailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
+var EmailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
+
+// EmailScrubber returns the shared HTML scrubber instance used for email
+// content sanitization. This is the canonical sanitization policy for both
+// storage-time and render-time email HTML processing
+func EmailScrubber() scrubber.Scrubber {
+	return EmailHTMLScrubber
+}
 
 // ProviderMock is the provider name for the mock email sender used in tests
 const ProviderMock = "mock"
@@ -31,11 +38,11 @@ const ProviderMock = "mock"
 func buildSender(provider string, apiKey string) (newman.EmailSender, error) {
 	switch provider {
 	case "resend":
-		return resend.New(apiKey, resend.WithHTMLScrubber(emailHTMLScrubber))
+		return resend.New(apiKey, resend.WithHTMLScrubber(EmailHTMLScrubber))
 	case "sendgrid":
-		return sendgrid.New(apiKey, sendgrid.WithHTMLScrubber(emailHTMLScrubber))
+		return sendgrid.New(apiKey, sendgrid.WithHTMLScrubber(EmailHTMLScrubber))
 	case "postmark":
-		return postmark.New(apiKey, postmark.WithHTMLScrubber(emailHTMLScrubber))
+		return postmark.New(apiKey, postmark.WithHTMLScrubber(EmailHTMLScrubber))
 	case ProviderMock:
 		return mock.New("")
 	default:
