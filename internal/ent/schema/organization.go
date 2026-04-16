@@ -109,7 +109,6 @@ func (Organization) Fields() []ent.Field {
 		field.Time("avatar_updated_at").
 			Comment("The time the user's (local) avatar was last updated").
 			Default(time.Now).
-			UpdateDefault(time.Now).
 			Optional().
 			Nillable(),
 		field.Bool("dedicated_db").

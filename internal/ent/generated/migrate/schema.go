@@ -1003,23 +1003,32 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{ControlsColumns[43], ControlsColumns[53]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
+					Where: "deleted_at is NULL AND owner_id is not NULL AND standard_id is NULL",
 				},
 			},
 			{
-				Name:    "control_standard_id_deleted_at_owner_id",
+				Name:    "control_ref_code",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[54], ControlsColumns[5], ControlsColumns[53]},
+				Columns: []*schema.Column{ControlsColumns[43]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at IS NULL AND owner_id IS NOT NULL AND status != 'ARCHIVED'",
+				},
 			},
 			{
-				Name:    "control_reference_id_deleted_at_owner_id",
+				Name:    "control_reference_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[14], ControlsColumns[5], ControlsColumns[53]},
+				Columns: []*schema.Column{ControlsColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
-				Name:    "control_auditor_reference_id_deleted_at_owner_id",
+				Name:    "control_auditor_reference_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[15], ControlsColumns[5], ControlsColumns[53]},
+				Columns: []*schema.Column{ControlsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -1275,6 +1284,17 @@ var (
 				Name:    "customtypeenum_object_type",
 				Unique:  false,
 				Columns: []*schema.Column{CustomTypeEnumsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "customtypeenum_name_field",
+				Unique:  false,
+				Columns: []*schema.Column{CustomTypeEnumsColumns[12], CustomTypeEnumsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 		},
 	}
@@ -2187,7 +2207,7 @@ var (
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
 		{Name: "risk_score_coverage", Type: field.TypeInt, Nullable: true},
-		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}},
+		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "STANDARD"},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},

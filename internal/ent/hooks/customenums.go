@@ -164,15 +164,15 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			// look up the enum by name, object type, and field
 			// and ensure it exists
 			enumPredicates := []predicate.CustomTypeEnum{
-				customtypeenum.NameEqualFold(enumValue),
-				customtypeenum.FieldEqualFold(in.Field),
+				customtypeenum.Name(enumValue),
+				customtypeenum.Field(in.Field),
 				customtypeenum.DeletedAtIsNil(),
 			}
 
 			// lookupEnum fetches a custom enum by object type
 			lookupEnum := func(objectType string) (*generated.CustomTypeEnum, error) {
 				return client.CustomTypeEnum.Query().
-					Where(append(enumPredicates, customtypeenum.ObjectTypeEqualFold(objectType))...).
+					Where(append(enumPredicates, customtypeenum.ObjectType(objectType))...).
 					Only(ctx)
 			}
 
