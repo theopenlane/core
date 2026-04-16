@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/newman/providers/mock"
 )
 
-// TestCampaignEmailDispatch verifies that SendCampaign renders
+// TestCampaignEmailDispatch verifies that SendBrandedCampaign renders
 // campaign emails with the correct branding, template variables, and
 // metadata, then sends one email per target via the mock sender
 func TestCampaignEmailDispatch(t *testing.T) {
@@ -94,7 +94,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 
-	// --- dispatch via SendCampaign operation ---
+	// --- dispatch via SendBrandedCampaign operation ---
 
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
@@ -113,7 +113,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -123,7 +123,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	assert.NilError(t, err)
 	req.Config = configBytes
 
-	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
+	_, err = email.SendBrandedCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
 	// --- verify sent messages ---
@@ -273,7 +273,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -283,7 +283,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 	assert.NilError(t, err)
 	req.Config = configBytes
 
-	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
+	_, err = email.SendBrandedCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
 	messages := mockSender.Messages()
@@ -345,7 +345,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -355,7 +355,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 	assert.NilError(t, err)
 	req.Config = configBytes
 
-	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
+	_, err = email.SendBrandedCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
 	messages := mockSender.Messages()
@@ -405,7 +405,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -415,7 +415,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 	assert.NilError(t, err)
 	req.Config = configBytes
 
-	_, err = email.SendCampaign{}.Run(ctx, req, emailClient, cfg)
+	_, err = email.SendBrandedCampaign{}.Run(ctx, req, emailClient, cfg)
 	assert.NilError(t, err)
 
 	messages := mockSender.Messages()

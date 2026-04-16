@@ -1814,7 +1814,7 @@ var (
 		{Name: "key", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "channel", Type: field.TypeEnum, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
+		{Name: "channel", Type: field.TypeEnum, Nullable: true, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"TEXT", "MARKDOWN", "HTML", "JSON"}, Default: "MARKDOWN"},
 		{Name: "locale", Type: field.TypeString, Default: "en-US"},
 		{Name: "topic_pattern", Type: field.TypeString},

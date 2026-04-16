@@ -4946,7 +4946,7 @@ var (
 			},
 			{
 				Name:    "notificationpreference_owner_id_user_id_channel",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{NotificationPreferencesColumns[28], NotificationPreferencesColumns[26], NotificationPreferencesColumns[7]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
@@ -4970,7 +4970,7 @@ var (
 		{Name: "key", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "channel", Type: field.TypeEnum, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
+		{Name: "channel", Type: field.TypeEnum, Nullable: true, Enums: []string{"IN_APP", "SLACK", "TEAMS", "EMAIL"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"TEXT", "MARKDOWN", "HTML", "JSON"}, Default: "MARKDOWN"},
 		{Name: "locale", Type: field.TypeString, Default: "en-US"},
 		{Name: "topic_pattern", Type: field.TypeString},
@@ -5033,7 +5033,7 @@ var (
 			},
 			{
 				Name:    "notificationtemplate_owner_id_channel_locale_topic_pattern",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{NotificationTemplatesColumns[32], NotificationTemplatesColumns[14], NotificationTemplatesColumns[16], NotificationTemplatesColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
@@ -5049,7 +5049,7 @@ var (
 			},
 			{
 				Name:    "notificationtemplate_key",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{NotificationTemplatesColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and system_owned = true",

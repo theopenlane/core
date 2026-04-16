@@ -4,8 +4,6 @@ import "errors"
 
 // Campaign error constants used by dispatch/test-email flows.
 var (
-	// ErrCampaignDispatchNotQuestionnaire is returned when dispatching a non-questionnaire campaign.
-	ErrCampaignDispatchNotQuestionnaire = errors.New("campaign must be of type QUESTIONNAIRE to dispatch")
 	// ErrCampaignTestEmailNotQuestionnaire is returned when sending test emails for a non-questionnaire campaign.
 	ErrCampaignTestEmailNotQuestionnaire = errors.New("campaign must be of type QUESTIONNAIRE to send a test email")
 	// ErrCampaignMissingAssessmentID is returned when a campaign lacks an assessment reference.

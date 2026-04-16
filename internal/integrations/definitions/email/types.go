@@ -20,8 +20,10 @@ var (
 	healthCheckSchema, healthCheckOp = providerkit.OperationSchema[HealthCheck]()
 	// sendEmailSchema is the operation schema for the generic send-email operation
 	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
-	// sendCampaignSchema is the operation schema for the send-campaign operation
-	sendCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendCampaignRequest]()
+	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
+	sendBrandedCampaignSchema, SendBrandedCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]()
+	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
+	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]()
 )
 
 // Tag key constants for email delivery tracking via provider webhooks
@@ -67,6 +69,8 @@ type RuntimeEmailConfig struct {
 	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
 	// UnsubscribeURL is the unsubscribe link for email footers
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" default:"https://console.theopenlane.io/unsubscribe"`
+	// TrustCenterDomain is the default domain for trust center URLs when no custom domain is configured
+	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" default:"trustcenter.theopenlane.io"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields

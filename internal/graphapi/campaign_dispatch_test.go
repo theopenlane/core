@@ -42,17 +42,3 @@ func TestResolveCampaignScheduleAt(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, scheduled == nil)
 }
-
-// TestShouldSetCampaignDueDate ensures due-date behavior on resend.
-func TestShouldSetCampaignDueDate(t *testing.T) {
-	now := time.Date(2024, time.January, 2, 15, 4, 5, 0, time.UTC)
-	past := models.DateTime(now.Add(-time.Hour))
-	future := models.DateTime(now.Add(time.Hour))
-
-	campaignPast := &generated.Campaign{DueDate: &past}
-	campaignFuture := &generated.Campaign{DueDate: &future}
-
-	assert.Check(t, !shouldSetCampaignDueDate(campaignPast, true, now))
-	assert.Check(t, shouldSetCampaignDueDate(campaignFuture, true, now))
-	assert.Check(t, shouldSetCampaignDueDate(campaignFuture, false, now))
-}

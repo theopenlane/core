@@ -362,7 +362,6 @@ func (Campaign) Annotations() []schema.Annotation {
 func (Campaign) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookCampaignResolveEmailIntegration(),
-		hooks.HookCampaignDispatchOnActive(),
 	}
 }
 

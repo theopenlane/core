@@ -51,6 +51,9 @@ type EmailOperation[T HasRecipient] struct {
 	Content func(cfg RuntimeEmailConfig, input T) render.EmailContent
 	// MessageOptions returns additional newman message options for per-operation customization such as attachment
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
+	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
+	// When set, the handler uses WithClientRequestConfig to pass the full OperationRequest through
+	PreHook func(ctx context.Context, req types.OperationRequest, client *EmailClient, input *T) error
 }
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder
@@ -66,8 +69,14 @@ func (e EmailOperation[T]) Registration() types.OperationRegistration {
 
 // handler returns the typed operation handler that renders and sends the email
 func (e EmailOperation[T]) handler() types.OperationHandler {
-	return providerkit.WithClientConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
-		func(ctx context.Context, client *EmailClient, input T) (json.RawMessage, error) {
+	return providerkit.WithClientRequestConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
+		func(ctx context.Context, req types.OperationRequest, client *EmailClient, input T) (json.RawMessage, error) {
+			if e.PreHook != nil {
+				if err := e.PreHook(ctx, req, client, &input); err != nil {
+					return nil, err
+				}
+			}
+
 			var extraOpts []newman.MessageOption
 			if e.MessageOptions != nil {
 				extraOpts = e.MessageOptions(client.Config, input)

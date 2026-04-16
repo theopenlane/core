@@ -43622,7 +43622,7 @@ type NotificationTemplateHistory implements Node {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateHistoryChannel!
+  channel: NotificationTemplateHistoryChannel
   """
   template format for rendering
   """
@@ -44046,6 +44046,8 @@ input NotificationTemplateHistoryWhereInput {
   channelNEQ: NotificationTemplateHistoryChannel
   channelIn: [NotificationTemplateHistoryChannel!]
   channelNotIn: [NotificationTemplateHistoryChannel!]
+  channelIsNil: Boolean
+  channelNotNil: Boolean
   """
   format field predicates
   """

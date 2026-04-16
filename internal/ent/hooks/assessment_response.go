@@ -2,15 +2,9 @@ package hooks
 
 import (
 	"context"
-	"fmt"
-	"net/url"
 	"time"
 
 	"entgo.io/ent"
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -21,8 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -136,21 +128,12 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 		update = update.SetStatus(enums.AssessmentResponseStatusSent)
 	}
 
-	updatedResponse, err := update.Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := createResponseEmail(ctx, m, existingResponse.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
-	}
-
-	return updatedResponse, nil
+	return update.Save(ctx)
 }
 
-// createNewAssessmentResponse creates a new assessment response record, handles contact creation,
-// and sends the initial email invitation. It handles race conditions by detecting unique constraint
-// violations and re-querying to update the existing record.
+// createNewAssessmentResponse creates a new assessment response record and handles contact creation.
+// It handles race conditions by detecting unique constraint violations and re-querying to update
+// the existing record. Email dispatch is handled by the integration operation layer.
 func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, next ent.Mutator, email string) (generated.Value, error) {
 	isDraft, _ := m.IsDraft()
 
@@ -181,19 +164,6 @@ func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentRes
 		}
 
 		return nil, err
-	}
-
-	if isDraft {
-		return value, nil
-	}
-
-	var responseID string
-	if resp, ok := value.(*generated.AssessmentResponse); ok {
-		responseID = resp.ID
-	}
-
-	if err := createResponseEmail(ctx, m, responseID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
 	}
 
 	return value, nil
@@ -231,72 +201,6 @@ func isUniqueConstraintError(err error) bool {
 	}
 
 	return generated.IsConstraintError(err)
-}
-
-// createResponseEmail builds a JWT token and questionnaire auth URL, then emits
-// a typed email operation event for the assessment response recipient.
-// responseID is used to tag the outbound email for webhook delivery correlation
-func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMutation, responseID string) error {
-	orgIDValue, ownerOK := m.OwnerID()
-	orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
-	if err != nil {
-		return err
-	}
-
-	assessmentIDValue, assessmentOK := m.AssessmentID()
-	assessmentID, err := requiredMutationString("assessment_id", assessmentIDValue, assessmentOK)
-	if err != nil {
-		return err
-	}
-
-	emailRaw, emailOK := m.Email()
-	emailAddress, err := requiredMutationString("email", emailRaw, emailOK)
-	if err != nil {
-		return err
-	}
-
-	assessmentObj, err := m.Client().Assessment.Query().
-		Where(assessment.ID(assessmentID)).
-		Select(assessment.FieldName).
-		Only(ctx)
-	if err != nil {
-		return err
-	}
-
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, ulids.New().String())
-
-	duration := m.Client().TokenManager.Config().AssessmentAccessDuration
-
-	accessToken, _, err := m.Client().TokenManager.CreateTokenPair(&tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
-		UserID:       anonUserID,
-		OrgID:        orgID,
-		AssessmentID: assessmentID,
-		Email:        emailAddress,
-	}, tokens.WithAccessDuration(duration))
-	if err != nil {
-		return err
-	}
-
-	baseURL, err := url.Parse(emailProductURL(ctx, m.Client()) + "/questionnaire")
-	if err != nil {
-		return err
-	}
-
-	authURL, err := addTokenToURLAndShorten(ctx, *baseURL, accessToken)
-	if err != nil {
-		return err
-	}
-
-	tags := buildAssessmentResponseTags(ctx, m, responseID)
-
-	return sendSystemEmail(ctx, m.Client(), emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
-		RecipientInfo:  emaildef.RecipientInfo{Email: emailAddress, Tags: tags},
-		AssessmentName: assessmentObj.Name,
-		AuthURL:        authURL,
-	})
 }
 
 // HookUpdateAssessmentResponse validates status transitions and checks if the assessment response
@@ -479,24 +383,4 @@ func validateAndSetDueDate(ctx context.Context, m *generated.AssessmentResponseM
 	}
 
 	return nil
-}
-
-// buildAssessmentResponseTags constructs delivery tracking tags for an assessment
-// response email from the response ID, campaign context, and test flag
-func buildAssessmentResponseTags(ctx context.Context, m *generated.AssessmentResponseMutation, responseID string) []newman.Tag {
-	var tags []newman.Tag
-
-	if responseID != "" {
-		tags = append(tags, newman.Tag{Name: emaildef.TagAssessmentResponseID, Value: responseID})
-	}
-
-	if campCtx, ok := CampaignEmailContextFrom(ctx); ok && campCtx.CampaignTargetID != "" {
-		tags = append(tags, newman.Tag{Name: emaildef.TagCampaignTargetID, Value: campCtx.CampaignTargetID})
-	}
-
-	if isTest, exists := m.IsTest(); exists && isTest {
-		tags = append(tags, newman.Tag{Name: emaildef.TagIsTest, Value: "true"})
-	}
-
-	return tags
 }

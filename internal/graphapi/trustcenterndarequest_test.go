@@ -1078,7 +1078,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 	}
 
 	// simulate signed NDA access by creating anonymous contexts with subject IDs
-	// matching what generateTrustCenterJWT produces: AnonTrustCenterJWTPrefix + ndaRequestID
+	// matching the trust center JWT subject format: AnonTrustCenterJWTPrefix + ndaRequestID
 	anonCtxs := make([]context.Context, 0, len(ndaReqIDs))
 
 	for _, id := range ndaReqIDs {

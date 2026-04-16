@@ -1,12 +1,9 @@
 package handlers
 
 import (
-	"context"
-	"fmt"
 	"net/url"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -22,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const maxQuestionnaireResendAttempts = 5
@@ -94,38 +92,33 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, ulids.New().String())
-
-	newClaims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
-		UserID:       anonUserID,
-		OrgID:        assessmentResp.OwnerID,
-		AssessmentID: in.AssessmentID,
-		Email:        in.Email,
+	baseURL, err := url.Parse(h.IntegrationsConfig.Email.ProductURL + "/questionnaire")
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error parsing questionnaire base URL")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	duration := h.DBClient.TokenManager.Config().AssessmentAccessDuration
 
-	accessToken, _, err := h.DBClient.TokenManager.CreateTokenPair(newClaims, tokens.WithAccessDuration(duration))
+	result, err := urlx.GenerateAnonTokenURL(reqCtx, h.DBClient.TokenManager, h.DBClient.Shortlinks, *baseURL, urlx.AnonTokenRequest{
+		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
+		SubjectID: ulids.New().String(),
+		OrgID:     assessmentResp.OwnerID,
+		Email:     in.Email,
+		Duration:  duration,
+		ExtraClaims: func(c *tokens.Claims) {
+			c.AssessmentID = in.AssessmentID
+		},
+	})
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating token pair")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
-	authURL, err := h.shortenQuestionnaireURL(reqCtx, accessToken)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error shortening questionnaire URL")
-
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error generating questionnaire auth URL")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp.Name(), email.QuestionnaireAuthEmail{
 		RecipientInfo:  email.RecipientInfo{Email: in.Email},
 		AssessmentName: assessmentData.Name,
-		AuthURL:        authURL,
+		AuthURL:        result.URL,
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending questionnaire auth email")
 
@@ -133,28 +126,4 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	}
 
 	return h.Success(ctx, out, openapi)
-}
-
-func (h *Handler) shortenQuestionnaireURL(ctx context.Context, token string) (string, error) {
-	baseURL, err := url.Parse(h.IntegrationsConfig.Email.ProductURL + "/questionnaire")
-	if err != nil {
-		return "", err
-	}
-
-	originalURL := baseURL.ResolveReference(&url.URL{RawQuery: url.Values{"token": []string{token}}.Encode()})
-
-	if h.ShortlinksClient == nil {
-		return originalURL.String(), nil
-	}
-
-	shortURL, err := h.ShortlinksClient.Create(ctx, originalURL.String(), "")
-	if err != nil {
-		logx.FromContext(ctx).Error().Str("baseURL", baseURL.String()).
-			Err(err).
-			Msg("failed to shorten URL, using original")
-
-		return originalURL.String(), nil
-	}
-
-	return shortURL, nil
 }

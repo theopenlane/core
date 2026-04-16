@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -31,7 +32,6 @@ func HookNotificationTemplateSanitize() ent.Hook {
 				}
 			}
 
-			p := EmailTemplateSanitizePolicy()
 			strict := bluemonday.StrictPolicy()
 
 			if v, exists := m.TitleTemplate(); exists {
@@ -43,7 +43,7 @@ func HookNotificationTemplateSanitize() ent.Hook {
 			}
 
 			if v, exists := m.BodyTemplate(); exists {
-				m.SetBodyTemplate(SanitizeBodyHTML(p, v))
+				m.SetBodyTemplate(emaildef.EmailScrubber().Scrub(v))
 			}
 
 			return next.Mutate(ctx, m)
