@@ -246,6 +246,8 @@ func TestMutationCreateProgram(t *testing.T) {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
+	ErrStartDateLaterThanEndDate := "mutation's start date cannot be later than end date"
+
 	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
 
 	// Create some edge objects
@@ -582,6 +584,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	archivedProgram := (&ProgramBuilder{client: suite.client, Status: enums.ProgramStatusArchived}).MustNew(testUser1.UserCtx, t)
+
+	// data to test the date validation logic in the update mutation, we want to ensure that the validation is working and that it is possible to update the dates successfully when they are valid
+	ErrStartDateLaterThanEndDate := "mutation's start date cannot be later than end date"
 
 	baseStart := time.Now().AddDate(0, 0, 5)
 	baseEnd := time.Now().AddDate(0, 0, 10)

@@ -71,12 +71,11 @@ const (
 	redacted = "*****************************"
 
 	// common error message strings
-	notFoundErrorMsg             = "not found"
-	notAuthorizedErrorMsg        = "you are not authorized to perform this action"
-	invalidInputErrorMsg         = "invalid input"
-	seedStripeSubscriptionID     = "sub_test_subscription"
-	webhookSecret                = "whsec_test_secret"
-	ErrStartDateLaterThanEndDate = "mutation's start date cannot be later than end date"
+	notFoundErrorMsg         = "not found"
+	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	invalidInputErrorMsg     = "invalid input"
+	seedStripeSubscriptionID = "sub_test_subscription"
+	webhookSecret            = "whsec_test_secret"
 
 	previewZoneTestID = "test-zone-id"
 	cnameTargetTest   = "cname-target.test.com"
