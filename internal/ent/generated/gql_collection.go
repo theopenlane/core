@@ -14335,6 +14335,16 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldCanonicalEmail)
 				fieldSeen[directoryaccount.FieldCanonicalEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[directoryaccount.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldEmailAliases)
+				fieldSeen[directoryaccount.FieldEmailAliases] = struct{}{}
+			}
+		case "phoneNumber":
+			if _, ok := fieldSeen[directoryaccount.FieldPhoneNumber]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldPhoneNumber)
+				fieldSeen[directoryaccount.FieldPhoneNumber] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[directoryaccount.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldDisplayName)
@@ -35059,6 +35069,11 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[identityholder.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, identityholder.FieldMetadata)
 				fieldSeen[identityholder.FieldMetadata] = struct{}{}
+			}
+		case "avatarRemoteURL":
+			if _, ok := fieldSeen[identityholder.FieldAvatarRemoteURL]; !ok {
+				selectedFields = append(selectedFields, identityholder.FieldAvatarRemoteURL)
+				fieldSeen[identityholder.FieldAvatarRemoteURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":

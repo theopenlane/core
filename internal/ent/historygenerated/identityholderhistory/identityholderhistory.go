@@ -100,6 +100,8 @@ const (
 	FieldExternalReferenceID = "external_reference_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
+	FieldAvatarRemoteURL = "avatar_remote_url"
 	// Table holds the table name of the identityholderhistory in the database.
 	Table = "identity_holder_history"
 )
@@ -147,6 +149,7 @@ var Columns = []string{
 	FieldExternalUserID,
 	FieldExternalReferenceID,
 	FieldMetadata,
+	FieldAvatarRemoteURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -415,6 +418,11 @@ func ByExternalUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalReferenceID orders the results by the external_reference_id field.
 func ByExternalReferenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalReferenceID, opts...).ToFunc()
+}
+
+// ByAvatarRemoteURL orders the results by the avatar_remote_url field.
+func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
 }
 
 var (

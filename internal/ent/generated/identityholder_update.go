@@ -662,6 +662,26 @@ func (_u *IdentityHolderUpdate) ClearMetadata() *IdentityHolderUpdate {
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderUpdate) SetAvatarRemoteURL(v string) *IdentityHolderUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderUpdate) SetNillableAvatarRemoteURL(v *string) *IdentityHolderUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderUpdate) ClearAvatarRemoteURL() *IdentityHolderUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *IdentityHolderUpdate) AddBlockedGroupIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1490,6 +1510,11 @@ func (_u *IdentityHolderUpdate) check() error {
 			return &ValidationError{Name: "alternate_email", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.alternate_email": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.EmailAliases(); ok {
+		if err := identityholder.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.email_aliases": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := identityholder.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.phone_number": %w`, err)}
@@ -1503,6 +1528,11 @@ func (_u *IdentityHolderUpdate) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := identityholder.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
+		if err := identityholder.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.avatar_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -1688,6 +1718,12 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholder.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholder.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholder.FieldAvatarRemoteURL, field.TypeString)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -3421,6 +3457,26 @@ func (_u *IdentityHolderUpdateOne) ClearMetadata() *IdentityHolderUpdateOne {
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderUpdateOne) SetAvatarRemoteURL(v string) *IdentityHolderUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderUpdateOne) SetNillableAvatarRemoteURL(v *string) *IdentityHolderUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderUpdateOne) ClearAvatarRemoteURL() *IdentityHolderUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddBlockedGroupIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -4262,6 +4318,11 @@ func (_u *IdentityHolderUpdateOne) check() error {
 			return &ValidationError{Name: "alternate_email", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.alternate_email": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.EmailAliases(); ok {
+		if err := identityholder.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.email_aliases": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.PhoneNumber(); ok {
 		if err := identityholder.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.phone_number": %w`, err)}
@@ -4275,6 +4336,11 @@ func (_u *IdentityHolderUpdateOne) check() error {
 	if v, ok := _u.mutation.Status(); ok {
 		if err := identityholder.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.status": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
+		if err := identityholder.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.avatar_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -4477,6 +4543,12 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholder.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholder.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholder.FieldAvatarRemoteURL, field.TypeString)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

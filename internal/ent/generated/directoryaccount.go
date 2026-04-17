@@ -66,6 +66,10 @@ type DirectoryAccount struct {
 	SecondaryKey *string `json:"secondary_key,omitempty"`
 	// lower-cased primary email address, if present
 	CanonicalEmail *string `json:"canonical_email,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"email_aliases,omitempty"`
+	// phone number for the identity holder
+	PhoneNumber *string `json:"phone_number,omitempty"`
 	// provider supplied display name
 	DisplayName string `json:"display_name,omitempty"`
 	// URL of the avatar supplied by the directory provider
@@ -289,11 +293,11 @@ func (*DirectoryAccount) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case directoryaccount.FieldTags, directoryaccount.FieldProfile, directoryaccount.FieldMetadata:
+		case directoryaccount.FieldTags, directoryaccount.FieldEmailAliases, directoryaccount.FieldProfile, directoryaccount.FieldMetadata:
 			values[i] = new([]byte)
 		case directoryaccount.FieldPrimarySource:
 			values[i] = new(sql.NullBool)
-		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldPlatformID, directoryaccount.FieldDirectoryInstanceID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
+		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldDisplayID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldDirectorySyncRunID, directoryaccount.FieldPlatformID, directoryaccount.FieldDirectoryInstanceID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldPhoneNumber, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldProfileHash, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldAvatarUpdatedAt, directoryaccount.FieldLastLoginAt, directoryaccount.FieldFirstSeenAt, directoryaccount.FieldLastSeenAt, directoryaccount.FieldAddedAt, directoryaccount.FieldRemovedAt, directoryaccount.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -444,6 +448,21 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.CanonicalEmail = new(string)
 				*_m.CanonicalEmail = value.String
+			}
+		case directoryaccount.FieldEmailAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailAliases); err != nil {
+					return fmt.Errorf("unmarshal field email_aliases: %w", err)
+				}
+			}
+		case directoryaccount.FieldPhoneNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
+			} else if value.Valid {
+				_m.PhoneNumber = new(string)
+				*_m.PhoneNumber = value.String
 			}
 		case directoryaccount.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -778,6 +797,14 @@ func (_m *DirectoryAccount) String() string {
 	builder.WriteString(", ")
 	if v := _m.CanonicalEmail; v != nil {
 		builder.WriteString("canonical_email=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("email_aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailAliases))
+	builder.WriteString(", ")
+	if v := _m.PhoneNumber; v != nil {
+		builder.WriteString("phone_number=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

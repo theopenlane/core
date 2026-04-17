@@ -99,6 +99,8 @@ type IdentityHolder struct {
 	ExternalReferenceID string `json:"external_reference_id,omitempty"`
 	// additional metadata about the identity holder
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IdentityHolderQuery when eager-loading is set.
 	Edges        IdentityHolderEdges `json:"edges"`
@@ -445,7 +447,7 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID:
+		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholder.FieldCreatedAt, identityholder.FieldUpdatedAt, identityholder.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -699,6 +701,13 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
+			}
+		case identityholder.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -980,6 +989,11 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

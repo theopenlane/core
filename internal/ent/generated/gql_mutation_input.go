@@ -5065,6 +5065,8 @@ type CreateDirectoryAccountInput struct {
 	ExternalID           string
 	SecondaryKey         *string
 	CanonicalEmail       *string
+	EmailAliases         []string
+	PhoneNumber          *string
 	DisplayName          *string
 	AvatarRemoteURL      *string
 	AvatarUpdatedAt      *time.Time
@@ -5124,6 +5126,12 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -5252,6 +5260,11 @@ type UpdateDirectoryAccountInput struct {
 	SecondaryKey               *string
 	ClearCanonicalEmail        bool
 	CanonicalEmail             *string
+	ClearEmailAliases          bool
+	EmailAliases               []string
+	AppendEmailAliases         []string
+	ClearPhoneNumber           bool
+	PhoneNumber                *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearAvatarRemoteURL       bool
@@ -5359,6 +5372,21 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
+	}
+	if i.ClearPhoneNumber {
+		m.ClearPhoneNumber()
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -12200,6 +12228,7 @@ type CreateIdentityHolderInput struct {
 	ExternalUserID         *string
 	ExternalReferenceID    *string
 	Metadata               map[string]interface{}
+	AvatarRemoteURL        *string
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -12294,6 +12323,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -12426,6 +12458,8 @@ type UpdateIdentityHolderInput struct {
 	ExternalReferenceID         *string
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearAvatarRemoteURL        bool
+	AvatarRemoteURL             *string
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -12627,6 +12661,12 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearAvatarRemoteURL {
+		m.ClearAvatarRemoteURL()
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

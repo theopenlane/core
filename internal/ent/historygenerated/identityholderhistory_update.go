@@ -646,6 +646,26 @@ func (_u *IdentityHolderHistoryUpdate) ClearMetadata() *IdentityHolderHistoryUpd
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdate) SetAvatarRemoteURL(v string) *IdentityHolderHistoryUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderHistoryUpdate) SetNillableAvatarRemoteURL(v *string) *IdentityHolderHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdate) ClearAvatarRemoteURL() *IdentityHolderHistoryUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // Mutation returns the IdentityHolderHistoryMutation object of the builder.
 func (_u *IdentityHolderHistoryUpdate) Mutation() *IdentityHolderHistoryMutation {
 	return _u.mutation
@@ -930,6 +950,12 @@ func (_u *IdentityHolderHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholderhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IdentityHolderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1565,6 +1591,26 @@ func (_u *IdentityHolderHistoryUpdateOne) ClearMetadata() *IdentityHolderHistory
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdateOne) SetAvatarRemoteURL(v string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderHistoryUpdateOne) SetNillableAvatarRemoteURL(v *string) *IdentityHolderHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdateOne) ClearAvatarRemoteURL() *IdentityHolderHistoryUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // Mutation returns the IdentityHolderHistoryMutation object of the builder.
 func (_u *IdentityHolderHistoryUpdateOne) Mutation() *IdentityHolderHistoryMutation {
 	return _u.mutation
@@ -1879,6 +1925,12 @@ func (_u *IdentityHolderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholderhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IdentityHolderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

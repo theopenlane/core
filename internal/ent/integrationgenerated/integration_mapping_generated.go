@@ -238,6 +238,7 @@ const (
 	IntegrationMappingDirectoryAccountDirectoryName = "directoryName"
 	IntegrationMappingDirectoryAccountDirectorySyncRunID = "directorySyncRunID"
 	IntegrationMappingDirectoryAccountDisplayName = "displayName"
+	IntegrationMappingDirectoryAccountEmailAliases = "emailAliases"
 	IntegrationMappingDirectoryAccountEnvironmentID = "environmentID"
 	IntegrationMappingDirectoryAccountEnvironmentName = "environmentName"
 	IntegrationMappingDirectoryAccountExternalID = "externalID"
@@ -254,6 +255,7 @@ const (
 	IntegrationMappingDirectoryAccountMfaState = "mfaState"
 	IntegrationMappingDirectoryAccountObservedAt = "observedAt"
 	IntegrationMappingDirectoryAccountOrganizationUnit = "organizationUnit"
+	IntegrationMappingDirectoryAccountPhoneNumber = "phoneNumber"
 	IntegrationMappingDirectoryAccountPlatformID = "platformID"
 	IntegrationMappingDirectoryAccountPrimarySource = "primarySource"
 	IntegrationMappingDirectoryAccountProfile = "profile"
@@ -1152,6 +1154,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey: "emailAliases",
+				GoField: "EmailAliases",
+				EntField: "email_aliases",
+				Type: "json.RawMessage",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey: "environmentID",
 				GoField: "EnvironmentID",
 				EntField: "environment_id",
@@ -1296,6 +1307,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey: "phoneNumber",
+				GoField: "PhoneNumber",
+				EntField: "phone_number",
+				Type: "string",
+				Required: false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey: "platformID",
 				GoField: "PlatformID",
 				EntField: "platform_id",
@@ -1406,6 +1426,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"directoryName": {},
 			"directorySyncRunID": {},
 			"displayName": {},
+			"emailAliases": {},
 			"environmentID": {},
 			"environmentName": {},
 			"externalID": {},
@@ -1422,6 +1443,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"mfaState": {},
 			"observedAt": {},
 			"organizationUnit": {},
+			"phoneNumber": {},
 			"platformID": {},
 			"primarySource": {},
 			"profile": {},

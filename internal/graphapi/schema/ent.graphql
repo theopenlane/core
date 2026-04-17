@@ -10909,6 +10909,14 @@ input CreateDirectoryAccountInput {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -12436,6 +12444,10 @@ input CreateIdentityHolderInput {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -17295,6 +17307,14 @@ type DirectoryAccount implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -17974,6 +17994,24 @@ input DirectoryAccountWhereInput {
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
   """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
+  """
   display_name field predicates
   """
   displayName: String
@@ -18350,6 +18388,10 @@ input DirectoryAccountWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type DirectoryGroup implements Node {
   id: ID!
@@ -32683,7 +32725,7 @@ type IdentityHolder implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
   """
   alternate email address for the identity holder in an array
   """
@@ -32752,6 +32794,10 @@ type IdentityHolder implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   owner: Organization
   blockedGroups(
     """
@@ -33951,6 +33997,24 @@ input IdentityHolderWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
   """
   owner edge predicates
   """
@@ -72745,6 +72809,17 @@ input UpdateDirectoryAccountInput {
   canonicalEmail: String
   clearCanonicalEmail: Boolean
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  clearPhoneNumber: Boolean
+  """
   provider supplied display name
   """
   displayName: String
@@ -74847,6 +74922,11 @@ input UpdateIdentityHolderInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
+  clearAvatarRemoteURL: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

@@ -2964,6 +2964,16 @@ func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldCanonicalEmail)
 				fieldSeen[directoryaccounthistory.FieldCanonicalEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldEmailAliases)
+				fieldSeen[directoryaccounthistory.FieldEmailAliases] = struct{}{}
+			}
+		case "phoneNumber":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldPhoneNumber]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldPhoneNumber)
+				fieldSeen[directoryaccounthistory.FieldPhoneNumber] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldDisplayName)
@@ -6771,6 +6781,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[identityholderhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldMetadata)
 				fieldSeen[identityholderhistory.FieldMetadata] = struct{}{}
+			}
+		case "avatarRemoteURL":
+			if _, ok := fieldSeen[identityholderhistory.FieldAvatarRemoteURL]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldAvatarRemoteURL)
+				fieldSeen[identityholderhistory.FieldAvatarRemoteURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":

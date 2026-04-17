@@ -529,6 +529,20 @@ func (_c *IdentityHolderHistoryCreate) SetMetadata(v map[string]interface{}) *Id
 	return _c
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_c *IdentityHolderHistoryCreate) SetAvatarRemoteURL(v string) *IdentityHolderHistoryCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_c *IdentityHolderHistoryCreate) SetNillableAvatarRemoteURL(v *string) *IdentityHolderHistoryCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IdentityHolderHistoryCreate) SetID(v string) *IdentityHolderHistoryCreate {
 	_c.mutation.SetID(v)
@@ -875,6 +889,10 @@ func (_c *IdentityHolderHistoryCreate) createSpec() (*IdentityHolderHistory, *sq
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(identityholderhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString, value)
+		_node.AvatarRemoteURL = &value
 	}
 	return _node, _spec
 }

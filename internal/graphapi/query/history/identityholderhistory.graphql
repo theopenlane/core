@@ -10,6 +10,7 @@ query GetAllIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $b
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department
@@ -64,6 +65,7 @@ query GetIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $befo
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department

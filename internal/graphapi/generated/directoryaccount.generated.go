@@ -94,6 +94,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
 			case "canonicalEmail":
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
 			case "avatarRemoteURL":
@@ -241,6 +245,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
 			case "canonicalEmail":
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
 			case "avatarRemoteURL":
@@ -417,6 +425,10 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
 			case "canonicalEmail":
 				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
+			case "emailAliases":
+				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
+			case "phoneNumber":
+				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
 			case "displayName":
 				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
 			case "avatarRemoteURL":

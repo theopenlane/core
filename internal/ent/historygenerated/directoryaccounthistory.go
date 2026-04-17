@@ -68,6 +68,10 @@ type DirectoryAccountHistory struct {
 	SecondaryKey *string `json:"secondary_key,omitempty"`
 	// lower-cased primary email address, if present
 	CanonicalEmail *string `json:"canonical_email,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"email_aliases,omitempty"`
+	// phone number for the identity holder
+	PhoneNumber *string `json:"phone_number,omitempty"`
 	// provider supplied display name
 	DisplayName string `json:"display_name,omitempty"`
 	// URL of the avatar supplied by the directory provider
@@ -126,13 +130,13 @@ func (*DirectoryAccountHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case directoryaccounthistory.FieldTags, directoryaccounthistory.FieldProfile, directoryaccounthistory.FieldMetadata:
+		case directoryaccounthistory.FieldTags, directoryaccounthistory.FieldEmailAliases, directoryaccounthistory.FieldProfile, directoryaccounthistory.FieldMetadata:
 			values[i] = new([]byte)
 		case directoryaccounthistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case directoryaccounthistory.FieldPrimarySource:
 			values[i] = new(sql.NullBool)
-		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
+		case directoryaccounthistory.FieldID, directoryaccounthistory.FieldRef, directoryaccounthistory.FieldCreatedBy, directoryaccounthistory.FieldUpdatedBy, directoryaccounthistory.FieldDisplayID, directoryaccounthistory.FieldOwnerID, directoryaccounthistory.FieldEnvironmentName, directoryaccounthistory.FieldEnvironmentID, directoryaccounthistory.FieldScopeName, directoryaccounthistory.FieldScopeID, directoryaccounthistory.FieldIntegrationID, directoryaccounthistory.FieldDirectorySyncRunID, directoryaccounthistory.FieldPlatformID, directoryaccounthistory.FieldDirectoryInstanceID, directoryaccounthistory.FieldIdentityHolderID, directoryaccounthistory.FieldDirectoryName, directoryaccounthistory.FieldExternalID, directoryaccounthistory.FieldSecondaryKey, directoryaccounthistory.FieldCanonicalEmail, directoryaccounthistory.FieldPhoneNumber, directoryaccounthistory.FieldDisplayName, directoryaccounthistory.FieldAvatarRemoteURL, directoryaccounthistory.FieldAvatarLocalFileID, directoryaccounthistory.FieldGivenName, directoryaccounthistory.FieldFamilyName, directoryaccounthistory.FieldJobTitle, directoryaccounthistory.FieldDepartment, directoryaccounthistory.FieldOrganizationUnit, directoryaccounthistory.FieldAccountType, directoryaccounthistory.FieldStatus, directoryaccounthistory.FieldMfaState, directoryaccounthistory.FieldLastSeenIP, directoryaccounthistory.FieldProfileHash, directoryaccounthistory.FieldRawProfileFileID, directoryaccounthistory.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccounthistory.FieldHistoryTime, directoryaccounthistory.FieldCreatedAt, directoryaccounthistory.FieldUpdatedAt, directoryaccounthistory.FieldAvatarUpdatedAt, directoryaccounthistory.FieldLastLoginAt, directoryaccounthistory.FieldFirstSeenAt, directoryaccounthistory.FieldLastSeenAt, directoryaccounthistory.FieldAddedAt, directoryaccounthistory.FieldRemovedAt, directoryaccounthistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -301,6 +305,21 @@ func (_m *DirectoryAccountHistory) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				_m.CanonicalEmail = new(string)
 				*_m.CanonicalEmail = value.String
+			}
+		case directoryaccounthistory.FieldEmailAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailAliases); err != nil {
+					return fmt.Errorf("unmarshal field email_aliases: %w", err)
+				}
+			}
+		case directoryaccounthistory.FieldPhoneNumber:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
+			} else if value.Valid {
+				_m.PhoneNumber = new(string)
+				*_m.PhoneNumber = value.String
 			}
 		case directoryaccounthistory.FieldDisplayName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -584,6 +603,14 @@ func (_m *DirectoryAccountHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.CanonicalEmail; v != nil {
 		builder.WriteString("canonical_email=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("email_aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailAliases))
+	builder.WriteString(", ")
+	if v := _m.PhoneNumber; v != nil {
+		builder.WriteString("phone_number=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
