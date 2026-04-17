@@ -226,16 +226,25 @@ func (s Platform) Edges() []ent.Edge {
 			fromSchema: s,
 			name:       "architecture_diagrams",
 			t:          File.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(File{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			name:       "data_flow_diagrams",
 			t:          File.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(File{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			name:       "trust_boundary_diagrams",
 			t:          File.Type,
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(File{}.Name()),
+			},
 		}),
 		defaultEdgeToWithPagination(s, Risk{}),
 		defaultEdgeToWithPagination(s, Control{}),

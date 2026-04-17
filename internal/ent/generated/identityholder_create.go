@@ -289,6 +289,12 @@ func (_c *IdentityHolderCreate) SetNillableAlternateEmail(v *string) *IdentityHo
 	return _c
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_c *IdentityHolderCreate) SetEmailAliases(v []string) *IdentityHolderCreate {
+	_c.mutation.SetEmailAliases(v)
+	return _c
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (_c *IdentityHolderCreate) SetPhoneNumber(v string) *IdentityHolderCreate {
 	_c.mutation.SetPhoneNumber(v)
@@ -502,6 +508,20 @@ func (_c *IdentityHolderCreate) SetNillableExternalReferenceID(v *string) *Ident
 // SetMetadata sets the "metadata" field.
 func (_c *IdentityHolderCreate) SetMetadata(v map[string]interface{}) *IdentityHolderCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_c *IdentityHolderCreate) SetAvatarRemoteURL(v string) *IdentityHolderCreate {
+	_c.mutation.SetAvatarRemoteURL(v)
+	return _c
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableAvatarRemoteURL(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetAvatarRemoteURL(*v)
+	}
 	return _c
 }
 
@@ -912,6 +932,10 @@ func (_c *IdentityHolderCreate) defaults() error {
 		v := identityholder.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
+	if _, ok := _c.mutation.EmailAliases(); !ok {
+		v := identityholder.DefaultEmailAliases
+		_c.mutation.SetEmailAliases(v)
+	}
 	if _, ok := _c.mutation.IsOpenlaneUser(); !ok {
 		v := identityholder.DefaultIsOpenlaneUser
 		_c.mutation.SetIsOpenlaneUser(v)
@@ -974,6 +998,11 @@ func (_c *IdentityHolderCreate) check() error {
 			return &ValidationError{Name: "alternate_email", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.alternate_email": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.EmailAliases(); ok {
+		if err := identityholder.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.email_aliases": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.PhoneNumber(); ok {
 		if err := identityholder.PhoneNumberValidator(v); err != nil {
 			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.phone_number": %w`, err)}
@@ -997,6 +1026,11 @@ func (_c *IdentityHolderCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsActive(); !ok {
 		return &ValidationError{Name: "is_active", err: errors.New(`generated: missing required field "IdentityHolder.is_active"`)}
+	}
+	if v, ok := _c.mutation.AvatarRemoteURL(); ok {
+		if err := identityholder.AvatarRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "IdentityHolder.avatar_remote_url": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -1094,6 +1128,10 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 		_spec.SetField(identityholder.FieldAlternateEmail, field.TypeString, value)
 		_node.AlternateEmail = value
 	}
+	if value, ok := _c.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholder.FieldEmailAliases, field.TypeJSON, value)
+		_node.EmailAliases = value
+	}
 	if value, ok := _c.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholder.FieldPhoneNumber, field.TypeString, value)
 		_node.PhoneNumber = value
@@ -1149,6 +1187,10 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(identityholder.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholder.FieldAvatarRemoteURL, field.TypeString, value)
+		_node.AvatarRemoteURL = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

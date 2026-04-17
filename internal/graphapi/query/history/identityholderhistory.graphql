@@ -10,11 +10,13 @@ query GetAllIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $b
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department
 				displayID
 				email
+				emailAliases
 				employerEntityID
 				endDate
 				environmentID
@@ -63,11 +65,13 @@ query GetIdentityHolderHistories ($first: Int, $last: Int, $after: Cursor, $befo
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department
 				displayID
 				email
+				emailAliases
 				employerEntityID
 				endDate
 				environmentID

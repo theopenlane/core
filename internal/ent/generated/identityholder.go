@@ -65,6 +65,8 @@ type IdentityHolder struct {
 	Email string `json:"email,omitempty"`
 	// alternate email address for the identity holder
 	AlternateEmail string `json:"alternate_email,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"email_aliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber string `json:"phone_number,omitempty"`
 	// whether the identity holder record is linked to an Openlane user account
@@ -97,6 +99,8 @@ type IdentityHolder struct {
 	ExternalReferenceID string `json:"external_reference_id,omitempty"`
 	// additional metadata about the identity holder
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IdentityHolderQuery when eager-loading is set.
 	Edges        IdentityHolderEdges `json:"edges"`
@@ -439,11 +443,11 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case identityholder.FieldStartDate, identityholder.FieldEndDate:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case identityholder.FieldTags, identityholder.FieldMetadata:
+		case identityholder.FieldTags, identityholder.FieldEmailAliases, identityholder.FieldMetadata:
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID:
+		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholder.FieldCreatedAt, identityholder.FieldUpdatedAt, identityholder.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -590,6 +594,14 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.AlternateEmail = value.String
 			}
+		case identityholder.FieldEmailAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailAliases); err != nil {
+					return fmt.Errorf("unmarshal field email_aliases: %w", err)
+				}
+			}
 		case identityholder.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
@@ -689,6 +701,13 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
+			}
+		case identityholder.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -916,6 +935,9 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString("alternate_email=")
 	builder.WriteString(_m.AlternateEmail)
 	builder.WriteString(", ")
+	builder.WriteString("email_aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailAliases))
+	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(_m.PhoneNumber)
 	builder.WriteString(", ")
@@ -967,6 +989,11 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

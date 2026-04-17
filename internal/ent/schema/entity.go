@@ -240,6 +240,7 @@ func (Entity) Fields() []ent.Field {
 		field.Enum("tier").
 			Comment("the vendor risk tier classification, used to determine the depth of TPRM assessment required").
 			GoType(enums.VendorTier("")).
+			Default(enums.VendorTierStandard.String()).
 			Optional().
 			Annotations(
 				entgql.OrderField("tier"),

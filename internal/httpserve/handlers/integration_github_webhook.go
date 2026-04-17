@@ -56,7 +56,7 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 
 	installation, err := h.resolveGitHubAppWebhookInstallation(webhookCtx, payload)
 	if err != nil {
-		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve github app webhook installation")
+		logx.FromContext(webhookCtx).Error().Err(err).Interface("payload", string(payload)).Msg("failed to resolve github app webhook installation")
 
 		return h.BadRequest(ctx, err, openapiCtx)
 	}

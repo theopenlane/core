@@ -334,6 +334,24 @@ func (_u *IdentityHolderHistoryUpdate) ClearAlternateEmail() *IdentityHolderHist
 	return _u
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) SetEmailAliases(v []string) *IdentityHolderHistoryUpdate {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) AppendEmailAliases(v []string) *IdentityHolderHistoryUpdate {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdate) ClearEmailAliases() *IdentityHolderHistoryUpdate {
+	_u.mutation.ClearEmailAliases()
+	return _u
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (_u *IdentityHolderHistoryUpdate) SetPhoneNumber(v string) *IdentityHolderHistoryUpdate {
 	_u.mutation.SetPhoneNumber(v)
@@ -628,6 +646,26 @@ func (_u *IdentityHolderHistoryUpdate) ClearMetadata() *IdentityHolderHistoryUpd
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdate) SetAvatarRemoteURL(v string) *IdentityHolderHistoryUpdate {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderHistoryUpdate) SetNillableAvatarRemoteURL(v *string) *IdentityHolderHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdate) ClearAvatarRemoteURL() *IdentityHolderHistoryUpdate {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // Mutation returns the IdentityHolderHistoryMutation object of the builder.
 func (_u *IdentityHolderHistoryUpdate) Mutation() *IdentityHolderHistoryMutation {
 	return _u.mutation
@@ -815,6 +853,17 @@ func (_u *IdentityHolderHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.AlternateEmailCleared() {
 		_spec.ClearField(identityholderhistory.FieldAlternateEmail, field.TypeString)
 	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholderhistory.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, identityholderhistory.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(identityholderhistory.FieldEmailAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholderhistory.FieldPhoneNumber, field.TypeString, value)
 	}
@@ -901,6 +950,12 @@ func (_u *IdentityHolderHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholderhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IdentityHolderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1224,6 +1279,24 @@ func (_u *IdentityHolderHistoryUpdateOne) ClearAlternateEmail() *IdentityHolderH
 	return _u
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) SetEmailAliases(v []string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) AppendEmailAliases(v []string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *IdentityHolderHistoryUpdateOne) ClearEmailAliases() *IdentityHolderHistoryUpdateOne {
+	_u.mutation.ClearEmailAliases()
+	return _u
+}
+
 // SetPhoneNumber sets the "phone_number" field.
 func (_u *IdentityHolderHistoryUpdateOne) SetPhoneNumber(v string) *IdentityHolderHistoryUpdateOne {
 	_u.mutation.SetPhoneNumber(v)
@@ -1518,6 +1591,26 @@ func (_u *IdentityHolderHistoryUpdateOne) ClearMetadata() *IdentityHolderHistory
 	return _u
 }
 
+// SetAvatarRemoteURL sets the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdateOne) SetAvatarRemoteURL(v string) *IdentityHolderHistoryUpdateOne {
+	_u.mutation.SetAvatarRemoteURL(v)
+	return _u
+}
+
+// SetNillableAvatarRemoteURL sets the "avatar_remote_url" field if the given value is not nil.
+func (_u *IdentityHolderHistoryUpdateOne) SetNillableAvatarRemoteURL(v *string) *IdentityHolderHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearAvatarRemoteURL clears the value of the "avatar_remote_url" field.
+func (_u *IdentityHolderHistoryUpdateOne) ClearAvatarRemoteURL() *IdentityHolderHistoryUpdateOne {
+	_u.mutation.ClearAvatarRemoteURL()
+	return _u
+}
+
 // Mutation returns the IdentityHolderHistoryMutation object of the builder.
 func (_u *IdentityHolderHistoryUpdateOne) Mutation() *IdentityHolderHistoryMutation {
 	return _u.mutation
@@ -1735,6 +1828,17 @@ func (_u *IdentityHolderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	if _u.mutation.AlternateEmailCleared() {
 		_spec.ClearField(identityholderhistory.FieldAlternateEmail, field.TypeString)
 	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(identityholderhistory.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, identityholderhistory.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(identityholderhistory.FieldEmailAliases, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.PhoneNumber(); ok {
 		_spec.SetField(identityholderhistory.FieldPhoneNumber, field.TypeString, value)
 	}
@@ -1821,6 +1925,12 @@ func (_u *IdentityHolderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(identityholderhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.AvatarRemoteURL(); ok {
+		_spec.SetField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.AvatarRemoteURLCleared() {
+		_spec.ClearField(identityholderhistory.FieldAvatarRemoteURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IdentityHolderHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

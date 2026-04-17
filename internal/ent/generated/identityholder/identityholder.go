@@ -58,6 +58,8 @@ const (
 	FieldEmail = "email"
 	// FieldAlternateEmail holds the string denoting the alternate_email field in the database.
 	FieldAlternateEmail = "alternate_email"
+	// FieldEmailAliases holds the string denoting the email_aliases field in the database.
+	FieldEmailAliases = "email_aliases"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
 	// FieldIsOpenlaneUser holds the string denoting the is_openlane_user field in the database.
@@ -90,6 +92,8 @@ const (
 	FieldExternalReferenceID = "external_reference_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
+	FieldAvatarRemoteURL = "avatar_remote_url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -327,6 +331,7 @@ var Columns = []string{
 	FieldFullName,
 	FieldEmail,
 	FieldAlternateEmail,
+	FieldEmailAliases,
 	FieldPhoneNumber,
 	FieldIsOpenlaneUser,
 	FieldUserID,
@@ -343,6 +348,7 @@ var Columns = []string{
 	FieldExternalUserID,
 	FieldExternalReferenceID,
 	FieldMetadata,
+	FieldAvatarRemoteURL,
 }
 
 var (
@@ -400,7 +406,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
+	Hooks        [15]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -423,12 +429,18 @@ var (
 	EmailValidator func(string) error
 	// AlternateEmailValidator is a validator for the "alternate_email" field. It is called by the builders before save.
 	AlternateEmailValidator func(string) error
+	// DefaultEmailAliases holds the default value on creation for the "email_aliases" field.
+	DefaultEmailAliases []string
+	// EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
+	EmailAliasesValidator func([]string) error
 	// PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	PhoneNumberValidator func(string) error
 	// DefaultIsOpenlaneUser holds the default value on creation for the "is_openlane_user" field.
 	DefaultIsOpenlaneUser bool
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
 	DefaultIsActive bool
+	// AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
+	AvatarRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -633,6 +645,11 @@ func ByExternalUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalReferenceID orders the results by the external_reference_id field.
 func ByExternalReferenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalReferenceID, opts...).ToFunc()
+}
+
+// ByAvatarRemoteURL orders the results by the avatar_remote_url field.
+func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

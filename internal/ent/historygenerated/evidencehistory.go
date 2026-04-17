@@ -76,8 +76,10 @@ type EvidenceHistory struct {
 	// the url of the evidence if not uploaded directly to the system
 	URL string `json:"url,omitempty"`
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
-	Status       enums.EvidenceStatus `json:"status,omitempty"`
-	selectValues sql.SelectValues
+	Status enums.EvidenceStatus `json:"status,omitempty"`
+	// the cadence for reviewing the evidence
+	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -93,7 +95,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case evidencehistory.FieldWorkflowEligibleMarker, evidencehistory.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
+		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus, evidencehistory.FieldReviewFrequency:
 			values[i] = new(sql.NullString)
 		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -285,6 +287,12 @@ func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Status = enums.EvidenceStatus(value.String)
 			}
+		case evidencehistory.FieldReviewFrequency:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
+			} else if value.Valid {
+				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -407,6 +415,9 @@ func (_m *EvidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("review_frequency=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
 	builder.WriteByte(')')
 	return builder.String()
 }

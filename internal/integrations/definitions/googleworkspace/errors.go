@@ -25,4 +25,6 @@ var (
 	ErrCredentialEncode = errors.New("googleworkspace: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("googleworkspace: credential decode failed")
+	// ErrCustomerIDMissing indicates installation metadata is missing the required customer identifier
+	ErrCustomerIDMissing = errors.New("googleworkspace: customer id missing from installation metadata")
 )

@@ -52,6 +52,37 @@ func (r *Runtime) SetPostExecutionHook(hook PostExecutionHook) {
 	r.postExecutionHook = hook
 }
 
+// Enabled reports whether the integrations runtime is available for the given
+// client. It checks the context first (for the original client with
+// IntegrationsRuntime set), falling back to the provided client. This handles
+// the case where IntegrationsRuntime is set after client initialization, since
+// entity clients copy config by value.
+func Enabled(ctx context.Context, client *ent.Client) bool {
+	if ctxClient := ent.FromContext(ctx); ctxClient != nil && ctxClient.IntegrationsRuntime != nil {
+		return true
+	}
+
+	return client != nil && client.IntegrationsRuntime != nil
+}
+
+// FromClient resolves the typed *Runtime from the client, checking the
+// context-based client first, then falling back to the provided client
+func FromClient(ctx context.Context, client *ent.Client) *Runtime {
+	if ctxClient := ent.FromContext(ctx); ctxClient != nil {
+		if rt, ok := ctxClient.IntegrationsRuntime.(*Runtime); ok {
+			return rt
+		}
+	}
+
+	if client != nil {
+		if rt, ok := client.IntegrationsRuntime.(*Runtime); ok {
+			return rt
+		}
+	}
+
+	return nil
+}
+
 // DB returns the Ent client from the injector
 func (r *Runtime) DB() *ent.Client {
 	return do.MustInvoke[*ent.Client](r.injector)

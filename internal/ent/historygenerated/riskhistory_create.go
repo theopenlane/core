@@ -543,6 +543,20 @@ func (_c *RiskHistoryCreate) SetNillableReviewFrequency(v *enums.Frequency) *Ris
 	return _c
 }
 
+// SetDueDate sets the "due_date" field.
+func (_c *RiskHistoryCreate) SetDueDate(v models.DateTime) *RiskHistoryCreate {
+	_c.mutation.SetDueDate(v)
+	return _c
+}
+
+// SetNillableDueDate sets the "due_date" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableDueDate(v *models.DateTime) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetDueDate(*v)
+	}
+	return _c
+}
+
 // SetNextReviewDueAt sets the "next_review_due_at" field.
 func (_c *RiskHistoryCreate) SetNextReviewDueAt(v models.DateTime) *RiskHistoryCreate {
 	_c.mutation.SetNextReviewDueAt(v)
@@ -660,14 +674,6 @@ func (_c *RiskHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Tags(); !ok {
 		v := riskhistory.DefaultTags
 		_c.mutation.SetTags(v)
-	}
-	if _, ok := _c.mutation.Status(); !ok {
-		v := riskhistory.DefaultStatus
-		_c.mutation.SetStatus(v)
-	}
-	if _, ok := _c.mutation.Impact(); !ok {
-		v := riskhistory.DefaultImpact
-		_c.mutation.SetImpact(v)
 	}
 	if _, ok := _c.mutation.Likelihood(); !ok {
 		v := riskhistory.DefaultLikelihood
@@ -938,6 +944,10 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
 		_spec.SetField(riskhistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.DueDate(); ok {
+		_spec.SetField(riskhistory.FieldDueDate, field.TypeTime, value)
+		_node.DueDate = &value
 	}
 	if value, ok := _c.mutation.NextReviewDueAt(); ok {
 		_spec.SetField(riskhistory.FieldNextReviewDueAt, field.TypeTime, value)

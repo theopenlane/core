@@ -314,6 +314,26 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableCanonicalEmail(v *string) *D
 	return _c
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_c *DirectoryAccountHistoryCreate) SetEmailAliases(v []string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetEmailAliases(v)
+	return _c
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (_c *DirectoryAccountHistoryCreate) SetPhoneNumber(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetPhoneNumber(v)
+	return _c
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillablePhoneNumber(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetPhoneNumber(*v)
+	}
+	return _c
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_c *DirectoryAccountHistoryCreate) SetDisplayName(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetDisplayName(v)
@@ -724,6 +744,10 @@ func (_c *DirectoryAccountHistoryCreate) defaults() error {
 		v := directoryaccounthistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.EmailAliases(); !ok {
+		v := directoryaccounthistory.DefaultEmailAliases
+		_c.mutation.SetEmailAliases(v)
+	}
 	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
 		if directoryaccounthistory.DefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("historygenerated: uninitialized directoryaccounthistory.DefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
@@ -944,6 +968,14 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.CanonicalEmail(); ok {
 		_spec.SetField(directoryaccounthistory.FieldCanonicalEmail, field.TypeString, value)
 		_node.CanonicalEmail = &value
+	}
+	if value, ok := _c.mutation.EmailAliases(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEmailAliases, field.TypeJSON, value)
+		_node.EmailAliases = value
+	}
+	if value, ok := _c.mutation.PhoneNumber(); ok {
+		_spec.SetField(directoryaccounthistory.FieldPhoneNumber, field.TypeString, value)
+		_node.PhoneNumber = &value
 	}
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccounthistory.FieldDisplayName, field.TypeString, value)

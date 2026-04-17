@@ -69,6 +69,8 @@ type IdentityHolderHistory struct {
 	Email string `json:"email,omitempty"`
 	// alternate email address for the identity holder
 	AlternateEmail string `json:"alternate_email,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"email_aliases,omitempty"`
 	// phone number for the identity holder
 	PhoneNumber string `json:"phone_number,omitempty"`
 	// whether the identity holder record is linked to an Openlane user account
@@ -100,8 +102,10 @@ type IdentityHolderHistory struct {
 	// external identifier for the identity holder from an upstream roster
 	ExternalReferenceID string `json:"external_reference_id,omitempty"`
 	// additional metadata about the identity holder
-	Metadata     map[string]interface{} `json:"metadata,omitempty"`
-	selectValues sql.SelectValues
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -111,13 +115,13 @@ func (*IdentityHolderHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case identityholderhistory.FieldStartDate, identityholderhistory.FieldEndDate:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case identityholderhistory.FieldTags, identityholderhistory.FieldMetadata:
+		case identityholderhistory.FieldTags, identityholderhistory.FieldEmailAliases, identityholderhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case identityholderhistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case identityholderhistory.FieldWorkflowEligibleMarker, identityholderhistory.FieldIsOpenlaneUser, identityholderhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID:
+		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholderhistory.FieldHistoryTime, identityholderhistory.FieldCreatedAt, identityholderhistory.FieldUpdatedAt, identityholderhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -282,6 +286,14 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.AlternateEmail = value.String
 			}
+		case identityholderhistory.FieldEmailAliases:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_aliases", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailAliases); err != nil {
+					return fmt.Errorf("unmarshal field email_aliases: %w", err)
+				}
+			}
 		case identityholderhistory.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field phone_number", values[i])
@@ -381,6 +393,13 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
+			}
+		case identityholderhistory.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -487,6 +506,9 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString("alternate_email=")
 	builder.WriteString(_m.AlternateEmail)
 	builder.WriteString(", ")
+	builder.WriteString("email_aliases=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailAliases))
+	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(_m.PhoneNumber)
 	builder.WriteString(", ")
@@ -538,6 +560,11 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -1617,8 +1617,18 @@ func init() {
 	directoryaccountDescExternalID := directoryaccountFields[6].Descriptor()
 	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
+	// directoryaccountDescEmailAliases is the schema descriptor for email_aliases field.
+	directoryaccountDescEmailAliases := directoryaccountFields[9].Descriptor()
+	// directoryaccount.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	directoryaccount.DefaultEmailAliases = directoryaccountDescEmailAliases.Default.([]string)
+	// directoryaccount.EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
+	directoryaccount.EmailAliasesValidator = directoryaccountDescEmailAliases.Validators[0].(func([]string) error)
+	// directoryaccountDescPhoneNumber is the schema descriptor for phone_number field.
+	directoryaccountDescPhoneNumber := directoryaccountFields[10].Descriptor()
+	// directoryaccount.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
+	directoryaccount.PhoneNumberValidator = directoryaccountDescPhoneNumber.Validators[0].(func(string) error)
 	// directoryaccountDescAvatarRemoteURL is the schema descriptor for avatar_remote_url field.
-	directoryaccountDescAvatarRemoteURL := directoryaccountFields[10].Descriptor()
+	directoryaccountDescAvatarRemoteURL := directoryaccountFields[12].Descriptor()
 	// directoryaccount.AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
 	directoryaccount.AvatarRemoteURLValidator = func() func(string) error {
 		validators := directoryaccountDescAvatarRemoteURL.Validators
@@ -1636,21 +1646,19 @@ func init() {
 		}
 	}()
 	// directoryaccountDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[12].Descriptor()
+	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[14].Descriptor()
 	// directoryaccount.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccount.DefaultAvatarUpdatedAt = directoryaccountDescAvatarUpdatedAt.Default.(func() time.Time)
-	// directoryaccount.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	directoryaccount.UpdateDefaultAvatarUpdatedAt = directoryaccountDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// directoryaccountDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccountDescObservedAt := directoryaccountFields[27].Descriptor()
+	directoryaccountDescObservedAt := directoryaccountFields[29].Descriptor()
 	// directoryaccount.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccount.DefaultObservedAt = directoryaccountDescObservedAt.Default.(func() time.Time)
 	// directoryaccountDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccountDescProfileHash := directoryaccountFields[28].Descriptor()
+	directoryaccountDescProfileHash := directoryaccountFields[30].Descriptor()
 	// directoryaccount.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directoryaccount.DefaultProfileHash = directoryaccountDescProfileHash.Default.(string)
 	// directoryaccountDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccountDescPrimarySource := directoryaccountFields[33].Descriptor()
+	directoryaccountDescPrimarySource := directoryaccountFields[35].Descriptor()
 	// directoryaccount.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccount.DefaultPrimarySource = directoryaccountDescPrimarySource.Default.(bool)
 	// directoryaccountDescID is the schema descriptor for id field.
@@ -2709,6 +2717,8 @@ func init() {
 	evidence.Hooks[10] = evidenceHooks[0]
 
 	evidence.Hooks[11] = evidenceHooks[1]
+
+	evidence.Hooks[12] = evidenceHooks[2]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters5 := evidenceMixin[5].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters1[0]
@@ -3411,6 +3421,8 @@ func init() {
 	identityholder.Hooks[12] = identityholderMixinHooks10[0]
 
 	identityholder.Hooks[13] = identityholderHooks[0]
+
+	identityholder.Hooks[14] = identityholderHooks[1]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
@@ -3480,18 +3492,42 @@ func init() {
 	identityholderDescAlternateEmail := identityholderFields[2].Descriptor()
 	// identityholder.AlternateEmailValidator is a validator for the "alternate_email" field. It is called by the builders before save.
 	identityholder.AlternateEmailValidator = identityholderDescAlternateEmail.Validators[0].(func(string) error)
+	// identityholderDescEmailAliases is the schema descriptor for email_aliases field.
+	identityholderDescEmailAliases := identityholderFields[3].Descriptor()
+	// identityholder.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	identityholder.DefaultEmailAliases = identityholderDescEmailAliases.Default.([]string)
+	// identityholder.EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
+	identityholder.EmailAliasesValidator = identityholderDescEmailAliases.Validators[0].(func([]string) error)
 	// identityholderDescPhoneNumber is the schema descriptor for phone_number field.
-	identityholderDescPhoneNumber := identityholderFields[3].Descriptor()
+	identityholderDescPhoneNumber := identityholderFields[4].Descriptor()
 	// identityholder.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	identityholder.PhoneNumberValidator = identityholderDescPhoneNumber.Validators[0].(func(string) error)
 	// identityholderDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderDescIsOpenlaneUser := identityholderFields[4].Descriptor()
+	identityholderDescIsOpenlaneUser := identityholderFields[5].Descriptor()
 	// identityholder.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholder.DefaultIsOpenlaneUser = identityholderDescIsOpenlaneUser.Default.(bool)
 	// identityholderDescIsActive is the schema descriptor for is_active field.
-	identityholderDescIsActive := identityholderFields[8].Descriptor()
+	identityholderDescIsActive := identityholderFields[9].Descriptor()
 	// identityholder.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholder.DefaultIsActive = identityholderDescIsActive.Default.(bool)
+	// identityholderDescAvatarRemoteURL is the schema descriptor for avatar_remote_url field.
+	identityholderDescAvatarRemoteURL := identityholderFields[20].Descriptor()
+	// identityholder.AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
+	identityholder.AvatarRemoteURLValidator = func() func(string) error {
+		validators := identityholderDescAvatarRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(avatar_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(avatar_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// identityholderDescID is the schema descriptor for id field.
 	identityholderDescID := identityholderMixinFields2[0].Descriptor()
 	// identityholder.DefaultID holds the default value on creation for the id field.
@@ -5350,8 +5386,6 @@ func init() {
 	organizationDescAvatarUpdatedAt := organizationFields[7].Descriptor()
 	// organization.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	organization.DefaultAvatarUpdatedAt = organizationDescAvatarUpdatedAt.Default.(func() time.Time)
-	// organization.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	organization.UpdateDefaultAvatarUpdatedAt = organizationDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationDescDedicatedDb is the schema descriptor for dedicated_db field.
 	organizationDescDedicatedDb := organizationFields[8].Descriptor()
 	// organization.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
@@ -5928,6 +5962,8 @@ func init() {
 	program.Hooks[9] = programMixinHooks7[0]
 
 	program.Hooks[10] = programHooks[0]
+
+	program.Hooks[11] = programHooks[1]
 	programMixinInters1 := programMixin[1].Interceptors()
 	programMixinInters5 := programMixin[5].Interceptors()
 	programInters := schema.Program{}.Interceptors()
@@ -6209,7 +6245,7 @@ func init() {
 	// review.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	review.TitleValidator = reviewDescTitle.Validators[0].(func(string) error)
 	// reviewDescApproved is the schema descriptor for approved field.
-	reviewDescApproved := reviewFields[9].Descriptor()
+	reviewDescApproved := reviewFields[10].Descriptor()
 	// review.DefaultApproved holds the default value on creation for the approved field.
 	review.DefaultApproved = reviewDescApproved.Default.(bool)
 	// reviewDescID is the schema descriptor for id field.
@@ -6269,6 +6305,8 @@ func init() {
 	risk.Hooks[15] = riskHooks[1]
 
 	risk.Hooks[16] = riskHooks[2]
+
+	risk.Hooks[17] = riskHooks[3]
 	riskMixinInters1 := riskMixin[1].Interceptors()
 	riskMixinInters5 := riskMixin[5].Interceptors()
 	risk.Interceptors[0] = riskMixinInters1[0]
@@ -8385,8 +8423,6 @@ func init() {
 	userDescAvatarUpdatedAt := userFields[6].Descriptor()
 	// user.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	user.DefaultAvatarUpdatedAt = userDescAvatarUpdatedAt.Default.(func() time.Time)
-	// user.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	user.UpdateDefaultAvatarUpdatedAt = userDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userDescLastSeen is the schema descriptor for last_seen field.
 	userDescLastSeen := userFields[7].Descriptor()
 	// user.UpdateDefaultLastSeen holds the default value on update for the last_seen field.

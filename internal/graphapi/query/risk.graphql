@@ -9,6 +9,7 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			details
 			detailsJSON
 			displayID
+			dueDate
 			environmentID
 			environmentName
 			externalID
@@ -63,6 +64,7 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			details
 			detailsJSON
 			displayID
+			dueDate
 			environmentID
 			environmentName
 			externalID
@@ -117,6 +119,7 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			details
 			detailsJSON
 			displayID
+			dueDate
 			environmentID
 			environmentName
 			externalID
@@ -216,6 +219,7 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				details
 				detailsJSON
 				displayID
+				dueDate
 				environmentID
 				environmentName
 				externalID
@@ -302,6 +306,7 @@ query GetRiskByID ($riskId: ID!) {
 		details
 		detailsJSON
 		displayID
+		dueDate
 		environmentID
 		environmentName
 		externalID
@@ -395,6 +400,7 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				details
 				detailsJSON
 				displayID
+				dueDate
 				environmentID
 				environmentName
 				externalID
@@ -482,6 +488,7 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			details
 			detailsJSON
 			displayID
+			dueDate
 			environmentID
 			environmentName
 			externalID
@@ -537,6 +544,7 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			details
 			detailsJSON
 			displayID
+			dueDate
 			environmentID
 			environmentName
 			externalID

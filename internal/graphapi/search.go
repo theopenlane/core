@@ -1040,19 +1040,24 @@ func adminSearchIdentityHolders(ctx context.Context, query string, after *entgql
 				identityholder.FullNameContainsFold(query),             // search by FullName
 				identityholder.EmailContainsFold(query),                // search by Email
 				identityholder.AlternateEmailContainsFold(query),       // search by AlternateEmail
-				identityholder.PhoneNumberContainsFold(query),          // search by PhoneNumber
-				identityholder.UserIDContainsFold(query),               // search by UserID
-				identityholder.TitleContainsFold(query),                // search by Title
-				identityholder.DepartmentContainsFold(query),           // search by Department
-				identityholder.TeamContainsFold(query),                 // search by Team
-				identityholder.LocationContainsFold(query),             // search by Location
-				identityholder.EmployerEntityIDContainsFold(query),     // search by EmployerEntityID
-				identityholder.ExternalUserIDContainsFold(query),       // search by ExternalUserID
-				identityholder.ExternalReferenceIDContainsFold(query),  // search by ExternalReferenceID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $24", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(email_aliases)::text LIKE $15", likeQuery)) // search by EmailAliases
 				},
+				identityholder.PhoneNumberContainsFold(query),         // search by PhoneNumber
+				identityholder.UserIDContainsFold(query),              // search by UserID
+				identityholder.TitleContainsFold(query),               // search by Title
+				identityholder.DepartmentContainsFold(query),          // search by Department
+				identityholder.TeamContainsFold(query),                // search by Team
+				identityholder.LocationContainsFold(query),            // search by Location
+				identityholder.EmployerEntityIDContainsFold(query),    // search by EmployerEntityID
+				identityholder.ExternalUserIDContainsFold(query),      // search by ExternalUserID
+				identityholder.ExternalReferenceIDContainsFold(query), // search by ExternalReferenceID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $25", likeQuery)) // search by Metadata
+				},
+				identityholder.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL
 			),
 		)
 

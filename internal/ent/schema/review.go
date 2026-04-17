@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -74,6 +75,11 @@ func (Review) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("state"),
 			),
+		field.Enum("status").
+			GoType(enums.ReviewStatus("")).
+			Default(enums.ReviewStatusOpen.String()).
+			Comment("status of the review").
+			Optional(),
 		field.String("category").
 			Comment("category for the review record").
 			Optional(),

@@ -26,7 +26,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -451,7 +451,7 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
 		{Name: "implementation_date", Type: field.TypeTime, Nullable: true},
 		{Name: "verified", Type: field.TypeBool, Nullable: true},
 		{Name: "verification_date", Type: field.TypeTime, Nullable: true},
@@ -611,6 +611,8 @@ var (
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
 		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
+		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
@@ -962,7 +964,7 @@ var (
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
 		{Name: "risk_score_coverage", Type: field.TypeInt, Nullable: true},
-		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}},
+		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "STANDARD"},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
@@ -1046,6 +1048,7 @@ var (
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -1389,6 +1392,7 @@ var (
 		{Name: "full_name", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "alternate_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "is_openlane_user", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
@@ -1405,6 +1409,7 @@ var (
 		{Name: "external_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 	}
 	// IdentityHolderHistoryTable holds the schema information for the "identity_holder_history" table.
 	IdentityHolderHistoryTable = &schema.Table{
@@ -1491,7 +1496,7 @@ var (
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -2048,7 +2053,7 @@ var (
 		{Name: "revision", Type: field.TypeString, Nullable: true, Default: "v0.0.1"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED"}, Default: "DRAFT"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLISHED", "DRAFT", "NEEDS_APPROVAL", "APPROVED", "ARCHIVED", "PENDING"}, Default: "DRAFT"},
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "details_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: true},
@@ -2242,6 +2247,7 @@ var (
 		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "IN_REVIEW", "COMPLETED", "WONT_DO"}, Default: "OPEN"},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "classification", Type: field.TypeString, Nullable: true},
 		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2298,8 +2304,8 @@ var (
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
-		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}},
+		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}},
 		{Name: "likelihood", Type: field.TypeEnum, Nullable: true, Enums: []string{"UNLIKELY", "LIKELY", "HIGHLY_LIKELY"}, Default: "LIKELY"},
 		{Name: "score", Type: field.TypeInt, Nullable: true},
 		{Name: "mitigation", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -2314,9 +2320,10 @@ var (
 		{Name: "review_required", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "last_reviewed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
+		{Name: "due_date", Type: field.TypeTime, Nullable: true},
 		{Name: "next_review_due_at", Type: field.TypeTime, Nullable: true},
 		{Name: "residual_score", Type: field.TypeInt, Nullable: true},
-		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", " MITIGATE", " ACCEPT", " TRANSFER", " NONE"}, Default: " NONE"},
+		{Name: "risk_decision", Type: field.TypeEnum, Nullable: true, Enums: []string{"AVOID", "MITIGATE", "ACCEPT", "TRANSFER", "NONE"}, Default: "NONE"},
 	}
 	// RiskHistoryTable holds the schema information for the "risk_history" table.
 	RiskHistoryTable = &schema.Table{

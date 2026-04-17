@@ -4892,6 +4892,14 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetNillableCanonicalEmail(&canonicalEmail)
 	}
 
+	if emailAliases, exists := m.EmailAliases(); exists {
+		create = create.SetEmailAliases(emailAliases)
+	}
+
+	if phoneNumber, exists := m.PhoneNumber(); exists {
+		create = create.SetNillablePhoneNumber(&phoneNumber)
+	}
+
 	if displayName, exists := m.DisplayName(); exists {
 		create = create.SetDisplayName(displayName)
 	}
@@ -5143,6 +5151,18 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableCanonicalEmail(directoryaccount.CanonicalEmail)
 		}
 
+		if emailAliases, exists := m.EmailAliases(); exists {
+			create = create.SetEmailAliases(emailAliases)
+		} else {
+			create = create.SetEmailAliases(directoryaccount.EmailAliases)
+		}
+
+		if phoneNumber, exists := m.PhoneNumber(); exists {
+			create = create.SetNillablePhoneNumber(&phoneNumber)
+		} else {
+			create = create.SetNillablePhoneNumber(directoryaccount.PhoneNumber)
+		}
+
 		if displayName, exists := m.DisplayName(); exists {
 			create = create.SetDisplayName(displayName)
 		} else {
@@ -5348,6 +5368,8 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetExternalID(directoryaccount.ExternalID).
 			SetNillableSecondaryKey(directoryaccount.SecondaryKey).
 			SetNillableCanonicalEmail(directoryaccount.CanonicalEmail).
+			SetEmailAliases(directoryaccount.EmailAliases).
+			SetNillablePhoneNumber(directoryaccount.PhoneNumber).
 			SetDisplayName(directoryaccount.DisplayName).
 			SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL).
 			SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID).
@@ -8488,6 +8510,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if reviewFrequency, exists := m.ReviewFrequency(); exists {
+		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8663,6 +8689,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(evidence.Status)
 		}
 
+		if reviewFrequency, exists := m.ReviewFrequency(); exists {
+			create = create.SetReviewFrequency(reviewFrequency)
+		} else {
+			create = create.SetReviewFrequency(evidence.ReviewFrequency)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8722,6 +8754,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsAutomated(evidence.IsAutomated).
 			SetURL(evidence.URL).
 			SetStatus(evidence.Status).
+			SetReviewFrequency(evidence.ReviewFrequency).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -11257,6 +11290,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetAlternateEmail(alternateEmail)
 	}
 
+	if emailAliases, exists := m.EmailAliases(); exists {
+		create = create.SetEmailAliases(emailAliases)
+	}
+
 	if phoneNumber, exists := m.PhoneNumber(); exists {
 		create = create.SetPhoneNumber(phoneNumber)
 	}
@@ -11319,6 +11356,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if metadata, exists := m.Metadata(); exists {
 		create = create.SetMetadata(metadata)
+	}
+
+	if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
 	}
 
 	_, err := create.Save(ctx)
@@ -11472,6 +11513,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetAlternateEmail(identityholder.AlternateEmail)
 		}
 
+		if emailAliases, exists := m.EmailAliases(); exists {
+			create = create.SetEmailAliases(emailAliases)
+		} else {
+			create = create.SetEmailAliases(identityholder.EmailAliases)
+		}
+
 		if phoneNumber, exists := m.PhoneNumber(); exists {
 			create = create.SetPhoneNumber(phoneNumber)
 		} else {
@@ -11568,6 +11615,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetMetadata(identityholder.Metadata)
 		}
 
+		if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+			create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
+		} else {
+			create = create.SetNillableAvatarRemoteURL(identityholder.AvatarRemoteURL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11623,6 +11676,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetFullName(identityholder.FullName).
 			SetEmail(identityholder.Email).
 			SetAlternateEmail(identityholder.AlternateEmail).
+			SetEmailAliases(identityholder.EmailAliases).
 			SetPhoneNumber(identityholder.PhoneNumber).
 			SetIsOpenlaneUser(identityholder.IsOpenlaneUser).
 			SetUserID(identityholder.UserID).
@@ -11639,6 +11693,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetExternalUserID(identityholder.ExternalUserID).
 			SetExternalReferenceID(identityholder.ExternalReferenceID).
 			SetMetadata(identityholder.Metadata).
+			SetNillableAvatarRemoteURL(identityholder.AvatarRemoteURL).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -18196,6 +18251,10 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetState(state)
 	}
 
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -18397,6 +18456,12 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetState(review.State)
 		}
 
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(review.Status)
+		}
+
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -18535,6 +18600,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
 			SetState(review.State).
+			SetStatus(review.Status).
 			SetCategory(review.Category).
 			SetClassification(review.Classification).
 			SetSummary(review.Summary).
@@ -18724,6 +18790,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if reviewFrequency, exists := m.ReviewFrequency(); exists {
 		create = create.SetReviewFrequency(reviewFrequency)
+	}
+
+	if dueDate, exists := m.DueDate(); exists {
+		create = create.SetNillableDueDate(&dueDate)
 	}
 
 	if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
@@ -18997,6 +19067,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(risk.ReviewFrequency)
 		}
 
+		if dueDate, exists := m.DueDate(); exists {
+			create = create.SetNillableDueDate(&dueDate)
+		} else {
+			create = create.SetNillableDueDate(risk.DueDate)
+		}
+
 		if nextReviewDueAt, exists := m.NextReviewDueAt(); exists {
 			create = create.SetNillableNextReviewDueAt(&nextReviewDueAt)
 		} else {
@@ -19088,6 +19164,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetReviewRequired(risk.ReviewRequired).
 			SetNillableLastReviewedAt(risk.LastReviewedAt).
 			SetReviewFrequency(risk.ReviewFrequency).
+			SetNillableDueDate(risk.DueDate).
 			SetNillableNextReviewDueAt(risk.NextReviewDueAt).
 			SetResidualScore(risk.ResidualScore).
 			SetRiskDecision(risk.RiskDecision).

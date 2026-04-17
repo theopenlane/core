@@ -239,6 +239,11 @@ func ExternalReferenceID(v string) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldExternalReferenceID, v))
 }
 
+// AvatarRemoteURL applies equality check predicate on the "avatar_remote_url" field. It's identical to AvatarRemoteURLEQ.
+func AvatarRemoteURL(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1649,6 +1654,16 @@ func AlternateEmailContainsFold(v string) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldContainsFold(FieldAlternateEmail, v))
 }
 
+// EmailAliasesIsNil applies the IsNil predicate on the "email_aliases" field.
+func EmailAliasesIsNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldIsNull(FieldEmailAliases))
+}
+
+// EmailAliasesNotNil applies the NotNil predicate on the "email_aliases" field.
+func EmailAliasesNotNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldNotNull(FieldEmailAliases))
+}
+
 // PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
 func PhoneNumberEQ(v string) predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldPhoneNumber, v))
@@ -2522,6 +2537,81 @@ func MetadataIsNil() predicate.IdentityHolderHistory {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.IdentityHolderHistory {
 	return predicate.IdentityHolderHistory(sql.FieldNotNull(FieldMetadata))
+}
+
+// AvatarRemoteURLEQ applies the EQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEQ(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLNEQ applies the NEQ predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNEQ(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldNEQ(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIn applies the In predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIn(vs ...string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLNotIn applies the NotIn predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotIn(vs ...string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldNotIn(FieldAvatarRemoteURL, vs...))
+}
+
+// AvatarRemoteURLGT applies the GT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGT(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldGT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLGTE applies the GTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLGTE(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldGTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLT applies the LT predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLT(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldLT(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLLTE applies the LTE predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLLTE(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldLTE(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContains applies the Contains predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContains(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldContains(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasPrefix applies the HasPrefix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasPrefix(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldHasPrefix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLHasSuffix applies the HasSuffix predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLHasSuffix(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldHasSuffix(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLIsNil applies the IsNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLIsNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldIsNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLNotNil applies the NotNil predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLNotNil() predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldNotNull(FieldAvatarRemoteURL))
+}
+
+// AvatarRemoteURLEqualFold applies the EqualFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLEqualFold(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldEqualFold(FieldAvatarRemoteURL, v))
+}
+
+// AvatarRemoteURLContainsFold applies the ContainsFold predicate on the "avatar_remote_url" field.
+func AvatarRemoteURLContainsFold(v string) predicate.IdentityHolderHistory {
+	return predicate.IdentityHolderHistory(sql.FieldContainsFold(FieldAvatarRemoteURL, v))
 }
 
 // And groups predicates with the AND operator between them.

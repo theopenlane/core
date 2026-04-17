@@ -123,8 +123,6 @@ var (
 	DefaultPersonalOrg bool
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
-	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
-	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultDedicatedDb holds the default value on creation for the "dedicated_db" field.
 	DefaultDedicatedDb bool
 	// DefaultID holds the default value on creation for the "id" field.

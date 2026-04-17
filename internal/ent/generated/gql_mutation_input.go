@@ -5065,6 +5065,8 @@ type CreateDirectoryAccountInput struct {
 	ExternalID           string
 	SecondaryKey         *string
 	CanonicalEmail       *string
+	EmailAliases         []string
+	PhoneNumber          *string
 	DisplayName          *string
 	AvatarRemoteURL      *string
 	AvatarUpdatedAt      *time.Time
@@ -5124,6 +5126,12 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -5252,6 +5260,11 @@ type UpdateDirectoryAccountInput struct {
 	SecondaryKey               *string
 	ClearCanonicalEmail        bool
 	CanonicalEmail             *string
+	ClearEmailAliases          bool
+	EmailAliases               []string
+	AppendEmailAliases         []string
+	ClearPhoneNumber           bool
+	PhoneNumber                *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearAvatarRemoteURL       bool
@@ -5359,6 +5372,21 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
+	}
+	if i.ClearPhoneNumber {
+		m.ClearPhoneNumber()
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -8747,6 +8775,7 @@ type CreateEvidenceInput struct {
 	IsAutomated              *bool
 	URL                      *string
 	Status                   *enums.EvidenceStatus
+	ReviewFrequency          *enums.Frequency
 	OwnerID                  *string
 	EnvironmentID            *string
 	ScopeID                  *string
@@ -8804,6 +8833,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8884,6 +8916,8 @@ type UpdateEvidenceInput struct {
 	URL                            *string
 	ClearStatus                    bool
 	Status                         *enums.EvidenceStatus
+	ClearReviewFrequency           bool
+	ReviewFrequency                *enums.Frequency
 	ClearEnvironment               bool
 	EnvironmentID                  *string
 	ClearScope                     bool
@@ -9005,6 +9039,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearReviewFrequency {
+		m.ClearReviewFrequency()
+	}
+	if v := i.ReviewFrequency; v != nil {
+		m.SetReviewFrequency(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -12209,6 +12249,7 @@ type CreateIdentityHolderInput struct {
 	FullName               string
 	Email                  string
 	AlternateEmail         *string
+	EmailAliases           []string
 	PhoneNumber            *string
 	IsOpenlaneUser         *bool
 	IdentityHolderType     *enums.IdentityHolderType
@@ -12223,6 +12264,7 @@ type CreateIdentityHolderInput struct {
 	ExternalUserID         *string
 	ExternalReferenceID    *string
 	Metadata               map[string]interface{}
+	AvatarRemoteURL        *string
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -12273,6 +12315,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
 	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
 	if v := i.PhoneNumber; v != nil {
 		m.SetPhoneNumber(*v)
 	}
@@ -12314,6 +12359,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -12418,6 +12466,9 @@ type UpdateIdentityHolderInput struct {
 	Email                       *string
 	ClearAlternateEmail         bool
 	AlternateEmail              *string
+	ClearEmailAliases           bool
+	EmailAliases                []string
+	AppendEmailAliases          []string
 	ClearPhoneNumber            bool
 	PhoneNumber                 *string
 	ClearIsOpenlaneUser         bool
@@ -12443,6 +12494,8 @@ type UpdateIdentityHolderInput struct {
 	ExternalReferenceID         *string
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearAvatarRemoteURL        bool
+	AvatarRemoteURL             *string
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -12561,6 +12614,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.AlternateEmail; v != nil {
 		m.SetAlternateEmail(*v)
 	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
+	}
 	if i.ClearPhoneNumber {
 		m.ClearPhoneNumber()
 	}
@@ -12635,6 +12697,12 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearAvatarRemoteURL {
+		m.ClearAvatarRemoteURL()
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -20900,6 +20968,7 @@ type CreateReviewInput struct {
 	ExternalOwnerID   *string
 	Title             string
 	State             *string
+	Status            *enums.ReviewStatus
 	Category          *string
 	Classification    *string
 	Summary           *string
@@ -20963,6 +21032,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	m.SetTitle(i.Title)
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -21097,6 +21169,8 @@ type UpdateReviewInput struct {
 	Title                   *string
 	ClearState              bool
 	State                   *string
+	ClearStatus             bool
+	Status                  *enums.ReviewStatus
 	ClearCategory           bool
 	Category                *string
 	ClearClassification     bool
@@ -21240,6 +21314,12 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.State; v != nil {
 		m.SetState(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -21539,6 +21619,7 @@ type CreateRiskInput struct {
 	ReviewRequired    *bool
 	LastReviewedAt    *models.DateTime
 	ReviewFrequency   *enums.Frequency
+	DueDate           *models.DateTime
 	NextReviewDueAt   *models.DateTime
 	ResidualScore     *int
 	RiskDecision      *enums.RiskDecision
@@ -21640,6 +21721,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if v := i.NextReviewDueAt; v != nil {
 		m.SetNextReviewDueAt(*v)
@@ -21786,6 +21870,8 @@ type UpdateRiskInput struct {
 	LastReviewedAt          *models.DateTime
 	ClearReviewFrequency    bool
 	ReviewFrequency         *enums.Frequency
+	ClearDueDate            bool
+	DueDate                 *models.DateTime
 	ClearNextReviewDueAt    bool
 	NextReviewDueAt         *models.DateTime
 	ClearResidualScore      bool
@@ -22014,6 +22100,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearDueDate {
+		m.ClearDueDate()
+	}
+	if v := i.DueDate; v != nil {
+		m.SetDueDate(*v)
 	}
 	if i.ClearNextReviewDueAt {
 		m.ClearNextReviewDueAt()

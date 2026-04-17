@@ -139,6 +139,14 @@ func (Evidence) Fields() []ent.Field {
 			).
 			Comment("the status of the evidence, ready, approved, needs renewal, missing artifact, rejected").
 			Optional(),
+		field.Enum("review_frequency").
+			Comment("the cadence for reviewing the evidence").
+			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
+			Optional().
+			Annotations(
+				entgql.OrderField("REVIEW_FREQUENCY"),
+			),
 	}
 }
 
@@ -146,7 +154,7 @@ func (Evidence) Fields() []ent.Field {
 func (Evidence) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -255,6 +263,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 // Hooks of the Evidence
 func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookEvidenceReviewDate(),
 		hooks.HookEvidenceFiles(),
 		hooks.HookSystemOwnedControls(),
 	}

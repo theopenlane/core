@@ -32,3 +32,17 @@
 		}
 	}
 {{ end }}
+
+{{ define "config/fields/integrationsruntime" -}}
+	// IntegrationsRuntime configures the integrations runtime.
+	IntegrationsRuntime any
+{{ end }}
+
+{{ define "config/options/integrationsruntime" }}
+	// IntegrationsRuntime configures the integrations runtime.
+	func IntegrationsRuntime(v any) Option {
+		return func(c *config) {
+			c.IntegrationsRuntime = v
+		}
+	}
+{{ end }}

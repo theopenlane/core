@@ -9,13 +9,13 @@ var (
 	// RiskDecisionAvoid indicates the avoid.
 	RiskDecisionAvoid RiskDecision = "AVOID"
 	// RiskDecisionMitigate indicates the  mitigate.
-	RiskDecisionMitigate RiskDecision = " MITIGATE"
+	RiskDecisionMitigate RiskDecision = "MITIGATE"
 	// RiskDecisionAccept indicates the  accept.
-	RiskDecisionAccept RiskDecision = " ACCEPT"
+	RiskDecisionAccept RiskDecision = "ACCEPT"
 	// RiskDecisionTransfer indicates the  transfer.
-	RiskDecisionTransfer RiskDecision = " TRANSFER"
+	RiskDecisionTransfer RiskDecision = "TRANSFER"
 	// RiskDecisionNone indicates the no decision. has been made
-	RiskDecisionNone RiskDecision = " NONE"
+	RiskDecisionNone RiskDecision = "NONE"
 	// RiskDecisionInvalid is used when an unknown or unsupported value is provided.
 	RiskDecisionInvalid RiskDecision = "RISKDECISION_INVALID"
 )

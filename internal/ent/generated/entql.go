@@ -703,6 +703,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldExternalID:          {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
 			directoryaccount.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
 			directoryaccount.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
+			directoryaccount.FieldEmailAliases:        {Type: field.TypeJSON, Column: directoryaccount.FieldEmailAliases},
+			directoryaccount.FieldPhoneNumber:         {Type: field.TypeString, Column: directoryaccount.FieldPhoneNumber},
 			directoryaccount.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
 			directoryaccount.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
 			directoryaccount.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
@@ -1156,6 +1158,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldIsAutomated:            {Type: field.TypeBool, Column: evidence.FieldIsAutomated},
 			evidence.FieldURL:                    {Type: field.TypeString, Column: evidence.FieldURL},
 			evidence.FieldStatus:                 {Type: field.TypeEnum, Column: evidence.FieldStatus},
+			evidence.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidence.FieldReviewFrequency},
 		},
 	}
 	graph.Nodes[27] = &sqlgraph.Node{
@@ -1498,6 +1501,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldFullName:               {Type: field.TypeString, Column: identityholder.FieldFullName},
 			identityholder.FieldEmail:                  {Type: field.TypeString, Column: identityholder.FieldEmail},
 			identityholder.FieldAlternateEmail:         {Type: field.TypeString, Column: identityholder.FieldAlternateEmail},
+			identityholder.FieldEmailAliases:           {Type: field.TypeJSON, Column: identityholder.FieldEmailAliases},
 			identityholder.FieldPhoneNumber:            {Type: field.TypeString, Column: identityholder.FieldPhoneNumber},
 			identityholder.FieldIsOpenlaneUser:         {Type: field.TypeBool, Column: identityholder.FieldIsOpenlaneUser},
 			identityholder.FieldUserID:                 {Type: field.TypeString, Column: identityholder.FieldUserID},
@@ -1514,6 +1518,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldExternalUserID:         {Type: field.TypeString, Column: identityholder.FieldExternalUserID},
 			identityholder.FieldExternalReferenceID:    {Type: field.TypeString, Column: identityholder.FieldExternalReferenceID},
 			identityholder.FieldMetadata:               {Type: field.TypeJSON, Column: identityholder.FieldMetadata},
+			identityholder.FieldAvatarRemoteURL:        {Type: field.TypeString, Column: identityholder.FieldAvatarRemoteURL},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -2648,6 +2653,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			review.FieldExternalOwnerID:  {Type: field.TypeString, Column: review.FieldExternalOwnerID},
 			review.FieldTitle:            {Type: field.TypeString, Column: review.FieldTitle},
 			review.FieldState:            {Type: field.TypeString, Column: review.FieldState},
+			review.FieldStatus:           {Type: field.TypeEnum, Column: review.FieldStatus},
 			review.FieldCategory:         {Type: field.TypeString, Column: review.FieldCategory},
 			review.FieldClassification:   {Type: field.TypeString, Column: review.FieldClassification},
 			review.FieldSummary:          {Type: field.TypeString, Column: review.FieldSummary},
@@ -2713,6 +2719,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldReviewRequired:    {Type: field.TypeBool, Column: risk.FieldReviewRequired},
 			risk.FieldLastReviewedAt:    {Type: field.TypeTime, Column: risk.FieldLastReviewedAt},
 			risk.FieldReviewFrequency:   {Type: field.TypeEnum, Column: risk.FieldReviewFrequency},
+			risk.FieldDueDate:           {Type: field.TypeTime, Column: risk.FieldDueDate},
 			risk.FieldNextReviewDueAt:   {Type: field.TypeTime, Column: risk.FieldNextReviewDueAt},
 			risk.FieldResidualScore:     {Type: field.TypeInt, Column: risk.FieldResidualScore},
 			risk.FieldRiskDecision:      {Type: field.TypeEnum, Column: risk.FieldRiskDecision},
@@ -22362,6 +22369,16 @@ func (f *DirectoryAccountFilter) WhereCanonicalEmail(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldCanonicalEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *DirectoryAccountFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(directoryaccount.FieldEmailAliases))
+}
+
+// WherePhoneNumber applies the entql string predicate on the phone_number field.
+func (f *DirectoryAccountFilter) WherePhoneNumber(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldPhoneNumber))
+}
+
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldDisplayName))
@@ -25993,6 +26010,11 @@ func (f *EvidenceFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldStatus))
 }
 
+// WhereReviewFrequency applies the entql string predicate on the review_frequency field.
+func (f *EvidenceFilter) WhereReviewFrequency(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldReviewFrequency))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *EvidenceFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -29231,6 +29253,11 @@ func (f *IdentityHolderFilter) WhereAlternateEmail(p entql.StringP) {
 	f.Where(p.Field(identityholder.FieldAlternateEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *IdentityHolderFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(identityholder.FieldEmailAliases))
+}
+
 // WherePhoneNumber applies the entql string predicate on the phone_number field.
 func (f *IdentityHolderFilter) WherePhoneNumber(p entql.StringP) {
 	f.Where(p.Field(identityholder.FieldPhoneNumber))
@@ -29309,6 +29336,11 @@ func (f *IdentityHolderFilter) WhereExternalReferenceID(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IdentityHolderFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(identityholder.FieldMetadata))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *IdentityHolderFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(identityholder.FieldAvatarRemoteURL))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -39549,6 +39581,11 @@ func (f *ReviewFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(review.FieldState))
 }
 
+// WhereStatus applies the entql string predicate on the status field.
+func (f *ReviewFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(review.FieldStatus))
+}
+
 // WhereCategory applies the entql string predicate on the category field.
 func (f *ReviewFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(review.FieldCategory))
@@ -40155,6 +40192,11 @@ func (f *RiskFilter) WhereLastReviewedAt(p entql.TimeP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *RiskFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(risk.FieldReviewFrequency))
+}
+
+// WhereDueDate applies the entql time.Time predicate on the due_date field.
+func (f *RiskFilter) WhereDueDate(p entql.TimeP) {
+	f.Where(p.Field(risk.FieldDueDate))
 }
 
 // WhereNextReviewDueAt applies the entql time.Time predicate on the next_review_due_at field.

@@ -371,6 +371,20 @@ func (_c *EvidenceHistoryCreate) SetNillableStatus(v *enums.EvidenceStatus) *Evi
 	return _c
 }
 
+// SetReviewFrequency sets the "review_frequency" field.
+func (_c *EvidenceHistoryCreate) SetReviewFrequency(v enums.Frequency) *EvidenceHistoryCreate {
+	_c.mutation.SetReviewFrequency(v)
+	return _c
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetReviewFrequency(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EvidenceHistoryCreate) SetID(v string) *EvidenceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -469,6 +483,10 @@ func (_c *EvidenceHistoryCreate) defaults() error {
 		v := evidencehistory.DefaultIsAutomated
 		_c.mutation.SetIsAutomated(v)
 	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := evidencehistory.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if evidencehistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized evidencehistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -504,6 +522,11 @@ func (_c *EvidenceHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := evidencehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ReviewFrequency(); ok {
+		if err := evidencehistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.review_frequency": %w`, err)}
 		}
 	}
 	return nil
@@ -649,6 +672,10 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ReviewFrequency(); ok {
+		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
+		_node.ReviewFrequency = value
 	}
 	return _node, _spec
 }

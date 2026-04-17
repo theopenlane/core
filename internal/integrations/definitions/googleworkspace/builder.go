@@ -56,7 +56,9 @@ func Builder(cfg Config) registry.Builder {
 							Scopes: []string{
 								"https://www.googleapis.com/auth/admin.directory.user.readonly",
 								"https://www.googleapis.com/auth/admin.directory.group.readonly",
-								"https://www.googleapis.com/auth/apps.groups.migration",
+								"https://www.googleapis.com/auth/admin.directory.orgunit.readonly",
+								"https://www.googleapis.com/auth/admin.directory.domain.readonly",
+								"https://www.googleapis.com/auth/admin.directory.customer.readonly",
 							},
 							AuthParams: map[string]string{
 								"access_type": "offline",
@@ -83,7 +85,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:            workspaceClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
 					Description:    "Google Workspace Admin SDK client",
-					Build:          Client{}.Build,
+					Build:          Client{cfg: cfg}.Build,
 				},
 			},
 			Operations: []types.OperationRegistration{

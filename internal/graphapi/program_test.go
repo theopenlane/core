@@ -16,6 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
+const errStartDateLaterThanEndDate = "mutation's start date cannot be later than end date"
+
 func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
 	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(testUser1.UserCtx, t)
@@ -348,6 +350,34 @@ func TestMutationCreateProgram(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "happy path, date valid",
+			request: testclient.CreateProgramInput{
+				Name:      "Valid Date Program",
+				StartDate: lo.ToPtr(startDate),
+				EndDate:   lo.ToPtr(endDate),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "only start date",
+			request: testclient.CreateProgramInput{
+				Name:      "Start Date Only",
+				StartDate: lo.ToPtr(startDate),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "only end date",
+			request: testclient.CreateProgramInput{
+				Name:    "End Date Only",
+				EndDate: lo.ToPtr(endDate),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateProgramInput{
 				Name: "mitb program",
@@ -383,6 +413,17 @@ func TestMutationCreateProgram(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "validator failed for field",
+		},
+		{
+			name: "invalid date",
+			request: testclient.CreateProgramInput{
+				Name:      "Invalid Date Program",
+				StartDate: lo.ToPtr(time.Now().AddDate(0, 10, 22)),
+				EndDate:   lo.ToPtr(time.Now().AddDate(0, 9, 17)),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 	}
 
@@ -543,6 +584,13 @@ func TestMutationUpdateProgram(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	archivedProgram := (&ProgramBuilder{client: suite.client, Status: enums.ProgramStatusArchived}).MustNew(testUser1.UserCtx, t)
+
+	// data to test the date validation logic in the update mutation, we want to ensure that the validation is working and that it is possible to update the dates successfully when they are valid
+	baseStart := time.Now().AddDate(0, 0, 5)
+	baseEnd := time.Now().AddDate(0, 0, 10)
+
+	program.StartDate = baseStart
+	program.EndDate = baseEnd
 
 	programMembers, err := suite.client.api.GetProgramMembersByProgramID(testUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
 		ProgramID: &program.ID,
@@ -719,6 +767,69 @@ func TestMutationUpdateProgram(t *testing.T) {
 			client:            suite.client.api,
 			ctx:               testUser1.UserCtx,
 			expectedEdgeCount: 1,
+		},
+		{
+			name:      "happy path, valid start and end date update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(baseStart.AddDate(0, 0, -1)),
+				EndDate:   lo.ToPtr(baseEnd.AddDate(0, 0, 1)),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path, valid start date update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 2)),
+				EndDate:   lo.ToPtr(baseEnd),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path, valid end date update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(baseStart),
+				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "invalid start and end date update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(time.Now().AddDate(2, 2, 5)),
+				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: errStartDateLaterThanEndDate,
+		},
+		{
+			name:      "invalid start update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 15)),
+				EndDate:   lo.ToPtr(baseEnd),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: errStartDateLaterThanEndDate,
+		},
+		{
+			name:      "invalid end update",
+			programID: program.ID,
+			request: testclient.UpdateProgramInput{
+				StartDate: lo.ToPtr(baseStart),
+				EndDate:   lo.ToPtr(time.Now().AddDate(0, 0, -15)),
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
 			name:      "update edge - procedure - not allowed to access procedure",

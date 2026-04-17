@@ -239,6 +239,14 @@ func (_u *UserHistoryUpdate) SetAvatarUpdatedAt(v time.Time) *UserHistoryUpdate 
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *UserHistoryUpdate) SetNillableAvatarUpdatedAt(v *time.Time) *UserHistoryUpdate {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *UserHistoryUpdate) ClearAvatarUpdatedAt() *UserHistoryUpdate {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -494,13 +502,6 @@ func (_u *UserHistoryUpdate) defaults() error {
 		}
 		v := userhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := userhistory.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if userhistory.UpdateDefaultLastSeen == nil {
@@ -921,6 +922,14 @@ func (_u *UserHistoryUpdateOne) SetAvatarUpdatedAt(v time.Time) *UserHistoryUpda
 	return _u
 }
 
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *UserHistoryUpdateOne) SetNillableAvatarUpdatedAt(v *time.Time) *UserHistoryUpdateOne {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
+	return _u
+}
+
 // ClearAvatarUpdatedAt clears the value of the "avatar_updated_at" field.
 func (_u *UserHistoryUpdateOne) ClearAvatarUpdatedAt() *UserHistoryUpdateOne {
 	_u.mutation.ClearAvatarUpdatedAt()
@@ -1189,13 +1198,6 @@ func (_u *UserHistoryUpdateOne) defaults() error {
 		}
 		v := userhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
-	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if userhistory.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized userhistory.UpdateDefaultAvatarUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := userhistory.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
 	}
 	if _, ok := _u.mutation.LastSeen(); !ok && !_u.mutation.LastSeenCleared() {
 		if userhistory.UpdateDefaultLastSeen == nil {

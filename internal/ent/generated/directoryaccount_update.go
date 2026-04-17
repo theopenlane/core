@@ -291,6 +291,44 @@ func (_u *DirectoryAccountUpdate) ClearCanonicalEmail() *DirectoryAccountUpdate 
 	return _u
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *DirectoryAccountUpdate) SetEmailAliases(v []string) *DirectoryAccountUpdate {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *DirectoryAccountUpdate) AppendEmailAliases(v []string) *DirectoryAccountUpdate {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *DirectoryAccountUpdate) ClearEmailAliases() *DirectoryAccountUpdate {
+	_u.mutation.ClearEmailAliases()
+	return _u
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (_u *DirectoryAccountUpdate) SetPhoneNumber(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillablePhoneNumber(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
+	}
+	return _u
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (_u *DirectoryAccountUpdate) ClearPhoneNumber() *DirectoryAccountUpdate {
+	_u.mutation.ClearPhoneNumber()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *DirectoryAccountUpdate) SetDisplayName(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -354,6 +392,14 @@ func (_u *DirectoryAccountUpdate) ClearAvatarLocalFileID() *DirectoryAccountUpda
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (_u *DirectoryAccountUpdate) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountUpdate {
 	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableAvatarUpdatedAt(v *time.Time) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
 	return _u
 }
 
@@ -980,13 +1026,6 @@ func (_u *DirectoryAccountUpdate) defaults() error {
 		v := directoryaccount.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if directoryaccount.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized directoryaccount.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := directoryaccount.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
-	}
 	return nil
 }
 
@@ -995,6 +1034,16 @@ func (_u *DirectoryAccountUpdate) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := directoryaccount.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.EmailAliases(); ok {
+		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PhoneNumber(); ok {
+		if err := directoryaccount.PhoneNumberValidator(v); err != nil {
+			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.phone_number": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
@@ -1102,6 +1151,23 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.CanonicalEmailCleared() {
 		_spec.ClearField(directoryaccount.FieldCanonicalEmail, field.TypeString)
+	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(directoryaccount.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, directoryaccount.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(directoryaccount.FieldEmailAliases, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PhoneNumber(); ok {
+		_spec.SetField(directoryaccount.FieldPhoneNumber, field.TypeString, value)
+	}
+	if _u.mutation.PhoneNumberCleared() {
+		_spec.ClearField(directoryaccount.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccount.FieldDisplayName, field.TypeString, value)
@@ -1871,6 +1937,44 @@ func (_u *DirectoryAccountUpdateOne) ClearCanonicalEmail() *DirectoryAccountUpda
 	return _u
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_u *DirectoryAccountUpdateOne) SetEmailAliases(v []string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetEmailAliases(v)
+	return _u
+}
+
+// AppendEmailAliases appends value to the "email_aliases" field.
+func (_u *DirectoryAccountUpdateOne) AppendEmailAliases(v []string) *DirectoryAccountUpdateOne {
+	_u.mutation.AppendEmailAliases(v)
+	return _u
+}
+
+// ClearEmailAliases clears the value of the "email_aliases" field.
+func (_u *DirectoryAccountUpdateOne) ClearEmailAliases() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearEmailAliases()
+	return _u
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (_u *DirectoryAccountUpdateOne) SetPhoneNumber(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetPhoneNumber(v)
+	return _u
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillablePhoneNumber(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetPhoneNumber(*v)
+	}
+	return _u
+}
+
+// ClearPhoneNumber clears the value of the "phone_number" field.
+func (_u *DirectoryAccountUpdateOne) ClearPhoneNumber() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearPhoneNumber()
+	return _u
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_u *DirectoryAccountUpdateOne) SetDisplayName(v string) *DirectoryAccountUpdateOne {
 	_u.mutation.SetDisplayName(v)
@@ -1934,6 +2038,14 @@ func (_u *DirectoryAccountUpdateOne) ClearAvatarLocalFileID() *DirectoryAccountU
 // SetAvatarUpdatedAt sets the "avatar_updated_at" field.
 func (_u *DirectoryAccountUpdateOne) SetAvatarUpdatedAt(v time.Time) *DirectoryAccountUpdateOne {
 	_u.mutation.SetAvatarUpdatedAt(v)
+	return _u
+}
+
+// SetNillableAvatarUpdatedAt sets the "avatar_updated_at" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableAvatarUpdatedAt(v *time.Time) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetAvatarUpdatedAt(*v)
+	}
 	return _u
 }
 
@@ -2573,13 +2685,6 @@ func (_u *DirectoryAccountUpdateOne) defaults() error {
 		v := directoryaccount.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := _u.mutation.AvatarUpdatedAt(); !ok && !_u.mutation.AvatarUpdatedAtCleared() {
-		if directoryaccount.UpdateDefaultAvatarUpdatedAt == nil {
-			return fmt.Errorf("generated: uninitialized directoryaccount.UpdateDefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
-		}
-		v := directoryaccount.UpdateDefaultAvatarUpdatedAt()
-		_u.mutation.SetAvatarUpdatedAt(v)
-	}
 	return nil
 }
 
@@ -2588,6 +2693,16 @@ func (_u *DirectoryAccountUpdateOne) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := directoryaccount.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.EmailAliases(); ok {
+		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PhoneNumber(); ok {
+		if err := directoryaccount.PhoneNumberValidator(v); err != nil {
+			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.phone_number": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.AvatarRemoteURL(); ok {
@@ -2712,6 +2827,23 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.CanonicalEmailCleared() {
 		_spec.ClearField(directoryaccount.FieldCanonicalEmail, field.TypeString)
+	}
+	if value, ok := _u.mutation.EmailAliases(); ok {
+		_spec.SetField(directoryaccount.FieldEmailAliases, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEmailAliases(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, directoryaccount.FieldEmailAliases, value)
+		})
+	}
+	if _u.mutation.EmailAliasesCleared() {
+		_spec.ClearField(directoryaccount.FieldEmailAliases, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.PhoneNumber(); ok {
+		_spec.SetField(directoryaccount.FieldPhoneNumber, field.TypeString, value)
+	}
+	if _u.mutation.PhoneNumberCleared() {
+		_spec.ClearField(directoryaccount.FieldPhoneNumber, field.TypeString)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccount.FieldDisplayName, field.TypeString, value)

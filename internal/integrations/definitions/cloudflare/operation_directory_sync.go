@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // cloudflareMemberPayload is the normalized payload for a Cloudflare account member
@@ -59,6 +60,8 @@ func (DirectorySync) Run(ctx context.Context, client *cf.Client, cfg UserInput) 
 
 	for iter.Next() {
 		if err := ctx.Err(); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare_directory_sync: error during cloudflare account members iteration")
+
 			return nil, err
 		}
 
@@ -78,6 +81,8 @@ func (DirectorySync) Run(ctx context.Context, client *cf.Client, cfg UserInput) 
 
 		envelope, err := providerkit.MarshalEnvelope(resource, payload, ErrPayloadEncode)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare_directory_sync: error during cloudflare account members iteration")
+
 			return nil, err
 		}
 
@@ -85,6 +90,8 @@ func (DirectorySync) Run(ctx context.Context, client *cf.Client, cfg UserInput) 
 	}
 
 	if err := iter.Err(); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare_directory_sync: error fetching Cloudflare account members")
+
 		return nil, ErrMembersFetchFailed
 	}
 

@@ -1201,6 +1201,7 @@ type ComplexityRoot struct {
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		DisplayName         func(childComplexity int) int
+		EmailAliases        func(childComplexity int) int
 		Environment         func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
 		EnvironmentName     func(childComplexity int) int
@@ -1226,6 +1227,7 @@ type ComplexityRoot struct {
 		OrganizationUnit    func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		PhoneNumber         func(childComplexity int) int
 		Platform            func(childComplexity int) int
 		PlatformID          func(childComplexity int) int
 		PrimarySource       func(childComplexity int) int
@@ -1994,6 +1996,7 @@ type ComplexityRoot struct {
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
+		ReviewFrequency         func(childComplexity int) int
 		Scans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Scope                   func(childComplexity int) int
 		ScopeID                 func(childComplexity int) int
@@ -2636,6 +2639,7 @@ type ComplexityRoot struct {
 		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		Assessments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AvatarRemoteURL         func(childComplexity int) int
 		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -2646,6 +2650,7 @@ type ComplexityRoot struct {
 		DisplayID               func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email                   func(childComplexity int) int
+		EmailAliases            func(childComplexity int) int
 		Employer                func(childComplexity int) int
 		EmployerEntityID        func(childComplexity int) int
 		EndDate                 func(childComplexity int) int
@@ -5336,6 +5341,7 @@ type ComplexityRoot struct {
 		ScopeName        func(childComplexity int) int
 		Source           func(childComplexity int) int
 		State            func(childComplexity int) int
+		Status           func(childComplexity int) int
 		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
 		Summary          func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
@@ -5401,6 +5407,7 @@ type ComplexityRoot struct {
 		DetailsJSON       func(childComplexity int) int
 		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID         func(childComplexity int) int
+		DueDate           func(childComplexity int) int
 		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment       func(childComplexity int) int
@@ -13373,6 +13380,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccount.DisplayName(childComplexity), true
 
+	case "DirectoryAccount.emailAliases":
+		if e.ComplexityRoot.DirectoryAccount.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.EmailAliases(childComplexity), true
+
 	case "DirectoryAccount.environment":
 		if e.ComplexityRoot.DirectoryAccount.Environment == nil {
 			break
@@ -13562,6 +13576,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.OwnerID(childComplexity), true
+
+	case "DirectoryAccount.phoneNumber":
+		if e.ComplexityRoot.DirectoryAccount.PhoneNumber == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.PhoneNumber(childComplexity), true
 
 	case "DirectoryAccount.platform":
 		if e.ComplexityRoot.DirectoryAccount.Platform == nil {
@@ -17400,6 +17421,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Evidence.RenewalDate(childComplexity), true
 
+	case "Evidence.reviewFrequency":
+		if e.ComplexityRoot.Evidence.ReviewFrequency == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.ReviewFrequency(childComplexity), true
+
 	case "Evidence.scans":
 		if e.ComplexityRoot.Evidence.Scans == nil {
 			break
@@ -20743,6 +20771,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IdentityHolder.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
 
+	case "IdentityHolder.avatarRemoteURL":
+		if e.ComplexityRoot.IdentityHolder.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.AvatarRemoteURL(childComplexity), true
+
 	case "IdentityHolder.blockedGroups":
 		if e.ComplexityRoot.IdentityHolder.BlockedGroups == nil {
 			break
@@ -20837,6 +20872,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Email(childComplexity), true
+
+	case "IdentityHolder.emailAliases":
+		if e.ComplexityRoot.IdentityHolder.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.EmailAliases(childComplexity), true
 
 	case "IdentityHolder.employer":
 		if e.ComplexityRoot.IdentityHolder.Employer == nil {
@@ -41011,6 +41053,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Review.State(childComplexity), true
 
+	case "Review.status":
+		if e.ComplexityRoot.Review.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Review.Status(childComplexity), true
+
 	case "Review.subcontrols":
 		if e.ComplexityRoot.Review.Subcontrols == nil {
 			break
@@ -41326,6 +41375,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.DisplayID(childComplexity), true
+
+	case "Risk.dueDate":
+		if e.ComplexityRoot.Risk.DueDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.DueDate(childComplexity), true
 
 	case "Risk.editors":
 		if e.ComplexityRoot.Risk.Editors == nil {
@@ -57235,6 +57291,7 @@ enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/commo
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -64078,6 +64135,7 @@ enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -67197,6 +67255,14 @@ input CreateDirectoryAccountInput {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -68050,6 +68116,10 @@ input CreateEvidenceInput {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -68670,6 +68740,10 @@ input CreateIdentityHolderInput {
   """
   alternateEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -68725,6 +68799,10 @@ input CreateIdentityHolderInput {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -70286,6 +70364,10 @@ input CreateReviewInput {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -70458,6 +70540,10 @@ input CreateRiskInput {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -73576,6 +73662,14 @@ type DirectoryAccount implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -74255,6 +74349,24 @@ input DirectoryAccountWhereInput {
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
   """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
+  """
   display_name field predicates
   """
   displayName: String
@@ -74631,6 +74743,10 @@ input DirectoryAccountWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type DirectoryGroup implements Node {
   id: ID!
@@ -81717,6 +81833,10 @@ type Evidence implements Node {
   the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
   """
   status: EvidenceEvidenceStatus
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -82107,6 +82227,16 @@ enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/
   REJECTED
 }
 """
+EvidenceFrequency is enum for the field review_frequency
+"""
+enum EvidenceFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
+  YEARLY
+  QUARTERLY
+  BIANNUALLY
+  MONTHLY
+  NONE
+}
+"""
 Ordering options for Evidence connections
 """
 input EvidenceOrder {
@@ -82129,6 +82259,7 @@ enum EvidenceOrderField {
   creation_date
   renewal_date
   STATUS
+  REVIEW_FREQUENCY
 }
 """
 EvidenceWhereInput is used for filtering Evidence objects.
@@ -82472,6 +82603,15 @@ input EvidenceWhereInput {
   statusNotIn: [EvidenceEvidenceStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  review_frequency field predicates
+  """
+  reviewFrequency: EvidenceFrequency
+  reviewFrequencyNEQ: EvidenceFrequency
+  reviewFrequencyIn: [EvidenceFrequency!]
+  reviewFrequencyNotIn: [EvidenceFrequency!]
+  reviewFrequencyIsNil: Boolean
+  reviewFrequencyNotNil: Boolean
   """
   owner edge predicates
   """
@@ -89012,7 +89152,11 @@ type IdentityHolder implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
+  """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
   """
   phone number for the identity holder
   """
@@ -89077,6 +89221,10 @@ type IdentityHolder implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   owner: Organization
   blockedGroups(
     """
@@ -90277,6 +90425,24 @@ input IdentityHolderWhereInput {
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
   """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -90410,6 +90576,10 @@ input IdentityHolderWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type Integration implements Node {
   id: ID!
@@ -92321,6 +92491,7 @@ enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/c
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -106406,6 +106577,7 @@ enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common
   NEEDS_APPROVAL
   APPROVED
   ARCHIVED
+  PENDING
 }
 """
 An edge in a connection.
@@ -112747,6 +112919,10 @@ type Review implements Node {
   """
   state: String
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  """
   category for the review record
   """
   category: String
@@ -113423,6 +113599,16 @@ enum ReviewOrderField {
   state
 }
 """
+ReviewReviewStatus is enum for the field status
+"""
+enum ReviewReviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReviewStatus") {
+  OPEN
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
+  WONT_DO
+}
+"""
 ReviewWhereInput is used for filtering Review objects.
 Input was generated by ent.
 """
@@ -113708,6 +113894,15 @@ input ReviewWhereInput {
   stateNotNil: Boolean
   stateEqualFold: String
   stateContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReviewReviewStatus
+  statusNEQ: ReviewReviewStatus
+  statusIn: [ReviewReviewStatus!]
+  statusNotIn: [ReviewReviewStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
   """
   category field predicates
   """
@@ -114144,6 +114339,10 @@ type Risk implements Node {
   """
   lastReviewedAt: DateTime
   reviewFrequency: RiskFrequency
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
   """
   the time when the next review is due for the risk
   """
@@ -114799,6 +114998,7 @@ enum RiskOrderField {
   review_required
   last_reviewed_at
   review_frequency
+  due_date
   next_review_due_at
   residual_score
   risk_decision
@@ -115360,6 +115560,19 @@ input RiskWhereInput {
   reviewFrequencyNotIn: [RiskFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  due_date field predicates
+  """
+  dueDate: DateTime
+  dueDateNEQ: DateTime
+  dueDateIn: [DateTime!]
+  dueDateNotIn: [DateTime!]
+  dueDateGT: DateTime
+  dueDateGTE: DateTime
+  dueDateLT: DateTime
+  dueDateLTE: DateTime
+  dueDateIsNil: Boolean
+  dueDateNotNil: Boolean
   """
   next_review_due_at field predicates
   """
@@ -129023,6 +129236,17 @@ input UpdateDirectoryAccountInput {
   canonicalEmail: String
   clearCanonicalEmail: Boolean
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  clearPhoneNumber: Boolean
+  """
   provider supplied display name
   """
   displayName: String
@@ -130147,6 +130371,11 @@ input UpdateEvidenceInput {
   """
   status: EvidenceEvidenceStatus
   clearStatus: Boolean
+  """
+  the cadence for reviewing the evidence
+  """
+  reviewFrequency: EvidenceFrequency
+  clearReviewFrequency: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -131060,6 +131289,12 @@ input UpdateIdentityHolderInput {
   alternateEmail: String
   clearAlternateEmail: Boolean
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
+  """
   phone number for the identity holder
   """
   phoneNumber: String
@@ -131126,6 +131361,11 @@ input UpdateIdentityHolderInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
+  clearAvatarRemoteURL: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -133372,6 +133612,11 @@ input UpdateReviewInput {
   state: String
   clearState: Boolean
   """
+  status of the review
+  """
+  status: ReviewReviewStatus
+  clearStatus: Boolean
+  """
   category for the review record
   """
   category: String
@@ -133622,6 +133867,11 @@ input UpdateRiskInput {
   clearLastReviewedAt: Boolean
   reviewFrequency: RiskFrequency
   clearReviewFrequency: Boolean
+  """
+  the time when the risk is due to be resolved by, based on the sla config but can be manually updated
+  """
+  dueDate: DateTime
+  clearDueDate: Boolean
   """
   the time when the next review is due for the risk
   """

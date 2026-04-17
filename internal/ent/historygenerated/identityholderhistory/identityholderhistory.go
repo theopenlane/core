@@ -66,6 +66,8 @@ const (
 	FieldEmail = "email"
 	// FieldAlternateEmail holds the string denoting the alternate_email field in the database.
 	FieldAlternateEmail = "alternate_email"
+	// FieldEmailAliases holds the string denoting the email_aliases field in the database.
+	FieldEmailAliases = "email_aliases"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
 	// FieldIsOpenlaneUser holds the string denoting the is_openlane_user field in the database.
@@ -98,6 +100,8 @@ const (
 	FieldExternalReferenceID = "external_reference_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
+	FieldAvatarRemoteURL = "avatar_remote_url"
 	// Table holds the table name of the identityholderhistory in the database.
 	Table = "identity_holder_history"
 )
@@ -128,6 +132,7 @@ var Columns = []string{
 	FieldFullName,
 	FieldEmail,
 	FieldAlternateEmail,
+	FieldEmailAliases,
 	FieldPhoneNumber,
 	FieldIsOpenlaneUser,
 	FieldUserID,
@@ -144,6 +149,7 @@ var Columns = []string{
 	FieldExternalUserID,
 	FieldExternalReferenceID,
 	FieldMetadata,
+	FieldAvatarRemoteURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -177,6 +183,8 @@ var (
 	DefaultTags []string
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
+	// DefaultEmailAliases holds the default value on creation for the "email_aliases" field.
+	DefaultEmailAliases []string
 	// DefaultIsOpenlaneUser holds the default value on creation for the "is_openlane_user" field.
 	DefaultIsOpenlaneUser bool
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
@@ -410,6 +418,11 @@ func ByExternalUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalReferenceID orders the results by the external_reference_id field.
 func ByExternalReferenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalReferenceID, opts...).ToFunc()
+}
+
+// ByAvatarRemoteURL orders the results by the avatar_remote_url field.
+func ByAvatarRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAvatarRemoteURL, opts...).ToFunc()
 }
 
 var (

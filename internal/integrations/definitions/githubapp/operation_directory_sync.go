@@ -9,10 +9,21 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// orgMemberNode is a single organization member record returned by the GitHub GraphQL API
-type orgMemberNode struct {
+// samlIdentity holds resolved SAML identity data for one organization member
+type samlIdentity struct {
+	// NameID is the SAML nameId, typically the user's SSO email
+	NameID string
+	// GivenName is the user's first name from the SAML assertion
+	GivenName string
+	// FamilyName is the user's last name from the SAML assertion
+	FamilyName string
+}
+
+// orgMemberNodeGQL is a single organization member record returned by the GitHub GraphQL API
+type orgMemberNodeGQL struct {
 	// DatabaseID is the numeric GitHub user identifier
 	DatabaseID int `graphql:"databaseId"`
 	// Login is the GitHub username
@@ -23,8 +34,22 @@ type orgMemberNode struct {
 	Email string
 	// AvatarURL is the user's avatar URL
 	AvatarURL string `graphql:"avatarUrl"`
-	// Org is the organization login populated after query
-	Org string `graphql:"-"`
+	// OrganizationVerifiedDomainEmails is the list of emails matching the org's verified domains
+	OrganizationVerifiedDomainEmails []string `graphql:"organizationVerifiedDomainEmails(login: $login)"`
+}
+
+// orgMemberNode combines the github response with details that are populated after the query
+type orgMemberNode struct {
+	orgMemberNodeGQL
+
+	// Org is the organization login, populated after query
+	Org string
+	// CanonicalEmail is the best-resolved email, populated after query
+	CanonicalEmail string
+	// GivenName is the user's first name from SAML identity when available
+	GivenName string
+	// FamilyName is the user's last name from SAML identity when available
+	FamilyName string
 }
 
 // orgNode holds the login of a GitHub organization accessible to the installation
@@ -47,30 +72,49 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("githubapp_directorysync: failed to discover organizations")
 		return nil, err
 	}
 
 	envelopes := make([]types.MappingEnvelope, 0)
 
 	for _, org := range orgs {
+		samlMap, err := queryExternalIdentities(ctx, client, org.Login)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Str("org", org.Login).Msg("githubapp_directorysync: SAML identity query failed, continuing without SSO data")
+			samlMap = nil
+		}
+
 		members, err := queryOrganizationMembers(ctx, client, org.Login)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("org", org.Login).Msg("githubapp_directorysync: failed to query members")
 			return nil, err
 		}
 
-		for _, member := range members {
-			member.Org = org.Login
+		orgMembers := make([]orgMemberNode, len(members))
+		for i, m := range members {
+			orgMembers[i] = orgMemberNode{
+				orgMemberNodeGQL: m,
+			}
 
-			resource := fmt.Sprintf("%s/%s", org.Login, member.Login)
+			orgMembers[i].Org = org.Login
+			resolveCanonicalEmail(&orgMembers[i], samlMap)
 
-			envelope, err := providerkit.MarshalEnvelope(resource, member, ErrIngestPayloadEncode)
+			resource := fmt.Sprintf("%s/%s", org.Login, orgMembers[i].Login)
+
+			envelope, err := providerkit.MarshalEnvelope(resource, orgMembers[i], ErrIngestPayloadEncode)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("member", orgMembers[i].Login).Msg("githubapp_directorysync: failed to marshal member into ingest envelope")
 				return nil, err
 			}
 
 			envelopes = append(envelopes, envelope)
 		}
+
+		logx.FromContext(ctx).Info().Str("org", org.Login).Int("member_count", len(orgMembers)).Bool("saml_available", samlMap != nil).Msg("githubapp_directorysync: queried organization members")
 	}
+
+	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(envelopes)).Msg("githubapp_directorysync: collected organization members for directory sync")
 
 	return []types.IngestPayloadSet{
 		{
@@ -80,9 +124,33 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 	}, nil
 }
 
-// queryViewerOrganizations lists organizations accessible to the GitHub App installation
+// resolveCanonicalEmail sets the best email for a member using the priority chain:
+// SAML nameId > organization verified domain email > public profile email
+func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentity) {
+	if samlMap != nil {
+		if saml, ok := samlMap[member.Login]; ok {
+			member.CanonicalEmail = saml.NameID
+			member.GivenName = saml.GivenName
+			member.FamilyName = saml.FamilyName
+		}
+	}
+
+	if member.CanonicalEmail == "" && len(member.OrganizationVerifiedDomainEmails) > 0 {
+		member.CanonicalEmail = member.OrganizationVerifiedDomainEmails[0]
+	}
+
+	if member.CanonicalEmail == "" {
+		member.CanonicalEmail = member.Email
+	}
+}
+
+// queryViewerOrganizations discovers organizations accessible to the GitHub App installation
+// by extracting unique organization owners from the installation's accessible repositories.
+// The viewer.organizations query returns empty for GitHub App bot users because the bot
+// is not an organization member.
 func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgNode, error) {
-	orgs := make([]orgNode, 0)
+	seen := make(map[string]struct{})
+	var orgs []orgNode
 	var after *githubv4.String
 
 	for {
@@ -92,15 +160,20 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 
 		var query struct {
 			Viewer struct {
-				Organizations struct {
-					Nodes    []orgNode
+				Repositories struct {
+					Nodes []struct {
+						Owner struct {
+							Login    string
+							TypeName string `graphql:"__typename"`
+						}
+					}
 					PageInfo pageInfo
-				} `graphql:"organizations(first: $first, after: $after)"`
+				} `graphql:"repositories(first: $first, after: $after)"`
 			}
 		}
 
 		variables := map[string]any{
-			"first": githubv4.Int(defaultPageSize),
+			"first": githubv4.Int(maxPageSize),
 			"after": after,
 		}
 
@@ -108,21 +181,33 @@ func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgN
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
-		orgs = append(orgs, query.Viewer.Organizations.Nodes...)
+		for _, r := range query.Viewer.Repositories.Nodes {
+			if r.Owner.TypeName != "Organization" {
+				continue
+			}
 
-		if !query.Viewer.Organizations.PageInfo.HasNextPage || query.Viewer.Organizations.PageInfo.EndCursor == "" {
+			if _, ok := seen[r.Owner.Login]; ok {
+				continue
+			}
+
+			seen[r.Owner.Login] = struct{}{}
+			orgs = append(orgs, orgNode{Login: r.Owner.Login})
+		}
+
+		if !query.Viewer.Repositories.PageInfo.HasNextPage || query.Viewer.Repositories.PageInfo.EndCursor == "" {
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Viewer.Organizations.PageInfo.EndCursor))
+		after = githubv4.NewString(githubv4.String(query.Viewer.Repositories.PageInfo.EndCursor))
 	}
 
 	return orgs, nil
 }
 
-// queryOrganizationMembers lists members of one GitHub organization
-func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogin string) ([]orgMemberNode, error) {
-	members := make([]orgMemberNode, 0)
+// queryExternalIdentities queries SAML external identities for an organization.
+// Returns nil, nil when the organization has no SAML identity provider configured.
+func queryExternalIdentities(ctx context.Context, client GraphQLClient, orgLogin string) (map[string]samlIdentity, error) {
+	identities := make(map[string]samlIdentity)
 	var after *githubv4.String
 
 	for {
@@ -132,10 +217,21 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 
 		var query struct {
 			Organization struct {
-				MembersWithRole struct {
-					Nodes    []orgMemberNode
-					PageInfo pageInfo
-				} `graphql:"membersWithRole(first: $first, after: $after)"`
+				SamlIdentityProvider *struct {
+					ExternalIdentities struct {
+						Nodes []struct {
+							SamlIdentity *struct {
+								NameID     string `graphql:"nameId"`
+								GivenName  string
+								FamilyName string
+							}
+							User *struct {
+								Login string
+							}
+						}
+						PageInfo pageInfo
+					} `graphql:"externalIdentities(first: $first, after: $after)"`
+				}
 			} `graphql:"organization(login: $login)"`
 		}
 
@@ -149,13 +245,74 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
-		members = append(members, query.Organization.MembersWithRole.Nodes...)
+		if query.Organization.SamlIdentityProvider == nil {
+			return nil, nil
+		}
 
-		if !query.Organization.MembersWithRole.PageInfo.HasNextPage || query.Organization.MembersWithRole.PageInfo.EndCursor == "" {
+		for _, node := range query.Organization.SamlIdentityProvider.ExternalIdentities.Nodes {
+			if node.User == nil || node.SamlIdentity == nil {
+				continue
+			}
+
+			identities[node.User.Login] = samlIdentity{
+				NameID:     node.SamlIdentity.NameID,
+				GivenName:  node.SamlIdentity.GivenName,
+				FamilyName: node.SamlIdentity.FamilyName,
+			}
+		}
+
+		pi := query.Organization.SamlIdentityProvider.ExternalIdentities.PageInfo
+		if !pi.HasNextPage || pi.EndCursor == "" {
 			break
 		}
 
-		after = githubv4.NewString(githubv4.String(query.Organization.MembersWithRole.PageInfo.EndCursor))
+		after = githubv4.NewString(githubv4.String(pi.EndCursor))
+	}
+
+	return identities, nil
+}
+
+// queryOrganizationMembers lists members of one GitHub organization
+func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogin string) ([]orgMemberNodeGQL, error) {
+	members := make([]orgMemberNodeGQL, 0)
+	var after *githubv4.String
+
+	for {
+		if err := ctx.Err(); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("githubapp: error checking context for github member query")
+			return nil, err
+		}
+
+		var query struct {
+			Organization struct {
+				MembersWithRole struct {
+					Nodes    []orgMemberNodeGQL
+					PageInfo pageInfo
+				} `graphql:"membersWithRole(first: $first, after: $after)"`
+			} `graphql:"organization(login: $login)"`
+		}
+
+		variables := map[string]any{
+			"login": githubv4.String(orgLogin),
+			"first": githubv4.Int(defaultPageSize),
+			"after": after,
+		}
+
+		if err := client.Query(ctx, &query, variables); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Interface("org_member_node", members).Interface("variables", variables).Msg("githubapp: error querying github organization members")
+
+			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
+		}
+
+		members = append(members, query.Organization.MembersWithRole.Nodes...)
+
+		if !query.Organization.MembersWithRole.PageInfo.HasNextPage {
+			break
+		}
+
+		cursor := githubv4.String(query.Organization.MembersWithRole.PageInfo.EndCursor)
+
+		after = &cursor
 	}
 
 	return members, nil

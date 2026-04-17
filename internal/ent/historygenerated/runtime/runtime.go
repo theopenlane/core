@@ -685,22 +685,24 @@ func init() {
 	directoryaccounthistoryDescTags := directoryaccounthistoryFields[9].Descriptor()
 	// directoryaccounthistory.DefaultTags holds the default value on creation for the tags field.
 	directoryaccounthistory.DefaultTags = directoryaccounthistoryDescTags.Default.([]string)
+	// directoryaccounthistoryDescEmailAliases is the schema descriptor for email_aliases field.
+	directoryaccounthistoryDescEmailAliases := directoryaccounthistoryFields[24].Descriptor()
+	// directoryaccounthistory.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	directoryaccounthistory.DefaultEmailAliases = directoryaccounthistoryDescEmailAliases.Default.([]string)
 	// directoryaccounthistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[27].Descriptor()
+	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[29].Descriptor()
 	// directoryaccounthistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccounthistory.DefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// directoryaccounthistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	directoryaccounthistory.UpdateDefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// directoryaccounthistoryDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[42].Descriptor()
+	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[44].Descriptor()
 	// directoryaccounthistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccounthistory.DefaultObservedAt = directoryaccounthistoryDescObservedAt.Default.(func() time.Time)
 	// directoryaccounthistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[43].Descriptor()
+	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[45].Descriptor()
 	// directoryaccounthistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directoryaccounthistory.DefaultProfileHash = directoryaccounthistoryDescProfileHash.Default.(string)
 	// directoryaccounthistoryDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccounthistoryDescPrimarySource := directoryaccounthistoryFields[48].Descriptor()
+	directoryaccounthistoryDescPrimarySource := directoryaccounthistoryFields[50].Descriptor()
 	// directoryaccounthistory.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccounthistory.DefaultPrimarySource = directoryaccounthistoryDescPrimarySource.Default.(bool)
 	// directoryaccounthistoryDescID is the schema descriptor for id field.
@@ -1434,12 +1436,16 @@ func init() {
 	identityholderhistoryDescWorkflowEligibleMarker := identityholderhistoryFields[20].Descriptor()
 	// identityholderhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	identityholderhistory.DefaultWorkflowEligibleMarker = identityholderhistoryDescWorkflowEligibleMarker.Default.(bool)
+	// identityholderhistoryDescEmailAliases is the schema descriptor for email_aliases field.
+	identityholderhistoryDescEmailAliases := identityholderhistoryFields[24].Descriptor()
+	// identityholderhistory.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	identityholderhistory.DefaultEmailAliases = identityholderhistoryDescEmailAliases.Default.([]string)
 	// identityholderhistoryDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[25].Descriptor()
+	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[26].Descriptor()
 	// identityholderhistory.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholderhistory.DefaultIsOpenlaneUser = identityholderhistoryDescIsOpenlaneUser.Default.(bool)
 	// identityholderhistoryDescIsActive is the schema descriptor for is_active field.
-	identityholderhistoryDescIsActive := identityholderhistoryFields[29].Descriptor()
+	identityholderhistoryDescIsActive := identityholderhistoryFields[30].Descriptor()
 	// identityholderhistory.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholderhistory.DefaultIsActive = identityholderhistoryDescIsActive.Default.(bool)
 	// identityholderhistoryDescID is the schema descriptor for id field.
@@ -1947,8 +1953,6 @@ func init() {
 	organizationhistoryDescAvatarUpdatedAt := organizationhistoryFields[18].Descriptor()
 	// organizationhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	organizationhistory.DefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// organizationhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	organizationhistory.UpdateDefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationhistoryDescDedicatedDb is the schema descriptor for dedicated_db field.
 	organizationhistoryDescDedicatedDb := organizationhistoryFields[19].Descriptor()
 	// organizationhistory.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
@@ -2295,7 +2299,7 @@ func init() {
 	// reviewhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	reviewhistory.DefaultSystemOwned = reviewhistoryDescSystemOwned.Default.(bool)
 	// reviewhistoryDescApproved is the schema descriptor for approved field.
-	reviewhistoryDescApproved := reviewhistoryFields[28].Descriptor()
+	reviewhistoryDescApproved := reviewhistoryFields[29].Descriptor()
 	// reviewhistory.DefaultApproved holds the default value on creation for the approved field.
 	reviewhistory.DefaultApproved = reviewhistoryDescApproved.Default.(bool)
 	// reviewhistoryDescID is the schema descriptor for id field.
@@ -3058,8 +3062,6 @@ func init() {
 	userhistoryDescAvatarUpdatedAt := userhistoryFields[18].Descriptor()
 	// userhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	userhistory.DefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// userhistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	userhistory.UpdateDefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// userhistoryDescLastSeen is the schema descriptor for last_seen field.
 	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
 	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
