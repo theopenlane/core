@@ -12975,6 +12975,18 @@ type FileHistory implements Node {
   """
   scopeID: String
   """
+  the category of the file
+  """
+  categoryName: String
+  """
+  the category of the file
+  """
+  categoryID: String
+  """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -13006,7 +13018,7 @@ type FileHistory implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -13331,6 +13343,60 @@ input FileHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """

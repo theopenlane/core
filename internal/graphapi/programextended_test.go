@@ -133,7 +133,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 	resp, err := suite.client.api.CreateStandard(user.UserCtx, testclient.CreateStandardInput{
 		Name:       "Super Awesome Standard",
 		ControlIDs: controlIDs,
-	}, nil)
+	}, nil, nil)
 	assert.NilError(t, err)
 
 	orgStandard := resp.CreateStandard.Standard

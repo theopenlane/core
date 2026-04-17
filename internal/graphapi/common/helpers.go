@@ -88,7 +88,7 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 				continue
 			}
 
-			for _, fileUpload := range files {
+			for i, fileUpload := range files {
 				// Buffer the file in memory if small enough, otherwise leave as-is
 				if fileUpload.RawFile != nil {
 					buffered, err := pkgobjects.NewBufferedReaderFromReader(fileUpload.RawFile)
@@ -104,6 +104,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 
 					return nil, err
 				}
+
+				applyUploadMetadataFromVariables(op.Variables, k, i, enhanced)
 
 				uploads = append(uploads, *enhanced)
 			}
@@ -1180,6 +1182,63 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, variables map[string]any,
 	log.Debug().Str("key", key).Msg("unable to determine object type - no matching upload argument found")
 
 	return upload, ErrUnableToDetermineObjectType
+}
+
+func applyUploadMetadataFromVariables(variables map[string]any, uploadArg string, index int, upload *pkgobjects.File) {
+	if upload == nil || len(variables) == 0 {
+		return
+	}
+
+	metadata := metadataInputForUploadArg(variables, uploadArg, index)
+	if len(metadata) == 0 {
+		return
+	}
+
+	if upload.Metadata == nil {
+		upload.Metadata = make(map[string]any)
+	}
+
+	if name, ok := metadata["name"].(string); ok {
+		name = strings.TrimSpace(name)
+		if name != "" {
+			upload.Metadata["name"] = name
+			upload.Name = name
+		}
+	}
+
+	if rawMetadata, ok := metadata["metadata"].(map[string]any); ok {
+		for k, v := range rawMetadata {
+			upload.Metadata[k] = v
+		}
+	}
+}
+
+// extract the metadata from the mutation
+// the convention is as follows: If avatarFile is the name, avatarFileMetadata is what should be used.
+// this allows us not to touch the resolvers in anyway
+func metadataInputForUploadArg(variables map[string]any, uploadArg string, index int) map[string]any {
+	raw, ok := variables[uploadArg+"Metadata"]
+	if !ok || raw == nil {
+		return nil
+	}
+
+	switch v := raw.(type) {
+	case map[string]any:
+		return v
+	case []any:
+		if index < 0 || index >= len(v) {
+			return nil
+		}
+
+		m, ok := v[index].(map[string]any)
+		if !ok {
+			return nil
+		}
+
+		return m
+	}
+
+	return nil
 }
 
 // argIsUpload checks if the argument is an upload

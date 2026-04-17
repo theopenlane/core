@@ -40,7 +40,7 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 }
 
 // CreateUploadProcedure is the resolver for the createUploadProcedure field.
-func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, ownerID *string) (*model.ProcedureCreatePayload, error) {
+func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) (*model.ProcedureCreatePayload, error) {
 	var procedureInput generated.CreateProcedureInput
 
 	if ownerID != nil && *ownerID != "" {
@@ -130,7 +130,7 @@ func (r *mutationResolver) UpdateBulkProcedure(ctx context.Context, ids []string
 }
 
 // UpdateProcedure is the resolver for the updateProcedure field.
-func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) (*model.ProcedureUpdatePayload, error) {
+func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})

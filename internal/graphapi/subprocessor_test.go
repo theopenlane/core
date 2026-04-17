@@ -26,7 +26,7 @@ func TestQuerySubprocessorByID(t *testing.T) {
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
 
-	systemOwnedSubprocessor, err := suite.client.api.CreateSubprocessor(systemAdminUser.UserCtx, input, logoFile)
+	systemOwnedSubprocessor, err := suite.client.api.CreateSubprocessor(systemAdminUser.UserCtx, input, logoFile, nil)
 	assert.NilError(t, err)
 
 	systemSubprocessr := systemOwnedSubprocessor.CreateSubprocessor.Subprocessor
@@ -265,7 +265,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
 			}
 
-			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, tc.upload)
+			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, tc.upload, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -431,7 +431,7 @@ func TestUpdateSubprocessor(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.UpdateSubprocessor(tc.ctx, tc.queryID, tc.updateInput, nil)
+			resp, err := tc.client.UpdateSubprocessor(tc.ctx, tc.queryID, tc.updateInput, nil, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)

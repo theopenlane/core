@@ -23,6 +23,7 @@ extend type Mutation{
         Files to attach to the review
         """
         reviewFiles: [Upload!]
+        reviewFilesMetadata: [FileMetadataInput!]
     ): ReviewCreatePayload!
     """
     Create multiple new reviews
@@ -67,6 +68,7 @@ extend type Mutation{
         Files to attach to the review
         """
         reviewFiles: [Upload!]
+        reviewFilesMetadata: [FileMetadataInput!]
     ): ReviewUpdatePayload!
     """
     Delete an existing review

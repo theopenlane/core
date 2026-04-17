@@ -36,6 +36,10 @@ extend type Mutation{
         """
         avatarFile: Upload
         """
+        metadata for the avatar file
+        """
+        avatarFileMetadata: FileMetadataInput
+        """
         organization members to be added to the new org
         """
         members: [OrgMembersInput!]

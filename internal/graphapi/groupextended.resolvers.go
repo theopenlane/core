@@ -129,7 +129,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		return nil, rout.ErrPermissionDenied
 	}
 
-	res, err := r.CreateGroup(ctx, groupInput, nil)
+	res, err := r.CreateGroup(ctx, groupInput, nil, nil)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}

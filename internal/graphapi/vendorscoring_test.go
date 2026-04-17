@@ -24,7 +24,7 @@ func TestVendorScoringEntityManualRiskFieldsPersistWithoutScores(t *testing.T) {
 	_, err := suite.client.api.UpdateEntity(scoringUser.UserCtx, entity.ID, testclient.UpdateEntityInput{
 		RiskScore:  &manualRiskScore,
 		RiskRating: &manualRiskRating,
-	})
+	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	configResp, err := suite.client.api.CreateVendorScoringConfig(scoringUser.UserCtx, testclient.CreateVendorScoringConfigInput{
@@ -60,7 +60,7 @@ func TestVendorScoringEntityManualRiskFieldsOverriddenByScores(t *testing.T) {
 	_, err := suite.client.api.UpdateEntity(scoringUser.UserCtx, entity.ID, testclient.UpdateEntityInput{
 		RiskScore:  &manualRiskScore,
 		RiskRating: &manualRiskRating,
-	})
+	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	assertEntityRiskState(t, scoringUser.UserCtx, entity.ID, 17, "HIGH", 0)
@@ -652,7 +652,7 @@ func TestVendorScoringConfigManualModeSkipsAggregation(t *testing.T) {
 	_, err := suite.client.api.UpdateEntity(scoringUser.UserCtx, entity.ID, testclient.UpdateEntityInput{
 		RiskScore:  &manualRiskScore,
 		RiskRating: &manualRiskRating,
-	})
+	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	// Create config in MANUAL mode
@@ -817,7 +817,7 @@ func TestVendorScoringConfigSwitchModeRecomputes(t *testing.T) {
 	_, err = suite.client.api.UpdateEntity(scoringUser.UserCtx, entity.ID, testclient.UpdateEntityInput{
 		RiskScore:  &manualScore,
 		RiskRating: &manualRating,
-	})
+	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
 	// Update the score — aggregate hook should skip in MANUAL mode

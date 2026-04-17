@@ -12818,6 +12818,14 @@ input CreateFileInput {
 	"""
 	scopeName: String
 	"""
+	the category of the file
+	"""
+	categoryName: String
+	"""
+	the user-facing display name of the file
+	"""
+	name: String
+	"""
 	the name of the file provided in the payload key without the extension
 	"""
 	providedFileName: String!
@@ -12881,6 +12889,7 @@ input CreateFileInput {
 	lastAccessedAt: Time
 	environmentID: ID
 	scopeID: ID
+	categoryID: ID
 	organizationIDs: [ID!]
 	groupIDs: [ID!]
 	contactIDs: [ID!]
@@ -28729,6 +28738,18 @@ type File implements Node {
 	"""
 	scopeID: ID
 	"""
+	the category of the file
+	"""
+	categoryName: String
+	"""
+	the category of the file
+	"""
+	categoryID: ID
+	"""
+	the user-facing display name of the file
+	"""
+	name: String
+	"""
 	the name of the file provided in the payload key without the extension
 	"""
 	providedFileName: String!
@@ -28760,7 +28781,7 @@ type File implements Node {
 	"""
 	the category type of the file, if any (e.g. evidence, invoice, etc.)
 	"""
-	categoryType: String
+	categoryType: String @deprecated(reason: "use category_status_name instead")
 	"""
 	the full URI of the file
 	"""
@@ -28792,6 +28813,7 @@ type File implements Node {
 	lastAccessedAt: Time
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
+	category: CustomTypeEnum
 	organization: [Organization!]
 	groups(
 		"""
@@ -29001,6 +29023,16 @@ type FileEdge {
 	A cursor for use in pagination.
 	"""
 	cursor: Cursor!
+}
+input FileMetadataInput {
+	"""
+	the display name for the file, defaults to the original filename
+	"""
+	name: String
+	"""
+	additional extracted or client-provided metadata for the file
+	"""
+	metadata: Map
 }
 """
 Ordering options for File connections
@@ -29221,6 +29253,60 @@ input FileWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
+	"""
+	category_name field predicates
+	"""
+	categoryName: String
+	categoryNameNEQ: String
+	categoryNameIn: [String!]
+	categoryNameNotIn: [String!]
+	categoryNameGT: String
+	categoryNameGTE: String
+	categoryNameLT: String
+	categoryNameLTE: String
+	categoryNameContains: String
+	categoryNameHasPrefix: String
+	categoryNameHasSuffix: String
+	categoryNameIsNil: Boolean
+	categoryNameNotNil: Boolean
+	categoryNameEqualFold: String
+	categoryNameContainsFold: String
+	"""
+	category_id field predicates
+	"""
+	categoryID: ID
+	categoryIDNEQ: ID
+	categoryIDIn: [ID!]
+	categoryIDNotIn: [ID!]
+	categoryIDGT: ID
+	categoryIDGTE: ID
+	categoryIDLT: ID
+	categoryIDLTE: ID
+	categoryIDContains: ID
+	categoryIDHasPrefix: ID
+	categoryIDHasSuffix: ID
+	categoryIDIsNil: Boolean
+	categoryIDNotNil: Boolean
+	categoryIDEqualFold: ID
+	categoryIDContainsFold: ID
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameIsNil: Boolean
+	nameNotNil: Boolean
+	nameEqualFold: String
+	nameContainsFold: String
 	"""
 	provided_file_name field predicates
 	"""
@@ -29498,6 +29584,11 @@ input FileWhereInput {
 	"""
 	hasScope: Boolean
 	hasScopeWith: [CustomTypeEnumWhereInput!]
+	"""
+	category edge predicates
+	"""
+	hasCategory: Boolean
+	hasCategoryWith: [CustomTypeEnumWhereInput!]
 	"""
 	organization edge predicates
 	"""
@@ -43766,7 +43857,7 @@ type Mutation {
 		File to upload for the documentData
 		"""
 		documentDataFile: Upload
-	): DocumentDataUpdatePayload!
+	documentDataFileMetadata: FileMetadataInput): DocumentDataUpdatePayload!
 	"""
 	Delete an existing documentData
 	"""
@@ -43985,12 +44076,12 @@ type Mutation {
 		entity type name allows the name of the entity type to be passed in over an id
 		"""
 		entityTypeName: String
-	entityFiles: [Upload!],
+	entityFiles: [Upload!], entityFilesMetadata: [FileMetadataInput!],
 		"""
 		file to upload as the logo of the entity
 		"""
 		logoFile: Upload
-	): EntityCreatePayload!
+	logoFileMetadata: FileMetadataInput): EntityCreatePayload!
 	"""
 	Create multiple new entities
 	"""
@@ -44032,12 +44123,12 @@ type Mutation {
 		New values for the entity
 		"""
 		input: UpdateEntityInput!
-	entityFiles: [Upload!],
+	entityFiles: [Upload!], entityFilesMetadata: [FileMetadataInput!],
 		"""
 		file to upload as the logo of the entity
 		"""
 		logoFile: Upload
-	): EntityUpdatePayload!
+	logoFileMetadata: FileMetadataInput): EntityUpdatePayload!
 	"""
 	Delete an existing entity
 	"""
@@ -44251,7 +44342,7 @@ type Mutation {
 		values of the evidence
 		"""
 		input: CreateEvidenceInput!
-	evidenceFiles: [Upload!]): EvidenceCreatePayload!
+	evidenceFiles: [Upload!], evidenceFilesMetadata: [FileMetadataInput!]): EvidenceCreatePayload!
 	"""
 	Create multiple new evidence
 	"""
@@ -44297,7 +44388,7 @@ type Mutation {
 		New values for the evidence
 		"""
 		input: UpdateEvidenceInput!
-	evidenceFiles: [Upload!]): EvidenceUpdatePayload!
+	evidenceFiles: [Upload!], evidenceFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
 	"""
 	Delete an existing evidence
 	"""
@@ -44352,7 +44443,7 @@ type Mutation {
 		Files to attach to the export
 		"""
 		exportFiles: [Upload!]
-	): ExportUpdatePayload!
+	exportFilesMetadata: [FileMetadataInput!]): ExportUpdatePayload!
 	"""
 	Delete an existing export
 	"""
@@ -44520,7 +44611,7 @@ type Mutation {
 		values of the group
 		"""
 		input: CreateGroupInput!
-	avatarFile: Upload): GroupCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): GroupCreatePayload!
 	"""
 	Create multiple new groups
 	"""
@@ -44552,7 +44643,7 @@ type Mutation {
 		New values for the group
 		"""
 		input: UpdateGroupInput!
-	avatarFile: Upload): GroupUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): GroupUpdatePayload!
 	"""
 	Delete an existing group
 	"""
@@ -44888,7 +44979,7 @@ type Mutation {
 		values of the identityHolder
 		"""
 		input: CreateIdentityHolderInput!
-	identityHolderFiles: [Upload!]): IdentityHolderCreatePayload!
+	identityHolderFiles: [Upload!], identityHolderFilesMetadata: [FileMetadataInput!]): IdentityHolderCreatePayload!
 	"""
 	Create multiple new identityHolders
 	"""
@@ -44920,7 +45011,7 @@ type Mutation {
 		New values for the identityHolder
 		"""
 		input: UpdateIdentityHolderInput!
-	identityHolderFiles: [Upload!]): IdentityHolderUpdatePayload!
+	identityHolderFiles: [Upload!], identityHolderFilesMetadata: [FileMetadataInput!]): IdentityHolderUpdatePayload!
 	"""
 	Delete an existing identityHolder
 	"""
@@ -44988,7 +45079,7 @@ type Mutation {
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload!
-
+	internalPolicyFileMetadata: FileMetadataInput,
 		"""
 		ID of the owner organization
 		"""
@@ -45044,7 +45135,7 @@ type Mutation {
 		file containing values of the internalPolicy
 		"""
 		internalPolicyFile: Upload
-	): InternalPolicyUpdatePayload!
+	internalPolicyFileMetadata: FileMetadataInput): InternalPolicyUpdatePayload!
 	"""
 	Delete an existing internalPolicy
 	"""
@@ -45167,7 +45258,7 @@ type Mutation {
 		files to upload as jobResult attachments
 		"""
 		jobResultFiles: [Upload!]
-	): JobResultCreatePayload!
+	jobResultFilesMetadata: [FileMetadataInput!]): JobResultCreatePayload!
 	"""
 	Update an existing jobResult
 	"""
@@ -45186,7 +45277,7 @@ type Mutation {
 		files to upload as jobResult attachments
 		"""
 		jobResultFiles: [Upload!]
-	): JobResultUpdatePayload!
+	jobResultFilesMetadata: [FileMetadataInput!]): JobResultUpdatePayload!
 	"""
 	Delete an existing jobResult
 	"""
@@ -45610,7 +45701,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): TaskUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TaskUpdatePayload!
 	"""
 	Update an existing control comment
 	"""
@@ -45629,7 +45720,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): ControlUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): ControlUpdatePayload!
 	"""
 	Update an existing subcontrol comment
 	"""
@@ -45648,7 +45739,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): SubcontrolUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): SubcontrolUpdatePayload!
 	"""
 	Update an existing procedure comment
 	"""
@@ -45667,7 +45758,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): ProcedureUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): ProcedureUpdatePayload!
 	"""
 	Update an existing risk comment
 	"""
@@ -45686,7 +45777,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): RiskUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): RiskUpdatePayload!
 	"""
 	Update an existing internal policy comment
 	"""
@@ -45705,7 +45796,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): InternalPolicyUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): InternalPolicyUpdatePayload!
 	"""
 	Update an existing trust center FAQ comment
 	"""
@@ -45724,7 +45815,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): TrustCenterFAQUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TrustCenterFAQUpdatePayload!
 	"""
 	Update an existing trust center post
 	"""
@@ -45743,7 +45834,7 @@ type Mutation {
 		Files to attach to the post
 		"""
 		noteFiles: [Upload!]
-	): TrustCenterUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): TrustCenterUpdatePayload!
 	"""
 	Update an existing evidence comment
 	"""
@@ -45762,7 +45853,7 @@ type Mutation {
 		Files to attach to the comment
 		"""
 		noteFiles: [Upload!]
-	): EvidenceUpdatePayload!
+	noteFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
 	"""
 	Delete an existing note
 	"""
@@ -45985,7 +46076,7 @@ type Mutation {
 		values of the organization
 		"""
 		input: CreateOrganizationInput!
-	avatarFile: Upload): OrganizationCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): OrganizationCreatePayload!
 	"""
 	Update an existing organization
 	"""
@@ -45999,7 +46090,7 @@ type Mutation {
 		New values for the organization
 		"""
 		input: UpdateOrganizationInput!
-	avatarFile: Upload): OrganizationUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): OrganizationUpdatePayload!
 	"""
 	Delete an existing organization
 	"""
@@ -46104,6 +46195,11 @@ type Mutation {
 		avatar file to Upload
 		"""
 		avatarFile: Upload
+
+		"""
+		metadata for the avatar file
+		"""
+		avatarFileMetadata: FileMetadataInput
 
 		"""
 		organization members to be added to the new org
@@ -46241,7 +46337,7 @@ type Mutation {
 		values of the platform
 		"""
 		input: CreatePlatformInput!
-	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformCreatePayload!
+	architectureDiagrams: [Upload!], architectureDiagramsMetadata: [FileMetadataInput!], dataFlowDiagrams: [Upload!], dataFlowDiagramsMetadata: [FileMetadataInput!], trustBoundaryDiagrams: [Upload!], trustBoundaryDiagramsMetadata: [FileMetadataInput!]): PlatformCreatePayload!
 	"""
 	Create multiple new platforms
 	"""
@@ -46273,7 +46369,7 @@ type Mutation {
 		New values for the platform
 		"""
 		input: UpdatePlatformInput!
-	architectureDiagrams: [Upload!], dataFlowDiagrams: [Upload!], trustBoundaryDiagrams: [Upload!]): PlatformUpdatePayload!
+	architectureDiagrams: [Upload!], architectureDiagramsMetadata: [FileMetadataInput!], dataFlowDiagrams: [Upload!], dataFlowDiagramsMetadata: [FileMetadataInput!], trustBoundaryDiagrams: [Upload!], trustBoundaryDiagramsMetadata: [FileMetadataInput!]): PlatformUpdatePayload!
 	"""
 	Delete an existing platform
 	"""
@@ -46300,7 +46396,7 @@ type Mutation {
 		file containing values of the procedure
 		"""
 		procedureFile: Upload!
-
+	procedureFileMetadata: FileMetadataInput,
 		"""
 		ID of the owner organization
 		"""
@@ -46356,7 +46452,7 @@ type Mutation {
 		file containing values of the procedure
 		"""
 		procedureFile: Upload
-	): ProcedureUpdatePayload!
+	procedureFileMetadata: FileMetadataInput): ProcedureUpdatePayload!
 	"""
 	Delete an existing procedure
 	"""
@@ -46670,7 +46766,7 @@ type Mutation {
 		Files to attach to the review
 		"""
 		reviewFiles: [Upload!]
-	): ReviewCreatePayload!
+	reviewFilesMetadata: [FileMetadataInput!]): ReviewCreatePayload!
 	"""
 	Create multiple new reviews
 	"""
@@ -46716,7 +46812,7 @@ type Mutation {
 		Files to attach to the review
 		"""
 		reviewFiles: [Upload!]
-	): ReviewUpdatePayload!
+	reviewFilesMetadata: [FileMetadataInput!]): ReviewUpdatePayload!
 	"""
 	Delete an existing review
 	"""
@@ -47122,7 +47218,7 @@ type Mutation {
 		file to upload as the logo to represent the standard
 		"""
 		logoFile: Upload
-	): StandardCreatePayload!
+	logoFileMetadata: FileMetadataInput): StandardCreatePayload!
 	"""
 	Update an existing standard
 	"""
@@ -47141,7 +47237,7 @@ type Mutation {
 		file to upload as the logo to represent the standard
 		"""
 		logoFile: Upload
-	): StandardUpdatePayload!
+	logoFileMetadata: FileMetadataInput): StandardUpdatePayload!
 	"""
 	Delete an existing standard
 	"""
@@ -47246,7 +47342,7 @@ type Mutation {
 		file to upload as the logo of the subprocessor
 		"""
 		logoFile: Upload
-	): SubprocessorCreatePayload!
+	logoFileMetadata: FileMetadataInput): SubprocessorCreatePayload!
 	"""
 	Create multiple new subprocessors
 	"""
@@ -47283,7 +47379,7 @@ type Mutation {
 		file to upload as the logo of the subprocessor
 		"""
 		logoFile: Upload
-	): SubprocessorUpdatePayload!
+	logoFileMetadata: FileMetadataInput): SubprocessorUpdatePayload!
 	"""
 	Update multiple existing subprocessors
 	"""
@@ -47602,7 +47698,7 @@ type Mutation {
 		values of the template
 		"""
 		input: CreateTemplateInput!
-	templateFiles: [Upload!]): TemplateCreatePayload!
+	templateFiles: [Upload!], templateFilesMetadata: [FileMetadataInput!]): TemplateCreatePayload!
 	"""
 	Create multiple new templates
 	"""
@@ -47634,7 +47730,7 @@ type Mutation {
 		New values for the template
 		"""
 		input: UpdateTemplateInput!
-	templateFiles: [Upload!]): TemplateUpdatePayload!
+	templateFiles: [Upload!], templateFilesMetadata: [FileMetadataInput!]): TemplateUpdatePayload!
 	"""
 	Delete an existing template
 	"""
@@ -47816,7 +47912,7 @@ type Mutation {
 		values of the trustCenterDoc
 		"""
 		input: CreateTrustCenterDocInput!
-	trustCenterDocFile: Upload!): TrustCenterDocCreatePayload!
+	trustCenterDocFile: Upload!, trustCenterDocFileMetadata: FileMetadataInput): TrustCenterDocCreatePayload!
 	"""
 	Create multiple new trustCenterDocs
 	"""
@@ -47848,7 +47944,7 @@ type Mutation {
 		New values for the trustCenterDoc
 		"""
 		input: UpdateTrustCenterDocInput!
-	trustCenterDocFile: Upload, watermarkedTrustCenterDocFile: Upload): TrustCenterDocUpdatePayload!
+	trustCenterDocFile: Upload, trustCenterDocFileMetadata: FileMetadataInput, watermarkedTrustCenterDocFile: Upload, watermarkedTrustCenterDocFileMetadata: FileMetadataInput): TrustCenterDocUpdatePayload!
 	"""
 	Update multiple existing trust center docs
 	"""
@@ -47912,7 +48008,7 @@ type Mutation {
 		logo file for the trustCenterEntity
 		"""
 		logoFile: Upload
-	): TrustCenterEntityCreatePayload!
+	logoFileMetadata: FileMetadataInput): TrustCenterEntityCreatePayload!
 	"""
 	Create multiple new trustCenterEntitys
 	"""
@@ -47949,7 +48045,7 @@ type Mutation {
 		logo file for the trustCenterEntity
 		"""
 		logoFile: Upload
-	): TrustCenterEntityUpdatePayload!
+	logoFileMetadata: FileMetadataInput): TrustCenterEntityUpdatePayload!
 	"""
 	Delete an existing trustCenterEntity
 	"""
@@ -48054,7 +48150,7 @@ type Mutation {
 		NDA file
 		"""
 		templateFiles: [Upload!]
-	): TrustCenterNDACreatePayload!
+	templateFilesMetadata: [FileMetadataInput!]): TrustCenterNDACreatePayload!
 	updateTrustCenterNDA(
 		"""
 		ID of the trust center
@@ -48065,7 +48161,7 @@ type Mutation {
 		NDA file
 		"""
 		templateFiles: [Upload!]
-	): TrustCenterNDAUpdatePayload!
+	templateFilesMetadata: [FileMetadataInput!]): TrustCenterNDAUpdatePayload!
 	"""
 	Submit a response to a Trust Center NDA
 	"""
@@ -48169,7 +48265,7 @@ type Mutation {
 		values of the preview trust center setting
 		"""
 		input: CreateTrustCenterPreviewSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterPreviewSettingCreatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterPreviewSettingCreatePayload!
 	"""
 	Create a new trustCenterSetting
 	"""
@@ -48178,7 +48274,7 @@ type Mutation {
 		values of the trustCenterSetting
 		"""
 		input: CreateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingCreatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingCreatePayload!
 	"""
 	Update an existing trustCenterSetting by targeting the ID
 	"""
@@ -48192,7 +48288,7 @@ type Mutation {
 		New values for the trustCenterSetting
 		"""
 		input: UpdateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingUpdatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingUpdatePayload!
 	"""
 	Update an existing trustCenterSetting preview settings
 	"""
@@ -48201,7 +48297,7 @@ type Mutation {
 		New values for the trustCenterSetting
 		"""
 		input: UpdateTrustCenterSettingInput!
-	logoFile: Upload, faviconFile: Upload, heroImageFile: Upload): TrustCenterSettingUpdatePayload!
+	logoFile: Upload, logoFileMetadata: FileMetadataInput, faviconFile: Upload, faviconFileMetadata: FileMetadataInput, heroImageFile: Upload, heroImageFileMetadata: FileMetadataInput): TrustCenterSettingUpdatePayload!
 	"""
 	Publish changes from preview to live environment
 	"""
@@ -48305,7 +48401,7 @@ type Mutation {
 		values of the trustCenterWatermarkConfig
 		"""
 		input: CreateTrustCenterWatermarkConfigInput!
-	watermarkFile: Upload): TrustCenterWatermarkConfigCreatePayload!
+	watermarkFile: Upload, watermarkFileMetadata: FileMetadataInput): TrustCenterWatermarkConfigCreatePayload!
 	"""
 	Update an existing trustCenterWatermarkConfig
 	"""
@@ -48319,7 +48415,7 @@ type Mutation {
 		New values for the trustCenterWatermarkConfig
 		"""
 		input: UpdateTrustCenterWatermarkConfigInput!
-	watermarkFile: Upload): TrustCenterWatermarkConfigUpdatePayload!
+	watermarkFile: Upload, watermarkFileMetadata: FileMetadataInput): TrustCenterWatermarkConfigUpdatePayload!
 	"""
 	Delete an existing trustCenterWatermarkConfig
 	"""
@@ -48337,7 +48433,7 @@ type Mutation {
 		values of the user
 		"""
 		input: CreateUserInput!
-	avatarFile: Upload): UserCreatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): UserCreatePayload!
 	"""
 	Update an existing user
 	"""
@@ -48351,7 +48447,7 @@ type Mutation {
 		New values for the user
 		"""
 		input: UpdateUserInput!
-	avatarFile: Upload): UserUpdatePayload!
+	avatarFile: Upload, avatarFileMetadata: FileMetadataInput): UserUpdatePayload!
 	"""
 	Delete an existing user
 	"""
@@ -87889,6 +87985,16 @@ input UpdateFileInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	the category of the file
+	"""
+	categoryName: String
+	clearCategoryName: Boolean
+	"""
+	the user-facing display name of the file
+	"""
+	name: String
+	clearName: Boolean
+	"""
 	the name of the file provided in the payload key without the extension
 	"""
 	providedFileName: String
@@ -87968,6 +88074,8 @@ input UpdateFileInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
+	categoryID: ID
+	clearCategory: Boolean
 	addOrganizationIDs: [ID!]
 	removeOrganizationIDs: [ID!]
 	clearOrganization: Boolean
@@ -93519,6 +93627,10 @@ The `Upload` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
+"""
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
 type User implements Node {
 	id: ID!
 	createdAt: Time

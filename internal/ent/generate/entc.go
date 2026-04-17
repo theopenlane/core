@@ -20,6 +20,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums/exportenums"
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/filecategorygen"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entitlements/genfeatures"
@@ -338,6 +339,8 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		workflowgen.WithEnumsPackageName("enums"),
 	)
 
+	fileCategoryGen := filecategorygen.New(schemaPath, "internal/objects/store/file_category_generated.go")
+
 	hooks := []gen.Hook{
 		genhooks.GenCSVSchema(
 			genhooks.WithCSVOutputDir(csvGeneratedPath),
@@ -358,6 +361,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			integrationmapping.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
 		).Hook(),
 		accessMapExt.Hook(),
+		fileCategoryGen.Hook(),
 		exportenums.New().Hook(),
 		workflowGenExt.Hook(),
 	}

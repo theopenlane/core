@@ -23,6 +23,7 @@ extend type Mutation{
         file to upload as the logo to represent the standard
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -40,6 +41,7 @@ extend type Mutation{
         file to upload as the logo to represent the standard
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): StandardUpdatePayload!
     """
     Delete an existing standard

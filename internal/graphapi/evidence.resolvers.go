@@ -40,7 +40,7 @@ func (r *evidenceResolver) WorkflowTimeline(ctx context.Context, obj *generated.
 }
 
 // CreateEvidence is the resolver for the createEvidence field.
-func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceCreatePayload, error) {
+func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) (*model.EvidenceCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -125,7 +125,7 @@ func (r *mutationResolver) UpdateBulkEvidence(ctx context.Context, ids []string,
 }
 
 // UpdateEvidence is the resolver for the updateEvidence field.
-func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
+func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) (*model.EvidenceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Evidence.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})

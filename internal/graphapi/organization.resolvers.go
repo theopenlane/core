@@ -18,7 +18,7 @@ import (
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
-func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error) {
+func (r *mutationResolver) CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.OrganizationCreatePayload, error) {
 	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
 		logx.FromContext(ctx).Info().Msg("organization attempted to be created with non-JWT auth type")
 
@@ -49,7 +49,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 }
 
 // UpdateOrganization is the resolver for the updateOrganization field.
-func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationUpdatePayload, error) {
+func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.OrganizationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Organization.Get(ctx, id)
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to get organization")

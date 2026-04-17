@@ -5234,6 +5234,21 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldScopeID)
 				fieldSeen[filehistory.FieldScopeID] = struct{}{}
 			}
+		case "categoryName":
+			if _, ok := fieldSeen[filehistory.FieldCategoryName]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCategoryName)
+				fieldSeen[filehistory.FieldCategoryName] = struct{}{}
+			}
+		case "categoryID":
+			if _, ok := fieldSeen[filehistory.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCategoryID)
+				fieldSeen[filehistory.FieldCategoryID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[filehistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldName)
+				fieldSeen[filehistory.FieldName] = struct{}{}
+			}
 		case "providedFileName":
 			if _, ok := fieldSeen[filehistory.FieldProvidedFileName]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldProvidedFileName)

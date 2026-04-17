@@ -20,7 +20,7 @@ import (
 )
 
 // CreateEntity is the resolver for the createEntity field.
-func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityCreatePayload, error) {
+func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.EntityCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -145,7 +145,7 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 }
 
 // UpdateEntity is the resolver for the updateEntity field.
-func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) (*model.EntityUpdatePayload, error) {
+func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.EntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})

@@ -433,7 +433,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddProgramCreatorIDs: []string{groupMember.GroupID},
-					}, nil)
+					}, nil, nil)
 				assert.NilError(t, err)
 			}
 

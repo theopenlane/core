@@ -245,6 +245,48 @@ func (_c *FileHistoryCreate) SetNillableScopeID(v *string) *FileHistoryCreate {
 	return _c
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_c *FileHistoryCreate) SetCategoryName(v string) *FileHistoryCreate {
+	_c.mutation.SetCategoryName(v)
+	return _c
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableCategoryName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetCategoryName(*v)
+	}
+	return _c
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_c *FileHistoryCreate) SetCategoryID(v string) *FileHistoryCreate {
+	_c.mutation.SetCategoryID(v)
+	return _c
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableCategoryID(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetCategoryID(*v)
+	}
+	return _c
+}
+
+// SetName sets the "name" field.
+func (_c *FileHistoryCreate) SetName(v string) *FileHistoryCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableName(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetName(*v)
+	}
+	return _c
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_c *FileHistoryCreate) SetProvidedFileName(v string) *FileHistoryCreate {
 	_c.mutation.SetProvidedFileName(v)
@@ -672,6 +714,18 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScopeID(); ok {
 		_spec.SetField(filehistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.CategoryName(); ok {
+		_spec.SetField(filehistory.FieldCategoryName, field.TypeString, value)
+		_node.CategoryName = value
+	}
+	if value, ok := _c.mutation.CategoryID(); ok {
+		_spec.SetField(filehistory.FieldCategoryID, field.TypeString, value)
+		_node.CategoryID = value
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(filehistory.FieldName, field.TypeString, value)
+		_node.Name = value
 	}
 	if value, ok := _c.mutation.ProvidedFileName(); ok {
 		_spec.SetField(filehistory.FieldProvidedFileName, field.TypeString, value)

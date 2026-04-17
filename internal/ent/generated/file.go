@@ -47,6 +47,12 @@ type File struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the file
 	ScopeID string `json:"scope_id,omitempty"`
+	// the category of the file
+	CategoryName string `json:"category_name,omitempty"`
+	// the category of the file
+	CategoryID string `json:"category_id,omitempty"`
+	// the user-facing display name of the file
+	Name string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -111,6 +117,8 @@ type FileEdges struct {
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
 	Scope *CustomTypeEnum `json:"scope,omitempty"`
+	// Category holds the value of the category edge.
+	Category *CustomTypeEnum `json:"category,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization []*Organization `json:"organization,omitempty"`
 	// Groups holds the value of the groups edge.
@@ -149,9 +157,9 @@ type FileEdges struct {
 	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
 	namedOrganization           map[string][]*Organization
 	namedGroups                 map[string][]*Group
@@ -195,10 +203,21 @@ func (e FileEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "scope"}
 }
 
+// CategoryOrErr returns the Category value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) CategoryOrErr() (*CustomTypeEnum, error) {
+	if e.Category != nil {
+		return e.Category, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "category"}
+}
+
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -207,7 +226,7 @@ func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -216,7 +235,7 @@ func (e FileEdges) GroupsOrErr() ([]*Group, error) {
 // ContactOrErr returns the Contact value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ContactOrErr() ([]*Contact, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Contact, nil
 	}
 	return nil, &NotLoadedError{edge: "contact"}
@@ -225,7 +244,7 @@ func (e FileEdges) ContactOrErr() ([]*Contact, error) {
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EntityOrErr() ([]*Entity, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -234,7 +253,7 @@ func (e FileEdges) EntityOrErr() ([]*Entity, error) {
 // OrganizationSettingOrErr returns the OrganizationSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.OrganizationSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "organization_setting"}
@@ -243,7 +262,7 @@ func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TemplateOrErr() ([]*Template, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Template, nil
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -252,7 +271,7 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 // DocumentOrErr returns the Document value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Document, nil
 	}
 	return nil, &NotLoadedError{edge: "document"}
@@ -261,7 +280,7 @@ func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
@@ -270,7 +289,7 @@ func (e FileEdges) ProgramOrErr() ([]*Program, error) {
 // PlatformOrErr returns the Platform value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) PlatformOrErr() ([]*Platform, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Platform, nil
 	}
 	return nil, &NotLoadedError{edge: "platform"}
@@ -279,7 +298,7 @@ func (e FileEdges) PlatformOrErr() ([]*Platform, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -288,7 +307,7 @@ func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
 // IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) IdentityHolderOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.IdentityHolder, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holder"}
@@ -297,7 +316,7 @@ func (e FileEdges) IdentityHolderOrErr() ([]*IdentityHolder, error) {
 // ScanOrErr returns the Scan value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ScanOrErr() ([]*Scan, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Scan, nil
 	}
 	return nil, &NotLoadedError{edge: "scan"}
@@ -306,7 +325,7 @@ func (e FileEdges) ScanOrErr() ([]*Scan, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -315,7 +334,7 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -324,7 +343,7 @@ func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -333,7 +352,7 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 // TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.TrustCenterEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_entities"}
@@ -342,7 +361,7 @@ func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 // TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.TrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_doc"}
@@ -351,7 +370,7 @@ func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
@@ -368,7 +387,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -502,6 +521,24 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case file.FieldCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
+			} else if value.Valid {
+				_m.CategoryName = value.String
+			}
+		case file.FieldCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
+			} else if value.Valid {
+				_m.CategoryID = value.String
+			}
+		case file.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
 			}
 		case file.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -714,6 +751,11 @@ func (_m *File) QueryScope() *CustomTypeEnumQuery {
 	return NewFileClient(_m.config).QueryScope(_m)
 }
 
+// QueryCategory queries the "category" edge of the File entity.
+func (_m *File) QueryCategory() *CustomTypeEnumQuery {
+	return NewFileClient(_m.config).QueryCategory(_m)
+}
+
 // QueryOrganization queries the "organization" edge of the File entity.
 func (_m *File) QueryOrganization() *OrganizationQuery {
 	return NewFileClient(_m.config).QueryOrganization(_m)
@@ -872,6 +914,15 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)

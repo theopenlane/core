@@ -19,7 +19,7 @@ import (
 )
 
 // CreateTrustCenterEntity is the resolver for the createTrustCenterEntity field.
-func (r *mutationResolver) CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.TrustCenterEntityCreatePayload, error) {
 	if input.TrustCenterID == nil {
 		var err error
 		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterentity")
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterEntity(ctx context.Context, i
 }
 
 // UpdateTrustCenterEntity is the resolver for the updateTrustCenterEntity field.
-func (r *mutationResolver) UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.TrustCenterEntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterEntity.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterentity"})

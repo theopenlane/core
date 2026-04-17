@@ -641,6 +641,7 @@ func (o Organization) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FileCategory(SchemaOrganization),
 		entfga.SelfAccessChecks(),
 	}
 }

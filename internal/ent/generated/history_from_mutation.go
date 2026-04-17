@@ -8836,6 +8836,18 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if categoryName, exists := m.CategoryName(); exists {
+		create = create.SetCategoryName(categoryName)
+	}
+
+	if categoryID, exists := m.CategoryID(); exists {
+		create = create.SetCategoryID(categoryID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
 	if providedFileName, exists := m.ProvidedFileName(); exists {
 		create = create.SetProvidedFileName(providedFileName)
 	}
@@ -9023,6 +9035,24 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(file.ScopeID)
 		}
 
+		if categoryName, exists := m.CategoryName(); exists {
+			create = create.SetCategoryName(categoryName)
+		} else {
+			create = create.SetCategoryName(file.CategoryName)
+		}
+
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
+		} else {
+			create = create.SetCategoryID(file.CategoryID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(file.Name)
+		}
+
 		if providedFileName, exists := m.ProvidedFileName(); exists {
 			create = create.SetProvidedFileName(providedFileName)
 		} else {
@@ -9180,6 +9210,9 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(file.EnvironmentID).
 			SetScopeName(file.ScopeName).
 			SetScopeID(file.ScopeID).
+			SetCategoryName(file.CategoryName).
+			SetCategoryID(file.CategoryID).
+			SetName(file.Name).
 			SetProvidedFileName(file.ProvidedFileName).
 			SetProvidedFileExtension(file.ProvidedFileExtension).
 			SetProvidedFileSize(file.ProvidedFileSize).

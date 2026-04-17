@@ -55,6 +55,12 @@ type FileHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the file
 	ScopeID string `json:"scope_id,omitempty"`
+	// the category of the file
+	CategoryName string `json:"category_name,omitempty"`
+	// the category of the file
+	CategoryID string `json:"category_id,omitempty"`
+	// the user-facing display name of the file
+	Name string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -107,7 +113,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldEnvironmentName, filehistory.FieldEnvironmentID, filehistory.FieldScopeName, filehistory.FieldScopeID, filehistory.FieldCategoryName, filehistory.FieldCategoryID, filehistory.FieldName, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -237,6 +243,24 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case filehistory.FieldCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
+			} else if value.Valid {
+				_m.CategoryName = value.String
+			}
+		case filehistory.FieldCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
+			} else if value.Valid {
+				_m.CategoryID = value.String
+			}
+		case filehistory.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
 			}
 		case filehistory.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -439,6 +463,15 @@ func (_m *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
+	builder.WriteString(", ")
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)

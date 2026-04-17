@@ -54,8 +54,8 @@ mutation CreateBulkSubprocessor ($input: [CreateSubprocessorInput!]) {
 		}
 	}
 }
-mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload) {
-	createSubprocessor(input: $input, logoFile: $logoFile) {
+mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	createSubprocessor(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		subprocessor {
 			createdAt
 			createdBy
@@ -69,6 +69,8 @@ mutation CreateSubprocessor ($input: CreateSubprocessorInput!, $logoFile: Upload
 			logoFileID
 			logoFile {
 				id
+				name
+				metadata
 				presignedURL
 			}
 			owner {
@@ -201,8 +203,8 @@ mutation UpdateBulkSubprocessor ($ids: [ID!]!, $input: UpdateSubprocessorInput!)
 		updatedIDs
 	}
 }
-mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
-	updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
+mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		subprocessor {
 			createdAt
 			createdBy
@@ -215,6 +217,9 @@ mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubproces
 			logoRemoteURL
 			logoFileID
 			logoFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			owner {

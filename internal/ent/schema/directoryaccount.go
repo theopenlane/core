@@ -376,6 +376,7 @@ func (d DirectoryAccount) Policy() ent.Policy {
 // Annotations of the DirectoryAccount
 func (d DirectoryAccount) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaDirectoryAccount),
 		entgql.QueryField(),
 		entx.CascadeThroughAnnotationField(
 			[]entx.ThroughCleanup{

@@ -8,8 +8,11 @@ extend type Mutation {
     """
     input: CreateTrustCenterPreviewSettingInput!
     logoFile: Upload
+    logoFileMetadata: FileMetadataInput
     faviconFile: Upload
+    faviconFileMetadata: FileMetadataInput
     heroImageFile: Upload
+    heroImageFileMetadata: FileMetadataInput
   ): TrustCenterPreviewSettingCreatePayload!
 }
 

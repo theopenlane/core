@@ -6856,6 +6856,10 @@ type CreateFileInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the file
 	ScopeName *string `json:"scopeName,omitempty"`
+	// the category of the file
+	CategoryName *string `json:"categoryName,omitempty"`
+	// the user-facing display name of the file
+	Name *string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -6890,6 +6894,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time `json:"lastAccessedAt,omitempty"`
 	EnvironmentID             *string    `json:"environmentID,omitempty"`
 	ScopeID                   *string    `json:"scopeID,omitempty"`
+	CategoryID                *string    `json:"categoryID,omitempty"`
 	OrganizationIDs           []string   `json:"organizationIDs,omitempty"`
 	GroupIDs                  []string   `json:"groupIDs,omitempty"`
 	ContactIDs                []string   `json:"contactIDs,omitempty"`
@@ -16113,6 +16118,12 @@ type File struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the file
 	ScopeID *string `json:"scopeID,omitempty"`
+	// the category of the file
+	CategoryName *string `json:"categoryName,omitempty"`
+	// the category of the file
+	CategoryID *string `json:"categoryID,omitempty"`
+	// the user-facing display name of the file
+	Name *string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -16147,6 +16158,7 @@ type File struct {
 	LastAccessedAt         *time.Time                   `json:"lastAccessedAt,omitempty"`
 	Environment            *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum              `json:"scope,omitempty"`
+	Category               *CustomTypeEnum              `json:"category,omitempty"`
 	Organization           []*Organization              `json:"organization,omitempty"`
 	Groups                 *GroupConnection             `json:"groups"`
 	Contact                []*Contact                   `json:"contact,omitempty"`
@@ -16193,6 +16205,13 @@ type FileEdge struct {
 	Node *File `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+type FileMetadataInput struct {
+	// the display name for the file, defaults to the original filename
+	Name *string `json:"name,omitempty"`
+	// additional extracted or client-provided metadata for the file
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 // Ordering options for File connections
@@ -16375,6 +16394,54 @@ type FileWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// category_name field predicates
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNeq          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameGt           *string  `json:"categoryNameGT,omitempty"`
+	CategoryNameGte          *string  `json:"categoryNameGTE,omitempty"`
+	CategoryNameLt           *string  `json:"categoryNameLT,omitempty"`
+	CategoryNameLte          *string  `json:"categoryNameLTE,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        *bool    `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       *bool    `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+	// category_id field predicates
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIdneq          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIdgt           *string  `json:"categoryIDGT,omitempty"`
+	CategoryIdgte          *string  `json:"categoryIDGTE,omitempty"`
+	CategoryIdlt           *string  `json:"categoryIDLT,omitempty"`
+	CategoryIdlte          *string  `json:"categoryIDLTE,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameIsNil        *bool    `json:"nameIsNil,omitempty"`
+	NameNotNil       *bool    `json:"nameNotNil,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -16616,6 +16683,9 @@ type FileWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+	// category edge predicates
+	HasCategory     *bool                       `json:"hasCategory,omitempty"`
+	HasCategoryWith []*CustomTypeEnumWhereInput `json:"hasCategoryWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -40549,6 +40619,12 @@ type UpdateFileInput struct {
 	// the scope of the file
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// the category of the file
+	CategoryName      *string `json:"categoryName,omitempty"`
+	ClearCategoryName *bool   `json:"clearCategoryName,omitempty"`
+	// the user-facing display name of the file
+	Name      *string `json:"name,omitempty"`
+	ClearName *bool   `json:"clearName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName *string `json:"providedFileName,omitempty"`
 	// the extension of the file provided
@@ -40599,6 +40675,8 @@ type UpdateFileInput struct {
 	ClearEnvironment                *bool      `json:"clearEnvironment,omitempty"`
 	ScopeID                         *string    `json:"scopeID,omitempty"`
 	ClearScope                      *bool      `json:"clearScope,omitempty"`
+	CategoryID                      *string    `json:"categoryID,omitempty"`
+	ClearCategory                   *bool      `json:"clearCategory,omitempty"`
 	AddOrganizationIDs              []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs           []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganization               *bool      `json:"clearOrganization,omitempty"`

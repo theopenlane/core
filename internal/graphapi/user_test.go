@@ -128,7 +128,7 @@ func TestMutationCreateUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile)
+			resp, err := suite.client.api.CreateUser(testUser1.UserCtx, tc.userInput, tc.avatarFile, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -285,7 +285,7 @@ func TestMutationUpdateUser(t *testing.T) {
 			}
 
 			// update user
-			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile)
+			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile, nil)
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
 

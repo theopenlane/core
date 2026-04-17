@@ -260,6 +260,66 @@ func (_u *FileUpdate) ClearScopeID() *FileUpdate {
 	return _u
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_u *FileUpdate) SetCategoryName(v string) *FileUpdate {
+	_u.mutation.SetCategoryName(v)
+	return _u
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableCategoryName(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *FileUpdate) ClearCategoryName() *FileUpdate {
+	_u.mutation.ClearCategoryName()
+	return _u
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_u *FileUpdate) SetCategoryID(v string) *FileUpdate {
+	_u.mutation.SetCategoryID(v)
+	return _u
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableCategoryID(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *FileUpdate) ClearCategoryID() *FileUpdate {
+	_u.mutation.ClearCategoryID()
+	return _u
+}
+
+// SetName sets the "name" field.
+func (_u *FileUpdate) SetName(v string) *FileUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableName(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileUpdate) ClearName() *FileUpdate {
+	_u.mutation.ClearName()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdate) SetProvidedFileName(v string) *FileUpdate {
 	_u.mutation.SetProvidedFileName(v)
@@ -610,6 +670,11 @@ func (_u *FileUpdate) SetScope(v *CustomTypeEnum) *FileUpdate {
 	return _u.SetScopeID(v.ID)
 }
 
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) SetCategory(v *CustomTypeEnum) *FileUpdate {
+	return _u.SetCategoryID(v.ID)
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdate) AddOrganizationIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -894,6 +959,12 @@ func (_u *FileUpdate) ClearEnvironment() *FileUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FileUpdate) ClearScope() *FileUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearCategory clears the "category" edge to the CustomTypeEnum entity.
+func (_u *FileUpdate) ClearCategory() *FileUpdate {
+	_u.mutation.ClearCategory()
 	return _u
 }
 
@@ -1418,6 +1489,18 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(file.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(file.FieldCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(file.FieldCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(file.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(file.FieldName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -1574,6 +1657,37 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   file.ScopeTable,
 			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -2683,6 +2797,66 @@ func (_u *FileUpdateOne) ClearScopeID() *FileUpdateOne {
 	return _u
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_u *FileUpdateOne) SetCategoryName(v string) *FileUpdateOne {
+	_u.mutation.SetCategoryName(v)
+	return _u
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableCategoryName(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *FileUpdateOne) ClearCategoryName() *FileUpdateOne {
+	_u.mutation.ClearCategoryName()
+	return _u
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_u *FileUpdateOne) SetCategoryID(v string) *FileUpdateOne {
+	_u.mutation.SetCategoryID(v)
+	return _u
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableCategoryID(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *FileUpdateOne) ClearCategoryID() *FileUpdateOne {
+	_u.mutation.ClearCategoryID()
+	return _u
+}
+
+// SetName sets the "name" field.
+func (_u *FileUpdateOne) SetName(v string) *FileUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableName(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *FileUpdateOne) ClearName() *FileUpdateOne {
+	_u.mutation.ClearName()
+	return _u
+}
+
 // SetProvidedFileName sets the "provided_file_name" field.
 func (_u *FileUpdateOne) SetProvidedFileName(v string) *FileUpdateOne {
 	_u.mutation.SetProvidedFileName(v)
@@ -3033,6 +3207,11 @@ func (_u *FileUpdateOne) SetScope(v *CustomTypeEnum) *FileUpdateOne {
 	return _u.SetScopeID(v.ID)
 }
 
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) SetCategory(v *CustomTypeEnum) *FileUpdateOne {
+	return _u.SetCategoryID(v.ID)
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdateOne) AddOrganizationIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -3317,6 +3496,12 @@ func (_u *FileUpdateOne) ClearEnvironment() *FileUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *FileUpdateOne) ClearScope() *FileUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearCategory clears the "category" edge to the CustomTypeEnum entity.
+func (_u *FileUpdateOne) ClearCategory() *FileUpdateOne {
+	_u.mutation.ClearCategory()
 	return _u
 }
 
@@ -3871,6 +4056,18 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(file.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(file.FieldCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(file.FieldCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(file.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(file.FieldName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ProvidedFileName(); ok {
 		_spec.SetField(file.FieldProvidedFileName, field.TypeString, value)
 	}
@@ -4027,6 +4224,37 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			Inverse: false,
 			Table:   file.ScopeTable,
 			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.File
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

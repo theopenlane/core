@@ -23,6 +23,7 @@ extend type Mutation{
         file to upload as the logo of the subprocessor
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): SubprocessorCreatePayload!
     """
     Create multiple new subprocessors
@@ -58,6 +59,7 @@ extend type Mutation{
         file to upload as the logo of the subprocessor
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): SubprocessorUpdatePayload!
     """
     Update multiple existing subprocessors

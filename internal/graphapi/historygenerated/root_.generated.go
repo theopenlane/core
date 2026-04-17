@@ -1005,6 +1005,8 @@ type ComplexityRoot struct {
 	}
 
 	FileHistory struct {
+		CategoryID            func(childComplexity int) int
+		CategoryName          func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -1018,6 +1020,7 @@ type ComplexityRoot struct {
 		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
@@ -8749,6 +8752,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceHistoryEdge.Node(childComplexity), true
 
+	case "FileHistory.categoryID":
+		if e.ComplexityRoot.FileHistory.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryID(childComplexity), true
+
+	case "FileHistory.categoryName":
+		if e.ComplexityRoot.FileHistory.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryName(childComplexity), true
+
 	case "FileHistory.categoryType":
 		if e.ComplexityRoot.FileHistory.CategoryType == nil {
 			break
@@ -8839,6 +8856,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.Metadata(childComplexity), true
+
+	case "FileHistory.name":
+		if e.ComplexityRoot.FileHistory.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.Name(childComplexity), true
 
 	case "FileHistory.operation":
 		if e.ComplexityRoot.FileHistory.Operation == nil {
@@ -22057,6 +22081,10 @@ This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
 """
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
+"""
 The ` + "`" + `Address` + "`" + ` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains ` + "`" + `Line1` + "`" + `, ` + "`" + `Line2` + "`" + `, ` + "`" + `City` + "`" + `, ` + "`" + `State` + "`" + `, ` + "`" + `PostalCode` + "`" + `, and ` + "`" + `Country` + "`" + `
@@ -35154,6 +35182,18 @@ type FileHistory implements Node {
   """
   scopeID: String
   """
+  the category of the file
+  """
+  categoryName: String
+  """
+  the category of the file
+  """
+  categoryID: String
+  """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -35185,7 +35225,7 @@ type FileHistory implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -35510,6 +35550,60 @@ input FileHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """

@@ -244,6 +244,7 @@ func (g Group) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FileCategory(SchemaGroup),
 		entfga.SelfAccessChecks(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(

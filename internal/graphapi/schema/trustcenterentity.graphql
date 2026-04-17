@@ -23,6 +23,7 @@ extend type Mutation{
         logo file for the trustCenterEntity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): TrustCenterEntityCreatePayload!
     """
     Create multiple new trustCenterEntitys
@@ -58,6 +59,7 @@ extend type Mutation{
         logo file for the trustCenterEntity
         """
         logoFile: Upload
+        logoFileMetadata: FileMetadataInput
     ): TrustCenterEntityUpdatePayload!
     """
     Delete an existing trustCenterEntity

@@ -20,7 +20,7 @@ import (
 )
 
 // CreatePlatform is the resolver for the createPlatform field.
-func (r *mutationResolver) CreatePlatform(ctx context.Context, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformCreatePayload, error) {
+func (r *mutationResolver) CreatePlatform(ctx context.Context, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) (*model.PlatformCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -96,7 +96,7 @@ func (r *mutationResolver) CreateBulkCSVPlatform(ctx context.Context, input grap
 }
 
 // UpdatePlatform is the resolver for the updatePlatform field.
-func (r *mutationResolver) UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, dataFlowDiagrams []*graphql.Upload, trustBoundaryDiagrams []*graphql.Upload) (*model.PlatformUpdatePayload, error) {
+func (r *mutationResolver) UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) (*model.PlatformUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Platform.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "platform"})

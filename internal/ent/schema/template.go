@@ -146,6 +146,7 @@ func (Template) Indexes() []ent.Index {
 
 func (Template) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaTemplate),
 		entsql.Annotation{
 			Check: fmt.Sprintf("trust_center_id IS NOT NULL OR kind != '%s'", enums.TemplateKindTrustCenterNda.String()),
 		},

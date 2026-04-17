@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 }
 
 // CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
-func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
 	var internalPolicyInput generated.CreateInternalPolicyInput
 
 	if ownerID != nil && *ownerID != "" {
@@ -150,7 +150,7 @@ func (r *mutationResolver) UpdateBulkInternalPolicy(ctx context.Context, ids []s
 }
 
 // UpdateInternalPolicy is the resolver for the updateInternalPolicy field.
-func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) (*model.InternalPolicyUpdatePayload, error) {
+func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})

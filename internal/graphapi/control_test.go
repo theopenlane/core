@@ -1392,7 +1392,7 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 	newRevision := "v0.1.0"
 	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
 		Revision: &newRevision,
-	}, nil)
+	}, nil, nil)
 	assert.NilError(t, err)
 
 	newSourceSubcontrol := (&SubcontrolBuilder{
@@ -1498,7 +1498,7 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 	newRevision := "v0.2.0"
 	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
 		Revision: &newRevision,
-	}, nil)
+	}, nil, nil)
 	assert.NilError(t, err)
 
 	// clone again — this should succeed even though the existing control has comments on description_json

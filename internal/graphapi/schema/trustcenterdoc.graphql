@@ -20,6 +20,7 @@ extend type Mutation{
         """
         input: CreateTrustCenterDocInput!
         trustCenterDocFile: Upload!
+        trustCenterDocFileMetadata: FileMetadataInput
     ): TrustCenterDocCreatePayload!
     """
     Create multiple new trustCenterDocs
@@ -52,7 +53,9 @@ extend type Mutation{
         """
         input: UpdateTrustCenterDocInput!
         trustCenterDocFile: Upload
+        trustCenterDocFileMetadata: FileMetadataInput
         watermarkedTrustCenterDocFile: Upload
+        watermarkedTrustCenterDocFileMetadata: FileMetadataInput
     ): TrustCenterDocUpdatePayload!
         """
     Update multiple existing trust center docs

@@ -20,6 +20,7 @@ extend type Mutation{
         """
         input: CreateTemplateInput!
         templateFiles: [Upload!]
+        templateFilesMetadata: [FileMetadataInput!]
     ): TemplateCreatePayload!
     """
     Create multiple new templates
@@ -52,6 +53,7 @@ extend type Mutation{
         """
         input: UpdateTemplateInput!
         templateFiles: [Upload!]
+        templateFilesMetadata: [FileMetadataInput!]
     ): TemplateUpdatePayload!
     """
     Delete an existing template

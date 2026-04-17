@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/keygen"
 )
@@ -175,6 +176,7 @@ func (o OrganizationSetting) Edges() []ent.Edge {
 // Annotations of the OrganizationSetting
 func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaOrganizationSetting),
 		entfga.SettingsChecks("organization"),
 	}
 }

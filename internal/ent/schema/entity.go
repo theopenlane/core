@@ -418,6 +418,7 @@ func (e Entity) Policy() ent.Policy {
 // Annotations of the Entity
 func (e Entity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaEntity),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
