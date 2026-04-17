@@ -249,8 +249,11 @@ func createIdentityHolder(ctx context.Context, client *entgen.Client, account *e
 		SetIsOpenlaneUser(exists).
 		SetFullName(buildFullName(account.DisplayName, account.GivenName, account.FamilyName, canonicalEmail))
 
-	// always apply on initial creation as a best effort
-	applyPrimarySourceDefaults(create, account)
+	if account.PrimarySource {
+		applyPrimarySourceDefaults(create, account)
+	} else {
+		create.SetStatus(enums.UserStatusUnknown)
+	}
 
 	holder, err := create.Save(ctx)
 	if err == nil {
