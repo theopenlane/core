@@ -41,7 +41,7 @@ require (
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/gertd/go-pluralize v0.2.1
-	github.com/getkin/kin-openapi v0.134.0
+	github.com/getkin/kin-openapi v0.135.0
 	github.com/go-jose/go-jose/v4 v4.1.4
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/go-webauthn/webauthn v0.16.4
@@ -247,8 +247,8 @@ require (
 	github.com/morikuni/aec v1.1.0 // indirect
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
-	github.com/oasdiff/yaml v0.0.0-20260313112342-a3ea61cb4d4c // indirect
-	github.com/oasdiff/yaml3 v0.0.0-20260224194419-61cd415a242b // indirect
+	github.com/oasdiff/yaml v0.0.9 // indirect
+	github.com/oasdiff/yaml3 v0.0.9 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
 	github.com/olekukonko/ll v0.1.4-0.20260115111900-9e59c2286df0 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect
