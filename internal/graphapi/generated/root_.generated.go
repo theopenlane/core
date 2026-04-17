@@ -1201,6 +1201,7 @@ type ComplexityRoot struct {
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		DisplayName         func(childComplexity int) int
+		EmailAliases        func(childComplexity int) int
 		Environment         func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
 		EnvironmentName     func(childComplexity int) int
@@ -1226,6 +1227,7 @@ type ComplexityRoot struct {
 		OrganizationUnit    func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		PhoneNumber         func(childComplexity int) int
 		Platform            func(childComplexity int) int
 		PlatformID          func(childComplexity int) int
 		PrimarySource       func(childComplexity int) int
@@ -2633,6 +2635,7 @@ type ComplexityRoot struct {
 		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		Assessments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AvatarRemoteURL         func(childComplexity int) int
 		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Controls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -13373,6 +13376,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccount.DisplayName(childComplexity), true
 
+	case "DirectoryAccount.emailAliases":
+		if e.ComplexityRoot.DirectoryAccount.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.EmailAliases(childComplexity), true
+
 	case "DirectoryAccount.environment":
 		if e.ComplexityRoot.DirectoryAccount.Environment == nil {
 			break
@@ -13562,6 +13572,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.OwnerID(childComplexity), true
+
+	case "DirectoryAccount.phoneNumber":
+		if e.ComplexityRoot.DirectoryAccount.PhoneNumber == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.PhoneNumber(childComplexity), true
 
 	case "DirectoryAccount.platform":
 		if e.ComplexityRoot.DirectoryAccount.Platform == nil {
@@ -20721,6 +20738,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "IdentityHolder.avatarRemoteURL":
+		if e.ComplexityRoot.IdentityHolder.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolder.AvatarRemoteURL(childComplexity), true
 
 	case "IdentityHolder.blockedGroups":
 		if e.ComplexityRoot.IdentityHolder.BlockedGroups == nil {
@@ -67193,6 +67217,14 @@ input CreateDirectoryAccountInput {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -68720,6 +68752,10 @@ input CreateIdentityHolderInput {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -73579,6 +73615,14 @@ type DirectoryAccount implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -74258,6 +74302,24 @@ input DirectoryAccountWhereInput {
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
   """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
+  """
   display_name field predicates
   """
   displayName: String
@@ -74634,6 +74696,10 @@ input DirectoryAccountWhereInput {
   Filter for tagsHas to contain a specific value
   """
   tagsHas: String
+  """
+  Filter for emailAliasesHas to contain a specific value
+  """
+  emailAliasesHas: String
 }
 type DirectoryGroup implements Node {
   id: ID!
@@ -88967,7 +89033,7 @@ type IdentityHolder implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
   """
   alternate email address for the identity holder in an array
   """
@@ -89036,6 +89102,10 @@ type IdentityHolder implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
   owner: Organization
   blockedGroups(
     """
@@ -90235,6 +90305,24 @@ input IdentityHolderWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
   """
   owner edge predicates
   """
@@ -129029,6 +129117,17 @@ input UpdateDirectoryAccountInput {
   canonicalEmail: String
   clearCanonicalEmail: Boolean
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  appendEmailAliases: [String!]
+  clearEmailAliases: Boolean
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  clearPhoneNumber: Boolean
+  """
   provider supplied display name
   """
   displayName: String
@@ -131131,6 +131230,11 @@ input UpdateIdentityHolderInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
+  clearAvatarRemoteURL: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

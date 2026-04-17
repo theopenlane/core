@@ -124,6 +124,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
 			case "blockedGroups":
@@ -316,6 +318,8 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identit
 				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
 			case "blockedGroups":
@@ -508,6 +512,8 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
 			case "blockedGroups":
@@ -700,6 +706,8 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
 			case "metadata":
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
+			case "avatarRemoteURL":
+				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
 			case "blockedGroups":

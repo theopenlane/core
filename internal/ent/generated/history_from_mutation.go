@@ -4892,6 +4892,14 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetNillableCanonicalEmail(&canonicalEmail)
 	}
 
+	if emailAliases, exists := m.EmailAliases(); exists {
+		create = create.SetEmailAliases(emailAliases)
+	}
+
+	if phoneNumber, exists := m.PhoneNumber(); exists {
+		create = create.SetNillablePhoneNumber(&phoneNumber)
+	}
+
 	if displayName, exists := m.DisplayName(); exists {
 		create = create.SetDisplayName(displayName)
 	}
@@ -5143,6 +5151,18 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableCanonicalEmail(directoryaccount.CanonicalEmail)
 		}
 
+		if emailAliases, exists := m.EmailAliases(); exists {
+			create = create.SetEmailAliases(emailAliases)
+		} else {
+			create = create.SetEmailAliases(directoryaccount.EmailAliases)
+		}
+
+		if phoneNumber, exists := m.PhoneNumber(); exists {
+			create = create.SetNillablePhoneNumber(&phoneNumber)
+		} else {
+			create = create.SetNillablePhoneNumber(directoryaccount.PhoneNumber)
+		}
+
 		if displayName, exists := m.DisplayName(); exists {
 			create = create.SetDisplayName(displayName)
 		} else {
@@ -5348,6 +5368,8 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetExternalID(directoryaccount.ExternalID).
 			SetNillableSecondaryKey(directoryaccount.SecondaryKey).
 			SetNillableCanonicalEmail(directoryaccount.CanonicalEmail).
+			SetEmailAliases(directoryaccount.EmailAliases).
+			SetNillablePhoneNumber(directoryaccount.PhoneNumber).
 			SetDisplayName(directoryaccount.DisplayName).
 			SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL).
 			SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID).
@@ -11303,6 +11325,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetMetadata(metadata)
 	}
 
+	if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11556,6 +11582,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetMetadata(identityholder.Metadata)
 		}
 
+		if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
+			create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
+		} else {
+			create = create.SetNillableAvatarRemoteURL(identityholder.AvatarRemoteURL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11628,6 +11660,7 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetExternalUserID(identityholder.ExternalUserID).
 			SetExternalReferenceID(identityholder.ExternalReferenceID).
 			SetMetadata(identityholder.Metadata).
+			SetNillableAvatarRemoteURL(identityholder.AvatarRemoteURL).
 			Save(ctx)
 		if err != nil {
 			return err

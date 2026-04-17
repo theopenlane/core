@@ -703,6 +703,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldExternalID:          {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
 			directoryaccount.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
 			directoryaccount.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
+			directoryaccount.FieldEmailAliases:        {Type: field.TypeJSON, Column: directoryaccount.FieldEmailAliases},
+			directoryaccount.FieldPhoneNumber:         {Type: field.TypeString, Column: directoryaccount.FieldPhoneNumber},
 			directoryaccount.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
 			directoryaccount.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
 			directoryaccount.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
@@ -1513,6 +1515,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldExternalUserID:         {Type: field.TypeString, Column: identityholder.FieldExternalUserID},
 			identityholder.FieldExternalReferenceID:    {Type: field.TypeString, Column: identityholder.FieldExternalReferenceID},
 			identityholder.FieldMetadata:               {Type: field.TypeJSON, Column: identityholder.FieldMetadata},
+			identityholder.FieldAvatarRemoteURL:        {Type: field.TypeString, Column: identityholder.FieldAvatarRemoteURL},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -22351,6 +22354,16 @@ func (f *DirectoryAccountFilter) WhereCanonicalEmail(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldCanonicalEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *DirectoryAccountFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(directoryaccount.FieldEmailAliases))
+}
+
+// WherePhoneNumber applies the entql string predicate on the phone_number field.
+func (f *DirectoryAccountFilter) WherePhoneNumber(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldPhoneNumber))
+}
+
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldDisplayName))
@@ -29279,6 +29292,11 @@ func (f *IdentityHolderFilter) WhereExternalReferenceID(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IdentityHolderFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(identityholder.FieldMetadata))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *IdentityHolderFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(identityholder.FieldAvatarRemoteURL))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

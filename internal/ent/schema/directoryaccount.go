@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"net/mail"
 	"time"
 
 	"entgo.io/contrib/entgql"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -113,6 +115,34 @@ func (DirectoryAccount) Fields() []ent.Field {
 				entx.IntegrationMappingField().UpsertKey(),
 				entgql.OrderField("canonical_email"),
 			),
+		field.Strings("email_aliases").
+			Comment("alternate email address for the identity holder in an array").
+			Optional().
+			Validate(func(emails []string) error {
+				for _, e := range emails {
+					_, err := mail.ParseAddress(e)
+					return err
+				}
+
+				return nil
+			}).
+			Default([]string{}),
+		field.String("phone_number").
+			Comment("phone number for the identity holder").
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				valid := validator.ValidatePhoneNumber(s)
+				if !valid {
+					return rout.InvalidField("phone_number")
+				}
+
+				return nil
+			}).
+			Nillable().
+			Optional(),
 		field.String("display_name").
 			Comment("provider supplied display name").
 			Optional().
@@ -135,7 +165,6 @@ func (DirectoryAccount) Fields() []ent.Field {
 		field.Time("avatar_updated_at").
 			Comment("time the directory account avatar was last updated").
 			Default(time.Now).
-			UpdateDefault(time.Now).
 			Optional().
 			Nillable(),
 		field.String("given_name").

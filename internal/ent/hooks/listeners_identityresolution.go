@@ -2,16 +2,20 @@ package hooks
 
 import (
 	"context"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -237,17 +241,16 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 // conservative defaults, using primary source fields when available
 func createIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
 	canonicalEmail := *account.CanonicalEmail
+	exists := resolveIsOpenlaneUser(ctx, client, canonicalEmail)
 
 	create := client.IdentityHolder.Create().
 		SetOwnerID(account.OwnerID).
 		SetEmail(canonicalEmail).
+		SetIsOpenlaneUser(exists).
 		SetFullName(buildFullName(account.DisplayName, account.GivenName, account.FamilyName, canonicalEmail))
 
-	if account.PrimarySource {
-		applyPrimarySourceDefaults(create, account)
-	} else {
-		create.SetStatus(enums.UserStatusUnknown)
-	}
+	// always apply on initial creation as a best effort
+	applyPrimarySourceDefaults(create, account)
 
 	holder, err := create.Save(ctx)
 	if err == nil {
@@ -264,49 +267,100 @@ func createIdentityHolder(ctx context.Context, client *entgen.Client, account *e
 			identityholder.Email(canonicalEmail)).Only(ctx)
 }
 
+// resolveIsOpenlaneUser checks if the user with the email is a member of the organization and sets to true if found
+func resolveIsOpenlaneUser(ctx context.Context, client *entgen.Client, email string) bool {
+	if email == "" {
+		return false
+	}
+
+	exists, err := client.OrgMembership.Query().Where(
+		orgmembership.HasUserWith(user.Email(email)),
+	).Exist(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error determining if users exists in organization")
+	}
+
+	return exists
+}
+
 // applyPrimarySourceDefaults sets authoritative fields on a new identity holder create builder from a primary source directory account
 func applyPrimarySourceDefaults(create *entgen.IdentityHolderCreate, account *entgen.DirectoryAccount) {
 	create.SetStatus(mapDirectoryAccountStatus(account.Status))
 	create.SetIsActive(account.Status == enums.DirectoryAccountStatusActive)
 	create.SetNillableTitle(account.JobTitle)
 	create.SetNillableDepartment(account.Department)
+	create.SetEmailAliases(account.EmailAliases)
+	create.SetNillablePhoneNumber(account.PhoneNumber)
+	create.SetExternalUserID(account.ExternalID)
+
+	if account.AddedAt != nil {
+		create.SetStartDate(models.DateTime(*account.AddedAt))
+	}
+
+	if account.RemovedAt != nil {
+		create.SetEndDate(models.DateTime(*account.RemovedAt))
+	}
 }
 
 // enrichFromPrimarySource updates an existing identity holder with authoritative fields from a primary source directory account
 func enrichFromPrimarySource(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder, account *entgen.DirectoryAccount) error {
 	update := client.IdentityHolder.UpdateOneID(holder.ID)
 
+	exists := resolveIsOpenlaneUser(ctx, client, holder.Email)
+
+	update.SetIsOpenlaneUser(exists)
 	update.SetStatus(mapDirectoryAccountStatus(account.Status))
 	update.SetIsActive(account.Status == enums.DirectoryAccountStatusActive)
+	update.SetExternalUserID(account.ExternalID)
 
 	if name := buildFullName(account.DisplayName, account.GivenName, account.FamilyName, ""); name != "" {
 		update.SetFullName(name)
 	}
 
+	update.SetNillablePhoneNumber(account.PhoneNumber)
 	update.SetNillableTitle(account.JobTitle)
 	update.SetNillableDepartment(account.Department)
+	update.SetNillableAvatarRemoteURL(account.AvatarRemoteURL)
+
+	if account.AddedAt != nil {
+		update.SetStartDate(models.DateTime(*account.AddedAt))
+	}
+
+	if account.RemovedAt != nil {
+		update.SetEndDate(models.DateTime(*account.RemovedAt))
+	}
 
 	return update.Exec(ctx)
 }
 
 // syncEmailAliases rebuilds the identity holder's email_aliases from all linked
-// directory accounts' canonical emails, excluding the primary email
+// directory accounts' canonical emails and per-account aliases, excluding the primary email
 func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder) error {
 	accounts, err := client.DirectoryAccount.Query().
 		Where(directoryaccount.IdentityHolderID(holder.ID),
 			directoryaccount.CanonicalEmailNotNil()).
-		Select(directoryaccount.FieldCanonicalEmail).All(ctx)
+		Select(directoryaccount.FieldCanonicalEmail, directoryaccount.FieldEmailAliases).All(ctx)
 	if err != nil {
 		return err
 	}
 
-	aliases := lo.Uniq(lo.FilterMap(accounts, func(a *entgen.DirectoryAccount, _ int) (string, bool) {
-		if a.CanonicalEmail == nil || *a.CanonicalEmail == "" || strings.EqualFold(*a.CanonicalEmail, holder.Email) {
-			return "", false
+	var collected []string
+
+	for _, a := range accounts {
+		if a.CanonicalEmail != nil && *a.CanonicalEmail != "" && !strings.EqualFold(*a.CanonicalEmail, holder.Email) {
+			collected = append(collected, *a.CanonicalEmail)
 		}
 
-		return *a.CanonicalEmail, true
-	}))
+		collected = append(collected, a.EmailAliases...)
+	}
+
+	aliases := lo.Uniq(collected)
+
+	if i := slices.Index(aliases, holder.Email); i > -1 {
+		aliases = slices.Delete(aliases, i, i+1)
+	}
+
+	slices.Sort(aliases)
 
 	return client.IdentityHolder.UpdateOneID(holder.ID).
 		SetEmailAliases(aliases).

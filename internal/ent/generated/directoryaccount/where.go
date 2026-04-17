@@ -163,6 +163,11 @@ func CanonicalEmail(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldCanonicalEmail, v))
 }
 
+// PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
+func PhoneNumber(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldDisplayName, v))
@@ -1626,6 +1631,91 @@ func CanonicalEmailEqualFold(v string) predicate.DirectoryAccount {
 // CanonicalEmailContainsFold applies the ContainsFold predicate on the "canonical_email" field.
 func CanonicalEmailContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldCanonicalEmail, v))
+}
+
+// EmailAliasesIsNil applies the IsNil predicate on the "email_aliases" field.
+func EmailAliasesIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldEmailAliases))
+}
+
+// EmailAliasesNotNil applies the NotNil predicate on the "email_aliases" field.
+func EmailAliasesNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldEmailAliases))
+}
+
+// PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
+func PhoneNumberEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberNEQ applies the NEQ predicate on the "phone_number" field.
+func PhoneNumberNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIn applies the In predicate on the "phone_number" field.
+func PhoneNumberIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberNotIn applies the NotIn predicate on the "phone_number" field.
+func PhoneNumberNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberGT applies the GT predicate on the "phone_number" field.
+func PhoneNumberGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberGTE applies the GTE predicate on the "phone_number" field.
+func PhoneNumberGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLT applies the LT predicate on the "phone_number" field.
+func PhoneNumberLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLTE applies the LTE predicate on the "phone_number" field.
+func PhoneNumberLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContains applies the Contains predicate on the "phone_number" field.
+func PhoneNumberContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasPrefix applies the HasPrefix predicate on the "phone_number" field.
+func PhoneNumberHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasSuffix applies the HasSuffix predicate on the "phone_number" field.
+func PhoneNumberHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIsNil applies the IsNil predicate on the "phone_number" field.
+func PhoneNumberIsNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIsNull(FieldPhoneNumber))
+}
+
+// PhoneNumberNotNil applies the NotNil predicate on the "phone_number" field.
+func PhoneNumberNotNil() predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotNull(FieldPhoneNumber))
+}
+
+// PhoneNumberEqualFold applies the EqualFold predicate on the "phone_number" field.
+func PhoneNumberEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
+func PhoneNumberContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldPhoneNumber, v))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.

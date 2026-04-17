@@ -685,22 +685,24 @@ func init() {
 	directoryaccounthistoryDescTags := directoryaccounthistoryFields[9].Descriptor()
 	// directoryaccounthistory.DefaultTags holds the default value on creation for the tags field.
 	directoryaccounthistory.DefaultTags = directoryaccounthistoryDescTags.Default.([]string)
+	// directoryaccounthistoryDescEmailAliases is the schema descriptor for email_aliases field.
+	directoryaccounthistoryDescEmailAliases := directoryaccounthistoryFields[24].Descriptor()
+	// directoryaccounthistory.DefaultEmailAliases holds the default value on creation for the email_aliases field.
+	directoryaccounthistory.DefaultEmailAliases = directoryaccounthistoryDescEmailAliases.Default.([]string)
 	// directoryaccounthistoryDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[27].Descriptor()
+	directoryaccounthistoryDescAvatarUpdatedAt := directoryaccounthistoryFields[29].Descriptor()
 	// directoryaccounthistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccounthistory.DefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// directoryaccounthistory.UpdateDefaultAvatarUpdatedAt holds the default value on update for the avatar_updated_at field.
-	directoryaccounthistory.UpdateDefaultAvatarUpdatedAt = directoryaccounthistoryDescAvatarUpdatedAt.UpdateDefault.(func() time.Time)
 	// directoryaccounthistoryDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[42].Descriptor()
+	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[44].Descriptor()
 	// directoryaccounthistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccounthistory.DefaultObservedAt = directoryaccounthistoryDescObservedAt.Default.(func() time.Time)
 	// directoryaccounthistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[43].Descriptor()
+	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[45].Descriptor()
 	// directoryaccounthistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directoryaccounthistory.DefaultProfileHash = directoryaccounthistoryDescProfileHash.Default.(string)
 	// directoryaccounthistoryDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccounthistoryDescPrimarySource := directoryaccounthistoryFields[48].Descriptor()
+	directoryaccounthistoryDescPrimarySource := directoryaccounthistoryFields[50].Descriptor()
 	// directoryaccounthistory.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccounthistory.DefaultPrimarySource = directoryaccounthistoryDescPrimarySource.Default.(bool)
 	// directoryaccounthistoryDescID is the schema descriptor for id field.

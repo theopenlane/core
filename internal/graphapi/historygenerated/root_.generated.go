@@ -575,6 +575,7 @@ type ComplexityRoot struct {
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		DisplayName         func(childComplexity int) int
+		EmailAliases        func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
 		EnvironmentName     func(childComplexity int) int
 		ExternalID          func(childComplexity int) int
@@ -595,6 +596,7 @@ type ComplexityRoot struct {
 		Operation           func(childComplexity int) int
 		OrganizationUnit    func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		PhoneNumber         func(childComplexity int) int
 		PlatformID          func(childComplexity int) int
 		PrimarySource       func(childComplexity int) int
 		Profile             func(childComplexity int) int
@@ -1278,6 +1280,7 @@ type ComplexityRoot struct {
 
 	IdentityHolderHistory struct {
 		AlternateEmail         func(childComplexity int) int
+		AvatarRemoteURL        func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Department             func(childComplexity int) int
@@ -6366,6 +6369,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.DisplayName(childComplexity), true
 
+	case "DirectoryAccountHistory.emailAliases":
+		if e.ComplexityRoot.DirectoryAccountHistory.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.EmailAliases(childComplexity), true
+
 	case "DirectoryAccountHistory.environmentID":
 		if e.ComplexityRoot.DirectoryAccountHistory.EnvironmentID == nil {
 			break
@@ -6505,6 +6515,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.OwnerID(childComplexity), true
+
+	case "DirectoryAccountHistory.phoneNumber":
+		if e.ComplexityRoot.DirectoryAccountHistory.PhoneNumber == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.PhoneNumber(childComplexity), true
 
 	case "DirectoryAccountHistory.platformID":
 		if e.ComplexityRoot.DirectoryAccountHistory.PlatformID == nil {
@@ -10215,6 +10232,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.AlternateEmail(childComplexity), true
+
+	case "IdentityHolderHistory.avatarRemoteURL":
+		if e.ComplexityRoot.IdentityHolderHistory.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.AvatarRemoteURL(childComplexity), true
 
 	case "IdentityHolderHistory.createdAt":
 		if e.ComplexityRoot.IdentityHolderHistory.CreatedAt == nil {
@@ -29162,6 +29186,14 @@ type DirectoryAccountHistory implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -29738,6 +29770,24 @@ input DirectoryAccountHistoryWhereInput {
   canonicalEmailNotNil: Boolean
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
+  """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
   """
   display_name field predicates
   """
@@ -38507,7 +38557,7 @@ type IdentityHolderHistory implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
   """
   alternate email address for the identity holder in an array
   """
@@ -38576,6 +38626,10 @@ type IdentityHolderHistory implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
 }
 """
 A connection to a list of items.
@@ -39224,6 +39278,24 @@ input IdentityHolderHistoryWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
 }
 type IntegrationHistory implements Node {
   id: ID!

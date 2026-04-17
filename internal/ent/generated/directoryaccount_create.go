@@ -288,6 +288,26 @@ func (_c *DirectoryAccountCreate) SetNillableCanonicalEmail(v *string) *Director
 	return _c
 }
 
+// SetEmailAliases sets the "email_aliases" field.
+func (_c *DirectoryAccountCreate) SetEmailAliases(v []string) *DirectoryAccountCreate {
+	_c.mutation.SetEmailAliases(v)
+	return _c
+}
+
+// SetPhoneNumber sets the "phone_number" field.
+func (_c *DirectoryAccountCreate) SetPhoneNumber(v string) *DirectoryAccountCreate {
+	_c.mutation.SetPhoneNumber(v)
+	return _c
+}
+
+// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillablePhoneNumber(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetPhoneNumber(*v)
+	}
+	return _c
+}
+
 // SetDisplayName sets the "display_name" field.
 func (_c *DirectoryAccountCreate) SetDisplayName(v string) *DirectoryAccountCreate {
 	_c.mutation.SetDisplayName(v)
@@ -805,6 +825,10 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.EmailAliases(); !ok {
+		v := directoryaccount.DefaultEmailAliases
+		_c.mutation.SetEmailAliases(v)
+	}
 	if _, ok := _c.mutation.AvatarUpdatedAt(); !ok {
 		if directoryaccount.DefaultAvatarUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultAvatarUpdatedAt (forgotten import generated/runtime?)")
@@ -885,6 +909,16 @@ func (_c *DirectoryAccountCreate) check() error {
 	if v, ok := _c.mutation.ExternalID(); ok {
 		if err := directoryaccount.ExternalIDValidator(v); err != nil {
 			return &ValidationError{Name: "external_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.external_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.EmailAliases(); ok {
+		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
+			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PhoneNumber(); ok {
+		if err := directoryaccount.PhoneNumberValidator(v); err != nil {
+			return &ValidationError{Name: "phone_number", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.phone_number": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.AvatarRemoteURL(); ok {
@@ -1009,6 +1043,14 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.CanonicalEmail(); ok {
 		_spec.SetField(directoryaccount.FieldCanonicalEmail, field.TypeString, value)
 		_node.CanonicalEmail = &value
+	}
+	if value, ok := _c.mutation.EmailAliases(); ok {
+		_spec.SetField(directoryaccount.FieldEmailAliases, field.TypeJSON, value)
+		_node.EmailAliases = value
+	}
+	if value, ok := _c.mutation.PhoneNumber(); ok {
+		_spec.SetField(directoryaccount.FieldPhoneNumber, field.TypeString, value)
+		_node.PhoneNumber = &value
 	}
 	if value, ok := _c.mutation.DisplayName(); ok {
 		_spec.SetField(directoryaccount.FieldDisplayName, field.TypeString, value)

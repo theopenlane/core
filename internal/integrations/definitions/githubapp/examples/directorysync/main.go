@@ -29,6 +29,24 @@ import (
 	"golang.org/x/oauth2"
 )
 
+type orgMemberNodeGQL struct {
+	DatabaseID                       int `graphql:"databaseId"`
+	Login                            string
+	Name                             string
+	Email                            string
+	AvatarURL                        string   `graphql:"avatarUrl"`
+	OrganizationVerifiedDomainEmails []string `graphql:"organizationVerifiedDomainEmails(login: $login)"`
+}
+
+type orgMemberNode struct {
+	orgMemberNodeGQL
+
+	Org            string
+	CanonicalEmail string
+	GivenName      string
+	FamilyName     string
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Fprintln(os.Stderr, "usage: go run main.go <installation_id> [config_path]")
@@ -190,12 +208,7 @@ func main() {
 				Login           string
 				MembersWithRole struct {
 					TotalCount int
-					Nodes      []struct {
-						Login                          string
-						Email                          string
-						Name                           string
-						OrganizationVerifiedDomainEmails []string `graphql:"organizationVerifiedDomainEmails(login: $login)"`
-					}
+					Nodes      []orgMemberNodeGQL
 				} `graphql:"membersWithRole(first: 10)"`
 			} `graphql:"organization(login: $login)"`
 		}
@@ -205,7 +218,7 @@ func main() {
 		}
 
 		if err := gqlClient.Query(ctx, &directOrgQuery, variables); err != nil {
-			fmt.Fprintf(os.Stderr, "direct org members query: %v\n", err)
+			fmt.Fprintf(os.Stderr, "ERROR: direct org members query: %v\n", err)
 		} else {
 			fmt.Printf("members via direct org query: %d\n", directOrgQuery.Organization.MembersWithRole.TotalCount)
 			for _, m := range directOrgQuery.Organization.MembersWithRole.Nodes {
@@ -236,8 +249,8 @@ func main() {
 								Groups     []string
 							}
 							ScimIdentity *struct {
-								Username   *string
-								Emails     []struct {
+								Username *string
+								Emails   []struct {
 									Value string
 								}
 								GivenName  *string
