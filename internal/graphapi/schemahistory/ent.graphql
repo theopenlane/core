@@ -7007,6 +7007,14 @@ type DirectoryAccountHistory implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -7583,6 +7591,24 @@ input DirectoryAccountHistoryWhereInput {
   canonicalEmailNotNil: Boolean
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
+  """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
   """
   display_name field predicates
   """
@@ -12949,6 +12975,18 @@ type FileHistory implements Node {
   """
   scopeID: String
   """
+  the category of the file
+  """
+  categoryName: String
+  """
+  the category of the file
+  """
+  categoryID: String
+  """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -12980,7 +13018,7 @@ type FileHistory implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -13305,6 +13343,60 @@ input FileHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -16352,7 +16444,7 @@ type IdentityHolderHistory implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
   """
   alternate email address for the identity holder in an array
   """
@@ -16421,6 +16513,10 @@ type IdentityHolderHistory implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
 }
 """
 A connection to a list of items.
@@ -17069,6 +17165,24 @@ input IdentityHolderHistoryWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
 }
 type IntegrationHistory implements Node {
   id: ID!

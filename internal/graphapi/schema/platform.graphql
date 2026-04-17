@@ -47,8 +47,11 @@ extend type Mutation{
         """
         input: CreatePlatformInput!
         architectureDiagrams: [Upload!]
+        architectureDiagramsMetadata: [FileMetadataInput!]
         dataFlowDiagrams: [Upload!]
+        dataFlowDiagramsMetadata: [FileMetadataInput!]
         trustBoundaryDiagrams: [Upload!]
+        trustBoundaryDiagramsMetadata: [FileMetadataInput!]
     ): PlatformCreatePayload!
     """
     Create multiple new platforms
@@ -81,8 +84,11 @@ extend type Mutation{
         """
         input: UpdatePlatformInput!
         architectureDiagrams: [Upload!]
+        architectureDiagramsMetadata: [FileMetadataInput!]
         dataFlowDiagrams: [Upload!]
+        dataFlowDiagramsMetadata: [FileMetadataInput!]
         trustBoundaryDiagrams: [Upload!]
+        trustBoundaryDiagramsMetadata: [FileMetadataInput!]
     ): PlatformUpdatePayload!
     """
     Delete an existing platform

@@ -2964,6 +2964,16 @@ func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNod
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldCanonicalEmail)
 				fieldSeen[directoryaccounthistory.FieldCanonicalEmail] = struct{}{}
 			}
+		case "emailAliases":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldEmailAliases]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldEmailAliases)
+				fieldSeen[directoryaccounthistory.FieldEmailAliases] = struct{}{}
+			}
+		case "phoneNumber":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldPhoneNumber]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldPhoneNumber)
+				fieldSeen[directoryaccounthistory.FieldPhoneNumber] = struct{}{}
+			}
 		case "displayName":
 			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayName]; !ok {
 				selectedFields = append(selectedFields, directoryaccounthistory.FieldDisplayName)
@@ -5224,6 +5234,21 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldScopeID)
 				fieldSeen[filehistory.FieldScopeID] = struct{}{}
 			}
+		case "categoryName":
+			if _, ok := fieldSeen[filehistory.FieldCategoryName]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCategoryName)
+				fieldSeen[filehistory.FieldCategoryName] = struct{}{}
+			}
+		case "categoryID":
+			if _, ok := fieldSeen[filehistory.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldCategoryID)
+				fieldSeen[filehistory.FieldCategoryID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[filehistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldName)
+				fieldSeen[filehistory.FieldName] = struct{}{}
+			}
 		case "providedFileName":
 			if _, ok := fieldSeen[filehistory.FieldProvidedFileName]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldProvidedFileName)
@@ -6771,6 +6796,11 @@ func (_q *IdentityHolderHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[identityholderhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, identityholderhistory.FieldMetadata)
 				fieldSeen[identityholderhistory.FieldMetadata] = struct{}{}
+			}
+		case "avatarRemoteURL":
+			if _, ok := fieldSeen[identityholderhistory.FieldAvatarRemoteURL]; !ok {
+				selectedFields = append(selectedFields, identityholderhistory.FieldAvatarRemoteURL)
+				fieldSeen[identityholderhistory.FieldAvatarRemoteURL] = struct{}{}
 			}
 		case "id":
 		case "__typename":

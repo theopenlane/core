@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -139,6 +140,7 @@ func (JobResult) Modules() []models.OrgModule {
 // Annotations of the JobResult
 func (j JobResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaJobResult),
 		history.Annotations{
 			Exclude: true,
 		},

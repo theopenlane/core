@@ -28,20 +28,15 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 
 	svc, err := admin.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {
-		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to create admin service, attempting to resolve installation metadata with token info")
+		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to create admin service")
 
 		return InstallationMetadata{}, false, nil
 	}
 
-	if req.Integration.InstallationMetadata.Display.ExternalID == "" {
-		logx.FromContext(ctx).Info().Msg("googleworkspace: no installation metadata external ID, attempting to resolve with token info")
-
-		return InstallationMetadata{}, false, ErrCustomerIDMissing
-	}
-
-	customer, err := svc.Customers.Get(req.Integration.InstallationMetadata.Display.ExternalID).Context(ctx).Do()
+	customer, err := svc.Customers.Get("my_customer").Context(ctx).Do()
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to fetch customer information")
+
 		return InstallationMetadata{}, false, nil
 	}
 

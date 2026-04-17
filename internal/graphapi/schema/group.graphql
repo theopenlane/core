@@ -20,6 +20,7 @@ extend type Mutation{
         """
         input: CreateGroupInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): GroupCreatePayload!
     """
     Create multiple new groups
@@ -52,6 +53,7 @@ extend type Mutation{
         """
         input: UpdateGroupInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): GroupUpdatePayload!
     """
     Delete an existing group

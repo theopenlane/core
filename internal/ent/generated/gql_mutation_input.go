@@ -5065,6 +5065,8 @@ type CreateDirectoryAccountInput struct {
 	ExternalID           string
 	SecondaryKey         *string
 	CanonicalEmail       *string
+	EmailAliases         []string
+	PhoneNumber          *string
 	DisplayName          *string
 	AvatarRemoteURL      *string
 	AvatarUpdatedAt      *time.Time
@@ -5124,6 +5126,12 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
@@ -5252,6 +5260,11 @@ type UpdateDirectoryAccountInput struct {
 	SecondaryKey               *string
 	ClearCanonicalEmail        bool
 	CanonicalEmail             *string
+	ClearEmailAliases          bool
+	EmailAliases               []string
+	AppendEmailAliases         []string
+	ClearPhoneNumber           bool
+	PhoneNumber                *string
 	ClearDisplayName           bool
 	DisplayName                *string
 	ClearAvatarRemoteURL       bool
@@ -5359,6 +5372,21 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.CanonicalEmail; v != nil {
 		m.SetCanonicalEmail(*v)
+	}
+	if i.ClearEmailAliases {
+		m.ClearEmailAliases()
+	}
+	if v := i.EmailAliases; v != nil {
+		m.SetEmailAliases(v)
+	}
+	if i.AppendEmailAliases != nil {
+		m.AppendEmailAliases(i.EmailAliases)
+	}
+	if i.ClearPhoneNumber {
+		m.ClearPhoneNumber()
+	}
+	if v := i.PhoneNumber; v != nil {
+		m.SetPhoneNumber(*v)
 	}
 	if i.ClearDisplayName {
 		m.ClearDisplayName()
@@ -9270,6 +9298,8 @@ type CreateFileInput struct {
 	SystemInternalID          *string
 	EnvironmentName           *string
 	ScopeName                 *string
+	CategoryName              *string
+	Name                      *string
 	ProvidedFileName          string
 	ProvidedFileExtension     string
 	ProvidedFileSize          *int64
@@ -9289,6 +9319,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time
 	EnvironmentID             *string
 	ScopeID                   *string
+	CategoryID                *string
 	OrganizationIDs           []string
 	GroupIDs                  []string
 	ContactIDs                []string
@@ -9325,6 +9356,12 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if v := i.CategoryName; v != nil {
+		m.SetCategoryName(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
 	}
 	m.SetProvidedFileName(i.ProvidedFileName)
 	m.SetProvidedFileExtension(i.ProvidedFileExtension)
@@ -9376,6 +9413,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
@@ -9452,6 +9492,10 @@ type UpdateFileInput struct {
 	EnvironmentName                 *string
 	ClearScopeName                  bool
 	ScopeName                       *string
+	ClearCategoryName               bool
+	CategoryName                    *string
+	ClearName                       bool
+	Name                            *string
 	ProvidedFileName                *string
 	ProvidedFileExtension           *string
 	ClearProvidedFileSize           bool
@@ -9487,6 +9531,8 @@ type UpdateFileInput struct {
 	EnvironmentID                   *string
 	ClearScope                      bool
 	ScopeID                         *string
+	ClearCategory                   bool
+	CategoryID                      *string
 	ClearOrganization               bool
 	AddOrganizationIDs              []string
 	RemoveOrganizationIDs           []string
@@ -9577,6 +9623,18 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
+	}
+	if i.ClearCategoryName {
+		m.ClearCategoryName()
+	}
+	if v := i.CategoryName; v != nil {
+		m.SetCategoryName(*v)
+	}
+	if i.ClearName {
+		m.ClearName()
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
 	}
 	if v := i.ProvidedFileName; v != nil {
 		m.SetProvidedFileName(*v)
@@ -9682,6 +9740,12 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
@@ -12200,6 +12264,7 @@ type CreateIdentityHolderInput struct {
 	ExternalUserID         *string
 	ExternalReferenceID    *string
 	Metadata               map[string]interface{}
+	AvatarRemoteURL        *string
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -12294,6 +12359,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -12426,6 +12494,8 @@ type UpdateIdentityHolderInput struct {
 	ExternalReferenceID         *string
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearAvatarRemoteURL        bool
+	AvatarRemoteURL             *string
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -12627,6 +12697,12 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearAvatarRemoteURL {
+		m.ClearAvatarRemoteURL()
+	}
+	if v := i.AvatarRemoteURL; v != nil {
+		m.SetAvatarRemoteURL(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

@@ -284,6 +284,7 @@ func (Remediation) Indexes() []ent.Index {
 // Annotations of the Remediation
 func (Remediation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaRemediation),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

@@ -1,5 +1,5 @@
-mutation CreateStandard ($input: CreateStandardInput!, $logoFile: Upload) {
-	createStandard(input: $input, logoFile: $logoFile) {
+mutation CreateStandard ($input: CreateStandardInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	createStandard(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		standard {
 			createdAt
 			createdBy
@@ -14,6 +14,8 @@ mutation CreateStandard ($input: CreateStandardInput!, $logoFile: Upload) {
 			link
 			logoFile {
 				id
+				name
+				metadata
 			}
 			name
 			ownerID
@@ -201,8 +203,8 @@ query GetStandards ($first: Int, $last: Int, $where: StandardWhereInput) {
 		}
 	}
 }
-mutation UpdateStandard ($updateStandardId: ID!, $input: UpdateStandardInput!, $logoFile: Upload) {
-	updateStandard(id: $updateStandardId, input: $input, logoFile: $logoFile) {
+mutation UpdateStandard ($updateStandardId: ID!, $input: UpdateStandardInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	updateStandard(id: $updateStandardId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		standard {
 			createdAt
 			createdBy
@@ -217,6 +219,8 @@ mutation UpdateStandard ($updateStandardId: ID!, $input: UpdateStandardInput!, $
 			link
 			logoFile {
 				id
+				name
+				metadata
 			}
 			name
 			ownerID

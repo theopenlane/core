@@ -22,8 +22,8 @@ type samlIdentity struct {
 	FamilyName string
 }
 
-// orgMemberNode is a single organization member record returned by the GitHub GraphQL API
-type orgMemberNode struct {
+// orgMemberNodeGQL is a single organization member record returned by the GitHub GraphQL API
+type orgMemberNodeGQL struct {
 	// DatabaseID is the numeric GitHub user identifier
 	DatabaseID int `graphql:"databaseId"`
 	// Login is the GitHub username
@@ -36,14 +36,20 @@ type orgMemberNode struct {
 	AvatarURL string `graphql:"avatarUrl"`
 	// OrganizationVerifiedDomainEmails is the list of emails matching the org's verified domains
 	OrganizationVerifiedDomainEmails []string `graphql:"organizationVerifiedDomainEmails(login: $login)"`
+}
+
+// orgMemberNode combines the github response with details that are populated after the query
+type orgMemberNode struct {
+	orgMemberNodeGQL
+
 	// Org is the organization login, populated after query
-	Org string `graphql:"-"`
+	Org string
 	// CanonicalEmail is the best-resolved email, populated after query
-	CanonicalEmail string `graphql:"-"`
+	CanonicalEmail string
 	// GivenName is the user's first name from SAML identity when available
-	GivenName string `graphql:"-"`
+	GivenName string
 	// FamilyName is the user's last name from SAML identity when available
-	FamilyName string `graphql:"-"`
+	FamilyName string
 }
 
 // orgNode holds the login of a GitHub organization accessible to the installation
@@ -85,22 +91,27 @@ func (DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.Ing
 			return nil, err
 		}
 
-		for i := range members {
-			members[i].Org = org.Login
-			resolveCanonicalEmail(&members[i], samlMap)
+		orgMembers := make([]orgMemberNode, len(members))
+		for i, m := range members {
+			orgMembers[i] = orgMemberNode{
+				orgMemberNodeGQL: m,
+			}
 
-			resource := fmt.Sprintf("%s/%s", org.Login, members[i].Login)
+			orgMembers[i].Org = org.Login
+			resolveCanonicalEmail(&orgMembers[i], samlMap)
 
-			envelope, err := providerkit.MarshalEnvelope(resource, members[i], ErrIngestPayloadEncode)
+			resource := fmt.Sprintf("%s/%s", org.Login, orgMembers[i].Login)
+
+			envelope, err := providerkit.MarshalEnvelope(resource, orgMembers[i], ErrIngestPayloadEncode)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("member", members[i].Login).Msg("githubapp_directorysync: failed to marshal member into ingest envelope")
+				logx.FromContext(ctx).Error().Err(err).Str("member", orgMembers[i].Login).Msg("githubapp_directorysync: failed to marshal member into ingest envelope")
 				return nil, err
 			}
 
 			envelopes = append(envelopes, envelope)
 		}
 
-		logx.FromContext(ctx).Info().Str("org", org.Login).Int("member_count", len(members)).Bool("saml_available", samlMap != nil).Msg("githubapp_directorysync: queried organization members")
+		logx.FromContext(ctx).Info().Str("org", org.Login).Int("member_count", len(orgMembers)).Bool("saml_available", samlMap != nil).Msg("githubapp_directorysync: queried organization members")
 	}
 
 	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(envelopes)).Msg("githubapp_directorysync: collected organization members for directory sync")
@@ -262,8 +273,8 @@ func queryExternalIdentities(ctx context.Context, client GraphQLClient, orgLogin
 }
 
 // queryOrganizationMembers lists members of one GitHub organization
-func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogin string) ([]orgMemberNode, error) {
-	members := make([]orgMemberNode, 0)
+func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogin string) ([]orgMemberNodeGQL, error) {
+	members := make([]orgMemberNodeGQL, 0)
 	var after *githubv4.String
 
 	for {
@@ -275,7 +286,7 @@ func queryOrganizationMembers(ctx context.Context, client GraphQLClient, orgLogi
 		var query struct {
 			Organization struct {
 				MembersWithRole struct {
-					Nodes    []orgMemberNode
+					Nodes    []orgMemberNodeGQL
 					PageInfo pageInfo
 				} `graphql:"membersWithRole(first: $first, after: $after)"`
 			} `graphql:"organization(login: $login)"`

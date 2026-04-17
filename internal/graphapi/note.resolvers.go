@@ -28,7 +28,7 @@ import (
 )
 
 // UpdateTaskComment is the resolver for the updateTaskComment field.
-func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error) {
+func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "taskcomment"})
@@ -61,7 +61,7 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 }
 
 // UpdateControlComment is the resolver for the updateControlComment field.
-func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error) {
+func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
@@ -88,7 +88,7 @@ func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, 
 }
 
 // UpdateSubcontrolComment is the resolver for the updateSubcontrolComment field.
-func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error) {
+func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.SubcontrolUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
@@ -114,7 +114,7 @@ func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id strin
 }
 
 // UpdateProcedureComment is the resolver for the updateProcedureComment field.
-func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ProcedureUpdatePayload, error) {
+func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
@@ -141,7 +141,7 @@ func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string
 }
 
 // UpdateRiskComment is the resolver for the updateRiskComment field.
-func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.RiskUpdatePayload, error) {
+func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
@@ -168,7 +168,7 @@ func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, inp
 }
 
 // UpdateInternalPolicyComment is the resolver for the updateInternalPolicyComment field.
-func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.InternalPolicyUpdatePayload, error) {
+func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
@@ -195,7 +195,7 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 }
 
 // UpdateTrustCenterFAQComment is the resolver for the updateTrustCenterFAQComment field.
-func (r *mutationResolver) UpdateTrustCenterFAQComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterFAQUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterFAQComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterFAQUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterfaq"})
@@ -219,7 +219,7 @@ func (r *mutationResolver) UpdateTrustCenterFAQComment(ctx context.Context, id s
 }
 
 // UpdateTrustCenterPost is the resolver for the updateTrustCenterPost field.
-func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
@@ -243,7 +243,7 @@ func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string,
 }
 
 // UpdateEvidenceComment is the resolver for the updateEvidenceComment field.
-func (r *mutationResolver) UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
+func (r *mutationResolver) UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) (*model.EvidenceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})

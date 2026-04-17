@@ -3,6 +3,7 @@ package operations
 
 import (
 	"context"
+	"time"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -16,6 +17,8 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 
 	createInput.PrimarySource = &integration.PrimaryDirectory
 
+	now := time.Now()
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,
@@ -26,9 +29,11 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 				Only(ctx)
 		},
 		func(ctx context.Context, input ent.CreateDirectoryAccountInput) error {
+			input.FirstSeenAt = &now
 			return db.DirectoryAccount.Create().SetInput(input).Exec(ctx)
 		},
 		func(ctx context.Context, existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) error {
+			input.LastSeenAt = &now
 			return db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
 	)

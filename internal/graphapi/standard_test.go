@@ -488,7 +488,7 @@ func TestMutationCreateStandard(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
 			}
 
-			resp, err := tc.client.CreateStandard(tc.ctx, tc.request, tc.upload)
+			resp, err := tc.client.CreateStandard(tc.ctx, tc.request, tc.upload, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -771,7 +771,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
 			}
 
-			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request, tc.upload)
+			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request, tc.upload, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 

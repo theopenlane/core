@@ -20,6 +20,15 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+<<<<<<< HEAD
+||||||| cba4c23b0
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
+=======
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
+>>>>>>> origin/main
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
@@ -183,6 +192,7 @@ func (o OrganizationSetting) Edges() []ent.Edge {
 // Annotations of the OrganizationSetting
 func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaOrganizationSetting),
 		entfga.SettingsChecks("organization"),
 	}
 }

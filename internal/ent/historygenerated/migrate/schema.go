@@ -611,6 +611,8 @@ var (
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
 		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
+		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
+		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "display_name", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
@@ -1081,6 +1083,9 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_name", Type: field.TypeString, Nullable: true},
+		{Name: "category_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
 		{Name: "provided_file_name", Type: field.TypeString},
 		{Name: "provided_file_extension", Type: field.TypeString},
 		{Name: "provided_file_size", Type: field.TypeInt64, Nullable: true},
@@ -1404,6 +1409,7 @@ var (
 		{Name: "external_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 	}
 	// IdentityHolderHistoryTable holds the schema information for the "identity_holder_history" table.
 	IdentityHolderHistoryTable = &schema.Table{

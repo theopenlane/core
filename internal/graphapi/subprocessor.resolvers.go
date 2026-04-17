@@ -19,7 +19,7 @@ import (
 )
 
 // CreateSubprocessor is the resolver for the createSubprocessor field.
-func (r *mutationResolver) CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorCreatePayload, error) {
+func (r *mutationResolver) CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.SubprocessorCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subprocessor.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subprocessor"})
@@ -87,7 +87,7 @@ func (r *mutationResolver) CreateBulkCSVSubprocessor(ctx context.Context, input 
 }
 
 // UpdateSubprocessor is the resolver for the updateSubprocessor field.
-func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error) {
+func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) (*model.SubprocessorUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subprocessor.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subprocessor"})

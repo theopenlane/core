@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
@@ -200,6 +201,7 @@ func (TrustCenterNDARequest) Indexes() []ent.Index {
 // Annotations of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaTrustCenterNDARequest),
 		entfga.SelfAccessChecks(),
 	}
 }

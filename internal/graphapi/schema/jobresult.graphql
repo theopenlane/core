@@ -23,6 +23,7 @@ extend type Mutation{
         files to upload as jobResult attachments
         """
         jobResultFiles: [Upload!]
+        jobResultFilesMetadata: [FileMetadataInput!]
     ): JobResultCreatePayload!
     """
     Update an existing jobResult
@@ -40,6 +41,7 @@ extend type Mutation{
         files to upload as jobResult attachments
         """
         jobResultFiles: [Upload!]
+        jobResultFilesMetadata: [FileMetadataInput!]
     ): JobResultUpdatePayload!
     """
     Delete an existing jobResult

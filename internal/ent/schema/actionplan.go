@@ -163,6 +163,7 @@ func (ActionPlan) Modules() []models.OrgModule {
 // Annotations of the ActionPlan
 func (a ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaActionPlan),
 		entfga.SelfAccessChecks(),
 	}
 }

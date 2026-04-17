@@ -102,8 +102,10 @@ type IdentityHolderHistory struct {
 	// external identifier for the identity holder from an upstream roster
 	ExternalReferenceID string `json:"external_reference_id,omitempty"`
 	// additional metadata about the identity holder
-	Metadata     map[string]interface{} `json:"metadata,omitempty"`
-	selectValues sql.SelectValues
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -119,7 +121,7 @@ func (*IdentityHolderHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case identityholderhistory.FieldWorkflowEligibleMarker, identityholderhistory.FieldIsOpenlaneUser, identityholderhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID:
+		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholderhistory.FieldHistoryTime, identityholderhistory.FieldCreatedAt, identityholderhistory.FieldUpdatedAt, identityholderhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -392,6 +394,13 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case identityholderhistory.FieldAvatarRemoteURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field avatar_remote_url", values[i])
+			} else if value.Valid {
+				_m.AvatarRemoteURL = new(string)
+				*_m.AvatarRemoteURL = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -551,6 +560,11 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	if v := _m.AvatarRemoteURL; v != nil {
+		builder.WriteString("avatar_remote_url=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

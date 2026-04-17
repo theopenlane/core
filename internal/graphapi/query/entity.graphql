@@ -60,8 +60,8 @@ mutation CreateBulkEntity ($input: [CreateEntityInput!], $entityTypeName: String
 		}
 	}
 }
-mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String) {
-	createEntity(input: $input, entityTypeName: $entityTypeName) {
+mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	createEntity(input: $input, entityTypeName: $entityTypeName, entityFiles: $entityFiles, entityFilesMetadata: $entityFilesMetadata, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		entity {
 			createdAt
 			createdBy
@@ -83,11 +83,28 @@ mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String) {
 				name
 			}
 			id
+			logoFileID
 			name
 			ownerID
 			tags
 			updatedAt
 			updatedBy
+			logoFile {
+				id
+				name
+				metadata
+				presignedURL
+			}
+			files {
+				edges {
+					node {
+						id
+						name
+						metadata
+						presignedURL
+					}
+				}
+			}
 		}
 	}
 }
@@ -226,6 +243,22 @@ query GetEntityByID ($entityId: ID!) {
 		updatedAt
 		updatedBy
 		vendorMetadata
+		logoFile {
+			id
+			name
+			metadata
+			presignedURL
+		}
+		files {
+			edges {
+				node {
+					id
+					name
+					metadata
+					presignedURL
+				}
+			}
+		}
 		notes {
 			edges {
 				node {
@@ -254,8 +287,8 @@ query GetEntityByID ($entityId: ID!) {
 		}
 	}
 }
-mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
-	updateEntity(id: $updateEntityId, input: $input) {
+mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	updateEntity(id: $updateEntityId, input: $input, entityFiles: $entityFiles, entityFilesMetadata: $entityFilesMetadata, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		entity {
 			annualSpend
 			approvedForUse
@@ -319,6 +352,22 @@ mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!) {
 			updatedAt
 			updatedBy
 			vendorMetadata
+			logoFile {
+				id
+				name
+				metadata
+				presignedURL
+			}
+			files {
+				edges {
+					node {
+						id
+						name
+						metadata
+						presignedURL
+					}
+				}
+			}
 			notes {
 				edges {
 					node {

@@ -357,6 +357,7 @@ func (Finding) Hooks() []ent.Hook {
 // Annotations of the Finding
 func (Finding) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaFinding),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

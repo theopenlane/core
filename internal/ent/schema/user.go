@@ -323,6 +323,7 @@ func (u User) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FileCategory(SchemaUser),
 	}
 }
 

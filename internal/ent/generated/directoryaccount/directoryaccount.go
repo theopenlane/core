@@ -58,6 +58,10 @@ const (
 	FieldSecondaryKey = "secondary_key"
 	// FieldCanonicalEmail holds the string denoting the canonical_email field in the database.
 	FieldCanonicalEmail = "canonical_email"
+	// FieldEmailAliases holds the string denoting the email_aliases field in the database.
+	FieldEmailAliases = "email_aliases"
+	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
+	FieldPhoneNumber = "phone_number"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
 	FieldDisplayName = "display_name"
 	// FieldAvatarRemoteURL holds the string denoting the avatar_remote_url field in the database.
@@ -239,6 +243,8 @@ var Columns = []string{
 	FieldExternalID,
 	FieldSecondaryKey,
 	FieldCanonicalEmail,
+	FieldEmailAliases,
+	FieldPhoneNumber,
 	FieldDisplayName,
 	FieldAvatarRemoteURL,
 	FieldAvatarLocalFileID,
@@ -314,12 +320,16 @@ var (
 	PlatformIDValidator func(string) error
 	// ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	ExternalIDValidator func(string) error
+	// DefaultEmailAliases holds the default value on creation for the "email_aliases" field.
+	DefaultEmailAliases []string
+	// EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
+	EmailAliasesValidator func([]string) error
+	// PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
+	PhoneNumberValidator func(string) error
 	// AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
 	AvatarRemoteURLValidator func(string) error
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
-	// UpdateDefaultAvatarUpdatedAt holds the default value on update for the "avatar_updated_at" field.
-	UpdateDefaultAvatarUpdatedAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultProfileHash holds the default value on creation for the "profile_hash" field.
@@ -467,6 +477,11 @@ func BySecondaryKey(opts ...sql.OrderTermOption) OrderOption {
 // ByCanonicalEmail orders the results by the canonical_email field.
 func ByCanonicalEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCanonicalEmail, opts...).ToFunc()
+}
+
+// ByPhoneNumber orders the results by the phone_number field.
+func ByPhoneNumber(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhoneNumber, opts...).ToFunc()
 }
 
 // ByDisplayName orders the results by the display_name field.

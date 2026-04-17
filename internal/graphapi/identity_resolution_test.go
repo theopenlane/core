@@ -35,7 +35,10 @@ func TestIdentityResolution(t *testing.T) {
 			Status:         enums.DirectoryAccountStatusActive,
 			JobTitle:       lo.ToPtr("Engineer"),
 			Department:     lo.ToPtr("Platform"),
+			PhoneNumber:    lo.ToPtr("800-867-5309"),
+			EmailAliases:   []string{"single-create@mail.testresolution.io"},
 			OwnerID:        testUser1.OrganizationID,
+			ExternalID:     "1234871001",
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -53,6 +56,11 @@ func TestIdentityResolution(t *testing.T) {
 		assert.Check(t, holder.IsActive)
 		assert.Check(t, is.Equal("Engineer", holder.Title))
 		assert.Check(t, is.Equal("Platform", holder.Department))
+		assert.Check(t, is.Equal("800-867-5309", holder.PhoneNumber))
+		assert.Check(t, is.Equal("1234871001", holder.ExternalUserID))
+
+		// we do not sync email aliases from directory accounts, this should be empty
+		assert.Check(t, is.Len(holder.EmailAliases, 0))
 
 		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, ID: da.ID}).MustDelete(ctx, t)
 		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holder.ID}).MustDelete(ctx, t)
@@ -88,6 +96,9 @@ func TestIdentityResolution(t *testing.T) {
 			DirectoryName:  lo.ToPtr("github"),
 			Status:         enums.DirectoryAccountStatusActive,
 			OwnerID:        testUser1.OrganizationID,
+			PhoneNumber:    lo.ToPtr("800-867-5309"),
+			EmailAliases:   []string{"single-create@mail.testresolution.io"},
+			ExternalID:     "1234871001",
 		}).MustNew(ctx, t)
 
 		irSetup.Runtime.WaitIdle()
@@ -100,6 +111,10 @@ func TestIdentityResolution(t *testing.T) {
 		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(holder.EmailAliases, 0))
+
+		// ensure phone number, external id are not set from the non-primary record
+		assert.Check(t, holder.PhoneNumber == "")
+		assert.Check(t, holder.ExternalUserID == da1.ExternalID)
 
 		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, IDs: []string{da1.ID, da2.ID}}).MustDelete(ctx, t)
 		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holderID}).MustDelete(ctx, t)

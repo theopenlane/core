@@ -36,6 +36,7 @@ extend type Mutation{
         Files to attach to the export
         """
         exportFiles: [Upload!]
+        exportFilesMetadata: [FileMetadataInput!]
     ): ExportUpdatePayload!
     """
     Delete an existing export

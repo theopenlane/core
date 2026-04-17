@@ -1057,6 +1057,7 @@ func adminSearchIdentityHolders(ctx context.Context, query string, after *entgql
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(metadata)::text LIKE $25", likeQuery)) // search by Metadata
 				},
+				identityholder.AvatarRemoteURLContainsFold(query), // search by AvatarRemoteURL
 			),
 		)
 

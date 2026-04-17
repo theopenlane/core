@@ -2,6 +2,7 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 	createBulkCSVIdentityHolder(input: $input) {
 		identityHolders {
 			alternateEmail
+			avatarRemoteURL
 			createdAt
 			createdBy
 			department
@@ -44,6 +45,7 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 	createBulkIdentityHolder(input: $input) {
 		identityHolders {
 			alternateEmail
+			avatarRemoteURL
 			createdAt
 			createdBy
 			department
@@ -86,6 +88,7 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 	createIdentityHolder(input: $input) {
 		identityHolder {
 			alternateEmail
+			avatarRemoteURL
 			createdAt
 			createdBy
 			department
@@ -141,6 +144,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department
@@ -207,6 +211,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 query GetIdentityHolderByID ($identityHolderId: ID!) {
 	identityHolder(id: $identityHolderId) {
 		alternateEmail
+		avatarRemoteURL
 		createdAt
 		createdBy
 		department
@@ -346,6 +351,7 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 		edges {
 			node {
 				alternateEmail
+				avatarRemoteURL
 				createdAt
 				createdBy
 				department
@@ -399,6 +405,7 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 	updateIdentityHolder(id: $updateIdentityHolderId, input: $input) {
 		identityHolder {
 			alternateEmail
+			avatarRemoteURL
 			createdAt
 			createdBy
 			department

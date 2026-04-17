@@ -27,6 +27,7 @@ extend type Mutation{
         """
         input: CreateUserInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): UserCreatePayload!
     """
     Update an existing user
@@ -41,6 +42,7 @@ extend type Mutation{
         """
         input: UpdateUserInput!
         avatarFile: Upload
+        avatarFileMetadata: FileMetadataInput
     ): UserUpdatePayload!
     """
     Delete an existing user

@@ -186,6 +186,8 @@ type DirectoryAccountBuilder struct {
 	JobTitle       *string
 	Department     *string
 	OwnerID        string
+	PhoneNumber    *string
+	EmailAliases   []string
 }
 
 type ContactBuilder struct {
@@ -1059,7 +1061,9 @@ func (d *DirectoryAccountBuilder) MustNew(ctx context.Context, t *testing.T) *en
 		SetNillableFamilyName(d.FamilyName).
 		SetNillableDirectoryName(d.DirectoryName).
 		SetNillableJobTitle(d.JobTitle).
-		SetNillableDepartment(d.Department)
+		SetNillableDepartment(d.Department).
+		SetNillablePhoneNumber(d.PhoneNumber).
+		SetEmailAliases(d.EmailAliases)
 
 	if d.OwnerID != "" {
 		create.SetOwnerID(d.OwnerID)

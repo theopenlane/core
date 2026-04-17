@@ -195,6 +195,7 @@ func (IntegrationRun) Modules() []models.OrgModule {
 // Annotations of the IntegrationRun.
 func (r IntegrationRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaIntegrationRun),
 		entgql.Skip(entgql.SkipAll),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),

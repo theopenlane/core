@@ -75,6 +75,9 @@ func (IdentityHolder) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("alternate_email"),
+				entgql.Directives(
+					entgql.Deprecated("use email_aliases instead"),
+				),
 			).
 			Validate(func(email string) error {
 				if email == "" {
@@ -86,6 +89,14 @@ func (IdentityHolder) Fields() []ent.Field {
 		field.Strings("email_aliases").
 			Comment("alternate email address for the identity holder in an array").
 			Optional().
+			Validate(func(emails []string) error {
+				for _, e := range emails {
+					_, err := mail.ParseAddress(e)
+					return err
+				}
+
+				return nil
+			}).
 			Default([]string{}),
 		field.String("phone_number").
 			Comment("phone number for the identity holder").
@@ -200,6 +211,12 @@ func (IdentityHolder) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the identity holder").
 			Optional(),
+		field.String("avatar_remote_url").
+			Comment("URL of the avatar of the identity holder").
+			MaxLen(2048). //nolint:mnd
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -292,6 +309,7 @@ func (IdentityHolder) Modules() []models.OrgModule {
 // Annotations of the IdentityHolder
 func (IdentityHolder) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaIdentityHolder),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),

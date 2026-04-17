@@ -575,6 +575,7 @@ type ComplexityRoot struct {
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		DisplayName         func(childComplexity int) int
+		EmailAliases        func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
 		EnvironmentName     func(childComplexity int) int
 		ExternalID          func(childComplexity int) int
@@ -595,6 +596,7 @@ type ComplexityRoot struct {
 		Operation           func(childComplexity int) int
 		OrganizationUnit    func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		PhoneNumber         func(childComplexity int) int
 		PlatformID          func(childComplexity int) int
 		PrimarySource       func(childComplexity int) int
 		Profile             func(childComplexity int) int
@@ -1003,6 +1005,8 @@ type ComplexityRoot struct {
 	}
 
 	FileHistory struct {
+		CategoryID            func(childComplexity int) int
+		CategoryName          func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -1016,6 +1020,7 @@ type ComplexityRoot struct {
 		LastAccessedAt        func(childComplexity int) int
 		Md5Hash               func(childComplexity int) int
 		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		PersistedFileSize     func(childComplexity int) int
 		ProvidedFileExtension func(childComplexity int) int
@@ -1278,6 +1283,7 @@ type ComplexityRoot struct {
 
 	IdentityHolderHistory struct {
 		AlternateEmail         func(childComplexity int) int
+		AvatarRemoteURL        func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Department             func(childComplexity int) int
@@ -6367,6 +6373,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryAccountHistory.DisplayName(childComplexity), true
 
+	case "DirectoryAccountHistory.emailAliases":
+		if e.ComplexityRoot.DirectoryAccountHistory.EmailAliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.EmailAliases(childComplexity), true
+
 	case "DirectoryAccountHistory.environmentID":
 		if e.ComplexityRoot.DirectoryAccountHistory.EnvironmentID == nil {
 			break
@@ -6506,6 +6519,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccountHistory.OwnerID(childComplexity), true
+
+	case "DirectoryAccountHistory.phoneNumber":
+		if e.ComplexityRoot.DirectoryAccountHistory.PhoneNumber == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccountHistory.PhoneNumber(childComplexity), true
 
 	case "DirectoryAccountHistory.platformID":
 		if e.ComplexityRoot.DirectoryAccountHistory.PlatformID == nil {
@@ -8733,6 +8753,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceHistoryEdge.Node(childComplexity), true
 
+	case "FileHistory.categoryID":
+		if e.ComplexityRoot.FileHistory.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryID(childComplexity), true
+
+	case "FileHistory.categoryName":
+		if e.ComplexityRoot.FileHistory.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.CategoryName(childComplexity), true
+
 	case "FileHistory.categoryType":
 		if e.ComplexityRoot.FileHistory.CategoryType == nil {
 			break
@@ -8823,6 +8857,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.Metadata(childComplexity), true
+
+	case "FileHistory.name":
+		if e.ComplexityRoot.FileHistory.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FileHistory.Name(childComplexity), true
 
 	case "FileHistory.operation":
 		if e.ComplexityRoot.FileHistory.Operation == nil {
@@ -10216,6 +10257,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.AlternateEmail(childComplexity), true
+
+	case "IdentityHolderHistory.avatarRemoteURL":
+		if e.ComplexityRoot.IdentityHolderHistory.AvatarRemoteURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.AvatarRemoteURL(childComplexity), true
 
 	case "IdentityHolderHistory.createdAt":
 		if e.ComplexityRoot.IdentityHolderHistory.CreatedAt == nil {
@@ -22041,6 +22089,10 @@ This scalar is typically used to handle file uploads in GraphQL mutations.
 """
 scalar Upload
 """
+UploadFileName allows passing file name overrides for uploaded files without requiring a resolver.
+"""
+scalar UploadFileName
+"""
 The ` + "`" + `Address` + "`" + ` scalar type represents a physical or mailing address.
 This scalar can be used to store and validate address information in the GraphQL schema.
 It contains ` + "`" + `Line1` + "`" + `, ` + "`" + `Line2` + "`" + `, ` + "`" + `City` + "`" + `, ` + "`" + `State` + "`" + `, ` + "`" + `PostalCode` + "`" + `, and ` + "`" + `Country` + "`" + `
@@ -29170,6 +29222,14 @@ type DirectoryAccountHistory implements Node {
   """
   canonicalEmail: String
   """
+  alternate email address for the identity holder in an array
+  """
+  emailAliases: [String!]
+  """
+  phone number for the identity holder
+  """
+  phoneNumber: String
+  """
   provider supplied display name
   """
   displayName: String
@@ -29746,6 +29806,24 @@ input DirectoryAccountHistoryWhereInput {
   canonicalEmailNotNil: Boolean
   canonicalEmailEqualFold: String
   canonicalEmailContainsFold: String
+  """
+  phone_number field predicates
+  """
+  phoneNumber: String
+  phoneNumberNEQ: String
+  phoneNumberIn: [String!]
+  phoneNumberNotIn: [String!]
+  phoneNumberGT: String
+  phoneNumberGTE: String
+  phoneNumberLT: String
+  phoneNumberLTE: String
+  phoneNumberContains: String
+  phoneNumberHasPrefix: String
+  phoneNumberHasSuffix: String
+  phoneNumberIsNil: Boolean
+  phoneNumberNotNil: Boolean
+  phoneNumberEqualFold: String
+  phoneNumberContainsFold: String
   """
   display_name field predicates
   """
@@ -35112,6 +35190,18 @@ type FileHistory implements Node {
   """
   scopeID: String
   """
+  the category of the file
+  """
+  categoryName: String
+  """
+  the category of the file
+  """
+  categoryID: String
+  """
+  the user-facing display name of the file
+  """
+  name: String
+  """
   the name of the file provided in the payload key without the extension
   """
   providedFileName: String!
@@ -35143,7 +35233,7 @@ type FileHistory implements Node {
   """
   the category type of the file, if any (e.g. evidence, invoice, etc.)
   """
-  categoryType: String
+  categoryType: String @deprecated(reason: "use category_status_name instead")
   """
   the full URI of the file
   """
@@ -35468,6 +35558,60 @@ input FileHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameGT: String
+  categoryNameGTE: String
+  categoryNameLT: String
+  categoryNameLTE: String
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDGT: String
+  categoryIDGTE: String
+  categoryIDLT: String
+  categoryIDLTE: String
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameIsNil: Boolean
+  nameNotNil: Boolean
+  nameEqualFold: String
+  nameContainsFold: String
   """
   provided_file_name field predicates
   """
@@ -38515,7 +38659,7 @@ type IdentityHolderHistory implements Node {
   """
   alternate email address for the identity holder
   """
-  alternateEmail: String
+  alternateEmail: String @deprecated(reason: "use email_aliases instead")
   """
   alternate email address for the identity holder in an array
   """
@@ -38584,6 +38728,10 @@ type IdentityHolderHistory implements Node {
   additional metadata about the identity holder
   """
   metadata: Map
+  """
+  URL of the avatar of the identity holder
+  """
+  avatarRemoteURL: String
 }
 """
 A connection to a list of items.
@@ -39232,6 +39380,24 @@ input IdentityHolderHistoryWhereInput {
   externalReferenceIDNotNil: Boolean
   externalReferenceIDEqualFold: String
   externalReferenceIDContainsFold: String
+  """
+  avatar_remote_url field predicates
+  """
+  avatarRemoteURL: String
+  avatarRemoteURLNEQ: String
+  avatarRemoteURLIn: [String!]
+  avatarRemoteURLNotIn: [String!]
+  avatarRemoteURLGT: String
+  avatarRemoteURLGTE: String
+  avatarRemoteURLLT: String
+  avatarRemoteURLLTE: String
+  avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
+  avatarRemoteURLHasSuffix: String
+  avatarRemoteURLIsNil: Boolean
+  avatarRemoteURLNotNil: Boolean
+  avatarRemoteURLEqualFold: String
+  avatarRemoteURLContainsFold: String
 }
 type IntegrationHistory implements Node {
   id: ID!

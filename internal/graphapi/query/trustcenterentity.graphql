@@ -30,8 +30,8 @@ mutation CreateBulkTrustCenterEntity ($input: [CreateTrustCenterEntityInput!]) {
 		}
 	}
 }
-mutation CreateTrustCenterEntity ($input: CreateTrustCenterEntityInput!, $logoFile: Upload) {
-	createTrustCenterEntity(input: $input, logoFile: $logoFile) {
+mutation CreateTrustCenterEntity ($input: CreateTrustCenterEntityInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	createTrustCenterEntity(input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		trustCenterEntity {
 			createdAt
 			createdBy
@@ -45,6 +45,8 @@ mutation CreateTrustCenterEntity ($input: CreateTrustCenterEntityInput!, $logoFi
 			logoFile {
 				id
 				md5Hash
+				name
+				metadata
 				presignedURL
 			}
 		}
@@ -132,8 +134,8 @@ query GetTrustCenterEntityByID ($trustCenterEntityId: ID!) {
 		}
 	}
 }
-mutation UpdateTrustCenterEntity ($updateTrustCenterEntityId: ID!, $input: UpdateTrustCenterEntityInput!, $logoFile: Upload) {
-	updateTrustCenterEntity(id: $updateTrustCenterEntityId, input: $input, logoFile: $logoFile) {
+mutation UpdateTrustCenterEntity ($updateTrustCenterEntityId: ID!, $input: UpdateTrustCenterEntityInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+	updateTrustCenterEntity(id: $updateTrustCenterEntityId, input: $input, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
 		trustCenterEntity {
 			createdAt
 			createdBy
@@ -147,6 +149,8 @@ mutation UpdateTrustCenterEntity ($updateTrustCenterEntityId: ID!, $input: Updat
 			logoFile {
 				id
 				md5Hash
+				name
+				metadata
 				presignedURL
 			}
 		}

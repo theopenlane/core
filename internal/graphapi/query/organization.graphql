@@ -1,5 +1,5 @@
-mutation CreateOrganization ($input: CreateOrganizationInput!, $avatarFile: Upload) {
-	createOrganization(input: $input, avatarFile: $avatarFile) {
+mutation CreateOrganization ($input: CreateOrganizationInput!, $avatarFile: Upload, $avatarFileMetadata: FileMetadataInput) {
+	createOrganization(input: $input, avatarFile: $avatarFile, avatarFileMetadata: $avatarFileMetadata) {
 		organization {
 			id
 			name
@@ -10,6 +10,9 @@ mutation CreateOrganization ($input: CreateOrganizationInput!, $avatarFile: Uplo
 			avatarRemoteURL
 			avatarLocalFileID
 			avatarFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			createdAt
@@ -386,8 +389,8 @@ mutation TransferOrganizationOwnership ($newOwnerEmail: String!) {
 		invitationSent
 	}
 }
-mutation UpdateOrganization ($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
-	updateOrganization(id: $updateOrganizationId, input: $input, avatarFile: $avatarFile) {
+mutation UpdateOrganization ($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload, $avatarFileMetadata: FileMetadataInput) {
+	updateOrganization(id: $updateOrganizationId, input: $input, avatarFile: $avatarFile, avatarFileMetadata: $avatarFileMetadata) {
 		organization {
 			id
 			name
@@ -397,6 +400,9 @@ mutation UpdateOrganization ($updateOrganizationId: ID!, $input: UpdateOrganizat
 			avatarLocalFileID
 			avatarRemoteURL
 			avatarFile {
+				id
+				name
+				metadata
 				presignedURL
 			}
 			tags

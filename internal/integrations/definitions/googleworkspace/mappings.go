@@ -10,15 +10,28 @@ import (
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `'primaryEmail' in payload ? payload.primaryEmail : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountPhoneNumber, Expr: `'phones' in payload && size(payload.phones) > 0
+  ? (
+      size(payload.phones.filter(p, p.type == "work")) > 0
+        ? payload.phones.filter(p, p.type == "work")[0].value
+        : payload.phones[0].value
+    )
+  : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'name' in payload && 'fullName' in payload.name ? payload.name.fullName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `'name' in payload && 'givenName' in payload.name ? payload.name.givenName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'name' in payload && 'familyName' in payload.name ? payload.name.familyName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `'customerId' in payload ? payload.customerId : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountOrganizationUnit, Expr: `'orgUnitPath' in payload ? payload.orgUnitPath : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('deletionTime' in payload && payload.deletionTime != "" ? "DELETED" : ('suspended' in payload && payload.suspended ? "SUSPENDED" : ('archived' in payload && payload.archived ? "INACTIVE" : "ACTIVE")))`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDepartment, Expr: `'organizations' in payload && size(payload.organizations.filter(o, ('primary' in o) && o.primary == true)) > 0 ? ('department' in payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0] ? payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0].department : "") : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountJobTitle, Expr: `'organizations' in payload && size(payload.organizations.filter(o, ('primary' in o) && o.primary == true)) > 0 ? ('title' in payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0] ? payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0].title : "") : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAccountType, Expr: `'type' in payload ? payload.type : "USER"`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountMfaState, Expr: `dyn('isEnforcedIn2Sv' in payload && payload.isEnforcedIn2Sv ? "ENFORCED" : ('isEnrolledIn2Sv' in payload && payload.isEnrolledIn2Sv ? "ENABLED" : "DISABLED"))`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountLastLoginAt, Expr: `'lastLoginTime' in payload ? payload.lastLoginTime : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountEmailAliases, Expr: `dyn('emails' in payload ? payload.emails.filter(e, !('primary' in e) || e.primary != true).map(e, e.address) : [])`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAddedAt, Expr: `'creationTime' in payload ? payload.creationTime : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `'thumbnailPhotoUrl' in payload ? payload.thumbnailPhotoUrl : null`},
 })
 
 // mapExprDirectoryGroup is the CEL mapping expression for Google Workspace group payloads mapped to DirectoryGroup

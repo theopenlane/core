@@ -693,7 +693,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 		Name:          "test entity 1",
 		TrustCenterID: &trustCenter.ID,
 		URL:           lo.ToPtr(gofakeit.URL()),
-	}, logoFile)
+	}, logoFile, nil)
 	assert.NilError(t, err)
 
 	_, err = suite.client.api.UpdateTrustCenter(testUser.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
@@ -1184,7 +1184,7 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 				}
 			}
 
-			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile, nil, nil)
+			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.updateInput, logoFile, nil, nil, nil, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return

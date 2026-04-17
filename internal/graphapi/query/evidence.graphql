@@ -52,6 +52,8 @@ mutation CreateEvidence ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]
 				edges {
 					node {
 						id
+						name
+						metadata
 						presignedURL
 					}
 				}

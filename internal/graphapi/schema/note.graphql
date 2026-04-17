@@ -108,6 +108,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): TaskUpdatePayload!
     """
     Update an existing control comment
@@ -125,6 +126,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): ControlUpdatePayload!
     """
     Update an existing subcontrol comment
@@ -142,6 +144,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): SubcontrolUpdatePayload!
     """
     Update an existing procedure comment
@@ -159,6 +162,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): ProcedureUpdatePayload!
     """
     Update an existing risk comment
@@ -176,6 +180,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): RiskUpdatePayload!
     """
     Update an existing internal policy comment
@@ -193,6 +198,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): InternalPolicyUpdatePayload!
     """
     Update an existing trust center FAQ comment
@@ -210,6 +216,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): TrustCenterFAQUpdatePayload!
      """
     Update an existing trust center post
@@ -227,6 +234,7 @@ extend type Mutation{
         Files to attach to the post
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): TrustCenterUpdatePayload!
     """
     Update an existing evidence comment
@@ -244,6 +252,7 @@ extend type Mutation{
         Files to attach to the comment
         """
         noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
     ): EvidenceUpdatePayload!
     """
     Delete an existing note

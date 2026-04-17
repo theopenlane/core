@@ -6292,6 +6292,10 @@ type CreateDirectoryAccountInput struct {
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
 	// lower-cased primary email address, if present
 	CanonicalEmail *string `json:"canonicalEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"emailAliases,omitempty"`
+	// phone number for the identity holder
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// provider supplied display name
 	DisplayName *string `json:"displayName,omitempty"`
 	// URL of the avatar supplied by the directory provider
@@ -6852,6 +6856,10 @@ type CreateFileInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the file
 	ScopeName *string `json:"scopeName,omitempty"`
+	// the category of the file
+	CategoryName *string `json:"categoryName,omitempty"`
+	// the user-facing display name of the file
+	Name *string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -6886,6 +6894,7 @@ type CreateFileInput struct {
 	LastAccessedAt            *time.Time `json:"lastAccessedAt,omitempty"`
 	EnvironmentID             *string    `json:"environmentID,omitempty"`
 	ScopeID                   *string    `json:"scopeID,omitempty"`
+	CategoryID                *string    `json:"categoryID,omitempty"`
 	OrganizationIDs           []string   `json:"organizationIDs,omitempty"`
 	GroupIDs                  []string   `json:"groupIDs,omitempty"`
 	ContactIDs                []string   `json:"contactIDs,omitempty"`
@@ -7228,33 +7237,35 @@ type CreateIdentityHolderInput struct {
 	// external identifier for the identity holder from an upstream roster
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the identity holder
-	Metadata              map[string]any `json:"metadata,omitempty"`
-	OwnerID               *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs             []string       `json:"editorIDs,omitempty"`
-	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
-	InternalOwnerUserID   *string        `json:"internalOwnerUserID,omitempty"`
-	InternalOwnerGroupID  *string        `json:"internalOwnerGroupID,omitempty"`
-	EnvironmentID         *string        `json:"environmentID,omitempty"`
-	ScopeID               *string        `json:"scopeID,omitempty"`
-	EmployerID            *string        `json:"employerID,omitempty"`
-	AssessmentResponseIDs []string       `json:"assessmentResponseIDs,omitempty"`
-	AssessmentIDs         []string       `json:"assessmentIDs,omitempty"`
-	TemplateIDs           []string       `json:"templateIDs,omitempty"`
-	AssetIDs              []string       `json:"assetIDs,omitempty"`
-	EntityIDs             []string       `json:"entityIDs,omitempty"`
-	DirectoryAccountIDs   []string       `json:"directoryAccountIDs,omitempty"`
-	ControlIDs            []string       `json:"controlIDs,omitempty"`
-	SubcontrolIDs         []string       `json:"subcontrolIDs,omitempty"`
-	PlatformIDs           []string       `json:"platformIDs,omitempty"`
-	CampaignIDs           []string       `json:"campaignIDs,omitempty"`
-	TaskIDs               []string       `json:"taskIDs,omitempty"`
-	FileIDs               []string       `json:"fileIDs,omitempty"`
-	FindingIDs            []string       `json:"findingIDs,omitempty"`
-	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
-	AccessPlatformIDs     []string       `json:"accessPlatformIDs,omitempty"`
-	UserID                *string        `json:"userID,omitempty"`
-	InternalPolicyIDs     []string       `json:"internalPolicyIDs,omitempty"`
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL       *string  `json:"avatarRemoteURL,omitempty"`
+	OwnerID               *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string `json:"editorIDs,omitempty"`
+	ViewerIDs             []string `json:"viewerIDs,omitempty"`
+	InternalOwnerUserID   *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID  *string  `json:"internalOwnerGroupID,omitempty"`
+	EnvironmentID         *string  `json:"environmentID,omitempty"`
+	ScopeID               *string  `json:"scopeID,omitempty"`
+	EmployerID            *string  `json:"employerID,omitempty"`
+	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
+	AssessmentIDs         []string `json:"assessmentIDs,omitempty"`
+	TemplateIDs           []string `json:"templateIDs,omitempty"`
+	AssetIDs              []string `json:"assetIDs,omitempty"`
+	EntityIDs             []string `json:"entityIDs,omitempty"`
+	DirectoryAccountIDs   []string `json:"directoryAccountIDs,omitempty"`
+	ControlIDs            []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs         []string `json:"subcontrolIDs,omitempty"`
+	PlatformIDs           []string `json:"platformIDs,omitempty"`
+	CampaignIDs           []string `json:"campaignIDs,omitempty"`
+	TaskIDs               []string `json:"taskIDs,omitempty"`
+	FileIDs               []string `json:"fileIDs,omitempty"`
+	FindingIDs            []string `json:"findingIDs,omitempty"`
+	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
+	AccessPlatformIDs     []string `json:"accessPlatformIDs,omitempty"`
+	UserID                *string  `json:"userID,omitempty"`
+	InternalPolicyIDs     []string `json:"internalPolicyIDs,omitempty"`
 }
 
 // CreateInternalPolicyInput is used for create InternalPolicy object.
@@ -10358,6 +10369,10 @@ type DirectoryAccount struct {
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
 	// lower-cased primary email address, if present
 	CanonicalEmail *string `json:"canonicalEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases []string `json:"emailAliases,omitempty"`
+	// phone number for the identity holder
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 	// provider supplied display name
 	DisplayName *string `json:"displayName,omitempty"`
 	// URL of the avatar supplied by the directory provider
@@ -10786,6 +10801,22 @@ type DirectoryAccountWhereInput struct {
 	CanonicalEmailNotNil       *bool    `json:"canonicalEmailNotNil,omitempty"`
 	CanonicalEmailEqualFold    *string  `json:"canonicalEmailEqualFold,omitempty"`
 	CanonicalEmailContainsFold *string  `json:"canonicalEmailContainsFold,omitempty"`
+	// phone_number field predicates
+	PhoneNumber             *string  `json:"phoneNumber,omitempty"`
+	PhoneNumberNeq          *string  `json:"phoneNumberNEQ,omitempty"`
+	PhoneNumberIn           []string `json:"phoneNumberIn,omitempty"`
+	PhoneNumberNotIn        []string `json:"phoneNumberNotIn,omitempty"`
+	PhoneNumberGt           *string  `json:"phoneNumberGT,omitempty"`
+	PhoneNumberGte          *string  `json:"phoneNumberGTE,omitempty"`
+	PhoneNumberLt           *string  `json:"phoneNumberLT,omitempty"`
+	PhoneNumberLte          *string  `json:"phoneNumberLTE,omitempty"`
+	PhoneNumberContains     *string  `json:"phoneNumberContains,omitempty"`
+	PhoneNumberHasPrefix    *string  `json:"phoneNumberHasPrefix,omitempty"`
+	PhoneNumberHasSuffix    *string  `json:"phoneNumberHasSuffix,omitempty"`
+	PhoneNumberIsNil        *bool    `json:"phoneNumberIsNil,omitempty"`
+	PhoneNumberNotNil       *bool    `json:"phoneNumberNotNil,omitempty"`
+	PhoneNumberEqualFold    *string  `json:"phoneNumberEqualFold,omitempty"`
+	PhoneNumberContainsFold *string  `json:"phoneNumberContainsFold,omitempty"`
 	// display_name field predicates
 	DisplayName             *string  `json:"displayName,omitempty"`
 	DisplayNameNeq          *string  `json:"displayNameNEQ,omitempty"`
@@ -11093,6 +11124,8 @@ type DirectoryAccountWhereInput struct {
 	HasMembershipsWith []*DirectoryMembershipWhereInput `json:"hasMembershipsWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
+	// Filter for emailAliasesHas to contain a specific value
+	EmailAliasesHas *string `json:"emailAliasesHas,omitempty"`
 }
 
 type DirectoryGroup struct {
@@ -16085,6 +16118,12 @@ type File struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the file
 	ScopeID *string `json:"scopeID,omitempty"`
+	// the category of the file
+	CategoryName *string `json:"categoryName,omitempty"`
+	// the category of the file
+	CategoryID *string `json:"categoryID,omitempty"`
+	// the user-facing display name of the file
+	Name *string `json:"name,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"providedFileName"`
 	// the extension of the file provided
@@ -16119,6 +16158,7 @@ type File struct {
 	LastAccessedAt         *time.Time                   `json:"lastAccessedAt,omitempty"`
 	Environment            *CustomTypeEnum              `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum              `json:"scope,omitempty"`
+	Category               *CustomTypeEnum              `json:"category,omitempty"`
 	Organization           []*Organization              `json:"organization,omitempty"`
 	Groups                 *GroupConnection             `json:"groups"`
 	Contact                []*Contact                   `json:"contact,omitempty"`
@@ -16165,6 +16205,13 @@ type FileEdge struct {
 	Node *File `json:"node,omitempty"`
 	// A cursor for use in pagination.
 	Cursor string `json:"cursor"`
+}
+
+type FileMetadataInput struct {
+	// the display name for the file, defaults to the original filename
+	Name *string `json:"name,omitempty"`
+	// additional extracted or client-provided metadata for the file
+	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
 // Ordering options for File connections
@@ -16347,6 +16394,54 @@ type FileWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// category_name field predicates
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNeq          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameGt           *string  `json:"categoryNameGT,omitempty"`
+	CategoryNameGte          *string  `json:"categoryNameGTE,omitempty"`
+	CategoryNameLt           *string  `json:"categoryNameLT,omitempty"`
+	CategoryNameLte          *string  `json:"categoryNameLTE,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        *bool    `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       *bool    `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+	// category_id field predicates
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIdneq          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIdgt           *string  `json:"categoryIDGT,omitempty"`
+	CategoryIdgte          *string  `json:"categoryIDGTE,omitempty"`
+	CategoryIdlt           *string  `json:"categoryIDLT,omitempty"`
+	CategoryIdlte          *string  `json:"categoryIDLTE,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameIsNil        *bool    `json:"nameIsNil,omitempty"`
+	NameNotNil       *bool    `json:"nameNotNil,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 	// provided_file_name field predicates
 	ProvidedFileName             *string  `json:"providedFileName,omitempty"`
 	ProvidedFileNameNeq          *string  `json:"providedFileNameNEQ,omitempty"`
@@ -16588,6 +16683,9 @@ type FileWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+	// category edge predicates
+	HasCategory     *bool                       `json:"hasCategory,omitempty"`
+	HasCategoryWith []*CustomTypeEnumWhereInput `json:"hasCategoryWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -19155,7 +19253,9 @@ type IdentityHolder struct {
 	// external identifier for the identity holder from an upstream roster
 	ExternalReferenceID *string `json:"externalReferenceID,omitempty"`
 	// additional metadata about the identity holder
-	Metadata            map[string]any                `json:"metadata,omitempty"`
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL     *string                       `json:"avatarRemoteURL,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -19704,6 +19804,22 @@ type IdentityHolderWhereInput struct {
 	ExternalReferenceIDNotNil       *bool    `json:"externalReferenceIDNotNil,omitempty"`
 	ExternalReferenceIDEqualFold    *string  `json:"externalReferenceIDEqualFold,omitempty"`
 	ExternalReferenceIDContainsFold *string  `json:"externalReferenceIDContainsFold,omitempty"`
+	// avatar_remote_url field predicates
+	AvatarRemoteURL             *string  `json:"avatarRemoteURL,omitempty"`
+	AvatarRemoteURLNeq          *string  `json:"avatarRemoteURLNEQ,omitempty"`
+	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
+	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
+	AvatarRemoteURLGt           *string  `json:"avatarRemoteURLGT,omitempty"`
+	AvatarRemoteURLGte          *string  `json:"avatarRemoteURLGTE,omitempty"`
+	AvatarRemoteURLLt           *string  `json:"avatarRemoteURLLT,omitempty"`
+	AvatarRemoteURLLte          *string  `json:"avatarRemoteURLLTE,omitempty"`
+	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
+	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
+	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
+	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
+	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
+	AvatarRemoteURLEqualFold    *string  `json:"avatarRemoteURLEqualFold,omitempty"`
+	AvatarRemoteURLContainsFold *string  `json:"avatarRemoteURLContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -39632,6 +39748,13 @@ type UpdateDirectoryAccountInput struct {
 	// lower-cased primary email address, if present
 	CanonicalEmail      *string `json:"canonicalEmail,omitempty"`
 	ClearCanonicalEmail *bool   `json:"clearCanonicalEmail,omitempty"`
+	// alternate email address for the identity holder in an array
+	EmailAliases       []string `json:"emailAliases,omitempty"`
+	AppendEmailAliases []string `json:"appendEmailAliases,omitempty"`
+	ClearEmailAliases  *bool    `json:"clearEmailAliases,omitempty"`
+	// phone number for the identity holder
+	PhoneNumber      *string `json:"phoneNumber,omitempty"`
+	ClearPhoneNumber *bool   `json:"clearPhoneNumber,omitempty"`
 	// provider supplied display name
 	DisplayName      *string `json:"displayName,omitempty"`
 	ClearDisplayName *bool   `json:"clearDisplayName,omitempty"`
@@ -40512,6 +40635,12 @@ type UpdateFileInput struct {
 	// the scope of the file
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// the category of the file
+	CategoryName      *string `json:"categoryName,omitempty"`
+	ClearCategoryName *bool   `json:"clearCategoryName,omitempty"`
+	// the user-facing display name of the file
+	Name      *string `json:"name,omitempty"`
+	ClearName *bool   `json:"clearName,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName *string `json:"providedFileName,omitempty"`
 	// the extension of the file provided
@@ -40562,6 +40691,8 @@ type UpdateFileInput struct {
 	ClearEnvironment                *bool      `json:"clearEnvironment,omitempty"`
 	ScopeID                         *string    `json:"scopeID,omitempty"`
 	ClearScope                      *bool      `json:"clearScope,omitempty"`
+	CategoryID                      *string    `json:"categoryID,omitempty"`
+	ClearCategory                   *bool      `json:"clearCategory,omitempty"`
 	AddOrganizationIDs              []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs           []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganization               *bool      `json:"clearOrganization,omitempty"`
@@ -41165,77 +41296,80 @@ type UpdateIdentityHolderInput struct {
 	ExternalReferenceID      *string `json:"externalReferenceID,omitempty"`
 	ClearExternalReferenceID *bool   `json:"clearExternalReferenceID,omitempty"`
 	// additional metadata about the identity holder
-	Metadata                    map[string]any `json:"metadata,omitempty"`
-	ClearMetadata               *bool          `json:"clearMetadata,omitempty"`
-	AddBlockedGroupIDs          []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs       []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups          *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs             []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors                *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs                []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs             []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers                *bool          `json:"clearViewers,omitempty"`
-	InternalOwnerUserID         *string        `json:"internalOwnerUserID,omitempty"`
-	ClearInternalOwnerUser      *bool          `json:"clearInternalOwnerUser,omitempty"`
-	InternalOwnerGroupID        *string        `json:"internalOwnerGroupID,omitempty"`
-	ClearInternalOwnerGroup     *bool          `json:"clearInternalOwnerGroup,omitempty"`
-	EnvironmentID               *string        `json:"environmentID,omitempty"`
-	ClearEnvironment            *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                     *string        `json:"scopeID,omitempty"`
-	ClearScope                  *bool          `json:"clearScope,omitempty"`
-	EmployerID                  *string        `json:"employerID,omitempty"`
-	ClearEmployer               *bool          `json:"clearEmployer,omitempty"`
-	AddAssessmentResponseIDs    []string       `json:"addAssessmentResponseIDs,omitempty"`
-	RemoveAssessmentResponseIDs []string       `json:"removeAssessmentResponseIDs,omitempty"`
-	ClearAssessmentResponses    *bool          `json:"clearAssessmentResponses,omitempty"`
-	AddAssessmentIDs            []string       `json:"addAssessmentIDs,omitempty"`
-	RemoveAssessmentIDs         []string       `json:"removeAssessmentIDs,omitempty"`
-	ClearAssessments            *bool          `json:"clearAssessments,omitempty"`
-	AddTemplateIDs              []string       `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs           []string       `json:"removeTemplateIDs,omitempty"`
-	ClearTemplates              *bool          `json:"clearTemplates,omitempty"`
-	AddAssetIDs                 []string       `json:"addAssetIDs,omitempty"`
-	RemoveAssetIDs              []string       `json:"removeAssetIDs,omitempty"`
-	ClearAssets                 *bool          `json:"clearAssets,omitempty"`
-	AddEntityIDs                []string       `json:"addEntityIDs,omitempty"`
-	RemoveEntityIDs             []string       `json:"removeEntityIDs,omitempty"`
-	ClearEntities               *bool          `json:"clearEntities,omitempty"`
-	AddDirectoryAccountIDs      []string       `json:"addDirectoryAccountIDs,omitempty"`
-	RemoveDirectoryAccountIDs   []string       `json:"removeDirectoryAccountIDs,omitempty"`
-	ClearDirectoryAccounts      *bool          `json:"clearDirectoryAccounts,omitempty"`
-	AddControlIDs               []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs            []string       `json:"removeControlIDs,omitempty"`
-	ClearControls               *bool          `json:"clearControls,omitempty"`
-	AddSubcontrolIDs            []string       `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs         []string       `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols            *bool          `json:"clearSubcontrols,omitempty"`
-	AddPlatformIDs              []string       `json:"addPlatformIDs,omitempty"`
-	RemovePlatformIDs           []string       `json:"removePlatformIDs,omitempty"`
-	ClearPlatforms              *bool          `json:"clearPlatforms,omitempty"`
-	AddCampaignIDs              []string       `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs           []string       `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns              *bool          `json:"clearCampaigns,omitempty"`
-	AddTaskIDs                  []string       `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs               []string       `json:"removeTaskIDs,omitempty"`
-	ClearTasks                  *bool          `json:"clearTasks,omitempty"`
-	AddFileIDs                  []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs               []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles                  *bool          `json:"clearFiles,omitempty"`
-	AddFindingIDs               []string       `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs            []string       `json:"removeFindingIDs,omitempty"`
-	ClearFindings               *bool          `json:"clearFindings,omitempty"`
-	AddWorkflowObjectRefIDs     []string       `json:"addWorkflowObjectRefIDs,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
-	ClearWorkflowObjectRefs     *bool          `json:"clearWorkflowObjectRefs,omitempty"`
-	AddAccessPlatformIDs        []string       `json:"addAccessPlatformIDs,omitempty"`
-	RemoveAccessPlatformIDs     []string       `json:"removeAccessPlatformIDs,omitempty"`
-	ClearAccessPlatforms        *bool          `json:"clearAccessPlatforms,omitempty"`
-	UserID                      *string        `json:"userID,omitempty"`
-	ClearUser                   *bool          `json:"clearUser,omitempty"`
-	AddInternalPolicyIDs        []string       `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs     []string       `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies       *bool          `json:"clearInternalPolicies,omitempty"`
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// URL of the avatar of the identity holder
+	AvatarRemoteURL             *string  `json:"avatarRemoteURL,omitempty"`
+	ClearAvatarRemoteURL        *bool    `json:"clearAvatarRemoteURL,omitempty"`
+	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool    `json:"clearViewers,omitempty"`
+	InternalOwnerUserID         *string  `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser      *bool    `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID        *string  `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup     *bool    `json:"clearInternalOwnerGroup,omitempty"`
+	EnvironmentID               *string  `json:"environmentID,omitempty"`
+	ClearEnvironment            *bool    `json:"clearEnvironment,omitempty"`
+	ScopeID                     *string  `json:"scopeID,omitempty"`
+	ClearScope                  *bool    `json:"clearScope,omitempty"`
+	EmployerID                  *string  `json:"employerID,omitempty"`
+	ClearEmployer               *bool    `json:"clearEmployer,omitempty"`
+	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
+	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
+	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`
+	AddAssessmentIDs            []string `json:"addAssessmentIDs,omitempty"`
+	RemoveAssessmentIDs         []string `json:"removeAssessmentIDs,omitempty"`
+	ClearAssessments            *bool    `json:"clearAssessments,omitempty"`
+	AddTemplateIDs              []string `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs           []string `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates              *bool    `json:"clearTemplates,omitempty"`
+	AddAssetIDs                 []string `json:"addAssetIDs,omitempty"`
+	RemoveAssetIDs              []string `json:"removeAssetIDs,omitempty"`
+	ClearAssets                 *bool    `json:"clearAssets,omitempty"`
+	AddEntityIDs                []string `json:"addEntityIDs,omitempty"`
+	RemoveEntityIDs             []string `json:"removeEntityIDs,omitempty"`
+	ClearEntities               *bool    `json:"clearEntities,omitempty"`
+	AddDirectoryAccountIDs      []string `json:"addDirectoryAccountIDs,omitempty"`
+	RemoveDirectoryAccountIDs   []string `json:"removeDirectoryAccountIDs,omitempty"`
+	ClearDirectoryAccounts      *bool    `json:"clearDirectoryAccounts,omitempty"`
+	AddControlIDs               []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs            []string `json:"removeControlIDs,omitempty"`
+	ClearControls               *bool    `json:"clearControls,omitempty"`
+	AddSubcontrolIDs            []string `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs         []string `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols            *bool    `json:"clearSubcontrols,omitempty"`
+	AddPlatformIDs              []string `json:"addPlatformIDs,omitempty"`
+	RemovePlatformIDs           []string `json:"removePlatformIDs,omitempty"`
+	ClearPlatforms              *bool    `json:"clearPlatforms,omitempty"`
+	AddCampaignIDs              []string `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs           []string `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns              *bool    `json:"clearCampaigns,omitempty"`
+	AddTaskIDs                  []string `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs               []string `json:"removeTaskIDs,omitempty"`
+	ClearTasks                  *bool    `json:"clearTasks,omitempty"`
+	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
+	AddFindingIDs               []string `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs            []string `json:"removeFindingIDs,omitempty"`
+	ClearFindings               *bool    `json:"clearFindings,omitempty"`
+	AddWorkflowObjectRefIDs     []string `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs     *bool    `json:"clearWorkflowObjectRefs,omitempty"`
+	AddAccessPlatformIDs        []string `json:"addAccessPlatformIDs,omitempty"`
+	RemoveAccessPlatformIDs     []string `json:"removeAccessPlatformIDs,omitempty"`
+	ClearAccessPlatforms        *bool    `json:"clearAccessPlatforms,omitempty"`
+	UserID                      *string  `json:"userID,omitempty"`
+	ClearUser                   *bool    `json:"clearUser,omitempty"`
+	AddInternalPolicyIDs        []string `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs     []string `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies       *bool    `json:"clearInternalPolicies,omitempty"`
 }
 
 // UpdateInternalPolicyInput is used for update InternalPolicy object.

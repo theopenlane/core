@@ -244,6 +244,7 @@ func (Integration) Modules() []models.OrgModule {
 // Annotations of the Integration
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.FileCategory(SchemaIntegration),
 		entgql.Skip(
 			// integrations are created by an oauth flow, not by the user directly
 			entgql.SkipMutationCreateInput,

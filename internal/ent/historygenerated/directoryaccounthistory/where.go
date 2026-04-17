@@ -173,6 +173,11 @@ func CanonicalEmail(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldCanonicalEmail, v))
 }
 
+// PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
+func PhoneNumber(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
 // DisplayName applies equality check predicate on the "display_name" field. It's identical to DisplayNameEQ.
 func DisplayName(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldDisplayName, v))
@@ -1771,6 +1776,91 @@ func CanonicalEmailEqualFold(v string) predicate.DirectoryAccountHistory {
 // CanonicalEmailContainsFold applies the ContainsFold predicate on the "canonical_email" field.
 func CanonicalEmailContainsFold(v string) predicate.DirectoryAccountHistory {
 	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldCanonicalEmail, v))
+}
+
+// EmailAliasesIsNil applies the IsNil predicate on the "email_aliases" field.
+func EmailAliasesIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldEmailAliases))
+}
+
+// EmailAliasesNotNil applies the NotNil predicate on the "email_aliases" field.
+func EmailAliasesNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldEmailAliases))
+}
+
+// PhoneNumberEQ applies the EQ predicate on the "phone_number" field.
+func PhoneNumberEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberNEQ applies the NEQ predicate on the "phone_number" field.
+func PhoneNumberNEQ(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNEQ(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIn applies the In predicate on the "phone_number" field.
+func PhoneNumberIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberNotIn applies the NotIn predicate on the "phone_number" field.
+func PhoneNumberNotIn(vs ...string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotIn(FieldPhoneNumber, vs...))
+}
+
+// PhoneNumberGT applies the GT predicate on the "phone_number" field.
+func PhoneNumberGT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberGTE applies the GTE predicate on the "phone_number" field.
+func PhoneNumberGTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldGTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLT applies the LT predicate on the "phone_number" field.
+func PhoneNumberLT(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLT(FieldPhoneNumber, v))
+}
+
+// PhoneNumberLTE applies the LTE predicate on the "phone_number" field.
+func PhoneNumberLTE(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldLTE(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContains applies the Contains predicate on the "phone_number" field.
+func PhoneNumberContains(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContains(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasPrefix applies the HasPrefix predicate on the "phone_number" field.
+func PhoneNumberHasPrefix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasPrefix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberHasSuffix applies the HasSuffix predicate on the "phone_number" field.
+func PhoneNumberHasSuffix(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldHasSuffix(FieldPhoneNumber, v))
+}
+
+// PhoneNumberIsNil applies the IsNil predicate on the "phone_number" field.
+func PhoneNumberIsNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldIsNull(FieldPhoneNumber))
+}
+
+// PhoneNumberNotNil applies the NotNil predicate on the "phone_number" field.
+func PhoneNumberNotNil() predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldNotNull(FieldPhoneNumber))
+}
+
+// PhoneNumberEqualFold applies the EqualFold predicate on the "phone_number" field.
+func PhoneNumberEqualFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldEqualFold(FieldPhoneNumber, v))
+}
+
+// PhoneNumberContainsFold applies the ContainsFold predicate on the "phone_number" field.
+func PhoneNumberContainsFold(v string) predicate.DirectoryAccountHistory {
+	return predicate.DirectoryAccountHistory(sql.FieldContainsFold(FieldPhoneNumber, v))
 }
 
 // DisplayNameEQ applies the EQ predicate on the "display_name" field.

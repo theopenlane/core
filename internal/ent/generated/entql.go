@@ -703,6 +703,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldExternalID:          {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
 			directoryaccount.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccount.FieldSecondaryKey},
 			directoryaccount.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccount.FieldCanonicalEmail},
+			directoryaccount.FieldEmailAliases:        {Type: field.TypeJSON, Column: directoryaccount.FieldEmailAliases},
+			directoryaccount.FieldPhoneNumber:         {Type: field.TypeString, Column: directoryaccount.FieldPhoneNumber},
 			directoryaccount.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccount.FieldDisplayName},
 			directoryaccount.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccount.FieldAvatarRemoteURL},
 			directoryaccount.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccount.FieldAvatarLocalFileID},
@@ -1213,6 +1215,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldEnvironmentID:         {Type: field.TypeString, Column: file.FieldEnvironmentID},
 			file.FieldScopeName:             {Type: field.TypeString, Column: file.FieldScopeName},
 			file.FieldScopeID:               {Type: field.TypeString, Column: file.FieldScopeID},
+			file.FieldCategoryName:          {Type: field.TypeString, Column: file.FieldCategoryName},
+			file.FieldCategoryID:            {Type: field.TypeString, Column: file.FieldCategoryID},
+			file.FieldName:                  {Type: field.TypeString, Column: file.FieldName},
 			file.FieldProvidedFileName:      {Type: field.TypeString, Column: file.FieldProvidedFileName},
 			file.FieldProvidedFileExtension: {Type: field.TypeString, Column: file.FieldProvidedFileExtension},
 			file.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: file.FieldProvidedFileSize},
@@ -1513,6 +1518,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldExternalUserID:         {Type: field.TypeString, Column: identityholder.FieldExternalUserID},
 			identityholder.FieldExternalReferenceID:    {Type: field.TypeString, Column: identityholder.FieldExternalReferenceID},
 			identityholder.FieldMetadata:               {Type: field.TypeJSON, Column: identityholder.FieldMetadata},
+			identityholder.FieldAvatarRemoteURL:        {Type: field.TypeString, Column: identityholder.FieldAvatarRemoteURL},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -7511,6 +7517,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   file.ScopeTable,
 			Columns: []string{file.ScopeColumn},
+			Bidi:    false,
+		},
+		"File",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"category",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   file.CategoryTable,
+			Columns: []string{file.CategoryColumn},
 			Bidi:    false,
 		},
 		"File",
@@ -22352,6 +22370,16 @@ func (f *DirectoryAccountFilter) WhereCanonicalEmail(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldCanonicalEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *DirectoryAccountFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(directoryaccount.FieldEmailAliases))
+}
+
+// WherePhoneNumber applies the entql string predicate on the phone_number field.
+func (f *DirectoryAccountFilter) WherePhoneNumber(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldPhoneNumber))
+}
+
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldDisplayName))
@@ -26456,6 +26484,21 @@ func (f *FileFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(file.FieldScopeID))
 }
 
+// WhereCategoryName applies the entql string predicate on the category_name field.
+func (f *FileFilter) WhereCategoryName(p entql.StringP) {
+	f.Where(p.Field(file.FieldCategoryName))
+}
+
+// WhereCategoryID applies the entql string predicate on the category_id field.
+func (f *FileFilter) WhereCategoryID(p entql.StringP) {
+	f.Where(p.Field(file.FieldCategoryID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *FileFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(file.FieldName))
+}
+
 // WhereProvidedFileName applies the entql string predicate on the provided_file_name field.
 func (f *FileFilter) WhereProvidedFileName(p entql.StringP) {
 	f.Where(p.Field(file.FieldProvidedFileName))
@@ -26568,6 +26611,20 @@ func (f *FileFilter) WhereHasScope() {
 // WhereHasScopeWith applies a predicate to check if query has an edge scope with a given conditions (other predicates).
 func (f *FileFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("scope", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasCategory applies a predicate to check if query has an edge category.
+func (f *FileFilter) WhereHasCategory() {
+	f.Where(entql.HasEdge("category"))
+}
+
+// WhereHasCategoryWith applies a predicate to check if query has an edge category with a given conditions (other predicates).
+func (f *FileFilter) WhereHasCategoryWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("category", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -29280,6 +29337,11 @@ func (f *IdentityHolderFilter) WhereExternalReferenceID(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IdentityHolderFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(identityholder.FieldMetadata))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *IdentityHolderFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(identityholder.FieldAvatarRemoteURL))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

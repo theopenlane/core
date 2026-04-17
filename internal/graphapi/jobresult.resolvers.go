@@ -18,7 +18,7 @@ import (
 )
 
 // CreateJobResult is the resolver for the createJobResult field.
-func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error) {
+func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) (*model.JobResultCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.
 }
 
 // UpdateJobResult is the resolver for the updateJobResult field.
-func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error) {
+func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) (*model.JobResultUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).JobResult.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "jobresult"})

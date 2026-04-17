@@ -654,6 +654,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccounthistory.FieldExternalID:          {Type: field.TypeString, Column: directoryaccounthistory.FieldExternalID},
 			directoryaccounthistory.FieldSecondaryKey:        {Type: field.TypeString, Column: directoryaccounthistory.FieldSecondaryKey},
 			directoryaccounthistory.FieldCanonicalEmail:      {Type: field.TypeString, Column: directoryaccounthistory.FieldCanonicalEmail},
+			directoryaccounthistory.FieldEmailAliases:        {Type: field.TypeJSON, Column: directoryaccounthistory.FieldEmailAliases},
+			directoryaccounthistory.FieldPhoneNumber:         {Type: field.TypeString, Column: directoryaccounthistory.FieldPhoneNumber},
 			directoryaccounthistory.FieldDisplayName:         {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayName},
 			directoryaccounthistory.FieldAvatarRemoteURL:     {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarRemoteURL},
 			directoryaccounthistory.FieldAvatarLocalFileID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarLocalFileID},
@@ -1084,6 +1086,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldEnvironmentID:         {Type: field.TypeString, Column: filehistory.FieldEnvironmentID},
 			filehistory.FieldScopeName:             {Type: field.TypeString, Column: filehistory.FieldScopeName},
 			filehistory.FieldScopeID:               {Type: field.TypeString, Column: filehistory.FieldScopeID},
+			filehistory.FieldCategoryName:          {Type: field.TypeString, Column: filehistory.FieldCategoryName},
+			filehistory.FieldCategoryID:            {Type: field.TypeString, Column: filehistory.FieldCategoryID},
+			filehistory.FieldName:                  {Type: field.TypeString, Column: filehistory.FieldName},
 			filehistory.FieldProvidedFileName:      {Type: field.TypeString, Column: filehistory.FieldProvidedFileName},
 			filehistory.FieldProvidedFileExtension: {Type: field.TypeString, Column: filehistory.FieldProvidedFileExtension},
 			filehistory.FieldProvidedFileSize:      {Type: field.TypeInt64, Column: filehistory.FieldProvidedFileSize},
@@ -1379,6 +1384,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholderhistory.FieldExternalUserID:         {Type: field.TypeString, Column: identityholderhistory.FieldExternalUserID},
 			identityholderhistory.FieldExternalReferenceID:    {Type: field.TypeString, Column: identityholderhistory.FieldExternalReferenceID},
 			identityholderhistory.FieldMetadata:               {Type: field.TypeJSON, Column: identityholderhistory.FieldMetadata},
+			identityholderhistory.FieldAvatarRemoteURL:        {Type: field.TypeString, Column: identityholderhistory.FieldAvatarRemoteURL},
 		},
 	}
 	graph.Nodes[30] = &sqlgraph.Node{
@@ -5790,6 +5796,16 @@ func (f *DirectoryAccountHistoryFilter) WhereCanonicalEmail(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldCanonicalEmail))
 }
 
+// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
+func (f *DirectoryAccountHistoryFilter) WhereEmailAliases(p entql.BytesP) {
+	f.Where(p.Field(directoryaccounthistory.FieldEmailAliases))
+}
+
+// WherePhoneNumber applies the entql string predicate on the phone_number field.
+func (f *DirectoryAccountHistoryFilter) WherePhoneNumber(p entql.StringP) {
+	f.Where(p.Field(directoryaccounthistory.FieldPhoneNumber))
+}
+
 // WhereDisplayName applies the entql string predicate on the display_name field.
 func (f *DirectoryAccountHistoryFilter) WhereDisplayName(p entql.StringP) {
 	f.Where(p.Field(directoryaccounthistory.FieldDisplayName))
@@ -7690,6 +7706,21 @@ func (f *FileHistoryFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldScopeID))
 }
 
+// WhereCategoryName applies the entql string predicate on the category_name field.
+func (f *FileHistoryFilter) WhereCategoryName(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCategoryName))
+}
+
+// WhereCategoryID applies the entql string predicate on the category_id field.
+func (f *FileHistoryFilter) WhereCategoryID(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldCategoryID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *FileHistoryFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldName))
+}
+
 // WhereProvidedFileName applies the entql string predicate on the provided_file_name field.
 func (f *FileHistoryFilter) WhereProvidedFileName(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldProvidedFileName))
@@ -8988,6 +9019,11 @@ func (f *IdentityHolderHistoryFilter) WhereExternalReferenceID(p entql.StringP) 
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IdentityHolderHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(identityholderhistory.FieldMetadata))
+}
+
+// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
+func (f *IdentityHolderHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
+	f.Where(p.Field(identityholderhistory.FieldAvatarRemoteURL))
 }
 
 // addPredicate implements the predicateAdder interface.

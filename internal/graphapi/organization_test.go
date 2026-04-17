@@ -426,7 +426,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				input.CreateOrgSettings = tc.settings
 			}
 
-			resp, err := tc.client.CreateOrganization(tc.ctx, input, tc.avatarFile)
+			resp, err := tc.client.CreateOrganization(tc.ctx, input, tc.avatarFile, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -800,7 +800,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				}
 			}
 
-			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput, tc.avatarFile)
+			resp, err := tc.client.UpdateOrganization(tc.ctx, tc.orgID, tc.updateInput, tc.avatarFile, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
