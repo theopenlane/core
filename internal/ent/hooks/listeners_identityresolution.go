@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -336,43 +335,23 @@ func enrichFromPrimarySource(ctx context.Context, client *entgen.Client, holder 
 }
 
 // syncEmailAliases rebuilds the identity holder's email_aliases from all linked
-// directory accounts' canonical emails and per-account aliases, excluding the primary email
+// directory accounts' canonical emails, excluding the primary email
 func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder) error {
 	accounts, err := client.DirectoryAccount.Query().
 		Where(directoryaccount.IdentityHolderID(holder.ID),
 			directoryaccount.CanonicalEmailNotNil()).
-		Select(directoryaccount.FieldCanonicalEmail, directoryaccount.FieldEmailAliases).All(ctx)
+		Select(directoryaccount.FieldCanonicalEmail).All(ctx)
 	if err != nil {
 		return err
 	}
 
-	var collected []string
-
-	for _, a := range accounts {
-		if a.CanonicalEmail != nil && *a.CanonicalEmail != "" {
-			if !strings.EqualFold(*a.CanonicalEmail, holder.Email) {
-				collected = append(collected, *a.CanonicalEmail)
-			}
+	aliases := lo.Uniq(lo.FilterMap(accounts, func(a *entgen.DirectoryAccount, _ int) (string, bool) {
+		if a.CanonicalEmail == nil || *a.CanonicalEmail == "" || strings.EqualFold(*a.CanonicalEmail, holder.Email) {
+			return "", false
 		}
 
-		for _, e := range a.EmailAliases {
-			if a.CanonicalEmail != nil && *a.CanonicalEmail != "" {
-				if !strings.EqualFold(*a.CanonicalEmail, e) {
-					collected = append(collected, e)
-				}
-			} else {
-				collected = append(collected, e)
-			}
-		}
-	}
-
-	aliases := lo.Uniq(collected)
-
-	if i := slices.Index(aliases, holder.Email); i > -1 {
-		aliases = slices.Delete(aliases, i, i+1)
-	}
-
-	slices.Sort(aliases)
+		return *a.CanonicalEmail, true
+	}))
 
 	return client.IdentityHolder.UpdateOneID(holder.ID).
 		SetEmailAliases(aliases).

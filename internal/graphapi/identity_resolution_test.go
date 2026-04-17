@@ -57,8 +57,10 @@ func TestIdentityResolution(t *testing.T) {
 		assert.Check(t, is.Equal("Engineer", holder.Title))
 		assert.Check(t, is.Equal("Platform", holder.Department))
 		assert.Check(t, is.Equal("800-867-5309", holder.PhoneNumber))
-		assert.Check(t, is.DeepEqual([]string{"single-create@mail.testresolution.io"}, holder.EmailAliases))
 		assert.Check(t, is.Equal("1234871001", holder.ExternalUserID))
+
+		// we do not sync email aliases from directory accounts, this should be empty
+		assert.Check(t, is.Len(holder.EmailAliases, 0))
 
 		(&Cleanup[*generated.DirectoryAccountDeleteOne]{client: suite.client.db.DirectoryAccount, ID: da.ID}).MustDelete(ctx, t)
 		(&Cleanup[*generated.IdentityHolderDeleteOne]{client: suite.client.db.IdentityHolder, ID: holder.ID}).MustDelete(ctx, t)
@@ -108,9 +110,7 @@ func TestIdentityResolution(t *testing.T) {
 
 		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
 		assert.NilError(t, err)
-
-		// There should be one record from the secondary directory
-		assert.Check(t, is.Len(holder.EmailAliases, 1))
+		assert.Check(t, is.Len(holder.EmailAliases, 0))
 
 		// ensure phone number, external id are not set from the non-primary record
 		assert.Check(t, holder.PhoneNumber == "")
