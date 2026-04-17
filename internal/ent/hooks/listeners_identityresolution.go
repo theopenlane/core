@@ -292,7 +292,6 @@ func applyPrimarySourceDefaults(create *entgen.IdentityHolderCreate, account *en
 	create.SetIsActive(account.Status == enums.DirectoryAccountStatusActive)
 	create.SetNillableTitle(account.JobTitle)
 	create.SetNillableDepartment(account.Department)
-	create.SetEmailAliases(account.EmailAliases)
 	create.SetNillablePhoneNumber(account.PhoneNumber)
 	create.SetExternalUserID(account.ExternalID)
 
@@ -350,11 +349,21 @@ func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen
 	var collected []string
 
 	for _, a := range accounts {
-		if a.CanonicalEmail != nil && *a.CanonicalEmail != "" && !strings.EqualFold(*a.CanonicalEmail, holder.Email) {
-			collected = append(collected, *a.CanonicalEmail)
+		if a.CanonicalEmail != nil && *a.CanonicalEmail != "" {
+			if !strings.EqualFold(*a.CanonicalEmail, holder.Email) {
+				collected = append(collected, *a.CanonicalEmail)
+			}
 		}
 
-		collected = append(collected, a.EmailAliases...)
+		for _, e := range a.EmailAliases {
+			if a.CanonicalEmail != nil && *a.CanonicalEmail != "" {
+				if !strings.EqualFold(*a.CanonicalEmail, e) {
+					collected = append(collected, e)
+				}
+			} else {
+				collected = append(collected, e)
+			}
+		}
 	}
 
 	aliases := lo.Uniq(collected)
