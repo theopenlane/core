@@ -11,7 +11,7 @@ var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
-	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeIntegrationSchema[RuntimeEmailConfig]()
+	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
 	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
 	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[EmailCredential]()
 	// emailClientRef is the client ref for the email client used by this definition
@@ -44,33 +44,33 @@ type RuntimeEmailConfig struct {
 	// Provider is the email service provider name (resend, sendgrid, postmark)
 	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
-	FromEmail string `json:"fromEmail" koanf:"fromEmail" default:"support@mail.theopenlane.io"`
+	FromEmail string `json:"fromEmail" koanf:"fromEmail" jsonschema:"description=Sender email address" default:"support@mail.theopenlane.io"`
 	// CompanyName is the display name of the sending company
-	CompanyName string `json:"companyName" koanf:"companyName" default:"Openlane"`
+	CompanyName string `json:"companyName" koanf:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
-	CompanyAddress string `json:"companyAddress" koanf:"companyAddress" default:"5150 Broadway St San Antonio, TX 78209"`
+	CompanyAddress string `json:"companyAddress" koanf:"companyAddress" jsonschema:"description=Company mailing address" default:"5150 Broadway St San Antonio, TX 78209"`
 	// Corporation is the legal corporation name
-	Corporation string `json:"corporation" koanf:"corporation" default:"theopenlane, Inc."`
+	Corporation string `json:"corporation" koanf:"corporation" jsonschema:"description=Legal corporation name" default:"theopenlane, Inc."`
 	// SupportEmail is the support contact email address
-	SupportEmail string `json:"supportEmail" koanf:"supportEmail" default:"support@theopenlane.io"`
+	SupportEmail string `json:"supportEmail" koanf:"supportEmail" jsonschema:"description=Support contact email address" default:"support@theopenlane.io"`
 	// LogoURL is the company logo image URL
-	LogoURL string `json:"logoURL" koanf:"logoURL" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
+	LogoURL string `json:"logoURL" koanf:"logoURL" jsonschema:"description=Company logo URL" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
 	// RootURL is the root application URL used to construct email action links
-	RootURL string `json:"rootURL" koanf:"rootURL" default:"https://www.theopenlane.io"`
+	RootURL string `json:"rootURL" koanf:"rootURL" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
-	ProductURL string `json:"productURL" koanf:"productURL" default:"https://console.theopenlane.io"`
+	ProductURL string `json:"productURL" koanf:"productURL" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
-	DocsURL string `json:"docsURL" koanf:"docsURL" default:"https://docs.theopenlane.io"`
+	DocsURL string `json:"docsURL" koanf:"docsURL" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
 	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
-	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" default:"no-reply@mail.theopenlane.io"`
+	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" jsonschema:"description=Sender override for questionnaire auth emails" default:"no-reply@mail.theopenlane.io"`
 	// Copyright is the copyright notice for email footers
-	Copyright string `json:"copyright,omitempty" koanf:"copyright" default:"© theopenlane, Inc. All rights reserved."`
+	Copyright string `json:"copyright,omitempty" koanf:"copyright" jsonschema:"description=Copyright notice for email footers" default:"© theopenlane, Inc. All rights reserved."`
 	// TroubleText is the fallback help text shown below action buttons; {ACTION} is replaced with button text at render time
-	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
+	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" jsonschema:"description=Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
 	// UnsubscribeURL is the unsubscribe link for email footers
-	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" default:"https://console.theopenlane.io/unsubscribe"`
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" jsonschema:"description=Unsubscribe link for email footers" default:"https://console.theopenlane.io/unsubscribe"`
 	// TrustCenterDomain is the default domain for trust center URLs when no custom domain is configured
-	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" default:"trustcenter.theopenlane.io"`
+	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" jsonschema:"description=Default domain for trust center URLs when no custom domain is configured" default:"trustcenter.theopenlane.io"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields

@@ -20,7 +20,7 @@ func TestMessageSendRunDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))
+	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
 	resultBytes, err := MessageSend{}.Run(context.Background(), client, MessageSendOperation{
 		Destinations: []string{"C11111", "C22222"},
@@ -45,7 +45,7 @@ func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))
+	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
 	resultBytes, err := MessageSend{}.Run(context.Background(), client, MessageSendOperation{
 		Channel:      "C11111",

@@ -77,14 +77,14 @@
 
                             {{/* Icon — circular image between logo and content */}}
                             {{ if .Email.Body.Icon }}
-                            <tr style="width:105px;height:105px">
-                                <td>
+                            <tr>
+                                <td align="center" style="text-align:center;">
                                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"
                                         class="content-icon"
-                                        style="width:105px;max-width:105px;height:105px;background-color:#f0fdf9;border-radius:52.5px;">
+                                        style="width:105px;max-width:105px;height:105px;background-color:#f0fdf9;border-radius:52.5px;margin-left:auto;margin-right:auto;">
                                         <tr>
-                                            <td align="center" valign="middle" style="width:105px;height:105px;">
-                                                <img alt="{{ .Email.Body.Icon.Alt }}" height="68" width="67" style="display:block;"
+                                            <td align="center" valign="middle" style="width:105px;height:105px;text-align:center;">
+                                                <img alt="{{ .Email.Body.Icon.Alt }}" height="68" width="67" style="display:block;margin-left:auto;margin-right:auto;"
                                                     src="{{ .Email.Body.Icon.Src | url }}" />
                                             </td>
                                         </tr>

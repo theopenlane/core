@@ -18,8 +18,11 @@ var (
 	_, slackCredential = providerkit.CredentialSchema[slackCred]()
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
 	slackBotTokenCredentialSchema, slackBotTokenCredential = providerkit.CredentialSchema[slackBotTokenCred]()
-	// slackClient is the client ref for the Slack Web API client used by this definition
-	slackClient = types.NewClientRef[*slackgo.Client]()
+	// slackClient is the unified client ref for every Slack operation; runtime and customer
+	// paths both build a SlackClient that wraps the Web API client and any system-notification transport
+	slackClient = types.NewClientRef[*SlackClient]()
+	// runtimeSlackSchema is the JSON schema and typed ref for the runtime Slack config
+	runtimeSlackSchema, runtimeSlackRef = providerkit.RuntimeSchema[RuntimeSlackConfig]()
 	// healthDefaultOperation is the operation ref for the Slack health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
@@ -27,6 +30,29 @@ var (
 	// messageSendSchema is the operation ref for the Slack message send operation
 	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
 )
+
+// RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.
+// Sourced from koanf/environment at startup; populated for the platform-owned workspace
+type RuntimeSlackConfig struct {
+	// WebhookURL is the Slack incoming webhook URL used to deliver system notifications
+	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL used for system notifications"`
+}
+
+// Provisioned reports whether the runtime config has the minimum required fields to deliver system messages
+func (c RuntimeSlackConfig) Provisioned() bool {
+	return c.WebhookURL != ""
+}
+
+// SlackClient is the unified Slack client used by every Slack operation. The runtime (system)
+// path populates only WebhookURL; customer installations populate API and optionally DefaultChannel
+type SlackClient struct {
+	// API is the Slack Web API client used by customer-installed operations
+	API *slackgo.Client
+	// WebhookURL is the Slack incoming webhook used by the runtime system-notification path
+	WebhookURL string
+	// DefaultChannel is the channel id customer installations use when a system-message op supplies no explicit recipient
+	DefaultChannel string
+}
 
 // slackCred holds the provider-owned credential material for an OAuth-based Slack installation
 type slackCred struct {
@@ -63,6 +89,15 @@ type InstallationMetadata struct {
 	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
 	// TeamName is the Slack workspace display name
 	TeamName string `json:"teamName,omitempty" jsonschema:"title=Team Name"`
+	// DefaultChannel is the Slack channel id used for system notifications on the customer installation
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel"`
+}
+
+// InstallationInput is the provider-defined input supplied when installing the Slack integration.
+// Bot-token connections populate it at install time; OAuth connections leave it empty for now
+type InstallationInput struct {
+	// DefaultChannel is the Slack channel id used as the default delivery target for system messages
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id used as the default delivery target for system notifications"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable

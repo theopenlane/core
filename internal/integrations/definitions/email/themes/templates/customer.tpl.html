@@ -53,23 +53,37 @@
                         style="background-color:#ffffff;border-radius:8px;padding:40px 36px;margin-left:auto;margin-right:auto;border:1px solid #e5e7eb;">
                         <tbody>
                             <!-- Logo / Brand -->
+                            {{ if or .Renderer.Branding.Logo .Renderer.Branding.Name }}
                             <tr style="width:100%">
                                 <td style="padding-bottom:24px;border-bottom:1px solid #e5e7eb;margin-bottom:24px;">
                                     {{ if .Renderer.Branding.Logo }}
-                                    <a href="{{ .Renderer.Branding.Link }}" target="_blank">
+                                        {{ if .Renderer.Branding.Link }}
+                                        <a href="{{ .Renderer.Branding.Link }}" target="_blank">
+                                            <img alt="{{ .Renderer.Branding.Name }}" height="40"
+                                                src="{{ .Renderer.Branding.Logo | url }}"
+                                                class="email-logo"
+                                                style="display:block;outline:none;border:none;text-decoration:none;height:auto;max-height:48px;margin-left:auto;margin-right:auto;"
+                                                width="162" />
+                                        </a>
+                                        {{ else }}
                                         <img alt="{{ .Renderer.Branding.Name }}" height="40"
                                             src="{{ .Renderer.Branding.Logo | url }}"
                                             class="email-logo"
                                             style="display:block;outline:none;border:none;text-decoration:none;height:auto;max-height:48px;margin-left:auto;margin-right:auto;"
                                             width="162" />
-                                    </a>
+                                        {{ end }}
                                     {{ else if .Renderer.Branding.Name }}
                                     <h2 style="text-align:center;margin:0;font-size:22px;font-weight:600;">
+                                        {{ if .Renderer.Branding.Link }}
                                         <a href="{{ .Renderer.Branding.Link }}" target="_blank" style="color:#111827;text-decoration:none;">{{ .Renderer.Branding.Name }}</a>
+                                        {{ else }}
+                                        <span style="color:#111827;">{{ .Renderer.Branding.Name }}</span>
+                                        {{ end }}
                                     </h2>
                                     {{ end }}
                                 </td>
                             </tr>
+                            {{ end }}
 
                             <!-- Content -->
                             <tr style="width:100%">
@@ -266,7 +280,7 @@
                                     {{ end }}
 
                                     {{/* Trouble Text */}}
-                                    {{ if eq .Email.Body.FreeMarkdown "" }}
+                                    {{ if and .Renderer.Branding.TroubleText (eq .Email.Body.FreeMarkdown "") }}
                                         {{ with .Email.Body.Actions }}
                                             <table class="body-sub">
                                                 <tbody>
@@ -291,6 +305,7 @@
                     </table>
 
                     {{/* Footer */}}
+                    {{ if .Renderer.Branding.Copyright }}
                     <table align="center" role="presentation" style="padding-top:32px;border:0;margin:auto;max-width:600px;">
                         <tbody>
                             <tr style="width:100%">
@@ -302,6 +317,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    {{ end }}
                 </td>
             </tr>
         </tbody>

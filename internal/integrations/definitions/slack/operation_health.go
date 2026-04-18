@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	slackgo "github.com/slack-go/slack"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -26,8 +24,8 @@ func (h HealthCheck) Handle() types.OperationHandler {
 }
 
 // Run executes the Slack auth.test health check
-func (HealthCheck) Run(ctx context.Context, c *slackgo.Client) (json.RawMessage, error) {
-	resp, err := c.AuthTestContext(ctx)
+func (HealthCheck) Run(ctx context.Context, c *SlackClient) (json.RawMessage, error) {
+	resp, err := c.API.AuthTestContext(ctx)
 	if err != nil {
 		return nil, ErrAuthTestFailed
 	}

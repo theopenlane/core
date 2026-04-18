@@ -30,7 +30,7 @@ var scopes = append(chatScopes, directoryScopes...)
 // Builder returns the Slack definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		return types.Definition{
+		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
 				Family:      "Slack",
@@ -133,12 +133,12 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:            slackClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{slackCredential.ID(), slackBotTokenCredential.ID()},
-					Description:    "Slack Web API client",
+					Description:    "Unified Slack client wrapping the Web API and system-notification transports",
 					Build:          Client{}.Build,
 				},
 			},
-			Operations: []types.OperationRegistration{
-				{
+			Operations: append(AllSlackSystemMessages(),
+				types.OperationRegistration{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
 					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
@@ -156,7 +156,7 @@ func Builder(cfg Config) registry.Builder {
 					Handle:              MessageSend{}.Handle(),
 					RequiredPermissions: scopes,
 				},
-				{
+				types.OperationRegistration{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect workspace users as directory accounts",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
@@ -174,8 +174,26 @@ func Builder(cfg Config) registry.Builder {
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 				},
-			},
+			),
 			Mappings: slackMappings(),
-		}, nil
+		}
+
+		if runtime != nil && runtime.Provisioned() {
+			runtimeSlackRef.SetConfig(runtime)
+
+			marshaledConfig, err := runtimeSlackRef.MarshalConfig()
+			if err != nil {
+				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
+			}
+
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Ref:    runtimeSlackRef.ID(),
+				Schema: runtimeSlackSchema,
+				Config: marshaledConfig,
+				Build:  buildRuntimeSlackClient,
+			}
+		}
+
+		return def, nil
 	})
 }
