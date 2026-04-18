@@ -17,6 +17,8 @@ type Config struct {
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition
 	Slack slack.Config `json:"slack" koanf:"slack"`
+	// SlackRuntime holds runtime-provisioned configuration for system Slack notifications
+	SlackRuntime slack.RuntimeSlackConfig `json:"slackRuntime" koanf:"slackRuntime"`
 	// GoogleWorkspace holds OAuth credentials for the Google Workspace definition
 	GoogleWorkspace googleworkspace.Config `json:"googleworkspace" koanf:"googleworkspace"`
 	// AzureEntraID holds OAuth credentials for the Azure Entra ID definition

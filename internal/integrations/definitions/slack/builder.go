@@ -1,6 +1,8 @@
 package slack
 
 import (
+	"fmt"
+
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -8,10 +10,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// Builder returns the Slack definition builder with the supplied operator config applied
-func Builder(cfg Config) registry.Builder {
+// Builder returns the Slack definition builder with the supplied operator and runtime config applied.
+// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send
+func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		return types.Definition{
+		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
 				Family:      "slack",
@@ -103,12 +106,12 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:            slackClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{slackCredential.ID(), slackBotTokenCredential.ID()},
-					Description:    "Slack Web API client",
+					Description:    "Unified Slack client wrapping the Web API and system-notification transports",
 					Build:          Client{}.Build,
 				},
 			},
-			Operations: []types.OperationRegistration{
-				{
+			Operations: append(AllSlackSystemMessages(),
+				types.OperationRegistration{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
 					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
@@ -117,7 +120,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigSchema: healthCheckSchema,
 					Handle:       HealthCheck{}.Handle(),
 				},
-				{
+				types.OperationRegistration{
 					Name:         messageSendOperation.Name(),
 					Description:  "Send a Slack message via chat.postMessage",
 					Topic:        definitionID.OperationTopic(messageSendOperation.Name()),
@@ -125,7 +128,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),
 				},
-				{
+				types.OperationRegistration{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect workspace users as directory accounts",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
@@ -139,8 +142,26 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
 				},
-			},
+			),
 			Mappings: slackMappings(),
-		}, nil
+		}
+
+		if runtime != nil && runtime.Provisioned() {
+			runtimeSlackRef.SetConfig(runtime)
+
+			marshaledConfig, err := runtimeSlackRef.MarshalConfig()
+			if err != nil {
+				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
+			}
+
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Ref:    runtimeSlackRef.ID(),
+				Schema: runtimeSlackSchema,
+				Config: marshaledConfig,
+				Build:  buildRuntimeSlackClient,
+			}
+		}
+
+		return def, nil
 	})
 }

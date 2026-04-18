@@ -32,6 +32,6 @@ func Builders(cfg Config) []registry.Builder {
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),
 		scim.Builder(),
-		slack.Builder(cfg.Slack),
+		slack.Builder(cfg.Slack, &cfg.SlackRuntime),
 	}
 }

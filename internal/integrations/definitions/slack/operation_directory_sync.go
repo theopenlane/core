@@ -3,8 +3,6 @@ package slack
 import (
 	"context"
 
-	slackgo "github.com/slack-go/slack"
-
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -48,14 +46,14 @@ type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
 		return d.Run(ctx, client)
 	})
 }
 
 // Run collects Slack workspace users and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-	users, err := client.GetUsersContext(ctx)
+func (DirectorySync) Run(ctx context.Context, client *SlackClient) ([]types.IngestPayloadSet, error) {
+	users, err := client.API.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
 		return nil, ErrUsersFetchFailed

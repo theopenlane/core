@@ -5,79 +5,79 @@ import (
 	"encoding/json"
 )
 
-// RuntimeIntegrationID is the stable identifier for a runtime integration config, derived from the Go type name
-type RuntimeIntegrationID struct {
+// RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name
+type RuntimeRefID struct {
 	// name is the stable string identifier derived from the reflected schema
 	name string
 }
 
-// NewRuntimeIntegrationID creates a runtime integration identity handle with a stable name
-func NewRuntimeIntegrationID(name string) RuntimeIntegrationID {
-	return RuntimeIntegrationID{name: name}
+// NewRuntimeRefID creates a runtime integration identity handle with a stable name
+func NewRuntimeRefID(name string) RuntimeRefID {
+	return RuntimeRefID{name: name}
 }
 
 // Name returns the stable identifier
-func (id RuntimeIntegrationID) Name() string {
+func (id RuntimeRefID) Name() string {
 	return id.name
 }
 
 // String returns the stable identifier
-func (id RuntimeIntegrationID) String() string {
+func (id RuntimeRefID) String() string {
 	return id.name
 }
 
 // Valid reports whether the ID was initialized
-func (id RuntimeIntegrationID) Valid() bool {
+func (id RuntimeRefID) Valid() bool {
 	return id.name != ""
 }
 
-// RuntimeIntegrationRef is a typed reference to a runtime integration config.
+// RuntimeRef is a typed reference to a runtime integration config.
 // When populated, the definition operates entirely in memory with no Integration
 // DB record, no keystore credentials, and no connection lifecycle
-type RuntimeIntegrationRef[T any] struct {
+type RuntimeRef[T any] struct {
 	// id is the stable identifier derived from the reflected schema
-	id RuntimeIntegrationID
+	id RuntimeRefID
 	// schema is the reflected JSON schema of the config type
 	schema json.RawMessage
 	// config is the runtime config, nil when not provisioned
 	config *T
 }
 
-// NewRuntimeIntegrationRef creates a typed runtime integration ref with the given name and schema
-func NewRuntimeIntegrationRef[T any](name string, schema json.RawMessage) RuntimeIntegrationRef[T] {
-	return RuntimeIntegrationRef[T]{
-		id:     NewRuntimeIntegrationID(name),
+// NewRuntimeRef creates a typed runtime integration ref with the given name and schema
+func NewRuntimeRef[T any](name string, schema json.RawMessage) RuntimeRef[T] {
+	return RuntimeRef[T]{
+		id:     NewRuntimeRefID(name),
 		schema: schema,
 	}
 }
 
 // ID returns the stable identifier
-func (r RuntimeIntegrationRef[T]) ID() RuntimeIntegrationID {
+func (r RuntimeRef[T]) ID() RuntimeRefID {
 	return r.id
 }
 
 // Schema returns the reflected JSON schema
-func (r RuntimeIntegrationRef[T]) Schema() json.RawMessage {
+func (r RuntimeRef[T]) Schema() json.RawMessage {
 	return r.schema
 }
 
 // SetConfig sets the runtime config. When set, the registry will call Build at registration time
-func (r *RuntimeIntegrationRef[T]) SetConfig(cfg *T) {
+func (r *RuntimeRef[T]) SetConfig(cfg *T) {
 	r.config = cfg
 }
 
 // Config returns the runtime config, if set
-func (r RuntimeIntegrationRef[T]) Config() *T {
+func (r RuntimeRef[T]) Config() *T {
 	return r.config
 }
 
 // Provisioned reports whether runtime config has been provided
-func (r RuntimeIntegrationRef[T]) Provisioned() bool {
+func (r RuntimeRef[T]) Provisioned() bool {
 	return r.config != nil
 }
 
 // MarshalConfig marshals the config to JSON for passing to the Build function
-func (r RuntimeIntegrationRef[T]) MarshalConfig() (json.RawMessage, error) {
+func (r RuntimeRef[T]) MarshalConfig() (json.RawMessage, error) {
 	if r.config == nil {
 		return nil, nil
 	}
@@ -88,7 +88,7 @@ func (r RuntimeIntegrationRef[T]) MarshalConfig() (json.RawMessage, error) {
 // RuntimeIntegrationRegistration is the non-generic registration stored on a Definition
 type RuntimeIntegrationRegistration struct {
 	// Ref is the stable identifier for the runtime config type
-	Ref RuntimeIntegrationID `json:"ref"`
+	Ref RuntimeRefID `json:"ref"`
 	// Schema is the reflected JSON schema of the runtime config struct
 	Schema json.RawMessage `json:"schema,omitempty"`
 	// Config is the marshaled runtime config, nil when not provisioned

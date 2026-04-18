@@ -1160,7 +1160,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 			Visible:     true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeIntegrationID("TestRuntimeConfig"),
+			Ref:    integrationtypes.NewRuntimeRefID("TestRuntimeConfig"),
 			Schema: json.RawMessage(`{"type":"object"}`),
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
@@ -1204,7 +1204,7 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 			Active:      true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeIntegrationID("Unconfigured"),
+			Ref:    integrationtypes.NewRuntimeRefID("Unconfigured"),
 			Schema: json.RawMessage(`{"type":"object"}`),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return "should-not-be-called", nil
@@ -1238,7 +1238,7 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeIntegrationID("WithCreds"),
+			Ref:    integrationtypes.NewRuntimeRefID("WithCreds"),
 			Schema: json.RawMessage(`{"type":"object"}`),
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
@@ -1299,7 +1299,7 @@ func TestRuntimeMutualExclusivityWithOperatorConfig(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:   integrationtypes.NewRuntimeIntegrationID("OpConflict"),
+			Ref:   integrationtypes.NewRuntimeRefID("OpConflict"),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
 		},
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
@@ -1323,7 +1323,7 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref: integrationtypes.NewRuntimeIntegrationID("NoBuild"),
+			Ref: integrationtypes.NewRuntimeRefID("NoBuild"),
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
@@ -1346,7 +1346,7 @@ func TestRuntimeBuildError(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeIntegrationID("FailBuild"),
+			Ref:    integrationtypes.NewRuntimeRefID("FailBuild"),
 			Config: json.RawMessage(`{}`),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return nil, buildErr

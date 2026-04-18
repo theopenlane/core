@@ -51,7 +51,7 @@ func (m MessageSend) Handle() types.OperationHandler {
 }
 
 // Run sends a Slack message via chat.postMessage
-func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOperation) (json.RawMessage, error) {
+func (MessageSend) Run(ctx context.Context, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
 	destinations := lo.Uniq(lo.Compact(append([]string{cfg.Channel}, cfg.Destinations...)))
 	if len(destinations) == 0 {
 		return nil, ErrChannelMissing
@@ -93,7 +93,7 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOp
 
 	deliveries := make([]MessageDelivery, 0, len(destinations))
 	for _, destination := range destinations {
-		respChannel, ts, err := c.PostMessageContext(ctx, destination, opts...)
+		respChannel, ts, err := c.API.PostMessageContext(ctx, destination, opts...)
 		if err != nil {
 			return nil, ErrMessageSendFailed
 		}

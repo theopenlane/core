@@ -31,4 +31,16 @@ var (
 	ErrCredentialEncode = errors.New("slack: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("slack: credential decode failed")
+	// ErrInstallationInputDecode indicates the installation input payload could not be deserialized
+	ErrInstallationInputDecode = errors.New("slack: installation input decode failed")
+	// ErrClientBuildFailed indicates a Slack runtime or customer client could not be constructed
+	ErrClientBuildFailed = errors.New("slack: client build failed")
+	// ErrRuntimeConfigInvalid indicates the runtime Slack configuration is missing required fields
+	ErrRuntimeConfigInvalid = errors.New("slack: runtime config invalid")
+	// ErrRuntimeConfigDecode indicates the runtime Slack configuration could not be deserialized
+	ErrRuntimeConfigDecode = errors.New("slack: runtime config decode failed")
+	// ErrDefaultChannelMissing indicates the installation has no default channel configured for system messages
+	ErrDefaultChannelMissing = errors.New("slack: default channel missing")
+	// ErrTemplateRenderFailed indicates a system message template could not be rendered
+	ErrTemplateRenderFailed = errors.New("slack: template render failed")
 )

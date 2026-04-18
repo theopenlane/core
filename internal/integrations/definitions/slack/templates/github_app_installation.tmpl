@@ -1,0 +1,6 @@
+Openlane GitHub App installation completed
+GitHub organization: {{ .GitHubOrganization }}
+{{- if .GitHubAccountType }}
+GitHub account type: {{ .GitHubAccountType }}
+{{- end }}
+Openlane organization: {{ .OpenlaneOrganization }}{{ if .ShowOpenlaneOrganizationID }} ({{ .OpenlaneOrganizationID }}){{ end }}
