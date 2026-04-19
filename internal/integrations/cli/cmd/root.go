@@ -77,7 +77,7 @@ func init() {
 
 	fs := RootCmd.PersistentFlags()
 
-	fs.StringVar(&cfgFile, "config", "", "config file (default is $HOME/."+AppName+".yaml)")
+	fs.StringVar(&cfgFile, "config", "", "config file (default is "+config.DefaultConfigDir+"/"+config.DefaultConfigFile+")")
 
 	fs.String("host", config.DefaultHost, "openlane api url")
 	config.SetConfigKey(fs, "host", "openlane.host")

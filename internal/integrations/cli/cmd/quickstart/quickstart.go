@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/pkg/logx"
 	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
@@ -26,18 +26,16 @@ const resourcePrefix = "cli-quickstart-"
 // defaultSubject is the subject line for the smoke-test template
 const defaultSubject = "Openlane CLI quickstart test"
 
-// defaultBody is the body template for the smoke-test email. Uses the
-// CAMPAIGN_RECIPIENT variable context so the server substitutes recipient
-// and company data at render time.
-const defaultBody = `<html>
-<body>
-<p>Hi {{ .Recipient.FirstName }},</p>
-<p>This is a smoke-test email from the Openlane integrations CLI for
-campaign <strong>{{ .Campaign.Name }}</strong>.</p>
-<p>If you received this, the end-to-end flow (branding + template + campaign
-+ launch + dispatch) is working.</p>
-</body>
-</html>`
+// defaultBody is the body template for the smoke-test email. Flat keys match
+// the variables produced by sendCampaignTargetEmail + buildTemplateData
+// (recipientFirstName, campaignName, companyName, ...); the body contains
+// content blocks only — the theme renderer supplies the surrounding HTML
+const defaultBody = `Hi {{ .recipientFirstName }},
+
+This is a smoke-test email from the Openlane integrations CLI for campaign **{{ .campaignName }}**.
+
+If you received this, the end-to-end flow (branding + template + campaign + launch + dispatch) is working.
+`
 
 var command = &cobra.Command{
 	Use:   "quickstart",
@@ -81,21 +79,29 @@ func run(ctx context.Context) error {
 
 	brandingID, err := createBranding(ctx, client, suffix)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email branding")
+
 		return fmt.Errorf("create branding: %w", err)
 	}
 
 	templateID, err := createTemplate(ctx, client, templateKey, suffix)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email template")
+
 		return fmt.Errorf("create template: %w", err)
 	}
 
-	campaignID, err := createCampaign(ctx, client, templateID, recipient, suffix)
+	campaignID, err := createCampaign(ctx, client, templateID, brandingID, recipient, suffix)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create campaign")
+
 		return fmt.Errorf("create campaign: %w", err)
 	}
 
 	launch, err := client.LaunchCampaign(ctx, graphclient.LaunchCampaignInput{CampaignID: campaignID})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to launch campaign")
+
 		return fmt.Errorf("launch campaign: %w", err)
 	}
 
@@ -129,20 +135,26 @@ func resolveRecipient() (string, error) {
 // createBranding creates a default email branding tagged with quickstartTag
 func createBranding(ctx context.Context, client *openlaneclient.Client, suffix string) (string, error) {
 	input := graphclient.CreateEmailBrandingInput{
-		Name:         resourcePrefix + suffix,
-		BrandName:    lo.ToPtr("Openlane Quickstart"),
-		PrimaryColor: lo.ToPtr("#1F2937"),
-		IsDefault:    lo.ToPtr(true),
-		Tags:         []string{quickstartTag},
+		Name:            resourcePrefix + suffix,
+		BrandName:       lo.ToPtr("Openlane Quickstart"),
+		PrimaryColor:    lo.ToPtr("#1F2937"),
+		BackgroundColor: lo.ToPtr("#F8FAFC"),
+		TextColor:       lo.ToPtr("#0F172A"),
+		LinkColor:       lo.ToPtr("#2563EB"),
+		ButtonColor:     lo.ToPtr("#1F2937"),
+		ButtonTextColor: lo.ToPtr("#FFFFFF"),
+		IsDefault:       lo.ToPtr(true),
+		Tags:            []string{quickstartTag},
 	}
 
 	resp, err := client.CreateEmailBranding(ctx, input)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email branding")
 		return "", err
 	}
 
 	id := resp.CreateEmailBranding.EmailBranding.ID
-	log.Info().Str("branding_id", id).Msg("created email branding")
+	logx.FromContext(ctx).Debug().Str("branding_id", id).Msg("created email branding")
 
 	return id, nil
 }
@@ -163,23 +175,26 @@ func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suf
 
 	resp, err := client.CreateEmailTemplate(ctx, input)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("template_key", key).Msg("failed to create email template")
+
 		return "", err
 	}
 
 	id := resp.CreateEmailTemplate.EmailTemplate.ID
-	log.Info().Str("template_id", id).Str("template_key", key).Msg("created email template")
+	logx.FromContext(ctx).Debug().Str("template_id", id).Str("template_key", key).Msg("created email template")
 
 	return id, nil
 }
 
 // createCampaign creates a CUSTOM campaign targeting the recipient
-func createCampaign(ctx context.Context, client *openlaneclient.Client, templateID, recipient, suffix string) (string, error) {
+func createCampaign(ctx context.Context, client *openlaneclient.Client, templateID, brandingID, recipient, suffix string) (string, error) {
 	campaign := &graphclient.CreateCampaignInput{
-		Name:         resourcePrefix + suffix,
-		Description:  lo.ToPtr("End-to-end smoke test campaign created by the integrations CLI"),
-		CampaignType: lo.ToPtr(enums.CampaignTypeCustom),
-		TemplateID:   &templateID,
-		Tags:         []string{quickstartTag},
+		Name:            resourcePrefix + suffix,
+		Description:     lo.ToPtr("End-to-end smoke test campaign created by the integrations CLI"),
+		CampaignType:    lo.ToPtr(enums.CampaignTypeCustom),
+		EmailTemplateID: &templateID,
+		EmailBrandingID: &brandingID,
+		Tags:            []string{quickstartTag},
 	}
 
 	input := graphclient.CreateCampaignWithTargetsInput{
@@ -189,11 +204,13 @@ func createCampaign(ctx context.Context, client *openlaneclient.Client, template
 
 	resp, err := client.CreateCampaignWithTargets(ctx, input)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("recipient", recipient).Msg("failed to create campaign with targets")
+
 		return "", err
 	}
 
 	id := resp.CreateCampaignWithTargets.Campaign.ID
-	log.Info().Str("campaign_id", id).Str("recipient", recipient).Msg("created campaign")
+	logx.FromContext(ctx).Debug().Str("campaign_id", id).Str("recipient", recipient).Msg("created campaign")
 
 	return id, nil
 }

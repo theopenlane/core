@@ -40,7 +40,6 @@ type campaignDispatchOptions struct {
 
 // campaignDispatchState holds state accumulated during dispatch processing.
 type campaignDispatchState struct {
-	client         *generated.Client
 	campaignObj    *generated.Campaign
 	opts           campaignDispatchOptions
 	resend         bool
@@ -76,10 +75,9 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 		return nil, rout.NewMissingRequiredFieldError("campaignID")
 	}
 
-	client := withTransactionalMutation(ctx)
-	campaignObj, err := client.Campaign.Get(ctx, campaignID)
+	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	if err := r.validateCampaignDispatch(ctx, campaignObj); err != nil {
@@ -98,7 +96,6 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 	}
 
 	return &campaignDispatchState{
-		client:         client,
 		campaignObj:    campaignObj,
 		opts:           opts,
 		resend:         resend,
@@ -121,7 +118,7 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return err
 	}
 
-	if campaignObj.AssessmentID == "" {
+	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire && campaignObj.AssessmentID == "" {
 		return ErrCampaignMissingAssessmentID
 	}
 
@@ -135,7 +132,7 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 // processDispatchTargets counts dispatchable targets and, for immediate dispatch,
 // delegates to the appropriate email operation via the integration runtime
 func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *campaignDispatchState) error {
-	targets, err := state.client.CampaignTarget.Query().
+	targets, err := withTransactionalMutation(ctx).CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(state.campaignObj.ID)).
 		All(ctx)
 	if err != nil {
@@ -163,7 +160,7 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 // campaign type through the integration runtime. Questionnaire campaigns use
 // SendQuestionnaireCampaignOp; all others use SendBrandedCampaignOp
 func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state *campaignDispatchState) error {
-	rt := intruntime.FromClient(ctx, state.client)
+	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
 	if rt == nil {
 		return nil
 	}
@@ -228,7 +225,7 @@ func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Contex
 		return nil
 	}
 
-	update := state.client.Campaign.UpdateOneID(state.campaignObj.ID).
+	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID).
 		SetStatus(enums.CampaignStatusScheduled).
 		SetIsActive(false)
 
@@ -245,7 +242,7 @@ func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Contex
 
 // updateCampaignForImmediateDispatch sets the campaign to active and updates timestamps.
 func (r *mutationResolver) updateCampaignForImmediateDispatch(ctx context.Context, state *campaignDispatchState) error {
-	update := state.client.Campaign.UpdateOneID(state.campaignObj.ID).
+	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID).
 		SetStatus(enums.CampaignStatusActive).
 		SetIsActive(true)
 
@@ -267,7 +264,7 @@ func (r *mutationResolver) updateCampaignForImmediateDispatch(ctx context.Contex
 
 // buildDispatchPayload fetches the final campaign state and constructs the response.
 func (r *mutationResolver) buildDispatchPayload(ctx context.Context, state *campaignDispatchState) (*model.CampaignLaunchPayload, error) {
-	query, err := state.client.Campaign.Query().
+	query, err := withTransactionalMutation(ctx).Campaign.Query().
 		Where(campaign.ID(state.campaignObj.ID)).
 		CollectFields(ctx)
 	if err != nil {
@@ -279,7 +276,7 @@ func (r *mutationResolver) buildDispatchPayload(ctx context.Context, state *camp
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
 
-	r.recordCampaignDispatchEvent(ctx, state.campaignObj, state.opts.Action, state.queuedCount, state.skippedCount, state.scheduleAt)
+	//	r.recordCampaignDispatchEvent(ctx, state.campaignObj, state.opts.Action, state.queuedCount, state.skippedCount, state.scheduleAt)
 
 	return &model.CampaignLaunchPayload{
 		Campaign:     finalResult,
@@ -429,9 +426,13 @@ func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaig
 		SubjectID:   caller.SubjectID,
 	})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking campaign edit access")
+
 		return err
 	}
 	if !allow {
+		logx.FromContext(ctx).Warn().Str("campaign_id", campaignID).Msg("access denied to edit campaign")
+
 		return newPermissionDeniedError()
 	}
 	return nil

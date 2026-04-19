@@ -227,10 +227,12 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 				},
 				ContentBlocks: []template.HTML{
 					template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-						`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Go through our onboarding process to get a personalized experience</p>` +
-						`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Setup a test program to see all the features our platform has to offer</p>` +
-						`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
+						`<p style="font-size:16px;font-weight:500;line-height:24px;margin:0 0 12px 0;text-align:left;">Here's how to get started:</p>` +
+						`<ul style="margin:0;padding-left:16px;color:#505f6f;list-style-type:disc;">` +
+						`<li style="font-size:16px;line-height:24px;margin-bottom:8px;">Go through our onboarding process to get a personalized experience</li>` +
+						`<li style="font-size:16px;line-height:24px;margin-bottom:8px;">Setup a test program to see all the features our platform has to offer</li>` +
+						`<li style="font-size:16px;line-height:24px;">Checkout our <a href="https://docs.theopenlane.io/docs/platform/quickstartguide" style="color:rgb(63,118,255);text-decoration:none" target="_blank">quickstart guide</a> for helpful resources</li>` +
+						`</ul>` +
 						`</div>`),
 				},
 				Actions: []render.Action{{

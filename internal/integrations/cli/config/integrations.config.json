@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/theopenlane/core/internal/integrations/cli/config/config.-config",
+  "$defs": {
+    "config.OpenlaneAuthConfig": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "Mode selects the auth strategy: auto prefers token/pat when present and\nfalls back to credential login; token requires Token or PAT; credentials\nrequires Email and Password"
+        },
+        "token": {
+          "type": "string",
+          "description": "Token is the API bearer token (PAT or API token)"
+        },
+        "pat": {
+          "type": "string",
+          "description": "PAT is a personal access token; used as a fallback when Token is empty"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email is the login email used for auth-mode=credentials"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password is the login password used for auth-mode=credentials"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OpenlaneAuthConfig defines credentials and auth strategy"
+    },
+    "config.OpenlaneConfig": {
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "Host is the base URL for the Openlane API"
+        },
+        "auth": {
+          "$ref": "#/$defs/config.OpenlaneAuthConfig",
+          "description": "Auth controls authentication for API requests"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "OpenlaneConfig holds connection and auth defaults"
+    }
+  },
+  "properties": {
+    "openlane": {
+      "$ref": "#/$defs/config.OpenlaneConfig",
+      "description": "Openlane holds API host and authentication defaults used by every\nsubcommand that talks to the Openlane API"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "description": "Config defines the structured CLI configuration"
+}

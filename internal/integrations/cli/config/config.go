@@ -16,12 +16,19 @@ import (
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/posflag"
 	"github.com/knadh/koanf/v2"
-	"github.com/mitchellh/go-homedir"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
+
+// DefaultConfigDir is the repo-relative directory that holds the CLI config
+// file when no explicit --config flag is provided
+const DefaultConfigDir = "internal/integrations/cli/config"
+
+// DefaultConfigFile is the default config file name resolved inside
+// DefaultConfigDir
+const DefaultConfigFile = ".integrations.yaml"
 
 // Defaults applied to persistent flags and struct tags. These match the
 // values produced by `task cli:user:all` in the top-level cli Taskfile.
@@ -106,22 +113,14 @@ func (l *Loader) loadConfigFile() error {
 }
 
 // resolveConfigPath returns the config file path: the explicit --config flag
-// value when set, else ~/.<appname>.yaml
+// value when set, else DefaultConfigDir/DefaultConfigFile resolved relative to
+// the current working directory (repo root)
 func (l *Loader) resolveConfigPath() (string, error) {
 	if explicit := strings.TrimSpace(*l.configFile); explicit != "" {
 		return explicit, nil
 	}
 
-	if l.appName == "" {
-		return "", nil
-	}
-
-	home, err := homedir.Dir()
-	if err != nil {
-		return "", err
-	}
-
-	path := filepath.Join(home, "."+l.appName+".yaml")
+	path := filepath.Join(DefaultConfigDir, DefaultConfigFile)
 	*l.configFile = path
 
 	return path, nil
@@ -222,10 +221,6 @@ type Config struct {
 type OpenlaneConfig struct {
 	// Host is the base URL for the Openlane API
 	Host string `json:"host" koanf:"host" default:"http://localhost:17608"`
-	// OrganizationID pins an organization ID for API requests that accept one
-	OrganizationID string `json:"organization-id" koanf:"organization-id" default:""`
-	// UserID pins a user ID for operations that accept a user context
-	UserID string `json:"user-id" koanf:"user-id" default:""`
 	// Auth controls authentication for API requests
 	Auth OpenlaneAuthConfig `json:"auth" koanf:"auth"`
 }
@@ -235,7 +230,7 @@ type OpenlaneAuthConfig struct {
 	// Mode selects the auth strategy: auto prefers token/pat when present and
 	// falls back to credential login; token requires Token or PAT; credentials
 	// requires Email and Password
-	Mode string `json:"mode" koanf:"mode" default:"auto"`
+	Mode string `json:"mode" koanf:"mode" default:"credentials"`
 	// Token is the API bearer token (PAT or API token)
 	Token string `json:"token" koanf:"token" default:"" sensitive:"true"`
 	// PAT is a personal access token; used as a fallback when Token is empty
