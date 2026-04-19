@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -63,6 +65,20 @@ func (r *mutationResolver) LaunchCampaign(ctx context.Context, input model.Launc
 	action := campaignDispatchActionLaunch
 	if input.Resend != nil && *input.Resend {
 		action = campaignDispatchActionResend
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		logx.FromContext(ctx).Error().Msg("no caller in context")
+
+		return nil, errors.New("internal error")
+	}
+
+	ctx, err := common.SetOrganizationInAuthContext(ctx, &caller.OrganizationID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	return r.dispatchCampaign(ctx, input.CampaignID, campaignDispatchOptions{
