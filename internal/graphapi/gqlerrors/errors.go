@@ -65,48 +65,6 @@ func (e CustomError) Module() models.OrgModule {
 	return e.module
 }
 
-// BulkActionError is a struct that implements the CustomErrorType interface. It is used
-// when a bulk action is requested and for some reason, not all items in the list gets updated/deleted
-// as expected
-type BulkActionError struct {
-	code    string
-	message string
-	err     error
-
-	// ids that were not affected by the action
-	ids []string
-}
-
-// Error satisfies the CustomErrorType interface
-func (e BulkActionError) Error() string {
-	return e.err.Error()
-}
-
-// Code satisfies the CustomErrorType interface
-func (e BulkActionError) Code() string {
-	return e.code
-}
-
-// Message satisfies the CustomErrorType interface
-func (e BulkActionError) Message() string {
-	return e.message
-}
-
-// Module satisfies the CustomError interface
-func (e BulkActionError) IDs() []string {
-	return e.ids
-}
-
-// NewBulkActionError creates a custom error with the given code, error, modules and ids
-func NewBulkActionError(code, message string, err error, ids []string) BulkActionError {
-	return BulkActionError{
-		code:    code,
-		message: message,
-		err:     err,
-		ids:     ids,
-	}
-}
-
 // NewCustomErrorWithModule creates a custom error with the given code, error and module
 func NewCustomErrorWithModule(code, message string, err error, module *models.OrgModule) CustomError {
 	cErr := CustomError{
