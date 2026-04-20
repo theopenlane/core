@@ -147,6 +147,14 @@ type TrustCenterDocBulkDeletePayload {
     Deleted trustCenterDoc IDs
     """
     deletedIDs: [ID!]!
+    """
+    IDs that were not deleted
+    """
+    notDeletedIDs: [ID!]!
+    """
+    Error message when the bulk delete did not apply to every requested ID
+    """
+    error: String
 }
 
 """

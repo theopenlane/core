@@ -57,6 +57,10 @@ type APITokenBulkCreatePayload struct {
 type APITokenBulkDeletePayload struct {
 	// Deleted apiToken IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkAPIToken mutation
@@ -421,6 +425,10 @@ type ActionPlanBulkCreatePayload struct {
 type ActionPlanBulkDeletePayload struct {
 	// Deleted actionPlan IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkActionPlan mutation
@@ -990,6 +998,10 @@ func (Assessment) IsNode() {}
 type AssessmentBulkDeletePayload struct {
 	// Deleted assessment IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.
@@ -1743,6 +1755,10 @@ type AssetBulkCreatePayload struct {
 type AssetBulkDeletePayload struct {
 	// Deleted asset IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkAsset mutation
@@ -3632,6 +3648,10 @@ type ContactBulkCreatePayload struct {
 type ContactBulkDeletePayload struct {
 	// Deleted contact IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkContact mutation
@@ -4096,6 +4116,10 @@ type ControlBulkCreatePayload struct {
 type ControlBulkDeletePayload struct {
 	// Deleted control IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkControl mutation
@@ -4272,6 +4296,10 @@ type ControlImplementationBulkCreatePayload struct {
 type ControlImplementationBulkDeletePayload struct {
 	// Deleted controlImplementation IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkControlImplementation mutation
@@ -4588,6 +4616,10 @@ type ControlObjectiveBulkCreatePayload struct {
 type ControlObjectiveBulkDeletePayload struct {
 	// Deleted controlObjective IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkControlObjective mutation
@@ -9418,6 +9450,10 @@ type CustomDomainBulkCreatePayload struct {
 type CustomDomainBulkDeletePayload struct {
 	// Deleted customDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkCustomDomain mutation
@@ -10064,6 +10100,10 @@ type DNSVerificationBulkCreatePayload struct {
 type DNSVerificationBulkDeletePayload struct {
 	// Deleted dnsVerification IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkDNSVerification mutation
@@ -12689,6 +12729,10 @@ type DocumentDataBulkCreatePayload struct {
 type DocumentDataBulkDeletePayload struct {
 	// Deleted documentData IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkDocumentData mutation
@@ -12986,6 +13030,10 @@ type EmailBrandingBulkCreatePayload struct {
 type EmailBrandingBulkDeletePayload struct {
 	// Deleted emailBranding IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEmailBranding mutation
@@ -13398,6 +13446,10 @@ type EmailTemplateBulkCreatePayload struct {
 type EmailTemplateBulkDeletePayload struct {
 	// Deleted emailTemplate IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEmailTemplate mutation
@@ -13988,6 +14040,10 @@ type EntityBulkCreatePayload struct {
 type EntityBulkDeletePayload struct {
 	// Deleted entity IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEntity mutation
@@ -14070,6 +14126,10 @@ type EntityTypeBulkCreatePayload struct {
 type EntityTypeBulkDeletePayload struct {
 	// Deleted entityType IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEntityType mutation
@@ -15145,6 +15205,10 @@ type EventBulkCreatePayload struct {
 type EventBulkDeletePayload struct {
 	// Deleted event IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEvent mutation
@@ -15436,6 +15500,10 @@ type EvidenceBulkCreatePayload struct {
 type EvidenceBulkDeletePayload struct {
 	// Deleted evidence IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkEvidence mutation
@@ -15882,6 +15950,10 @@ type ExportBulkCreatePayload struct {
 type ExportBulkDeletePayload struct {
 	// Deleted export IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.
@@ -16888,6 +16960,10 @@ type FindingBulkCreatePayload struct {
 type FindingBulkDeletePayload struct {
 	// Deleted finding IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkFinding mutation
@@ -17976,6 +18052,10 @@ type GroupBulkCreatePayload struct {
 type GroupBulkDeletePayload struct {
 	// Deleted group IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkGroup mutation
@@ -18049,6 +18129,10 @@ type GroupMembershipBulkCreatePayload struct {
 type GroupMembershipBulkDeletePayload struct {
 	// Deleted groupMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkGroupMembership mutation
@@ -18319,6 +18403,10 @@ type GroupSettingBulkCreatePayload struct {
 type GroupSettingBulkDeletePayload struct {
 	// Deleted groupSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkGroupSetting mutation
@@ -18926,6 +19014,10 @@ type HushBulkCreatePayload struct {
 type HushBulkDeletePayload struct {
 	// Deleted hush IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkHush mutation
@@ -19304,6 +19396,10 @@ type IdentityHolderBulkCreatePayload struct {
 type IdentityHolderBulkDeletePayload struct {
 	// Deleted identityHolder IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkIdentityHolder mutation
@@ -20522,6 +20618,10 @@ type InternalPolicyBulkCreatePayload struct {
 type InternalPolicyBulkDeletePayload struct {
 	// Deleted internalPolicy IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkInternalPolicy mutation
@@ -21100,6 +21200,10 @@ type InviteBulkCreatePayload struct {
 type InviteBulkDeletePayload struct {
 	// Deleted invite IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkInvite mutation
@@ -22344,6 +22448,10 @@ type JobTemplateBulkCreatePayload struct {
 type JobTemplateBulkDeletePayload struct {
 	// Deleted jobTemplate IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkJobTemplate mutation
@@ -22618,6 +22726,10 @@ type MappableDomainBulkCreatePayload struct {
 type MappableDomainBulkDeletePayload struct {
 	// Deleted mappableDomain IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkMappableDomain mutation
@@ -22823,6 +22935,10 @@ type MappedControlBulkCreatePayload struct {
 type MappedControlBulkDeletePayload struct {
 	// Deleted mappedControl IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkMappedControl mutation
@@ -23114,6 +23230,10 @@ type NarrativeBulkCreatePayload struct {
 type NarrativeBulkDeletePayload struct {
 	// Deleted narrative IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkNarrative mutation
@@ -23807,6 +23927,10 @@ type NotificationPreferenceBulkCreatePayload struct {
 type NotificationPreferenceBulkDeletePayload struct {
 	// Deleted notificationPreference IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkNotificationPreference mutation
@@ -24227,6 +24351,10 @@ type NotificationTemplateBulkCreatePayload struct {
 type NotificationTemplateBulkDeletePayload struct {
 	// Deleted notificationTemplate IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkNotificationTemplate mutation
@@ -24755,6 +24883,10 @@ type OrgMembershipBulkCreatePayload struct {
 type OrgMembershipBulkDeletePayload struct {
 	// Deleted orgMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkOrgMembership mutation
@@ -25367,6 +25499,10 @@ type OrganizationSettingBulkCreatePayload struct {
 type OrganizationSettingBulkDeletePayload struct {
 	// Deleted organizationSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkOrganizationSetting mutation
@@ -27732,6 +27868,10 @@ type ProcedureBulkCreatePayload struct {
 type ProcedureBulkDeletePayload struct {
 	// Deleted export IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkProcedure mutation
@@ -28317,6 +28457,10 @@ type ProgramBulkCreatePayload struct {
 type ProgramBulkDeletePayload struct {
 	// Deleted program IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkProgram mutation
@@ -28382,6 +28526,10 @@ type ProgramMembershipBulkCreatePayload struct {
 type ProgramMembershipBulkDeletePayload struct {
 	// Deleted programMembership IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkProgramMembership mutation
@@ -29004,6 +29152,10 @@ type RemediationBulkCreatePayload struct {
 type RemediationBulkDeletePayload struct {
 	// Deleted remediation IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkRemediation mutation
@@ -29732,6 +29884,10 @@ type ReviewBulkCreatePayload struct {
 type ReviewBulkDeletePayload struct {
 	// Deleted trustCenterNDARequest IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkReview mutation
@@ -30397,6 +30553,10 @@ type RiskBulkCreatePayload struct {
 type RiskBulkDeletePayload struct {
 	// Deleted risk IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkRisk mutation
@@ -31052,6 +31212,10 @@ type SLADefinitionBulkCreatePayload struct {
 type SLADefinitionBulkDeletePayload struct {
 	// Deleted slaDefinition IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkSLADefinition mutation
@@ -31329,6 +31493,10 @@ type ScanBulkCreatePayload struct {
 type ScanBulkDeletePayload struct {
 	// Deleted scan IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkScan mutation
@@ -31857,6 +32025,10 @@ type ScheduledJobBulkCreatePayload struct {
 type ScheduledJobBulkDeletePayload struct {
 	// Deleted scheduledJob IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkScheduledJob mutation
@@ -32948,6 +33120,10 @@ type SubcontrolBulkCreatePayload struct {
 type SubcontrolBulkDeletePayload struct {
 	// Deleted subcontrol IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkSubcontrol mutation
@@ -33620,6 +33796,10 @@ type SubprocessorBulkCreatePayload struct {
 type SubprocessorBulkDeletePayload struct {
 	// Deleted subprocessor IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkSubprocessor mutation
@@ -34158,6 +34338,10 @@ type SystemDetailBulkCreatePayload struct {
 type SystemDetailBulkDeletePayload struct {
 	// Deleted systemDetail IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkSystemDetail mutation
@@ -34942,6 +35126,10 @@ type TaskBulkCreatePayload struct {
 type TaskBulkDeletePayload struct {
 	// Deleted task IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTask mutation
@@ -35478,6 +35666,10 @@ type TemplateBulkCreatePayload struct {
 type TemplateBulkDeletePayload struct {
 	// Deleted template IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTemplate mutation
@@ -35890,6 +36082,10 @@ type TrustCenterComplianceBulkCreatePayload struct {
 type TrustCenterComplianceBulkDeletePayload struct {
 	// Deleted trustCenterCompliance IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTrustCenterCompliance mutation
@@ -36134,6 +36330,10 @@ type TrustCenterDocBulkCreatePayload struct {
 type TrustCenterDocBulkDeletePayload struct {
 	// Deleted trustCenterDoc IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTrustCenterDoc mutation
@@ -36688,6 +36888,10 @@ type TrustCenterFAQBulkCreatePayload struct {
 type TrustCenterFAQBulkDeletePayload struct {
 	// Deleted trustCenterFAQ IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTrustCenterFAQ mutation
@@ -36979,6 +37183,10 @@ type TrustCenterNDARequestBulkCreatePayload struct {
 type TrustCenterNDARequestBulkDeletePayload struct {
 	// Deleted trustCenterNDARequest IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.
@@ -37890,6 +38098,10 @@ type TrustCenterSubprocessorBulkCreatePayload struct {
 type TrustCenterSubprocessorBulkDeletePayload struct {
 	// Deleted trustCenterSubprocessor IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkTrustCenterSubprocessor mutation
@@ -44985,6 +45197,10 @@ type UserSettingBulkCreatePayload struct {
 type UserSettingBulkDeletePayload struct {
 	// Deleted userSetting IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkUserSetting mutation
@@ -45636,6 +45852,10 @@ type VendorRiskScoreBulkCreatePayload struct {
 type VendorRiskScoreBulkDeletePayload struct {
 	// Deleted vendorRiskScore IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkVendorRiskScore mutation
@@ -45976,6 +46196,10 @@ type VendorScoringConfigBulkCreatePayload struct {
 type VendorScoringConfigBulkDeletePayload struct {
 	// Deleted vendorScoringConfig IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkVendorScoringConfig mutation
@@ -46280,6 +46504,10 @@ type VulnerabilityBulkCreatePayload struct {
 type VulnerabilityBulkDeletePayload struct {
 	// Deleted vulnerability IDs
 	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for updateBulkVulnerability mutation
