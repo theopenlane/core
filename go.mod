@@ -12,8 +12,6 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
-replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins/
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.42.0
@@ -102,7 +100,7 @@ require (
 	github.com/theopenlane/emailtemplates v0.3.6
 	github.com/theopenlane/entx v0.24.1
 	github.com/theopenlane/go-client v0.9.4
-	github.com/theopenlane/gqlgen-plugins v0.14.6
+	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.27.5
 	github.com/theopenlane/newman v0.2.2
