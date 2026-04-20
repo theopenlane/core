@@ -13,4 +13,6 @@ var (
 	ErrRetrievingObjects = errors.New("error retrieving objects")
 	// ErrFeatureNotEnabled is returned when a requested feature is not enabled for the organization
 	ErrFeatureNotEnabled = errors.New("feature not enabled for organization")
+	// ErrBulkActionNotCompleted is returned when bulk actions do not completely apply to all provided ids
+	ErrBulkActionNotCompleted = errors.New("bulk action did not apply to the entire ids provided")
 )

@@ -21,4 +21,7 @@ const (
 	// NoAccessToModule is the error code for when an org has no access to a
 	// specific schema and module
 	NoAccessToModule = "MODULE_NO_ACCESS"
+	// BulkActionIncomplete is the error code for when a bulk action does not apply to all the
+	// provided IDs probably because of a permission error or simialr
+	BulkActionIncomplete = "BULK_ACTION_INCOMPLETELY_APPLIED"
 )

@@ -9028,6 +9028,64 @@ func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_deletedIDs(
 	return fc, nil
 }
 
+func (ec *executionContext) _ActionPlanBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActionPlanBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.NotDeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionPlanBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ActionPlanBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_ActionPlanBulkDeletePayload_error,
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		ec.marshalOString2ᚖstring,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_ActionPlanBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ActionPlanBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ActionPlanBulkUpdatePayload_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.ActionPlanBulkUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -9874,6 +9932,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkActionPlan(ctx conte
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ActionPlanBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ActionPlanBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ActionPlanBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlanBulkDeletePayload", field.Name)
 		},
@@ -10191,6 +10253,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkAPIToken(ctx context
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_APITokenBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_APITokenBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_APITokenBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type APITokenBulkDeletePayload", field.Name)
 		},
@@ -10465,6 +10531,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkAssessment(ctx conte
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_AssessmentBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_AssessmentBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_AssessmentBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentBulkDeletePayload", field.Name)
 		},
@@ -10825,6 +10895,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkAsset(ctx context.Co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_AssetBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_AssetBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_AssetBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssetBulkDeletePayload", field.Name)
 		},
@@ -11927,6 +12001,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkContact(ctx context.
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ContactBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ContactBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ContactBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ContactBulkDeletePayload", field.Name)
 		},
@@ -12338,6 +12416,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkControl(ctx context.
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ControlBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ControlBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ControlBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlBulkDeletePayload", field.Name)
 		},
@@ -12698,6 +12780,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkControlImplementatio
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ControlImplementationBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ControlImplementationBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ControlImplementationBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlImplementationBulkDeletePayload", field.Name)
 		},
@@ -13062,6 +13148,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkControlObjective(ctx
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ControlObjectiveBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ControlObjectiveBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ControlObjectiveBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveBulkDeletePayload", field.Name)
 		},
@@ -13426,6 +13516,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkCustomDomain(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_CustomDomainBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_CustomDomainBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_CustomDomainBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomDomainBulkDeletePayload", field.Name)
 		},
@@ -15185,6 +15279,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkDNSVerification(ctx 
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_DNSVerificationBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkDeletePayload", field.Name)
 		},
@@ -15549,6 +15647,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkDocumentData(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_DocumentDataBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_DocumentDataBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_DocumentDataBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type DocumentDataBulkDeletePayload", field.Name)
 		},
@@ -16007,6 +16109,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEmailBranding(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EmailBrandingBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EmailBrandingBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EmailBrandingBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailBrandingBulkDeletePayload", field.Name)
 		},
@@ -16371,6 +16477,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEmailTemplate(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EmailTemplateBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EmailTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EmailTemplateBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EmailTemplateBulkDeletePayload", field.Name)
 		},
@@ -16641,6 +16751,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEntity(ctx context.C
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EntityBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EntityBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EntityBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EntityBulkDeletePayload", field.Name)
 		},
@@ -17005,6 +17119,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEntityType(ctx conte
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EntityTypeBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EntityTypeBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EntityTypeBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EntityTypeBulkDeletePayload", field.Name)
 		},
@@ -17369,6 +17487,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEvent(ctx context.Co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EventBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EventBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EventBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EventBulkDeletePayload", field.Name)
 		},
@@ -17780,6 +17902,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkEvidence(ctx context
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_EvidenceBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_EvidenceBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_EvidenceBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type EvidenceBulkDeletePayload", field.Name)
 		},
@@ -18007,6 +18133,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkExport(ctx context.C
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ExportBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ExportBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ExportBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ExportBulkDeletePayload", field.Name)
 		},
@@ -18416,6 +18546,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkFinding(ctx context.
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_FindingBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_FindingBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_FindingBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type FindingBulkDeletePayload", field.Name)
 		},
@@ -18911,6 +19045,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkGroup(ctx context.Co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_GroupBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_GroupBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_GroupBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupBulkDeletePayload", field.Name)
 		},
@@ -19365,6 +19503,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkGroupMembership(ctx 
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_GroupMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_GroupMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_GroupMembershipBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkDeletePayload", field.Name)
 		},
@@ -19729,6 +19871,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkGroupSetting(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_GroupSettingBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_GroupSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_GroupSettingBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type GroupSettingBulkDeletePayload", field.Name)
 		},
@@ -20140,6 +20286,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkHush(ctx context.Con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_HushBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_HushBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_HushBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type HushBulkDeletePayload", field.Name)
 		},
@@ -20457,6 +20607,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkIdentityHolder(ctx c
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_IdentityHolderBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_IdentityHolderBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_IdentityHolderBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type IdentityHolderBulkDeletePayload", field.Name)
 		},
@@ -20958,6 +21112,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkInternalPolicy(ctx c
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_InternalPolicyBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_InternalPolicyBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_InternalPolicyBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicyBulkDeletePayload", field.Name)
 		},
@@ -21275,6 +21433,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkInvite(ctx context.C
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_InviteBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_InviteBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_InviteBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InviteBulkDeletePayload", field.Name)
 		},
@@ -22089,6 +22251,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkJobTemplate(ctx cont
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_JobTemplateBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_JobTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_JobTemplateBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkDeletePayload", field.Name)
 		},
@@ -22453,6 +22619,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkMappableDomain(ctx c
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_MappableDomainBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_MappableDomainBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkDeletePayload", field.Name)
 		},
@@ -22817,6 +22987,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkMappedControl(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_MappedControlBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_MappedControlBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_MappedControlBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MappedControlBulkDeletePayload", field.Name)
 		},
@@ -23181,6 +23355,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkNarrative(ctx contex
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_NarrativeBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_NarrativeBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_NarrativeBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NarrativeBulkDeletePayload", field.Name)
 		},
@@ -24224,6 +24402,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkNotificationPreferen
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_NotificationPreferenceBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_NotificationPreferenceBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_NotificationPreferenceBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NotificationPreferenceBulkDeletePayload", field.Name)
 		},
@@ -24588,6 +24770,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkNotificationTemplate
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_NotificationTemplateBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_NotificationTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_NotificationTemplateBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateBulkDeletePayload", field.Name)
 		},
@@ -25038,6 +25224,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkOrganizationSetting(
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_OrganizationSettingBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_OrganizationSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_OrganizationSettingBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkDeletePayload", field.Name)
 		},
@@ -25494,6 +25684,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkOrgMembership(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_OrgMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_OrgMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_OrgMembershipBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrgMembershipBulkDeletePayload", field.Name)
 		},
@@ -26310,6 +26504,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkProcedure(ctx contex
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ProcedureBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ProcedureBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ProcedureBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProcedureBulkDeletePayload", field.Name)
 		},
@@ -26627,6 +26825,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkProgram(ctx context.
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ProgramBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ProgramBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ProgramBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProgramBulkDeletePayload", field.Name)
 		},
@@ -27126,6 +27328,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkProgramMembership(ct
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ProgramMembershipBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkDeletePayload", field.Name)
 		},
@@ -27584,6 +27790,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkRemediation(ctx cont
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_RemediationBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_RemediationBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_RemediationBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type RemediationBulkDeletePayload", field.Name)
 		},
@@ -27719,6 +27929,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkReview(ctx context.C
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ReviewBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ReviewBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ReviewBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ReviewBulkDeletePayload", field.Name)
 		},
@@ -28265,6 +28479,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkRisk(ctx context.Con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_RiskBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_RiskBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_RiskBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type RiskBulkDeletePayload", field.Name)
 		},
@@ -28629,6 +28847,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkScan(ctx context.Con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ScanBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ScanBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ScanBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ScanBulkDeletePayload", field.Name)
 		},
@@ -28946,6 +29168,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkScheduledJob(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_ScheduledJobBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_ScheduledJobBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkDeletePayload", field.Name)
 		},
@@ -29539,6 +29765,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkSLADefinition(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_SLADefinitionBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_SLADefinitionBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_SLADefinitionBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SLADefinitionBulkDeletePayload", field.Name)
 		},
@@ -29944,6 +30174,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkSubcontrol(ctx conte
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_SubcontrolBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_SubcontrolBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_SubcontrolBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SubcontrolBulkDeletePayload", field.Name)
 		},
@@ -30355,6 +30589,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkSubprocessor(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_SubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_SubprocessorBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_SubprocessorBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SubprocessorBulkDeletePayload", field.Name)
 		},
@@ -30991,6 +31229,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkSystemDetail(ctx con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_SystemDetailBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_SystemDetailBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_SystemDetailBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkDeletePayload", field.Name)
 		},
@@ -31533,6 +31775,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTask(ctx context.Con
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TaskBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TaskBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TaskBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TaskBulkDeletePayload", field.Name)
 		},
@@ -31850,6 +32096,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTemplate(ctx context
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TemplateBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TemplateBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TemplateBulkDeletePayload", field.Name)
 		},
@@ -32449,6 +32699,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterComplianc
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TrustCenterComplianceBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TrustCenterComplianceBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TrustCenterComplianceBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceBulkDeletePayload", field.Name)
 		},
@@ -32860,6 +33114,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterDoc(ctx c
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TrustCenterDocBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TrustCenterDocBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TrustCenterDocBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocBulkDeletePayload", field.Name)
 		},
@@ -33447,6 +33705,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterFAQ(ctx c
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TrustCenterFAQBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TrustCenterFAQBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TrustCenterFAQBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQBulkDeletePayload", field.Name)
 		},
@@ -34036,6 +34298,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterNDAReques
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TrustCenterNDARequestBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TrustCenterNDARequestBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TrustCenterNDARequestBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestBulkDeletePayload", field.Name)
 		},
@@ -34656,6 +34922,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkTrustCenterSubproces
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorBulkDeletePayload", field.Name)
 		},
@@ -35198,6 +35468,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkUserSetting(ctx cont
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_UserSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_UserSettingBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkDeletePayload", field.Name)
 		},
@@ -35656,6 +35930,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkVendorRiskScore(ctx 
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_VendorRiskScoreBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_VendorRiskScoreBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_VendorRiskScoreBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type VendorRiskScoreBulkDeletePayload", field.Name)
 		},
@@ -36020,6 +36298,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkVendorScoringConfig(
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_VendorScoringConfigBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_VendorScoringConfigBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_VendorScoringConfigBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfigBulkDeletePayload", field.Name)
 		},
@@ -36384,6 +36666,10 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkVulnerability(ctx co
 			switch field.Name {
 			case "deletedIDs":
 				return ec.fieldContext_VulnerabilityBulkDeletePayload_deletedIDs(ctx, field)
+			case "notDeletedIDs":
+				return ec.fieldContext_VulnerabilityBulkDeletePayload_notDeletedIDs(ctx, field)
+			case "error":
+				return ec.fieldContext_VulnerabilityBulkDeletePayload_error(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type VulnerabilityBulkDeletePayload", field.Name)
 		},
@@ -37377,6 +37663,13 @@ func (ec *executionContext) _ActionPlanBulkDeletePayload(ctx context.Context, se
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "notDeletedIDs":
+			out.Values[i] = ec._ActionPlanBulkDeletePayload_notDeletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._ActionPlanBulkDeletePayload_error(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
