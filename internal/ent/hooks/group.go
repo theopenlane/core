@@ -232,7 +232,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 		publicGroup = groupSetting.Visibility == enums.VisibilityPublic
 	}
 
-	org, err := auth.GetOrganizationIDFromContext(ctx)
+	org, err := getTupleOrgID(ctx, m)
 	if err != nil {
 		return err
 	}
@@ -253,6 +253,15 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 	}
 
 	return nil
+}
+
+func getTupleOrgID(ctx context.Context, m *generated.GroupMutation) (string, error) {
+	// in instances of managed groups, this will be set so use it
+	if id, ok := m.OwnerID(); ok && id != "" {
+		return id, nil
+	}
+
+	return auth.GetOrganizationIDFromContext(ctx)
 }
 
 // createGroupParentTuple creates a relationship tuple for a group
