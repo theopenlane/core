@@ -256,7 +256,7 @@ func groupCreateHook(ctx context.Context, m *generated.GroupMutation) error {
 }
 
 func getTupleOrgID(ctx context.Context, m *generated.GroupMutation) (string, error) {
-	// in instances of managed groups, this will be set so use itgroupCreateHook
+	// in instances of managed groups, this will be set so use it
 	if id, ok := m.OwnerID(); ok && id != "" {
 		return id, nil
 	}
