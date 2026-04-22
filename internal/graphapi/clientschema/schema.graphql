@@ -94,6 +94,14 @@ type APITokenBulkDeletePayload {
 	Deleted apiToken IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkAPIToken mutation
@@ -1045,6 +1053,14 @@ type ActionPlanBulkDeletePayload {
 	Deleted actionPlan IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkActionPlan mutation
@@ -2050,6 +2066,14 @@ type AssessmentBulkDeletePayload {
 	Deleted assessment IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -3567,6 +3591,14 @@ type AssetBulkDeletePayload {
 	Deleted asset IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkAsset mutation
@@ -6635,6 +6667,14 @@ type ContactBulkDeletePayload {
 	Deleted contact IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkContact mutation
@@ -8121,6 +8161,14 @@ type ControlBulkDeletePayload {
 	Deleted control IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkControl mutation
@@ -8606,6 +8654,14 @@ type ControlImplementationBulkDeletePayload {
 	Deleted controlImplementation IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkControlImplementation mutation
@@ -9413,6 +9469,14 @@ type ControlObjectiveBulkDeletePayload {
 	Deleted controlObjective IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkControlObjective mutation
@@ -16934,6 +16998,14 @@ type CustomDomainBulkDeletePayload {
 	Deleted customDomain IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkCustomDomain mutation
@@ -18131,6 +18203,14 @@ type DNSVerificationBulkDeletePayload {
 	Deleted dnsVerification IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkDNSVerification mutation
@@ -22162,6 +22242,14 @@ type DocumentDataBulkDeletePayload {
 	Deleted documentData IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkDocumentData mutation
@@ -22715,6 +22803,14 @@ type EmailBrandingBulkDeletePayload {
 	Deleted emailBranding IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEmailBranding mutation
@@ -23466,6 +23562,14 @@ type EmailTemplateBulkDeletePayload {
 	Deleted emailTemplate IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEmailTemplate mutation
@@ -24999,6 +25103,14 @@ type EntityBulkDeletePayload {
 	Deleted entity IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEntity mutation
@@ -25215,6 +25327,14 @@ type EntityTypeBulkDeletePayload {
 	Deleted entityType IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEntityType mutation
@@ -26924,6 +27044,14 @@ type EventBulkDeletePayload {
 	Deleted event IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEvent mutation
@@ -27675,6 +27803,14 @@ type EvidenceBulkDeletePayload {
 	Deleted evidence IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkEvidence mutation
@@ -28356,6 +28492,14 @@ type ExportBulkDeletePayload {
 	Deleted export IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -30590,6 +30734,14 @@ type FindingBulkDeletePayload {
 	Deleted finding IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkFinding mutation
@@ -33397,6 +33549,14 @@ type GroupBulkDeletePayload {
 	Deleted group IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkGroup mutation
@@ -33527,6 +33687,14 @@ type GroupMembershipBulkDeletePayload {
 	Deleted groupMembership IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkGroupMembership mutation
@@ -33924,6 +34092,14 @@ type GroupSettingBulkDeletePayload {
 	Deleted groupSetting IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkGroupSetting mutation
@@ -34863,6 +35039,14 @@ type HushBulkDeletePayload {
 	Deleted hush IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkHush mutation
@@ -35965,6 +36149,14 @@ type IdentityHolderBulkDeletePayload {
 	Deleted identityHolder IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkIdentityHolder mutation
@@ -38696,6 +38888,14 @@ type InternalPolicyBulkDeletePayload {
 	Deleted internalPolicy IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkInternalPolicy mutation
@@ -39538,6 +39738,14 @@ type InviteBulkDeletePayload {
 	Deleted invite IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkInvite mutation
@@ -41332,6 +41540,14 @@ type JobTemplateBulkDeletePayload {
 	Deleted jobTemplate IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkJobTemplate mutation
@@ -41736,6 +41952,14 @@ type MappableDomainBulkDeletePayload {
 	Deleted mappableDomain IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkMappableDomain mutation
@@ -42200,6 +42424,14 @@ type MappedControlBulkDeletePayload {
 	Deleted mappedControl IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkMappedControl mutation
@@ -49251,6 +49483,14 @@ type NarrativeBulkDeletePayload {
 	Deleted narrative IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkNarrative mutation
@@ -50304,6 +50544,14 @@ type NotificationPreferenceBulkDeletePayload {
 	Deleted notificationPreference IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkNotificationPreference mutation
@@ -50940,6 +51188,14 @@ type NotificationTemplateBulkDeletePayload {
 	Deleted notificationTemplate IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkNotificationTemplate mutation
@@ -51676,6 +51932,14 @@ type OrgMembershipBulkDeletePayload {
 	Deleted orgMembership IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkOrgMembership mutation
@@ -55592,6 +55856,14 @@ type OrganizationSettingBulkDeletePayload {
 	Deleted organizationSetting IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkOrganizationSetting mutation
@@ -60162,6 +60434,14 @@ type ProcedureBulkDeletePayload {
 	Deleted export IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkProcedure mutation
@@ -61471,6 +61751,14 @@ type ProgramBulkDeletePayload {
 	Deleted program IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkProgram mutation
@@ -61562,6 +61850,14 @@ type ProgramMembershipBulkDeletePayload {
 	Deleted programMembership IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkProgramMembership mutation
@@ -68234,6 +68530,14 @@ type RemediationBulkDeletePayload {
 	Deleted remediation IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkRemediation mutation
@@ -69747,6 +70051,14 @@ type ReviewBulkDeletePayload {
 	Deleted trustCenterNDARequest IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkReview mutation
@@ -71188,6 +71500,14 @@ type RiskBulkDeletePayload {
 	Deleted risk IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkRisk mutation
@@ -72182,6 +72502,14 @@ type SLADefinitionBulkDeletePayload {
 	Deleted slaDefinition IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkSLADefinition mutation
@@ -73014,6 +73342,14 @@ type ScanBulkDeletePayload {
 	Deleted scan IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkScan mutation
@@ -73782,6 +74118,14 @@ type ScheduledJobBulkDeletePayload {
 	Deleted scheduledJob IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkScheduledJob mutation
@@ -75982,6 +76326,14 @@ type SubcontrolBulkDeletePayload {
 	Deleted subcontrol IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkSubcontrol mutation
@@ -76943,6 +77295,14 @@ type SubprocessorBulkDeletePayload {
 	Deleted subprocessor IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkSubprocessor mutation
@@ -77711,6 +78071,14 @@ type SystemDetailBulkDeletePayload {
 	Deleted systemDetail IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkSystemDetail mutation
@@ -79301,6 +79669,14 @@ type TaskBulkDeletePayload {
 	Deleted task IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTask mutation
@@ -80179,6 +80555,14 @@ type TemplateBulkDeletePayload {
 	Deleted template IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTemplate mutation
@@ -81098,6 +81482,14 @@ type TrustCenterComplianceBulkDeletePayload {
 	Deleted trustCenterCompliance IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTrustCenterCompliance mutation
@@ -81507,6 +81899,14 @@ type TrustCenterDocBulkDeletePayload {
 	Deleted trustCenterDoc IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTrustCenterDoc mutation
@@ -82378,6 +82778,14 @@ type TrustCenterFAQBulkDeletePayload {
 	Deleted trustCenterFAQ IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTrustCenterFAQ mutation
@@ -82865,6 +83273,14 @@ type TrustCenterNDARequestBulkDeletePayload {
 	Deleted trustCenterNDARequest IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -84188,6 +84604,14 @@ type TrustCenterSubprocessorBulkDeletePayload {
 	Deleted trustCenterSubprocessor IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkTrustCenterSubprocessor mutation
@@ -94495,6 +94919,14 @@ type UserSettingBulkDeletePayload {
 	Deleted userSetting IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkUserSetting mutation
@@ -95356,6 +95788,14 @@ type VendorRiskScoreBulkDeletePayload {
 	Deleted vendorRiskScore IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkVendorRiskScore mutation
@@ -95874,6 +96314,14 @@ type VendorScoringConfigBulkDeletePayload {
 	Deleted vendorScoringConfig IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkVendorScoringConfig mutation
@@ -96903,6 +97351,14 @@ type VulnerabilityBulkDeletePayload {
 	Deleted vulnerability IDs
 	"""
 	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 Return response for updateBulkVulnerability mutation
