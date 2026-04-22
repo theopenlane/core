@@ -39,7 +39,6 @@ func init() {
 	createCmd.Flags().Bool("active", true, "whether the template is active")
 	createCmd.Flags().String("defaults-file", "", "path to a JSON file containing template defaults (merged as base layer at render time)")
 	createCmd.Flags().String("defaults-json", "", "inline JSON string containing template defaults")
-	createCmd.Flags().String("email-branding-id", "", "email branding ID to attach to the template")
 }
 
 // resolveDefaults merges --defaults-file and --defaults-json into a single map.
@@ -116,10 +115,6 @@ func buildCreateInput() (graphclient.CreateEmailTemplateInput, error) {
 
 	if len(defaults) > 0 {
 		input.Defaults = defaults
-	}
-
-	if brandingID := cmd.Config.String("email-branding-id"); brandingID != "" {
-		input.EmailBrandingIDs = []string{brandingID}
 	}
 
 	return input, nil

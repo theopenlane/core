@@ -175,7 +175,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	if err := h.sendEmail(ctx, email.VerifyEmailOp.Name(), email.VerifyEmailRequest{
+	if err := h.sendEmail(ctx, email.VerifyEmailModernOp.Name(), email.VerifyEmailModernRequest{
 		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
 		Token:         meowtoken.Token,
 	}); err != nil {

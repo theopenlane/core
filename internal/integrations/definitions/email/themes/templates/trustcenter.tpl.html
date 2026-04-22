@@ -1,21 +1,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="{{ .Renderer.Direction }}" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Outfit:400,500" />
     <style type="text/css" rel="stylesheet" media="all">
-        {{ range $selector, $props := .MergedStyles }}
-        {{ $selector }} {
-            {{ range $key, $val := $props }}
-                {{ $key }}: {{ css $val }};
-            {{ end }}
-        }
-        {{ end }}
+        body { background-color: #fefefe; font-family: 'Outfit', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; font-size: 16px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #505f6f; }
+        table { border-collapse: separate; }
+        table td { font-family: 'Outfit', Helvetica, Arial, sans-serif; font-size: 16px; vertical-align: top; }
+        .body { background-color: #fefefe; width: 100%; }
+        .container { width: 780px; max-width: 780px; padding: 16px; }
+        h1, h2, h3, h4 { color: #082930; font-family: 'Outfit', Helvetica, Arial, sans-serif; font-weight: 450; line-height: 1.4; margin: 0 0 16px 0; }
+        h1 { font-size: 32px; text-transform: capitalize; }
+        .preheader { color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; visibility: hidden; width: 0; }
+        p { font-size: 16px; font-family: 'Outfit', Helvetica, Arial, sans-serif; font-weight: normal; margin: 0 0 26px 0; }
+        a, a:active, a:hover, a:visited { color: #082930; text-decoration: none; }
+        td.button { background-color: #082930; border: none; color: #ffffff; padding: 0; text-align: center; display: inline-block; font-size: 18px; border-radius: 5px; margin: 0 0 26px 0; line-height: 1; }
+        td.button a, td.button a:active, td.button a:hover, td.button a:visited { color: #ffffff; text-decoration: none; display: inline-block; padding: 12px 20px; border-radius: 10px; border: none; }
+        td.button a:hover, td.button a:active { text-decoration: underline; }
+        .button { display: inline-block; background-color: #3fc2b4; color: #ffffff; font-size: 15px; font-weight: 700; font-family: 'Outfit', Helvetica, Arial, sans-serif; text-decoration: none; padding: 12px 20px; border-radius: 10px; border: none; line-height: 1; text-align: center; box-shadow: 0 6px 14px rgba(63, 194, 180, 0.35); }
+        .body-action { width: 100%; margin: 16px auto; padding: 0; text-align: center; }
+        .invite-code { display: inline-block; padding: 14px 32px; font-size: 24px; font-weight: 600; font-family: monospace; letter-spacing: 4px; color: #082930; background-color: #f0fdf9; border: 2px dashed #3fc2b4; border-radius: 5px; }
+        .invite-code-table { margin: 16px auto; text-align: center; }
+        .invite-code-cell { padding: 14px 32px; font-size: 24px; font-weight: 600; font-family: monospace; letter-spacing: 4px; color: #082930; background-color: #f0fdf9; border: 2px dashed #3fc2b4; border-radius: 5px; }
+        hr { border: 0; border-bottom: 1px solid #303E4A; margin: 24px 0; }
+        .body-dictionary { margin: 16px 0; padding: 0; width: 100%; }
+        .body-dictionary dt { font-weight: 500; color: #082930; padding: 4px 0 2px 0; }
+        .body-dictionary dd { margin: 0 0 8px 0; padding: 0; color: #505f6f; }
+        .data-table-title, .data-table-title-unsafe { font-size: 18px; font-weight: 500; color: #082930; margin-bottom: 8px; text-align: left; }
+        .data-wrapper { margin: 16px 0; padding: 0; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { text-align: left; padding: 8px 12px; background-color: #f0fdf9; border-bottom: 2px solid #3fc2b4; font-weight: 500; font-size: 14px; color: #082930; }
+        .data-table th p { margin: 0; font-weight: 500; font-size: 14px; color: #082930; }
+        .data-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e5e7eb; font-size: 14px; color: #505f6f; }
+        .align-left { text-align: left; }
+        .align-center { text-align: center; }
+        .align-right { text-align: right; }
+        .table-footer { font-size: 12px; color: #64748b; margin-top: 8px; text-align: left; }
+        .body-sub { margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb; }
+        .body-sub p.sub { font-size: 12px; color: #64748b; }
+        .body-sub a { color: #3fc2b4; word-break: break-all; }
+        .vml-button-wrapper { margin: 16px auto; text-align: center; }
+        .invite-code-container { margin: 16px auto; text-align: center; }
+        .footer { padding: 18px 32px 26px; background-color: #f8fafc; border-top: 1px solid #e5e7eb; }
+        .footer p { font-size: 12px; color: #64748b; margin: 0 0 14px 0; }
+        .footer ul { padding: 0; font-size: 12px; color: #64748b; margin: 0 0 14px 0; }
+        .footer ul li { text-decoration: none; display: inline-block; margin: 0 32px 0 0; }
+        .footer ul li a { text-decoration: underline; }
+        .footer a { color: #3fc2b4; text-decoration: underline; }
+        .free-markdown p { margin-bottom: 16px; }
+        .free-markdown ul, .free-markdown ol { padding-left: 24px; margin-bottom: 16px; }
 
         /* Media Queries */
-        @media only screen and (max-width: {{ if .Email.Body.BodyWidth }}{{ .Email.Body.BodyWidth }}{{ else }}780px{{ end }}) {
+        @media only screen and (max-width: {{ if .Body.BodyWidth }}{{ .Body.BodyWidth }}{{ else }}780px{{ end }}) {
             .container {
                 width: 100% !important;
             }
@@ -27,14 +65,14 @@
             }
         }
 
-        {{ if .Email.Body.AdditionalCSS }}{{ .Email.Body.AdditionalCSS | css }}{{ end }}
+        {{ if .Body.AdditionalCSS }}{{ .Body.AdditionalCSS | css }}{{ end }}
     </style>
 </head>
 
-<body class="theme-{{ .Renderer.Theme.Name }}" style="margin:0;padding:0;">
-    {{ if .Email.Body.Preheader }}
+<body class="theme-openlane-trustcenter" style="margin:0;padding:0;">
+    {{ if .Body.Preheader }}
     <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">
-        {{- .Email.Body.Preheader -}}
+        {{- .Body.Preheader -}}
     </div>
     {{ end }}
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
@@ -43,37 +81,37 @@
             <td class="container">
 
                 {{/* Title or Greeting */}}
-                {{ if .Email.Body.Title }}
-                <h1>{{ .Email.Body.Title }}</h1>
-                {{ else if and .Email.Body.Greeting .Email.Body.Name }}
-                <p>{{ .Email.Body.Greeting }} {{ .Email.Body.Name }},</p>
+                {{ if .Body.Title }}
+                <h1>{{ .Body.Title }}</h1>
+                {{ else if and .Body.Greeting .Body.Name }}
+                <p>{{ .Body.Greeting }} {{ .Body.Name }},</p>
                 {{ end }}
 
                 {{/* Intros */}}
-                {{ if ne .Email.Body.IntrosMarkdown "" }}
-                    {{ .Email.Body.IntrosMarkdown.ToHTML }}
-                {{ else if gt (len .Email.Body.IntrosUnsafe) 0 }}
-                    {{ range $line := .Email.Body.IntrosUnsafe }}
+                {{ if ne .Body.Intros.Markdown "" }}
+                    {{ .Body.Intros.Markdown.ToHTML }}
+                {{ else if gt (len .Body.Intros.Unsafe) 0 }}
+                    {{ range $line := .Body.Intros.Unsafe }}
                     <p>{{ $line }}</p>
                     {{ end }}
                 {{ else }}
-                    {{ range $line := .Email.Body.Intros }}
+                    {{ range $line := .Body.Intros.Paragraphs}}
                     <p>{{ $line }}</p>
                     {{ end }}
                 {{ end }}
 
                 {{/* Content Blocks */}}
-                {{ range $block := .Email.Body.ContentBlocks }}
+                {{ range $block := .Body.ContentBlocks }}
                     {{ $block }}
                 {{ end }}
 
                 {{/* FreeMarkdown replaces structured content */}}
-                {{ if ne .Email.Body.FreeMarkdown "" }}
-                    <div class="free-markdown">{{ .Email.Body.FreeMarkdown.ToHTML }}</div>
+                {{ if ne .Body.FreeMarkdown "" }}
+                    <div class="free-markdown">{{ .Body.FreeMarkdown.ToHTML }}</div>
                 {{ else }}
 
                     {{/* Dictionary */}}
-                    {{ with .Email.Body.Dictionary }}
+                    {{ with .Body.Dictionary.Cells }}
                         {{ if gt (len .) 0 }}
                         <dl class="body-dictionary">
                             {{ range $entry := . }}
@@ -95,7 +133,7 @@
                     {{ end }}
 
                     {{/* Tables */}}
-                    {{ with .Email.Body.Tables }}
+                    {{ with .Body.Tables }}
                         {{ if gt (len .) 0 }}
                             {{ range $table := . }}
                                 {{ $data := .Data }}
@@ -148,7 +186,7 @@
                     {{ end }}
 
                     {{/* Actions */}}
-                    {{ with .Email.Body.Actions }}
+                    {{ with .Body.Actions }}
                         {{ if gt (len .) 0 }}
                             {{ $defaultColor := "#082930" }}
                             {{ $defaultTextColor := "#FFFFFF" }}
@@ -213,29 +251,29 @@
                 {{ end }}
 
                 {{/* Outros */}}
-                {{ if ne .Email.Body.OutrosMarkdown "" }}
-                    {{ .Email.Body.OutrosMarkdown.ToHTML }}
-                {{ else if gt (len .Email.Body.OutrosUnsafe) 0 }}
-                    {{ range $line := .Email.Body.OutrosUnsafe }}
+                {{ if ne .Body.Outros.Markdown "" }}
+                    {{ .Body.Outros.Markdown.ToHTML }}
+                {{ else if gt (len .Body.Outros.Unsafe) 0 }}
+                    {{ range $line := .Body.Outros.Unsafe }}
                     <p>{{ $line }}</p>
                     {{ end }}
                 {{ else }}
-                    {{ range $line := .Email.Body.Outros }}
+                    {{ range $line := .Body.Outros.Paragraphs}}
                     <p>{{ $line }}</p>
                     {{ end }}
                 {{ end }}
 
                 {{/* Signature */}}
-                {{ if and .Email.Body.Signature (gt (len .Email.Body.Signature) 0) }}
+                {{ if and .Body.Signature (gt (len .Body.Signature) 0) }}
                     <b>
-                        <p style="margin-top:15px;">{{ .Email.Body.Signature }}{{ if .Email.Body.SignatureName }}<br />{{ .Email.Body.SignatureName }}{{ end }}</p>
+                        <p style="margin-top:15px;">{{ .Body.Signature }}{{ if .Body.SignatureName }}<br />{{ .Body.SignatureName }}{{ end }}</p>
                     </b>
                 {{ end }}
 
                 {{/* Trust Center Footer */}}
                 <div class="footer" style="padding:18px 32px 26px;background-color:#f8fafc;border-top:1px solid #e5e7eb;">
                     <p style="margin:0 0 10px;font-size:12px;line-height:1.5;color:#64748b;">
-                        This message was sent by {{ .Renderer.Branding.Name }} to provide secure access to a Trust Center.
+                        This message was sent by {{ .Config.CompanyName }} to provide secure access to a Trust Center.
                     </p>
                     <p style="margin:0;font-size:12px;line-height:1.6;color:#64748b;">
                         Need help? Reply to this email or contact
@@ -245,7 +283,7 @@
                         <a href="mailto:security@theopenlane.io" style="color:#3fc2b4;text-decoration:underline;">security@theopenlane.io</a>.
                     </p>
                     <p style="margin:12px 0 0;font-size:12px;line-height:1.5;color:#94a3b8;">
-                        {{ .Renderer.Branding.Copyright }}
+                        {{ .Config.Copyright }}
                     </p>
                     <p style="margin:4px 0 0;font-size:12px;line-height:1.5;color:#94a3b8;">
                         If you did not expect this email, you can safely ignore it.

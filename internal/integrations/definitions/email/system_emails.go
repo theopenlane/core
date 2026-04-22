@@ -19,9 +19,12 @@ var (
 	standardTheme      = themes.Standard
 	trustCenterTheme   = themes.TrustCenter
 	questionnaireTheme = themes.Questionnaire
+	modernMessageTheme = themes.ModernMessage
 )
 
-// Icon image URLs hosted on the Openlane CDN
+// Image URLs hosted on the Openlane CDN. The logo URLs use CF Images flexible-variant
+// size tags (w=NN,fit=contain) so they render cleanly at the template's slot widths
+// without crushing the banner-shaped source image
 const (
 	iconRocketURL    = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/b5d07352-e391-4ac6-41f8-e1ee9185e000/public"
 	iconUserPlusURL  = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/a177b189-bf03-466a-e43a-542585eb1800/public"
@@ -615,8 +618,10 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 func allDispatchers() []EmailDispatcher {
 	return []EmailDispatcher{
 		verifyEmail,
+		verifyEmailModernEmail,
 		welcomeEmail,
 		inviteEmail,
+		inviteModernEmail,
 		inviteJoinedEmail,
 		resetRequestEmail,
 		resetSuccessEmail,
@@ -628,7 +633,6 @@ func allDispatchers() []EmailDispatcher {
 		questionnaireAuthEmail,
 		billingChangedEmail,
 		brandedMessageEmail,
-		brandedHeroEmail,
 	}
 }
 

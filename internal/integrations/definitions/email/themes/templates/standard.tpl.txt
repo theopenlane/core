@@ -1,25 +1,25 @@
 <h2>
-{{ if .Email.Body.Title }}
-    {{ .Email.Body.Title }}
+{{ if .Body.Title }}
+    {{ .Body.Title }}
 {{ else }}
-    {{ .Email.Body.Greeting }} {{ .Email.Body.Name }},
+    {{ .Body.Greeting }} {{ .Body.Name }},
 {{ end }}
 </h2>
-{{ if ne .Email.Body.IntrosMarkdown "" }}
-    {{ .Email.Body.IntrosMarkdown.ToHTML }}
-{{ else if gt (len .Email.Body.IntrosUnsafe) 0 }}
-    {{ range $line := .Email.Body.IntrosUnsafe }}
+{{ if ne .Body.Intros.Markdown "" }}
+    {{ .Body.Intros.Markdown.ToHTML }}
+{{ else if gt (len .Body.Intros.Unsafe) 0 }}
+    {{ range $line := .Body.Intros.Unsafe }}
         <p>{{ $line }}</p>
     {{ end }}
 {{ else }}
-    {{ range $line := .Email.Body.Intros }}
+    {{ range $line := .Body.Intros.Paragraphs}}
         <p>{{ $line }}</p>
     {{ end }}
 {{ end }}
-{{ if ne .Email.Body.FreeMarkdown "" }}
-    {{ .Email.Body.FreeMarkdown.ToHTML }}
+{{ if ne .Body.FreeMarkdown "" }}
+    {{ .Body.FreeMarkdown.ToHTML }}
 {{ else }}
-    {{ with .Email.Body.Dictionary }}
+    {{ with .Body.Dictionary.Cells }}
         <ul>
             {{ range $entry := . }}
             <li>
@@ -28,7 +28,7 @@
             {{ end }}
         </ul>
     {{ end }}
-    {{ with .Email.Body.Tables }}
+    {{ with .Body.Tables }}
         {{ if gt (len .) 0 }}
             {{ range $table := . }}
                 {{ $data := .Data }}
@@ -56,7 +56,7 @@
             {{ end }}
         {{ end }}
     {{ end }}
-    {{ with .Email.Body.Actions }}
+    {{ with .Body.Actions }}
         {{ range $action := . }}
         <p>
             {{ $action.Instructions }}
@@ -70,21 +70,21 @@
         {{ end }}
     {{ end }}
 {{ end }}
-{{ if ne .Email.Body.OutrosMarkdown "" }}
-    {{ .Email.Body.OutrosMarkdown.ToHTML }}
-{{ else if gt (len .Email.Body.OutrosUnsafe) 0 }}
-    {{ range $line := .Email.Body.OutrosUnsafe }}
+{{ if ne .Body.Outros.Markdown "" }}
+    {{ .Body.Outros.Markdown.ToHTML }}
+{{ else if gt (len .Body.Outros.Unsafe) 0 }}
+    {{ range $line := .Body.Outros.Unsafe }}
         <p>{{ $line }}</p>
     {{ end }}
 {{ else }}
-    {{ range $line := .Email.Body.Outros }}
+    {{ range $line := .Body.Outros.Paragraphs}}
         <p>{{ $line }}</p>
     {{ end }}
 {{ end }}
-{{ if and .Email.Body.Signature (gt (len .Email.Body.Signature) 0) }}
-<p>{{ .Email.Body.Signature }}{{ if .Email.Body.SignatureName }}<br>{{ .Email.Body.SignatureName }}{{ end }}</p>
+{{ if and .Body.Signature (gt (len .Body.Signature) 0) }}
+<p>{{ .Body.Signature }}{{ if .Body.SignatureName }}<br>{{ .Body.SignatureName }}{{ end }}</p>
 {{ else }}
 <p>Stay compliant,<br>The Openlane Team</p>
 {{ end }}
-<p>{{ .Renderer.Branding.Name }} - {{ .Renderer.Branding.Link }}</p>
-<p>{{ .Renderer.Branding.Copyright }}</p>
+<p>{{ .Config.CompanyName }} - {{ .Config.ProductURL }}</p>
+<p>{{ .Config.Copyright }}</p>

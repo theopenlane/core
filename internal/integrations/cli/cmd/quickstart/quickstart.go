@@ -69,14 +69,7 @@ func run(ctx context.Context) error {
 	suffix := time.Now().UTC().Format("20060102-150405")
 	templateKey := email.BrandedMessageOp.Name()
 
-	brandingID, err := createBranding(ctx, client, suffix)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email branding")
-
-		return fmt.Errorf("create branding: %w", err)
-	}
-
-	templateID, err := createTemplate(ctx, client, templateKey, suffix, brandingID)
+	templateID, err := createTemplate(ctx, client, templateKey, suffix)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email template")
 
@@ -100,7 +93,6 @@ func run(ctx context.Context) error {
 	payload := launch.LaunchCampaign
 	headers := []string{"BrandingID", "TemplateID", "CampaignID", "Recipient", "Queued", "Skipped"}
 	rows := [][]string{{
-		brandingID,
 		templateID,
 		campaignID,
 		recipient,
@@ -135,49 +127,21 @@ func loadDefaults() (map[string]any, error) {
 	return out, nil
 }
 
-// createBranding creates a default email branding tagged with quickstartTag
-func createBranding(ctx context.Context, client *openlaneclient.Client, suffix string) (string, error) {
-	input := graphclient.CreateEmailBrandingInput{
-		Name:            resourcePrefix + suffix,
-		BrandName:       lo.ToPtr("Openlane Campaigns"),
-		PrimaryColor:    lo.ToPtr("#1F2937"),
-		BackgroundColor: lo.ToPtr("#F8FAFC"),
-		TextColor:       lo.ToPtr("#0F172A"),
-		LinkColor:       lo.ToPtr("#2563EB"),
-		ButtonColor:     lo.ToPtr("#1F2937"),
-		ButtonTextColor: lo.ToPtr("#FFFFFF"),
-		IsDefault:       lo.ToPtr(true),
-		Tags:            []string{quickstartTag},
-	}
-
-	resp, err := client.CreateEmailBranding(ctx, input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email branding")
-		return "", err
-	}
-
-	id := resp.CreateEmailBranding.EmailBranding.ID
-	logx.FromContext(ctx).Debug().Str("branding_id", id).Msg("created email branding")
-
-	return id, nil
-}
-
 // createTemplate creates a CAMPAIGN_RECIPIENT template bound to the branded-message catalog entry.
 // The Defaults payload pre-fills the BrandedMessageRequest fields; recipient/campaign context is
 // layered on by the dispatcher at send time
-func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suffix, brandingID string) (string, error) {
+func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suffix string) (string, error) {
 	defaults, err := loadDefaults()
 	if err != nil {
 		return "", err
 	}
 
 	input := graphclient.CreateEmailTemplateInput{
-		Key:              key,
-		Name:             "Openlane Campaigns quickstart " + suffix,
-		TemplateContext:  enums.TemplateContextCampaignRecipient,
-		Defaults:         defaults,
-		EmailBrandingIDs: []string{brandingID},
-		Active:           lo.ToPtr(true),
+		Key:             key,
+		Name:            "Openlane Campaigns quickstart " + suffix,
+		TemplateContext: enums.TemplateContextCampaignRecipient,
+		Defaults:        defaults,
+		Active:          lo.ToPtr(true),
 	}
 
 	resp, err := client.CreateEmailTemplate(ctx, input)

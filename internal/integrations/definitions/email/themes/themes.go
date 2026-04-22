@@ -54,15 +54,6 @@ var ModernMessage = &render.Theme{
 	Text: sharedText,
 }
 
-// ModernHero is a hero-image-forward theme with a full-width header image,
-// large 40px headline, body paragraphs, optional CTA, and the shared modern
-// footer. Suitable for launches, announcements, and welcome-shaped messages
-var ModernHero = &render.Theme{
-	Name: "modern-hero",
-	HTML: readEmbed("templates/modern-hero.tpl.html"),
-	Text: sharedText,
-}
-
 // readEmbed reads a file from the embedded theme filesystem
 func readEmbed(name string) string {
 	data, err := themeFS.ReadFile(name)
