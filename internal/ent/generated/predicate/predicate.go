@@ -69,9 +69,6 @@ type Discussion func(*sql.Selector)
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 
-// EmailBranding is the predicate function for emailbranding builders.
-type EmailBranding func(*sql.Selector)
-
 // EmailTemplate is the predicate function for emailtemplate builders.
 type EmailTemplate func(*sql.Selector)
 

@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -69,6 +68,7 @@ func (EmailTemplate) Fields() []ent.Field {
 			Optional(),
 		field.Enum("format").
 			Comment("template format for rendering").
+			Optional().
 			GoType(enums.NotificationTemplateFormat("")).
 			Default(enums.NotificationTemplateFormatHTML.String()).
 			Annotations(
@@ -125,6 +125,7 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.Enum("template_context").
 			Comment("runtime data context defining available variable keys for this template").
 			GoType(enums.TemplateContext("")).
+			Optional().
 			Annotations(
 				entgql.OrderField("TEMPLATE_CONTEXT"),
 			),
@@ -150,7 +151,6 @@ func (EmailTemplate) Fields() []ent.Field {
 func (EmailTemplate) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "key").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
@@ -158,7 +158,6 @@ func (EmailTemplate) Indexes() []ent.Index {
 // Edges of the EmailTemplate.
 func (e EmailTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFrom(e, EmailBranding{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: e,
 			edgeSchema: Integration{},
@@ -212,14 +211,6 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 func (EmailTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
-	}
-}
-
-// Hooks of the EmailTemplate.
-func (EmailTemplate) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookEmailTemplateSanitize(),
-		hooks.HookExtractEmailTemplateVariables(),
 	}
 }
 

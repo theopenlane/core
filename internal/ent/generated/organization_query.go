@@ -33,7 +33,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -141,7 +140,6 @@ type OrganizationQuery struct {
 	withSetting                              *OrganizationSettingQuery
 	withPersonalAccessTokens                 *PersonalAccessTokenQuery
 	withAPITokens                            *APITokenQuery
-	withEmailBrandings                       *EmailBrandingQuery
 	withEmailTemplates                       *EmailTemplateQuery
 	withIntegrationWebhooks                  *IntegrationWebhookQuery
 	withIntegrationRuns                      *IntegrationRunQuery
@@ -253,7 +251,6 @@ type OrganizationQuery struct {
 	withNamedChildren                        map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens            map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                       map[string]*APITokenQuery
-	withNamedEmailBrandings                  map[string]*EmailBrandingQuery
 	withNamedEmailTemplates                  map[string]*EmailTemplateQuery
 	withNamedIntegrationWebhooks             map[string]*IntegrationWebhookQuery
 	withNamedIntegrationRuns                 map[string]*IntegrationRunQuery
@@ -1042,31 +1039,6 @@ func (_q *OrganizationQuery) QueryAPITokens() *APITokenQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryEmailBrandings chains the current query on the "email_brandings" edge.
-func (_q *OrganizationQuery) QueryEmailBrandings() *EmailBrandingQuery {
-	query := (&EmailBrandingClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailBrandingsTable, organization.EmailBrandingsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBranding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3392,7 +3364,6 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSetting:                         _q.withSetting.Clone(),
 		withPersonalAccessTokens:            _q.withPersonalAccessTokens.Clone(),
 		withAPITokens:                       _q.withAPITokens.Clone(),
-		withEmailBrandings:                  _q.withEmailBrandings.Clone(),
 		withEmailTemplates:                  _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:             _q.withIntegrationWebhooks.Clone(),
 		withIntegrationRuns:                 _q.withIntegrationRuns.Clone(),
@@ -3778,17 +3749,6 @@ func (_q *OrganizationQuery) WithAPITokens(opts ...func(*APITokenQuery)) *Organi
 		opt(query)
 	}
 	_q.withAPITokens = query
-	return _q
-}
-
-// WithEmailBrandings tells the query-builder to eager-load the nodes that are connected to
-// the "email_brandings" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithEmailBrandings(opts ...func(*EmailBrandingQuery)) *OrganizationQuery {
-	query := (&EmailBrandingClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withEmailBrandings = query
 	return _q
 }
 
@@ -4800,7 +4760,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [112]bool{
+		loadedTypes = [111]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4828,7 +4788,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSetting != nil,
 			_q.withPersonalAccessTokens != nil,
 			_q.withAPITokens != nil,
-			_q.withEmailBrandings != nil,
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
@@ -5144,13 +5103,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.Edges.APITokens = []*APIToken{} },
 			func(n *Organization, e *APIToken) { n.Edges.APITokens = append(n.Edges.APITokens, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withEmailBrandings; query != nil {
-		if err := _q.loadEmailBrandings(ctx, query, nodes,
-			func(n *Organization) { n.Edges.EmailBrandings = []*EmailBranding{} },
-			func(n *Organization, e *EmailBranding) { n.Edges.EmailBrandings = append(n.Edges.EmailBrandings, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5961,13 +5913,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAPITokens(name) },
 			func(n *Organization, e *APIToken) { n.appendNamedAPITokens(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedEmailBrandings {
-		if err := _q.loadEmailBrandings(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedEmailBrandings(name) },
-			func(n *Organization, e *EmailBranding) { n.appendNamedEmailBrandings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -7409,36 +7354,6 @@ func (_q *OrganizationQuery) loadAPITokens(ctx context.Context, query *APITokenQ
 	}
 	query.Where(predicate.APIToken(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.APITokensColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadEmailBrandings(ctx context.Context, query *EmailBrandingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *EmailBranding)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(emailbranding.FieldOwnerID)
-	}
-	query.Where(predicate.EmailBranding(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.EmailBrandingsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -10553,20 +10468,6 @@ func (_q *OrganizationQuery) WithNamedAPITokens(name string, opts ...func(*APITo
 		_q.withNamedAPITokens = make(map[string]*APITokenQuery)
 	}
 	_q.withNamedAPITokens[name] = query
-	return _q
-}
-
-// WithNamedEmailBrandings tells the query-builder to eager-load the nodes that are connected to the "email_brandings"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedEmailBrandings(name string, opts ...func(*EmailBrandingQuery)) *OrganizationQuery {
-	query := (&EmailBrandingClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedEmailBrandings == nil {
-		_q.withNamedEmailBrandings = make(map[string]*EmailBrandingQuery)
-	}
-	_q.withNamedEmailBrandings[name] = query
 	return _q
 }
 

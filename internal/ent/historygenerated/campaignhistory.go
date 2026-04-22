@@ -103,7 +103,7 @@ type CampaignHistory struct {
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// the email branding associated with the campaign
+	// the email branding or theme reference the campaign may use to override the email templates theme
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID string `json:"email_template_id,omitempty"`

@@ -2729,7 +2729,6 @@ type SearchResults struct {
 	Controls              *generated.ControlConnection              `json:"controls,omitempty"`
 	ControlObjectives     *generated.ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
 	CustomTypeEnums       *generated.CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
-	EmailBrandings        *generated.EmailBrandingConnection        `json:"emailBrandings,omitempty"`
 	EmailTemplates        *generated.EmailTemplateConnection        `json:"emailTemplates,omitempty"`
 	Entities              *generated.EntityConnection               `json:"entities,omitempty"`
 	Evidences             *generated.EvidenceConnection             `json:"evidences,omitempty"`

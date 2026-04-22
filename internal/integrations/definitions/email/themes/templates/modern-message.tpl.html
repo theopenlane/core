@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="{{ .Renderer.Direction }}" lang="en">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    {{ if .Renderer.Branding.Logo }}
+    <link rel="preload" as="image" href="{{ .Renderer.Branding.Logo | url }}" />
+    {{ end }}
+    {{ range $social := .Renderer.Branding.Social }}
+    <link rel="preload" as="image" href="{{ $social.IconURL | url }}" />
+    {{ end }}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" />
+    <style type="text/css" rel="stylesheet" media="all">
+        {{ range $selector, $props := .MergedStyles }}
+        {{ $selector }} {
+            {{ range $key, $val := $props }}
+                {{ $key }}: {{ css $val }};
+            {{ end }}
+        }
+        {{ end }}
+
+        @media only screen and (max-width: 600px) {
+            .mm-wrapper { margin-top: 0 !important; width: 100% !important; }
+            .mm-header, .mm-footer { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+            .mm-panel { padding: 3rem 1.5rem !important; }
+        }
+
+        {{ if .Email.Body.AdditionalCSS }}{{ .Email.Body.AdditionalCSS | css }}{{ end }}
+    </style>
+</head>
+<body class="theme-{{ .Renderer.Theme.Name }}" style="background-color:{{ or .Renderer.Branding.BackgroundColor "#F3F4F6" }};margin:0;padding:0;font-family:{{ or .Renderer.Branding.FontFamily "'Inter',system-ui,Arial,sans-serif" }};color:{{ or .Renderer.Branding.TextColor "#43454B" }};">
+    {{ if .Email.Body.Preheader }}
+    <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">{{- .Email.Body.Preheader -}}</div>
+    {{ end }}
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" role="presentation" align="center">
+        <tbody><tr><td style="background-color:{{ or .Renderer.Branding.BackgroundColor "#F3F4F6" }};text-align:center;">
+            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mm-wrapper" style="max-width:640px;margin:2rem auto 0 auto;width:100%;">
+                <tbody><tr style="width:100%"><td>
+
+                    {{/* Header: small logo left, brand name right */}}
+                    {{ if or .Renderer.Branding.Logo .Renderer.Branding.Name }}
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mm-header" style="background-color:#FFFFFF;padding:1rem 1.5rem 0.75rem 1.5rem;">
+                        <tbody><tr>
+                            <td style="width:50%;vertical-align:middle;padding:7px 0;">
+                                {{ if .Renderer.Branding.Logo }}
+                                {{ if .Renderer.Branding.Link }}
+                                <a href="{{ .Renderer.Branding.Link }}" target="_blank"><img alt="{{ .Renderer.Branding.Name }}" src="{{ .Renderer.Branding.Logo | url }}" width="23" style="display:block;outline:none;border:none;text-decoration:none;" /></a>
+                                {{ else }}
+                                <img alt="{{ .Renderer.Branding.Name }}" src="{{ .Renderer.Branding.Logo | url }}" width="23" style="display:block;outline:none;border:none;text-decoration:none;" />
+                                {{ end }}
+                                {{ end }}
+                            </td>
+                            <td align="right" style="width:50%;vertical-align:middle;padding:7px 0;">
+                                {{ if .Renderer.Branding.Name }}
+                                <p style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;margin:0;color:#7B7D81;text-align:right;">{{ .Renderer.Branding.Name }}</p>
+                                {{ end }}
+                            </td>
+                        </tr></tbody>
+                    </table>
+                    {{ end }}
+
+                    {{/* Hero body panel */}}
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mm-panel" style="background-color:{{ or .Renderer.Branding.BackgroundColor "#F3F4F6" }};border-radius:8px;padding:64px 40px;text-align:center;">
+                        <tbody><tr><td>
+
+                            {{ if .Renderer.Branding.Logo }}
+                            <img alt="" src="{{ .Renderer.Branding.Logo | url }}" width="48" style="display:block;outline:none;border:none;text-decoration:none;margin:0 auto 1.25rem auto;" />
+                            {{ end }}
+
+                            {{ if .Email.Body.Title }}
+                            <h1 style="font-size:28px;font-weight:600;letter-spacing:-0.084px;line-height:1.3;color:{{ or .Renderer.Branding.PrimaryColor "#14171E" }};margin:0;">{{ .Email.Body.Title }}</h1>
+                            {{ else if and .Email.Body.Greeting .Email.Body.Name }}
+                            <h1 style="font-size:28px;font-weight:600;letter-spacing:-0.084px;line-height:1.3;color:{{ or .Renderer.Branding.PrimaryColor "#14171E" }};margin:0;">{{ .Email.Body.Greeting }} {{ .Email.Body.Name }}</h1>
+                            {{ end }}
+
+                            {{/* Intros */}}
+                            {{ if ne .Email.Body.IntrosMarkdown "" }}
+                            <div style="font-size:16px;line-height:1.5;color:{{ or .Renderer.Branding.TextColor "#43454B" }};max-width:380px;margin:1.5rem auto 0 auto;">{{ .Email.Body.IntrosMarkdown.ToHTML }}</div>
+                            {{ else if gt (len .Email.Body.IntrosUnsafe) 0 }}
+                                {{ range $line := .Email.Body.IntrosUnsafe }}
+                                <p style="font-size:16px;line-height:1.5;font-weight:420;letter-spacing:-0.048px;color:{{ or .Renderer.Branding.TextColor "#43454B" }};max-width:380px;margin:1.5rem auto 0 auto;">{{ $line }}</p>
+                                {{ end }}
+                            {{ else }}
+                                {{ range $line := .Email.Body.Intros }}
+                                <p style="font-size:16px;line-height:1.5;font-weight:420;letter-spacing:-0.048px;color:{{ or .Renderer.Branding.TextColor "#43454B" }};max-width:380px;margin:1.5rem auto 0 auto;">{{ $line }}</p>
+                                {{ end }}
+                            {{ end }}
+
+                            {{/* Actions (CTA buttons + invite codes) */}}
+                            {{ with .Email.Body.Actions }}
+                                {{ range $action := . }}
+                                    {{ if $action.Button.Text }}
+                                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin-top:2rem;text-align:center;">
+                                        <tbody><tr><td align="center">
+                                            <a href="{{ $action.Button.Link }}" target="_blank" style="display:inline-block;background-color:{{ or $action.Button.Color $.Renderer.Branding.ButtonColor "#14171E" }};color:{{ or $action.Button.TextColor $.Renderer.Branding.ButtonTextColor "#FFFFFF" }};font-size:16px;font-weight:420;letter-spacing:-0.048px;line-height:1.5;text-decoration:none;border-radius:0.5rem;padding:16px 28px;font-family:{{ or $.Renderer.Branding.FontFamily "'Inter',system-ui,Arial,sans-serif" }};">{{ $action.Button.Text }}</a>
+                                        </td></tr></tbody>
+                                    </table>
+                                    {{ end }}
+                                    {{ if $action.InviteCode }}
+                                    <div style="margin-top:2rem;font-size:20px;font-weight:600;letter-spacing:4px;color:{{ or $.Renderer.Branding.PrimaryColor "#14171E" }};">{{ $action.InviteCode }}</div>
+                                    {{ end }}
+                                {{ end }}
+                            {{ end }}
+
+                            {{/* Outros — fine print below CTA */}}
+                            {{ if ne .Email.Body.OutrosMarkdown "" }}
+                            <div style="font-size:13px;line-height:1.5;color:#7B7D81;max-width:400px;margin:2rem auto 0 auto;">{{ .Email.Body.OutrosMarkdown.ToHTML }}</div>
+                            {{ else if gt (len .Email.Body.OutrosUnsafe) 0 }}
+                                {{ range $line := .Email.Body.OutrosUnsafe }}
+                                <p style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;color:#7B7D81;max-width:400px;margin:2rem auto 0 auto;">{{ $line }}</p>
+                                {{ end }}
+                            {{ else }}
+                                {{ range $line := .Email.Body.Outros }}
+                                <p style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;color:#7B7D81;max-width:400px;margin:2rem auto 0 auto;">{{ $line }}</p>
+                                {{ end }}
+                            {{ end }}
+
+                        </td></tr></tbody>
+                    </table>
+
+                    {{/* Footer: tagline + socials + address + unsubscribe + copyright */}}
+                    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" class="mm-footer" style="background-color:#FFFFFF;">
+                        <tbody><tr><td style="padding:2.5rem 1.5rem;text-align:center;">
+                            {{ if .Renderer.Branding.Tagline }}
+                            <p style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;color:#7B7D81;max-width:280px;margin:0 auto 2rem auto;">{{ .Renderer.Branding.Tagline }}</p>
+                            {{ end }}
+
+                            {{ if gt (len .Renderer.Branding.Social) 0 }}
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 auto 2rem auto;">
+                                <tbody><tr><td>
+                                    {{ range $social := .Renderer.Branding.Social }}
+                                    <a href="{{ $social.URL }}" target="_blank" style="display:inline-block;padding:0 0.5rem;vertical-align:middle;text-decoration:none;"><img alt="{{ $social.Platform }}" src="{{ $social.IconURL | url }}" width="18" style="display:block;outline:none;border:none;text-decoration:none;" /></a>
+                                    {{ end }}
+                                </td></tr></tbody>
+                            </table>
+                            {{ end }}
+
+                            {{ if .Renderer.Branding.CompanyAddress }}
+                            <p style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:#7B7D81;margin:1rem 0 1.25rem 0;">{{ .Renderer.Branding.CompanyAddress }}</p>
+                            {{ end }}
+
+                            {{ if .Renderer.Branding.UnsubscribeURL }}
+                            <p style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:#7B7D81;margin:0;">
+                                <a href="{{ .Renderer.Branding.UnsubscribeURL }}" target="_blank" style="color:#7B7D81;text-decoration:none;">Unsubscribe</a>{{ with .Renderer.Branding.Name }} from {{ . }}{{ end }}.
+                            </p>
+                            {{ end }}
+
+                            {{ if .Renderer.Branding.Copyright }}
+                            <p style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:#7B7D81;margin:1rem 0 0 0;">{{ .Renderer.Branding.Copyright }}</p>
+                            {{ end }}
+                        </td></tr></tbody>
+                    </table>
+
+                </td></tr></tbody>
+            </table>
+        </td></tr></tbody>
+    </table>
+</body>
+</html>

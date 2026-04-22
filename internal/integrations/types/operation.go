@@ -77,6 +77,11 @@ type OperationRegistration struct {
 	ClientRef ClientID `json:"-"`
 	// ConfigSchema is the JSON schema for operation configuration
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
+	// UISchema is optional UI layout hints for the input form; nil when absent
+	UISchema json.RawMessage `json:"uiSchema,omitempty"`
+	// CustomerSelectable reports whether the operation is exposed in customer-facing pickers;
+	// false by default, true for operations that customers may pick from a catalog
+	CustomerSelectable bool `json:"customerSelectable,omitempty"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
 	// Ingest declares the normalized schemas emitted by the operation

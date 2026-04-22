@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -4760,18 +4759,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Template",
 	)
 	graph.MustAddE(
-		"email_branding",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-		},
-		"Campaign",
-		"EmailBranding",
-	)
-	graph.MustAddE(
 		"integration",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -6624,78 +6611,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   emailbranding.OwnerTable,
-			Columns: []string{emailbranding.OwnerColumn},
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"Organization",
-	)
-	graph.MustAddE(
-		"blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   emailbranding.BlockedGroupsTable,
-			Columns: []string{emailbranding.BlockedGroupsColumn},
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"Group",
-	)
-	graph.MustAddE(
-		"editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   emailbranding.EditorsTable,
-			Columns: []string{emailbranding.EditorsColumn},
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"Group",
-	)
-	graph.MustAddE(
-		"viewers",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   emailbranding.ViewersTable,
-			Columns: []string{emailbranding.ViewersColumn},
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"Group",
-	)
-	graph.MustAddE(
-		"campaigns",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   emailbranding.CampaignsTable,
-			Columns: []string{emailbranding.CampaignsColumn},
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"Campaign",
-	)
-	graph.MustAddE(
-		"email_templates",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   emailbranding.EmailTemplatesTable,
-			Columns: emailbranding.EmailTemplatesPrimaryKey,
-			Bidi:    false,
-		},
-		"EmailBranding",
-		"EmailTemplate",
-	)
-	graph.MustAddE(
-		"owner",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
 			Table:   emailtemplate.OwnerTable,
 			Columns: []string{emailtemplate.OwnerColumn},
 			Bidi:    false,
@@ -6738,18 +6653,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"EmailTemplate",
 		"Group",
-	)
-	graph.MustAddE(
-		"email_branding",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-		},
-		"EmailTemplate",
-		"EmailBranding",
 	)
 	graph.MustAddE(
 		"integration",
@@ -11202,18 +11105,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"APIToken",
-	)
-	graph.MustAddE(
-		"email_brandings",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-		},
-		"Organization",
-		"EmailBranding",
 	)
 	graph.MustAddE(
 		"email_templates",
@@ -19870,20 +19761,6 @@ func (f *CampaignFilter) WhereHasTemplateWith(preds ...predicate.Template) {
 	})))
 }
 
-// WhereHasEmailBranding applies a predicate to check if query has an edge email_branding.
-func (f *CampaignFilter) WhereHasEmailBranding() {
-	f.Where(entql.HasEdge("email_branding"))
-}
-
-// WhereHasEmailBrandingWith applies a predicate to check if query has an edge email_branding with a given conditions (other predicates).
-func (f *CampaignFilter) WhereHasEmailBrandingWith(preds ...predicate.EmailBranding) {
-	f.Where(entql.HasEdgeWith("email_branding", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasIntegration applies a predicate to check if query has an edge integration.
 func (f *CampaignFilter) WhereHasIntegration() {
 	f.Where(entql.HasEdge("integration"))
@@ -24814,20 +24691,6 @@ func (f *EmailTemplateFilter) WhereHasViewers() {
 // WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
 func (f *EmailTemplateFilter) WhereHasViewersWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasEmailBranding applies a predicate to check if query has an edge email_branding.
-func (f *EmailTemplateFilter) WhereHasEmailBranding() {
-	f.Where(entql.HasEdge("email_branding"))
-}
-
-// WhereHasEmailBrandingWith applies a predicate to check if query has an edge email_branding with a given conditions (other predicates).
-func (f *EmailTemplateFilter) WhereHasEmailBrandingWith(preds ...predicate.EmailBranding) {
-	f.Where(entql.HasEdgeWith("email_branding", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -35617,20 +35480,6 @@ func (f *OrganizationFilter) WhereHasAPITokens() {
 // WhereHasAPITokensWith applies a predicate to check if query has an edge api_tokens with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasAPITokensWith(preds ...predicate.APIToken) {
 	f.Where(entql.HasEdgeWith("api_tokens", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasEmailBrandings applies a predicate to check if query has an edge email_brandings.
-func (f *OrganizationFilter) WhereHasEmailBrandings() {
-	f.Where(entql.HasEdge("email_brandings"))
-}
-
-// WhereHasEmailBrandingsWith applies a predicate to check if query has an edge email_brandings with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasEmailBrandingsWith(preds ...predicate.EmailBranding) {
-	f.Where(entql.HasEdgeWith("email_brandings", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

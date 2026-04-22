@@ -174,10 +174,7 @@ func (NotificationTemplate) Indexes() []ent.Index {
 		index.Fields(ownerFieldName, "channel", "locale", "topic_pattern").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields(ownerFieldName, "key").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("key").
-			Annotations(entsql.IndexWhere("deleted_at is NULL and system_owned = true")),
 	}
 }
 

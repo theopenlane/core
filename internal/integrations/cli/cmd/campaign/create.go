@@ -39,7 +39,9 @@ func init() {
 	createCmd.Flags().StringP("type", "y", "", "campaign type: QUESTIONNAIRE, TRAINING, POLICY_ATTESTATION, VENDOR_ASSESSMENT, CUSTOM")
 	createCmd.Flags().StringP("status", "s", "", "campaign status")
 	createCmd.Flags().StringP("assessment-id", "a", "", "assessment ID to associate with the campaign")
-	createCmd.Flags().StringP("template-id", "t", "", "email template ID for the campaign")
+	createCmd.Flags().StringP("template-id", "t", "", "notification template ID for the campaign")
+	createCmd.Flags().String("email-template-id", "", "email template ID (catalog entry) driving campaign sends")
+	createCmd.Flags().String("email-branding-id", "", "email branding ID to attach directly to the campaign")
 	createCmd.Flags().BoolP("is-recurring", "r", false, "whether the campaign recurs on a schedule")
 	createCmd.Flags().String("recurrence-frequency", "", "recurrence cadence: YEARLY, QUARTERLY, BIANNUALLY, MONTHLY")
 	createCmd.Flags().StringP("emails", "e", "", "comma-separated list of target email addresses")
@@ -59,6 +61,8 @@ func buildCreateInput() (graphclient.CreateCampaignWithTargetsInput, error) {
 	campaign.Description = lo.EmptyableToPtr(cmd.Config.String("description"))
 	campaign.AssessmentID = lo.EmptyableToPtr(cmd.Config.String("assessment-id"))
 	campaign.TemplateID = lo.EmptyableToPtr(cmd.Config.String("template-id"))
+	campaign.EmailTemplateID = lo.EmptyableToPtr(cmd.Config.String("email-template-id"))
+	campaign.EmailBrandingID = lo.EmptyableToPtr(cmd.Config.String("email-branding-id"))
 
 	if t := cmd.Config.String("type"); t != "" {
 		campaign.CampaignType = enums.ToCampaignType(t)

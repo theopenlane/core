@@ -1515,8 +1515,6 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
 		case "customTypeEnums":
 			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
-		case "emailBrandings":
-			out.Values[i] = ec._SearchResults_emailBrandings(ctx, field, obj)
 		case "emailTemplates":
 			out.Values[i] = ec._SearchResults_emailTemplates(ctx, field, obj)
 		case "entities":

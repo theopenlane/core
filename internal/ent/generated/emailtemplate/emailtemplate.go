@@ -86,8 +86,6 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
-	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
-	EdgeEmailBranding = "email_branding"
 	// EdgeIntegration holds the string denoting the integration edge name in mutations.
 	EdgeIntegration = "integration"
 	// EdgeWorkflowDefinition holds the string denoting the workflow_definition edge name in mutations.
@@ -130,11 +128,6 @@ const (
 	ViewersInverseTable = "groups"
 	// ViewersColumn is the table column denoting the viewers relation/edge.
 	ViewersColumn = "email_template_viewers"
-	// EmailBrandingTable is the table that holds the email_branding relation/edge. The primary key declared below.
-	EmailBrandingTable = "email_branding_email_templates"
-	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
-	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
-	EmailBrandingInverseTable = "email_brandings"
 	// IntegrationTable is the table that holds the integration relation/edge.
 	IntegrationTable = "email_templates"
 	// IntegrationInverseTable is the table name for the Integration entity.
@@ -214,12 +207,6 @@ var Columns = []string{
 	FieldWorkflowInstanceID,
 }
 
-var (
-	// EmailBrandingPrimaryKey and EmailBrandingColumn2 are the table columns denoting the
-	// primary key for the email_branding relation (M2M).
-	EmailBrandingPrimaryKey = []string{"email_branding_id", "email_template_id"}
-)
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
@@ -236,7 +223,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -476,20 +463,6 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByEmailBrandingCount orders the results by email_branding count.
-func ByEmailBrandingCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingStep(), opts...)
-	}
-}
-
-// ByEmailBranding orders the results by email_branding terms.
-func ByEmailBranding(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByIntegrationField orders the results by integration field.
 func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -578,13 +551,6 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
-	)
-}
-func newEmailBrandingStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EmailBrandingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, EmailBrandingTable, EmailBrandingPrimaryKey...),
 	)
 }
 func newIntegrationStep() *sqlgraph.Step {

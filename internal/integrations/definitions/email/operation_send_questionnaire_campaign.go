@@ -82,7 +82,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	}
 
 	for _, target := range targets {
-		if err := sendQuestionnaireToTarget(ctx, req.DB, client, camp, assessmentObj.Name, target); err != nil {
+		if err := sendQuestionnaireToTarget(ctx, req, req.DB, client, camp, assessmentObj.Name, target); err != nil {
 			logx.FromContext(ctx).Error().Err(err).
 				Str("campaign_id", cfg.CampaignID).
 				Str("target_id", target.ID).
@@ -94,8 +94,9 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 }
 
 // sendQuestionnaireToTarget creates an assessment response, generates an anonymous access
-// token URL, sends the questionnaire access email, and marks the target as sent
-func sendQuestionnaireToTarget(ctx context.Context, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, target *generated.CampaignTarget) error {
+// token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
+// operation, and marks the target as sent
+func sendQuestionnaireToTarget(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, target *generated.CampaignTarget) error {
 	create := db.AssessmentResponse.Create().
 		SetAssessmentID(camp.AssessmentID).
 		SetCampaignID(camp.ID).
@@ -136,21 +137,17 @@ func sendQuestionnaireToTarget(ctx context.Context, db *generated.Client, client
 		return fmt.Errorf("generate questionnaire token URL: %w", err)
 	}
 
-	tags := []newman.Tag{
-		{Name: TagCampaignTargetID, Value: target.ID},
+	input := QuestionnaireAuthEmail{
+		RecipientInfo: RecipientInfo{
+			Email: target.Email,
+			Tags:  []newman.Tag{{Name: TagCampaignTargetID, Value: target.ID}},
+		},
+		AssessmentName: assessmentName,
+		AuthURL:        result.URL,
 	}
 
-	if _, sendErr := renderAndSend(ctx, client, questionnaireTheme,
-		RecipientInfo{Email: target.Email, Tags: tags},
-		"Access "+assessmentName+" Questionnaire from "+client.Config.CompanyName,
-		questionnaireAuthEmail.Content(client.Config, QuestionnaireAuthEmail{
-			RecipientInfo:  RecipientInfo{Email: target.Email},
-			AssessmentName: assessmentName,
-			AuthURL:        result.URL,
-		}),
-		questionnaireFromOverride(client.Config)...,
-	); sendErr != nil {
-		return sendErr
+	if err := questionnaireAuthEmail.dispatch(ctx, req, client, input); err != nil {
+		return err
 	}
 
 	now := models.DateTime(time.Now())
@@ -159,16 +156,4 @@ func sendQuestionnaireToTarget(ctx context.Context, db *generated.Client, client
 	}
 
 	return nil
-}
-
-// questionnaireFromOverride returns a from-address override when the config specifies a
-// dedicated questionnaire sender address
-func questionnaireFromOverride(cfg RuntimeEmailConfig) []newman.MessageOption {
-	if cfg.QuestionnaireEmail == "" {
-		return nil
-	}
-
-	return []newman.MessageOption{
-		newman.WithFrom(cfg.QuestionnaireEmail),
-	}
 }

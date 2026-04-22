@@ -114,8 +114,6 @@ const (
 	EdgeAssessment = "assessment"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
 	EdgeTemplate = "template"
-	// EdgeEmailBranding holds the string denoting the email_branding edge name in mutations.
-	EdgeEmailBranding = "email_branding"
 	// EdgeIntegration holds the string denoting the integration edge name in mutations.
 	EdgeIntegration = "integration"
 	// EdgeEmailTemplate holds the string denoting the email_template edge name in mutations.
@@ -190,13 +188,6 @@ const (
 	TemplateInverseTable = "templates"
 	// TemplateColumn is the table column denoting the template relation/edge.
 	TemplateColumn = "template_id"
-	// EmailBrandingTable is the table that holds the email_branding relation/edge.
-	EmailBrandingTable = "campaigns"
-	// EmailBrandingInverseTable is the table name for the EmailBranding entity.
-	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
-	EmailBrandingInverseTable = "email_brandings"
-	// EmailBrandingColumn is the table column denoting the email_branding relation/edge.
-	EmailBrandingColumn = "email_branding_id"
 	// IntegrationTable is the table that holds the integration relation/edge.
 	IntegrationTable = "campaigns"
 	// IntegrationInverseTable is the table name for the Integration entity.
@@ -702,13 +693,6 @@ func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByEmailBrandingField orders the results by email_branding field.
-func ByEmailBrandingField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByIntegrationField orders the results by integration field.
 func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -895,13 +879,6 @@ func newTemplateStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
-	)
-}
-func newEmailBrandingStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EmailBrandingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, EmailBrandingTable, EmailBrandingColumn),
 	)
 }
 func newIntegrationStep() *sqlgraph.Step {

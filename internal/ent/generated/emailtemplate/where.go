@@ -1944,35 +1944,6 @@ func HasViewersWith(preds ...predicate.Group) predicate.EmailTemplate {
 	})
 }
 
-// HasEmailBranding applies the HasEdge predicate on the "email_branding" edge.
-func HasEmailBranding() predicate.EmailTemplate {
-	return predicate.EmailTemplate(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, EmailBrandingTable, EmailBrandingPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEmailBrandingWith applies the HasEdge predicate on the "email_branding" edge with a given conditions (other predicates).
-func HasEmailBrandingWith(preds ...predicate.EmailBranding) predicate.EmailTemplate {
-	return predicate.EmailTemplate(func(s *sql.Selector) {
-		step := newEmailBrandingStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasIntegration applies the HasEdge predicate on the "integration" edge.
 func HasIntegration() predicate.EmailTemplate {
 	return predicate.EmailTemplate(func(s *sql.Selector) {
