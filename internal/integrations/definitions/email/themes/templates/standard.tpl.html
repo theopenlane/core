@@ -1,28 +1,88 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="{{ .Renderer.Direction }}" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 
 <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="x-apple-disable-message-reformatting" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Outfit:400,500" />
-    {{ if .Renderer.Branding.Logo }}
-    <link rel="preload" as="image" href="{{ .Renderer.Branding.Logo | url }}" />
+    {{ if .Config.LogoURL }}
+    <link rel="preload" as="image" href="{{ .Config.LogoURL | url }}" />
     {{ end }}
     <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/6ffdcca4-a4c8-4a4d-6ddd-3b394f6c7a00/public" />
     <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/9ca24c5a-8377-4e12-9adb-14550a229800/public" />
     <link rel="preload" as="image" href="https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/afbbb82c-86c8-465b-8205-e17fd5514b00/public" />
     <style type="text/css" rel="stylesheet" media="all">
-        {{ range $selector, $props := .MergedStyles }}
-        {{ $selector }} {
-            {{ range $key, $val := $props }}
-                {{ $key }}: {{ css $val }};
-            {{ end }}
+        body {
+            background-color: #ffffff;
+            font-family: 'Outfit', Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            line-height: 1.625;
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            color: #505f6f;
+            box-sizing: border-box;
         }
-        {{ end }}
+        table { border-collapse: separate; }
+        table td { font-family: 'Outfit', Helvetica, Arial, sans-serif; font-size: 16px; vertical-align: top; }
+        .email-wrapper { width: 100%; max-width: 600px; margin: auto; padding: 45px 20px; background-color: #cdfaee; border: 0; text-align: center; }
+        .email-card { background-color: #ffffff; border-radius: 8px; padding: 36px; margin-left: auto; margin-right: auto; }
+        .email-logo { display: block; outline: none; border: none; text-decoration: none; height: auto; margin-left: auto; margin-right: auto; margin-bottom: 24px; }
+        h1, h2, h3, h4 { color: #082930; font-family: 'Outfit', Helvetica, Arial, sans-serif; font-weight: 500; line-height: 1.4; margin: 0 0 16px 0; }
+        h1 { font-size: 24px; font-weight: 400; color: #505f6f; margin-top: 16px; margin-bottom: 21px; line-height: 24px; }
+        h2 { font-size: 24px; }
+        h3 { font-size: 20px; }
+        p { font-size: 16px; font-family: 'Outfit', Helvetica, Arial, sans-serif; font-weight: normal; margin: 16px 0 21px 0; color: #505f6f; line-height: 24px; text-align: center; }
+        .content-icon { width: 105px; height: 105px; background-color: #f0fdf9; border-radius: 52.5px; }
+        a, a:active, a:hover, a:visited { color: #082930; text-decoration: none; }
+        .justify { text-align: left; }
+        .preheader { display: none; overflow: hidden; line-height: 1px; opacity: 0; max-height: 0; max-width: 0; }
+        .button { display: inline-block; background-color: #60e8c9; color: #082930; font-size: 14px; font-weight: 500; font-family: 'Outfit', Helvetica, Arial, sans-serif; text-decoration: none; padding: 12px 24px; border-radius: 6px; border: 1px solid #60e8c9; line-height: 1; text-align: center; box-sizing: border-box; }
+        .button:hover, .button:active { text-decoration: underline; }
+        .body-action { width: 100%; margin: 16px auto; padding: 0; text-align: center; }
+        .invite-code { display: inline-block; padding: 14px 32px; font-size: 24px; font-weight: 600; font-family: monospace; letter-spacing: 4px; color: #082930; background-color: #f0fdf9; border: 2px dashed #3fc2b4; border-radius: 5px; }
+        .invite-code-table { margin: 16px auto; text-align: center; }
+        .invite-code-cell { padding: 14px 32px; font-size: 24px; font-weight: 600; font-family: monospace; letter-spacing: 4px; color: #082930; background-color: #f0fdf9; border: 2px dashed #3fc2b4; border-radius: 5px; }
+        .body-dictionary { margin: 16px 0; padding: 0; width: 100%; }
+        .body-dictionary dt { font-weight: 500; color: #082930; padding: 4px 0 2px 0; }
+        .body-dictionary dd { margin: 0 0 8px 0; padding: 0; color: #505f6f; }
+        .data-table-title, .data-table-title-unsafe { font-size: 18px; font-weight: 500; color: #082930; margin-bottom: 8px; text-align: left; }
+        .data-wrapper { margin: 16px 0; padding: 0; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { text-align: left; padding: 8px 12px; background-color: #f0fdf9; border-bottom: 2px solid #3fc2b4; font-weight: 500; font-size: 14px; color: #082930; }
+        .data-table th p { margin: 0; font-weight: 500; font-size: 14px; color: #082930; }
+        .data-table td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e0e8ec; font-size: 14px; color: #505f6f; }
+        .align-left { text-align: left; }
+        .align-center { text-align: center; }
+        .align-right { text-align: right; }
+        .table-footer { font-size: 12px; color: #6d7f85; margin-top: 8px; text-align: left; }
+        .signature-divider { width: 100%; border: none; border-top: 1px solid #e0e8ec; margin-bottom: 24px; }
+        .signature-text { font-size: 16px; line-height: 24px; margin-bottom: 10px; margin-top: 16px; color: #505f6f; }
+        .signature-img { display: block; outline: none; border: none; text-decoration: none; height: auto; margin-left: auto; margin-right: auto; }
+        .help-divider { width: 100%; border: none; border-top: 1px solid #e0e8ec; margin-top: 24px; margin-bottom: 24px; }
+        .help-text { font-size: 14px; line-height: 24px; margin-bottom: 24px; margin-top: 16px; color: #aabec5; }
+        .help-link { color: #3f76ff; text-decoration: none; }
+        .body-sub { margin-top: 24px; padding-top: 24px; border-top: 1px solid #e0e8ec; }
+        .body-sub p.sub { font-size: 12px; color: #6d7f85; }
+        .body-sub a { color: #3fc2b4; word-break: break-all; }
+        .footer-links a { color: #052e2a; text-decoration: none; font-weight: 500; margin-left: 10px; margin-right: 10px; font-size: 12px; }
+        .footer-address { font-size: 14px; margin: 0; color: #6d7f85; padding-top: 20px; }
+        .footer-copyright { font-size: 14px; margin: 0; color: #6d7f85; padding-bottom: 20px; }
+        .social-icon { display: inline-block; outline: none; border: none; text-decoration: none; margin-left: 5px; margin-right: 5px; }
+        .vml-button-wrapper { margin: 16px auto; text-align: center; }
+        .invite-code-container { margin: 16px auto; text-align: center; }
+        .free-markdown { text-align: left; }
+        .free-markdown p { margin-bottom: 16px; }
+        .free-markdown ul, .free-markdown ol { padding-left: 24px; margin-bottom: 16px; }
+        .free-markdown table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .free-markdown th { text-align: left; padding: 8px; background-color: #f0fdf9; border-bottom: 2px solid #3fc2b4; font-weight: 500; color: #082930; }
+        .free-markdown td { padding: 8px; border-bottom: 1px solid #e0e8ec; }
 
         /* Media Queries */
-        @media only screen and (max-width: {{ if .Email.Body.BodyWidth }}{{ .Email.Body.BodyWidth }}{{ else }}600px{{ end }}) {
+        @media only screen and (max-width: {{ if .Body.BodyWidth }}{{ .Body.BodyWidth }}{{ else }}600px{{ end }}) {
             .email-wrapper,
             .email-card {
                 width: 100% !important;
@@ -36,15 +96,15 @@
             }
         }
 
-        {{ if .Email.Body.AdditionalCSS }}{{ .Email.Body.AdditionalCSS | css }}{{ end }}
+        {{ if .Body.AdditionalCSS }}{{ .Body.AdditionalCSS | css }}{{ end }}
     </style>
 </head>
 
-<body class="theme-{{ .Renderer.Theme.Name }}" style="margin:0;padding:0;width:100%;font-family:'Outfit',Helvetica,Arial,sans-serif;line-height:1.625;color:#505f6f;box-sizing:border-box;">
+<body class="theme-openlane-standard" style="margin:0;padding:0;width:100%;font-family:'Outfit',Helvetica,Arial,sans-serif;line-height:1.625;color:#505f6f;box-sizing:border-box;">
     {{/* Preheader — hidden preview text for email clients */}}
-    {{ if .Email.Body.Preheader }}
+    {{ if .Body.Preheader }}
     <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">
-        {{- .Email.Body.Preheader -}}
+        {{- .Body.Preheader -}}
     </div>
     {{ end }}
     <table align="center" role="presentation" cellpadding="0" cellspacing="0" width="600" class="email-wrapper"
@@ -59,32 +119,32 @@
                             <!-- Logo -->
                             <tr style="width:100%">
                                 <td>
-                                    {{ if .Renderer.Branding.Logo }}
-                                    <a href="{{ .Renderer.Branding.Link }}" target="_blank">
-                                        <img alt="{{ .Renderer.Branding.Name }}" height="40"
-                                            src="{{ .Renderer.Branding.Logo | url }}"
+                                    {{ if .Config.LogoURL }}
+                                    <a href="{{ .Config.ProductURL }}" target="_blank">
+                                        <img alt="{{ .Config.CompanyName }}" height="40"
+                                            src="{{ .Config.LogoURL | url }}"
                                             class="email-logo"
                                             style="display:block;outline:none;border:none;text-decoration:none;height:auto;margin-left:auto;margin-right:auto;margin-bottom:24px;"
                                             width="162" />
                                     </a>
                                     {{ else }}
                                     <h2 style="text-align:center;margin-bottom:24px;">
-                                        <a href="{{ .Renderer.Branding.Link }}" target="_blank" style="color:#082930;text-decoration:none;">{{ .Renderer.Branding.Name }}</a>
+                                        <a href="{{ .Config.ProductURL }}" target="_blank" style="color:#082930;text-decoration:none;">{{ .Config.CompanyName }}</a>
                                     </h2>
                                     {{ end }}
                                 </td>
                             </tr>
 
                             {{/* Icon — circular image between logo and content */}}
-                            {{ if .Email.Body.Icon }}
+                            {{ if .Body.Icon }}
                             <tr style="width:105px;height:105px">
                                 <td>
                                     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"
                                         style="width: 105px; height: 105px; background-color: #f0fdf9; border-radius: 52.5px;">
                                         <tr>
                                             <td align="center" valign="middle" style="width:105px;height:105px;vertical-align:middle;text-align:center;">
-                                                <img alt="{{ .Email.Body.Icon.Alt }}" height="68" width="67" style="display:block;margin-left:auto;margin-right:auto;"
-                                                    src="{{ .Email.Body.Icon.Src | url }}" />
+                                                <img alt="{{ .Body.Icon.Alt }}" height="68" width="67" style="display:block;margin-left:auto;margin-right:auto;"
+                                                    src="{{ .Body.Icon.Src | url }}" />
                                             </td>
                                         </tr>
                                     </table>
@@ -97,37 +157,37 @@
                                 <td class="content-cell" style="text-align:center;">
 
                                     {{/* Title or Greeting */}}
-                                    {{ if .Email.Body.Title }}
-                                    <h1>{{ .Email.Body.Title }}</h1>
-                                    {{ else if and .Email.Body.Greeting .Email.Body.Name }}
-                                    <p class="justify">{{ .Email.Body.Greeting }} {{ .Email.Body.Name }},</p>
+                                    {{ if .Body.Title }}
+                                    <h1>{{ .Body.Title }}</h1>
+                                    {{ else if and .Body.Greeting .Body.Name }}
+                                    <p class="justify">{{ .Body.Greeting }} {{ .Body.Name }},</p>
                                     {{ end }}
 
                                     {{/* Intros */}}
-                                    {{ if ne .Email.Body.IntrosMarkdown "" }}
-                                        {{ .Email.Body.IntrosMarkdown.ToHTML }}
-                                    {{ else if gt (len .Email.Body.IntrosUnsafe) 0 }}
-                                        {{ range $line := .Email.Body.IntrosUnsafe }}
+                                    {{ if ne .Body.Intros.Markdown "" }}
+                                        {{ .Body.Intros.Markdown.ToHTML }}
+                                    {{ else if gt (len .Body.Intros.Unsafe) 0 }}
+                                        {{ range $line := .Body.Intros.Unsafe }}
                                         <p>{{ $line }}</p>
                                         {{ end }}
                                     {{ else }}
-                                        {{ range $line := .Email.Body.Intros }}
+                                        {{ range $line := .Body.Intros.Paragraphs}}
                                         <p>{{ $line }}</p>
                                         {{ end }}
                                     {{ end }}
 
                                     {{/* Content Blocks — standalone HTML blocks between intros and structured content */}}
-                                    {{ range $block := .Email.Body.ContentBlocks }}
+                                    {{ range $block := .Body.ContentBlocks }}
                                         {{ $block }}
                                     {{ end }}
 
                                     {{/* FreeMarkdown replaces structured content */}}
-                                    {{ if ne .Email.Body.FreeMarkdown "" }}
-                                        <div class="free-markdown">{{ .Email.Body.FreeMarkdown.ToHTML }}</div>
+                                    {{ if ne .Body.FreeMarkdown "" }}
+                                        <div class="free-markdown">{{ .Body.FreeMarkdown.ToHTML }}</div>
                                     {{ else }}
 
                                         {{/* Dictionary */}}
-                                        {{ with .Email.Body.Dictionary }}
+                                        {{ with .Body.Dictionary.Cells }}
                                             {{ if gt (len .) 0 }}
                                             <dl class="body-dictionary">
                                                 {{ range $entry := . }}
@@ -149,7 +209,7 @@
                                         {{ end }}
 
                                         {{/* Tables */}}
-                                        {{ with .Email.Body.Tables }}
+                                        {{ with .Body.Tables }}
                                             {{ if gt (len .) 0 }}
                                                 {{ range $table := . }}
                                                     {{ $data := .Data }}
@@ -202,7 +262,7 @@
                                         {{ end }}
 
                                         {{/* Actions */}}
-                                        {{ with .Email.Body.Actions }}
+                                        {{ with .Body.Actions }}
                                             {{ if gt (len .) 0 }}
                                                 {{ $defaultColor := "#60e8c9" }}
                                                 {{ $defaultTextColor := "#082930" }}
@@ -267,14 +327,14 @@
                                     {{ end }}
 
                                     {{/* Outros */}}
-                                    {{ if ne .Email.Body.OutrosMarkdown "" }}
-                                        {{ .Email.Body.OutrosMarkdown.ToHTML }}
-                                    {{ else if gt (len .Email.Body.OutrosUnsafe) 0 }}
-                                        {{ range $line := .Email.Body.OutrosUnsafe }}
+                                    {{ if ne .Body.Outros.Markdown "" }}
+                                        {{ .Body.Outros.Markdown.ToHTML }}
+                                    {{ else if gt (len .Body.Outros.Unsafe) 0 }}
+                                        {{ range $line := .Body.Outros.Unsafe }}
                                         <p>{{ $line }}</p>
                                         {{ end }}
                                     {{ else }}
-                                        {{ range $line := .Email.Body.Outros }}
+                                        {{ range $line := .Body.Outros.Paragraphs}}
                                         <p>{{ $line }}</p>
                                         {{ end }}
                                     {{ end }}
@@ -288,9 +348,9 @@
 
                                     {{/* Signature */}}
                                     <hr class="signature-divider" style="width:100%;border:none;border-top:1px solid #e0e8ec;margin-bottom:24px;" />
-                                    {{ if and .Email.Body.Signature (gt (len .Email.Body.Signature) 0) }}
+                                    {{ if and .Body.Signature (gt (len .Body.Signature) 0) }}
                                         <p class="signature-text" style="font-size:16px;line-height:24px;margin-bottom:10px;margin-top:16px;">
-                                            <b>{{ .Email.Body.Signature }}{{ if .Email.Body.SignatureName }}<br />{{ .Email.Body.SignatureName }}{{ end }}</b>
+                                            <b>{{ .Body.Signature }}{{ if .Body.SignatureName }}<br />{{ .Body.SignatureName }}{{ end }}</b>
                                         </p>
                                     {{ else }}
                                         <p class="signature-text" style="font-size:16px;line-height:24px;margin-bottom:10px;margin-top:16px;">
@@ -313,26 +373,26 @@
                         <tbody>
                             <tr style="width:100%">
                                 <td align="center" class="footer-links" style="text-align:center;">
-                                    <a href="{{ .Renderer.Branding.RootURL }}/legal/terms-of-service"
+                                    <a href="{{ .Config.RootURL }}/legal/terms-of-service"
                                         style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
                                         target="_blank">Terms</a>
-                                    <a href="{{ .Renderer.Branding.RootURL }}/legal/privacy"
+                                    <a href="{{ .Config.RootURL }}/legal/privacy"
                                         style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
                                         target="_blank">Privacy</a>
-                                    <a href="{{ .Renderer.Branding.UnsubscribeURL }}"
+                                    <a href="{{ .Config.UnsubscribeURL }}"
                                         style="color:#052e2a;text-decoration:none;font-weight:500;margin-left:10px;margin-right:10px;font-size:12px;"
                                         target="_blank">Unsubscribe</a>
                                 </td>
                             </tr>
                             <tr style="width:100%">
                                 <td align="center" style="text-align:center;">
-                                    {{ if .Renderer.Branding.CompanyAddress }}
+                                    {{ if .Config.CompanyAddress }}
                                     <p class="footer-address" style="font-size:14px;margin:0;color:#6d7f85;padding-top:20px;">
-                                        {{ .Renderer.Branding.CompanyAddress }}
+                                        {{ .Config.CompanyAddress }}
                                     </p>
                                     {{ end }}
-                                    <p class="footer-copyright" style="font-size:14px;margin:0;color:#6d7f85;{{ if not .Renderer.Branding.CompanyAddress }}padding-top:20px;{{ end }}padding-bottom:20px;">
-                                        {{ .Renderer.Branding.Copyright }}
+                                    <p class="footer-copyright" style="font-size:14px;margin:0;color:#6d7f85;{{ if not .Config.CompanyAddress }}padding-top:20px;{{ end }}padding-bottom:20px;">
+                                        {{ .Config.Copyright }}
                                     </p>
                                 </td>
                             </tr>

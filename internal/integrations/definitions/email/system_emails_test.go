@@ -374,11 +374,11 @@ func TestBillingChangedContent(t *testing.T) {
 	assert.Contains(t, block, "new@billing.com")
 }
 
-// TestAllEmailOperationsCount verifies the expected number of operations are registered
+// TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration
 func TestAllEmailOperationsCount(t *testing.T) {
 	ops := AllEmailOperations()
 
-	assert.Len(t, ops, 13)
+	assert.Len(t, ops, len(allDispatchers()))
 }
 
 // TestAllEmailOperationsHaveNames verifies each operation registration has a non-empty name

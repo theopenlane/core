@@ -116,7 +116,7 @@ func HookInvite() ent.Hook {
 				return retValue, ErrInternalServerError
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteOp.Name(), emaildef.InviteRequest{
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteModernOp.Name(), emaildef.InviteModernRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				InviterName:   inviterName,
 				OrgName:       orgName,

@@ -3,7 +3,6 @@ package email
 import (
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/email/themes"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 )
 
@@ -44,7 +43,7 @@ var (
 var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
 	Schema:             brandedMessageSchema,
-	Theme:              themes.ModernMessage,
+	Theme:              modernMessageTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
 	CustomerSelectable: true,
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {
