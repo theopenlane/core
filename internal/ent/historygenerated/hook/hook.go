@@ -215,18 +215,6 @@ func (f DocumentDataHistoryFunc) Mutate(ctx context.Context, m historygenerated.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.DocumentDataHistoryMutation", m)
 }
 
-// The EmailBrandingHistoryFunc type is an adapter to allow the use of ordinary
-// function as EmailBrandingHistory mutator.
-type EmailBrandingHistoryFunc func(context.Context, *historygenerated.EmailBrandingHistoryMutation) (historygenerated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f EmailBrandingHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
-	if mv, ok := m.(*historygenerated.EmailBrandingHistoryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.EmailBrandingHistoryMutation", m)
-}
-
 // The EmailTemplateHistoryFunc type is an adapter to allow the use of ordinary
 // function as EmailTemplateHistory mutator.
 type EmailTemplateHistoryFunc func(context.Context, *historygenerated.EmailTemplateHistoryMutation) (historygenerated.Value, error)

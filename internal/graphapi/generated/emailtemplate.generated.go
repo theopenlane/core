@@ -118,8 +118,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_EmailTemplate_integration(ctx, field)
 			case "workflowDefinition":
@@ -258,8 +256,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_EmailTemplate_integration(ctx, field)
 			case "workflowDefinition":
@@ -398,8 +394,6 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_EmailTemplate_integration(ctx, field)
 			case "workflowDefinition":
@@ -538,8 +532,6 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_EmailTemplate_integration(ctx, field)
 			case "workflowDefinition":

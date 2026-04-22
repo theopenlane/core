@@ -1123,10 +1123,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "DocumentData",
 		Rules:      []CSVReferenceRule{},
 	},
-	"EmailBranding": {
-		SchemaName: "EmailBranding",
-		Rules:      []CSVReferenceRule{},
-	},
 	"EmailTemplate": {
 		SchemaName: "EmailTemplate",
 		Rules:      []CSVReferenceRule{},
@@ -2320,24 +2316,6 @@ type DocumentDataCSVUpdateInput struct {
 
 // CSVInputWrapper marks DocumentDataCSVUpdateInput for CSV header preprocessing.
 func (DocumentDataCSVUpdateInput) CSVInputWrapper() {}
-
-// EmailBrandingCSVInput wraps CreateEmailBrandingInput with CSV reference columns.
-type EmailBrandingCSVInput struct {
-	Input generated.CreateEmailBrandingInput
-}
-
-// CSVInputWrapper marks EmailBrandingCSVInput for CSV header preprocessing.
-func (EmailBrandingCSVInput) CSVInputWrapper() {}
-
-// EmailBrandingCSVUpdateInput wraps UpdateEmailBrandingInput with CSV reference columns for bulk updates.
-type EmailBrandingCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateEmailBrandingInput
-}
-
-// CSVInputWrapper marks EmailBrandingCSVUpdateInput for CSV header preprocessing.
-func (EmailBrandingCSVUpdateInput) CSVInputWrapper() {}
 
 // EmailTemplateCSVInput wraps CreateEmailTemplateInput with CSV reference columns.
 type EmailTemplateCSVInput struct {

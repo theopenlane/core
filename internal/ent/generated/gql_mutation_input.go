@@ -1927,6 +1927,7 @@ type CreateCampaignInput struct {
 	ResendCount            *int
 	LastResentAt           *models.DateTime
 	Metadata               map[string]interface{}
+	EmailBrandingID        *string
 	OwnerID                *string
 	BlockedGroupIDs        []string
 	EditorIDs              []string
@@ -1935,7 +1936,6 @@ type CreateCampaignInput struct {
 	InternalOwnerGroupID   *string
 	AssessmentID           *string
 	TemplateID             *string
-	EmailBrandingID        *string
 	IntegrationID          *string
 	EmailTemplateID        *string
 	EntityID               *string
@@ -2021,6 +2021,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
 	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -2044,9 +2047,6 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
-	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -2135,6 +2135,8 @@ type UpdateCampaignInput struct {
 	LastResentAt                *models.DateTime
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearEmailBrandingID        bool
+	EmailBrandingID             *string
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string
 	RemoveBlockedGroupIDs       []string
@@ -2152,8 +2154,6 @@ type UpdateCampaignInput struct {
 	AssessmentID                *string
 	ClearTemplate               bool
 	TemplateID                  *string
-	ClearEmailBranding          bool
-	EmailBrandingID             *string
 	ClearIntegration            bool
 	IntegrationID               *string
 	ClearEmailTemplate          bool
@@ -2320,6 +2320,12 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
 	}
+	if i.ClearEmailBrandingID {
+		m.ClearEmailBrandingID()
+	}
+	if v := i.EmailBrandingID; v != nil {
+		m.SetEmailBrandingID(*v)
+	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
 	}
@@ -2370,12 +2376,6 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
-	}
-	if i.ClearEmailBranding {
-		m.ClearEmailBranding()
-	}
-	if v := i.EmailBrandingID; v != nil {
-		m.SetEmailBrandingID(*v)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()
@@ -6657,278 +6657,6 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 	return c
 }
 
-// CreateEmailBrandingInput represents a mutation input for creating emailbrandings.
-type CreateEmailBrandingInput struct {
-	Tags             []string
-	Name             string
-	BrandName        *string
-	LogoRemoteURL    *string
-	PrimaryColor     *string
-	SecondaryColor   *string
-	BackgroundColor  *string
-	TextColor        *string
-	ButtonColor      *string
-	ButtonTextColor  *string
-	LinkColor        *string
-	FontFamily       *enums.Font
-	IsDefault        *bool
-	OwnerID          *string
-	BlockedGroupIDs  []string
-	EditorIDs        []string
-	ViewerIDs        []string
-	CampaignIDs      []string
-	EmailTemplateIDs []string
-}
-
-// Mutate applies the CreateEmailBrandingInput on the EmailBrandingMutation builder.
-func (i *CreateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	m.SetName(i.Name)
-	if v := i.BrandName; v != nil {
-		m.SetBrandName(*v)
-	}
-	if v := i.LogoRemoteURL; v != nil {
-		m.SetLogoRemoteURL(*v)
-	}
-	if v := i.PrimaryColor; v != nil {
-		m.SetPrimaryColor(*v)
-	}
-	if v := i.SecondaryColor; v != nil {
-		m.SetSecondaryColor(*v)
-	}
-	if v := i.BackgroundColor; v != nil {
-		m.SetBackgroundColor(*v)
-	}
-	if v := i.TextColor; v != nil {
-		m.SetTextColor(*v)
-	}
-	if v := i.ButtonColor; v != nil {
-		m.SetButtonColor(*v)
-	}
-	if v := i.ButtonTextColor; v != nil {
-		m.SetButtonTextColor(*v)
-	}
-	if v := i.LinkColor; v != nil {
-		m.SetLinkColor(*v)
-	}
-	if v := i.FontFamily; v != nil {
-		m.SetFontFamily(*v)
-	}
-	if v := i.IsDefault; v != nil {
-		m.SetIsDefault(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.CampaignIDs; len(v) > 0 {
-		m.AddCampaignIDs(v...)
-	}
-	if v := i.EmailTemplateIDs; len(v) > 0 {
-		m.AddEmailTemplateIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateEmailBrandingInput on the EmailBrandingCreate builder.
-func (c *EmailBrandingCreate) SetInput(i CreateEmailBrandingInput) *EmailBrandingCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateEmailBrandingInput represents a mutation input for updating emailbrandings.
-type UpdateEmailBrandingInput struct {
-	ClearTags              bool
-	Tags                   []string
-	AppendTags             []string
-	Name                   *string
-	ClearBrandName         bool
-	BrandName              *string
-	ClearLogoRemoteURL     bool
-	LogoRemoteURL          *string
-	ClearPrimaryColor      bool
-	PrimaryColor           *string
-	ClearSecondaryColor    bool
-	SecondaryColor         *string
-	ClearBackgroundColor   bool
-	BackgroundColor        *string
-	ClearTextColor         bool
-	TextColor              *string
-	ClearButtonColor       bool
-	ButtonColor            *string
-	ClearButtonTextColor   bool
-	ButtonTextColor        *string
-	ClearLinkColor         bool
-	LinkColor              *string
-	ClearFontFamily        bool
-	FontFamily             *enums.Font
-	ClearIsDefault         bool
-	IsDefault              *bool
-	ClearBlockedGroups     bool
-	AddBlockedGroupIDs     []string
-	RemoveBlockedGroupIDs  []string
-	ClearEditors           bool
-	AddEditorIDs           []string
-	RemoveEditorIDs        []string
-	ClearViewers           bool
-	AddViewerIDs           []string
-	RemoveViewerIDs        []string
-	ClearCampaigns         bool
-	AddCampaignIDs         []string
-	RemoveCampaignIDs      []string
-	ClearEmailTemplates    bool
-	AddEmailTemplateIDs    []string
-	RemoveEmailTemplateIDs []string
-}
-
-// Mutate applies the UpdateEmailBrandingInput on the EmailBrandingMutation builder.
-func (i *UpdateEmailBrandingInput) Mutate(m *EmailBrandingMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
-	if i.ClearBrandName {
-		m.ClearBrandName()
-	}
-	if v := i.BrandName; v != nil {
-		m.SetBrandName(*v)
-	}
-	if i.ClearLogoRemoteURL {
-		m.ClearLogoRemoteURL()
-	}
-	if v := i.LogoRemoteURL; v != nil {
-		m.SetLogoRemoteURL(*v)
-	}
-	if i.ClearPrimaryColor {
-		m.ClearPrimaryColor()
-	}
-	if v := i.PrimaryColor; v != nil {
-		m.SetPrimaryColor(*v)
-	}
-	if i.ClearSecondaryColor {
-		m.ClearSecondaryColor()
-	}
-	if v := i.SecondaryColor; v != nil {
-		m.SetSecondaryColor(*v)
-	}
-	if i.ClearBackgroundColor {
-		m.ClearBackgroundColor()
-	}
-	if v := i.BackgroundColor; v != nil {
-		m.SetBackgroundColor(*v)
-	}
-	if i.ClearTextColor {
-		m.ClearTextColor()
-	}
-	if v := i.TextColor; v != nil {
-		m.SetTextColor(*v)
-	}
-	if i.ClearButtonColor {
-		m.ClearButtonColor()
-	}
-	if v := i.ButtonColor; v != nil {
-		m.SetButtonColor(*v)
-	}
-	if i.ClearButtonTextColor {
-		m.ClearButtonTextColor()
-	}
-	if v := i.ButtonTextColor; v != nil {
-		m.SetButtonTextColor(*v)
-	}
-	if i.ClearLinkColor {
-		m.ClearLinkColor()
-	}
-	if v := i.LinkColor; v != nil {
-		m.SetLinkColor(*v)
-	}
-	if i.ClearFontFamily {
-		m.ClearFontFamily()
-	}
-	if v := i.FontFamily; v != nil {
-		m.SetFontFamily(*v)
-	}
-	if i.ClearIsDefault {
-		m.ClearIsDefault()
-	}
-	if v := i.IsDefault; v != nil {
-		m.SetIsDefault(*v)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
-	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
-	}
-	if i.ClearCampaigns {
-		m.ClearCampaigns()
-	}
-	if v := i.AddCampaignIDs; len(v) > 0 {
-		m.AddCampaignIDs(v...)
-	}
-	if v := i.RemoveCampaignIDs; len(v) > 0 {
-		m.RemoveCampaignIDs(v...)
-	}
-	if i.ClearEmailTemplates {
-		m.ClearEmailTemplates()
-	}
-	if v := i.AddEmailTemplateIDs; len(v) > 0 {
-		m.AddEmailTemplateIDs(v...)
-	}
-	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
-		m.RemoveEmailTemplateIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateEmailBrandingInput on the EmailBrandingUpdate builder.
-func (c *EmailBrandingUpdate) SetInput(i UpdateEmailBrandingInput) *EmailBrandingUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateEmailBrandingInput on the EmailBrandingUpdateOne builder.
-func (c *EmailBrandingUpdateOne) SetInput(i UpdateEmailBrandingInput) *EmailBrandingUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreateEmailTemplateInput represents a mutation input for creating emailtemplates.
 type CreateEmailTemplateInput struct {
 	Revision                *string
@@ -6954,7 +6682,6 @@ type CreateEmailTemplateInput struct {
 	BlockedGroupIDs         []string
 	EditorIDs               []string
 	ViewerIDs               []string
-	EmailBrandingIDs        []string
 	IntegrationID           *string
 	WorkflowDefinitionID    *string
 	WorkflowInstanceID      *string
@@ -7028,9 +6755,6 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	if v := i.EmailBrandingIDs; len(v) > 0 {
-		m.AddEmailBrandingIDs(v...)
-	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
 	}
@@ -7099,9 +6823,6 @@ type UpdateEmailTemplateInput struct {
 	ClearViewers                  bool
 	AddViewerIDs                  []string
 	RemoveViewerIDs               []string
-	ClearEmailBranding            bool
-	AddEmailBrandingIDs           []string
-	RemoveEmailBrandingIDs        []string
 	ClearIntegration              bool
 	IntegrationID                 *string
 	ClearWorkflowDefinition       bool
@@ -7240,15 +6961,6 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
-	}
-	if i.ClearEmailBranding {
-		m.ClearEmailBranding()
-	}
-	if v := i.AddEmailBrandingIDs; len(v) > 0 {
-		m.AddEmailBrandingIDs(v...)
-	}
-	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
-		m.RemoveEmailBrandingIDs(v...)
 	}
 	if i.ClearIntegration {
 		m.ClearIntegration()
@@ -15881,7 +15593,6 @@ type CreateOrganizationInput struct {
 	SettingID                         *string
 	PersonalAccessTokenIDs            []string
 	APITokenIDs                       []string
-	EmailBrandingIDs                  []string
 	EmailTemplateIDs                  []string
 	NotificationPreferenceIDs         []string
 	NotificationTemplateIDs           []string
@@ -16059,9 +15770,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.APITokenIDs; len(v) > 0 {
 		m.AddAPITokenIDs(v...)
-	}
-	if v := i.EmailBrandingIDs; len(v) > 0 {
-		m.AddEmailBrandingIDs(v...)
 	}
 	if v := i.EmailTemplateIDs; len(v) > 0 {
 		m.AddEmailTemplateIDs(v...)
@@ -16380,9 +16088,6 @@ type UpdateOrganizationInput struct {
 	ClearAPITokens                          bool
 	AddAPITokenIDs                          []string
 	RemoveAPITokenIDs                       []string
-	ClearEmailBrandings                     bool
-	AddEmailBrandingIDs                     []string
-	RemoveEmailBrandingIDs                  []string
 	ClearEmailTemplates                     bool
 	AddEmailTemplateIDs                     []string
 	RemoveEmailTemplateIDs                  []string
@@ -16862,15 +16567,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAPITokenIDs; len(v) > 0 {
 		m.RemoveAPITokenIDs(v...)
-	}
-	if i.ClearEmailBrandings {
-		m.ClearEmailBrandings()
-	}
-	if v := i.AddEmailBrandingIDs; len(v) > 0 {
-		m.AddEmailBrandingIDs(v...)
-	}
-	if v := i.RemoveEmailBrandingIDs; len(v) > 0 {
-		m.RemoveEmailBrandingIDs(v...)
 	}
 	if i.ClearEmailTemplates {
 		m.ClearEmailTemplates()

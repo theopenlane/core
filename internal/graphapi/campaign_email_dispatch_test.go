@@ -39,22 +39,11 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		}).
 		SaveX(ctx)
 
-	emailBranding := suite.client.db.EmailBranding.Create().
-		SetName("Dispatch Test Branding").
-		SetBrandName("TestBrand").
-		SetButtonColor("#ff5500").
-		SetButtonTextColor("#ffffff").
-		SetBackgroundColor("#f0f0f0").
-		SetTextColor("#333333").
-		SetLinkColor("#0066cc").
-		SaveX(ctx)
-
 	campaignObj := suite.client.db.Campaign.Create().
 		SetName("Dispatch Integration Test Campaign").
 		SetDescription("Testing email dispatch pipeline").
 		SetOwnerID(testUser1.OrganizationID).
 		SetEmailTemplateID(emailTemplate.ID).
-		SetEmailBrandingID(emailBranding.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SetMetadata(map[string]any{
 			"promoCode": "SUMMER2025",
@@ -87,10 +76,6 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		(&Cleanup[*generated.EmailTemplateDeleteOne]{
 			client: suite.client.db.EmailTemplate,
 			ID:     emailTemplate.ID,
-		}).MustDelete(testUser1.UserCtx, t)
-		(&Cleanup[*generated.EmailBrandingDeleteOne]{
-			client: suite.client.db.EmailBranding,
-			ID:     emailBranding.ID,
 		}).MustDelete(testUser1.UserCtx, t)
 	}()
 

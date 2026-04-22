@@ -249,18 +249,6 @@ func (f DocumentDataFunc) Mutate(ctx context.Context, m generated.Mutation) (gen
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DocumentDataMutation", m)
 }
 
-// The EmailBrandingFunc type is an adapter to allow the use of ordinary
-// function as EmailBranding mutator.
-type EmailBrandingFunc func(context.Context, *generated.EmailBrandingMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f EmailBrandingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.EmailBrandingMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.EmailBrandingMutation", m)
-}
-
 // The EmailTemplateFunc type is an adapter to allow the use of ordinary
 // function as EmailTemplate mutator.
 type EmailTemplateFunc func(context.Context, *generated.EmailTemplateMutation) (generated.Value, error)

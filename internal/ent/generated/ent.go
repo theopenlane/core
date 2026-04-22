@@ -32,7 +32,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -199,7 +198,6 @@ func checkColumn(t, c string) error {
 			directorysyncrun.Table:           directorysyncrun.ValidColumn,
 			discussion.Table:                 discussion.ValidColumn,
 			documentdata.Table:               documentdata.ValidColumn,
-			emailbranding.Table:              emailbranding.ValidColumn,
 			emailtemplate.Table:              emailtemplate.ValidColumn,
 			emailverificationtoken.Table:     emailverificationtoken.ValidColumn,
 			entity.Table:                     entity.ValidColumn,

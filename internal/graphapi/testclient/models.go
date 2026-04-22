@@ -2605,7 +2605,7 @@ type Campaign struct {
 	AssessmentID *string `json:"assessmentID,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]any `json:"metadata,omitempty"`
-	// the email branding associated with the campaign
+	// the email branding or theme reference the campaign may use to override the email templates theme
 	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID *string `json:"emailTemplateID,omitempty"`
@@ -2619,7 +2619,6 @@ type Campaign struct {
 	InternalOwnerGroup  *Group                        `json:"internalOwnerGroup,omitempty"`
 	Assessment          *Assessment                   `json:"assessment,omitempty"`
 	Template            *Template                     `json:"template,omitempty"`
-	EmailBranding       *EmailBranding                `json:"emailBranding,omitempty"`
 	Integration         *Integration                  `json:"integration,omitempty"`
 	EmailTemplate       *EmailTemplate                `json:"emailTemplate,omitempty"`
 	Entity              *Entity                       `json:"entity,omitempty"`
@@ -3514,9 +3513,6 @@ type CampaignWhereInput struct {
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
-	// email_branding edge predicates
-	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
-	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
 	// integration edge predicates
 	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
 	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
@@ -5943,27 +5939,28 @@ type CreateCampaignInput struct {
 	// when campaign notifications were last resent
 	LastResentAt *models.DateTime `json:"lastResentAt,omitempty"`
 	// additional metadata about the campaign
-	Metadata              map[string]any `json:"metadata,omitempty"`
-	OwnerID               *string        `json:"ownerID,omitempty"`
-	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs             []string       `json:"editorIDs,omitempty"`
-	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
-	InternalOwnerUserID   *string        `json:"internalOwnerUserID,omitempty"`
-	InternalOwnerGroupID  *string        `json:"internalOwnerGroupID,omitempty"`
-	AssessmentID          *string        `json:"assessmentID,omitempty"`
-	TemplateID            *string        `json:"templateID,omitempty"`
-	EmailBrandingID       *string        `json:"emailBrandingID,omitempty"`
-	IntegrationID         *string        `json:"integrationID,omitempty"`
-	EmailTemplateID       *string        `json:"emailTemplateID,omitempty"`
-	EntityID              *string        `json:"entityID,omitempty"`
-	CampaignTargetIDs     []string       `json:"campaignTargetIDs,omitempty"`
-	AssessmentResponseIDs []string       `json:"assessmentResponseIDs,omitempty"`
-	ContactIDs            []string       `json:"contactIDs,omitempty"`
-	UserIDs               []string       `json:"userIDs,omitempty"`
-	GroupIDs              []string       `json:"groupIDs,omitempty"`
-	IdentityHolderIDs     []string       `json:"identityHolderIDs,omitempty"`
-	ControlIDs            []string       `json:"controlIDs,omitempty"`
-	WorkflowObjectRefIDs  []string       `json:"workflowObjectRefIDs,omitempty"`
+	Metadata map[string]any `json:"metadata,omitempty"`
+	// the email branding or theme reference the campaign may use to override the email templates theme
+	EmailBrandingID       *string  `json:"emailBrandingID,omitempty"`
+	OwnerID               *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string `json:"editorIDs,omitempty"`
+	ViewerIDs             []string `json:"viewerIDs,omitempty"`
+	InternalOwnerUserID   *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerGroupID  *string  `json:"internalOwnerGroupID,omitempty"`
+	AssessmentID          *string  `json:"assessmentID,omitempty"`
+	TemplateID            *string  `json:"templateID,omitempty"`
+	IntegrationID         *string  `json:"integrationID,omitempty"`
+	EmailTemplateID       *string  `json:"emailTemplateID,omitempty"`
+	EntityID              *string  `json:"entityID,omitempty"`
+	CampaignTargetIDs     []string `json:"campaignTargetIDs,omitempty"`
+	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
+	ContactIDs            []string `json:"contactIDs,omitempty"`
+	UserIDs               []string `json:"userIDs,omitempty"`
+	GroupIDs              []string `json:"groupIDs,omitempty"`
+	IdentityHolderIDs     []string `json:"identityHolderIDs,omitempty"`
+	ControlIDs            []string `json:"controlIDs,omitempty"`
+	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateCampaignTargetInput is used for create CampaignTarget object.
@@ -6539,43 +6536,6 @@ type CreateDocumentDataInput struct {
 	FileIDs       []string       `json:"fileIDs,omitempty"`
 }
 
-// CreateEmailBrandingInput is used for create EmailBranding object.
-// Input was generated by ent.
-type CreateEmailBrandingInput struct {
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// friendly name for this email branding configuration
-	Name string `json:"name"`
-	// brand name displayed in templates
-	BrandName *string `json:"brandName,omitempty"`
-	// URL of the brand logo for emails
-	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
-	// primary brand color for emails
-	PrimaryColor *string `json:"primaryColor,omitempty"`
-	// secondary brand color for emails
-	SecondaryColor *string `json:"secondaryColor,omitempty"`
-	// background color for emails
-	BackgroundColor *string `json:"backgroundColor,omitempty"`
-	// text color for emails
-	TextColor *string `json:"textColor,omitempty"`
-	// button background color for emails
-	ButtonColor *string `json:"buttonColor,omitempty"`
-	// button text color for emails
-	ButtonTextColor *string `json:"buttonTextColor,omitempty"`
-	// link color for emails
-	LinkColor *string `json:"linkColor,omitempty"`
-	// font family for emails
-	FontFamily *enums.Font `json:"fontFamily,omitempty"`
-	// whether this is the default email branding for the organization
-	IsDefault        *bool    `json:"isDefault,omitempty"`
-	OwnerID          *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs  []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs        []string `json:"editorIDs,omitempty"`
-	ViewerIDs        []string `json:"viewerIDs,omitempty"`
-	CampaignIDs      []string `json:"campaignIDs,omitempty"`
-	EmailTemplateIDs []string `json:"emailTemplateIDs,omitempty"`
-}
-
 // CreateEmailTemplateInput is used for create EmailTemplate object.
 // Input was generated by ent.
 type CreateEmailTemplateInput struct {
@@ -6621,7 +6581,6 @@ type CreateEmailTemplateInput struct {
 	BlockedGroupIDs         []string       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs               []string       `json:"editorIDs,omitempty"`
 	ViewerIDs               []string       `json:"viewerIDs,omitempty"`
-	EmailBrandingIDs        []string       `json:"emailBrandingIDs,omitempty"`
 	IntegrationID           *string        `json:"integrationID,omitempty"`
 	WorkflowDefinitionID    *string        `json:"workflowDefinitionID,omitempty"`
 	WorkflowInstanceID      *string        `json:"workflowInstanceID,omitempty"`
@@ -7765,7 +7724,6 @@ type CreateOrganizationInput struct {
 	SettingID                         *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs            []string                        `json:"personalAccessTokenIDs,omitempty"`
 	APITokenIDs                       []string                        `json:"apiTokenIDs,omitempty"`
-	EmailBrandingIDs                  []string                        `json:"emailBrandingIDs,omitempty"`
 	EmailTemplateIDs                  []string                        `json:"emailTemplateIDs,omitempty"`
 	NotificationPreferenceIDs         []string                        `json:"notificationPreferenceIDs,omitempty"`
 	NotificationTemplateIDs           []string                        `json:"notificationTemplateIDs,omitempty"`
@@ -12920,393 +12878,6 @@ type DocumentDataWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
-type EmailBranding struct {
-	ID        string     `json:"id"`
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
-	CreatedBy *string    `json:"createdBy,omitempty"`
-	UpdatedBy *string    `json:"updatedBy,omitempty"`
-	// tags associated with the object
-	Tags []string `json:"tags,omitempty"`
-	// the ID of the organization owner of the object
-	OwnerID *string `json:"ownerID,omitempty"`
-	// friendly name for this email branding configuration
-	Name string `json:"name"`
-	// brand name displayed in templates
-	BrandName *string `json:"brandName,omitempty"`
-	// URL of the brand logo for emails
-	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
-	// primary brand color for emails
-	PrimaryColor *string `json:"primaryColor,omitempty"`
-	// secondary brand color for emails
-	SecondaryColor *string `json:"secondaryColor,omitempty"`
-	// background color for emails
-	BackgroundColor *string `json:"backgroundColor,omitempty"`
-	// text color for emails
-	TextColor *string `json:"textColor,omitempty"`
-	// button background color for emails
-	ButtonColor *string `json:"buttonColor,omitempty"`
-	// button text color for emails
-	ButtonTextColor *string `json:"buttonTextColor,omitempty"`
-	// link color for emails
-	LinkColor *string `json:"linkColor,omitempty"`
-	// font family for emails
-	FontFamily *enums.Font `json:"fontFamily,omitempty"`
-	// whether this is the default email branding for the organization
-	IsDefault      *bool                    `json:"isDefault,omitempty"`
-	Owner          *Organization            `json:"owner,omitempty"`
-	BlockedGroups  *GroupConnection         `json:"blockedGroups"`
-	Editors        *GroupConnection         `json:"editors"`
-	Viewers        *GroupConnection         `json:"viewers"`
-	Campaigns      *CampaignConnection      `json:"campaigns"`
-	EmailTemplates *EmailTemplateConnection `json:"emailTemplates"`
-}
-
-func (EmailBranding) IsNode() {}
-
-// Return response for createBulkEmailBranding mutation
-type EmailBrandingBulkCreatePayload struct {
-	// Created emailBrandings
-	EmailBrandings []*EmailBranding `json:"emailBrandings,omitempty"`
-}
-
-// Return response for deleteBulkEmailBranding mutation
-type EmailBrandingBulkDeletePayload struct {
-	// Deleted emailBranding IDs
-	DeletedIDs []string `json:"deletedIDs"`
-}
-
-// Return response for updateBulkEmailBranding mutation
-type EmailBrandingBulkUpdatePayload struct {
-	// Updated emailBrandings
-	EmailBrandings []*EmailBranding `json:"emailBrandings,omitempty"`
-	// IDs of the updated emailBrandings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-}
-
-// A connection to a list of items.
-type EmailBrandingConnection struct {
-	// A list of edges.
-	Edges []*EmailBrandingEdge `json:"edges,omitempty"`
-	// Information to aid in pagination.
-	PageInfo *PageInfo `json:"pageInfo"`
-	// Identifies the total count of items in the connection.
-	TotalCount int64 `json:"totalCount"`
-}
-
-// Return response for createEmailBranding mutation
-type EmailBrandingCreatePayload struct {
-	// Created emailBranding
-	EmailBranding *EmailBranding `json:"emailBranding"`
-}
-
-// Return response for deleteEmailBranding mutation
-type EmailBrandingDeletePayload struct {
-	// Deleted emailBranding ID
-	DeletedID string `json:"deletedID"`
-}
-
-// An edge in a connection.
-type EmailBrandingEdge struct {
-	// The item at the end of the edge.
-	Node *EmailBranding `json:"node,omitempty"`
-	// A cursor for use in pagination.
-	Cursor string `json:"cursor"`
-}
-
-// Ordering options for EmailBranding connections
-type EmailBrandingOrder struct {
-	// The ordering direction.
-	Direction OrderDirection `json:"direction"`
-	// The field by which to order EmailBrandings.
-	Field EmailBrandingOrderField `json:"field"`
-}
-
-// Return response for updateEmailBranding mutation
-type EmailBrandingUpdatePayload struct {
-	// Updated emailBranding
-	EmailBranding *EmailBranding `json:"emailBranding"`
-}
-
-// EmailBrandingWhereInput is used for filtering EmailBranding objects.
-// Input was generated by ent.
-type EmailBrandingWhereInput struct {
-	Not *EmailBrandingWhereInput   `json:"not,omitempty"`
-	And []*EmailBrandingWhereInput `json:"and,omitempty"`
-	Or  []*EmailBrandingWhereInput `json:"or,omitempty"`
-	// id field predicates
-	ID             *string  `json:"id,omitempty"`
-	IDNeq          *string  `json:"idNEQ,omitempty"`
-	IDIn           []string `json:"idIn,omitempty"`
-	IDNotIn        []string `json:"idNotIn,omitempty"`
-	IDGt           *string  `json:"idGT,omitempty"`
-	IDGte          *string  `json:"idGTE,omitempty"`
-	IDLt           *string  `json:"idLT,omitempty"`
-	IDLte          *string  `json:"idLTE,omitempty"`
-	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
-	IDContainsFold *string  `json:"idContainsFold,omitempty"`
-	// created_at field predicates
-	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
-	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
-	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
-	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
-	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
-	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
-	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
-	// updated_at field predicates
-	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
-	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
-	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
-	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
-	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
-	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
-	// created_by field predicates
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGt           *string  `json:"createdByGT,omitempty"`
-	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLt           *string  `json:"createdByLT,omitempty"`
-	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-	// updated_by field predicates
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-	// owner_id field predicates
-	OwnerID             *string  `json:"ownerID,omitempty"`
-	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
-	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
-	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
-	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
-	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
-	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
-	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
-	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
-	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
-	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
-	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
-	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
-	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
-	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// name field predicates
-	Name             *string  `json:"name,omitempty"`
-	NameNeq          *string  `json:"nameNEQ,omitempty"`
-	NameIn           []string `json:"nameIn,omitempty"`
-	NameNotIn        []string `json:"nameNotIn,omitempty"`
-	NameGt           *string  `json:"nameGT,omitempty"`
-	NameGte          *string  `json:"nameGTE,omitempty"`
-	NameLt           *string  `json:"nameLT,omitempty"`
-	NameLte          *string  `json:"nameLTE,omitempty"`
-	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
-	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
-	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
-	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-	// brand_name field predicates
-	BrandName             *string  `json:"brandName,omitempty"`
-	BrandNameNeq          *string  `json:"brandNameNEQ,omitempty"`
-	BrandNameIn           []string `json:"brandNameIn,omitempty"`
-	BrandNameNotIn        []string `json:"brandNameNotIn,omitempty"`
-	BrandNameGt           *string  `json:"brandNameGT,omitempty"`
-	BrandNameGte          *string  `json:"brandNameGTE,omitempty"`
-	BrandNameLt           *string  `json:"brandNameLT,omitempty"`
-	BrandNameLte          *string  `json:"brandNameLTE,omitempty"`
-	BrandNameContains     *string  `json:"brandNameContains,omitempty"`
-	BrandNameHasPrefix    *string  `json:"brandNameHasPrefix,omitempty"`
-	BrandNameHasSuffix    *string  `json:"brandNameHasSuffix,omitempty"`
-	BrandNameIsNil        *bool    `json:"brandNameIsNil,omitempty"`
-	BrandNameNotNil       *bool    `json:"brandNameNotNil,omitempty"`
-	BrandNameEqualFold    *string  `json:"brandNameEqualFold,omitempty"`
-	BrandNameContainsFold *string  `json:"brandNameContainsFold,omitempty"`
-	// logo_remote_url field predicates
-	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
-	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
-	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
-	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
-	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
-	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
-	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
-	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
-	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
-	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
-	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
-	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
-	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
-	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
-	// primary_color field predicates
-	PrimaryColor             *string  `json:"primaryColor,omitempty"`
-	PrimaryColorNeq          *string  `json:"primaryColorNEQ,omitempty"`
-	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
-	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
-	PrimaryColorGt           *string  `json:"primaryColorGT,omitempty"`
-	PrimaryColorGte          *string  `json:"primaryColorGTE,omitempty"`
-	PrimaryColorLt           *string  `json:"primaryColorLT,omitempty"`
-	PrimaryColorLte          *string  `json:"primaryColorLTE,omitempty"`
-	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
-	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
-	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
-	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
-	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
-	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
-	// secondary_color field predicates
-	SecondaryColor             *string  `json:"secondaryColor,omitempty"`
-	SecondaryColorNeq          *string  `json:"secondaryColorNEQ,omitempty"`
-	SecondaryColorIn           []string `json:"secondaryColorIn,omitempty"`
-	SecondaryColorNotIn        []string `json:"secondaryColorNotIn,omitempty"`
-	SecondaryColorGt           *string  `json:"secondaryColorGT,omitempty"`
-	SecondaryColorGte          *string  `json:"secondaryColorGTE,omitempty"`
-	SecondaryColorLt           *string  `json:"secondaryColorLT,omitempty"`
-	SecondaryColorLte          *string  `json:"secondaryColorLTE,omitempty"`
-	SecondaryColorContains     *string  `json:"secondaryColorContains,omitempty"`
-	SecondaryColorHasPrefix    *string  `json:"secondaryColorHasPrefix,omitempty"`
-	SecondaryColorHasSuffix    *string  `json:"secondaryColorHasSuffix,omitempty"`
-	SecondaryColorIsNil        *bool    `json:"secondaryColorIsNil,omitempty"`
-	SecondaryColorNotNil       *bool    `json:"secondaryColorNotNil,omitempty"`
-	SecondaryColorEqualFold    *string  `json:"secondaryColorEqualFold,omitempty"`
-	SecondaryColorContainsFold *string  `json:"secondaryColorContainsFold,omitempty"`
-	// background_color field predicates
-	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
-	BackgroundColorNeq          *string  `json:"backgroundColorNEQ,omitempty"`
-	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
-	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
-	BackgroundColorGt           *string  `json:"backgroundColorGT,omitempty"`
-	BackgroundColorGte          *string  `json:"backgroundColorGTE,omitempty"`
-	BackgroundColorLt           *string  `json:"backgroundColorLT,omitempty"`
-	BackgroundColorLte          *string  `json:"backgroundColorLTE,omitempty"`
-	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
-	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
-	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
-	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
-	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
-	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
-	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
-	// text_color field predicates
-	TextColor             *string  `json:"textColor,omitempty"`
-	TextColorNeq          *string  `json:"textColorNEQ,omitempty"`
-	TextColorIn           []string `json:"textColorIn,omitempty"`
-	TextColorNotIn        []string `json:"textColorNotIn,omitempty"`
-	TextColorGt           *string  `json:"textColorGT,omitempty"`
-	TextColorGte          *string  `json:"textColorGTE,omitempty"`
-	TextColorLt           *string  `json:"textColorLT,omitempty"`
-	TextColorLte          *string  `json:"textColorLTE,omitempty"`
-	TextColorContains     *string  `json:"textColorContains,omitempty"`
-	TextColorHasPrefix    *string  `json:"textColorHasPrefix,omitempty"`
-	TextColorHasSuffix    *string  `json:"textColorHasSuffix,omitempty"`
-	TextColorIsNil        *bool    `json:"textColorIsNil,omitempty"`
-	TextColorNotNil       *bool    `json:"textColorNotNil,omitempty"`
-	TextColorEqualFold    *string  `json:"textColorEqualFold,omitempty"`
-	TextColorContainsFold *string  `json:"textColorContainsFold,omitempty"`
-	// button_color field predicates
-	ButtonColor             *string  `json:"buttonColor,omitempty"`
-	ButtonColorNeq          *string  `json:"buttonColorNEQ,omitempty"`
-	ButtonColorIn           []string `json:"buttonColorIn,omitempty"`
-	ButtonColorNotIn        []string `json:"buttonColorNotIn,omitempty"`
-	ButtonColorGt           *string  `json:"buttonColorGT,omitempty"`
-	ButtonColorGte          *string  `json:"buttonColorGTE,omitempty"`
-	ButtonColorLt           *string  `json:"buttonColorLT,omitempty"`
-	ButtonColorLte          *string  `json:"buttonColorLTE,omitempty"`
-	ButtonColorContains     *string  `json:"buttonColorContains,omitempty"`
-	ButtonColorHasPrefix    *string  `json:"buttonColorHasPrefix,omitempty"`
-	ButtonColorHasSuffix    *string  `json:"buttonColorHasSuffix,omitempty"`
-	ButtonColorIsNil        *bool    `json:"buttonColorIsNil,omitempty"`
-	ButtonColorNotNil       *bool    `json:"buttonColorNotNil,omitempty"`
-	ButtonColorEqualFold    *string  `json:"buttonColorEqualFold,omitempty"`
-	ButtonColorContainsFold *string  `json:"buttonColorContainsFold,omitempty"`
-	// button_text_color field predicates
-	ButtonTextColor             *string  `json:"buttonTextColor,omitempty"`
-	ButtonTextColorNeq          *string  `json:"buttonTextColorNEQ,omitempty"`
-	ButtonTextColorIn           []string `json:"buttonTextColorIn,omitempty"`
-	ButtonTextColorNotIn        []string `json:"buttonTextColorNotIn,omitempty"`
-	ButtonTextColorGt           *string  `json:"buttonTextColorGT,omitempty"`
-	ButtonTextColorGte          *string  `json:"buttonTextColorGTE,omitempty"`
-	ButtonTextColorLt           *string  `json:"buttonTextColorLT,omitempty"`
-	ButtonTextColorLte          *string  `json:"buttonTextColorLTE,omitempty"`
-	ButtonTextColorContains     *string  `json:"buttonTextColorContains,omitempty"`
-	ButtonTextColorHasPrefix    *string  `json:"buttonTextColorHasPrefix,omitempty"`
-	ButtonTextColorHasSuffix    *string  `json:"buttonTextColorHasSuffix,omitempty"`
-	ButtonTextColorIsNil        *bool    `json:"buttonTextColorIsNil,omitempty"`
-	ButtonTextColorNotNil       *bool    `json:"buttonTextColorNotNil,omitempty"`
-	ButtonTextColorEqualFold    *string  `json:"buttonTextColorEqualFold,omitempty"`
-	ButtonTextColorContainsFold *string  `json:"buttonTextColorContainsFold,omitempty"`
-	// link_color field predicates
-	LinkColor             *string  `json:"linkColor,omitempty"`
-	LinkColorNeq          *string  `json:"linkColorNEQ,omitempty"`
-	LinkColorIn           []string `json:"linkColorIn,omitempty"`
-	LinkColorNotIn        []string `json:"linkColorNotIn,omitempty"`
-	LinkColorGt           *string  `json:"linkColorGT,omitempty"`
-	LinkColorGte          *string  `json:"linkColorGTE,omitempty"`
-	LinkColorLt           *string  `json:"linkColorLT,omitempty"`
-	LinkColorLte          *string  `json:"linkColorLTE,omitempty"`
-	LinkColorContains     *string  `json:"linkColorContains,omitempty"`
-	LinkColorHasPrefix    *string  `json:"linkColorHasPrefix,omitempty"`
-	LinkColorHasSuffix    *string  `json:"linkColorHasSuffix,omitempty"`
-	LinkColorIsNil        *bool    `json:"linkColorIsNil,omitempty"`
-	LinkColorNotNil       *bool    `json:"linkColorNotNil,omitempty"`
-	LinkColorEqualFold    *string  `json:"linkColorEqualFold,omitempty"`
-	LinkColorContainsFold *string  `json:"linkColorContainsFold,omitempty"`
-	// font_family field predicates
-	FontFamily       *enums.Font  `json:"fontFamily,omitempty"`
-	FontFamilyNeq    *enums.Font  `json:"fontFamilyNEQ,omitempty"`
-	FontFamilyIn     []enums.Font `json:"fontFamilyIn,omitempty"`
-	FontFamilyNotIn  []enums.Font `json:"fontFamilyNotIn,omitempty"`
-	FontFamilyIsNil  *bool        `json:"fontFamilyIsNil,omitempty"`
-	FontFamilyNotNil *bool        `json:"fontFamilyNotNil,omitempty"`
-	// is_default field predicates
-	IsDefault       *bool `json:"isDefault,omitempty"`
-	IsDefaultNeq    *bool `json:"isDefaultNEQ,omitempty"`
-	IsDefaultIsNil  *bool `json:"isDefaultIsNil,omitempty"`
-	IsDefaultNotNil *bool `json:"isDefaultNotNil,omitempty"`
-	// owner edge predicates
-	HasOwner     *bool                     `json:"hasOwner,omitempty"`
-	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// blocked_groups edge predicates
-	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
-	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
-	// editors edge predicates
-	HasEditors     *bool              `json:"hasEditors,omitempty"`
-	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// viewers edge predicates
-	HasViewers     *bool              `json:"hasViewers,omitempty"`
-	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-	// campaigns edge predicates
-	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
-	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
-	// email_templates edge predicates
-	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
-	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
-	// Filter for tagsHas to contain a specific value
-	TagsHas *string `json:"tagsHas,omitempty"`
-}
-
 type EmailTemplate struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -13365,7 +12936,6 @@ type EmailTemplate struct {
 	BlockedGroups         *GroupConnection                `json:"blockedGroups"`
 	Editors               *GroupConnection                `json:"editors"`
 	Viewers               *GroupConnection                `json:"viewers"`
-	EmailBranding         []*EmailBranding                `json:"emailBranding,omitempty"`
 	Integration           *Integration                    `json:"integration,omitempty"`
 	WorkflowDefinition    *WorkflowDefinition             `json:"workflowDefinition,omitempty"`
 	WorkflowInstance      *WorkflowInstance               `json:"workflowInstance,omitempty"`
@@ -13784,9 +13354,6 @@ type EmailTemplateWhereInput struct {
 	// viewers edge predicates
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
-	// email_branding edge predicates
-	HasEmailBranding     *bool                      `json:"hasEmailBranding,omitempty"`
-	HasEmailBrandingWith []*EmailBrandingWhereInput `json:"hasEmailBrandingWith,omitempty"`
 	// integration edge predicates
 	HasIntegration     *bool                    `json:"hasIntegration,omitempty"`
 	HasIntegrationWith []*IntegrationWhereInput `json:"hasIntegrationWith,omitempty"`
@@ -25075,7 +24642,6 @@ type Organization struct {
 	Setting                         *OrganizationSetting                  `json:"setting,omitempty"`
 	PersonalAccessTokens            *PersonalAccessTokenConnection        `json:"personalAccessTokens"`
 	APITokens                       *APITokenConnection                   `json:"apiTokens"`
-	EmailBrandings                  *EmailBrandingConnection              `json:"emailBrandings"`
 	EmailTemplates                  *EmailTemplateConnection              `json:"emailTemplates"`
 	NotificationPreferences         *NotificationPreferenceConnection     `json:"notificationPreferences"`
 	NotificationTemplates           *NotificationTemplateConnection       `json:"notificationTemplates"`
@@ -25914,9 +25480,6 @@ type OrganizationWhereInput struct {
 	// api_tokens edge predicates
 	HasAPITokens     *bool                 `json:"hasAPITokens,omitempty"`
 	HasAPITokensWith []*APITokenWhereInput `json:"hasAPITokensWith,omitempty"`
-	// email_brandings edge predicates
-	HasEmailBrandings     *bool                      `json:"hasEmailBrandings,omitempty"`
-	HasEmailBrandingsWith []*EmailBrandingWhereInput `json:"hasEmailBrandingsWith,omitempty"`
 	// email_templates edge predicates
 	HasEmailTemplates     *bool                      `json:"hasEmailTemplates,omitempty"`
 	HasEmailTemplatesWith []*EmailTemplateWhereInput `json:"hasEmailTemplatesWith,omitempty"`
@@ -32221,7 +31784,6 @@ type SearchResults struct {
 	Controls              *ControlConnection              `json:"controls,omitempty"`
 	ControlObjectives     *ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
 	CustomTypeEnums       *CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
-	EmailBrandings        *EmailBrandingConnection        `json:"emailBrandings,omitempty"`
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates,omitempty"`
 	Entities              *EntityConnection               `json:"entities,omitempty"`
 	Evidences             *EvidenceConnection             `json:"evidences,omitempty"`
@@ -39052,57 +38614,58 @@ type UpdateCampaignInput struct {
 	LastResentAt      *models.DateTime `json:"lastResentAt,omitempty"`
 	ClearLastResentAt *bool            `json:"clearLastResentAt,omitempty"`
 	// additional metadata about the campaign
-	Metadata                    map[string]any `json:"metadata,omitempty"`
-	ClearMetadata               *bool          `json:"clearMetadata,omitempty"`
-	AddBlockedGroupIDs          []string       `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs       []string       `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups          *bool          `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs                []string       `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs             []string       `json:"removeEditorIDs,omitempty"`
-	ClearEditors                *bool          `json:"clearEditors,omitempty"`
-	AddViewerIDs                []string       `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs             []string       `json:"removeViewerIDs,omitempty"`
-	ClearViewers                *bool          `json:"clearViewers,omitempty"`
-	InternalOwnerUserID         *string        `json:"internalOwnerUserID,omitempty"`
-	ClearInternalOwnerUser      *bool          `json:"clearInternalOwnerUser,omitempty"`
-	InternalOwnerGroupID        *string        `json:"internalOwnerGroupID,omitempty"`
-	ClearInternalOwnerGroup     *bool          `json:"clearInternalOwnerGroup,omitempty"`
-	AssessmentID                *string        `json:"assessmentID,omitempty"`
-	ClearAssessment             *bool          `json:"clearAssessment,omitempty"`
-	TemplateID                  *string        `json:"templateID,omitempty"`
-	ClearTemplate               *bool          `json:"clearTemplate,omitempty"`
-	EmailBrandingID             *string        `json:"emailBrandingID,omitempty"`
-	ClearEmailBranding          *bool          `json:"clearEmailBranding,omitempty"`
-	IntegrationID               *string        `json:"integrationID,omitempty"`
-	ClearIntegration            *bool          `json:"clearIntegration,omitempty"`
-	EmailTemplateID             *string        `json:"emailTemplateID,omitempty"`
-	ClearEmailTemplate          *bool          `json:"clearEmailTemplate,omitempty"`
-	EntityID                    *string        `json:"entityID,omitempty"`
-	ClearEntity                 *bool          `json:"clearEntity,omitempty"`
-	AddCampaignTargetIDs        []string       `json:"addCampaignTargetIDs,omitempty"`
-	RemoveCampaignTargetIDs     []string       `json:"removeCampaignTargetIDs,omitempty"`
-	ClearCampaignTargets        *bool          `json:"clearCampaignTargets,omitempty"`
-	AddAssessmentResponseIDs    []string       `json:"addAssessmentResponseIDs,omitempty"`
-	RemoveAssessmentResponseIDs []string       `json:"removeAssessmentResponseIDs,omitempty"`
-	ClearAssessmentResponses    *bool          `json:"clearAssessmentResponses,omitempty"`
-	AddContactIDs               []string       `json:"addContactIDs,omitempty"`
-	RemoveContactIDs            []string       `json:"removeContactIDs,omitempty"`
-	ClearContacts               *bool          `json:"clearContacts,omitempty"`
-	AddUserIDs                  []string       `json:"addUserIDs,omitempty"`
-	RemoveUserIDs               []string       `json:"removeUserIDs,omitempty"`
-	ClearUsers                  *bool          `json:"clearUsers,omitempty"`
-	AddGroupIDs                 []string       `json:"addGroupIDs,omitempty"`
-	RemoveGroupIDs              []string       `json:"removeGroupIDs,omitempty"`
-	ClearGroups                 *bool          `json:"clearGroups,omitempty"`
-	AddIdentityHolderIDs        []string       `json:"addIdentityHolderIDs,omitempty"`
-	RemoveIdentityHolderIDs     []string       `json:"removeIdentityHolderIDs,omitempty"`
-	ClearIdentityHolders        *bool          `json:"clearIdentityHolders,omitempty"`
-	AddControlIDs               []string       `json:"addControlIDs,omitempty"`
-	RemoveControlIDs            []string       `json:"removeControlIDs,omitempty"`
-	ClearControls               *bool          `json:"clearControls,omitempty"`
-	AddWorkflowObjectRefIDs     []string       `json:"addWorkflowObjectRefIDs,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string       `json:"removeWorkflowObjectRefIDs,omitempty"`
-	ClearWorkflowObjectRefs     *bool          `json:"clearWorkflowObjectRefs,omitempty"`
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
+	// the email branding or theme reference the campaign may use to override the email templates theme
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	ClearEmailBrandingID        *bool    `json:"clearEmailBrandingID,omitempty"`
+	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool    `json:"clearViewers,omitempty"`
+	InternalOwnerUserID         *string  `json:"internalOwnerUserID,omitempty"`
+	ClearInternalOwnerUser      *bool    `json:"clearInternalOwnerUser,omitempty"`
+	InternalOwnerGroupID        *string  `json:"internalOwnerGroupID,omitempty"`
+	ClearInternalOwnerGroup     *bool    `json:"clearInternalOwnerGroup,omitempty"`
+	AssessmentID                *string  `json:"assessmentID,omitempty"`
+	ClearAssessment             *bool    `json:"clearAssessment,omitempty"`
+	TemplateID                  *string  `json:"templateID,omitempty"`
+	ClearTemplate               *bool    `json:"clearTemplate,omitempty"`
+	IntegrationID               *string  `json:"integrationID,omitempty"`
+	ClearIntegration            *bool    `json:"clearIntegration,omitempty"`
+	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
+	ClearEmailTemplate          *bool    `json:"clearEmailTemplate,omitempty"`
+	EntityID                    *string  `json:"entityID,omitempty"`
+	ClearEntity                 *bool    `json:"clearEntity,omitempty"`
+	AddCampaignTargetIDs        []string `json:"addCampaignTargetIDs,omitempty"`
+	RemoveCampaignTargetIDs     []string `json:"removeCampaignTargetIDs,omitempty"`
+	ClearCampaignTargets        *bool    `json:"clearCampaignTargets,omitempty"`
+	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
+	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
+	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`
+	AddContactIDs               []string `json:"addContactIDs,omitempty"`
+	RemoveContactIDs            []string `json:"removeContactIDs,omitempty"`
+	ClearContacts               *bool    `json:"clearContacts,omitempty"`
+	AddUserIDs                  []string `json:"addUserIDs,omitempty"`
+	RemoveUserIDs               []string `json:"removeUserIDs,omitempty"`
+	ClearUsers                  *bool    `json:"clearUsers,omitempty"`
+	AddGroupIDs                 []string `json:"addGroupIDs,omitempty"`
+	RemoveGroupIDs              []string `json:"removeGroupIDs,omitempty"`
+	ClearGroups                 *bool    `json:"clearGroups,omitempty"`
+	AddIdentityHolderIDs        []string `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs     []string `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders        *bool    `json:"clearIdentityHolders,omitempty"`
+	AddControlIDs               []string `json:"addControlIDs,omitempty"`
+	RemoveControlIDs            []string `json:"removeControlIDs,omitempty"`
+	ClearControls               *bool    `json:"clearControls,omitempty"`
+	AddWorkflowObjectRefIDs     []string `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs     *bool    `json:"clearWorkflowObjectRefs,omitempty"`
 }
 
 // UpdateCampaignTargetInput is used for update CampaignTarget object.
@@ -39985,65 +39548,6 @@ type UpdateDocumentDataInput struct {
 	ClearFiles       *bool          `json:"clearFiles,omitempty"`
 }
 
-// UpdateEmailBrandingInput is used for update EmailBranding object.
-// Input was generated by ent.
-type UpdateEmailBrandingInput struct {
-	// tags associated with the object
-	Tags       []string `json:"tags,omitempty"`
-	AppendTags []string `json:"appendTags,omitempty"`
-	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// friendly name for this email branding configuration
-	Name *string `json:"name,omitempty"`
-	// brand name displayed in templates
-	BrandName      *string `json:"brandName,omitempty"`
-	ClearBrandName *bool   `json:"clearBrandName,omitempty"`
-	// URL of the brand logo for emails
-	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
-	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
-	// primary brand color for emails
-	PrimaryColor      *string `json:"primaryColor,omitempty"`
-	ClearPrimaryColor *bool   `json:"clearPrimaryColor,omitempty"`
-	// secondary brand color for emails
-	SecondaryColor      *string `json:"secondaryColor,omitempty"`
-	ClearSecondaryColor *bool   `json:"clearSecondaryColor,omitempty"`
-	// background color for emails
-	BackgroundColor      *string `json:"backgroundColor,omitempty"`
-	ClearBackgroundColor *bool   `json:"clearBackgroundColor,omitempty"`
-	// text color for emails
-	TextColor      *string `json:"textColor,omitempty"`
-	ClearTextColor *bool   `json:"clearTextColor,omitempty"`
-	// button background color for emails
-	ButtonColor      *string `json:"buttonColor,omitempty"`
-	ClearButtonColor *bool   `json:"clearButtonColor,omitempty"`
-	// button text color for emails
-	ButtonTextColor      *string `json:"buttonTextColor,omitempty"`
-	ClearButtonTextColor *bool   `json:"clearButtonTextColor,omitempty"`
-	// link color for emails
-	LinkColor      *string `json:"linkColor,omitempty"`
-	ClearLinkColor *bool   `json:"clearLinkColor,omitempty"`
-	// font family for emails
-	FontFamily      *enums.Font `json:"fontFamily,omitempty"`
-	ClearFontFamily *bool       `json:"clearFontFamily,omitempty"`
-	// whether this is the default email branding for the organization
-	IsDefault              *bool    `json:"isDefault,omitempty"`
-	ClearIsDefault         *bool    `json:"clearIsDefault,omitempty"`
-	AddBlockedGroupIDs     []string `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs  []string `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups     *bool    `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs           []string `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs        []string `json:"removeEditorIDs,omitempty"`
-	ClearEditors           *bool    `json:"clearEditors,omitempty"`
-	AddViewerIDs           []string `json:"addViewerIDs,omitempty"`
-	RemoveViewerIDs        []string `json:"removeViewerIDs,omitempty"`
-	ClearViewers           *bool    `json:"clearViewers,omitempty"`
-	AddCampaignIDs         []string `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs      []string `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns         *bool    `json:"clearCampaigns,omitempty"`
-	AddEmailTemplateIDs    []string `json:"addEmailTemplateIDs,omitempty"`
-	RemoveEmailTemplateIDs []string `json:"removeEmailTemplateIDs,omitempty"`
-	ClearEmailTemplates    *bool    `json:"clearEmailTemplates,omitempty"`
-}
-
 // UpdateEmailTemplateInput is used for update EmailTemplate object.
 // Input was generated by ent.
 type UpdateEmailTemplateInput struct {
@@ -40106,9 +39610,6 @@ type UpdateEmailTemplateInput struct {
 	AddViewerIDs                  []string       `json:"addViewerIDs,omitempty"`
 	RemoveViewerIDs               []string       `json:"removeViewerIDs,omitempty"`
 	ClearViewers                  *bool          `json:"clearViewers,omitempty"`
-	AddEmailBrandingIDs           []string       `json:"addEmailBrandingIDs,omitempty"`
-	RemoveEmailBrandingIDs        []string       `json:"removeEmailBrandingIDs,omitempty"`
-	ClearEmailBranding            *bool          `json:"clearEmailBranding,omitempty"`
 	IntegrationID                 *string        `json:"integrationID,omitempty"`
 	ClearIntegration              *bool          `json:"clearIntegration,omitempty"`
 	WorkflowDefinitionID          *string        `json:"workflowDefinitionID,omitempty"`
@@ -41978,9 +41479,6 @@ type UpdateOrganizationInput struct {
 	AddAPITokenIDs                          []string                        `json:"addAPITokenIDs,omitempty"`
 	RemoveAPITokenIDs                       []string                        `json:"removeAPITokenIDs,omitempty"`
 	ClearAPITokens                          *bool                           `json:"clearAPITokens,omitempty"`
-	AddEmailBrandingIDs                     []string                        `json:"addEmailBrandingIDs,omitempty"`
-	RemoveEmailBrandingIDs                  []string                        `json:"removeEmailBrandingIDs,omitempty"`
-	ClearEmailBrandings                     *bool                           `json:"clearEmailBrandings,omitempty"`
 	AddEmailTemplateIDs                     []string                        `json:"addEmailTemplateIDs,omitempty"`
 	RemoveEmailTemplateIDs                  []string                        `json:"removeEmailTemplateIDs,omitempty"`
 	ClearEmailTemplates                     *bool                           `json:"clearEmailTemplates,omitempty"`
@@ -50840,64 +50338,6 @@ func (e *DocumentDataOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e DocumentDataOrderField) MarshalJSON() ([]byte, error) {
-	var buf bytes.Buffer
-	e.MarshalGQL(&buf)
-	return buf.Bytes(), nil
-}
-
-// Properties by which EmailBranding connections can be ordered.
-type EmailBrandingOrderField string
-
-const (
-	EmailBrandingOrderFieldCreatedAt EmailBrandingOrderField = "created_at"
-	EmailBrandingOrderFieldUpdatedAt EmailBrandingOrderField = "updated_at"
-	EmailBrandingOrderFieldName      EmailBrandingOrderField = "name"
-)
-
-var AllEmailBrandingOrderField = []EmailBrandingOrderField{
-	EmailBrandingOrderFieldCreatedAt,
-	EmailBrandingOrderFieldUpdatedAt,
-	EmailBrandingOrderFieldName,
-}
-
-func (e EmailBrandingOrderField) IsValid() bool {
-	switch e {
-	case EmailBrandingOrderFieldCreatedAt, EmailBrandingOrderFieldUpdatedAt, EmailBrandingOrderFieldName:
-		return true
-	}
-	return false
-}
-
-func (e EmailBrandingOrderField) String() string {
-	return string(e)
-}
-
-func (e *EmailBrandingOrderField) UnmarshalGQL(v any) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = EmailBrandingOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid EmailBrandingOrderField", str)
-	}
-	return nil
-}
-
-func (e EmailBrandingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-func (e *EmailBrandingOrderField) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	return e.UnmarshalGQL(s)
-}
-
-func (e EmailBrandingOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

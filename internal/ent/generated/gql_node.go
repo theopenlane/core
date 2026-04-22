@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -213,11 +212,6 @@ var documentdataImplementors = []string{"DocumentData", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*DocumentData) IsNode() {}
-
-var emailbrandingImplementors = []string{"EmailBranding", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EmailBranding) IsNode() {}
 
 var emailtemplateImplementors = []string{"EmailTemplate", "Node"}
 
@@ -838,15 +832,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(documentdata.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, documentdataImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case emailbranding.Table:
-		query := c.EmailBranding.Query().
-			Where(emailbranding.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailbrandingImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1925,22 +1910,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.DocumentData.Query().
 			Where(documentdata.IDIn(ids...))
 		query, err := query.CollectFields(ctx, documentdataImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case emailbranding.Table:
-		query := c.EmailBranding.Query().
-			Where(emailbranding.IDIn(ids...))
-		query, err := query.CollectFields(ctx, emailbrandingImplementors...)
 		if err != nil {
 			return nil, err
 		}

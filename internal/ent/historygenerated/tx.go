@@ -48,8 +48,6 @@ type Tx struct {
 	DiscussionHistory *DiscussionHistoryClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
 	DocumentDataHistory *DocumentDataHistoryClient
-	// EmailBrandingHistory is the client for interacting with the EmailBrandingHistory builders.
-	EmailBrandingHistory *EmailBrandingHistoryClient
 	// EmailTemplateHistory is the client for interacting with the EmailTemplateHistory builders.
 	EmailTemplateHistory *EmailTemplateHistoryClient
 	// EntityHistory is the client for interacting with the EntityHistory builders.
@@ -320,7 +318,6 @@ func (tx *Tx) init() {
 	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DiscussionHistory = NewDiscussionHistoryClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
-	tx.EmailBrandingHistory = NewEmailBrandingHistoryClient(tx.config)
 	tx.EmailTemplateHistory = NewEmailTemplateHistoryClient(tx.config)
 	tx.EntityHistory = NewEntityHistoryClient(tx.config)
 	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)

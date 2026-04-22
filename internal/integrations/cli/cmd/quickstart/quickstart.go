@@ -2,6 +2,8 @@ package quickstart
 
 import (
 	"context"
+	_ "embed"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -11,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
@@ -23,29 +26,23 @@ const quickstartTag = "cli-quickstart"
 // resourcePrefix is prepended to generated resource names
 const resourcePrefix = "cli-quickstart-"
 
-// defaultSubject is the subject line for the smoke-test template
-const defaultSubject = "Openlane CLI quickstart test"
-
-// defaultBody is the body template for the smoke-test email. Flat keys match
-// the variables produced by sendCampaignTargetEmail + buildTemplateData
-// (recipientFirstName, campaignName, companyName, ...); the body contains
-// content blocks only — the theme renderer supplies the surrounding HTML
-const defaultBody = `Hi {{ .recipientFirstName }},
-
-This is a smoke-test email from the Openlane integrations CLI for campaign **{{ .campaignName }}**.
-
-If you received this, the end-to-end flow (branding + template + campaign + launch + dispatch) is working.
-`
+// defaultsJSON is the canonical BrandedMessageRequest payload used to seed the
+// quickstart template. Edit defaults.example.json to change the wording
+//
+//go:embed defaults.example.json
+var defaultsJSON []byte
 
 var command = &cobra.Command{
 	Use:   "quickstart",
-	Short: "end-to-end smoke test: create branding + template + campaign, then launch",
-	Long: `Creates a timestamped email branding, email template, and campaign
-targeted at the authenticated user, then launches the campaign. All resources
-are tagged "cli-quickstart" for easy discovery and cleanup.
+	Short: "end-to-end Openlane Campaigns smoke test: create branding + template + campaign, then launch",
+	Long: `Provisions an Openlane Campaigns pipeline end-to-end: a branded, branded-message
+template seeded from defaults.example.json, a campaign targeting the authenticated
+user, and a launch that exercises dispatch through the email provider.
 
-Override --to to send to a different address; override --template-key to
-pin a deterministic template key across runs.`,
+All resources are tagged "cli-quickstart" for easy discovery and cleanup. Branding
+is attached to the template so the campaign inherits it transparently.
+
+Override --to to send to a different address.`,
 	RunE: func(c *cobra.Command, _ []string) error {
 		return run(c.Context())
 	},
@@ -55,7 +52,6 @@ func init() {
 	cmd.RootCmd.AddCommand(command)
 
 	command.Flags().String("to", "", "recipient email (defaults to openlane.auth.email)")
-	command.Flags().String("template-key", "", "template key (defaults to cli-quickstart-<timestamp>)")
 }
 
 // run executes the end-to-end flow
@@ -71,11 +67,7 @@ func run(ctx context.Context) error {
 	}
 
 	suffix := time.Now().UTC().Format("20060102-150405")
-	templateKey := cmd.Config.String("template-key")
-
-	if templateKey == "" {
-		templateKey = resourcePrefix + suffix
-	}
+	templateKey := email.BrandedMessageOp.Name()
 
 	brandingID, err := createBranding(ctx, client, suffix)
 	if err != nil {
@@ -84,14 +76,14 @@ func run(ctx context.Context) error {
 		return fmt.Errorf("create branding: %w", err)
 	}
 
-	templateID, err := createTemplate(ctx, client, templateKey, suffix)
+	templateID, err := createTemplate(ctx, client, templateKey, suffix, brandingID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create email template")
 
 		return fmt.Errorf("create template: %w", err)
 	}
 
-	campaignID, err := createCampaign(ctx, client, templateID, brandingID, recipient, suffix)
+	campaignID, err := createCampaign(ctx, client, templateID, recipient, suffix)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create campaign")
 
@@ -132,11 +124,22 @@ func resolveRecipient() (string, error) {
 	return "", ErrRecipientResolution
 }
 
+// loadDefaults unmarshals the embedded defaults.example.json into the map shape
+// expected by graphclient.CreateEmailTemplateInput.Defaults
+func loadDefaults() (map[string]any, error) {
+	out := map[string]any{}
+	if err := json.Unmarshal(defaultsJSON, &out); err != nil {
+		return nil, fmt.Errorf("parse quickstart defaults: %w", err)
+	}
+
+	return out, nil
+}
+
 // createBranding creates a default email branding tagged with quickstartTag
 func createBranding(ctx context.Context, client *openlaneclient.Client, suffix string) (string, error) {
 	input := graphclient.CreateEmailBrandingInput{
 		Name:            resourcePrefix + suffix,
-		BrandName:       lo.ToPtr("Openlane Quickstart"),
+		BrandName:       lo.ToPtr("Openlane Campaigns"),
 		PrimaryColor:    lo.ToPtr("#1F2937"),
 		BackgroundColor: lo.ToPtr("#F8FAFC"),
 		TextColor:       lo.ToPtr("#0F172A"),
@@ -159,18 +162,22 @@ func createBranding(ctx context.Context, client *openlaneclient.Client, suffix s
 	return id, nil
 }
 
-// createTemplate creates a CAMPAIGN_RECIPIENT template with the smoke-test body
-func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suffix string) (string, error) {
-	subject := defaultSubject
-	body := defaultBody
+// createTemplate creates a CAMPAIGN_RECIPIENT template bound to the branded-message catalog entry.
+// The Defaults payload pre-fills the BrandedMessageRequest fields; recipient/campaign context is
+// layered on by the dispatcher at send time
+func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suffix, brandingID string) (string, error) {
+	defaults, err := loadDefaults()
+	if err != nil {
+		return "", err
+	}
 
 	input := graphclient.CreateEmailTemplateInput{
-		Key:             key,
-		Name:            "CLI Quickstart " + suffix,
-		TemplateContext: enums.TemplateContextCampaignRecipient,
-		SubjectTemplate: &subject,
-		BodyTemplate:    &body,
-		Active:          lo.ToPtr(true),
+		Key:              key,
+		Name:             "Openlane Campaigns quickstart " + suffix,
+		TemplateContext:  enums.TemplateContextCampaignRecipient,
+		Defaults:         defaults,
+		EmailBrandingIDs: []string{brandingID},
+		Active:           lo.ToPtr(true),
 	}
 
 	resp, err := client.CreateEmailTemplate(ctx, input)
@@ -186,14 +193,14 @@ func createTemplate(ctx context.Context, client *openlaneclient.Client, key, suf
 	return id, nil
 }
 
-// createCampaign creates a CUSTOM campaign targeting the recipient
-func createCampaign(ctx context.Context, client *openlaneclient.Client, templateID, brandingID, recipient, suffix string) (string, error) {
+// createCampaign creates a CUSTOM campaign targeting the recipient. Branding is attached via the
+// template's EmailBrandingIDs edge, so the campaign does not set EmailBrandingID directly
+func createCampaign(ctx context.Context, client *openlaneclient.Client, templateID, recipient, suffix string) (string, error) {
 	campaign := &graphclient.CreateCampaignInput{
 		Name:            resourcePrefix + suffix,
-		Description:     lo.ToPtr("End-to-end smoke test campaign created by the integrations CLI"),
+		Description:     lo.ToPtr("Openlane Campaigns end-to-end smoke test"),
 		CampaignType:    lo.ToPtr(enums.CampaignTypeCustom),
 		EmailTemplateID: &templateID,
-		EmailBrandingID: &brandingID,
 		Tags:            []string{quickstartTag},
 	}
 

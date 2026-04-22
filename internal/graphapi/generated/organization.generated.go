@@ -136,8 +136,6 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
-			case "emailBrandings":
-				return ec.fieldContext_Organization_emailBrandings(ctx, field)
 			case "emailTemplates":
 				return ec.fieldContext_Organization_emailTemplates(ctx, field)
 			case "notificationPreferences":
@@ -405,8 +403,6 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
-			case "emailBrandings":
-				return ec.fieldContext_Organization_emailBrandings(ctx, field)
 			case "emailTemplates":
 				return ec.fieldContext_Organization_emailTemplates(ctx, field)
 			case "notificationPreferences":
@@ -703,8 +699,6 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
 			case "apiTokens":
 				return ec.fieldContext_Organization_apiTokens(ctx, field)
-			case "emailBrandings":
-				return ec.fieldContext_Organization_emailBrandings(ctx, field)
 			case "emailTemplates":
 				return ec.fieldContext_Organization_emailTemplates(ctx, field)
 			case "notificationPreferences":

@@ -52,8 +52,6 @@ type Tx struct {
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
-	// EmailBranding is the client for interacting with the EmailBranding builders.
-	EmailBranding *EmailBrandingClient
 	// EmailTemplate is the client for interacting with the EmailTemplate builders.
 	EmailTemplate *EmailTemplateClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
@@ -377,7 +375,6 @@ func (tx *Tx) init() {
 	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
 	tx.Discussion = NewDiscussionClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
-	tx.EmailBranding = NewEmailBrandingClient(tx.config)
 	tx.EmailTemplate = NewEmailTemplateClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
 	tx.Entity = NewEntityClient(tx.config)

@@ -1,4 +1,4 @@
-h1:evQOIZSWMafivX+66weCxkNrxPt5Z+P78KMFizMMbFE=
+h1:ixRoCFv1JfqErLSxNeBY/s1RsbQoZpUI87Dmkb8r96s=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -108,5 +108,5 @@ h1:evQOIZSWMafivX+66weCxkNrxPt5Z+P78KMFizMMbFE=
 20260411061315_risk_status_history.sql h1:gf6iar2R1KYlit1HYuD0dQ4qRqiGPvPwMquwcVUCNNc=
 20260412014212_risk_due.sql h1:DQfGfj1hCS75IrWYBjKwjGYof6YEC7RBlnRhBEPBs68=
 20260412014218_risk_due_history.sql h1:Tu46804CppUkSweLwGQB/X7HKUNaaGPJfzMk5SzONq4=
-20260417210242_emailintegration.sql h1:Y7mZ5cntxDusD5M9defaHAiz93/QNkM0EXo/CWfFUtI=
-20260417210245_emailintegration_history.sql h1:EXJdwZNEiPgPBkEN/O/LmRW8az1CEXCoNw1+upV7Kdo=
+20260422144549_emailintegrationsremovebranding.sql h1:ROGTE8Dc29AxIYEcEByVmBcNO2cwCQjLNqEkLca0/9A=
+20260422144552_emailintegrationsremovebranding_history.sql h1:owwu37237oEPkdq3eSasTK9zUtVp9GL+oe/5TLvPghA=

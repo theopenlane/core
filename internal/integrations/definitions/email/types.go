@@ -40,11 +40,11 @@ const (
 // Sourced from koanf/environment at startup
 type RuntimeEmailConfig struct {
 	// APIKey is the email provider API key
-	APIKey string `json:"apiKey" koanf:"apiKey"`
+	APIKey string `json:"apiKey" koanf:"apiKey" jsonschema:"required,description=Email provider API key"`
 	// Provider is the email service provider name (resend, sendgrid, postmark)
 	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
-	FromEmail string `json:"fromEmail" koanf:"fromEmail" jsonschema:"description=Sender email address" default:"support@mail.theopenlane.io"`
+	FromEmail string `json:"fromEmail" koanf:"fromEmail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" koanf:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
@@ -71,6 +71,20 @@ type RuntimeEmailConfig struct {
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" jsonschema:"description=Unsubscribe link for email footers" default:"https://console.theopenlane.io/unsubscribe"`
 	// TrustCenterDomain is the default domain for trust center URLs when no custom domain is configured
 	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" jsonschema:"description=Default domain for trust center URLs when no custom domain is configured" default:"trustcenter.theopenlane.io"`
+	// Tagline is a short descriptive footer line rendered in modern themes above the social row
+	Tagline string `json:"tagline,omitempty" koanf:"tagline" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
+	// Social is the ordered list of social footer entries rendered by modern themes
+	Social []SocialLink `json:"social,omitempty" koanf:"social" jsonschema:"description=Ordered social footer entries for modern themes"`
+}
+
+// SocialLink is a single social media footer entry: platform label, icon image URL, and destination URL
+type SocialLink struct {
+	// Platform is the display label for the social network (e.g. X, LinkedIn)
+	Platform string `json:"platform" koanf:"platform" jsonschema:"required,description=Display label for the social network"`
+	// IconURL is the publicly reachable URL of the icon image
+	IconURL string `json:"iconURL" koanf:"iconURL" jsonschema:"required,description=Publicly reachable icon image URL"`
+	// URL is the destination the icon links to
+	URL string `json:"url" koanf:"url" jsonschema:"required,description=Destination URL the icon links to"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields
@@ -102,7 +116,7 @@ type EmailUserInput struct {
 	// SupportEmail is the support contact email address
 	SupportEmail string `json:"supportEmail,omitempty" jsonschema:"description=Support contact email address"`
 	// LogoURL is the company logo URL for email templates
-	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Company logo URL for email templates"`
+	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Internet-accessible company logo URL for email templates"`
 	// RootURL is the root application URL used to construct email action links
 	RootURL string `json:"rootURL,omitempty" jsonschema:"description=Root application URL"`
 	// ProductURL is the product home URL
@@ -112,9 +126,13 @@ type EmailUserInput struct {
 	// Copyright is the copyright notice for email footers
 	Copyright string `json:"copyright,omitempty" jsonschema:"description=Copyright notice for email footers; auto-generated from corporation and year when empty"`
 	// TroubleText is the fallback help text shown below action buttons
-	TroubleText string `json:"troubleText,omitempty" jsonschema:"description=Help text shown below action buttons; {ACTION} is replaced with button text"`
+	TroubleText string `json:"troubleText,omitempty" jsonschema:"description=Help text shown below action buttons"`
 	// UnsubscribeURL is the unsubscribe link for email footers
-	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe URL for email footers; auto-generated from product URL when empty"`
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe URL for email footers"`
+	// Tagline is a short descriptive footer line rendered in modern themes above the social row
+	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
+	// Social is the ordered list of social footer entries rendered by modern themes
+	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Ordered social footer entries for modern themes"`
 }
 
 // ToRuntimeConfig converts customer user input to a RuntimeEmailConfig for rendering.
@@ -133,5 +151,7 @@ func (u EmailUserInput) ToRuntimeConfig() RuntimeEmailConfig {
 		Copyright:      u.Copyright,
 		TroubleText:    u.TroubleText,
 		UnsubscribeURL: u.UnsubscribeURL,
+		Tagline:        u.Tagline,
+		Social:         u.Social,
 	}
 }

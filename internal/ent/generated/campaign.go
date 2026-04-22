@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -103,7 +102,7 @@ type Campaign struct {
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// the email branding associated with the campaign
+	// the email branding or theme reference the campaign may use to override the email templates theme
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID string `json:"email_template_id,omitempty"`
@@ -133,8 +132,6 @@ type CampaignEdges struct {
 	Assessment *Assessment `json:"assessment,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
-	// EmailBranding holds the value of the email_branding edge.
-	EmailBranding *EmailBranding `json:"email_branding,omitempty"`
 	// Integration holds the value of the integration edge.
 	Integration *Integration `json:"integration,omitempty"`
 	// EmailTemplate holds the value of the email_template edge.
@@ -159,9 +156,9 @@ type CampaignEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -258,23 +255,12 @@ func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 	return nil, &NotLoadedError{edge: "template"}
 }
 
-// EmailBrandingOrErr returns the EmailBranding value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e CampaignEdges) EmailBrandingOrErr() (*EmailBranding, error) {
-	if e.EmailBranding != nil {
-		return e.EmailBranding, nil
-	} else if e.loadedTypes[8] {
-		return nil, &NotFoundError{label: emailbranding.Label}
-	}
-	return nil, &NotLoadedError{edge: "email_branding"}
-}
-
 // IntegrationOrErr returns the Integration value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -285,7 +271,7 @@ func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 	if e.EmailTemplate != nil {
 		return e.EmailTemplate, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: emailtemplate.Label}
 	}
 	return nil, &NotLoadedError{edge: "email_template"}
@@ -296,7 +282,7 @@ func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -305,7 +291,7 @@ func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -314,7 +300,7 @@ func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -323,7 +309,7 @@ func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error)
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -332,7 +318,7 @@ func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[14] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -341,7 +327,7 @@ func (e CampaignEdges) UsersOrErr() ([]*User, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -350,7 +336,7 @@ func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -359,7 +345,7 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -368,7 +354,7 @@ func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -718,11 +704,6 @@ func (_m *Campaign) QueryAssessment() *AssessmentQuery {
 // QueryTemplate queries the "template" edge of the Campaign entity.
 func (_m *Campaign) QueryTemplate() *TemplateQuery {
 	return NewCampaignClient(_m.config).QueryTemplate(_m)
-}
-
-// QueryEmailBranding queries the "email_branding" edge of the Campaign entity.
-func (_m *Campaign) QueryEmailBranding() *EmailBrandingQuery {
-	return NewCampaignClient(_m.config).QueryEmailBranding(_m)
 }
 
 // QueryIntegration queries the "integration" edge of the Campaign entity.

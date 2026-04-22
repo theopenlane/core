@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
@@ -859,45 +858,6 @@ func init() {
 	documentdatahistoryDescID := documentdatahistoryFields[9].Descriptor()
 	// documentdatahistory.DefaultID holds the default value on creation for the id field.
 	documentdatahistory.DefaultID = documentdatahistoryDescID.Default.(func() string)
-	emailbrandinghistory.Policy = privacy.NewPolicies(historyschema.EmailBrandingHistory{})
-	emailbrandinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := emailbrandinghistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	emailbrandinghistoryInters := historyschema.EmailBrandingHistory{}.Interceptors()
-	emailbrandinghistory.Interceptors[0] = emailbrandinghistoryInters[0]
-	emailbrandinghistoryFields := historyschema.EmailBrandingHistory{}.Fields()
-	_ = emailbrandinghistoryFields
-	// emailbrandinghistoryDescHistoryTime is the schema descriptor for history_time field.
-	emailbrandinghistoryDescHistoryTime := emailbrandinghistoryFields[0].Descriptor()
-	// emailbrandinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	emailbrandinghistory.DefaultHistoryTime = emailbrandinghistoryDescHistoryTime.Default.(func() time.Time)
-	// emailbrandinghistoryDescCreatedAt is the schema descriptor for created_at field.
-	emailbrandinghistoryDescCreatedAt := emailbrandinghistoryFields[3].Descriptor()
-	// emailbrandinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	emailbrandinghistory.DefaultCreatedAt = emailbrandinghistoryDescCreatedAt.Default.(func() time.Time)
-	// emailbrandinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	emailbrandinghistoryDescUpdatedAt := emailbrandinghistoryFields[4].Descriptor()
-	// emailbrandinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	emailbrandinghistory.DefaultUpdatedAt = emailbrandinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// emailbrandinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	emailbrandinghistory.UpdateDefaultUpdatedAt = emailbrandinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// emailbrandinghistoryDescTags is the schema descriptor for tags field.
-	emailbrandinghistoryDescTags := emailbrandinghistoryFields[10].Descriptor()
-	// emailbrandinghistory.DefaultTags holds the default value on creation for the tags field.
-	emailbrandinghistory.DefaultTags = emailbrandinghistoryDescTags.Default.([]string)
-	// emailbrandinghistoryDescIsDefault is the schema descriptor for is_default field.
-	emailbrandinghistoryDescIsDefault := emailbrandinghistoryFields[23].Descriptor()
-	// emailbrandinghistory.DefaultIsDefault holds the default value on creation for the is_default field.
-	emailbrandinghistory.DefaultIsDefault = emailbrandinghistoryDescIsDefault.Default.(bool)
-	// emailbrandinghistoryDescID is the schema descriptor for id field.
-	emailbrandinghistoryDescID := emailbrandinghistoryFields[9].Descriptor()
-	// emailbrandinghistory.DefaultID holds the default value on creation for the id field.
-	emailbrandinghistory.DefaultID = emailbrandinghistoryDescID.Default.(func() string)
 	emailtemplatehistory.Policy = privacy.NewPolicies(historyschema.EmailTemplateHistory{})
 	emailtemplatehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

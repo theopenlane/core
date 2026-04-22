@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -637,50 +636,6 @@ func adminSearchCustomTypeEnums(ctx context.Context, query string, after *entgql
 				customtypeenum.DescriptionContainsFold(query),      // search by Description
 				customtypeenum.ColorContainsFold(query),            // search by Color
 				customtypeenum.IconContainsFold(query),             // search by Icon
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchEmailBranding searches for EmailBranding based on the query string looking for matches
-func searchEmailBrandings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
-	request := withTransactionalMutation(ctx).EmailBranding.Query().
-		Where(
-			emailbranding.Or(
-				emailbranding.ID(query),               // search equal to ID
-				emailbranding.NameContainsFold(query), // search by Name
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-				},
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchEmailBranding searches for EmailBranding based on the query string looking for matches
-func adminSearchEmailBrandings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
-	request := withTransactionalMutation(ctx).EmailBranding.Query().
-		Where(
-			emailbranding.Or(
-				emailbranding.ID(query), // search equal to ID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-				},
-				emailbranding.OwnerIDContainsFold(query),         // search by OwnerID
-				emailbranding.NameContainsFold(query),            // search by Name
-				emailbranding.BrandNameContainsFold(query),       // search by BrandName
-				emailbranding.LogoRemoteURLContainsFold(query),   // search by LogoRemoteURL
-				emailbranding.PrimaryColorContainsFold(query),    // search by PrimaryColor
-				emailbranding.SecondaryColorContainsFold(query),  // search by SecondaryColor
-				emailbranding.BackgroundColorContainsFold(query), // search by BackgroundColor
-				emailbranding.TextColorContainsFold(query),       // search by TextColor
-				emailbranding.ButtonColorContainsFold(query),     // search by ButtonColor
-				emailbranding.ButtonTextColorContainsFold(query), // search by ButtonTextColor
-				emailbranding.LinkColorContainsFold(query),       // search by LinkColor
 			),
 		)
 

@@ -2,6 +2,7 @@ package email
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/theopenlane/newman"
@@ -13,7 +14,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// loadEmailTemplate resolves an active email template by ID for the given owner
+// loadEmailTemplate resolves an active email template by ID for the given owner, eager-loading
+// the Files edge so static attachments can be included in the dispatched message
 func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, emailTemplateID string) (*generated.EmailTemplate, error) {
 	record, err := client.EmailTemplate.Query().
 		Where(
@@ -21,7 +23,6 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 			emailtemplate.ActiveEQ(true),
 			emailtemplate.OwnerIDEQ(ownerID),
 		).
-		WithEmailBranding().
 		WithFiles(func(q *generated.FileQuery) {
 			q.Select(
 				file.FieldProvidedFileName,
@@ -40,6 +41,36 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 	}
 
 	return record, nil
+}
+
+// buildDispatchPayload overlays the supplied struct values onto template defaults as a JSON object
+// and returns the raw payload consumed by EmailDispatcher.SendByKey. Each overlay is marshaled
+// through its JSON tags, so the overlay struct types (RecipientInfo, CampaignContext, etc.) remain
+// the single source of truth for per-invocation field names; overlays apply in order, so later
+// overlays win on key conflicts
+func buildDispatchPayload(defaults map[string]any, overlays ...any) (json.RawMessage, error) {
+	base, err := jsonx.ToRawMessage(defaults)
+	if err != nil {
+		return nil, fmt.Errorf("%w: defaults: %w", ErrTemplateRenderFailed, err)
+	}
+
+	if len(base) == 0 {
+		base = json.RawMessage(`{}`)
+	}
+
+	for _, overlay := range overlays {
+		patch, err := jsonx.ToRawMap(overlay)
+		if err != nil {
+			return nil, fmt.Errorf("%w: overlay: %w", ErrTemplateRenderFailed, err)
+		}
+
+		base, _, err = jsonx.MergeObjectMap(base, patch)
+		if err != nil {
+			return nil, fmt.Errorf("%w: merge: %w", ErrTemplateRenderFailed, err)
+		}
+	}
+
+	return base, nil
 }
 
 // staticAttachmentsFromFiles converts File edge records to newman attachments
@@ -65,22 +96,4 @@ func staticAttachmentsFromFiles(ctx context.Context, files []*generated.File) []
 	}
 
 	return attachments
-}
-
-// validateTemplateData validates template input against a jsonschema object
-func validateTemplateData(schema map[string]any, payload map[string]any) error {
-	if len(schema) == 0 {
-		return nil
-	}
-
-	result, err := jsonx.ValidateSchema(schema, payload)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrTemplateDataInvalid, err)
-	}
-
-	if result.Valid() {
-		return nil
-	}
-
-	return fmt.Errorf("%w: %s", ErrTemplateDataInvalid, result.Errors())
 }

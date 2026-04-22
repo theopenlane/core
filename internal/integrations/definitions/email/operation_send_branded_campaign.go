@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"maps"
 	"strings"
 	"time"
 
@@ -34,13 +33,13 @@ func (s SendBrandedCampaign) Handle() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(emailClientRef, SendBrandedCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
-// Run loads the campaign, iterates pending targets, renders and sends one email per target.
+// Run loads the campaign, iterates pending targets, and dispatches one email per target
+// through the catalog dispatcher identified by the linked EmailTemplate.Key.
 // Targets with sent_at already set are skipped. Failed sends are logged and processing
 // continues so a single bad address does not abort the entire dispatch
 func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, err := req.DB.Campaign.Query().
 		Where(campaign.IDEQ(cfg.CampaignID)).
-		WithEmailBranding().
 		WithEmailTemplate(func(q *generated.EmailTemplateQuery) {
 			q.WithFiles(func(fq *generated.FileQuery) {
 				fq.Select(
@@ -60,9 +59,14 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		return nil, ErrCampaignNotFound
 	}
 
-	emailRecord := camp.Edges.EmailTemplate
-	if emailRecord == nil {
+	template := camp.Edges.EmailTemplate
+	if template == nil {
 		return nil, nil
+	}
+
+	dispatcher, ok := DispatcherByKey(template.Key)
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
 	}
 
 	targets, err := req.DB.CampaignTarget.Query().
@@ -77,8 +81,15 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		return nil, err
 	}
 
+	attachments := staticAttachmentsFromFiles(ctx, template.Edges.Files)
+	campaignOverlay := CampaignContext{
+		CampaignID:          camp.ID,
+		CampaignName:        camp.Name,
+		CampaignDescription: camp.Description,
+	}
+
 	for _, target := range targets {
-		if err := sendAndMarkTarget(ctx, req.DB, client, camp, emailRecord, target); err != nil {
+		if err := sendAndMarkCampaignTarget(ctx, req, client, dispatcher, template.Defaults, campaignOverlay, target, attachments); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Str("target_id", target.ID).Msg("failed dispatching campaign email to target")
 		}
 	}
@@ -86,68 +97,33 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	return nil, nil
 }
 
-// sendAndMarkTarget sends a single campaign email then marks the target as sent.
-// The send is an external provider call that cannot be rolled back, so we send
-// first and mark after. A failed mark means the target may be re-sent on retry,
-// which is preferable to marking sent without actually sending
-func sendAndMarkTarget(ctx context.Context, db *generated.Client, emailClient *EmailClient, camp *generated.Campaign, emailRecord *generated.EmailTemplate, target *generated.CampaignTarget) error {
-	if err := sendCampaignTargetEmail(ctx, emailClient, camp, emailRecord, target); err != nil {
+// sendAndMarkCampaignTarget dispatches a single campaign email then marks the target as sent.
+// The send is an external provider call that cannot be rolled back, so we send first and mark
+// after; a failed mark means the target may be re-sent on retry, which is preferable to
+// marking sent without actually sending
+func sendAndMarkCampaignTarget(ctx context.Context, req types.OperationRequest, client *EmailClient, dispatcher EmailDispatcher, defaults map[string]any, campaignOverlay CampaignContext, target *generated.CampaignTarget, attachments []*newman.Attachment) error {
+	first, last := splitFullName(target.FullName)
+
+	payload, err := buildDispatchPayload(defaults,
+		RecipientInfo{Email: target.Email, FirstName: first, LastName: last},
+		campaignOverlay,
+	)
+	if err != nil {
+		return err
+	}
+
+	extraOpts := []newman.MessageOption{
+		newman.WithTag(newman.Tag{Name: TagCampaignTargetID, Value: target.ID}),
+		newman.WithAttachments(attachments),
+	}
+
+	if err := dispatcher.SendByKey(ctx, req, client, payload, extraOpts...); err != nil {
 		return err
 	}
 
 	now := models.DateTime(time.Now())
-	if err := db.CampaignTarget.UpdateOneID(target.ID).SetSentAt(now).Exec(ctx); err != nil {
+	if err := req.DB.CampaignTarget.UpdateOneID(target.ID).SetSentAt(now).Exec(ctx); err != nil {
 		return fmt.Errorf("mark sent: %w", err)
-	}
-
-	return nil
-}
-
-// sendCampaignTargetEmail renders and sends one email for a single campaign target
-// through the integration framework's email client
-func sendCampaignTargetEmail(ctx context.Context, emailClient *EmailClient, camp *generated.Campaign, emailRecord *generated.EmailTemplate, target *generated.CampaignTarget) error {
-	first, last := splitFullName(target.FullName)
-
-	vars := make(map[string]any, len(emailRecord.Defaults)+len(camp.Metadata)+5) //nolint:mnd
-	maps.Copy(vars, emailRecord.Defaults)
-	maps.Copy(vars, camp.Metadata)
-
-	vars["recipientEmail"] = target.Email
-	vars["recipientFirstName"] = first
-	vars["recipientLastName"] = last
-	vars["campaignName"] = camp.Name
-	vars["campaignDescription"] = camp.Description
-
-	data, err := buildTemplateData(emailClient.Config, vars)
-	if err != nil {
-		return err
-	}
-
-	if err := validateTemplateData(emailRecord.Jsonconfig, data); err != nil {
-		return err
-	}
-
-	rendered, err := renderDBEnvelope(emailRecord, data, camp.Edges.EmailBranding)
-	if err != nil {
-		return err
-	}
-
-	opts := []newman.MessageOption{
-		newman.WithFrom(emailClient.Config.FromEmail),
-		newman.WithTo([]string{target.Email}),
-		newman.WithSubject(rendered.Subject),
-		newman.WithHTML(rendered.HTML),
-		newman.WithText(rendered.Text),
-		newman.WithTag(newman.Tag{Name: TagCampaignTargetID, Value: target.ID}),
-		newman.WithAttachments(staticAttachmentsFromFiles(ctx, emailRecord.Edges.Files)),
-	}
-
-	message := newman.NewEmailMessageWithOptions(opts...)
-
-	if err := emailClient.Sender.SendEmailWithContext(ctx, message); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed sending campaign email")
-
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
 	}
 
 	return nil

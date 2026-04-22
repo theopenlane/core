@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -806,11 +805,6 @@ func (_u *CampaignUpdate) SetTemplate(v *Template) *CampaignUpdate {
 	return _u.SetTemplateID(v.ID)
 }
 
-// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
-func (_u *CampaignUpdate) SetEmailBranding(v *EmailBranding) *CampaignUpdate {
-	return _u.SetEmailBrandingID(v.ID)
-}
-
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *CampaignUpdate) SetIntegration(v *Integration) *CampaignUpdate {
 	return _u.SetIntegrationID(v.ID)
@@ -1035,12 +1029,6 @@ func (_u *CampaignUpdate) ClearAssessment() *CampaignUpdate {
 // ClearTemplate clears the "template" edge to the Template entity.
 func (_u *CampaignUpdate) ClearTemplate() *CampaignUpdate {
 	_u.mutation.ClearTemplate()
-	return _u
-}
-
-// ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
-func (_u *CampaignUpdate) ClearEmailBranding() *CampaignUpdate {
-	_u.mutation.ClearEmailBranding()
 	return _u
 }
 
@@ -1498,6 +1486,12 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaign.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaign.FieldEmailBrandingID, field.TypeString, value)
+	}
+	if _u.mutation.EmailBrandingIDCleared() {
+		_spec.ClearField(campaign.FieldEmailBrandingID, field.TypeString)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1758,37 +1752,6 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Campaign
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Campaign
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign
@@ -3056,11 +3019,6 @@ func (_u *CampaignUpdateOne) SetTemplate(v *Template) *CampaignUpdateOne {
 	return _u.SetTemplateID(v.ID)
 }
 
-// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
-func (_u *CampaignUpdateOne) SetEmailBranding(v *EmailBranding) *CampaignUpdateOne {
-	return _u.SetEmailBrandingID(v.ID)
-}
-
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *CampaignUpdateOne) SetIntegration(v *Integration) *CampaignUpdateOne {
 	return _u.SetIntegrationID(v.ID)
@@ -3285,12 +3243,6 @@ func (_u *CampaignUpdateOne) ClearAssessment() *CampaignUpdateOne {
 // ClearTemplate clears the "template" edge to the Template entity.
 func (_u *CampaignUpdateOne) ClearTemplate() *CampaignUpdateOne {
 	_u.mutation.ClearTemplate()
-	return _u
-}
-
-// ClearEmailBranding clears the "email_branding" edge to the EmailBranding entity.
-func (_u *CampaignUpdateOne) ClearEmailBranding() *CampaignUpdateOne {
-	_u.mutation.ClearEmailBranding()
 	return _u
 }
 
@@ -3778,6 +3730,12 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaign.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaign.FieldEmailBrandingID, field.TypeString, value)
+	}
+	if _u.mutation.EmailBrandingIDCleared() {
+		_spec.ClearField(campaign.FieldEmailBrandingID, field.TypeString)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4038,37 +3996,6 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Campaign
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Campaign
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Campaign

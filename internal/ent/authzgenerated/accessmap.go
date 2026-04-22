@@ -296,10 +296,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "template",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
-}, "email_branding": {
-	ObjectType:      "email_branding",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
 }, "integration": {
 	ObjectType:      "integration",
 	SkipEditCheck:   true,
@@ -903,31 +899,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "email_branding": {"owner": {
-	ObjectType:      "owner",
-	SkipEditCheck:   true,
-	CheckViewAccess: false,
-}, "blocked_groups": {
-	ObjectType:      "group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
-}, "editors": {
-	ObjectType:      "group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
-}, "viewers": {
-	ObjectType:      "group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
-}, "campaigns": {
-	ObjectType:      "campaign",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "email_templates": {
-	ObjectType:      "email_template",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-},
 }, "email_template": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -944,10 +915,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
-}, "email_branding": {
-	ObjectType:      "email_branding",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "integration": {
 	ObjectType:      "integration",
 	SkipEditCheck:   true,
@@ -2458,10 +2425,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "api_tokens": {
 	ObjectType:      "api_token",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "email_brandings": {
-	ObjectType:      "email_branding",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "email_templates": {

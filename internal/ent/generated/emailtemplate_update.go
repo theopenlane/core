@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -530,21 +529,6 @@ func (_u *EmailTemplateUpdate) AddViewers(v ...*Group) *EmailTemplateUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
-// AddEmailBrandingIDs adds the "email_branding" edge to the EmailBranding entity by IDs.
-func (_u *EmailTemplateUpdate) AddEmailBrandingIDs(ids ...string) *EmailTemplateUpdate {
-	_u.mutation.AddEmailBrandingIDs(ids...)
-	return _u
-}
-
-// AddEmailBranding adds the "email_branding" edges to the EmailBranding entity.
-func (_u *EmailTemplateUpdate) AddEmailBranding(v ...*EmailBranding) *EmailTemplateUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingIDs(ids...)
-}
-
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *EmailTemplateUpdate) SetIntegration(v *Integration) *EmailTemplateUpdate {
 	return _u.SetIntegrationID(v.ID)
@@ -671,27 +655,6 @@ func (_u *EmailTemplateUpdate) RemoveViewers(v ...*Group) *EmailTemplateUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
-}
-
-// ClearEmailBranding clears all "email_branding" edges to the EmailBranding entity.
-func (_u *EmailTemplateUpdate) ClearEmailBranding() *EmailTemplateUpdate {
-	_u.mutation.ClearEmailBranding()
-	return _u
-}
-
-// RemoveEmailBrandingIDs removes the "email_branding" edge to EmailBranding entities by IDs.
-func (_u *EmailTemplateUpdate) RemoveEmailBrandingIDs(ids ...string) *EmailTemplateUpdate {
-	_u.mutation.RemoveEmailBrandingIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBranding removes "email_branding" edges to EmailBranding entities.
-func (_u *EmailTemplateUpdate) RemoveEmailBranding(v ...*EmailBranding) *EmailTemplateUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingIDs(ids...)
 }
 
 // ClearIntegration clears the "integration" edge to the Integration entity.
@@ -1133,54 +1096,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1937,21 +1852,6 @@ func (_u *EmailTemplateUpdateOne) AddViewers(v ...*Group) *EmailTemplateUpdateOn
 	return _u.AddViewerIDs(ids...)
 }
 
-// AddEmailBrandingIDs adds the "email_branding" edge to the EmailBranding entity by IDs.
-func (_u *EmailTemplateUpdateOne) AddEmailBrandingIDs(ids ...string) *EmailTemplateUpdateOne {
-	_u.mutation.AddEmailBrandingIDs(ids...)
-	return _u
-}
-
-// AddEmailBranding adds the "email_branding" edges to the EmailBranding entity.
-func (_u *EmailTemplateUpdateOne) AddEmailBranding(v ...*EmailBranding) *EmailTemplateUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingIDs(ids...)
-}
-
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_u *EmailTemplateUpdateOne) SetIntegration(v *Integration) *EmailTemplateUpdateOne {
 	return _u.SetIntegrationID(v.ID)
@@ -2078,27 +1978,6 @@ func (_u *EmailTemplateUpdateOne) RemoveViewers(v ...*Group) *EmailTemplateUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
-}
-
-// ClearEmailBranding clears all "email_branding" edges to the EmailBranding entity.
-func (_u *EmailTemplateUpdateOne) ClearEmailBranding() *EmailTemplateUpdateOne {
-	_u.mutation.ClearEmailBranding()
-	return _u
-}
-
-// RemoveEmailBrandingIDs removes the "email_branding" edge to EmailBranding entities by IDs.
-func (_u *EmailTemplateUpdateOne) RemoveEmailBrandingIDs(ids ...string) *EmailTemplateUpdateOne {
-	_u.mutation.RemoveEmailBrandingIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBranding removes "email_branding" edges to EmailBranding entities.
-func (_u *EmailTemplateUpdateOne) RemoveEmailBranding(v ...*EmailBranding) *EmailTemplateUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingIDs(ids...)
 }
 
 // ClearIntegration clears the "integration" edge to the Integration entity.
@@ -2570,54 +2449,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 			},
 		}
 		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -812,46 +812,6 @@ var (
 			},
 		},
 	}
-	// EmailBrandingHistoryColumns holds the columns for the "email_branding_history" table.
-	EmailBrandingHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString, Size: 64},
-		{Name: "brand_name", Type: field.TypeString, Nullable: true, Size: 64},
-		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "primary_color", Type: field.TypeString, Nullable: true},
-		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
-		{Name: "background_color", Type: field.TypeString, Nullable: true},
-		{Name: "text_color", Type: field.TypeString, Nullable: true},
-		{Name: "button_color", Type: field.TypeString, Nullable: true},
-		{Name: "button_text_color", Type: field.TypeString, Nullable: true},
-		{Name: "link_color", Type: field.TypeString, Nullable: true},
-		{Name: "font_family", Type: field.TypeEnum, Nullable: true, Enums: []string{"COURIER", "COURIER_BOLD", "COURIER_BOLDOBLIQUE", "COURIER_OBLIQUE", "HELVETICA", "HELVETICA_BOLD", "HELVETICA_BOLDOBLIQUE", "HELVETICA_OBLIQUE", "SYMBOL", "TIMES_BOLD", "TIMES_BOLDITALIC", "TIMES_ITALIC", "TIMES_ROMAN"}, Default: "HELVETICA"},
-		{Name: "is_default", Type: field.TypeBool, Nullable: true, Default: false},
-	}
-	// EmailBrandingHistoryTable holds the schema information for the "email_branding_history" table.
-	EmailBrandingHistoryTable = &schema.Table{
-		Name:       "email_branding_history",
-		Columns:    EmailBrandingHistoryColumns,
-		PrimaryKey: []*schema.Column{EmailBrandingHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "emailbrandinghistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{EmailBrandingHistoryColumns[1]},
-			},
-		},
-	}
 	// EmailTemplateHistoryColumns holds the columns for the "email_template_history" table.
 	EmailTemplateHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3548,7 +3508,6 @@ var (
 		DirectoryMembershipHistoryTable,
 		DiscussionHistoryTable,
 		DocumentDataHistoryTable,
-		EmailBrandingHistoryTable,
 		EmailTemplateHistoryTable,
 		EntityHistoryTable,
 		EntityTypeHistoryTable,
@@ -3664,9 +3623,6 @@ func init() {
 	}
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
 		Table: "document_data_history",
-	}
-	EmailBrandingHistoryTable.Annotation = &entsql.Annotation{
-		Table: "email_branding_history",
 	}
 	EmailTemplateHistoryTable.Annotation = &entsql.Annotation{
 		Table: "email_template_history",

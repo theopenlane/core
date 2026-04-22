@@ -489,7 +489,6 @@ type ComplexityRoot struct {
 		DisplayID               func(childComplexity int) int
 		DueDate                 func(childComplexity int) int
 		Editors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EmailBranding           func(childComplexity int) int
 		EmailBrandingID         func(childComplexity int) int
 		EmailTemplate           func(childComplexity int) int
 		EmailTemplateID         func(childComplexity int) int
@@ -1578,70 +1577,6 @@ type ComplexityRoot struct {
 		DocumentData func(childComplexity int) int
 	}
 
-	EmailBranding struct {
-		BackgroundColor func(childComplexity int) int
-		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		BrandName       func(childComplexity int) int
-		ButtonColor     func(childComplexity int) int
-		ButtonTextColor func(childComplexity int) int
-		Campaigns       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EmailTemplates  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
-		FontFamily      func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IsDefault       func(childComplexity int) int
-		LinkColor       func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Owner           func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		PrimaryColor    func(childComplexity int) int
-		SecondaryColor  func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TextColor       func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-		Viewers         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-	}
-
-	EmailBrandingBulkCreatePayload struct {
-		EmailBrandings func(childComplexity int) int
-	}
-
-	EmailBrandingBulkDeletePayload struct {
-		DeletedIDs func(childComplexity int) int
-	}
-
-	EmailBrandingBulkUpdatePayload struct {
-		EmailBrandings func(childComplexity int) int
-		UpdatedIDs     func(childComplexity int) int
-	}
-
-	EmailBrandingConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	EmailBrandingCreatePayload struct {
-		EmailBranding func(childComplexity int) int
-	}
-
-	EmailBrandingDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	EmailBrandingEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	EmailBrandingUpdatePayload struct {
-		EmailBranding func(childComplexity int) int
-	}
-
 	EmailTemplate struct {
 		Active                func(childComplexity int) int
 		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -1652,7 +1587,6 @@ type ComplexityRoot struct {
 		Defaults              func(childComplexity int) int
 		Description           func(childComplexity int) int
 		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		EmailBranding         func(childComplexity int) int
 		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Format                func(childComplexity int) int
 		ID                    func(childComplexity int) int
@@ -3331,7 +3265,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVDirectorySyncRun        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDiscussion              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEmailBranding           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload, entityTypeName *string) int
 		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
@@ -3397,7 +3330,6 @@ type ComplexityRoot struct {
 		CreateBulkDirectorySyncRun           func(childComplexity int, input []*generated.CreateDirectorySyncRunInput) int
 		CreateBulkDiscussion                 func(childComplexity int, input []*generated.CreateDiscussionInput) int
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
-		CreateBulkEmailBranding              func(childComplexity int, input []*generated.CreateEmailBrandingInput) int
 		CreateBulkEmailTemplate              func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
 		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput, entityTypeName *string) int
 		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
@@ -3467,7 +3399,6 @@ type ComplexityRoot struct {
 		CreateDirectorySyncRun               func(childComplexity int, input generated.CreateDirectorySyncRunInput) int
 		CreateDiscussion                     func(childComplexity int, input generated.CreateDiscussionInput) int
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
-		CreateEmailBranding                  func(childComplexity int, input generated.CreateEmailBrandingInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
 		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
 		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
@@ -3560,7 +3491,6 @@ type ComplexityRoot struct {
 		DeleteBulkCustomDomain               func(childComplexity int, ids []string) int
 		DeleteBulkDNSVerification            func(childComplexity int, ids []string) int
 		DeleteBulkDocumentData               func(childComplexity int, ids []string) int
-		DeleteBulkEmailBranding              func(childComplexity int, ids []string) int
 		DeleteBulkEmailTemplate              func(childComplexity int, ids []string) int
 		DeleteBulkEntity                     func(childComplexity int, ids []string) int
 		DeleteBulkEntityType                 func(childComplexity int, ids []string) int
@@ -3621,7 +3551,6 @@ type ComplexityRoot struct {
 		DeleteDirectorySyncRun               func(childComplexity int, id string) int
 		DeleteDiscussion                     func(childComplexity int, id string) int
 		DeleteDocumentData                   func(childComplexity int, id string) int
-		DeleteEmailBranding                  func(childComplexity int, id string) int
 		DeleteEmailTemplate                  func(childComplexity int, id string) int
 		DeleteEntity                         func(childComplexity int, id string) int
 		DeleteEntityType                     func(childComplexity int, id string) int
@@ -3720,7 +3649,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEmailBranding           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
@@ -3771,7 +3699,6 @@ type ComplexityRoot struct {
 		UpdateBulkCustomDomain               func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
 		UpdateBulkDNSVerification            func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
 		UpdateBulkDocumentData               func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
-		UpdateBulkEmailBranding              func(childComplexity int, ids []string, input generated.UpdateEmailBrandingInput) int
 		UpdateBulkEmailTemplate              func(childComplexity int, ids []string, input generated.UpdateEmailTemplateInput) int
 		UpdateBulkEntity                     func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
 		UpdateBulkEntityType                 func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
@@ -3831,7 +3758,6 @@ type ComplexityRoot struct {
 		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload) int
-		UpdateEmailBranding                  func(childComplexity int, id string, input generated.UpdateEmailBrandingInput) int
 		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
 		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, logoFile *graphql.Upload) int
 		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
@@ -4333,7 +4259,6 @@ type ComplexityRoot struct {
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayName                     func(childComplexity int) int
 		Documents                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		EmailBrandings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		EntityTypes                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
@@ -5006,9 +4931,6 @@ type ComplexityRoot struct {
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DocumentData                    func(childComplexity int, id string) int
 		DocumentDataSlice               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		EmailBranding                   func(childComplexity int, id string) int
-		EmailBrandingSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		EmailBrandings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) int
 		EmailTemplate                   func(childComplexity int, id string) int
 		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
@@ -5753,7 +5675,6 @@ type ComplexityRoot struct {
 		ControlObjectives     func(childComplexity int) int
 		Controls              func(childComplexity int) int
 		CustomTypeEnums       func(childComplexity int) int
-		EmailBrandings        func(childComplexity int) int
 		EmailTemplates        func(childComplexity int) int
 		Entities              func(childComplexity int) int
 		Evidences             func(childComplexity int) int
@@ -9903,13 +9824,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Campaign.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "Campaign.emailBranding":
-		if e.ComplexityRoot.Campaign.EmailBranding == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Campaign.EmailBranding(childComplexity), true
 
 	case "Campaign.emailBrandingID":
 		if e.ComplexityRoot.Campaign.EmailBrandingID == nil {
@@ -15182,290 +15096,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DocumentDataUpdatePayload.DocumentData(childComplexity), true
 
-	case "EmailBranding.backgroundColor":
-		if e.ComplexityRoot.EmailBranding.BackgroundColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.BackgroundColor(childComplexity), true
-
-	case "EmailBranding.blockedGroups":
-		if e.ComplexityRoot.EmailBranding.BlockedGroups == nil {
-			break
-		}
-
-		args, err := ec.field_EmailBranding_blockedGroups_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.EmailBranding.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "EmailBranding.brandName":
-		if e.ComplexityRoot.EmailBranding.BrandName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.BrandName(childComplexity), true
-
-	case "EmailBranding.buttonColor":
-		if e.ComplexityRoot.EmailBranding.ButtonColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.ButtonColor(childComplexity), true
-
-	case "EmailBranding.buttonTextColor":
-		if e.ComplexityRoot.EmailBranding.ButtonTextColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.ButtonTextColor(childComplexity), true
-
-	case "EmailBranding.campaigns":
-		if e.ComplexityRoot.EmailBranding.Campaigns == nil {
-			break
-		}
-
-		args, err := ec.field_EmailBranding_campaigns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.EmailBranding.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
-
-	case "EmailBranding.createdAt":
-		if e.ComplexityRoot.EmailBranding.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.CreatedAt(childComplexity), true
-
-	case "EmailBranding.createdBy":
-		if e.ComplexityRoot.EmailBranding.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.CreatedBy(childComplexity), true
-
-	case "EmailBranding.editors":
-		if e.ComplexityRoot.EmailBranding.Editors == nil {
-			break
-		}
-
-		args, err := ec.field_EmailBranding_editors_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.EmailBranding.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "EmailBranding.emailTemplates":
-		if e.ComplexityRoot.EmailBranding.EmailTemplates == nil {
-			break
-		}
-
-		args, err := ec.field_EmailBranding_emailTemplates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.EmailBranding.EmailTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailTemplateOrder), args["where"].(*generated.EmailTemplateWhereInput)), true
-
-	case "EmailBranding.fontFamily":
-		if e.ComplexityRoot.EmailBranding.FontFamily == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.FontFamily(childComplexity), true
-
-	case "EmailBranding.id":
-		if e.ComplexityRoot.EmailBranding.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.ID(childComplexity), true
-
-	case "EmailBranding.isDefault":
-		if e.ComplexityRoot.EmailBranding.IsDefault == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.IsDefault(childComplexity), true
-
-	case "EmailBranding.linkColor":
-		if e.ComplexityRoot.EmailBranding.LinkColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.LinkColor(childComplexity), true
-
-	case "EmailBranding.logoRemoteURL":
-		if e.ComplexityRoot.EmailBranding.LogoRemoteURL == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.LogoRemoteURL(childComplexity), true
-
-	case "EmailBranding.name":
-		if e.ComplexityRoot.EmailBranding.Name == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.Name(childComplexity), true
-
-	case "EmailBranding.owner":
-		if e.ComplexityRoot.EmailBranding.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.Owner(childComplexity), true
-
-	case "EmailBranding.ownerID":
-		if e.ComplexityRoot.EmailBranding.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.OwnerID(childComplexity), true
-
-	case "EmailBranding.primaryColor":
-		if e.ComplexityRoot.EmailBranding.PrimaryColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.PrimaryColor(childComplexity), true
-
-	case "EmailBranding.secondaryColor":
-		if e.ComplexityRoot.EmailBranding.SecondaryColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.SecondaryColor(childComplexity), true
-
-	case "EmailBranding.tags":
-		if e.ComplexityRoot.EmailBranding.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.Tags(childComplexity), true
-
-	case "EmailBranding.textColor":
-		if e.ComplexityRoot.EmailBranding.TextColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.TextColor(childComplexity), true
-
-	case "EmailBranding.updatedAt":
-		if e.ComplexityRoot.EmailBranding.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.UpdatedAt(childComplexity), true
-
-	case "EmailBranding.updatedBy":
-		if e.ComplexityRoot.EmailBranding.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBranding.UpdatedBy(childComplexity), true
-
-	case "EmailBranding.viewers":
-		if e.ComplexityRoot.EmailBranding.Viewers == nil {
-			break
-		}
-
-		args, err := ec.field_EmailBranding_viewers_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.EmailBranding.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "EmailBrandingBulkCreatePayload.emailBrandings":
-		if e.ComplexityRoot.EmailBrandingBulkCreatePayload.EmailBrandings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingBulkCreatePayload.EmailBrandings(childComplexity), true
-
-	case "EmailBrandingBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.EmailBrandingBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingBulkDeletePayload.DeletedIDs(childComplexity), true
-
-	case "EmailBrandingBulkUpdatePayload.emailBrandings":
-		if e.ComplexityRoot.EmailBrandingBulkUpdatePayload.EmailBrandings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingBulkUpdatePayload.EmailBrandings(childComplexity), true
-
-	case "EmailBrandingBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.EmailBrandingBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
-	case "EmailBrandingConnection.edges":
-		if e.ComplexityRoot.EmailBrandingConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingConnection.Edges(childComplexity), true
-
-	case "EmailBrandingConnection.pageInfo":
-		if e.ComplexityRoot.EmailBrandingConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingConnection.PageInfo(childComplexity), true
-
-	case "EmailBrandingConnection.totalCount":
-		if e.ComplexityRoot.EmailBrandingConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingConnection.TotalCount(childComplexity), true
-
-	case "EmailBrandingCreatePayload.emailBranding":
-		if e.ComplexityRoot.EmailBrandingCreatePayload.EmailBranding == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingCreatePayload.EmailBranding(childComplexity), true
-
-	case "EmailBrandingDeletePayload.deletedID":
-		if e.ComplexityRoot.EmailBrandingDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingDeletePayload.DeletedID(childComplexity), true
-
-	case "EmailBrandingEdge.cursor":
-		if e.ComplexityRoot.EmailBrandingEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingEdge.Cursor(childComplexity), true
-
-	case "EmailBrandingEdge.node":
-		if e.ComplexityRoot.EmailBrandingEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingEdge.Node(childComplexity), true
-
-	case "EmailBrandingUpdatePayload.emailBranding":
-		if e.ComplexityRoot.EmailBrandingUpdatePayload.EmailBranding == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingUpdatePayload.EmailBranding(childComplexity), true
-
 	case "EmailTemplate.active":
 		if e.ComplexityRoot.EmailTemplate.Active == nil {
 			break
@@ -15543,13 +15173,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
-	case "EmailTemplate.emailBranding":
-		if e.ComplexityRoot.EmailTemplate.EmailBranding == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.EmailBranding(childComplexity), true
 
 	case "EmailTemplate.files":
 		if e.ComplexityRoot.EmailTemplate.Files == nil {
@@ -24388,18 +24011,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVEmailBranding":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVEmailBranding(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCSVEmailTemplate":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVEmailTemplate == nil {
 			break
@@ -25179,18 +24790,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkDocumentData(childComplexity, args["input"].([]*generated.CreateDocumentDataInput)), true
-
-	case "Mutation.createBulkEmailBranding":
-		if e.ComplexityRoot.Mutation.CreateBulkEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkEmailBranding(childComplexity, args["input"].([]*generated.CreateEmailBrandingInput)), true
 
 	case "Mutation.createBulkEmailTemplate":
 		if e.ComplexityRoot.Mutation.CreateBulkEmailTemplate == nil {
@@ -26019,18 +25618,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateDocumentData(childComplexity, args["input"].(generated.CreateDocumentDataInput)), true
-
-	case "Mutation.createEmailBranding":
-		if e.ComplexityRoot.Mutation.CreateEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateEmailBranding(childComplexity, args["input"].(generated.CreateEmailBrandingInput)), true
 
 	case "Mutation.createEmailTemplate":
 		if e.ComplexityRoot.Mutation.CreateEmailTemplate == nil {
@@ -27136,18 +26723,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.DeleteBulkDocumentData(childComplexity, args["ids"].([]string)), true
 
-	case "Mutation.deleteBulkEmailBranding":
-		if e.ComplexityRoot.Mutation.DeleteBulkEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkEmailBranding(childComplexity, args["ids"].([]string)), true
-
 	case "Mutation.deleteBulkEmailTemplate":
 		if e.ComplexityRoot.Mutation.DeleteBulkEmailTemplate == nil {
 			break
@@ -27867,18 +27442,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteDocumentData(childComplexity, args["id"].(string)), true
-
-	case "Mutation.deleteEmailBranding":
-		if e.ComplexityRoot.Mutation.DeleteEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteEmailBranding(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteEmailTemplate":
 		if e.ComplexityRoot.Mutation.DeleteEmailTemplate == nil {
@@ -29051,18 +28614,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVDocumentData(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.updateBulkCSVEmailBranding":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVEmailBranding(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.updateBulkCSVEmailTemplate":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVEmailTemplate == nil {
 			break
@@ -29662,18 +29213,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkDocumentData(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateDocumentDataInput)), true
-
-	case "Mutation.updateBulkEmailBranding":
-		if e.ComplexityRoot.Mutation.UpdateBulkEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkEmailBranding(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEmailBrandingInput)), true
 
 	case "Mutation.updateBulkEmailTemplate":
 		if e.ComplexityRoot.Mutation.UpdateBulkEmailTemplate == nil {
@@ -30382,18 +29921,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateDocumentData(childComplexity, args["id"].(string), args["input"].(generated.UpdateDocumentDataInput), args["documentDataFile"].(*graphql.Upload)), true
-
-	case "Mutation.updateEmailBranding":
-		if e.ComplexityRoot.Mutation.UpdateEmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateEmailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateEmailBranding(childComplexity, args["id"].(string), args["input"].(generated.UpdateEmailBrandingInput)), true
 
 	case "Mutation.updateEmailTemplate":
 		if e.ComplexityRoot.Mutation.UpdateEmailTemplate == nil {
@@ -33400,18 +32927,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Documents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
-
-	case "Organization.emailBrandings":
-		if e.ComplexityRoot.Organization.EmailBrandings == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_emailBrandings_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.EmailBrandings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailBrandingOrder), args["where"].(*generated.EmailBrandingWhereInput)), true
 
 	case "Organization.emailTemplates":
 		if e.ComplexityRoot.Organization.EmailTemplates == nil {
@@ -37822,42 +37337,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.DocumentDataSlice(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DocumentDataOrder), args["where"].(*generated.DocumentDataWhereInput)), true
-
-	case "Query.emailBranding":
-		if e.ComplexityRoot.Query.EmailBranding == nil {
-			break
-		}
-
-		args, err := ec.field_Query_emailBranding_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.EmailBranding(childComplexity, args["id"].(string)), true
-
-	case "Query.emailBrandingSearch":
-		if e.ComplexityRoot.Query.EmailBrandingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_emailBrandingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.EmailBrandingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.emailBrandings":
-		if e.ComplexityRoot.Query.EmailBrandings == nil {
-			break
-		}
-
-		args, err := ec.field_Query_emailBrandings_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.EmailBrandings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EmailBrandingOrder), args["where"].(*generated.EmailBrandingWhereInput)), true
 
 	case "Query.emailTemplate":
 		if e.ComplexityRoot.Query.EmailTemplate == nil {
@@ -43059,13 +42538,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.CustomTypeEnums(childComplexity), true
-
-	case "SearchResults.emailBrandings":
-		if e.ComplexityRoot.SearchResults.EmailBrandings == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SearchResults.EmailBrandings(childComplexity), true
 
 	case "SearchResults.emailTemplates":
 		if e.ComplexityRoot.SearchResults.EmailTemplates == nil {
@@ -52278,7 +51750,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateDirectorySyncRunInput,
 		ec.unmarshalInputCreateDiscussionInput,
 		ec.unmarshalInputCreateDocumentDataInput,
-		ec.unmarshalInputCreateEmailBrandingInput,
 		ec.unmarshalInputCreateEmailTemplateInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
@@ -52371,8 +51842,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDiscussionWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
 		ec.unmarshalInputDocumentDataWhereInput,
-		ec.unmarshalInputEmailBrandingOrder,
-		ec.unmarshalInputEmailBrandingWhereInput,
 		ec.unmarshalInputEmailTemplateOrder,
 		ec.unmarshalInputEmailTemplateWhereInput,
 		ec.unmarshalInputEntityOrder,
@@ -52529,7 +51998,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDiscussionInput,
 		ec.unmarshalInputUpdateDiscussionsInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
-		ec.unmarshalInputUpdateEmailBrandingInput,
 		ec.unmarshalInputUpdateEmailTemplateInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -56070,165 +55538,6 @@ type DocumentDataBulkUpdatePayload {
     IDs of the updated documentDatas
     """
     updatedIDs: [ID!]
-}
-`, BuiltIn: false},
-	{Name: "../schema/emailbranding.graphql", Input: `extend type Query {
-    """
-    Look up emailBranding by ID
-    """
-     emailBranding(
-        """
-        ID of the emailBranding
-        """
-        id: ID!
-    ):  EmailBranding!
-}
-
-extend type Mutation{
-    """
-    Create a new emailBranding
-    """
-    createEmailBranding(
-        """
-        values of the emailBranding
-        """
-        input: CreateEmailBrandingInput!
-    ): EmailBrandingCreatePayload!
-    """
-    Create multiple new emailBrandings
-    """
-    createBulkEmailBranding(
-        """
-        values of the emailBranding
-        """
-        input: [CreateEmailBrandingInput!]
-    ): EmailBrandingBulkCreatePayload!
-    """
-    Create multiple new emailBrandings via file upload
-    """
-    createBulkCSVEmailBranding(
-        """
-        csv file containing values of the emailBranding
-        """
-        input: Upload!
-    ): EmailBrandingBulkCreatePayload!
-    """
-    Update multiple existing emailBrandings
-    """
-    updateBulkEmailBranding(
-        """
-        IDs of the emailBrandings to update
-        """
-        ids: [ID!]!
-        """
-        values to update the emailBrandings with
-        """
-        input: UpdateEmailBrandingInput!
-    ): EmailBrandingBulkUpdatePayload!
-    """
-    Update multiple existing emailBrandings via file upload
-    """
-    updateBulkCSVEmailBranding(
-        """
-        csv file containing values of the emailBranding, must include ID column
-        """
-        input: Upload!
-    ): EmailBrandingBulkUpdatePayload!
-    """
-    Update an existing emailBranding
-    """
-    updateEmailBranding(
-        """
-        ID of the emailBranding
-        """
-        id: ID!
-        """
-        New values for the emailBranding
-        """
-        input: UpdateEmailBrandingInput!
-    ): EmailBrandingUpdatePayload!
-    """
-    Delete an existing emailBranding
-    """
-    deleteEmailBranding(
-        """
-        ID of the emailBranding
-        """
-        id: ID!
-    ): EmailBrandingDeletePayload!
-    """
-    Delete multiple emailBrandings
-    """
-    deleteBulkEmailBranding(
-        """
-        IDs of the emailBrandings to delete
-        """
-        ids: [ID!]!
-    ): EmailBrandingBulkDeletePayload!
-}
-
-"""
-Return response for createEmailBranding mutation
-"""
-type EmailBrandingCreatePayload {
-    """
-    Created emailBranding
-    """
-    emailBranding: EmailBranding!
-}
-
-"""
-Return response for updateEmailBranding mutation
-"""
-type EmailBrandingUpdatePayload {
-    """
-    Updated emailBranding
-    """
-    emailBranding: EmailBranding!
-}
-
-"""
-Return response for deleteEmailBranding mutation
-"""
-type EmailBrandingDeletePayload {
-    """
-    Deleted emailBranding ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkEmailBranding mutation
-"""
-type EmailBrandingBulkCreatePayload {
-    """
-    Created emailBrandings
-    """
-    emailBrandings: [EmailBranding!]
-}
-
-"""
-Return response for updateBulkEmailBranding mutation
-"""
-type EmailBrandingBulkUpdatePayload {
-    """
-    Updated emailBrandings
-    """
-    emailBrandings: [EmailBranding!]
-    """
-    IDs of the updated emailBrandings
-    """
-    updatedIDs: [ID!]
-}
-
-"""
-Return response for deleteBulkEmailBranding mutation
-"""
-type EmailBrandingBulkDeletePayload {
-    """
-    Deleted emailBranding IDs
-    """
-    deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/emailtemplate.graphql", Input: `extend type Query {
@@ -60779,9 +60088,9 @@ type Campaign implements Node {
   """
   metadata: Map
   """
-  the email branding associated with the campaign
+  the email branding or theme reference the campaign may use to override the email templates theme
   """
-  emailBrandingID: ID
+  emailBrandingID: String
   """
   the email template associated with the campaign
   """
@@ -60888,7 +60197,6 @@ type Campaign implements Node {
   internalOwnerGroup: Group
   assessment: Assessment
   template: Template
-  emailBranding: EmailBranding
   integration: Integration
   emailTemplate: EmailTemplate
   entity: Entity
@@ -62135,21 +61443,21 @@ input CampaignWhereInput {
   """
   email_branding_id field predicates
   """
-  emailBrandingID: ID
-  emailBrandingIDNEQ: ID
-  emailBrandingIDIn: [ID!]
-  emailBrandingIDNotIn: [ID!]
-  emailBrandingIDGT: ID
-  emailBrandingIDGTE: ID
-  emailBrandingIDLT: ID
-  emailBrandingIDLTE: ID
-  emailBrandingIDContains: ID
-  emailBrandingIDHasPrefix: ID
-  emailBrandingIDHasSuffix: ID
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
   emailBrandingIDIsNil: Boolean
   emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: ID
-  emailBrandingIDContainsFold: ID
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
   """
   email_template_id field predicates
   """
@@ -62226,11 +61534,6 @@ input CampaignWhereInput {
   """
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
-  """
-  email_branding edge predicates
-  """
-  hasEmailBranding: Boolean
-  hasEmailBrandingWith: [EmailBrandingWhereInput!]
   """
   integration edge predicates
   """
@@ -66748,6 +66051,10 @@ input CreateCampaignInput {
   additional metadata about the campaign
   """
   metadata: Map
+  """
+  the email branding or theme reference the campaign may use to override the email templates theme
+  """
+  emailBrandingID: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -66756,7 +66063,6 @@ input CreateCampaignInput {
   internalOwnerGroupID: ID
   assessmentID: ID
   templateID: ID
-  emailBrandingID: ID
   integrationID: ID
   emailTemplateID: ID
   entityID: ID
@@ -67703,70 +67009,6 @@ input CreateDocumentDataInput {
   fileIDs: [ID!]
 }
 """
-CreateEmailBrandingInput is used for create EmailBranding object.
-Input was generated by ent.
-"""
-input CreateEmailBrandingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  friendly name for this email branding configuration
-  """
-  name: String!
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  """
-  text color for emails
-  """
-  textColor: String
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  """
-  link color for emails
-  """
-  linkColor: String
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  ownerID: ID
-  blockedGroupIDs: [ID!]
-  editorIDs: [ID!]
-  viewerIDs: [ID!]
-  campaignIDs: [ID!]
-  emailTemplateIDs: [ID!]
-}
-"""
 CreateEmailTemplateInput is used for create EmailTemplate object.
 Input was generated by ent.
 """
@@ -67851,7 +67093,6 @@ input CreateEmailTemplateInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  emailBrandingIDs: [ID!]
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
@@ -69650,7 +68891,6 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
-  emailBrandingIDs: [ID!]
   emailTemplateIDs: [ID!]
   notificationPreferenceIDs: [ID!]
   notificationTemplateIDs: [ID!]
@@ -77327,624 +76567,6 @@ input DocumentDataWhereInput {
   """
   tagsHas: String
 }
-type EmailBranding implements Node {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
-  friendly name for this email branding configuration
-  """
-  name: String!
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  """
-  text color for emails
-  """
-  textColor: String
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  """
-  link color for emails
-  """
-  linkColor: String
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  owner: Organization
-  blockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  editors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  campaigns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Campaigns returned from the connection.
-    """
-    orderBy: [CampaignOrder!]
-
-    """
-    Filtering options for Campaigns returned from the connection.
-    """
-    where: CampaignWhereInput
-  ): CampaignConnection!
-  emailTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailTemplates returned from the connection.
-    """
-    orderBy: [EmailTemplateOrder!]
-
-    """
-    Filtering options for EmailTemplates returned from the connection.
-    """
-    where: EmailTemplateWhereInput
-  ): EmailTemplateConnection!
-}
-"""
-A connection to a list of items.
-"""
-type EmailBrandingConnection {
-  """
-  A list of edges.
-  """
-  edges: [EmailBrandingEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type EmailBrandingEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: EmailBranding
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-EmailBrandingFont is enum for the field font_family
-"""
-enum EmailBrandingFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
-  COURIER
-  COURIER_BOLD
-  COURIER_BOLDOBLIQUE
-  COURIER_OBLIQUE
-  HELVETICA
-  HELVETICA_BOLD
-  HELVETICA_BOLDOBLIQUE
-  HELVETICA_OBLIQUE
-  SYMBOL
-  TIMES_BOLD
-  TIMES_BOLDITALIC
-  TIMES_ITALIC
-  TIMES_ROMAN
-}
-"""
-Ordering options for EmailBranding connections
-"""
-input EmailBrandingOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order EmailBrandings.
-  """
-  field: EmailBrandingOrderField!
-}
-"""
-Properties by which EmailBranding connections can be ordered.
-"""
-enum EmailBrandingOrderField {
-  created_at
-  updated_at
-  name
-}
-"""
-EmailBrandingWhereInput is used for filtering EmailBranding objects.
-Input was generated by ent.
-"""
-input EmailBrandingWhereInput {
-  not: EmailBrandingWhereInput
-  and: [EmailBrandingWhereInput!]
-  or: [EmailBrandingWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  brand_name field predicates
-  """
-  brandName: String
-  brandNameNEQ: String
-  brandNameIn: [String!]
-  brandNameNotIn: [String!]
-  brandNameGT: String
-  brandNameGTE: String
-  brandNameLT: String
-  brandNameLTE: String
-  brandNameContains: String
-  brandNameHasPrefix: String
-  brandNameHasSuffix: String
-  brandNameIsNil: Boolean
-  brandNameNotNil: Boolean
-  brandNameEqualFold: String
-  brandNameContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
-  secondary_color field predicates
-  """
-  secondaryColor: String
-  secondaryColorNEQ: String
-  secondaryColorIn: [String!]
-  secondaryColorNotIn: [String!]
-  secondaryColorGT: String
-  secondaryColorGTE: String
-  secondaryColorLT: String
-  secondaryColorLTE: String
-  secondaryColorContains: String
-  secondaryColorHasPrefix: String
-  secondaryColorHasSuffix: String
-  secondaryColorIsNil: Boolean
-  secondaryColorNotNil: Boolean
-  secondaryColorEqualFold: String
-  secondaryColorContainsFold: String
-  """
-  background_color field predicates
-  """
-  backgroundColor: String
-  backgroundColorNEQ: String
-  backgroundColorIn: [String!]
-  backgroundColorNotIn: [String!]
-  backgroundColorGT: String
-  backgroundColorGTE: String
-  backgroundColorLT: String
-  backgroundColorLTE: String
-  backgroundColorContains: String
-  backgroundColorHasPrefix: String
-  backgroundColorHasSuffix: String
-  backgroundColorIsNil: Boolean
-  backgroundColorNotNil: Boolean
-  backgroundColorEqualFold: String
-  backgroundColorContainsFold: String
-  """
-  text_color field predicates
-  """
-  textColor: String
-  textColorNEQ: String
-  textColorIn: [String!]
-  textColorNotIn: [String!]
-  textColorGT: String
-  textColorGTE: String
-  textColorLT: String
-  textColorLTE: String
-  textColorContains: String
-  textColorHasPrefix: String
-  textColorHasSuffix: String
-  textColorIsNil: Boolean
-  textColorNotNil: Boolean
-  textColorEqualFold: String
-  textColorContainsFold: String
-  """
-  button_color field predicates
-  """
-  buttonColor: String
-  buttonColorNEQ: String
-  buttonColorIn: [String!]
-  buttonColorNotIn: [String!]
-  buttonColorGT: String
-  buttonColorGTE: String
-  buttonColorLT: String
-  buttonColorLTE: String
-  buttonColorContains: String
-  buttonColorHasPrefix: String
-  buttonColorHasSuffix: String
-  buttonColorIsNil: Boolean
-  buttonColorNotNil: Boolean
-  buttonColorEqualFold: String
-  buttonColorContainsFold: String
-  """
-  button_text_color field predicates
-  """
-  buttonTextColor: String
-  buttonTextColorNEQ: String
-  buttonTextColorIn: [String!]
-  buttonTextColorNotIn: [String!]
-  buttonTextColorGT: String
-  buttonTextColorGTE: String
-  buttonTextColorLT: String
-  buttonTextColorLTE: String
-  buttonTextColorContains: String
-  buttonTextColorHasPrefix: String
-  buttonTextColorHasSuffix: String
-  buttonTextColorIsNil: Boolean
-  buttonTextColorNotNil: Boolean
-  buttonTextColorEqualFold: String
-  buttonTextColorContainsFold: String
-  """
-  link_color field predicates
-  """
-  linkColor: String
-  linkColorNEQ: String
-  linkColorIn: [String!]
-  linkColorNotIn: [String!]
-  linkColorGT: String
-  linkColorGTE: String
-  linkColorLT: String
-  linkColorLTE: String
-  linkColorContains: String
-  linkColorHasPrefix: String
-  linkColorHasSuffix: String
-  linkColorIsNil: Boolean
-  linkColorNotNil: Boolean
-  linkColorEqualFold: String
-  linkColorContainsFold: String
-  """
-  font_family field predicates
-  """
-  fontFamily: EmailBrandingFont
-  fontFamilyNEQ: EmailBrandingFont
-  fontFamilyIn: [EmailBrandingFont!]
-  fontFamilyNotIn: [EmailBrandingFont!]
-  fontFamilyIsNil: Boolean
-  fontFamilyNotNil: Boolean
-  """
-  is_default field predicates
-  """
-  isDefault: Boolean
-  isDefaultNEQ: Boolean
-  isDefaultIsNil: Boolean
-  isDefaultNotNil: Boolean
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  campaigns edge predicates
-  """
-  hasCampaigns: Boolean
-  hasCampaignsWith: [CampaignWhereInput!]
-  """
-  email_templates edge predicates
-  """
-  hasEmailTemplates: Boolean
-  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
 type EmailTemplate implements Node {
   id: ID!
   createdAt: Time
@@ -78141,7 +76763,6 @@ type EmailTemplate implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  emailBranding: [EmailBranding!]
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
@@ -78718,11 +77339,6 @@ input EmailTemplateWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
-  """
-  email_branding edge predicates
-  """
-  hasEmailBranding: Boolean
-  hasEmailBrandingWith: [EmailBrandingWhereInput!]
   """
   integration edge predicates
   """
@@ -99619,37 +98235,6 @@ type Organization implements Node {
     """
     where: APITokenWhereInput
   ): APITokenConnection!
-  emailBrandings(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailBrandings returned from the connection.
-    """
-    orderBy: [EmailBrandingOrder!]
-
-    """
-    Filtering options for EmailBrandings returned from the connection.
-    """
-    where: EmailBrandingWhereInput
-  ): EmailBrandingConnection!
   emailTemplates(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -102926,11 +101511,6 @@ input OrganizationWhereInput {
   """
   hasAPITokens: Boolean
   hasAPITokensWith: [APITokenWhereInput!]
-  """
-  email_brandings edge predicates
-  """
-  hasEmailBrandings: Boolean
-  hasEmailBrandingsWith: [EmailBrandingWhereInput!]
   """
   email_templates edge predicates
   """
@@ -109066,37 +107646,6 @@ type Query {
     """
     where: DocumentDataWhereInput
   ): DocumentDataConnection!
-  emailBrandings(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailBrandings returned from the connection.
-    """
-    orderBy: [EmailBrandingOrder!]
-
-    """
-    Filtering options for EmailBrandings returned from the connection.
-    """
-    where: EmailBrandingWhereInput
-  ): EmailBrandingConnection!
   emailTemplates(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -128362,6 +126911,11 @@ input UpdateCampaignInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  the email branding or theme reference the campaign may use to override the email templates theme
+  """
+  emailBrandingID: String
+  clearEmailBrandingID: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -128379,8 +126933,6 @@ input UpdateCampaignInput {
   clearAssessment: Boolean
   templateID: ID
   clearTemplate: Boolean
-  emailBrandingID: ID
-  clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean
   emailTemplateID: ID
@@ -129630,92 +128182,6 @@ input UpdateDocumentDataInput {
   clearFiles: Boolean
 }
 """
-UpdateEmailBrandingInput is used for update EmailBranding object.
-Input was generated by ent.
-"""
-input UpdateEmailBrandingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  friendly name for this email branding configuration
-  """
-  name: String
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  clearBrandName: Boolean
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  clearLogoRemoteURL: Boolean
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  clearPrimaryColor: Boolean
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  clearSecondaryColor: Boolean
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  clearBackgroundColor: Boolean
-  """
-  text color for emails
-  """
-  textColor: String
-  clearTextColor: Boolean
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  clearButtonColor: Boolean
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  clearButtonTextColor: Boolean
-  """
-  link color for emails
-  """
-  linkColor: String
-  clearLinkColor: Boolean
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  clearFontFamily: Boolean
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  clearIsDefault: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  addCampaignIDs: [ID!]
-  removeCampaignIDs: [ID!]
-  clearCampaigns: Boolean
-  addEmailTemplateIDs: [ID!]
-  removeEmailTemplateIDs: [ID!]
-  clearEmailTemplates: Boolean
-}
-"""
 UpdateEmailTemplateInput is used for update EmailTemplate object.
 Input was generated by ent.
 """
@@ -129817,9 +128283,6 @@ input UpdateEmailTemplateInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  addEmailBrandingIDs: [ID!]
-  removeEmailBrandingIDs: [ID!]
-  clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean
   workflowDefinitionID: ID
@@ -132301,9 +130764,6 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
-  addEmailBrandingIDs: [ID!]
-  removeEmailBrandingIDs: [ID!]
-  clearEmailBrandings: Boolean
   addEmailTemplateIDs: [ID!]
   removeEmailTemplateIDs: [ID!]
   clearEmailTemplates: Boolean
@@ -150074,31 +148534,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): CustomTypeEnumConnection
     """
-    Search across EmailBranding objects
-    """
-    emailBrandingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EmailBrandingConnection
-    """
     Search across EmailTemplate objects
     """
     emailTemplateSearch(
@@ -150893,7 +149328,6 @@ type SearchResults{
   controls: ControlConnection
   controlObjectives: ControlObjectiveConnection
   customTypeEnums: CustomTypeEnumConnection
-  emailBrandings: EmailBrandingConnection
   emailTemplates: EmailTemplateConnection
   entities: EntityConnection
   evidences: EvidenceConnection

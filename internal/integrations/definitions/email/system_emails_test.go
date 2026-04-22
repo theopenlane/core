@@ -135,12 +135,12 @@ func TestVerifyEmailURLConstruction(t *testing.T) {
 		Token:         "abc123",
 	}
 
-	content := verifyEmail.Content(cfg, req)
+	body := verifyEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/verify?token=abc123", content.Body.Actions[0].Button.Link)
-	assert.Equal(t, "Confirm Email", content.Body.Actions[0].Button.Text)
-	assert.Equal(t, "Alice", content.Body.Name)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/verify?token=abc123", body.Actions[0].Button.Link)
+	assert.Equal(t, "Confirm Email", body.Actions[0].Button.Text)
+	assert.Equal(t, "Alice", body.Name)
 }
 
 // TestInviteEmailURLConstruction verifies the invite email content builds the correct URL
@@ -158,11 +158,11 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 		Token:         "inv-tok-456",
 	}
 
-	content := inviteEmail.Content(cfg, req)
+	body := inviteEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456", content.Body.Actions[0].Button.Link)
-	assert.Equal(t, "Accept Invite", content.Body.Actions[0].Button.Text)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456", body.Actions[0].Button.Link)
+	assert.Equal(t, "Accept Invite", body.Actions[0].Button.Text)
 }
 
 // TestInviteEmailRoleInIntro verifies the role is uppercased in the intro
@@ -179,11 +179,11 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 		Token:       "tok",
 	}
 
-	content := inviteEmail.Content(cfg, req)
+	body := inviteEmail.Build(cfg, req)
 
-	require.NotEmpty(t, content.Body.IntrosUnsafe)
+	require.NotEmpty(t, body.Intros.Unsafe)
 	found := false
-	for _, intro := range content.Body.IntrosUnsafe {
+	for _, intro := range body.Intros.Unsafe {
 		if strings.Contains(string(intro), "ADMIN") {
 			found = true
 		}
@@ -205,10 +205,10 @@ func TestInviteEmailNoRole(t *testing.T) {
 		Token:       "tok",
 	}
 
-	content := inviteEmail.Content(cfg, req)
+	body := inviteEmail.Build(cfg, req)
 
-	require.NotEmpty(t, content.Body.IntrosUnsafe)
-	for _, intro := range content.Body.IntrosUnsafe {
+	require.NotEmpty(t, body.Intros.Unsafe)
+	for _, intro := range body.Intros.Unsafe {
 		assert.NotContains(t, string(intro), "role of")
 	}
 }
@@ -225,10 +225,10 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 		Token:         "reset-xyz",
 	}
 
-	content := resetRequestEmail.Content(cfg, req)
+	body := resetRequestEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", content.Body.Actions[0].Button.Link)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link)
 }
 
 // TestSubscribeVerifyURLConstruction verifies the subscribe verification URL
@@ -244,10 +244,10 @@ func TestSubscribeVerifyURLConstruction(t *testing.T) {
 		Token:         "sub-tok",
 	}
 
-	content := subscribeEmail.Content(cfg, req)
+	body := subscribeEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/subscribe/verify?token=sub-tok", content.Body.Actions[0].Button.Link)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
 }
 
 // TestVerifyBillingURLConstruction verifies the billing verification URL
@@ -261,36 +261,36 @@ func TestVerifyBillingURLConstruction(t *testing.T) {
 		Token: "bill-tok",
 	}
 
-	content := verifyBillingEmail.Content(cfg, req)
+	body := verifyBillingEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/billing/verify?token=bill-tok", content.Body.Actions[0].Button.Link)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/billing/verify?token=bill-tok", body.Actions[0].Button.Link)
 }
 
 // TestTrustCenterNDARequestButtonColor verifies the NDA request uses trust center theme colors
 func TestTrustCenterNDARequestButtonColor(t *testing.T) {
-	content := tcNDARequestEmail.Content(RuntimeEmailConfig{}, TrustCenterNDARequestEmail{
+	body := tcNDARequestEmail.Build(RuntimeEmailConfig{}, TrustCenterNDARequestEmail{
 		OrgName: "SecureCorp",
 		NDAURL:  "https://trust.securecorp.com/sign",
 	})
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, tcButtonColor, content.Body.Actions[0].Button.Color)
-	assert.Equal(t, tcButtonTextColor, content.Body.Actions[0].Button.TextColor)
-	assert.Equal(t, "https://trust.securecorp.com/sign", content.Body.Actions[0].Button.Link)
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)
+	assert.Equal(t, tcButtonTextColor, body.Actions[0].Button.TextColor)
+	assert.Equal(t, "https://trust.securecorp.com/sign", body.Actions[0].Button.Link)
 }
 
 // TestTrustCenterNDASignedContent verifies the NDA signed confirmation content
 func TestTrustCenterNDASignedContent(t *testing.T) {
-	content := tcNDASignedEmail.Content(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{
+	body := tcNDASignedEmail.Build(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{
 		OrgName:        "SecureCorp",
 		TrustCenterURL: "https://trust.securecorp.com",
 	})
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "Visit Trust Center", content.Body.Actions[0].Button.Text)
-	assert.Equal(t, "https://trust.securecorp.com", content.Body.Actions[0].Button.Link)
-	assert.Contains(t, content.Body.Intros[0], "SecureCorp")
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "Visit Trust Center", body.Actions[0].Button.Text)
+	assert.Equal(t, "https://trust.securecorp.com", body.Actions[0].Button.Link)
+	assert.Contains(t, body.Intros.Paragraphs[0], "SecureCorp")
 }
 
 // TestTrustCenterNDASignedAttachment verifies attachment options are returned when data is present
@@ -323,12 +323,12 @@ func TestQuestionnaireAuthContent(t *testing.T) {
 		AuthURL:        "https://q.auditco.com/auth?tok=abc",
 	}
 
-	content := questionnaireAuthEmail.Content(cfg, req)
+	body := questionnaireAuthEmail.Build(cfg, req)
 
-	require.Len(t, content.Body.Actions, 1)
-	assert.Equal(t, "https://q.auditco.com/auth?tok=abc", content.Body.Actions[0].Button.Link)
-	assert.Contains(t, content.Body.Title, "AuditCo")
-	assert.Contains(t, content.Body.Intros[0], "SOC2 Review")
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://q.auditco.com/auth?tok=abc", body.Actions[0].Button.Link)
+	assert.Contains(t, body.Title, "AuditCo")
+	assert.Contains(t, body.Intros.Paragraphs[0], "SOC2 Review")
 }
 
 // TestQuestionnaireFromOverride verifies the from address override when configured
@@ -363,13 +363,13 @@ func TestBillingChangedContent(t *testing.T) {
 		ChangedAt:       time.Date(2025, 6, 15, 14, 30, 0, 0, time.UTC),
 	}
 
-	content := billingChangedEmail.Content(cfg, req)
+	body := billingChangedEmail.Build(cfg, req)
 
-	assert.Equal(t, "Billing Email Changed", content.Body.Title)
-	assert.Contains(t, content.Body.Intros[0], "BillOrg")
+	assert.Equal(t, "Billing Email Changed", body.Title)
+	assert.Contains(t, body.Intros.Paragraphs[0], "BillOrg")
 
-	require.NotEmpty(t, content.Body.ContentBlocks)
-	block := string(content.Body.ContentBlocks[0])
+	require.NotEmpty(t, body.ContentBlocks)
+	block := string(body.ContentBlocks[0])
 	assert.Contains(t, block, "old@billing.com")
 	assert.Contains(t, block, "new@billing.com")
 }

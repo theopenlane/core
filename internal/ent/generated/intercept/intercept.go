@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -712,33 +711,6 @@ func (f TraverseDocumentData) Traverse(ctx context.Context, q generated.Query) e
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.DocumentDataQuery", q)
-}
-
-// The EmailBrandingFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EmailBrandingFunc func(context.Context, *generated.EmailBrandingQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EmailBrandingFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.EmailBrandingQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.EmailBrandingQuery", q)
-}
-
-// The TraverseEmailBranding type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEmailBranding func(context.Context, *generated.EmailBrandingQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEmailBranding) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEmailBranding) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EmailBrandingQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.EmailBrandingQuery", q)
 }
 
 // The EmailTemplateFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3106,8 +3078,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DiscussionQuery, predicate.Discussion, discussion.OrderOption]{typ: generated.TypeDiscussion, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
-	case *generated.EmailBrandingQuery:
-		return &query[*generated.EmailBrandingQuery, predicate.EmailBranding, emailbranding.OrderOption]{typ: generated.TypeEmailBranding, tq: q}, nil
 	case *generated.EmailTemplateQuery:
 		return &query[*generated.EmailTemplateQuery, predicate.EmailTemplate, emailtemplate.OrderOption]{typ: generated.TypeEmailTemplate, tq: q}, nil
 	case *generated.EmailVerificationTokenQuery:

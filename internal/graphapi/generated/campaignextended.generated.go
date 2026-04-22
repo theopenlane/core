@@ -146,8 +146,6 @@ func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campai
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":
@@ -388,8 +386,6 @@ func (ec *executionContext) fieldContext_CampaignLaunchPayload_campaign(_ contex
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":
@@ -603,8 +599,6 @@ func (ec *executionContext) fieldContext_CampaignTestEmailPayload_campaign(_ con
 				return ec.fieldContext_Campaign_assessment(ctx, field)
 			case "template":
 				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
 			case "integration":
 				return ec.fieldContext_Campaign_integration(ctx, field)
 			case "emailTemplate":

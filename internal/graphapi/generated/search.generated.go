@@ -466,43 +466,6 @@ func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context
 	return fc, nil
 }
 
-func (ec *executionContext) _SearchResults_emailBrandings(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_SearchResults_emailBrandings,
-		func(ctx context.Context) (any, error) {
-			return obj.EmailBrandings, nil
-		},
-		nil,
-		ec.marshalOEmailBrandingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailBrandingConnection,
-		true,
-		false,
-	)
-}
-
-func (ec *executionContext) fieldContext_SearchResults_emailBrandings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_EmailBrandingConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_EmailBrandingConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_EmailBrandingConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailBrandingConnection", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _SearchResults_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1742,8 +1705,6 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
 		case "customTypeEnums":
 			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
-		case "emailBrandings":
-			out.Values[i] = ec._SearchResults_emailBrandings(ctx, field, obj)
 		case "emailTemplates":
 			out.Values[i] = ec._SearchResults_emailTemplates(ctx, field, obj)
 		case "entities":

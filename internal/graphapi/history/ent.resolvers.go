@@ -579,38 +579,6 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 	return res, err
 }
 
-// EmailBrandingHistories is the resolver for the emailBrandingHistories field.
-func (r *queryResolver) EmailBrandingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailBrandingHistoryOrder, where *historygenerated.EmailBrandingHistoryWhereInput) (*historygenerated.EmailBrandingHistoryConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = &historygenerated.EmailBrandingHistoryOrder{
-			Field:     historygenerated.EmailBrandingHistoryOrderFieldCreatedAt,
-			Direction: entgql.OrderDirectionDesc,
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).EmailBrandingHistory.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbrandinghistory"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		historygenerated.WithEmailBrandingHistoryOrder(orderBy),
-		historygenerated.WithEmailBrandingHistoryFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbrandinghistory"})
-	}
-
-	return res, err
-}
-
 // EmailTemplateHistories is the resolver for the emailTemplateHistories field.
 func (r *queryResolver) EmailTemplateHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) (*historygenerated.EmailTemplateHistoryConnection, error) {
 	// set page limit if nothing was set

@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -649,11 +648,6 @@ func (_c *CampaignCreate) SetTemplate(v *Template) *CampaignCreate {
 	return _c.SetTemplateID(v.ID)
 }
 
-// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
-func (_c *CampaignCreate) SetEmailBranding(v *EmailBranding) *CampaignCreate {
-	return _c.SetEmailBrandingID(v.ID)
-}
-
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_c *CampaignCreate) SetIntegration(v *Integration) *CampaignCreate {
 	return _c.SetIntegrationID(v.ID)
@@ -1110,6 +1104,10 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 		_spec.SetField(campaign.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
+	if value, ok := _c.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaign.FieldEmailBrandingID, field.TypeString, value)
+		_node.EmailBrandingID = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1249,24 +1247,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TemplateID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Campaign
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.EmailBrandingID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {

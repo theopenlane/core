@@ -31,7 +31,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
@@ -170,7 +169,6 @@ func checkColumn(t, c string) error {
 			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
 			discussionhistory.Table:                 discussionhistory.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
-			emailbrandinghistory.Table:              emailbrandinghistory.ValidColumn,
 			emailtemplatehistory.Table:              emailtemplatehistory.ValidColumn,
 			entityhistory.Table:                     entityhistory.ValidColumn,
 			entitytypehistory.Table:                 entitytypehistory.ValidColumn,
