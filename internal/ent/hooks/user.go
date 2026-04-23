@@ -109,6 +109,17 @@ func HookUser() ent.Hook {
 				}
 			}
 
+			var oldDisplayName string
+			if m.Op().Is(ent.OpUpdateOne) && canUpdateManagedGroup(m) {
+				var err error
+
+				oldDisplayName, err = m.OldDisplayName(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("error getting old display name")
+					return nil, err
+				}
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -121,7 +132,7 @@ func HookUser() ent.Hook {
 
 			// handle display name updates for managed groups
 			if m.Op().Is(ent.OpUpdateOne) {
-				if err := updateSystemManagedGroupForUser(ctx, m, userCreated); err != nil {
+				if err := updateSystemManagedGroupForUser(ctx, m, userCreated, oldDisplayName); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("error updating system managed group name for the user")
 					return nil, err
 				}
@@ -372,7 +383,15 @@ func defaultUserSettings(ctx context.Context, user *generated.UserMutation) (str
 	return userSetting.ID, nil
 }
 
-func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutation, user *generated.User) error {
+func canUpdateManagedGroup(m *generated.UserMutation) bool {
+	_, didDisplayNameChange := m.DisplayName()
+	_, didAvatarRemoteURLChange := m.AvatarRemoteURL()
+	_, didLocalFileChange := m.AvatarLocalFileID()
+
+	return didDisplayNameChange || didAvatarRemoteURLChange || didLocalFileChange
+}
+
+func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutation, user *generated.User, oldDisplayName string) error {
 	displayName, ok := m.DisplayName()
 
 	avatarRemoteURL, isAvatarRemoteURLChanged := m.AvatarRemoteURL()
@@ -382,20 +401,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 		return nil
 	}
 
-	oldDisplayName, err := m.OldDisplayName(ctx)
-	if err != nil {
-		return err
-	}
-
 	if ok {
-		var err error
-
-		oldDisplayName, err = m.OldDisplayName(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error getting old display name")
-			return err
-		}
-
 		if oldDisplayName == displayName {
 			ok = false
 		}
