@@ -113,6 +113,7 @@ email:
     supportemail: ""
     templatespath: ""
     urls:
+        billing: ""
         docs: ""
         invite: ""
         product: ""

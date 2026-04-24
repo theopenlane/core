@@ -368,6 +368,7 @@ coreConfiguration:
       reset: ""  # @schema type:string
       verifysubscriber: ""  # @schema type:string
       verifybilling: ""  # @schema type:string
+      billing: ""  # @schema type:string
       questionnaire: ""  # @schema type:string
     templatespath: ""  # @schema type:string
   # -- Sessions config for user sessions and cookies
