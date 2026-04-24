@@ -10294,35 +10294,11 @@ type EmailTemplateHistory implements Node {
 	"""
 	template format for rendering
 	"""
-	format: EmailTemplateHistoryNotificationTemplateFormat!
+	format: EmailTemplateHistoryNotificationTemplateFormat
 	"""
 	locale for the template, e.g. en-US
 	"""
 	locale: String!
-	"""
-	subject template for email notifications
-	"""
-	subjectTemplate: String
-	"""
-	preheader/preview text template for email notifications
-	"""
-	preheaderTemplate: String
-	"""
-	body template for the email
-	"""
-	bodyTemplate: String
-	"""
-	plain text fallback template for the email
-	"""
-	textTemplate: String
-	"""
-	jsonschema for template data requirements
-	"""
-	jsonconfig: Map
-	"""
-	uischema for a template builder
-	"""
-	uischema: Map
 	"""
 	additional template metadata
 	"""
@@ -10338,7 +10314,7 @@ type EmailTemplateHistory implements Node {
 	"""
 	runtime data context defining available variable keys for this template
 	"""
-	templateContext: EmailTemplateHistoryTemplateContext!
+	templateContext: EmailTemplateHistoryTemplateContext
 	"""
 	static variable values merged as base layer at render time; call-site data takes precedence
 	"""
@@ -10695,6 +10671,8 @@ input EmailTemplateHistoryWhereInput {
 	formatNEQ: EmailTemplateHistoryNotificationTemplateFormat
 	formatIn: [EmailTemplateHistoryNotificationTemplateFormat!]
 	formatNotIn: [EmailTemplateHistoryNotificationTemplateFormat!]
+	formatIsNil: Boolean
+	formatNotNil: Boolean
 	"""
 	locale field predicates
 	"""
@@ -10806,6 +10784,8 @@ input EmailTemplateHistoryWhereInput {
 	templateContextNEQ: EmailTemplateHistoryTemplateContext
 	templateContextIn: [EmailTemplateHistoryTemplateContext!]
 	templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
+	templateContextIsNil: Boolean
+	templateContextNotNil: Boolean
 	"""
 	integration_id field predicates
 	"""

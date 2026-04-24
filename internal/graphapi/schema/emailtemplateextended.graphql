@@ -5,7 +5,18 @@ extend type Query {
     email template, including the JSON schema for its configurable fields and a
     rendered HTML preview of the template with default values.
     """
-    emailTemplateCatalog: [EmailTemplateCatalogEntry!]!
+    emailTemplateCatalog: EmailTemplateCatalog!
+}
+
+"""
+EmailTemplateCatalog contains the available customer-selectable email template types
+from the operation catalog.
+"""
+type EmailTemplateCatalog {
+    """
+    Available email template types.
+    """
+    entries: [EmailTemplateCatalogEntry!]!
 }
 
 """

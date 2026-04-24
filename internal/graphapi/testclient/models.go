@@ -6933,7 +6933,7 @@ type CreateEmailTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext enums.TemplateContext `json:"templateContext"`
+	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                map[string]any `json:"defaults,omitempty"`
 	OwnerID                 *string        `json:"ownerID,omitempty"`
@@ -13733,21 +13733,9 @@ type EmailTemplate struct {
 	// description of the template
 	Description *string `json:"description,omitempty"`
 	// template format for rendering
-	Format enums.NotificationTemplateFormat `json:"format"`
+	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
 	// locale for the template, e.g. en-US
 	Locale string `json:"locale"`
-	// subject template for email notifications
-	SubjectTemplate *string `json:"subjectTemplate,omitempty"`
-	// preheader/preview text template for email notifications
-	PreheaderTemplate *string `json:"preheaderTemplate,omitempty"`
-	// body template for the email
-	BodyTemplate *string `json:"bodyTemplate,omitempty"`
-	// plain text fallback template for the email
-	TextTemplate *string `json:"textTemplate,omitempty"`
-	// jsonschema for template data requirements
-	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
-	// uischema for a template builder
-	Uischema map[string]any `json:"uischema,omitempty"`
 	// additional template metadata
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// whether the template is active
@@ -13755,7 +13743,7 @@ type EmailTemplate struct {
 	// template version
 	Version int64 `json:"version"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext enums.TemplateContext `json:"templateContext"`
+	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults map[string]any `json:"defaults,omitempty"`
 	// integration used to deliver emails for this template
@@ -13800,6 +13788,30 @@ type EmailTemplateBulkUpdatePayload struct {
 	EmailTemplates []*EmailTemplate `json:"emailTemplates,omitempty"`
 	// IDs of the updated emailTemplates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// EmailTemplateCatalog contains the available customer-selectable email template types
+// from the operation catalog.
+type EmailTemplateCatalog struct {
+	// Available email template types.
+	Entries []*EmailTemplateCatalogEntry `json:"entries"`
+}
+
+// EmailTemplateCatalogEntry describes a single customer-selectable email template
+// type from the operation catalog. The key is stored on the EmailTemplate record to
+// link it back to the rendering pipeline at send time.
+type EmailTemplateCatalogEntry struct {
+	// Stable catalog key stored on the EmailTemplate record to resolve the
+	// rendering pipeline at send time.
+	Key string `json:"key"`
+	// Human-readable description of the template type.
+	Description string `json:"description"`
+	// JSON Schema describing the configurable fields for this template type.
+	// The UI uses this to render a dynamic form; the submitted values become
+	// the EmailTemplate defaults field.
+	ConfigSchema map[string]any `json:"configSchema"`
+	// Rendered HTML preview of the template with default/example values.
+	HTMLPreview string `json:"htmlPreview"`
 }
 
 // A connection to a list of items.
@@ -14031,10 +14043,12 @@ type EmailTemplateWhereInput struct {
 	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
 	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 	// format field predicates
-	Format      *enums.NotificationTemplateFormat  `json:"format,omitempty"`
-	FormatNeq   *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
-	FormatIn    []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
-	FormatNotIn []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+	Format       *enums.NotificationTemplateFormat  `json:"format,omitempty"`
+	FormatNeq    *enums.NotificationTemplateFormat  `json:"formatNEQ,omitempty"`
+	FormatIn     []enums.NotificationTemplateFormat `json:"formatIn,omitempty"`
+	FormatNotIn  []enums.NotificationTemplateFormat `json:"formatNotIn,omitempty"`
+	FormatIsNil  *bool                              `json:"formatIsNil,omitempty"`
+	FormatNotNil *bool                              `json:"formatNotNil,omitempty"`
 	// locale field predicates
 	Locale             *string  `json:"locale,omitempty"`
 	LocaleNeq          *string  `json:"localeNEQ,omitempty"`
@@ -14126,10 +14140,12 @@ type EmailTemplateWhereInput struct {
 	VersionLt    *int64  `json:"versionLT,omitempty"`
 	VersionLte   *int64  `json:"versionLTE,omitempty"`
 	// template_context field predicates
-	TemplateContext      *enums.TemplateContext  `json:"templateContext,omitempty"`
-	TemplateContextNeq   *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
-	TemplateContextIn    []enums.TemplateContext `json:"templateContextIn,omitempty"`
-	TemplateContextNotIn []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
+	TemplateContext       *enums.TemplateContext  `json:"templateContext,omitempty"`
+	TemplateContextNeq    *enums.TemplateContext  `json:"templateContextNEQ,omitempty"`
+	TemplateContextIn     []enums.TemplateContext `json:"templateContextIn,omitempty"`
+	TemplateContextNotIn  []enums.TemplateContext `json:"templateContextNotIn,omitempty"`
+	TemplateContextIsNil  *bool                   `json:"templateContextIsNil,omitempty"`
+	TemplateContextNotNil *bool                   `json:"templateContextNotNil,omitempty"`
 	// integration_id field predicates
 	IntegrationID             *string  `json:"integrationID,omitempty"`
 	IntegrationIdneq          *string  `json:"integrationIDNEQ,omitempty"`
@@ -40736,7 +40752,8 @@ type UpdateEmailTemplateInput struct {
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// template format for rendering
-	Format *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	Format      *enums.NotificationTemplateFormat `json:"format,omitempty"`
+	ClearFormat *bool                             `json:"clearFormat,omitempty"`
 	// locale for the template, e.g. en-US
 	Locale *string `json:"locale,omitempty"`
 	// subject template for email notifications
@@ -40765,7 +40782,8 @@ type UpdateEmailTemplateInput struct {
 	// template version
 	Version *int64 `json:"version,omitempty"`
 	// runtime data context defining available variable keys for this template
-	TemplateContext *enums.TemplateContext `json:"templateContext,omitempty"`
+	TemplateContext      *enums.TemplateContext `json:"templateContext,omitempty"`
+	ClearTemplateContext *bool                  `json:"clearTemplateContext,omitempty"`
 	// static variable values merged as base layer at render time; call-site data takes precedence
 	Defaults                      map[string]any `json:"defaults,omitempty"`
 	ClearDefaults                 *bool          `json:"clearDefaults,omitempty"`

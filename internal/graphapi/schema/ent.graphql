@@ -11963,7 +11963,7 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -21585,35 +21585,11 @@ type EmailTemplate implements Node {
   """
   template format for rendering
   """
-  format: EmailTemplateNotificationTemplateFormat!
+  format: EmailTemplateNotificationTemplateFormat
   """
   locale for the template, e.g. en-US
   """
   locale: String!
-  """
-  subject template for email notifications
-  """
-  subjectTemplate: String
-  """
-  preheader/preview text template for email notifications
-  """
-  preheaderTemplate: String
-  """
-  body template for the email
-  """
-  bodyTemplate: String
-  """
-  plain text fallback template for the email
-  """
-  textTemplate: String
-  """
-  jsonschema for template data requirements
-  """
-  jsonconfig: Map
-  """
-  uischema for a template builder
-  """
-  uischema: Map
   """
   additional template metadata
   """
@@ -21629,7 +21605,7 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -22131,6 +22107,8 @@ input EmailTemplateWhereInput {
   formatNEQ: EmailTemplateNotificationTemplateFormat
   formatIn: [EmailTemplateNotificationTemplateFormat!]
   formatNotIn: [EmailTemplateNotificationTemplateFormat!]
+  formatIsNil: Boolean
+  formatNotNil: Boolean
   """
   locale field predicates
   """
@@ -22242,6 +22220,8 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   integration_id field predicates
   """
@@ -73520,6 +73500,7 @@ input UpdateEmailTemplateInput {
   template format for rendering
   """
   format: EmailTemplateNotificationTemplateFormat
+  clearFormat: Boolean
   """
   locale for the template, e.g. en-US
   """
@@ -73571,6 +73552,7 @@ input UpdateEmailTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: EmailTemplateTemplateContext
+  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """

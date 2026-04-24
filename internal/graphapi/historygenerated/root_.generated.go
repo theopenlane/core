@@ -810,7 +810,6 @@ type ComplexityRoot struct {
 
 	EmailTemplateHistory struct {
 		Active               func(childComplexity int) int
-		BodyTemplate         func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
@@ -820,22 +819,17 @@ type ComplexityRoot struct {
 		ID                   func(childComplexity int) int
 		IntegrationID        func(childComplexity int) int
 		InternalNotes        func(childComplexity int) int
-		Jsonconfig           func(childComplexity int) int
 		Key                  func(childComplexity int) int
 		Locale               func(childComplexity int) int
 		Metadata             func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
-		PreheaderTemplate    func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		Revision             func(childComplexity int) int
-		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
 		TemplateContext      func(childComplexity int) int
-		TextTemplate         func(childComplexity int) int
-		Uischema             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Version              func(childComplexity int) int
@@ -7633,13 +7627,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.Active(childComplexity), true
 
-	case "EmailTemplateHistory.bodyTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.BodyTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.BodyTemplate(childComplexity), true
-
 	case "EmailTemplateHistory.createdAt":
 		if e.ComplexityRoot.EmailTemplateHistory.CreatedAt == nil {
 			break
@@ -7703,13 +7690,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.InternalNotes(childComplexity), true
 
-	case "EmailTemplateHistory.jsonconfig":
-		if e.ComplexityRoot.EmailTemplateHistory.Jsonconfig == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.Jsonconfig(childComplexity), true
-
 	case "EmailTemplateHistory.key":
 		if e.ComplexityRoot.EmailTemplateHistory.Key == nil {
 			break
@@ -7752,13 +7732,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.OwnerID(childComplexity), true
 
-	case "EmailTemplateHistory.preheaderTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate(childComplexity), true
-
 	case "EmailTemplateHistory.ref":
 		if e.ComplexityRoot.EmailTemplateHistory.Ref == nil {
 			break
@@ -7772,13 +7745,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Revision(childComplexity), true
-
-	case "EmailTemplateHistory.subjectTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.systemInternalID":
 		if e.ComplexityRoot.EmailTemplateHistory.SystemInternalID == nil {
@@ -7800,20 +7766,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
-
-	case "EmailTemplateHistory.textTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.TextTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.TextTemplate(childComplexity), true
-
-	case "EmailTemplateHistory.uischema":
-		if e.ComplexityRoot.EmailTemplateHistory.Uischema == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.Uischema(childComplexity), true
 
 	case "EmailTemplateHistory.updatedAt":
 		if e.ComplexityRoot.EmailTemplateHistory.UpdatedAt == nil {
@@ -32432,35 +32384,11 @@ type EmailTemplateHistory implements Node {
   """
   template format for rendering
   """
-  format: EmailTemplateHistoryNotificationTemplateFormat!
+  format: EmailTemplateHistoryNotificationTemplateFormat
   """
   locale for the template, e.g. en-US
   """
   locale: String!
-  """
-  subject template for email notifications
-  """
-  subjectTemplate: String
-  """
-  preheader/preview text template for email notifications
-  """
-  preheaderTemplate: String
-  """
-  body template for the email
-  """
-  bodyTemplate: String
-  """
-  plain text fallback template for the email
-  """
-  textTemplate: String
-  """
-  jsonschema for template data requirements
-  """
-  jsonconfig: Map
-  """
-  uischema for a template builder
-  """
-  uischema: Map
   """
   additional template metadata
   """
@@ -32476,7 +32404,7 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext!
+  templateContext: EmailTemplateHistoryTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -32833,6 +32761,8 @@ input EmailTemplateHistoryWhereInput {
   formatNEQ: EmailTemplateHistoryNotificationTemplateFormat
   formatIn: [EmailTemplateHistoryNotificationTemplateFormat!]
   formatNotIn: [EmailTemplateHistoryNotificationTemplateFormat!]
+  formatIsNil: Boolean
+  formatNotNil: Boolean
   """
   locale field predicates
   """
@@ -32944,6 +32874,8 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   integration_id field predicates
   """

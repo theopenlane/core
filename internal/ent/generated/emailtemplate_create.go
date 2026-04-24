@@ -345,6 +345,14 @@ func (_c *EmailTemplateCreate) SetTemplateContext(v enums.TemplateContext) *Emai
 	return _c
 }
 
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
 // SetDefaults sets the "defaults" field.
 func (_c *EmailTemplateCreate) SetDefaults(v map[string]interface{}) *EmailTemplateCreate {
 	_c.mutation.SetDefaults(v)
@@ -630,9 +638,6 @@ func (_c *EmailTemplateCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.name": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Format(); !ok {
-		return &ValidationError{Name: "format", err: errors.New(`generated: missing required field "EmailTemplate.format"`)}
-	}
 	if v, ok := _c.mutation.Format(); ok {
 		if err := emailtemplate.FormatValidator(v); err != nil {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.format": %w`, err)}
@@ -646,9 +651,6 @@ func (_c *EmailTemplateCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`generated: missing required field "EmailTemplate.version"`)}
-	}
-	if _, ok := _c.mutation.TemplateContext(); !ok {
-		return &ValidationError{Name: "template_context", err: errors.New(`generated: missing required field "EmailTemplate.template_context"`)}
 	}
 	if v, ok := _c.mutation.TemplateContext(); ok {
 		if err := emailtemplate.TemplateContextValidator(v); err != nil {

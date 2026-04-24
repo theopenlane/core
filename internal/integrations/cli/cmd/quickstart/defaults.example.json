@@ -1,15 +1,15 @@
 {
-  "subject": "Your Openlane Campaign is live",
-  "preheader": "Confirming your Openlane Campaign is provisioned and sending",
-  "title": "Welcome to Openlane Campaigns",
+  "subject": "{{ .companyName }} — Your Campaign is Live",
+  "preheader": "Hi {{ .firstName }}, your {{ .campaignName }} campaign is ready",
+  "title": "Welcome to {{ .companyName }} Campaigns",
   "intros": [
-    "Openlane Campaigns coordinate attestations, trainings, and assessments across your organization.",
-    "This message confirms your campaign delivery pipeline is wired up end-to-end."
+    "Hi {{ .firstName }}, this message confirms your campaign delivery pipeline is wired up end-to-end.",
+    "{{ .companyName }} Campaigns coordinate attestations, trainings, and assessments across your organization."
   ],
   "buttonText": "View your Campaign",
-  "buttonLink": "https://console.theopenlane.io/campaigns",
+  "buttonLink": "{{ .rootURL }}/campaigns",
   "outros": [
     "If you received this, branding, templates, targets, launch, and dispatch are all working as expected.",
-    "Edit defaults.example.json to tune subject, intros, and call-to-action for future test runs."
+    "Questions? Reach us at {{ .supportEmail }}."
   ]
 }

@@ -6932,7 +6932,7 @@ type CreateEmailTemplateInput struct {
 	Metadata                map[string]interface{}
 	Active                  *bool
 	Version                 *int
-	TemplateContext         enums.TemplateContext
+	TemplateContext         *enums.TemplateContext
 	Defaults                map[string]interface{}
 	OwnerID                 *string
 	BlockedGroupIDs         []string
@@ -6995,7 +6995,9 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
 	}
-	m.SetTemplateContext(i.TemplateContext)
+	if v := i.TemplateContext; v != nil {
+		m.SetTemplateContext(*v)
+	}
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
@@ -7049,6 +7051,7 @@ type UpdateEmailTemplateInput struct {
 	Name                          *string
 	ClearDescription              bool
 	Description                   *string
+	ClearFormat                   bool
 	Format                        *enums.NotificationTemplateFormat
 	Locale                        *string
 	ClearSubjectTemplate          bool
@@ -7067,6 +7070,7 @@ type UpdateEmailTemplateInput struct {
 	Metadata                      map[string]interface{}
 	Active                        *bool
 	Version                       *int
+	ClearTemplateContext          bool
 	TemplateContext               *enums.TemplateContext
 	ClearDefaults                 bool
 	Defaults                      map[string]interface{}
@@ -7128,6 +7132,9 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
+	if i.ClearFormat {
+		m.ClearFormat()
+	}
 	if v := i.Format; v != nil {
 		m.SetFormat(*v)
 	}
@@ -7181,6 +7188,9 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
+	}
+	if i.ClearTemplateContext {
+		m.ClearTemplateContext()
 	}
 	if v := i.TemplateContext; v != nil {
 		m.SetTemplateContext(*v)
