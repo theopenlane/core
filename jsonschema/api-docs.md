@@ -1165,6 +1165,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**reset**|`string`|||
 |**verifysubscriber**|`string`|||
 |**verifybilling**|`string`|||
+|**billing**|`string`|||
 |**questionnaire**|`string`|||
 
 **Additional Properties:** not allowed  
