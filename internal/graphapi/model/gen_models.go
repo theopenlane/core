@@ -920,6 +920,30 @@ type EmailTemplateBulkUpdatePayload struct {
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
+// EmailTemplateCatalog contains the available customer-selectable email template types
+// from the operation catalog.
+type EmailTemplateCatalog struct {
+	// Available email template types.
+	Entries []*EmailTemplateCatalogEntry `json:"entries"`
+}
+
+// EmailTemplateCatalogEntry describes a single customer-selectable email template
+// type from the operation catalog. The key is stored on the EmailTemplate record to
+// link it back to the rendering pipeline at send time.
+type EmailTemplateCatalogEntry struct {
+	// Stable catalog key stored on the EmailTemplate record to resolve the
+	// rendering pipeline at send time.
+	Key string `json:"key"`
+	// Human-readable description of the template type.
+	Description string `json:"description"`
+	// JSON Schema describing the configurable fields for this template type.
+	// The UI uses this to render a dynamic form; the submitted values become
+	// the EmailTemplate defaults field.
+	ConfigSchema map[string]any `json:"configSchema"`
+	// Rendered HTML preview of the template with default/example values.
+	HTMLPreview string `json:"htmlPreview"`
+}
+
 // Return response for createEmailTemplate mutation
 type EmailTemplateCreatePayload struct {
 	// Created emailTemplate

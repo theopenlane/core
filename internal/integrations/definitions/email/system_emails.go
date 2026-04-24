@@ -628,6 +628,13 @@ func AllEmailOperations() []types.OperationRegistration {
 	})
 }
 
+// CustomerSelectableDispatchers returns the dispatchers marked as customer-selectable
+func CustomerSelectableDispatchers() []EmailDispatcher {
+	return lo.Filter(dispatchers, func(d EmailDispatcher, _ int) bool {
+		return d.Registration().CustomerSelectable
+	})
+}
+
 // DispatcherByKey resolves a registered email dispatcher by its catalog key
 func DispatcherByKey(key string) (EmailDispatcher, bool) {
 	d, ok := dispatcherIndex[key]

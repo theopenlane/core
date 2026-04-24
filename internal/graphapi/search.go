@@ -670,10 +670,6 @@ func adminSearchEmailTemplates(ctx context.Context, query string, after *entgql.
 				emailtemplate.NameContainsFold(query),                 // search by Name
 				emailtemplate.DescriptionContainsFold(query),          // search by Description
 				emailtemplate.LocaleContainsFold(query),               // search by Locale
-				emailtemplate.SubjectTemplateContainsFold(query),      // search by SubjectTemplate
-				emailtemplate.PreheaderTemplateContainsFold(query),    // search by PreheaderTemplate
-				emailtemplate.BodyTemplateContainsFold(query),         // search by BodyTemplate
-				emailtemplate.TextTemplateContainsFold(query),         // search by TextTemplate
 				emailtemplate.IntegrationIDContainsFold(query),        // search by IntegrationID
 				emailtemplate.WorkflowDefinitionIDContainsFold(query), // search by WorkflowDefinitionID
 				emailtemplate.WorkflowInstanceIDContainsFold(query),   // search by WorkflowInstanceID

@@ -82,18 +82,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_format(ctx, field)
 			case "locale":
 				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
 			case "metadata":
 				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
 			case "active":
@@ -220,18 +208,6 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 				return ec.fieldContext_EmailTemplate_format(ctx, field)
 			case "locale":
 				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
 			case "metadata":
 				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
 			case "active":
@@ -358,18 +334,6 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_format(ctx, field)
 			case "locale":
 				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
 			case "metadata":
 				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
 			case "active":
@@ -496,18 +460,6 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 				return ec.fieldContext_EmailTemplate_format(ctx, field)
 			case "locale":
 				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
 			case "metadata":
 				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
 			case "active":

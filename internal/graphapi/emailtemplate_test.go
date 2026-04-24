@@ -151,7 +151,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			request: testclient.CreateEmailTemplateInput{
 				Key:             "email_key_" + ulids.New().String(),
 				Name:            "Email Template Name " + ulids.New().String(),
-				TemplateContext: enums.TemplateContextCampaignRecipient,
+				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -159,15 +159,19 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateEmailTemplateInput{
-				Key:               "email_key_" + ulids.New().String(),
-				Name:              "Email Template Name " + ulids.New().String(),
-				TemplateContext:   enums.TemplateContextTransactional,
-				Description:       lo.ToPtr("This is a description for the email template"),
-				SubjectTemplate:   lo.ToPtr("subject template for {{.CampaignName}}"),
-				PreheaderTemplate: lo.ToPtr("preheader template for {{.CampaignName}}"),
-				BodyTemplate:      lo.ToPtr("body template for {{.Recipient}}"),
-				Active:            lo.ToPtr(false),
-				Version:           lo.ToPtr(int64(1)),
+				Key:             "email_key_" + ulids.New().String(),
+				Name:            "Email Template Name " + ulids.New().String(),
+				TemplateContext: &enums.TemplateContextTransactional,
+				Description:     lo.ToPtr("This is a description for the email template"),
+				Active:          lo.ToPtr(false),
+				Version:         lo.ToPtr(int64(1)),
+				Defaults: map[string]any{
+					"subject":   "{{ .companyName }} — Welcome",
+					"title":     "Welcome to {{ .companyName }}",
+					"intros":    []any{"Hi {{ .firstName }}, thanks for joining."},
+					"buttonText": "Get Started",
+					"buttonLink": "{{ .rootURL }}/dashboard",
+				},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -177,7 +181,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			request: testclient.CreateEmailTemplateInput{
 				Key:             "email_key_" + ulids.New().String(),
 				Name:            "Email Template Name " + ulids.New().String(),
-				TemplateContext: enums.TemplateContextTransactional,
+				TemplateContext: &enums.TemplateContextTransactional,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -187,7 +191,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			request: testclient.CreateEmailTemplateInput{
 				Key:             "email_key_" + ulids.New().String(),
 				Name:            "Email Template Name " + ulids.New().String(),
-				TemplateContext: enums.TemplateContextCampaignRecipient,
+				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -197,27 +201,17 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			request: testclient.CreateEmailTemplateInput{
 				Key:             "email_key_" + ulids.New().String(),
 				Name:            "Email Template Name " + ulids.New().String(),
-				TemplateContext: enums.TemplateContextCampaignRecipient,
+				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "missing required field, template context",
-			request: testclient.CreateEmailTemplateInput{
-				Key:  "email_key_" + ulids.New().String(),
-				Name: "Email Template Name " + ulids.New().String(),
-			},
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "is not a valid EmailTemplateTemplateContext",
-		},
-		{
 			name: "missing required field, key",
 			request: testclient.CreateEmailTemplateInput{
 				Name:            "Email Template Name " + ulids.New().String(),
-				TemplateContext: enums.TemplateContextCampaignRecipient,
+				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -227,7 +221,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			name: "missing required field, name",
 			request: testclient.CreateEmailTemplateInput{
 				Key:             "email_key_" + ulids.New().String(),
-				TemplateContext: enums.TemplateContextCampaignRecipient,
+				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -249,7 +243,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.request.Key, resp.CreateEmailTemplate.EmailTemplate.Key))
 			assert.Check(t, is.Equal(tc.request.Name, resp.CreateEmailTemplate.EmailTemplate.Name))
-			assert.Check(t, is.Equal(tc.request.TemplateContext, resp.CreateEmailTemplate.EmailTemplate.TemplateContext))
+			assert.Check(t, is.DeepEqual(tc.request.TemplateContext, resp.CreateEmailTemplate.EmailTemplate.TemplateContext))
 
 			if tc.request.Description != nil {
 				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateEmailTemplate.EmailTemplate.Description))
@@ -257,34 +251,16 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.Description, ""))
 			}
 
-			if tc.request.SubjectTemplate != nil {
-				assert.Check(t, is.Equal(*tc.request.SubjectTemplate, *resp.CreateEmailTemplate.EmailTemplate.SubjectTemplate))
-			} else {
-				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.SubjectTemplate, ""))
-			}
-
-			if tc.request.PreheaderTemplate != nil {
-				assert.Check(t, is.Equal(*tc.request.PreheaderTemplate, *resp.CreateEmailTemplate.EmailTemplate.PreheaderTemplate))
-			} else {
-				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.PreheaderTemplate, ""))
-			}
-
-			if tc.request.BodyTemplate != nil {
-				assert.Check(t, is.Equal(*tc.request.BodyTemplate, *resp.CreateEmailTemplate.EmailTemplate.BodyTemplate))
-			} else {
-				assert.Check(t, is.Equal(*resp.CreateEmailTemplate.EmailTemplate.BodyTemplate, ""))
-			}
-
 			if tc.request.Active != nil {
 				assert.Check(t, is.Equal(*tc.request.Active, resp.CreateEmailTemplate.EmailTemplate.Active))
 			} else {
-				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Active == true) // default value is true
+				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Active == true)
 			}
 
 			if tc.request.Version != nil {
 				assert.Check(t, is.Equal(*tc.request.Version, resp.CreateEmailTemplate.EmailTemplate.Version))
 			} else {
-				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Version == 1) // default value is 1 (incremented on each update, but should start at 1 on create)
+				assert.Check(t, resp.CreateEmailTemplate.EmailTemplate.Version == 1)
 			}
 
 			// cleanup each email template created
@@ -314,10 +290,9 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateEmailTemplateInput{
-				Name:            lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
-				Description:     lo.ToPtr("Updated description for the email template"),
-				SubjectTemplate: lo.ToPtr("updated subject template for {{.CampaignName}}"),
-				Active:          lo.ToPtr(false),
+				Name:        lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
+				Description: lo.ToPtr("Updated description for the email template"),
+				Active:      lo.ToPtr(false),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -359,9 +334,6 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 			}
 			if tc.request.Description != nil {
 				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateEmailTemplate.EmailTemplate.Description))
-			}
-			if tc.request.SubjectTemplate != nil {
-				assert.Check(t, is.Equal(*tc.request.SubjectTemplate, *resp.UpdateEmailTemplate.EmailTemplate.SubjectTemplate))
 			}
 			if tc.request.Active != nil {
 				assert.Check(t, is.Equal(*tc.request.Active, resp.UpdateEmailTemplate.EmailTemplate.Active))

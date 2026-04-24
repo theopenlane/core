@@ -1580,7 +1580,6 @@ type ComplexityRoot struct {
 	EmailTemplate struct {
 		Active                func(childComplexity int) int
 		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		BodyTemplate          func(childComplexity int) int
 		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -1593,7 +1592,6 @@ type ComplexityRoot struct {
 		Integration           func(childComplexity int) int
 		IntegrationID         func(childComplexity int) int
 		InternalNotes         func(childComplexity int) int
-		Jsonconfig            func(childComplexity int) int
 		Key                   func(childComplexity int) int
 		Locale                func(childComplexity int) int
 		Metadata              func(childComplexity int) int
@@ -1601,14 +1599,10 @@ type ComplexityRoot struct {
 		NotificationTemplates func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
-		PreheaderTemplate     func(childComplexity int) int
 		Revision              func(childComplexity int) int
-		SubjectTemplate       func(childComplexity int) int
 		SystemInternalID      func(childComplexity int) int
 		SystemOwned           func(childComplexity int) int
 		TemplateContext       func(childComplexity int) int
-		TextTemplate          func(childComplexity int) int
-		Uischema              func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		Version               func(childComplexity int) int
@@ -1630,6 +1624,17 @@ type ComplexityRoot struct {
 	EmailTemplateBulkUpdatePayload struct {
 		EmailTemplates func(childComplexity int) int
 		UpdatedIDs     func(childComplexity int) int
+	}
+
+	EmailTemplateCatalog struct {
+		Entries func(childComplexity int) int
+	}
+
+	EmailTemplateCatalogEntry struct {
+		ConfigSchema func(childComplexity int) int
+		Description  func(childComplexity int) int
+		HTMLPreview  func(childComplexity int) int
+		Key          func(childComplexity int) int
 	}
 
 	EmailTemplateConnection struct {
@@ -4932,6 +4937,7 @@ type ComplexityRoot struct {
 		DocumentData                    func(childComplexity int, id string) int
 		DocumentDataSlice               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
 		EmailTemplate                   func(childComplexity int, id string) int
+		EmailTemplateCatalog            func(childComplexity int) int
 		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
@@ -15115,13 +15121,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
-	case "EmailTemplate.bodyTemplate":
-		if e.ComplexityRoot.EmailTemplate.BodyTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.BodyTemplate(childComplexity), true
-
 	case "EmailTemplate.campaigns":
 		if e.ComplexityRoot.EmailTemplate.Campaigns == nil {
 			break
@@ -15221,13 +15220,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.InternalNotes(childComplexity), true
 
-	case "EmailTemplate.jsonconfig":
-		if e.ComplexityRoot.EmailTemplate.Jsonconfig == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.Jsonconfig(childComplexity), true
-
 	case "EmailTemplate.key":
 		if e.ComplexityRoot.EmailTemplate.Key == nil {
 			break
@@ -15282,26 +15274,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplate.OwnerID(childComplexity), true
 
-	case "EmailTemplate.preheaderTemplate":
-		if e.ComplexityRoot.EmailTemplate.PreheaderTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.PreheaderTemplate(childComplexity), true
-
 	case "EmailTemplate.revision":
 		if e.ComplexityRoot.EmailTemplate.Revision == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EmailTemplate.Revision(childComplexity), true
-
-	case "EmailTemplate.subjectTemplate":
-		if e.ComplexityRoot.EmailTemplate.SubjectTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.SubjectTemplate(childComplexity), true
 
 	case "EmailTemplate.systemInternalID":
 		if e.ComplexityRoot.EmailTemplate.SystemInternalID == nil {
@@ -15323,20 +15301,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplate.TemplateContext(childComplexity), true
-
-	case "EmailTemplate.textTemplate":
-		if e.ComplexityRoot.EmailTemplate.TextTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.TextTemplate(childComplexity), true
-
-	case "EmailTemplate.uischema":
-		if e.ComplexityRoot.EmailTemplate.Uischema == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplate.Uischema(childComplexity), true
 
 	case "EmailTemplate.updatedAt":
 		if e.ComplexityRoot.EmailTemplate.UpdatedAt == nil {
@@ -15426,6 +15390,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "EmailTemplateCatalog.entries":
+		if e.ComplexityRoot.EmailTemplateCatalog.Entries == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateCatalog.Entries(childComplexity), true
+
+	case "EmailTemplateCatalogEntry.configSchema":
+		if e.ComplexityRoot.EmailTemplateCatalogEntry.ConfigSchema == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateCatalogEntry.ConfigSchema(childComplexity), true
+
+	case "EmailTemplateCatalogEntry.description":
+		if e.ComplexityRoot.EmailTemplateCatalogEntry.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateCatalogEntry.Description(childComplexity), true
+
+	case "EmailTemplateCatalogEntry.htmlPreview":
+		if e.ComplexityRoot.EmailTemplateCatalogEntry.HTMLPreview == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateCatalogEntry.HTMLPreview(childComplexity), true
+
+	case "EmailTemplateCatalogEntry.key":
+		if e.ComplexityRoot.EmailTemplateCatalogEntry.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateCatalogEntry.Key(childComplexity), true
 
 	case "EmailTemplateConnection.edges":
 		if e.ComplexityRoot.EmailTemplateConnection.Edges == nil {
@@ -37350,6 +37349,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.EmailTemplate(childComplexity, args["id"].(string)), true
 
+	case "Query.emailTemplateCatalog":
+		if e.ComplexityRoot.Query.EmailTemplateCatalog == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.EmailTemplateCatalog(childComplexity), true
+
 	case "Query.emailTemplateSearch":
 		if e.ComplexityRoot.Query.EmailTemplateSearch == nil {
 			break
@@ -55699,6 +55705,54 @@ type EmailTemplateBulkDeletePayload {
     deletedIDs: [ID!]!
 }
 `, BuiltIn: false},
+	{Name: "../schema/emailtemplateextended.graphql", Input: `extend type Query {
+    """
+    Returns all customer-selectable email template types from the operation catalog.
+    Each entry describes a template layout the customer can choose when creating an
+    email template, including the JSON schema for its configurable fields and a
+    rendered HTML preview of the template with default values.
+    """
+    emailTemplateCatalog: EmailTemplateCatalog!
+}
+
+"""
+EmailTemplateCatalog contains the available customer-selectable email template types
+from the operation catalog.
+"""
+type EmailTemplateCatalog {
+    """
+    Available email template types.
+    """
+    entries: [EmailTemplateCatalogEntry!]!
+}
+
+"""
+EmailTemplateCatalogEntry describes a single customer-selectable email template
+type from the operation catalog. The key is stored on the EmailTemplate record to
+link it back to the rendering pipeline at send time.
+"""
+type EmailTemplateCatalogEntry {
+    """
+    Stable catalog key stored on the EmailTemplate record to resolve the
+    rendering pipeline at send time.
+    """
+    key: String!
+    """
+    Human-readable description of the template type.
+    """
+    description: String!
+    """
+    JSON Schema describing the configurable fields for this template type.
+    The UI uses this to render a dynamic form; the submitted values become
+    the EmailTemplate defaults field.
+    """
+    configSchema: Map!
+    """
+    Rendered HTML preview of the template with default/example values.
+    """
+    htmlPreview: String!
+}
+`, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type APIToken implements Node {
@@ -67084,7 +67138,7 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -76608,35 +76662,11 @@ type EmailTemplate implements Node {
   """
   template format for rendering
   """
-  format: EmailTemplateNotificationTemplateFormat!
+  format: EmailTemplateNotificationTemplateFormat
   """
   locale for the template, e.g. en-US
   """
   locale: String!
-  """
-  subject template for email notifications
-  """
-  subjectTemplate: String
-  """
-  preheader/preview text template for email notifications
-  """
-  preheaderTemplate: String
-  """
-  body template for the email
-  """
-  bodyTemplate: String
-  """
-  plain text fallback template for the email
-  """
-  textTemplate: String
-  """
-  jsonschema for template data requirements
-  """
-  jsonconfig: Map
-  """
-  uischema for a template builder
-  """
-  uischema: Map
   """
   additional template metadata
   """
@@ -76652,7 +76682,7 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -77154,6 +77184,8 @@ input EmailTemplateWhereInput {
   formatNEQ: EmailTemplateNotificationTemplateFormat
   formatIn: [EmailTemplateNotificationTemplateFormat!]
   formatNotIn: [EmailTemplateNotificationTemplateFormat!]
+  formatIsNil: Boolean
+  formatNotNil: Boolean
   """
   locale field predicates
   """
@@ -77265,6 +77297,8 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   integration_id field predicates
   """
@@ -128218,6 +128252,7 @@ input UpdateEmailTemplateInput {
   template format for rendering
   """
   format: EmailTemplateNotificationTemplateFormat
+  clearFormat: Boolean
   """
   locale for the template, e.g. en-US
   """
@@ -128269,6 +128304,7 @@ input UpdateEmailTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: EmailTemplateTemplateContext
+  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """

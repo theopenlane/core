@@ -17569,36 +17569,6 @@ func (_q *EmailTemplateQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, emailtemplate.FieldLocale)
 				fieldSeen[emailtemplate.FieldLocale] = struct{}{}
 			}
-		case "subjectTemplate":
-			if _, ok := fieldSeen[emailtemplate.FieldSubjectTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldSubjectTemplate)
-				fieldSeen[emailtemplate.FieldSubjectTemplate] = struct{}{}
-			}
-		case "preheaderTemplate":
-			if _, ok := fieldSeen[emailtemplate.FieldPreheaderTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldPreheaderTemplate)
-				fieldSeen[emailtemplate.FieldPreheaderTemplate] = struct{}{}
-			}
-		case "bodyTemplate":
-			if _, ok := fieldSeen[emailtemplate.FieldBodyTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldBodyTemplate)
-				fieldSeen[emailtemplate.FieldBodyTemplate] = struct{}{}
-			}
-		case "textTemplate":
-			if _, ok := fieldSeen[emailtemplate.FieldTextTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldTextTemplate)
-				fieldSeen[emailtemplate.FieldTextTemplate] = struct{}{}
-			}
-		case "jsonconfig":
-			if _, ok := fieldSeen[emailtemplate.FieldJsonconfig]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldJsonconfig)
-				fieldSeen[emailtemplate.FieldJsonconfig] = struct{}{}
-			}
-		case "uischema":
-			if _, ok := fieldSeen[emailtemplate.FieldUischema]; !ok {
-				selectedFields = append(selectedFields, emailtemplate.FieldUischema)
-				fieldSeen[emailtemplate.FieldUischema] = struct{}{}
-			}
 		case "metadata":
 			if _, ok := fieldSeen[emailtemplate.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, emailtemplate.FieldMetadata)
