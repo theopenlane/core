@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -71,6 +73,36 @@ func buildDispatchPayload(defaults map[string]any, overlays ...any) (json.RawMes
 	}
 
 	return base, nil
+}
+
+// markCampaignTargetSent records the current time as the sent_at timestamp on a campaign target
+func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID string) error {
+	now := models.DateTime(time.Now())
+	if err := db.CampaignTarget.UpdateOneID(targetID).SetSentAt(now).Exec(ctx); err != nil {
+		return fmt.Errorf("mark sent: %w", err)
+	}
+
+	return nil
+}
+
+// createAssessmentResponse creates an assessment response record linking a
+// campaign target to the campaign's assessment for completion tracking
+func createAssessmentResponse(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, target *generated.CampaignTarget) error {
+	create := db.AssessmentResponse.Create().
+		SetAssessmentID(assessmentID).
+		SetCampaignID(camp.ID).
+		SetEmail(target.Email).
+		SetOwnerID(camp.OwnerID)
+
+	if camp.EntityID != "" {
+		create.SetEntityID(camp.EntityID)
+	}
+
+	if camp.DueDate != nil && !camp.DueDate.IsZero() {
+		create.SetDueDate(time.Time(*camp.DueDate))
+	}
+
+	return create.Exec(ctx)
 }
 
 // staticAttachmentsFromFiles converts File edge records to newman attachments

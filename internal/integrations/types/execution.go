@@ -31,6 +31,8 @@ type ExecutionMetadata struct {
 	DeliveryID string `json:"deliveryId,omitempty"`
 	// Workflow captures workflow linkage when present
 	Workflow *WorkflowMeta `json:"workflow,omitempty"`
+	// Runtime signals that this execution uses the runtime provider path
+	Runtime bool `json:"runtime,omitempty"`
 }
 
 // ExecutionMetadataKey stores durable integration execution metadata on a context

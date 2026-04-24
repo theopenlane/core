@@ -31,6 +31,9 @@ type EmailDispatcher interface {
 	// and dispatches through the shared render/send pipeline. Additional newman options are
 	// appended after the operation's own MessageOptions
 	SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error
+	// RenderMessage decodes the payload and renders the email into a newman message
+	// without sending it, for use in batch send paths
+	RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
@@ -104,12 +107,35 @@ func (e EmailOperation[T]) Name() string {
 func (e EmailOperation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
 	var input T
 	if len(payload) > 0 {
-		if err := json.Unmarshal(payload, &input); err != nil {
+		resolved, err := interpolatePayload(client, payload)
+		if err != nil {
+			return err
+		}
+
+		if err := json.Unmarshal(resolved, &input); err != nil {
 			return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 		}
 	}
 
 	return e.dispatch(ctx, req, client, input, extraOpts...)
+}
+
+// RenderMessage decodes the payload and renders the email into a newman message
+// without sending it
+func (e EmailOperation[T]) RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
+	var input T
+	if len(payload) > 0 {
+		resolved, err := interpolatePayload(client, payload)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(resolved, &input); err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+		}
+	}
+
+	return e.renderToMessage(client, input, extraOpts...)
 }
 
 // dispatch runs PreHook, assembles the per-op newman options, and invokes renderAndSend.
@@ -122,6 +148,23 @@ func (e EmailOperation[T]) dispatch(ctx context.Context, req types.OperationRequ
 		}
 	}
 
+	msg, err := e.renderToMessage(client, input, extraOpts...)
+	if err != nil {
+		return err
+	}
+
+	if err := client.Sender.SendEmailWithContext(ctx, msg); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed sending email")
+
+		return fmt.Errorf("%w: %w", ErrSendFailed, err)
+	}
+
+	return nil
+}
+
+// renderToMessage assembles the per-op newman options, renders the email content,
+// and returns a newman message without sending it
+func (e EmailOperation[T]) renderToMessage(client *EmailClient, input T, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	var opts []newman.MessageOption
 	if e.MessageOptions != nil {
 		opts = e.MessageOptions(client.Config, input)
@@ -143,7 +186,7 @@ func (e EmailOperation[T]) dispatch(ctx context.Context, req types.OperationRequ
 		content.Config = e.Config(client.Config, input)
 	}
 
-	return renderAndSend(ctx, client, e.Theme, recipient, e.Subject(client.Config, input), content, opts...)
+	return renderMessage(client, e.Theme, recipient, e.Subject(client.Config, input), content, opts...)
 }
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder.
@@ -171,18 +214,18 @@ func (e EmailOperation[T]) handler() types.OperationHandler {
 	)
 }
 
-// renderAndSend renders an email using the newman render engine and sends it through the client
-func renderAndSend(ctx context.Context, client *EmailClient, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) error {
+// renderMessage renders an email into a newman message without sending it
+func renderMessage(client *EmailClient, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	r := render.NewRenderer(render.WithTheme(theme))
 
 	htmlBody, err := r.GenerateHTML(content)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
 	textBody, err := r.GeneratePlainText(content)
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
 	opts := []newman.MessageOption{
@@ -194,13 +237,5 @@ func renderAndSend(ctx context.Context, client *EmailClient, theme *render.Theme
 	}
 	opts = append(opts, extraOpts...)
 
-	message := newman.NewEmailMessageWithOptions(opts...)
-
-	if err := client.Sender.SendEmailWithContext(ctx, message); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("op", subject).Msg("failed sending email")
-
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
-	}
-
-	return nil
+	return newman.NewEmailMessageWithOptions(opts...), nil
 }

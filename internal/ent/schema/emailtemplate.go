@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -82,26 +83,40 @@ func (EmailTemplate) Fields() []ent.Field {
 			),
 		field.String("subject_template").
 			Comment("subject template for email notifications").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.String("preheader_template").
 			Comment("preheader/preview text template for email notifications").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.Text("body_template").
 			Comment("body template for the email").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.Text("text_template").
 			Comment("plain text fallback template for the email").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.JSON("jsonconfig", map[string]any{}).
 			Comment("jsonschema for template data requirements").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("uischema", map[string]any{}).
 			Comment("uischema for a template builder").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("metadata", map[string]any{}).
@@ -211,6 +226,13 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 func (EmailTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogBaseModule,
+	}
+}
+
+// Hooks of the EmailTemplate.
+func (EmailTemplate) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookEmailTemplateSanitize(),
 	}
 }
 

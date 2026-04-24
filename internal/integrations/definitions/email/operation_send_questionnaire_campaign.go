@@ -5,12 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"time"
 
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
@@ -83,10 +81,9 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 
 	for _, target := range targets {
 		if err := sendQuestionnaireToTarget(ctx, req, req.DB, client, camp, assessmentObj.Name, target); err != nil {
-			logx.FromContext(ctx).Error().Err(err).
-				Str("campaign_id", cfg.CampaignID).
-				Str("target_id", target.ID).
-				Msg("failed dispatching questionnaire email to target")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire email to target")
+
+			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, target.Email)
 		}
 	}
 
@@ -97,22 +94,8 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 // token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
 // operation, and marks the target as sent
 func sendQuestionnaireToTarget(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, target *generated.CampaignTarget) error {
-	create := db.AssessmentResponse.Create().
-		SetAssessmentID(camp.AssessmentID).
-		SetCampaignID(camp.ID).
-		SetEmail(target.Email).
-		SetOwnerID(camp.OwnerID)
-
-	if camp.EntityID != "" {
-		create.SetEntityID(camp.EntityID)
-	}
-
-	if camp.DueDate != nil && !camp.DueDate.IsZero() {
-		create.SetDueDate(time.Time(*camp.DueDate))
-	}
-
-	if err := create.Exec(ctx); err != nil {
-		return fmt.Errorf("create assessment response: %w", err)
+	if err := createAssessmentResponse(ctx, db, camp, camp.AssessmentID, target); err != nil {
+		return err
 	}
 
 	baseURL, err := url.Parse(client.Config.ProductURL + "/questionnaire")
@@ -150,10 +133,5 @@ func sendQuestionnaireToTarget(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	now := models.DateTime(time.Now())
-	if err := db.CampaignTarget.UpdateOneID(target.ID).SetSentAt(now).Exec(ctx); err != nil {
-		return fmt.Errorf("mark sent: %w", err)
-	}
-
-	return nil
+	return markCampaignTargetSent(ctx, db, target.ID)
 }

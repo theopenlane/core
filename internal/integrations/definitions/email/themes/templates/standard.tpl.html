@@ -80,6 +80,10 @@
         .free-markdown table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
         .free-markdown th { text-align: left; padding: 8px; background-color: #f0fdf9; border-bottom: 2px solid #3fc2b4; font-weight: 500; color: #082930; }
         .free-markdown td { padding: 8px; border-bottom: 1px solid #e0e8ec; }
+        .body-callout { text-align: left; margin-bottom: 21px; background-color: #f0fdf9; padding: 20px; border-radius: 8px; }
+        .body-callout p { font-size: 16px; font-weight: 500; line-height: 24px; margin: 0 0 12px 0; text-align: left; }
+        .body-callout ul, .body-callout ol { margin: 0; padding-left: 16px; color: #505f6f; }
+        .body-callout li { font-size: 16px; line-height: 24px; margin-bottom: 8px; }
 
         /* Media Queries */
         @media only screen and (max-width: {{ if .Body.BodyWidth }}{{ .Body.BodyWidth }}{{ else }}600px{{ end }}) {
@@ -185,6 +189,18 @@
                                     {{ if ne .Body.FreeMarkdown "" }}
                                         <div class="free-markdown">{{ .Body.FreeMarkdown.ToHTML }}</div>
                                     {{ else }}
+
+                                        {{/* Callout */}}
+                                        {{ with .Body.Callout }}
+                                        <div class="body-callout">
+                                            {{ if .Title }}<p>{{ .Title }}</p>{{ end }}
+                                            {{ if .Ordered }}
+                                            <ol>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ol>
+                                            {{ else }}
+                                            <ul>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ul>
+                                            {{ end }}
+                                        </div>
+                                        {{ end }}
 
                                         {{/* Dictionary */}}
                                         {{ with .Body.Dictionary.Cells }}

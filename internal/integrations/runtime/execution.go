@@ -20,9 +20,14 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// bootstrapHandlerContext resolves the integration, enriches the execution metadata
-// with the persisted owner/installation fields, and returns a fully prepared system-level context
+// bootstrapHandlerContext resolves the integration and returns a fully prepared
+// system-level context. When metadata.Runtime is true, no DB lookup is performed
+// and the client is resolved from the registry at execution time
 func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) (context.Context, *ent.Integration, types.ExecutionMetadata, error) {
+	if metadata.Runtime {
+		return ctx, nil, metadata, nil
+	}
+
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	integration, err := r.DB().Integration.Get(systemCtx, metadata.IntegrationID)
@@ -117,7 +122,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("definition_id", envelope.DefinitionID).Str("operation", envelope.Operation).Msg("reconcile cycle started")
 
-	operation, err := r.Registry().Operation(installation.DefinitionID, envelope.Operation)
+	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)
 	if err != nil {
 		return 0, err
 	}
@@ -243,7 +248,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return execErr
 	}
 
-	logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation started")
+	logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("definition_id", envelope.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation started")
 
 	if tracked {
 		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
@@ -255,19 +260,19 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return failRun(bootstrapErr, nil)
 	}
 
-	operation, err := r.Registry().Operation(integration.DefinitionID, envelope.Operation)
+	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)
 	if err != nil {
 		return failRun(err, nil)
 	}
 
 	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceOperation, metadata))
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation failed")
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.IntegrationID).Str("definition_id", metadata.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation failed")
 
 		return failRun(err, response)
 	}
 
-	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation completed")
+	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("definition_id", metadata.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation completed")
 
 	var completeErr error
 
@@ -288,34 +293,6 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	return completeErr
 }
 
-// ExecuteRuntimeOperation runs an operation for a runtime integration; client is retrieved from the registry directly
-func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID string, operationName string, config json.RawMessage) (json.RawMessage, error) {
-	operation, err := r.Registry().Operation(definitionID, operationName)
-	if err != nil {
-		return nil, err
-	}
-
-	client, ok := r.Registry().RuntimeClient(definitionID)
-	if !ok {
-		return nil, ErrRuntimeClientNotFound
-	}
-
-	req := types.OperationRequest{
-		Client: client,
-		Config: config,
-		DB:     r.DB(),
-	}
-
-	response, err := operation.Handle(ctx, req)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("definition_id", definitionID).Str("operation", operationName).Msg("runtime operation failed")
-
-		return response, err
-	}
-
-	return response, nil
-}
-
 // BuildClientForIntegration builds a typed client for a specific integration installation.
 // It resolves credentials from the keystore and delegates to the registered client builder
 func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *ent.Integration, clientID types.ClientID) (any, error) {
@@ -332,32 +309,13 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 	return r.keystore().BuildClient(ctx, integration, registration, credentials, nil, false)
 }
 
-// executeResolvedOperation executes the given operation with the input integration and registered Operation
+// executeResolvedOperation executes the given operation with the input integration and registered Operation.
+// When integration is nil the client is resolved from the registry's runtime client.
 // Returns the response payload, the number of ingest records processed (0 for non-ingest operations), and any error
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, int, error) {
-	var client any
-
-	if operation.ClientRef.Valid() {
-		registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
-		if err != nil {
-			return nil, 0, err
-		}
-
-		if credentials == nil {
-			credentials, err = r.loadCredentials(ctx, integration, registration.CredentialRefs)
-			if err != nil {
-				return nil, 0, err
-			}
-		}
-
-		client, err = r.keystore().BuildClient(ctx, integration, registration, credentials, config, clientForce)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client build failed")
-
-			return nil, 0, err
-		}
-
-		logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client initialized")
+	client, definitionID, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
+	if err != nil {
+		return nil, 0, err
 	}
 
 	req := types.OperationRequest{
@@ -371,7 +329,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	if operation.IngestHandle != nil {
 		payloadSets, err := operation.IngestHandle(ctx, req)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("ingest handle failed")
+			logx.FromContext(ctx).Error().Err(err).Str("definition_id", definitionID).Str("operation", operation.Name).Msg("ingest handle failed")
 
 			return nil, 0, err
 		}
@@ -381,7 +339,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 			totalEnvelopes += len(ps.Envelopes)
 		}
 
-		logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
+		logx.FromContext(ctx).Info().Str("definition_id", definitionID).Str("operation", operation.Name).Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
 		if err := operations.EmitPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
@@ -401,4 +359,56 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	return response, 0, nil
+}
+
+// resolveOperationClient resolves the client for an operation. When integration
+// is non-nil, credentials are loaded from the keystore and the client is built
+// via the registered builder. When integration is nil, the pre-built runtime
+// client is retrieved from the registry
+func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, string, error) {
+	if !operation.ClientRef.Valid() {
+		if integration != nil {
+			return nil, integration.DefinitionID, nil
+		}
+
+		meta, _ := types.ExecutionMetadataFromContext(ctx)
+
+		return nil, meta.DefinitionID, nil
+	}
+
+	if integration == nil {
+		meta, _ := types.ExecutionMetadataFromContext(ctx)
+
+		client, ok := r.Registry().RuntimeClient(meta.DefinitionID)
+		if !ok {
+			return nil, meta.DefinitionID, ErrRuntimeClientNotFound
+		}
+
+		logx.FromContext(ctx).Info().Str("definition_id", meta.DefinitionID).Str("operation", operation.Name).Msg("runtime client resolved")
+
+		return client, meta.DefinitionID, nil
+	}
+
+	registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
+	if err != nil {
+		return nil, integration.DefinitionID, err
+	}
+
+	if credentials == nil {
+		credentials, err = r.loadCredentials(ctx, integration, registration.CredentialRefs)
+		if err != nil {
+			return nil, integration.DefinitionID, err
+		}
+	}
+
+	client, err := r.keystore().BuildClient(ctx, integration, registration, credentials, config, clientForce)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client build failed")
+
+		return nil, integration.DefinitionID, err
+	}
+
+	logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client initialized")
+
+	return client, integration.DefinitionID, nil
 }

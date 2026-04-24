@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -130,8 +131,13 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 		return nil
 	}
 
-	// no integration linked — execute directly via the runtime email definition
-	if _, err := e.integrationRuntime.ExecuteRuntimeOperation(ctx, emaildef.DefinitionID.ID(), emaildef.SendEmailOp.Name(), configBytes); err != nil {
+	if _, err := e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: emaildef.DefinitionID.ID(),
+		Operation:    emaildef.SendEmailOp.Name(),
+		Config:       configBytes,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	}); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("send_email runtime execution failed")
 		return err
 	}

@@ -182,6 +182,16 @@ var (
 	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
 	// ErrProviderHealthCheckFailed indicates the provider health check failed
 	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
+	// ErrDevModeRequired is returned when a dev-only endpoint is called in production
+	ErrDevModeRequired = errors.New("endpoint is only available in dev mode")
+	// ErrIntegrationsNotConfigured is returned when the integrations runtime is nil
+	ErrIntegrationsNotConfigured = errors.New("integrations runtime is not configured")
+	// ErrEmailClientNotAvailable is returned when the runtime email client cannot be resolved
+	ErrEmailClientNotAvailable = errors.New("runtime email client is not available")
+	// ErrRecipientRequired is returned when the recipient email is missing
+	ErrRecipientRequired = errors.New("recipient email is required")
+	// ErrDispatcherNotFound is returned when no dispatcher matches the requested name
+	ErrDispatcherNotFound = errors.New("no dispatcher found matching the requested name")
 )
 
 var (

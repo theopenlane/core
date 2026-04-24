@@ -2,6 +2,7 @@ package email
 
 import (
 	"html/template"
+	"net/url"
 	"strings"
 	"time"
 
@@ -30,6 +31,7 @@ const (
 	iconUserPlusURL  = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/a177b189-bf03-466a-e43a-542585eb1800/public"
 	iconUserCheckURL = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/22704d4a-a811-44c0-8618-8309b03dfa00/public"
 	iconBellURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/23690f00-2ddb-4d22-e9a5-af470c93c100/public"
+	iconMarkURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/13c70376-9501-4abd-a577-41a2b843a000/public"
 )
 
 // Trust center / questionnaire button colors matching the original teal theme
@@ -37,6 +39,11 @@ const (
 	tcButtonColor     = "#3fc2b4"
 	tcButtonTextColor = "#ffffff"
 )
+
+// tokenURL constructs a product URL with a query-encoded token parameter
+func tokenURL(base, path, token string) string {
+	return base + path + "?token=" + url.QueryEscape(token)
+}
 
 // VerifyEmailRequest is the input for the email verification operation
 type VerifyEmailRequest struct {
@@ -192,7 +199,7 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 		return "Please verify your email address to login to " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req VerifyEmailRequest) render.ContentBody {
-		verifyURL := cfg.ProductURL + "/verify?token=" + req.Token
+		verifyURL := tokenURL(cfg.ProductURL, "/verify", req.Token)
 
 		return render.ContentBody{
 			Preheader: "Verify Your Email Address",
@@ -200,7 +207,7 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 			Title:     "Verify Your Email Address",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"Welcome to " + cfg.CompanyName + " — where compliance isn't just a checkbox.",
+					"Welcome to " + cfg.CompanyName + " - where compliance isn't just a checkbox.",
 					"Before you get started, let's make sure it's really you. Click below to verify your email:",
 				},
 			},
@@ -209,8 +216,7 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
-					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
+					"This link expires in 7 days - but don't worry, if it does, you'll get a fresh one when you try to verify later.",
 				},
 			},
 		}
@@ -234,15 +240,13 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 					"We're thrilled to have you here. At " + cfg.CompanyName + ", we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
 				},
 			},
-			ContentBlocks: []template.HTML{
-				template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-					`<p style="font-size:16px;font-weight:500;line-height:24px;margin:0 0 12px 0;text-align:left;">Here's how to get started:</p>` +
-					`<ul style="margin:0;padding-left:16px;color:#505f6f;list-style-type:disc;">` +
-					`<li style="font-size:16px;line-height:24px;margin-bottom:8px;">Go through our onboarding process to get a personalized experience</li>` +
-					`<li style="font-size:16px;line-height:24px;margin-bottom:8px;">Setup a test program to see all the features our platform has to offer</li>` +
-					`<li style="font-size:16px;line-height:24px;">Checkout our <a href="https://docs.theopenlane.io/docs/platform/quickstartguide" style="color:rgb(63,118,255);text-decoration:none" target="_blank">quickstart guide</a> for helpful resources</li>` +
-					`</ul>` +
-					`</div>`),
+			Callout: &render.Callout{
+				Title: "Here's how to get started:",
+				Items: []template.HTML{
+					"Go through our onboarding process to get a personalized experience",
+					"Setup a test program to see all the features our platform has to offer",
+					"Checkout our " + render.Link(cfg.DocsURL+"/docs/platform/quickstartguide", "quickstart guide") + " for helpful resources",
+				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
@@ -258,14 +262,7 @@ var inviteEmail = EmailOperation[InviteRequest]{
 		return "Join Your Teammate " + req.InviterName + " on " + cfg.CompanyName + "!"
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteRequest) render.ContentBody {
-		inviteURL := cfg.ProductURL + "/invite?token=" + req.Token
-
-		intro := "You're in — let's build trust without the busywork. " + req.InviterName + " has invited you to collaborate in " + cfg.CompanyName + ", as part of the <b>" + req.OrgName + "</b> organization"
-		if req.Role != "" {
-			intro += " with the role of " + strings.ToUpper(req.Role)
-		}
-
-		intro += "."
+		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token)
 
 		return render.ContentBody{
 			Preheader: "You've been invited to join " + cfg.CompanyName,
@@ -274,7 +271,9 @@ var inviteEmail = EmailOperation[InviteRequest]{
 			Title:     "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
 				Unsafe: []template.HTML{
-					template.HTML(intro),
+					template.HTML("You're in - let's build trust without the busywork. "+req.InviterName+" has invited you to collaborate in "+cfg.CompanyName+", as part of the ") +
+						render.Bold(req.OrgName) + " organization" +
+						lo.Ternary(req.Role != "", " with the role of "+template.HTML(strings.ToUpper(req.Role)), "") + ".",
 					"To get started (and verify your email), click the link below:",
 				},
 			},
@@ -283,8 +282,7 @@ var inviteEmail = EmailOperation[InviteRequest]{
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + inviteURL,
-					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
+					"This link expires in 7 days - but don't worry, if it does, you'll get a fresh one when you try to verify later.",
 				},
 			},
 		}
@@ -299,23 +297,24 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteJoinedRequest) render.ContentBody {
 		return render.ContentBody{
-			Preheader: "You're in — welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
+			Preheader: "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
 			Icon:      &render.ContentIcon{Src: iconUserCheckURL, Alt: "User-Check"},
 			Name:      req.FirstName,
-			Title:     "You're in — welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
+			Title:     "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"Welcome to " + cfg.CompanyName + " — we're excited to have you on board with " + req.OrgName + "!",
-					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats — without the manual overhead.",
+					"Welcome to " + cfg.CompanyName + " - we're excited to have you on board with " + req.OrgName + "!",
+					"Ditch the spreadsheets, and embrace the pipeline with a faster, cleaner way to automate compliance, manage risk, and stay ahead of security threats - without the manual overhead.",
 				},
 			},
-			ContentBlocks: []template.HTML{
-				template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-					`<p style="font-size:16px;font-weight:500;margin-bottom:15px;line-height:24px;margin:16px 0">Here's how to get started:</p>` +
-					`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">1. Complete the onboarding flow to tailor your experience</p>` +
-					`<p style="font-size:16px;margin-bottom:12px;padding-left:20px;line-height:24px;margin:16px 0">2. Explore any active <a href="` + cfg.ProductURL + `/programs" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">programs</a> your team is running</p>` +
-					`<p style="font-size:16px;margin-bottom:0px;padding-left:20px;line-height:24px;margin:16px 0">3. Checkout our <a href="` + cfg.DocsURL + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">quickstart guide</a> for helpful resources</p>` +
-					`</div>`),
+			Callout: &render.Callout{
+				Title:   "Here's how to get started:",
+				Ordered: true,
+				Items: []template.HTML{
+					"Complete the onboarding flow to tailor your experience",
+					"Explore any active " + render.Link(cfg.ProductURL+"/programs", "programs") + " your team is running",
+					"Checkout our " + render.Link(cfg.DocsURL, "quickstart guide") + " for helpful resources",
+				},
 			},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
@@ -336,7 +335,7 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 		return cfg.CompanyName + " Password Reset - Action Required"
 	},
 	Build: func(cfg RuntimeEmailConfig, req PasswordResetEmailRequest) render.ContentBody {
-		resetURL := cfg.ProductURL + "/password-reset?token=" + req.Token
+		resetURL := tokenURL(cfg.ProductURL, "/password-reset", req.Token)
 
 		return render.ContentBody{
 			Preheader: "Reset your " + cfg.CompanyName + " password",
@@ -345,7 +344,7 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"We received a request to reset your " + cfg.CompanyName + " password.",
-					"If that was you, no problem — just click the button below to set a new one:",
+					"If that was you, no problem - just click the button below to set a new one:",
 				},
 			},
 			Actions: []render.Action{{
@@ -353,7 +352,6 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"No button? No problem — just paste this link in your browser: " + resetURL,
 					"This link will expire in 15 minutes to keep things secure.",
 					"If you didn't request a password reset, you can safely ignore this email.",
 				},
@@ -375,7 +373,7 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 			Title:     "Your " + cfg.CompanyName + " password has been reset",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"Your password was successfully updated. If you made this change, you're all set — no further action needed.",
+					"Your password was successfully updated. If you made this change, you're all set - no further action needed.",
 					"If you didn't request a password reset, please contact our support team right away at " + cfg.SupportEmail + ". Keeping your account secure is our top priority.",
 				},
 			},
@@ -390,13 +388,13 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 		return "You've been subscribed to " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req SubscribeRequest) render.ContentBody {
-		verifyURL := cfg.ProductURL + "/subscribe/verify?token=" + req.Token
+		verifyURL := tokenURL(cfg.ProductURL, "/subscribe/verify", req.Token)
 
 		return render.ContentBody{
-			Preheader: "You're In — Early Access Secured! Thanks for your interest in our beta program.",
+			Preheader: "You're In - Early Access Secured! Thanks for your interest in our beta program.",
 			Icon:      &render.ContentIcon{Src: iconBellURL, Alt: "Notification Bell"},
 			Name:      req.FirstName,
-			Title:     "You're In — Early Access Secured!",
+			Title:     "You're In - Early Access Secured!",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"We're thrilled to have you as part of our early community. Your interest means the world to us as we work to build a cutting-edge solution. We can't wait to share it with you!",
@@ -406,17 +404,17 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 			}},
-			ContentBlocks: []template.HTML{
-				template.HTML(`<div style="text-align:left;margin-bottom:21px;background-color:rgb(240,253,249);padding:20px;border-radius:8px">` +
-					`<p style="font-size:16px;line-height:24px;margin-bottom:15px;margin-top:16px;font-weight:500">What to Expect Next:</p>` +
-					`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">` + "\u2705" + ` You'll hear from us soon – We'll email you as soon as your spot is ready.</p>` +
-					`<p style="font-size:16px;line-height:24px;margin-bottom:12px;margin-top:16px;padding-left:20px">` + "\U0001F680" + ` Early access to beta features – Get a first look at everything we're building.</p>` +
-					`<p style="font-size:16px;line-height:24px;margin-bottom:0px;margin-top:16px;padding-left:20px">` + "\U0001F4A1" + ` Help shape the future – Your feedback will directly influence the product.</p>` +
-					`</div>`),
+			Callout: &render.Callout{
+				Title: "What to Expect Next:",
+				Items: []template.HTML{
+					"You'll hear from us soon - We'll email you as soon as your spot is ready.",
+					"Early access to beta features - Get a first look at everything we're building.",
+					"Help shape the future - Your feedback will directly influence the product.",
+				},
 			},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Thank you for being part of this journey — we're excited to have you on board!",
+					"Thank you for being part of this journey - we're excited to have you on board!",
 				},
 			},
 		}
@@ -430,7 +428,7 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 		return "Please verify the billing email for " + cfg.CompanyName + " to ensure your account stays up to date"
 	},
 	Build: func(cfg RuntimeEmailConfig, req VerifyBillingRequest) render.ContentBody {
-		verifyURL := cfg.ProductURL + "/billing/verify?token=" + req.Token
+		verifyURL := tokenURL(cfg.ProductURL, "/billing/verify", req.Token)
 
 		return render.ContentBody{
 			Preheader: "Verify Your Email Address",
@@ -447,7 +445,6 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + verifyURL,
 					"If you run into any issues, feel free to reach out at " + cfg.SupportEmail + ".",
 				},
 			},
@@ -473,11 +470,6 @@ var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Sign NDA", Link: req.NDAURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"If the button doesn't work, copy and paste this link into your browser: " + req.NDAURL,
-				},
-			},
 		}
 	},
 }
@@ -499,11 +491,6 @@ var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Visit Trust Center", Link: req.TrustCenterURL, Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"If the button doesn't work, copy and paste this link into your browser: " + req.TrustCenterURL,
-				},
-			},
 		}
 	},
 	MessageOptions: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) []newman.MessageOption {
@@ -538,7 +525,6 @@ var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
 					"This authentication link provides secure, time-limited access and will expire after a short period for your security.",
-					"If the button doesn't work, copy and paste this link into your browser: " + req.AuthURL,
 				},
 			},
 		}
@@ -565,7 +551,6 @@ var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
 					"This authentication link provides secure, time-limited access and will expire after a short period for your security.",
-					"If the button doesn't work, copy and paste this link into your browser: " + req.AuthURL,
 				},
 			},
 		}
@@ -596,12 +581,12 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 					"This email is to confirm that the billing email for " + req.OrgName + " has been changed.",
 				},
 			},
-			ContentBlocks: []template.HTML{
-				template.HTML(`<p style="font-size:16px;line-height:24px;margin-bottom:16px;margin-top:16px;text-align:center">` +
-					`<strong>Previous email:</strong> ` + req.OldBillingEmail + `<br />` +
-					`<strong>New email:</strong> ` + req.NewBillingEmail + `<br />` +
-					`<strong>Time of action:</strong> ` + req.ChangedAt.Format("January 2, 2006 at 3:04 PM MST") +
-					`</p>`),
+			Dictionary: render.Dictionary{
+				Cells: []render.Cell{
+					{Key: "Previous email", Value: req.OldBillingEmail},
+					{Key: "New email", Value: req.NewBillingEmail},
+					{Key: "Time of action", Value: req.ChangedAt.Format("January 2, 2006 at 3:04 PM MST")},
+				},
 			},
 			Outros: render.OutrosBlock{
 				Unsafe: []template.HTML{
@@ -613,40 +598,38 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 	},
 }
 
-// allDispatchers returns every registered catalog entry as an EmailDispatcher.
-// It is the single source of truth for both operation registration and key-based dispatch
-func allDispatchers() []EmailDispatcher {
-	return []EmailDispatcher{
-		verifyEmail,
-		verifyEmailModernEmail,
-		welcomeEmail,
-		inviteEmail,
-		inviteModernEmail,
-		inviteJoinedEmail,
-		resetRequestEmail,
-		resetSuccessEmail,
-		subscribeEmail,
-		verifyBillingEmail,
-		tcNDARequestEmail,
-		tcNDASignedEmail,
-		tcAuthEmail,
-		questionnaireAuthEmail,
-		billingChangedEmail,
-		brandedMessageEmail,
-	}
+var dispatchers = []EmailDispatcher{
+	verifyEmail,
+	verifyEmailModernEmail,
+	welcomeEmail,
+	inviteEmail,
+	inviteModernEmail,
+	inviteJoinedEmail,
+	resetRequestEmail,
+	resetSuccessEmail,
+	subscribeEmail,
+	verifyBillingEmail,
+	tcNDARequestEmail,
+	tcNDASignedEmail,
+	tcAuthEmail,
+	questionnaireAuthEmail,
+	billingChangedEmail,
+	brandedMessageEmail,
 }
+
+var dispatcherIndex = lo.SliceToMap(dispatchers, func(d EmailDispatcher) (string, EmailDispatcher) {
+	return d.Name(), d
+})
 
 // AllEmailOperations returns all system email operation registrations for wiring into the builder
 func AllEmailOperations() []types.OperationRegistration {
-	return lo.Map(allDispatchers(), func(d EmailDispatcher, _ int) types.OperationRegistration {
+	return lo.Map(dispatchers, func(d EmailDispatcher, _ int) types.OperationRegistration {
 		return d.Registration()
 	})
 }
 
-// DispatcherByKey resolves a registered email dispatcher by its catalog key. The second return
-// is false when no dispatcher matches the key
+// DispatcherByKey resolves a registered email dispatcher by its catalog key
 func DispatcherByKey(key string) (EmailDispatcher, bool) {
-	return lo.Find(allDispatchers(), func(d EmailDispatcher) bool {
-		return d.Name() == key
-	})
+	d, ok := dispatcherIndex[key]
+	return d, ok
 }

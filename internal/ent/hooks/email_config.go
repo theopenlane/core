@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
@@ -22,7 +24,13 @@ func sendSystemEmail(ctx context.Context, client *generated.Client, operationNam
 		return err
 	}
 
-	_, err = rt.ExecuteRuntimeOperation(ctx, email.DefinitionID.ID(), operationName, config)
+	_, err = rt.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: email.DefinitionID.ID(),
+		Operation:    operationName,
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	})
 
 	return err
 }

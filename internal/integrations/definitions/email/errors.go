@@ -25,4 +25,6 @@ var (
 	ErrCampaignMissingAssessment = errors.New("email: campaign has no assessment ID")
 	// ErrAssessmentNotFound indicates the assessment linked to a campaign cannot be found
 	ErrAssessmentNotFound = errors.New("email: assessment not found")
+	// ErrQuestionnaireDispatchFailed indicates failure during dispatch of a questionnaire access email to a campaign target
+	ErrQuestionnaireDispatchFailed = errors.New("email: questionnaire dispatch failed")
 )

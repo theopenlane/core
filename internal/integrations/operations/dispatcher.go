@@ -14,18 +14,35 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Dispatch validates and enqueues one operation execution request
+// Dispatch validates and enqueues one operation execution request. When
+// DispatchRequest.Runtime is true, no DB integration lookup is performed and
+// the client is resolved from the registry at execution time
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
-	if req.IntegrationID == "" || req.Operation == "" {
+	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
 		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
-	installationRecord, err := db.Integration.Get(ctx, req.IntegrationID)
-	if err != nil {
-		return DispatchResult{}, err
+	var (
+		definitionID string
+		ownerID      = req.OwnerID
+		installation *ent.Integration
+	)
+
+	switch {
+	case req.Runtime:
+		definitionID = req.DefinitionID
+	default:
+		record, err := db.Integration.Get(ctx, req.IntegrationID)
+		if err != nil {
+			return DispatchResult{}, err
+		}
+
+		installation = record
+		definitionID = record.DefinitionID
+		ownerID = record.OwnerID
 	}
 
-	operation, err := reg.Operation(installationRecord.DefinitionID, req.Operation)
+	operation, err := reg.Operation(definitionID, req.Operation)
 	if err != nil {
 		return DispatchResult{}, err
 	}
@@ -44,17 +61,17 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	metadata := types.ExecutionMetadata{
-		OwnerID:       installationRecord.OwnerID,
-		IntegrationID: installationRecord.ID,
-		DefinitionID:  installationRecord.DefinitionID,
+		OwnerID:       ownerID,
+		IntegrationID: req.IntegrationID,
+		DefinitionID:  definitionID,
 		Operation:     req.Operation,
 		RunType:       runType,
 		Workflow:      req.Workflow,
+		Runtime:       req.Runtime,
 	}
 
-	// Create a run record unless the operation policy opts out
-	if !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
+	if installation != nil && !operation.Policy.SkipRunRecord {
+		runRecord, err := CreatePendingRun(ctx, db, installation, DispatchRequest{
 			IntegrationID:      req.IntegrationID,
 			Operation:          req.Operation,
 			Config:             jsonx.CloneRawMessage(req.Config),
@@ -68,21 +85,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		metadata.RunID = runRecord.ID
 	}
 
-	// Inherit webhook/event context from the parent execution when dispatching
-	// from a webhook handler so the envelope carries the triggering event identity
-	if existing, ok := types.ExecutionMetadataFromContext(ctx); ok {
-		if metadata.Webhook == "" {
-			metadata.Webhook = existing.Webhook
-		}
-
-		if metadata.Event == "" {
-			metadata.Event = existing.Event
-		}
-
-		if metadata.DeliveryID == "" {
-			metadata.DeliveryID = existing.DeliveryID
-		}
-	}
+	inheritWebhookContext(&metadata, ctx)
 
 	emitCtx := types.WithExecutionMetadata(ctx, metadata)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
@@ -92,6 +95,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, gala.Headers{
 		IdempotencyKey: metadata.RunID,
 		Properties:     metadata.Properties(),
+		ScheduledAt:    req.ScheduledAt,
 	})
 
 	if receipt.Err != nil {
@@ -113,6 +117,27 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
+}
+
+// inheritWebhookContext propagates webhook/event context from a parent execution
+// so the envelope carries the triggering event identity
+func inheritWebhookContext(metadata *types.ExecutionMetadata, ctx context.Context) {
+	existing, ok := types.ExecutionMetadataFromContext(ctx)
+	if !ok {
+		return
+	}
+
+	if metadata.Webhook == "" {
+		metadata.Webhook = existing.Webhook
+	}
+
+	if metadata.Event == "" {
+		metadata.Event = existing.Event
+	}
+
+	if metadata.DeliveryID == "" {
+		metadata.DeliveryID = existing.DeliveryID
+	}
 }
 
 // ValidateConfig validates one raw configuration payload against the operation schema
