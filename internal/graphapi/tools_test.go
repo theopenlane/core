@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -17,6 +18,7 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v84"
@@ -89,6 +91,7 @@ type GraphTestSuite struct {
 	ofgaTF             *fgatest.OpenFGATestFixture
 	stripeMockBackend  *mocks.MockStripeBackend
 	cacheRefreshServer *httptest.Server
+	galaRuntime        *gala.Gala
 }
 
 // client contains all the clients the test need to interact with
@@ -256,6 +259,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
 	requireNoError(t, err)
 
+	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return suite.galaRuntime
+	}))
+
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
 	requireNoError(t, err)
 
@@ -275,6 +282,14 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 }
 
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
+	if suite.galaRuntime != nil {
+		err := suite.galaRuntime.StopWorkers(context.Background())
+		requireNoError(t, err)
+
+		err = suite.galaRuntime.Close()
+		requireNoError(t, err)
+	}
+
 	// close the database connection
 	err := suite.client.db.Close()
 	requireNoError(t, err)
@@ -290,6 +305,50 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	if suite.cacheRefreshServer != nil {
 		suite.cacheRefreshServer.Close()
 	}
+}
+
+func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
+	t.Helper()
+
+	if suite.galaRuntime != nil {
+		return
+	}
+
+	runtime, err := gala.NewGala(context.Background(), gala.Config{
+		Enabled:           true,
+		ConnectionURI:     suite.tf.URI,
+		QueueName:         fmt.Sprintf("graphapi_test_%d", time.Now().UnixNano()),
+		WorkerCount:       1,
+		RunMigrations:     true,
+		FetchCooldown:     time.Millisecond,
+		FetchPollInterval: 10 * time.Millisecond,
+	})
+	require.NoError(t, err)
+
+	do.ProvideValue(runtime.Injector(), runtime)
+	do.ProvideValue(runtime.Injector(), suite.client.db)
+
+	_, err = hooks.RegisterGalaEntitlementListeners(runtime.Registry())
+	require.NoError(t, err)
+
+	err = runtime.StartWorkers(context.Background())
+	require.NoError(t, err)
+
+	suite.galaRuntime = runtime
+
+	t.Cleanup(func() {
+		if suite.galaRuntime == nil {
+			return
+		}
+
+		err := suite.galaRuntime.StopWorkers(context.Background())
+		require.NoError(t, err)
+
+		err = suite.galaRuntime.Close()
+		require.NoError(t, err)
+
+		suite.galaRuntime = nil
+	})
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
