@@ -21,9 +21,9 @@ var nonTemplateConfigFields = map[string]struct{}{
 // backed by RuntimeEmailConfig fields, such as time-derived or per-recipient values
 var computedVariables = []models.TemplateVariable{
 	{Name: "year", Description: "Current year for copyright notices"},
-	{Name: "recipientEmail", Description: "Recipient email address"},
-	{Name: "recipientFirstName", Description: "Recipient first name"},
-	{Name: "recipientLastName", Description: "Recipient last name"},
+	{Name: "email", Description: "Recipient email address"},
+	{Name: "firstName", Description: "Recipient first name"},
+	{Name: "lastName", Description: "Recipient last name"},
 }
 
 // campaignVariables are additional template variables available in campaign email contexts

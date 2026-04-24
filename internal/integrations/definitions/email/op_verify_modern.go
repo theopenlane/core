@@ -32,12 +32,15 @@ var verifyEmailModernEmail = EmailOperation[VerifyEmailModernRequest]{
 		return "Please verify your email address to login to " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req VerifyEmailModernRequest) render.ContentBody {
-		verifyURL := cfg.ProductURL + "/verify?token=" + req.Token
+		verifyURL := tokenURL(cfg.ProductURL, "/verify", req.Token)
 
 		body := render.ContentBody{
 			Preheader: "Verify Your Email Address",
-			Name:      req.FirstName,
-			Title:     "Verify Your Email Address",
+			Header: render.HeaderBlock{
+				Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName},
+			},
+			Name:  req.FirstName,
+			Title: "Verify Your Email Address",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"We're almost there!",
@@ -48,11 +51,6 @@ var verifyEmailModernEmail = EmailOperation[VerifyEmailModernRequest]{
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 			}},
-			Outros: render.OutrosBlock{
-				Paragraphs: []string{
-					"If for some reason the button doesn't work, copy and paste this link into your browser: " + verifyURL,
-				},
-			},
 		}
 
 		if req.HeaderLogo != "" {

@@ -378,7 +378,7 @@ func TestBillingChangedContent(t *testing.T) {
 func TestAllEmailOperationsCount(t *testing.T) {
 	ops := AllEmailOperations()
 
-	assert.Len(t, ops, len(allDispatchers()))
+	assert.Len(t, ops, len(dispatchers))
 }
 
 // TestAllEmailOperationsHaveNames verifies each operation registration has a non-empty name

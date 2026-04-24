@@ -54,6 +54,10 @@
         .free-markdown table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
         .free-markdown th { text-align: left; padding: 8px; background-color: #f9fafb; border-bottom: 2px solid #e5e7eb; font-weight: 600; color: #111827; }
         .free-markdown td { padding: 8px; border-bottom: 1px solid #e5e7eb; }
+        .body-callout { text-align: left; margin-bottom: 16px; background-color: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
+        .body-callout p { font-size: 16px; font-weight: 600; line-height: 24px; margin: 0 0 12px 0; text-align: left; color: #111827; }
+        .body-callout ul, .body-callout ol { margin: 0; padding-left: 16px; color: #374151; }
+        .body-callout li { font-size: 16px; line-height: 24px; margin-bottom: 8px; }
 
         @media only screen and (max-width: {{ if .Body.BodyWidth }}{{ .Body.BodyWidth }}{{ else }}600px{{ end }}) {
             .email-wrapper,
@@ -155,6 +159,18 @@
                                     {{ if ne .Body.FreeMarkdown "" }}
                                         <div class="free-markdown">{{ .Body.FreeMarkdown.ToHTML }}</div>
                                     {{ else }}
+
+                                        {{/* Callout */}}
+                                        {{ with .Body.Callout }}
+                                        <div class="body-callout">
+                                            {{ if .Title }}<p>{{ .Title }}</p>{{ end }}
+                                            {{ if .Ordered }}
+                                            <ol>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ol>
+                                            {{ else }}
+                                            <ul>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ul>
+                                            {{ end }}
+                                        </div>
+                                        {{ end }}
 
                                         {{/* Dictionary */}}
                                         {{ with .Body.Dictionary.Cells }}

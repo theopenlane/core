@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"strings"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -39,22 +40,20 @@ var inviteModernEmail = EmailOperation[InviteModernRequest]{
 		return "Join Your Teammate " + req.InviterName + " on " + cfg.CompanyName + "!"
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteModernRequest) render.ContentBody {
-		inviteURL := cfg.ProductURL + "/invite?token=" + req.Token
-
-		intro := "You're in — let's build trust without the busywork. " + req.InviterName + " has invited you to collaborate in " + cfg.CompanyName + ", as part of the <b>" + req.OrgName + "</b> organization"
-		if req.Role != "" {
-			intro += " with the role of " + strings.ToUpper(req.Role)
-		}
-
-		intro += "."
+		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token)
 
 		return render.ContentBody{
 			Preheader: "You've been invited to join " + cfg.CompanyName,
-			Name:      req.FirstName,
-			Title:     "You've been invited to join " + cfg.CompanyName + "!",
+			Header: render.HeaderBlock{
+				Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName},
+			},
+			Name:  req.FirstName,
+			Title: "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
 				Unsafe: []template.HTML{
-					template.HTML(intro),
+					template.HTML("You're in - let's build trust without the busywork. "+req.InviterName+" has invited you to collaborate in "+cfg.CompanyName+", as part of the ") +
+						render.Bold(req.OrgName) + " organization" +
+						lo.Ternary(req.Role != "", " with the role of "+template.HTML(strings.ToUpper(req.Role)), "") + ".",
 					"To get started (and verify your email), click the link below:",
 				},
 			},
@@ -63,7 +62,6 @@ var inviteModernEmail = EmailOperation[InviteModernRequest]{
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{
-					"Or, if you're feeling old school, copy and paste this link into your browser: " + inviteURL,
 					"This link expires in 7 days — but don't worry, if it does, you'll get a fresh one when you try to verify later.",
 				},
 			},

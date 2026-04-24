@@ -3,6 +3,7 @@ package email
 import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 var (
@@ -135,23 +136,11 @@ type EmailUserInput struct {
 	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Ordered social footer entries for modern themes"`
 }
 
-// ToRuntimeConfig converts customer user input to a RuntimeEmailConfig for rendering.
-// Credential fields (APIKey, Provider) are not set — those come from the credential ref
+// ToRuntimeConfig converts customer user input to a RuntimeEmailConfig
 func (u EmailUserInput) ToRuntimeConfig() RuntimeEmailConfig {
-	return RuntimeEmailConfig{
-		FromEmail:      u.FromEmail,
-		CompanyName:    u.CompanyName,
-		CompanyAddress: u.CompanyAddress,
-		Corporation:    u.Corporation,
-		SupportEmail:   u.SupportEmail,
-		LogoURL:        u.LogoURL,
-		RootURL:        u.RootURL,
-		ProductURL:     u.ProductURL,
-		DocsURL:        u.DocsURL,
-		Copyright:      u.Copyright,
-		TroubleText:    u.TroubleText,
-		UnsubscribeURL: u.UnsubscribeURL,
-		Tagline:        u.Tagline,
-		Social:         u.Social,
-	}
+	var cfg RuntimeEmailConfig
+
+	_ = jsonx.RoundTrip(u, &cfg)
+
+	return cfg
 }

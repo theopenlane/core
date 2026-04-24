@@ -19,6 +19,15 @@
 {{ if ne .Body.FreeMarkdown "" }}
     {{ .Body.FreeMarkdown.ToHTML }}
 {{ else }}
+    {{ with .Body.Callout }}
+        {{ $ordered := .Ordered }}
+        {{ if .Title }}
+{{ .Title }}
+        {{ end }}
+        {{ range $i, $item := .Items }}
+            {{ if $ordered }}{{ add $i 1 }}. {{ $item }}{{ else }}- {{ $item }}{{ end }}
+        {{ end }}
+    {{ end }}
     {{ with .Body.Dictionary.Cells }}
         <ul>
             {{ range $entry := . }}

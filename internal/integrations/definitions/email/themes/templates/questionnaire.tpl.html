@@ -51,6 +51,10 @@
         .footer a { color: #3fc2b4; text-decoration: underline; }
         .free-markdown p { margin-bottom: 16px; }
         .free-markdown ul, .free-markdown ol { padding-left: 24px; margin-bottom: 16px; }
+        .body-callout { text-align: left; margin-bottom: 26px; background-color: #f0fdf9; padding: 20px; border-radius: 8px; }
+        .body-callout p { font-size: 16px; font-weight: 500; line-height: 24px; margin: 0 0 12px 0; text-align: left; color: #082930; }
+        .body-callout ul, .body-callout ol { margin: 0; padding-left: 16px; color: #505f6f; }
+        .body-callout li { font-size: 16px; line-height: 24px; margin-bottom: 8px; }
 
         /* Media Queries */
         @media only screen and (max-width: {{ if .Body.BodyWidth }}{{ .Body.BodyWidth }}{{ else }}780px{{ end }}) {
@@ -109,6 +113,18 @@
                 {{ if ne .Body.FreeMarkdown "" }}
                     <div class="free-markdown">{{ .Body.FreeMarkdown.ToHTML }}</div>
                 {{ else }}
+
+                    {{/* Callout */}}
+                    {{ with .Body.Callout }}
+                    <div class="body-callout">
+                        {{ if .Title }}<p>{{ .Title }}</p>{{ end }}
+                        {{ if .Ordered }}
+                        <ol>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ol>
+                        {{ else }}
+                        <ul>{{ range $item := .Items }}<li>{{ $item }}</li>{{ end }}</ul>
+                        {{ end }}
+                    </div>
+                    {{ end }}
 
                     {{/* Dictionary */}}
                     {{ with .Body.Dictionary.Cells }}

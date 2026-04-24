@@ -50,98 +50,83 @@ func trustCenterNDAURL(tc *generated.TrustCenter, defaultDomain string) url.URL 
 	return u
 }
 
-// resolveTrustCenterNDARequestFields loads the trust center from the database and
-// populates NDAURL and OrgName on the input when they are empty
-func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, client *EmailClient, input *TrustCenterNDARequestEmail) error {
-	if input.NDAURL != "" {
-		return nil
-	}
+// trustCenterResolveResult captures the resolved URL and org name from trust center lookup
+type trustCenterResolveResult struct {
+	URL     string
+	OrgName string
+}
 
-	if input.RequestID == "" || input.TrustCenterID == "" {
-		return nil
-	}
-
+// resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
+func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, client *EmailClient, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
 	tc, err := req.DB.TrustCenter.Query().
-		Where(trustcenter.IDEQ(input.TrustCenterID)).
+		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		WithSetting().
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", input.TrustCenterID).Msg("failed loading trust center for NDA email")
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed loading trust center for email")
+		return trustCenterResolveResult{}, fmt.Errorf("%w: %w", ErrSendFailed, err)
 	}
 
-	if input.OrgName == "" && tc.Edges.Setting != nil {
-		input.OrgName = tc.Edges.Setting.CompanyName
+	var orgName string
+	if tc.Edges.Setting != nil {
+		orgName = tc.Edges.Setting.CompanyName
 	}
 
 	duration := req.DB.TokenManager.Config().TrustCenterNDARequestAccessDuration
-
-	baseURL := trustCenterNDAURL(tc, client.Config.TrustCenterDomain)
+	baseURL := buildURL(tc, client.Config.TrustCenterDomain)
 
 	result, err := urlx.GenerateAnonTokenURL(ctx, req.DB.TokenManager, req.DB.Shortlinks, baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonTrustCenterJWTPrefix,
-		SubjectID: input.RequestID,
+		SubjectID: requestID,
 		OrgID:     tc.OwnerID,
-		Email:     input.Email,
+		Email:     email,
 		Duration:  duration,
 		ExtraClaims: func(c *tokens.Claims) {
-			c.TrustCenterID = input.TrustCenterID
+			c.TrustCenterID = trustCenterID
 		},
 	})
 	if err != nil {
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
+		return trustCenterResolveResult{}, fmt.Errorf("%w: %w", ErrSendFailed, err)
+	}
+
+	return trustCenterResolveResult{URL: result.URL, OrgName: orgName}, nil
+}
+
+// resolveTrustCenterNDARequestFields populates NDAURL and OrgName on the input when empty
+func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, client *EmailClient, input *TrustCenterNDARequestEmail) error {
+	if input.NDAURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
+		return nil
+	}
+
+	result, err := resolveTrustCenterAnonURL(ctx, req, client, input.RequestID, input.TrustCenterID, input.Email, trustCenterNDAURL)
+	if err != nil {
+		return err
 	}
 
 	input.NDAURL = result.URL
+	if input.OrgName == "" {
+		input.OrgName = result.OrgName
+	}
 
 	return nil
 }
 
-// resolveTrustCenterAuthFields loads the trust center from the database and
-// populates AuthURL and OrgName on the input when they are empty
+// resolveTrustCenterAuthFields populates AuthURL and OrgName on the input when empty
 func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, client *EmailClient, input *TrustCenterAuthEmail) error {
-	if input.AuthURL != "" {
+	if input.AuthURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
 		return nil
 	}
 
-	if input.RequestID == "" || input.TrustCenterID == "" {
-		return nil
-	}
-
-	tc, err := req.DB.TrustCenter.Query().
-		Where(trustcenter.IDEQ(input.TrustCenterID)).
-		WithCustomDomain().
-		WithSetting().
-		Only(ctx)
+	result, err := resolveTrustCenterAnonURL(ctx, req, client, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", input.TrustCenterID).Msg("failed loading trust center for auth email")
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
-	}
-
-	if input.OrgName == "" && tc.Edges.Setting != nil {
-		input.OrgName = tc.Edges.Setting.CompanyName
-	}
-
-	duration := req.DB.TokenManager.Config().TrustCenterNDARequestAccessDuration
-
-	baseURL := trustCenterBaseURL(tc, client.Config.TrustCenterDomain)
-
-	result, err := urlx.GenerateAnonTokenURL(ctx, req.DB.TokenManager, req.DB.Shortlinks, baseURL, urlx.AnonTokenRequest{
-		Prefix:    authmanager.AnonTrustCenterJWTPrefix,
-		SubjectID: input.RequestID,
-		OrgID:     tc.OwnerID,
-		Email:     input.Email,
-		Duration:  duration,
-		ExtraClaims: func(c *tokens.Claims) {
-			c.TrustCenterID = input.TrustCenterID
-		},
-	})
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrSendFailed, err)
+		return err
 	}
 
 	input.AuthURL = result.URL
+	if input.OrgName == "" {
+		input.OrgName = result.OrgName
+	}
 
 	return nil
 }

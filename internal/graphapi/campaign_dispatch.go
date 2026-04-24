@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
@@ -77,7 +76,7 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 
 	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
 
 	if err := r.validateCampaignDispatch(ctx, campaignObj); err != nil {
@@ -118,10 +117,6 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return err
 	}
 
-	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire && campaignObj.AssessmentID == "" {
-		return ErrCampaignMissingAssessmentID
-	}
-
 	if campaignObj.Status == enums.CampaignStatusCompleted || campaignObj.Status == enums.CampaignStatusCanceled {
 		return ErrCampaignDispatchInactive
 	}
@@ -156,52 +151,43 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 	return r.dispatchCampaignOperation(ctx, state)
 }
 
-// dispatchCampaignOperation dispatches the appropriate email operation for the
-// campaign type through the integration runtime. Questionnaire campaigns use
-// SendQuestionnaireCampaignOp; all others use SendBrandedCampaignOp
+// dispatchCampaignOperation dispatches the campaign email operation through the
+// integration runtime. It performs an active lookup for the email integration at
+// dispatch time so integrations created after campaign creation are picked up
 func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state *campaignDispatchState) error {
 	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
 	if rt == nil {
 		return nil
 	}
 
-	var operationName string
-
-	switch state.campaignObj.CampaignType {
-	case enums.CampaignTypeQuestionnaire:
-		operationName = emaildef.SendQuestionnaireCampaignOp.Name()
-	default:
-		operationName = emaildef.SendBrandedCampaignOp.Name()
-	}
-
-	config, err := json.Marshal(struct {
-		CampaignID string `json:"campaignId"`
-	}{CampaignID: state.campaignObj.ID})
+	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
+		CampaignID: state.campaignObj.ID,
+	})
 	if err != nil {
 		return err
 	}
 
-	integrationID := state.campaignObj.IntegrationID
-	if integrationID != "" {
-		if _, err := rt.Dispatch(ctx, operations.DispatchRequest{
-			IntegrationID: integrationID,
-			Operation:     operationName,
-			Config:        config,
-			RunType:       enums.IntegrationRunTypeEvent,
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).
-				Str("campaign_id", state.campaignObj.ID).
-				Str("integration_id", integrationID).
-				Msg("failed dispatching campaign operation via customer integration")
-		}
-
-		return nil
+	req := operations.DispatchRequest{
+		Operation: emaildef.SendBrandedCampaignOp.Name(),
+		Config:    config,
+		RunType:   enums.IntegrationRunTypeEvent,
 	}
 
-	if _, err := rt.ExecuteRuntimeOperation(ctx, emaildef.DefinitionID.ID(), operationName, config); err != nil {
+	integrationID := emaildef.ResolveEmailIntegration(ctx, withTransactionalMutation(ctx), state.campaignObj.OwnerID)
+
+	switch {
+	case integrationID != "":
+		req.IntegrationID = integrationID
+	default:
+		req.DefinitionID = emaildef.DefinitionID.ID()
+		req.OwnerID = state.campaignObj.OwnerID
+		req.Runtime = true
+	}
+
+	if _, err := rt.Dispatch(ctx, req); err != nil {
 		logx.FromContext(ctx).Error().Err(err).
 			Str("campaign_id", state.campaignObj.ID).
-			Msg("failed executing campaign operation via runtime")
+			Msg("failed dispatching campaign operation")
 	}
 
 	return nil
@@ -217,7 +203,7 @@ func (r *mutationResolver) updateCampaignAfterDispatch(ctx context.Context, stat
 
 // updateCampaignForScheduledDispatch enqueues the job and sets scheduled status.
 func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Context, state *campaignDispatchState) error {
-	if err := r.enqueueCampaignDispatchJob(ctx, state.campaignObj, state.opts.Action, state.scheduleAt); err != nil {
+	if err := r.enqueueCampaignDispatchJob(ctx, state.campaignObj, state.scheduleAt); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaign"})
 	}
 
@@ -276,7 +262,7 @@ func (r *mutationResolver) buildDispatchPayload(ctx context.Context, state *camp
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
 
-	//	r.recordCampaignDispatchEvent(ctx, state.campaignObj, state.opts.Action, state.queuedCount, state.skippedCount, state.scheduleAt)
+	r.recordCampaignDispatchEvent(ctx, state.campaignObj, state.opts.Action, state.queuedCount, state.skippedCount, state.scheduleAt)
 
 	return &model.CampaignLaunchPayload{
 		Campaign:     finalResult,
@@ -334,32 +320,48 @@ func resolveCampaignScheduleAt(now time.Time, campaignObj *generated.Campaign, a
 	return nil, nil
 }
 
-// enqueueCampaignDispatchJob inserts the campaign dispatch job into the queue.
-func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, campaignObj *generated.Campaign, action jobspec.CampaignDispatchAction, scheduledAt *time.Time) error {
+// enqueueCampaignDispatchJob schedules a campaign dispatch through the integration
+// framework with deferred execution at the specified time. Uses the customer
+// integration when available, falling back to the runtime provider
+func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, campaignObj *generated.Campaign, scheduledAt *time.Time) error {
 	if campaignObj == nil || scheduledAt == nil {
 		return ErrCampaignDispatchScheduleRequired
 	}
 
-	args := jobspec.CampaignDispatchArgs{
-		CampaignID:  campaignObj.ID,
-		Action:      action,
+	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	if rt == nil {
+		return ErrCampaignDispatchScheduleRequired
+	}
+
+	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
+		CampaignID: campaignObj.ID,
+	})
+	if err != nil {
+		return err
+	}
+
+	req := operations.DispatchRequest{
+		Operation:   emaildef.SendBrandedCampaignOp.Name(),
+		Config:      config,
+		RunType:     enums.IntegrationRunTypeEvent,
 		ScheduledAt: scheduledAt,
 	}
 
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
-		args.RequestedBy = caller.SubjectID
+	integrationID := emaildef.ResolveEmailIntegration(ctx, withTransactionalMutation(ctx), campaignObj.OwnerID)
+
+	switch {
+	case integrationID != "":
+		req.IntegrationID = integrationID
+	default:
+		req.DefinitionID = emaildef.DefinitionID.ID()
+		req.OwnerID = campaignObj.OwnerID
+		req.Runtime = true
 	}
 
-	opts := args.InsertOpts()
-	opts.ScheduledAt = *scheduledAt
-
-	_, err := r.db.Job.Insert(ctx, args, &opts)
-	if err != nil {
-		if hooks.IsUniqueConstraintError(err) {
-			logx.FromContext(ctx).Info().Err(err).Msg("campaign dispatch job already scheduled")
-
-			return nil
-		}
+	if _, err := rt.Dispatch(ctx, req); err != nil {
+		logx.FromContext(ctx).Error().Err(err).
+			Str("campaign_id", campaignObj.ID).
+			Msg("failed scheduling campaign dispatch")
 
 		return err
 	}

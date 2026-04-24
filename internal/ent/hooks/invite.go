@@ -124,9 +124,11 @@ func HookInvite() ent.Hook {
 				Token:         tokenValue,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
+
+				return retValue, err
 			}
 
-			return retValue, err
+			return retValue, nil
 		})
 	}, ent.OpCreate)
 }
@@ -319,6 +321,8 @@ func HookInviteAccepted() ent.Hook {
 				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
 				OrgName:       org.DisplayName,
 			}); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
+
 				return retValue, err
 			}
 
