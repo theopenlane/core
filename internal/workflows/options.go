@@ -35,7 +35,7 @@ type CELConfig struct {
 	// OptionalTypes enables CEL optional types and optional field syntax
 	OptionalTypes bool `json:"optionaltypes" koanf:"optionaltypes" default:"false"`
 	// IdentifierEscapeSyntax enables backtick escaped identifiers
-	IdentifierEscapeSyntax bool `json:"identifierescapesyntax" koanf:"identifierescapesyntax" default:"false"`
+	IdentifierEscapeSyntax bool `json:"identifierescapesyntax" koanf:"identifierescapesyntax" default:"true"`
 	// CrossTypeNumericComparisons enables comparisons across numeric types
 	CrossTypeNumericComparisons bool `json:"crosstypenumericcomparisons" koanf:"crosstypenumericcomparisons" default:"false"`
 	// MacroCallTracking records macro calls in AST source info for debugging

@@ -784,6 +784,13 @@ data:
         {{- else }}
         verifybilling: ""
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.billing }}
+        billing: {{ .Values.openlane.coreConfiguration.email.urls.billing | quote }}
+        {{- else if .Values.domain }}
+        billing: "https://console.{{ .Values.domain }}/organization-settings/billing"
+        {{- else }}
+        billing: ""
+        {{- end }}
         {{- if .Values.openlane.coreConfiguration.email.urls.questionnaire }}
         questionnaire: {{ .Values.openlane.coreConfiguration.email.urls.questionnaire | quote }}
         {{- else if .Values.domain }}
