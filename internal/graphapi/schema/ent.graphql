@@ -34298,6 +34298,14 @@ type Integration implements Node {
   """
   platformID: ID
   """
+  runtime configuration for operations, scheduling, and mappings
+  """
+  config: IntegrationConfig
+  """
+  stable, non-secret installation identity metadata for the provider
+  """
+  installationMetadata: IntegrationInstallationMetadata
+  """
   additional metadata about the integration
   """
   metadata: Map

@@ -176,3 +176,9 @@ models:
   RiskThresholdsConfig:
     model:
       - github.com/theopenlane/core/common/models.RiskThresholdsConfig
+  IntegrationConfig:
+    model:
+      - github.com/theopenlane/core/common/openapi.IntegrationConfig
+  IntegrationInstallationMetadata:
+    model:
+      - github.com/theopenlane/core/common/openapi.IntegrationInstallationMetadata

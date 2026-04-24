@@ -17270,6 +17270,10 @@ input IdentityHolderHistoryWhereInput {
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
 """
 scalar ImplementationGuidance
+"""
+IntegrationConfig holds the runtime configuration for operations, scheduling, and mappings
+"""
+scalar IntegrationConfig
 type IntegrationHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -17335,6 +17339,14 @@ type IntegrationHistory implements Node {
 	optional platform associated with this integration for downstream inventory linkage
 	"""
 	platformID: String
+	"""
+	runtime configuration for operations, scheduling, and mappings
+	"""
+	config: IntegrationConfig
+	"""
+	stable, non-secret installation identity metadata for the provider
+	"""
+	installationMetadata: IntegrationInstallationMetadata
 	"""
 	additional metadata about the integration
 	"""
@@ -17852,6 +17864,10 @@ input IntegrationHistoryWhereInput {
 	primaryDirectory: Boolean
 	primaryDirectoryNEQ: Boolean
 }
+"""
+IntegrationInstallationMetadata holds the stable, non-secret installation identity metadata for the provider
+"""
+scalar IntegrationInstallationMetadata
 type InternalPolicyHistory implements Node {
 	id: ID!
 	historyTime: Time!

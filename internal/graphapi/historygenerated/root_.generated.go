@@ -1336,6 +1336,7 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
+		Config                   func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DefinitionID             func(childComplexity int) int
@@ -1347,6 +1348,7 @@ type ComplexityRoot struct {
 		Family                   func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		InstallationMetadata     func(childComplexity int) int
 		IntegrationType          func(childComplexity int) int
 		InternalNotes            func(childComplexity int) int
 		Kind                     func(childComplexity int) int
@@ -10565,6 +10567,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IdentityHolderHistoryEdge.Node(childComplexity), true
 
+	case "IntegrationHistory.config":
+		if e.ComplexityRoot.IntegrationHistory.Config == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.Config(childComplexity), true
+
 	case "IntegrationHistory.createdAt":
 		if e.ComplexityRoot.IntegrationHistory.CreatedAt == nil {
 			break
@@ -10641,6 +10650,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationHistory.ID(childComplexity), true
+
+	case "IntegrationHistory.installationMetadata":
+		if e.ComplexityRoot.IntegrationHistory.InstallationMetadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.InstallationMetadata(childComplexity), true
 
 	case "IntegrationHistory.integrationType":
 		if e.ComplexityRoot.IntegrationHistory.IntegrationType == nil {
@@ -22204,7 +22220,14 @@ scalar VendorScoringQuestionsConfig
 RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
 """
 scalar RiskThresholdsConfig
-`, BuiltIn: false},
+"""
+IntegrationConfig holds the runtime configuration for operations, scheduling, and mappings
+"""
+scalar IntegrationConfig
+"""
+IntegrationInstallationMetadata holds the stable, non-secret installation identity metadata for the provider
+"""
+scalar IntegrationInstallationMetadata`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type ActionPlanHistory implements Node {
@@ -39456,6 +39479,14 @@ type IntegrationHistory implements Node {
   optional platform associated with this integration for downstream inventory linkage
   """
   platformID: String
+  """
+  runtime configuration for operations, scheduling, and mappings
+  """
+  config: IntegrationConfig
+  """
+  stable, non-secret installation identity metadata for the provider
+  """
+  installationMetadata: IntegrationInstallationMetadata
   """
   additional metadata about the integration
   """

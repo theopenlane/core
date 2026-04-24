@@ -3,6 +3,7 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 
 	"github.com/theopenlane/utils/rout"
 )
@@ -49,6 +50,12 @@ type IntegrationConfig struct {
 	ClientConfig json.RawMessage `json:"clientConfig,omitempty"`
 }
 
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (i IntegrationConfig) MarshalGQL(w io.Writer) { marshalGQLJSON(w, i) }
+
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (i *IntegrationConfig) UnmarshalGQL(v any) error { return unmarshalGQLJSON(v, i) }
+
 // IntegrationInstallationIdentity is the normalized, provider-agnostic installation identity
 // surfaced in the GraphQL metadata field for UI display
 type IntegrationInstallationIdentity struct {
@@ -71,6 +78,12 @@ type IntegrationInstallationMetadata struct {
 	// Display is the normalized installation identity for UI rendering
 	Display IntegrationInstallationIdentity `json:"display,omitzero"`
 }
+
+// MarshalGQL implement the Marshaler interface for gqlgen
+func (i IntegrationInstallationMetadata) MarshalGQL(w io.Writer) { marshalGQLJSON(w, i) }
+
+// UnmarshalGQL implement the Unmarshaler interface for gqlgen
+func (i *IntegrationInstallationMetadata) UnmarshalGQL(v any) error { return unmarshalGQLJSON(v, i) }
 
 // IntegrationProviderState stores provider-specific integration state captured during auth and config
 type IntegrationProviderState struct {

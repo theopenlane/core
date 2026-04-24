@@ -37024,6 +37024,14 @@ type Integration implements Node {
 	"""
 	platformID: ID
 	"""
+	runtime configuration for operations, scheduling, and mappings
+	"""
+	config: IntegrationConfig
+	"""
+	stable, non-secret installation identity metadata for the provider
+	"""
+	installationMetadata: IntegrationInstallationMetadata
+	"""
 	additional metadata about the integration
 	"""
 	metadata: Map
@@ -37592,6 +37600,10 @@ type Integration implements Node {
 	webhookURLs: Map
 }
 """
+IntegrationConfig holds the runtime configuration for operations, scheduling, and mappings
+"""
+scalar IntegrationConfig
+"""
 A connection to a list of items.
 """
 type IntegrationConnection {
@@ -37630,6 +37642,10 @@ type IntegrationEdge {
 	"""
 	cursor: Cursor!
 }
+"""
+IntegrationInstallationMetadata holds the stable, non-secret installation identity metadata for the provider
+"""
+scalar IntegrationInstallationMetadata
 """
 IntegrationIntegrationStatus is enum for the field status
 """

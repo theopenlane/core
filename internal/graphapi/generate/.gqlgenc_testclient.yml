@@ -94,6 +94,12 @@ models:
   RiskThresholdsConfig:
     model:
       - github.com/theopenlane/core/common/models.RiskThresholdsConfig
+  IntegrationConfig:
+    model:
+      - github.com/theopenlane/core/common/openapi.IntegrationConfig
+  IntegrationInstallationMetadata:
+    model:
+      - github.com/theopenlane/core/common/openapi.IntegrationInstallationMetadata
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

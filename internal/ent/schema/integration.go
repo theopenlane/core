@@ -87,14 +87,12 @@ func (Integration) Fields() []ent.Field {
 			Comment("runtime configuration for operations, scheduling, and mappings").
 			Optional().
 			Annotations(
-				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("installation_metadata", openapi.IntegrationInstallationMetadata{}).
 			Comment("stable, non-secret installation identity metadata for the provider").
 			Optional().
 			Annotations(
-				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("provider_state", openapi.IntegrationProviderState{}).

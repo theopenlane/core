@@ -127,3 +127,11 @@ scalar VendorScoringQuestionsConfig
 RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
 """
 scalar RiskThresholdsConfig
+"""
+IntegrationConfig holds the runtime configuration for operations, scheduling, and mappings
+"""
+scalar IntegrationConfig
+"""
+IntegrationInstallationMetadata holds the stable, non-secret installation identity metadata for the provider
+"""
+scalar IntegrationInstallationMetadata

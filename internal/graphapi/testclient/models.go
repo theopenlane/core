@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/openapi"
 )
 
 type APIToken struct {
@@ -20034,6 +20035,10 @@ type Integration struct {
 	IntegrationType *string `json:"integrationType,omitempty"`
 	// optional platform associated with this integration for downstream inventory linkage
 	PlatformID *string `json:"platformID,omitempty"`
+	// runtime configuration for operations, scheduling, and mappings
+	Config *openapi.IntegrationConfig `json:"config,omitempty"`
+	// stable, non-secret installation identity metadata for the provider
+	InstallationMetadata *openapi.IntegrationInstallationMetadata `json:"installationMetadata,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// the canonical definition identifier for the installation

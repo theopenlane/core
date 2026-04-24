@@ -6991,6 +6991,16 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, integrationhistory.FieldPlatformID)
 				fieldSeen[integrationhistory.FieldPlatformID] = struct{}{}
 			}
+		case "config":
+			if _, ok := fieldSeen[integrationhistory.FieldConfig]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldConfig)
+				fieldSeen[integrationhistory.FieldConfig] = struct{}{}
+			}
+		case "installationMetadata":
+			if _, ok := fieldSeen[integrationhistory.FieldInstallationMetadata]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldInstallationMetadata)
+				fieldSeen[integrationhistory.FieldInstallationMetadata] = struct{}{}
+			}
 		case "metadata":
 			if _, ok := fieldSeen[integrationhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldMetadata)

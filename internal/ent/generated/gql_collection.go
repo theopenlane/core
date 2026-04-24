@@ -36890,6 +36890,16 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldPlatformID)
 				fieldSeen[integration.FieldPlatformID] = struct{}{}
 			}
+		case "config":
+			if _, ok := fieldSeen[integration.FieldConfig]; !ok {
+				selectedFields = append(selectedFields, integration.FieldConfig)
+				fieldSeen[integration.FieldConfig] = struct{}{}
+			}
+		case "installationMetadata":
+			if _, ok := fieldSeen[integration.FieldInstallationMetadata]; !ok {
+				selectedFields = append(selectedFields, integration.FieldInstallationMetadata)
+				fieldSeen[integration.FieldInstallationMetadata] = struct{}{}
+			}
 		case "metadata":
 			if _, ok := fieldSeen[integration.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, integration.FieldMetadata)

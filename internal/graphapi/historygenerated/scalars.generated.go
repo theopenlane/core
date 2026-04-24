@@ -7,6 +7,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -464,6 +465,26 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOIntegrationConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋopenapiᚐIntegrationConfig(ctx context.Context, v any) (openapi.IntegrationConfig, error) {
+	var res openapi.IntegrationConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOIntegrationConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋopenapiᚐIntegrationConfig(ctx context.Context, sel ast.SelectionSet, v openapi.IntegrationConfig) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOIntegrationInstallationMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋopenapiᚐIntegrationInstallationMetadata(ctx context.Context, v any) (openapi.IntegrationInstallationMetadata, error) {
+	var res openapi.IntegrationInstallationMetadata
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOIntegrationInstallationMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋopenapiᚐIntegrationInstallationMetadata(ctx context.Context, sel ast.SelectionSet, v openapi.IntegrationInstallationMetadata) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
