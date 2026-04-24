@@ -435,7 +435,7 @@ workflows:
         crosstypenumericcomparisons: false
         evaloptimize: true
         extendedvalidations: true
-        identifierescapesyntax: false
+        identifierescapesyntax: true
         interruptcheckfrequency: 100
         macrocalltracking: false
         optionaltypes: false

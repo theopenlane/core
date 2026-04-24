@@ -564,7 +564,7 @@ coreConfiguration:
       comprehensionnestinglimit: 0  # @schema type:integer; default:0
       extendedvalidations: true  # @schema type:boolean; default:true
       optionaltypes: false  # @schema type:boolean; default:false
-      identifierescapesyntax: false  # @schema type:boolean; default:false
+      identifierescapesyntax: true  # @schema type:boolean; default:true
       crosstypenumericcomparisons: false  # @schema type:boolean; default:false
       macrocalltracking: false  # @schema type:boolean; default:false
       evaloptimize: true  # @schema type:boolean; default:true
