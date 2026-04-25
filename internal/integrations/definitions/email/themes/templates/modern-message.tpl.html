@@ -162,16 +162,16 @@
                                                             {{ with .Body.Header.Logo }}
                                                             <img
                                                               alt="{{ or .Alt $.Config.CompanyName }}"
-                                                              src="{{ .Src | url }}"
+                                                              src="{{ printf "%s/w=64,fit=contain" (trimSuffix "/public" .Src) | url }}"
                                                               style="display:block;outline:none;border:none;text-decoration:none"
-                                                              width="100" />
+                                                              width="32" />
                                                             {{ else }}
                                                             {{ if $.Config.LogoURL }}
                                                             <img
                                                               alt="{{ $.Config.CompanyName }}"
-                                                              src="{{ printf "%s/w=200,fit=contain" (trimSuffix "/public" $.Config.LogoURL) | url }}"
+                                                              src="{{ printf "%s/w=64,fit=contain" (trimSuffix "/public" $.Config.LogoURL) | url }}"
                                                               style="display:block;outline:none;border:none;text-decoration:none"
-                                                              width="100" />
+                                                              width="32" />
                                                             {{ end }}
                                                             {{ end }}
                                                           </td>

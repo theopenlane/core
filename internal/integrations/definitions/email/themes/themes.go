@@ -54,6 +54,15 @@ var ModernMessage = &render.Theme{
 	Text: sharedText,
 }
 
+// OpenlaneModern is a centered card theme with brand logo, decorative icon
+// circle, title, body, CTA button with fallback link, and a compact footer.
+// Designed for short transactional messages like verification and welcome emails
+var OpenlaneModern = &render.Theme{
+	Name: "openlane-modern",
+	HTML: readEmbed("templates/openlane-modern.tpl.html"),
+	Text: sharedText,
+}
+
 // readEmbed reads a file from the embedded theme filesystem
 func readEmbed(name string) string {
 	data, err := themeFS.ReadFile(name)

@@ -21,6 +21,7 @@ var (
 	trustCenterTheme   = themes.TrustCenter
 	questionnaireTheme = themes.Questionnaire
 	modernMessageTheme = themes.ModernMessage
+	openlaneModernTheme = themes.OpenlaneModern
 )
 
 // Image URLs hosted on the Openlane CDN. The logo URLs use CF Images flexible-variant
@@ -32,6 +33,7 @@ const (
 	iconUserCheckURL = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/22704d4a-a811-44c0-8618-8309b03dfa00/public"
 	iconBellURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/23690f00-2ddb-4d22-e9a5-af470c93c100/public"
 	iconMarkURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/13c70376-9501-4abd-a577-41a2b843a000/public"
+	iconBWMarkURL    = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/2c681874-6b4a-41de-73ea-58e550a95800/public"
 )
 
 // Trust center / questionnaire button colors matching the original teal theme

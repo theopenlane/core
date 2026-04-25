@@ -13,8 +13,6 @@ type VerifyEmailModernRequest struct {
 	RecipientInfo
 	// Token is the email verification token appended to the verify URL
 	Token string `json:"token" jsonschema:"required,description=Email verification token"`
-	// HeaderLogo optionally overrides the upper-left header logo; empty falls back to Config.LogoURL
-	HeaderLogo string `json:"headerLogo,omitempty" jsonschema:"description=Override URL for the upper-left header logo"`
 }
 
 // verifyEmailModernSchema is the reflected JSON schema for the modern verify input type
@@ -23,28 +21,26 @@ var (
 	verifyEmailModernSchema, VerifyEmailModernOp = providerkit.OperationSchema[VerifyEmailModernRequest]()
 )
 
-// verifyEmailModernEmail renders the same content as verifyEmail using the modern-message
-// theme so the two layouts can be compared side-by-side
+// verifyEmailModernEmail renders the email verification message using the
+// openlane-modern card theme with centered logo, icon circle, and CTA
 var verifyEmailModernEmail = EmailOperation[VerifyEmailModernRequest]{
-	Op: VerifyEmailModernOp, Schema: verifyEmailModernSchema, Theme: modernMessageTheme,
-	Description: "Modern-themed variant of the email verification message for side-by-side theme comparison",
+	Op: VerifyEmailModernOp, Schema: verifyEmailModernSchema, Theme: openlaneModernTheme,
+	Description: "Openlane-modern themed email verification message with centered card layout",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyEmailModernRequest) string {
 		return "Please verify your email address to login to " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req VerifyEmailModernRequest) render.ContentBody {
 		verifyURL := tokenURL(cfg.ProductURL, "/verify", req.Token)
 
-		body := render.ContentBody{
+		return render.ContentBody{
 			Preheader: "Verify Your Email Address",
-			Header: render.HeaderBlock{
-				Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName},
-			},
-			Name:  req.FirstName,
-			Title: "Verify Your Email Address",
+			Icon:      &render.ContentIcon{Src: iconRocketURL, Alt: "Verify"},
+			Name:      req.FirstName,
+			Title:     "Verify Your Email Address",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"We're almost there!",
-					"Thank you for signing up for" + cfg.CompanyName,
+					"Thank you for signing up for " + cfg.CompanyName,
 					"To verify your account, we just need to confirm your email address.",
 				},
 			},
@@ -52,11 +48,5 @@ var verifyEmailModernEmail = EmailOperation[VerifyEmailModernRequest]{
 				Button: render.Button{Text: "Confirm Email", Link: verifyURL},
 			}},
 		}
-
-		if req.HeaderLogo != "" {
-			body.Header.Logo = &render.ContentIcon{Src: req.HeaderLogo, Alt: cfg.CompanyName}
-		}
-
-		return body
 	},
 }
