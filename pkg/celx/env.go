@@ -17,6 +17,7 @@ func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 		// add extensions for parsing
 		ext.Strings(),
 		cel.StdLib(),
+		indexByFunc,
 	)
 
 	if cfg.ComprehensionNestingLimit > 0 {
