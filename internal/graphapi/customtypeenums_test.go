@@ -135,7 +135,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "Preventative",
+				Name:       "preventative",
 				ObjectType: "control",
 			},
 			client: suite.client.api,
@@ -144,7 +144,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:        "Detective",
+				Name:        "detective",
 				ObjectType:  "control",
 				Description: lo.ToPtr("A detective control is designed to detect threats instead of proactively preventing them."),
 				Color:       lo.ToPtr("#00ff00"),
@@ -155,7 +155,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "Evidence",
+				Name:       "evidence",
 				ObjectType: "task",
 			},
 			client: suite.client.apiWithPAT,
@@ -164,7 +164,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "Just Do It",
+				Name:       "just do it",
 				ObjectType: "task",
 			},
 			client: suite.client.apiWithToken,
@@ -173,7 +173,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "Operational",
+				Name:       "operational",
 				ObjectType: "risk",
 			},
 			client:      suite.client.api,
@@ -486,7 +486,7 @@ func TestMutationCreateGlobalCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, global enum with empty object type",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "Production",
+				Name:       "production",
 				ObjectType: "",
 				Field:      lo.ToPtr("environment"),
 			},
@@ -496,7 +496,7 @@ func TestMutationCreateGlobalCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, global scope enum",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:        "PCI-DSS",
+				Name:        "pci dss",
 				ObjectType:  "",
 				Field:       lo.ToPtr("scope"),
 				Description: lo.ToPtr("Payment Card Industry Data Security Standard scope"),
