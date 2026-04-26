@@ -26,6 +26,9 @@ type CampaignHistory func(*sql.Selector)
 // CampaignTargetHistory is the predicate function for campaigntargethistory builders.
 type CampaignTargetHistory func(*sql.Selector)
 
+// CheckResultHistory is the predicate function for checkresulthistory builders.
+type CheckResultHistory func(*sql.Selector)
+
 // ContactHistory is the predicate function for contacthistory builders.
 type ContactHistory func(*sql.Selector)
 

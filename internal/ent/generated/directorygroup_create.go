@@ -435,6 +435,20 @@ func (_c *DirectoryGroupCreate) SetNillableSourceVersion(v *string) *DirectoryGr
 	return _c
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_c *DirectoryGroupCreate) SetDirectoryName(v string) *DirectoryGroupCreate {
+	_c.mutation.SetDirectoryName(v)
+	return _c
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_c *DirectoryGroupCreate) SetNillableDirectoryName(v *string) *DirectoryGroupCreate {
+	if v != nil {
+		_c.SetDirectoryName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *DirectoryGroupCreate) SetID(v string) *DirectoryGroupCreate {
 	_c.mutation.SetID(v)
@@ -832,6 +846,10 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 	if value, ok := _c.mutation.SourceVersion(); ok {
 		_spec.SetField(directorygroup.FieldSourceVersion, field.TypeString, value)
 		_node.SourceVersion = &value
+	}
+	if value, ok := _c.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygroup.FieldDirectoryName, field.TypeString, value)
+		_node.DirectoryName = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

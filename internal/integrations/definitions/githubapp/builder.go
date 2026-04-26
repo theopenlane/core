@@ -142,7 +142,8 @@ func Builder(cfg Config) registry.Builder {
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							ExhaustiveSync: true,
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),

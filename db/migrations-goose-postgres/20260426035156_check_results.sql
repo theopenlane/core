@@ -1,0 +1,31 @@
+-- +goose Up
+-- modify "directory_groups" table
+ALTER TABLE "directory_groups" ADD COLUMN "directory_name" character varying NULL;
+-- modify "directory_memberships" table
+ALTER TABLE "directory_memberships" ADD COLUMN "directory_name" character varying NULL;
+-- modify "vulnerabilities" table
+ALTER TABLE "vulnerabilities" ADD COLUMN "fix_available" boolean NULL;
+-- create "check_results" table
+CREATE TABLE "check_results" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "status" character varying NOT NULL DEFAULT 'UNKNOWN', "source" character varying NOT NULL, "last_observed_at" timestamptz NULL, "external_uri" character varying NULL, "details" text NULL, "parent_external_id" character varying NULL, "integration_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "check_results_integrations_check_results" FOREIGN KEY ("integration_id") REFERENCES "integrations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
+-- create "check_result_controls" table
+CREATE TABLE "check_result_controls" ("check_result_id" character varying NOT NULL, "control_id" character varying NOT NULL, PRIMARY KEY ("check_result_id", "control_id"), CONSTRAINT "check_result_controls_check_result_id" FOREIGN KEY ("check_result_id") REFERENCES "check_results" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "check_result_controls_control_id" FOREIGN KEY ("control_id") REFERENCES "controls" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "finding_check_results" table
+CREATE TABLE "finding_check_results" ("finding_id" character varying NOT NULL, "check_result_id" character varying NOT NULL, PRIMARY KEY ("finding_id", "check_result_id"), CONSTRAINT "finding_check_results_check_result_id" FOREIGN KEY ("check_result_id") REFERENCES "check_results" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "finding_check_results_finding_id" FOREIGN KEY ("finding_id") REFERENCES "findings" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- modify "groups" table
+ALTER TABLE "groups" ADD COLUMN "check_result_blocked_groups" character varying NULL, ADD COLUMN "check_result_editors" character varying NULL, ADD COLUMN "check_result_viewers" character varying NULL, ADD CONSTRAINT "groups_check_results_blocked_groups" FOREIGN KEY ("check_result_blocked_groups") REFERENCES "check_results" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_check_results_editors" FOREIGN KEY ("check_result_editors") REFERENCES "check_results" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_check_results_viewers" FOREIGN KEY ("check_result_viewers") REFERENCES "check_results" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "groups" table
+ALTER TABLE "groups" DROP CONSTRAINT "groups_check_results_viewers", DROP CONSTRAINT "groups_check_results_editors", DROP CONSTRAINT "groups_check_results_blocked_groups", DROP COLUMN "check_result_viewers", DROP COLUMN "check_result_editors", DROP COLUMN "check_result_blocked_groups";
+-- reverse: create "finding_check_results" table
+DROP TABLE "finding_check_results";
+-- reverse: create "check_result_controls" table
+DROP TABLE "check_result_controls";
+-- reverse: create "check_results" table
+DROP TABLE "check_results";
+-- reverse: modify "vulnerabilities" table
+ALTER TABLE "vulnerabilities" DROP COLUMN "fix_available";
+-- reverse: modify "directory_memberships" table
+ALTER TABLE "directory_memberships" DROP COLUMN "directory_name";
+-- reverse: modify "directory_groups" table
+ALTER TABLE "directory_groups" DROP COLUMN "directory_name";

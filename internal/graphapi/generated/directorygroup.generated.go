@@ -120,6 +120,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
 			case "environment":
@@ -237,6 +239,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
 			case "environment":
@@ -383,6 +387,8 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
 			case "sourceVersion":
 				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
 			case "owner":
 				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
 			case "environment":

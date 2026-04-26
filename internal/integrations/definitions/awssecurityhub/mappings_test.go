@@ -1,56 +1,88 @@
 package awssecurityhub
 
 import (
-	"context"
-	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// TestAWSSecurityHubMappingsEvalMap verifies Security Hub findings map into vulnerability fields
-func TestAWSSecurityHubMappingsEvalMap(t *testing.T) {
-	envelope := types.MappingEnvelope{
-		Resource: "arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890",
-		Payload: json.RawMessage(`{
-			"Id":"arn:aws:securityhub:us-east-1::product/aws/securityhub/arn:aws:securityhub:us-east-1:123456789012:subscription/test/finding-1",
-			"AwsAccountId":"123456789012",
-			"CreatedAt":"2026-03-15T12:00:00Z",
-			"UpdatedAt":"2026-03-15T13:00:00Z",
-			"Description":"Security Hub detected a vulnerable package",
-			"Title":"Critical package vulnerability",
-			"Types":["Software and Configuration Checks/Vulnerabilities/CVE"],
-			"Workflow":{"Status":"NEW"},
-			"RecordState":"ACTIVE",
-			"Severity":{"Label":"CRITICAL"},
-			"Resources":[{"Id":"arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890"}],
-			"Vulnerabilities":[{"Id":"CVE-2026-1234","ReferenceUrls":["https://example.com/CVE-2026-1234"]}]
-		}`),
+func TestMappingExpressionsValid(t *testing.T) {
+	all := append(awsSecurityHubMappings(), awsIamMappings()...)
+
+	for _, m := range all {
+		name := m.Schema
+		if m.Variant != "" {
+			name += "/" + m.Variant
+		}
+
+		t.Run(name+"/filter", func(t *testing.T) {
+			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
+		})
+
+		t.Run(name+"/map", func(t *testing.T) {
+			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
+		})
 	}
+}
 
-	raw, err := providerkit.EvalMap(context.Background(), awsSecurityHubMappings()[0].Spec.MapExpr, envelope)
-	require.NoError(t, err)
+func TestExamplePayloads(t *testing.T) {
+	mappings := awsSecurityHubMappings()
+	findingSpec := mappingtest.MappingSpec(t, mappings, "Finding")
+	vulnSpec := mappingtest.MappingSpec(t, mappings, "Vulnerability")
 
-	mapped, err := jsonx.ToMap(raw)
-	require.NoError(t, err)
+	t.Run("vulnerability_json", func(t *testing.T) {
+		envelope := types.MappingEnvelope{Payload: mappingtest.LoadExample(t, "examples", "vulnerability.json")}
 
-	assert.Equal(t, "arn:aws:securityhub:us-east-1::product/aws/securityhub/arn:aws:securityhub:us-east-1:123456789012:subscription/test/finding-1", mapped["externalID"])
-	assert.Equal(t, "arn:aws:ec2:us-east-1:123456789012:instance/i-1234567890", mapped["externalOwnerID"])
-	assert.Equal(t, "aws_security_hub", mapped["source"])
-	assert.Equal(t, "Software and Configuration Checks/Vulnerabilities/CVE", mapped["category"])
-	assert.Equal(t, "NEW", mapped["vulnerabilityStatusName"])
-	assert.Equal(t, "CRITICAL", mapped["severity"])
-	assert.Equal(t, "Critical package vulnerability", mapped["summary"])
-	assert.Equal(t, "Security Hub detected a vulnerable package", mapped["description"])
-	assert.Equal(t, "Critical package vulnerability", mapped["displayName"])
-	assert.Equal(t, "CVE-2026-1234", mapped["cveID"])
-	assert.Equal(t, "https://example.com/CVE-2026-1234", mapped["externalURI"])
-	assert.Equal(t, "2026-03-15T12:00:00Z", mapped["discoveredAt"])
-	assert.Equal(t, "2026-03-15T13:00:00Z", mapped["sourceUpdatedAt"])
-	assert.Equal(t, true, mapped["open"])
+		assert.Assert(t, mappingtest.AssertFiltered(t, vulnSpec, envelope), "expected vulnerability.json to pass the Vulnerability filter")
+
+		mapped := mappingtest.EvalMap(t, vulnSpec, envelope)
+
+		assert.Equal(t, "arn:aws:inspector2:us-east-1:123456789012:finding/FINDING_ID", mapped["externalID"])
+		assert.Equal(t, "CVE-2022-34918", mapped["displayName"])
+		assert.Equal(t, "CVE-2022-34918", mapped["cveID"])
+		assert.Equal(t, "arn:aws:ec2:us-east-1:123456789012:i-0f1ed287081bdf0fb", mapped["externalOwnerID"])
+		assert.Equal(t, "Software and Configuration Checks/Vulnerabilities/CVE", mapped["category"])
+		assert.Equal(t, "HIGH", mapped["severity"])
+		assert.Equal(t, "CVE-2022-34918 - kernel", mapped["summary"])
+		assert.Equal(t, "An issue was discovered in the Linux kernel through 5.18.9. A type confusion bug in nft_set_elem_init (leading to a buffer overflow) could be used by a local attacker to escalate privileges...", mapped["description"])
+		assert.Equal(t, true, mapped["open"])
+		assert.Equal(t, "NEW", mapped["vulnerabilityStatusName"])
+		assert.Equal(t, float64(7.8), mapped["score"])
+		assert.Equal(t, true, mapped["fixAvailable"])
+		assert.Equal(t, "0:5.10.130-118.517.amzn2", mapped["firstPatchedVersion"])
+		assert.Equal(t, "2023-01-31T20:25:38Z", mapped["discoveredAt"])
+		assert.Equal(t, "2023-05-04T18:18:43Z", mapped["sourceUpdatedAt"])
+		assert.DeepEqual(t, []any{
+			"https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=7e6bc1f6cabcd30aba0b11219d8e01b952eacbb6",
+			"https://lore.kernel.org/netfilter-devel/cd9428b6-7ffb-dd22-d949-d86f4869f452@randorisec.fr/T/",
+			"https://www.debian.org/security/2022/dsa-5191",
+		}, mapped["references"])
+	})
+
+	t.Run("finding_json", func(t *testing.T) {
+		envelope := types.MappingEnvelope{Payload: mappingtest.LoadExample(t, "examples", "finding.json")}
+
+		assert.Assert(t, mappingtest.AssertFiltered(t, findingSpec, envelope), "expected finding.json to pass the Finding filter")
+
+		mapped := mappingtest.EvalMap(t, findingSpec, envelope)
+
+		assert.Equal(t, "arn:aws:securityhub:us-east-1:123456789123:security-control/S3.8/finding/5441c4a1-afb5-4000-b037-c98eebdd8e40", mapped["externalID"])
+		assert.Equal(t, "S3 general purpose buckets should block public access", mapped["displayName"])
+		assert.Equal(t, "arn:aws:s3:::aws-cloudtrail-logs-123456789123-f4ef37f5", mapped["externalOwnerID"])
+		assert.Equal(t, "Software and Configuration Checks/Industry and Regulatory Standards", mapped["category"])
+		assert.Equal(t, "This control checks whether an Amazon S3 general purpose bucket blocks public access at the bucket level. The control fails if any of the following settings are set to false: ignorePublicAcls, blockPublicPolicy, blockPublicAcls, restrictPublicBuckets.", mapped["description"])
+		assert.Equal(t, "INFORMATIONAL", mapped["severity"])
+		assert.Equal(t, false, mapped["open"])
+		assert.Equal(t, "RESOLVED", mapped["findingStatusName"])
+		assert.Equal(t, "ACTIVE", mapped["state"])
+		assert.Assert(t, mapped["externalURI"] == nil, "expected externalURI to be nil since SourceUrl is null in payload")
+		assert.Equal(t, "2026-04-21T18:18:53.823Z", mapped["reportedAt"])
+		assert.Equal(t, "2026-04-21T18:18:53.823Z", mapped["eventTime"])
+		assert.Equal(t, "2026-04-24T17:40:47.398Z", mapped["sourceUpdatedAt"])
+		assert.Equal(t, "https://docs.aws.amazon.com/console/securityhub/S3.8/remediation", mapped["references"].([]any)[0])
+	})
 }

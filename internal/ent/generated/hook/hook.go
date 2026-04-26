@@ -93,6 +93,18 @@ func (f CampaignTargetFunc) Mutate(ctx context.Context, m generated.Mutation) (g
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CampaignTargetMutation", m)
 }
 
+// The CheckResultFunc type is an adapter to allow the use of ordinary
+// function as CheckResult mutator.
+type CheckResultFunc func(context.Context, *generated.CheckResultMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CheckResultFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CheckResultMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CheckResultMutation", m)
+}
+
 // The ContactFunc type is an adapter to allow the use of ordinary
 // function as Contact mutator.
 type ContactFunc func(context.Context, *generated.ContactMutation) (generated.Value, error)

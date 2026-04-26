@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
@@ -153,6 +154,15 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 		DeliveryID:    event.DeliveryID,
 	}
 
+	tags := types.GetTagsForExecutionMetadata(metadata)
+	if integration.Name != "" {
+		tags = append(tags, strcase.UpperSnakeCase(integration.Name))
+	}
+
+	if integration.Family != "" {
+		tags = append(tags, strcase.UpperSnakeCase(integration.Family))
+	}
+
 	receipt := r.Gala().EmitWithHeaders(types.WithExecutionMetadata(ctx, metadata), registration.Topic, operations.WebhookEnvelope{
 		ExecutionMetadata: metadata,
 		Payload:           jsonx.CloneRawMessage(event.Payload),
@@ -160,6 +170,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 	}, gala.Headers{
 		IdempotencyKey: event.DeliveryID,
 		Properties:     metadata.Properties(),
+		Tags:           tags,
 	})
 
 	return receipt.Err

@@ -30,6 +30,7 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("Asset"):          makeCreateEntry[generated.CreateAssetInput](func(client *generated.Client) *generated.AssetCreate { return client.Asset.Create() }),
 	NormalizeSchemaType("Campaign"):       makeCreateEntry[generated.CreateCampaignInput](func(client *generated.Client) *generated.CampaignCreate { return client.Campaign.Create() }),
 	NormalizeSchemaType("CampaignTarget"): makeCreateEntry[generated.CreateCampaignTargetInput](func(client *generated.Client) *generated.CampaignTargetCreate { return client.CampaignTarget.Create() }),
+	NormalizeSchemaType("CheckResult"):    makeCreateEntry[generated.CreateCheckResultInput](func(client *generated.Client) *generated.CheckResultCreate { return client.CheckResult.Create() }),
 	NormalizeSchemaType("Contact"):        makeCreateEntry[generated.CreateContactInput](func(client *generated.Client) *generated.ContactCreate { return client.Contact.Create() }),
 	NormalizeSchemaType("Control"):        makeCreateEntry[generated.CreateControlInput](func(client *generated.Client) *generated.ControlCreate { return client.Control.Create() }),
 	NormalizeSchemaType("ControlImplementation"): makeCreateEntry[generated.CreateControlImplementationInput](func(client *generated.Client) *generated.ControlImplementationCreate {

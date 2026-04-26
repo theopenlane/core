@@ -101,6 +101,7 @@ func (c Control) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(c, CheckResult{}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeFromWithPagination(c, Platform{}),
 		defaultEdgeToWithPagination(c, Asset{}),

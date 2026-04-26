@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -80,6 +81,7 @@ type ControlQuery struct {
 	withEnvironment                 *CustomTypeEnumQuery
 	withScope                       *CustomTypeEnumQuery
 	withStandard                    *StandardQuery
+	withCheckResults                *CheckResultQuery
 	withPrograms                    *ProgramQuery
 	withPlatforms                   *PlatformQuery
 	withAssets                      *AssetQuery
@@ -112,6 +114,7 @@ type ControlQuery struct {
 	withNamedScans                  map[string]*ScanQuery
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
+	withNamedCheckResults           map[string]*CheckResultQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedPlatforms              map[string]*PlatformQuery
 	withNamedAssets                 map[string]*AssetQuery
@@ -737,6 +740,31 @@ func (_q *ControlQuery) QueryStandard() *StandardQuery {
 	return query
 }
 
+// QueryCheckResults chains the current query on the "check_results" edge.
+func (_q *ControlQuery) QueryCheckResults() *CheckResultQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.CheckResultsTable, control.CheckResultsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResultControls
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPrograms chains the current query on the "programs" edge.
 func (_q *ControlQuery) QueryPrograms() *ProgramQuery {
 	query := (&ProgramClient{config: _q.config}).Query()
@@ -1302,6 +1330,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withEnvironment:            _q.withEnvironment.Clone(),
 		withScope:                  _q.withScope.Clone(),
 		withStandard:               _q.withStandard.Clone(),
+		withCheckResults:           _q.withCheckResults.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withPlatforms:              _q.withPlatforms.Clone(),
 		withAssets:                 _q.withAssets.Clone(),
@@ -1576,6 +1605,17 @@ func (_q *ControlQuery) WithStandard(opts ...func(*StandardQuery)) *ControlQuery
 	return _q
 }
 
+// WithCheckResults tells the query-builder to eager-load the nodes that are connected to
+// the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *ControlQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCheckResults = query
+	return _q
+}
+
 // WithPrograms tells the query-builder to eager-load the nodes that are connected to
 // the "programs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithPrograms(opts ...func(*ProgramQuery)) *ControlQuery {
@@ -1815,7 +1855,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [37]bool{
+		loadedTypes = [38]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1839,6 +1879,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withStandard != nil,
+			_q.withCheckResults != nil,
 			_q.withPrograms != nil,
 			_q.withPlatforms != nil,
 			_q.withAssets != nil,
@@ -2033,6 +2074,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if query := _q.withStandard; query != nil {
 		if err := _q.loadStandard(ctx, query, nodes, nil,
 			func(n *Control, e *Standard) { n.Edges.Standard = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCheckResults; query != nil {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Control) { n.Edges.CheckResults = []*CheckResult{} },
+			func(n *Control, e *CheckResult) { n.Edges.CheckResults = append(n.Edges.CheckResults, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2240,6 +2288,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Control) { n.appendNamedEditors(name) },
 			func(n *Control, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCheckResults {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Control) { n.appendNamedCheckResults(name) },
+			func(n *Control, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3452,6 +3507,68 @@ func (_q *ControlQuery) loadStandard(ctx context.Context, query *StandardQuery, 
 	}
 	return nil
 }
+func (_q *ControlQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*Control, init func(*Control), assign func(*Control, *CheckResult)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.CheckResultsTable)
+		joinT.Schema(_q.schemaConfig.CheckResultControls)
+		s.Join(joinT).On(s.C(checkresult.FieldID), joinT.C(control.CheckResultsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.CheckResultsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.CheckResultsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*CheckResult](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "check_results" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Control, init func(*Control), assign func(*Control, *Program)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -4556,6 +4673,20 @@ func (_q *ControlQuery) WithNamedEditors(name string, opts ...func(*GroupQuery))
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
+	return _q
+}
+
+// WithNamedCheckResults tells the query-builder to eager-load the nodes that are connected to the "check_results"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedCheckResults(name string, opts ...func(*CheckResultQuery)) *ControlQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCheckResults == nil {
+		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
+	}
+	_q.withNamedCheckResults[name] = query
 	return _q
 }
 

@@ -501,6 +501,26 @@ func (_u *DirectoryGroupUpdate) ClearSourceVersion() *DirectoryGroupUpdate {
 	return _u
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryGroupUpdate) SetDirectoryName(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableDirectoryName(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryGroupUpdate) ClearDirectoryName() *DirectoryGroupUpdate {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *DirectoryGroupUpdate) SetOwner(v *Organization) *DirectoryGroupUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -874,6 +894,12 @@ func (_u *DirectoryGroupUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directorygroup.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygroup.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorygroup.FieldDirectoryName, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1620,6 +1646,26 @@ func (_u *DirectoryGroupUpdateOne) ClearSourceVersion() *DirectoryGroupUpdateOne
 	return _u
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryGroupUpdateOne) SetDirectoryName(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableDirectoryName(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryGroupUpdateOne) ClearDirectoryName() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *DirectoryGroupUpdateOne) SetOwner(v *Organization) *DirectoryGroupUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2023,6 +2069,12 @@ func (_u *DirectoryGroupUpdateOne) sqlSave(ctx context.Context) (_node *Director
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directorygroup.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygroup.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorygroup.FieldDirectoryName, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

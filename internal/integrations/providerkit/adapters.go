@@ -62,3 +62,16 @@ func StaticHandler(run func() (json.RawMessage, error)) types.OperationHandler {
 		return run()
 	}
 }
+
+// DisabledWhen returns an OperationRegistration.Disabled predicate that unmarshals the
+// installation's stored UserInput JSON into T and delegates to the caller-supplied check
+func DisabledWhen[T any](check func(T) bool) func(json.RawMessage) bool {
+	return func(userInput json.RawMessage) bool {
+		var input T
+		if err := json.Unmarshal(userInput, &input); err != nil {
+			return false
+		}
+
+		return check(input)
+	}
+}

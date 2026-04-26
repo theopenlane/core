@@ -80,6 +80,8 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		}
 	}
 
+	tags := types.GetTagsForExecutionMetadata(metadata)
+
 	emitCtx := types.WithExecutionMetadata(ctx, metadata)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		ExecutionMetadata:  metadata,
@@ -88,6 +90,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, gala.Headers{
 		IdempotencyKey: runRecord.ID,
 		Properties:     metadata.Properties(),
+		Tags:           tags,
 	})
 
 	if receipt.Err != nil {

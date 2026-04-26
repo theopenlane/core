@@ -15,6 +15,10 @@ func persistFindingInput(ctx context.Context, db *ent.Client, integration *ent.I
 		return ErrIngestUpsertKeyMissing
 	}
 
+	if createInput.Source == nil && integration.Name != "" {
+		createInput.Source = &integration.Name
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

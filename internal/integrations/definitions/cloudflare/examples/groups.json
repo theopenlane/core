@@ -1,0 +1,47 @@
+{
+  "errors": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "success": true,
+  "result": [
+    {
+      "id": "c8fed203ed3043cba015a93ad1616f1f",
+      "meta": {
+        "key": "key",
+        "value": "value"
+      },
+      "name": "Zone Read"
+    },
+    {
+      "id": "82e64a83756745bbbb1c9c2701bf816b",
+      "meta": {
+        "key": "key",
+        "value": "value"
+      },
+      "name": "Magic Network Monitoring"
+    }
+  ],
+  "result_info": {
+    "count": 1,
+    "page": 1,
+    "per_page": 20,
+    "total_count": 2000
+  }
+}

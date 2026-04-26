@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -1225,6 +1226,21 @@ func (_u *ControlUpdate) SetStandard(v *Standard) *ControlUpdate {
 	return _u.SetStandardID(v.ID)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *ControlUpdate) AddCheckResultIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *ControlUpdate) AddCheckResults(v ...*CheckResult) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (_u *ControlUpdate) AddProgramIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddProgramIDs(ids...)
@@ -1795,6 +1811,27 @@ func (_u *ControlUpdate) ClearScope() *ControlUpdate {
 func (_u *ControlUpdate) ClearStandard() *ControlUpdate {
 	_u.mutation.ClearStandard()
 	return _u
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *ControlUpdate) ClearCheckResults() *ControlUpdate {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *ControlUpdate) RemoveCheckResultIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *ControlUpdate) RemoveCheckResults(v ...*CheckResult) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -3427,6 +3464,54 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5311,6 +5396,21 @@ func (_u *ControlUpdateOne) SetStandard(v *Standard) *ControlUpdateOne {
 	return _u.SetStandardID(v.ID)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *ControlUpdateOne) AddCheckResultIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *ControlUpdateOne) AddCheckResults(v ...*CheckResult) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
 func (_u *ControlUpdateOne) AddProgramIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddProgramIDs(ids...)
@@ -5881,6 +5981,27 @@ func (_u *ControlUpdateOne) ClearScope() *ControlUpdateOne {
 func (_u *ControlUpdateOne) ClearStandard() *ControlUpdateOne {
 	_u.mutation.ClearStandard()
 	return _u
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *ControlUpdateOne) ClearCheckResults() *ControlUpdateOne {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *ControlUpdateOne) RemoveCheckResultIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *ControlUpdateOne) RemoveCheckResults(v ...*CheckResult) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearPrograms clears all "programs" edges to the Program entity.
@@ -7543,6 +7664,54 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResultControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

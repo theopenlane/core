@@ -178,6 +178,8 @@ const (
 	EdgeFiles = "files"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
+	EdgeCheckResults = "check_results"
 	// EdgeControlMappings holds the string denoting the control_mappings edge name in mutations.
 	EdgeControlMappings = "control_mappings"
 	// Table holds the table name of the finding in the database.
@@ -339,6 +341,11 @@ const (
 	WorkflowObjectRefsInverseTable = "workflow_object_refs"
 	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
 	WorkflowObjectRefsColumn = "finding_id"
+	// CheckResultsTable is the table that holds the check_results relation/edge. The primary key declared below.
+	CheckResultsTable = "finding_check_results"
+	// CheckResultsInverseTable is the table name for the CheckResult entity.
+	// It exists in this package in order to avoid circular dependency with the "checkresult" package.
+	CheckResultsInverseTable = "check_results"
 	// ControlMappingsTable is the table that holds the control_mappings relation/edge.
 	ControlMappingsTable = "finding_controls"
 	// ControlMappingsInverseTable is the table name for the FindingControl entity.
@@ -436,6 +443,9 @@ var (
 	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
 	// primary key for the reviews relation (M2M).
 	ReviewsPrimaryKey = []string{"review_id", "finding_id"}
+	// CheckResultsPrimaryKey and CheckResultsColumn2 are the table columns denoting the
+	// primary key for the check_results relation (M2M).
+	CheckResultsPrimaryKey = []string{"finding_id", "check_result_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -1062,6 +1072,20 @@ func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
+// ByCheckResultsCount orders the results by check_results count.
+func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCheckResultsStep(), opts...)
+	}
+}
+
+// ByCheckResults orders the results by check_results terms.
+func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCheckResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlMappingsCount orders the results by control_mappings count.
 func ByControlMappingsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1248,6 +1272,13 @@ func newWorkflowObjectRefsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newCheckResultsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CheckResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, CheckResultsTable, CheckResultsPrimaryKey...),
 	)
 }
 func newControlMappingsStep() *sqlgraph.Step {

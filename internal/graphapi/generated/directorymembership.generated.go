@@ -90,6 +90,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_role(ctx, field)
 			case "source":
 				return ec.fieldContext_DirectoryMembership_source(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryMembership_directoryName(ctx, field)
 			case "firstSeenAt":
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":
@@ -193,6 +195,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_role(ctx, field)
 			case "source":
 				return ec.fieldContext_DirectoryMembership_source(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryMembership_directoryName(ctx, field)
 			case "firstSeenAt":
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":
@@ -325,6 +329,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_role(ctx, field)
 			case "source":
 				return ec.fieldContext_DirectoryMembership_source(ctx, field)
+			case "directoryName":
+				return ec.fieldContext_DirectoryMembership_directoryName(ctx, field)
 			case "firstSeenAt":
 				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
 			case "lastSeenAt":

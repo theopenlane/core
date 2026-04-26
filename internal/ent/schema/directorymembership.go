@@ -3,6 +3,7 @@ package schema
 import (
 	"time"
 
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -90,6 +91,13 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("mechanism used to populate the membership (api, scim, csv, etc)").
 			Optional().
 			Nillable(),
+		field.String("directory_name").
+			Comment("directory source label set by the integration (e.g. googleworkspace, github, slack)").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("directory_name"),
+			),
 		field.Time("first_seen_at").
 			Comment("first time the membership was detected").
 			Optional().

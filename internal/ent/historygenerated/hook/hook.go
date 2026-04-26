@@ -83,6 +83,18 @@ func (f CampaignTargetHistoryFunc) Mutate(ctx context.Context, m historygenerate
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.CampaignTargetHistoryMutation", m)
 }
 
+// The CheckResultHistoryFunc type is an adapter to allow the use of ordinary
+// function as CheckResultHistory mutator.
+type CheckResultHistoryFunc func(context.Context, *historygenerated.CheckResultHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CheckResultHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.CheckResultHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.CheckResultHistoryMutation", m)
+}
+
 // The ContactHistoryFunc type is an adapter to allow the use of ordinary
 // function as ContactHistory mutator.
 type ContactHistoryFunc func(context.Context, *historygenerated.ContactHistoryMutation) (historygenerated.Value, error)

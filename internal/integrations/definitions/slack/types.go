@@ -47,7 +47,7 @@ type slackBotTokenCred struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.team_id == \"123456\""`
 }
 
 // InstallationMetadata holds the stable Slack workspace identity for one installation

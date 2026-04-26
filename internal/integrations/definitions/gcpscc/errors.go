@@ -11,8 +11,6 @@ var (
 	ErrMetadataDecode = errors.New("gcpscc: failed to decode credential metadata")
 	// ErrProjectIDRequired indicates no project or organization ID was provided
 	ErrProjectIDRequired = errors.New("gcpscc: project or organization ID required")
-	// ErrSourceIDRequired indicates no SCC source ID was provided
-	ErrSourceIDRequired = errors.New("gcpscc: source ID required")
 	// ErrServiceAccountKeyInvalid indicates the service account key JSON is invalid
 	ErrServiceAccountKeyInvalid = errors.New("gcpscc: service account key invalid")
 	// ErrSecurityCenterClientCreate indicates the SCC client could not be created

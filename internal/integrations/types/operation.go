@@ -35,6 +35,9 @@ type ExecutionPolicy struct {
 type IngestContract struct {
 	// Schema is the normalized target schema emitted by the operation
 	Schema string `json:"schema"`
+	// ExhaustiveSync indicates the operation returns a complete snapshot of all records for
+	// this schema and this integration only handles active records so we need to mark them as deleted
+	ExhaustiveSync bool `json:"exhaustiveSync,omitempty"`
 }
 
 // OperationRequest bundles the inputs for executing one definition operation
@@ -61,6 +64,8 @@ type OperationRegistration struct {
 	Name string `json:"name"`
 	// Description describes what the operation does
 	Description string `json:"description,omitempty"`
+	// RequiredPermissions lists what scopes or permissions are needed to retrieve data for the Operation
+	RequiredPermissions []string `json:"requiredPermissions,omitempty"`
 	// Topic is the gala topic used to execute the operation
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
@@ -76,4 +81,7 @@ type OperationRegistration struct {
 	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline,
 	// set for operations that produce ingest data and mutually exclusive with Handle
 	IngestHandle IngestHandler `json:"-"`
+	// Disabled reports whether this operation is disabled for a given installation's user input JSON;
+	// when set, reconcile cycles are skipped entirely instead of running and returning empty results
+	Disabled func(userInput json.RawMessage) bool `json:"-"`
 }

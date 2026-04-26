@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // persistDirectoryMembershipInput upserts one DirectoryMembership record using the ingest lookup key fields
@@ -51,8 +52,13 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 		return input, err
 	}
 
+	if input.DirectoryName == nil && integration.Name != "" {
+		input.DirectoryName = &integration.Name
+	}
+
 	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("account_id", input.DirectoryAccountID).Str("group_id", input.DirectoryGroupID).Interface("meta", input.Metadata).Msg("integrations: unable to find group for membership")
 		return input, err
 	}
 

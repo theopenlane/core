@@ -210,6 +210,8 @@ func (ec *executionContext) fieldContext_FindingBulkCreatePayload_findings(_ con
 				return ec.fieldContext_Finding_files(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Finding_workflowObjectRefs(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Finding_checkResults(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Finding_controlMappings(ctx, field)
 			}
@@ -488,6 +490,8 @@ func (ec *executionContext) fieldContext_FindingBulkUpdatePayload_findings(_ con
 				return ec.fieldContext_Finding_files(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Finding_workflowObjectRefs(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Finding_checkResults(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Finding_controlMappings(ctx, field)
 			}
@@ -708,6 +712,8 @@ func (ec *executionContext) fieldContext_FindingCreatePayload_finding(_ context.
 				return ec.fieldContext_Finding_files(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Finding_workflowObjectRefs(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Finding_checkResults(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Finding_controlMappings(ctx, field)
 			}
@@ -928,6 +934,8 @@ func (ec *executionContext) fieldContext_FindingUpdatePayload_finding(_ context.
 				return ec.fieldContext_Finding_files(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Finding_workflowObjectRefs(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Finding_checkResults(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Finding_controlMappings(ctx, field)
 			}

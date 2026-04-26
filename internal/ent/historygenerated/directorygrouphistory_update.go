@@ -498,6 +498,26 @@ func (_u *DirectoryGroupHistoryUpdate) ClearSourceVersion() *DirectoryGroupHisto
 	return _u
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryGroupHistoryUpdate) SetDirectoryName(v string) *DirectoryGroupHistoryUpdate {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryGroupHistoryUpdate) SetNillableDirectoryName(v *string) *DirectoryGroupHistoryUpdate {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryGroupHistoryUpdate) ClearDirectoryName() *DirectoryGroupHistoryUpdate {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // Mutation returns the DirectoryGroupHistoryMutation object of the builder.
 func (_u *DirectoryGroupHistoryUpdate) Mutation() *DirectoryGroupHistoryMutation {
 	return _u.mutation
@@ -738,6 +758,12 @@ func (_u *DirectoryGroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directorygrouphistory.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygrouphistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorygrouphistory.FieldDirectoryName, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.DirectoryGroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1226,6 +1252,26 @@ func (_u *DirectoryGroupHistoryUpdateOne) ClearSourceVersion() *DirectoryGroupHi
 	return _u
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryGroupHistoryUpdateOne) SetDirectoryName(v string) *DirectoryGroupHistoryUpdateOne {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryGroupHistoryUpdateOne) SetNillableDirectoryName(v *string) *DirectoryGroupHistoryUpdateOne {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryGroupHistoryUpdateOne) ClearDirectoryName() *DirectoryGroupHistoryUpdateOne {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // Mutation returns the DirectoryGroupHistoryMutation object of the builder.
 func (_u *DirectoryGroupHistoryUpdateOne) Mutation() *DirectoryGroupHistoryMutation {
 	return _u.mutation
@@ -1496,6 +1542,12 @@ func (_u *DirectoryGroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *D
 	}
 	if _u.mutation.SourceVersionCleared() {
 		_spec.ClearField(directorygrouphistory.FieldSourceVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygrouphistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorygrouphistory.FieldDirectoryName, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.DirectoryGroupHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -699,6 +700,21 @@ func (_c *IntegrationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Integ
 	return _c.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_c *IntegrationCreate) AddCheckResultIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddCheckResultIDs(ids...)
+	return _c
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_c *IntegrationCreate) AddCheckResults(v ...*CheckResult) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultIDs(ids...)
+}
+
 // SetPlatform sets the "platform" edge to the Platform entity.
 func (_c *IntegrationCreate) SetPlatform(v *Platform) *IntegrationCreate {
 	return _c.SetPlatformID(v.ID)
@@ -1317,6 +1333,23 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CheckResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

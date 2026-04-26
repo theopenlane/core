@@ -153,6 +153,11 @@ func Source(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldSource, v))
 }
 
+// DirectoryName applies equality check predicate on the "directory_name" field. It's identical to DirectoryNameEQ.
+func DirectoryName(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryName, v))
+}
+
 // FirstSeenAt applies equality check predicate on the "first_seen_at" field. It's identical to FirstSeenAtEQ.
 func FirstSeenAt(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldFirstSeenAt, v))
@@ -1396,6 +1401,81 @@ func SourceEqualFold(v string) predicate.DirectoryMembership {
 // SourceContainsFold applies the ContainsFold predicate on the "source" field.
 func SourceContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldSource, v))
+}
+
+// DirectoryNameEQ applies the EQ predicate on the "directory_name" field.
+func DirectoryNameEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameNEQ applies the NEQ predicate on the "directory_name" field.
+func DirectoryNameNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameIn applies the In predicate on the "directory_name" field.
+func DirectoryNameIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameNotIn applies the NotIn predicate on the "directory_name" field.
+func DirectoryNameNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameGT applies the GT predicate on the "directory_name" field.
+func DirectoryNameGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldDirectoryName, v))
+}
+
+// DirectoryNameGTE applies the GTE predicate on the "directory_name" field.
+func DirectoryNameGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameLT applies the LT predicate on the "directory_name" field.
+func DirectoryNameLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldDirectoryName, v))
+}
+
+// DirectoryNameLTE applies the LTE predicate on the "directory_name" field.
+func DirectoryNameLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameContains applies the Contains predicate on the "directory_name" field.
+func DirectoryNameContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasPrefix applies the HasPrefix predicate on the "directory_name" field.
+func DirectoryNameHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasSuffix applies the HasSuffix predicate on the "directory_name" field.
+func DirectoryNameHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldDirectoryName, v))
+}
+
+// DirectoryNameIsNil applies the IsNil predicate on the "directory_name" field.
+func DirectoryNameIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldDirectoryName))
+}
+
+// DirectoryNameNotNil applies the NotNil predicate on the "directory_name" field.
+func DirectoryNameNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldDirectoryName))
+}
+
+// DirectoryNameEqualFold applies the EqualFold predicate on the "directory_name" field.
+func DirectoryNameEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldDirectoryName, v))
+}
+
+// DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
+func DirectoryNameContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
 // FirstSeenAtEQ applies the EQ predicate on the "first_seen_at" field.

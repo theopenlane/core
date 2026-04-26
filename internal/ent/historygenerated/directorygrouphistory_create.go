@@ -464,6 +464,20 @@ func (_c *DirectoryGroupHistoryCreate) SetNillableSourceVersion(v *string) *Dire
 	return _c
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_c *DirectoryGroupHistoryCreate) SetDirectoryName(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetDirectoryName(v)
+	return _c
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableDirectoryName(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetDirectoryName(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *DirectoryGroupHistoryCreate) SetID(v string) *DirectoryGroupHistoryCreate {
 	_c.mutation.SetID(v)
@@ -799,6 +813,10 @@ func (_c *DirectoryGroupHistoryCreate) createSpec() (*DirectoryGroupHistory, *sq
 	if value, ok := _c.mutation.SourceVersion(); ok {
 		_spec.SetField(directorygrouphistory.FieldSourceVersion, field.TypeString, value)
 		_node.SourceVersion = &value
+	}
+	if value, ok := _c.mutation.DirectoryName(); ok {
+		_spec.SetField(directorygrouphistory.FieldDirectoryName, field.TypeString, value)
+		_node.DirectoryName = &value
 	}
 	return _node, _spec
 }

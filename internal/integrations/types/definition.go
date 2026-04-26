@@ -2,7 +2,9 @@ package types //nolint:revive
 
 import (
 	"encoding/json"
+	"fmt"
 
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -75,6 +77,8 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Recommended indicates the method that is recommend if there are multiple options
+	Recommended bool `json:"recommended,omitempty"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -113,11 +117,13 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 
 // ConnectionRegistration returns the connection registration for the given credential slot
 func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
+	log.Debug().Str("name", d.DisplayName).Interface("family", d.Family).Msg("integrations: connection registration")
+
 	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
 		return r.CredentialRef == ref
 	})
 	if !found {
-		return ConnectionRegistration{}, ErrConnectionRefNotFound
+		return ConnectionRegistration{}, fmt.Errorf("%w: %s not found", ErrConnectionRefNotFound, ref)
 	}
 
 	return reg, nil

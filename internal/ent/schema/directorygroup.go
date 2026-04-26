@@ -181,6 +181,13 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Comment("cursor or ETag supplied by the source system for auditing").
 			Optional().
 			Nillable(),
+		field.String("directory_name").
+			Comment("directory source label set by the integration (e.g. googleworkspace, github, slack)").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("directory_name"),
+			),
 	}
 }
 

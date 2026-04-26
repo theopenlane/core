@@ -22,18 +22,18 @@ var (
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// AccountID is the Cloudflare account identifier used for account-scoped API calls
-	AccountID string `json:"accountId,omitempty" jsonschema:"required,title=Account ID,description=Cloudflare account ID required for listing account members."`
+// DirectorySync holds installation-specific configuration collected from the user
+type DirectorySync struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.status = 'ACTIVE'"`
 }
 
 // CredentialSchema holds the Cloudflare API credentials for one installation
 type CredentialSchema struct {
 	// APIToken is the Cloudflare API token with permissions to read account and zone metadata
 	APIToken string `json:"apiToken"          jsonschema:"required,title=API Token"`
+	// AccountID is the Cloudflare account identifier used for account-scoped API calls
+	AccountID string `json:"accountId,omitempty" jsonschema:"required,title=Account ID,description=Cloudflare account ID required for listing account members."`
 }
 
 // InstallationMetadata holds the stable Cloudflare account identity for one installation

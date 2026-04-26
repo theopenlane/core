@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -74,6 +75,7 @@ type FindingQuery struct {
 	withComments                *NoteQuery
 	withFiles                   *FileQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	withCheckResults            *CheckResultQuery
 	withControlMappings         *FindingControlQuery
 	loadTotal                   []func(context.Context, []*Finding) error
 	modifiers                   []func(*sql.Selector)
@@ -98,6 +100,7 @@ type FindingQuery struct {
 	withNamedComments           map[string]*NoteQuery
 	withNamedFiles              map[string]*FileQuery
 	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
+	withNamedCheckResults       map[string]*CheckResultQuery
 	withNamedControlMappings    map[string]*FindingControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -760,6 +763,31 @@ func (_q *FindingQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryCheckResults chains the current query on the "check_results" edge.
+func (_q *FindingQuery) QueryCheckResults() *CheckResultQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.CheckResultsTable, finding.CheckResultsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.FindingCheckResults
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlMappings chains the current query on the "control_mappings" edge.
 func (_q *FindingQuery) QueryControlMappings() *FindingControlQuery {
 	query := (&FindingControlClient{config: _q.config}).Query()
@@ -1002,6 +1030,7 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withComments:           _q.withComments.Clone(),
 		withFiles:              _q.withFiles.Clone(),
 		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
+		withCheckResults:       _q.withCheckResults.Clone(),
 		withControlMappings:    _q.withControlMappings.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -1285,6 +1314,17 @@ func (_q *FindingQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQu
 	return _q
 }
 
+// WithCheckResults tells the query-builder to eager-load the nodes that are connected to
+// the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *FindingQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCheckResults = query
+	return _q
+}
+
 // WithControlMappings tells the query-builder to eager-load the nodes that are connected to
 // the "control_mappings" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FindingQuery) WithControlMappings(opts ...func(*FindingControlQuery)) *FindingQuery {
@@ -1380,7 +1420,7 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	var (
 		nodes       = []*Finding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1406,6 +1446,7 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			_q.withComments != nil,
 			_q.withFiles != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withCheckResults != nil,
 			_q.withControlMappings != nil,
 		}
 	)
@@ -1607,6 +1648,13 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			return nil, err
 		}
 	}
+	if query := _q.withCheckResults; query != nil {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Finding) { n.Edges.CheckResults = []*CheckResult{} },
+			func(n *Finding, e *CheckResult) { n.Edges.CheckResults = append(n.Edges.CheckResults, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControlMappings; query != nil {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Finding) { n.Edges.ControlMappings = []*FindingControl{} },
@@ -1758,6 +1806,13 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Finding, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCheckResults {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Finding) { n.appendNamedCheckResults(name) },
+			func(n *Finding, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2822,6 +2877,68 @@ func (_q *FindingQuery) loadWorkflowObjectRefs(ctx context.Context, query *Workf
 	}
 	return nil
 }
+func (_q *FindingQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *CheckResult)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.CheckResultsTable)
+		joinT.Schema(_q.schemaConfig.FindingCheckResults)
+		s.Join(joinT).On(s.C(checkresult.FieldID), joinT.C(finding.CheckResultsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.CheckResultsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.CheckResultsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*CheckResult](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "check_results" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FindingQuery) loadControlMappings(ctx context.Context, query *FindingControlQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *FindingControl)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Finding)
@@ -3254,6 +3371,20 @@ func (_q *FindingQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*W
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedCheckResults tells the query-builder to eager-load the nodes that are connected to the "check_results"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithNamedCheckResults(name string, opts ...func(*CheckResultQuery)) *FindingQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCheckResults == nil {
+		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
+	}
+	_q.withNamedCheckResults[name] = query
 	return _q
 }
 

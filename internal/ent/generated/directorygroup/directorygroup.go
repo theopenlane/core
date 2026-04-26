@@ -84,6 +84,8 @@ const (
 	FieldRawProfileFileID = "raw_profile_file_id"
 	// FieldSourceVersion holds the string denoting the source_version field in the database.
 	FieldSourceVersion = "source_version"
+	// FieldDirectoryName holds the string denoting the directory_name field in the database.
+	FieldDirectoryName = "directory_name"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -203,6 +205,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldRawProfileFileID,
 	FieldSourceVersion,
+	FieldDirectoryName,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "directory_groups"
@@ -453,6 +456,11 @@ func ByRawProfileFileID(opts ...sql.OrderTermOption) OrderOption {
 // BySourceVersion orders the results by the source_version field.
 func BySourceVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSourceVersion, opts...).ToFunc()
+}
+
+// ByDirectoryName orders the results by the directory_name field.
+func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

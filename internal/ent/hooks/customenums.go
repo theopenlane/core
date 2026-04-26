@@ -10,6 +10,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
@@ -119,6 +121,15 @@ func HookCustomTypeEnumCreate() ent.Hook {
 
 				return nil, fmt.Errorf("%w: %s is not a valid field for object type %s", ErrInvalidGlobalEnumField, fieldName, objectType)
 			}
+
+			// update casing for consistency and avoid duplicates like `Open` vs. OPEN
+			n, ok := m.Name()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			caser := cases.Title(language.English)
+			m.SetName(caser.String(n))
 
 			return next.Mutate(ctx, m)
 		})

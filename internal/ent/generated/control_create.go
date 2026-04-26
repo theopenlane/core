@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -959,6 +960,21 @@ func (_c *ControlCreate) SetScope(v *CustomTypeEnum) *ControlCreate {
 // SetStandard sets the "standard" edge to the Standard entity.
 func (_c *ControlCreate) SetStandard(v *Standard) *ControlCreate {
 	return _c.SetStandardID(v.ID)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_c *ControlCreate) AddCheckResultIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddCheckResultIDs(ids...)
+	return _c
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_c *ControlCreate) AddCheckResults(v ...*CheckResult) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultIDs(ids...)
 }
 
 // AddProgramIDs adds the "programs" edge to the Program entity by IDs.
@@ -1925,6 +1941,23 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.StandardID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.CheckResultsTable,
+			Columns: control.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CheckResultControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {

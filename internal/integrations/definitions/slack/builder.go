@@ -8,6 +8,22 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+var chatScopes = []string{
+	"channels:read",
+	"chat:write",
+	"chat:write.public",
+	"chat:write.customize",
+}
+var directoryScopes = []string{
+	"groups:read",
+	"team:read",
+	"users:read",
+	"users:read.email",
+	"users.profile:read",
+}
+
+var scopes = append(chatScopes, directoryScopes...)
+
 // Builder returns the Slack definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -34,6 +50,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         slackCredential.ID(),
 					Name:        "Slack OAuth Credential",
 					Description: "OAuth credential used to access the Slack workspace",
+					Recommended: true,
 				},
 				{
 					Ref:         slackBotTokenCredential.ID(),
@@ -59,17 +76,7 @@ func Builder(cfg Config) registry.Builder {
 							AuthURL:      "https://slack.com/oauth/v2/authorize",
 							TokenURL:     "https://slack.com/api/oauth.v2.access",
 							RedirectURL:  cfg.RedirectURL,
-							Scopes: []string{
-								"chat:write",
-								"chat:write.public",
-								"chat:write.customize",
-								"channels:read",
-								"groups:read",
-								"team:read",
-								"users:read",
-								"users:read.email",
-								"users.profile:read",
-							},
+							Scopes:       scopes,
 						},
 						Material: func(material auth.OAuthMaterial) (slackCred, error) {
 							return slackCred{
@@ -118,12 +125,13 @@ func Builder(cfg Config) registry.Builder {
 					Handle:       HealthCheck{}.Handle(),
 				},
 				{
-					Name:         messageSendOperation.Name(),
-					Description:  "Send a Slack message via chat.postMessage",
-					Topic:        definitionID.OperationTopic(messageSendOperation.Name()),
-					ClientRef:    slackClient.ID(),
-					ConfigSchema: messageSendSchema,
-					Handle:       MessageSend{}.Handle(),
+					Name:                messageSendOperation.Name(),
+					Description:         "Send a Slack message via chat.postMessage",
+					Topic:               definitionID.OperationTopic(messageSendOperation.Name()),
+					ClientRef:           slackClient.ID(),
+					ConfigSchema:        messageSendSchema,
+					Handle:              MessageSend{}.Handle(),
+					RequiredPermissions: scopes,
 				},
 				{
 					Name:         directorySyncOperation.Name(),
@@ -137,7 +145,8 @@ func Builder(cfg Config) registry.Builder {
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
+					IngestHandle:        DirectorySync{}.IngestHandle(),
+					RequiredPermissions: scopes,
 				},
 			},
 			Mappings: slackMappings(),

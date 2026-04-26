@@ -13,6 +13,23 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+func TestMappingExpressionsValid(t *testing.T) {
+	for _, m := range gcpsccMappings() {
+		name := m.Schema
+		if m.Variant != "" {
+			name += "/" + m.Variant
+		}
+
+		t.Run(name+"/filter", func(t *testing.T) {
+			assert.NoError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
+		})
+
+		t.Run(name+"/map", func(t *testing.T) {
+			assert.NoError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
+		})
+	}
+}
+
 // TestGCPSCCMappingsEvalMap verifies SCC finding payloads map into vulnerability fields
 func TestGCPSCCMappingsEvalMap(t *testing.T) {
 	t.Run("with_cve_details", func(t *testing.T) {
@@ -45,7 +62,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[0].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[1].Spec.MapExpr, envelope)
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)
@@ -54,11 +71,11 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 		assert.Equal(t, "organizations/123/sources/456/findings/finding-1", mapped["externalID"])
 		assert.Equal(t, "projects/example-project/instances/vm-1", mapped["externalOwnerID"])
 		assert.Equal(t, "OPEN_FIREWALL", mapped["category"])
-		assert.Equal(t, "ACTIVE", mapped["vulnerabilityStatusName"])
+		assert.Equal(t, "Open", mapped["vulnerabilityStatusName"])
 		assert.Equal(t, "HIGH", mapped["severity"])
-		assert.Equal(t, "OPEN_FIREWALL", mapped["summary"])
+		assert.Equal(t, "Firewall rule allows ingress from 0.0.0.0/0.", mapped["summary"])
 		assert.Equal(t, "Firewall rule allows ingress from 0.0.0.0/0.", mapped["description"])
-		assert.Equal(t, "google.compute.Instance projects/example-project/instances/vm-1", mapped["displayName"])
+		assert.Equal(t, "CVE-2026-0001", mapped["displayName"])
 		assert.Equal(t, "CVE-2026-0001", mapped["cveID"])
 		assert.Equal(t, "https://console.cloud.google.com/security/command-center/findings/finding-1", mapped["externalURI"])
 		assert.Equal(t, "2026-03-14T09:00:00Z", mapped["discoveredAt"])
@@ -82,7 +99,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[0].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[1].Spec.MapExpr, envelope)
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)

@@ -322,6 +322,36 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	CheckResultHistory struct {
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IntegrationID    func(childComplexity int) int
+		LastObservedAt   func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		ParentExternalID func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Source           func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	CheckResultHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CheckResultHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ContactHistory struct {
 		Address       func(childComplexity int) int
 		Company       func(childComplexity int) int
@@ -632,6 +662,7 @@ type ComplexityRoot struct {
 		CreatedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DirectoryInstanceID    func(childComplexity int) int
+		DirectoryName          func(childComplexity int) int
 		DirectorySyncRunID     func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		DisplayName            func(childComplexity int) int
@@ -683,6 +714,7 @@ type ComplexityRoot struct {
 		DirectoryAccountID  func(childComplexity int) int
 		DirectoryGroupID    func(childComplexity int) int
 		DirectoryInstanceID func(childComplexity int) int
+		DirectoryName       func(childComplexity int) int
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
@@ -2022,6 +2054,7 @@ type ComplexityRoot struct {
 		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
 		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
 		CampaignTargetHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
+		CheckResultHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CheckResultHistoryOrder, where *historygenerated.CheckResultHistoryWhereInput) int
 		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
 		ControlHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlHistoryOrder, where *historygenerated.ControlHistoryWhereInput) int
 		ControlImplementationHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlImplementationHistoryOrder, where *historygenerated.ControlImplementationHistoryWhereInput) int
@@ -3062,6 +3095,7 @@ type ComplexityRoot struct {
 		ExternalOwnerID         func(childComplexity int) int
 		ExternalURI             func(childComplexity int) int
 		FirstPatchedVersion     func(childComplexity int) int
+		FixAvailable            func(childComplexity int) int
 		FixedAt                 func(childComplexity int) int
 		HistoryTime             func(childComplexity int) int
 		ID                      func(childComplexity int) int
@@ -4987,6 +5021,153 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.CampaignTargetHistoryEdge.Node(childComplexity), true
 
+	case "CheckResultHistory.createdAt":
+		if e.ComplexityRoot.CheckResultHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.CreatedAt(childComplexity), true
+
+	case "CheckResultHistory.createdBy":
+		if e.ComplexityRoot.CheckResultHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.CreatedBy(childComplexity), true
+
+	case "CheckResultHistory.details":
+		if e.ComplexityRoot.CheckResultHistory.Details == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Details(childComplexity), true
+
+	case "CheckResultHistory.externalURI":
+		if e.ComplexityRoot.CheckResultHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ExternalURI(childComplexity), true
+
+	case "CheckResultHistory.historyTime":
+		if e.ComplexityRoot.CheckResultHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.HistoryTime(childComplexity), true
+
+	case "CheckResultHistory.id":
+		if e.ComplexityRoot.CheckResultHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ID(childComplexity), true
+
+	case "CheckResultHistory.integrationID":
+		if e.ComplexityRoot.CheckResultHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.IntegrationID(childComplexity), true
+
+	case "CheckResultHistory.lastObservedAt":
+		if e.ComplexityRoot.CheckResultHistory.LastObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.LastObservedAt(childComplexity), true
+
+	case "CheckResultHistory.operation":
+		if e.ComplexityRoot.CheckResultHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Operation(childComplexity), true
+
+	case "CheckResultHistory.parentExternalID":
+		if e.ComplexityRoot.CheckResultHistory.ParentExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ParentExternalID(childComplexity), true
+
+	case "CheckResultHistory.ref":
+		if e.ComplexityRoot.CheckResultHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Ref(childComplexity), true
+
+	case "CheckResultHistory.source":
+		if e.ComplexityRoot.CheckResultHistory.Source == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Source(childComplexity), true
+
+	case "CheckResultHistory.status":
+		if e.ComplexityRoot.CheckResultHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Status(childComplexity), true
+
+	case "CheckResultHistory.tags":
+		if e.ComplexityRoot.CheckResultHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Tags(childComplexity), true
+
+	case "CheckResultHistory.updatedAt":
+		if e.ComplexityRoot.CheckResultHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.UpdatedAt(childComplexity), true
+
+	case "CheckResultHistory.updatedBy":
+		if e.ComplexityRoot.CheckResultHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.UpdatedBy(childComplexity), true
+
+	case "CheckResultHistoryConnection.edges":
+		if e.ComplexityRoot.CheckResultHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.Edges(childComplexity), true
+
+	case "CheckResultHistoryConnection.pageInfo":
+		if e.ComplexityRoot.CheckResultHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.PageInfo(childComplexity), true
+
+	case "CheckResultHistoryConnection.totalCount":
+		if e.ComplexityRoot.CheckResultHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.TotalCount(childComplexity), true
+
+	case "CheckResultHistoryEdge.cursor":
+		if e.ComplexityRoot.CheckResultHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryEdge.Cursor(childComplexity), true
+
+	case "CheckResultHistoryEdge.node":
+		if e.ComplexityRoot.CheckResultHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryEdge.Node(childComplexity), true
+
 	case "ContactHistory.address":
 		if e.ComplexityRoot.ContactHistory.Address == nil {
 			break
@@ -6709,6 +6890,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryGroupHistory.DirectoryInstanceID(childComplexity), true
 
+	case "DirectoryGroupHistory.directoryName":
+		if e.ComplexityRoot.DirectoryGroupHistory.DirectoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.DirectoryName(childComplexity), true
+
 	case "DirectoryGroupHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryGroupHistory.DirectorySyncRunID == nil {
 			break
@@ -7002,6 +7190,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryInstanceID(childComplexity), true
+
+	case "DirectoryMembershipHistory.directoryName":
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryName(childComplexity), true
 
 	case "DirectoryMembershipHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryMembershipHistory.DirectorySyncRunID == nil {
@@ -14306,6 +14501,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.CampaignTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignTargetHistoryOrder), args["where"].(*historygenerated.CampaignTargetHistoryWhereInput)), true
 
+	case "Query.checkResultHistories":
+		if e.ComplexityRoot.Query.CheckResultHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_checkResultHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CheckResultHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CheckResultHistoryOrder), args["where"].(*historygenerated.CheckResultHistoryWhereInput)), true
+
 	case "Query.contactHistories":
 		if e.ComplexityRoot.Query.ContactHistories == nil {
 			break
@@ -20365,6 +20572,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion(childComplexity), true
 
+	case "VulnerabilityHistory.fixAvailable":
+		if e.ComplexityRoot.VulnerabilityHistory.FixAvailable == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FixAvailable(childComplexity), true
+
 	case "VulnerabilityHistory.fixedAt":
 		if e.ComplexityRoot.VulnerabilityHistory.FixedAt == nil {
 			break
@@ -21855,6 +22069,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCampaignHistoryWhereInput,
 		ec.unmarshalInputCampaignTargetHistoryOrder,
 		ec.unmarshalInputCampaignTargetHistoryWhereInput,
+		ec.unmarshalInputCheckResultHistoryOrder,
+		ec.unmarshalInputCheckResultHistoryWhereInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputControlHistoryOrder,
@@ -26078,6 +26294,346 @@ input CampaignTargetHistoryWhereInput {
   completedAtIsNil: Boolean
   completedAtNotNil: Boolean
 }
+type CheckResultHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: CheckResultHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  current status of the control
+  """
+  status: CheckResultHistoryCheckStatus!
+  """
+  source that set the check result
+  """
+  source: String!
+  """
+  timestamp the result was last updated
+  """
+  lastObservedAt: DateTime
+  """
+  link to the result in the source system
+  """
+  externalURI: String
+  """
+  optional details of the result
+  """
+  details: String
+  """
+  external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
+  """
+  parentExternalID: String
+  """
+  integration that owns this directory group
+  """
+  integrationID: String
+}
+"""
+CheckResultHistoryCheckStatus is enum for the field status
+"""
+enum CheckResultHistoryCheckStatus @goModel(model: "github.com/theopenlane/core/common/enums.CheckStatus") {
+  PASS
+  FAIL
+  UNKNOWN
+}
+"""
+A connection to a list of items.
+"""
+type CheckResultHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [CheckResultHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CheckResultHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CheckResultHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CheckResultHistoryOpType is enum for the field operation
+"""
+enum CheckResultHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for CheckResultHistory connections
+"""
+input CheckResultHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CheckResultHistories.
+  """
+  field: CheckResultHistoryOrderField!
+}
+"""
+Properties by which CheckResultHistory connections can be ordered.
+"""
+enum CheckResultHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  STATUS
+  source
+  observed_at
+}
+"""
+CheckResultHistoryWhereInput is used for filtering CheckResultHistory objects.
+Input was generated by ent.
+"""
+input CheckResultHistoryWhereInput {
+  not: CheckResultHistoryWhereInput
+  and: [CheckResultHistoryWhereInput!]
+  or: [CheckResultHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: CheckResultHistoryOpType
+  operationNEQ: CheckResultHistoryOpType
+  operationIn: [CheckResultHistoryOpType!]
+  operationNotIn: [CheckResultHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  status field predicates
+  """
+  status: CheckResultHistoryCheckStatus
+  statusNEQ: CheckResultHistoryCheckStatus
+  statusIn: [CheckResultHistoryCheckStatus!]
+  statusNotIn: [CheckResultHistoryCheckStatus!]
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  last_observed_at field predicates
+  """
+  lastObservedAt: DateTime
+  lastObservedAtNEQ: DateTime
+  lastObservedAtIn: [DateTime!]
+  lastObservedAtNotIn: [DateTime!]
+  lastObservedAtGT: DateTime
+  lastObservedAtGTE: DateTime
+  lastObservedAtLT: DateTime
+  lastObservedAtLTE: DateTime
+  lastObservedAtIsNil: Boolean
+  lastObservedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
+  parent_external_id field predicates
+  """
+  parentExternalID: String
+  parentExternalIDNEQ: String
+  parentExternalIDIn: [String!]
+  parentExternalIDNotIn: [String!]
+  parentExternalIDGT: String
+  parentExternalIDGTE: String
+  parentExternalIDLT: String
+  parentExternalIDLTE: String
+  parentExternalIDContains: String
+  parentExternalIDHasPrefix: String
+  parentExternalIDHasSuffix: String
+  parentExternalIDIsNil: Boolean
+  parentExternalIDNotNil: Boolean
+  parentExternalIDEqualFold: String
+  parentExternalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+}
 type ContactHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -30263,6 +30819,10 @@ type DirectoryGroupHistory implements Node {
   cursor or ETag supplied by the source system for auditing
   """
   sourceVersion: String
+  """
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
+  """
+  directoryName: String
 }
 """
 A connection to a list of items.
@@ -30343,6 +30903,7 @@ enum DirectoryGroupHistoryOrderField {
   external_id
   email
   display_name
+  directory_name
 }
 """
 DirectoryGroupHistoryWhereInput is used for filtering DirectoryGroupHistory objects.
@@ -30820,6 +31381,24 @@ input DirectoryGroupHistoryWhereInput {
   sourceVersionNotNil: Boolean
   sourceVersionEqualFold: String
   sourceVersionContainsFold: String
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
 }
 type DirectoryMembershipHistory implements Node {
   id: ID!
@@ -30886,6 +31465,10 @@ type DirectoryMembershipHistory implements Node {
   mechanism used to populate the membership (api, scim, csv, etc)
   """
   source: String
+  """
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
+  """
+  directoryName: String
   """
   first time the membership was detected
   """
@@ -30981,6 +31564,7 @@ enum DirectoryMembershipHistoryOrderField {
   history_time
   created_at
   updated_at
+  directory_name
 }
 """
 DirectoryMembershipHistoryWhereInput is used for filtering DirectoryMembershipHistory objects.
@@ -31334,6 +31918,24 @@ input DirectoryMembershipHistoryWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
   """
   first_seen_at field predicates
   """
@@ -36509,6 +37111,8 @@ enum FindingHistoryOrderField {
   external_owner_id
   category
   severity
+  event_time
+  reported_at
 }
 """
 FindingHistorySecurityLevel is enum for the field security_level
@@ -48002,6 +48606,37 @@ type Query {
     """
     where: CampaignTargetHistoryWhereInput
   ): CampaignTargetHistoryConnection!
+  checkResultHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CheckResultHistories returned from the connection.
+    """
+    orderBy: CheckResultHistoryOrder
+
+    """
+    Filtering options for CheckResultHistories returned from the connection.
+    """
+    where: CheckResultHistoryWhereInput
+  ): CheckResultHistoryConnection!
   contactHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62355,6 +62990,10 @@ type VulnerabilityHistory implements Node {
   """
   firstPatchedVersion: String
   """
+  indicates if there is a fix available for the vulnerability
+  """
+  fixAvailable: Boolean
+  """
   name of the vulnerable package or dependency
   """
   packageName: String
@@ -63122,6 +63761,13 @@ input VulnerabilityHistoryWhereInput {
   firstPatchedVersionNotNil: Boolean
   firstPatchedVersionEqualFold: String
   firstPatchedVersionContainsFold: String
+  """
+  fix_available field predicates
+  """
+  fixAvailable: Boolean
+  fixAvailableNEQ: Boolean
+  fixAvailableIsNil: Boolean
+  fixAvailableNotNil: Boolean
   """
   package_name field predicates
   """

@@ -62,6 +62,8 @@ const (
 	FieldRole = "role"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
+	// FieldDirectoryName holds the string denoting the directory_name field in the database.
+	FieldDirectoryName = "directory_name"
 	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
 	FieldFirstSeenAt = "first_seen_at"
 	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
@@ -104,6 +106,7 @@ var Columns = []string{
 	FieldDirectoryGroupID,
 	FieldRole,
 	FieldSource,
+	FieldDirectoryName,
 	FieldFirstSeenAt,
 	FieldLastSeenAt,
 	FieldAddedAt,
@@ -279,6 +282,11 @@ func ByRole(opts ...sql.OrderTermOption) OrderOption {
 // BySource orders the results by the source field.
 func BySource(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// ByDirectoryName orders the results by the directory_name field.
+func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
 }
 
 // ByFirstSeenAt orders the results by the first_seen_at field.

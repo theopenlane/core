@@ -35,7 +35,7 @@ var (
 	// repositorySyncSchema is the operation schema for the GitHub repository sync operation
 	repositorySyncSchema, repositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
 	// vulnerabilityCollectSchema is the operation schema for the GitHub vulnerability collection operation
-	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
+	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilitySync]()
 	// directorySyncSchema is the operation schema for the GitHub directory sync operationß
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
@@ -66,7 +66,7 @@ type githubAppCredential struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.State == \"OPEN\""`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes

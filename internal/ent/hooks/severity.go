@@ -8,8 +8,13 @@ import (
 	"github.com/theopenlane/core/common/enums"
 )
 
-type severityMutation interface {
+type severityScoreMutation interface {
 	Score() (float64, bool)
+	SetSecurityLevel(enums.SecurityLevel)
+}
+
+type severityMutation interface {
+	Severity() (string, bool)
 	SetSecurityLevel(enums.SecurityLevel)
 }
 
@@ -17,17 +22,29 @@ type severityMutation interface {
 func HookSeverityLevel() ent.Hook {
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			mut, ok := m.(severityMutation)
+			mut, ok := m.(severityScoreMutation)
+			if ok {
+				score, ok := mut.Score()
+				if ok && score > 0 {
+					mut.SetSecurityLevel(severityLevelFromScore(score))
+					return next.Mutate(ctx, m)
+				}
+			}
+
+			mutSev, ok := m.(severityMutation)
 			if !ok {
 				return next.Mutate(ctx, m)
 			}
 
-			score, ok := mut.Score()
-			if !ok {
+			sev, ok := mutSev.Severity()
+			if !ok || sev == "" {
 				return next.Mutate(ctx, m)
 			}
 
-			mut.SetSecurityLevel(severityLevelFromScore(score))
+			level := enums.ToSecurityLevel(sev)
+			if level != nil && level != &enums.SecurityLevelInvalid {
+				mutSev.SetSecurityLevel(*level)
+			}
 
 			return next.Mutate(ctx, m)
 		})

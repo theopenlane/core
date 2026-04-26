@@ -23,7 +23,7 @@ func Builder() registry.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: providerkit.SchemaFrom[DirectorySync](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
@@ -77,8 +77,15 @@ func Builder() registry.Builder {
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
+					IngestHandle:        DirectorySync{}.IngestHandle(),
+					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 				},
 			},
 			Mappings: cloudflareMappings(),

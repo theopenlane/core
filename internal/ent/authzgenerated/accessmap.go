@@ -366,6 +366,31 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "check_result": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "contact": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -477,6 +502,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "standard": {
 	ObjectType:      "organization",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "check_results": {
+	ObjectType:      "check_result",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "programs": {
@@ -1433,6 +1462,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "check_results": {
+	ObjectType:      "check_result",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_mappings": {
 	ObjectType:      "control_mapping",
 	SkipEditCheck:   false,
@@ -1879,6 +1912,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "directory_sync_runs": {
 	ObjectType:      "directory_sync_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "check_results": {
+	ObjectType:      "check_result",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "platform": {

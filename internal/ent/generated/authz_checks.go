@@ -53,6 +53,7 @@ var selfAccessTypes = map[string]bool{
 	"asset":                    true,
 	"campaign":                 true,
 	"campaign_target":          true,
+	"check_result":             true,
 	"control":                  true,
 	"control_implementation":   true,
 	"control_objective":        true,
@@ -970,6 +971,154 @@ func (m *CampaignTargetMutation) CheckAccessForDelete(ctx context.Context) error
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
 		ObjectType:  "campaign_target",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
+func (q *CheckResultQuery) CheckAccess(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
+	}
+
+	var objectID string
+
+	// check id from graphql arg context
+	// when all objects are requested, the interceptor will check object access
+	// check the where input first
+	whereArg := gCtx.Args["where"]
+	if whereArg != nil {
+		where, ok := whereArg.(*CheckResultWhereInput)
+		if ok && where != nil && where.ID != nil {
+			objectID = *where.ID
+		}
+	}
+
+	// if that doesn't work, check for the id in the request args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	// check if the user has access to the object requested
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanView,
+		ObjectType:  "check_result",
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		ObjectID:    objectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
+	}
+
+	access, err := q.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	// Skip to the next privacy rule (equivalent to return nil)
+	return privacy.Skip
+}
+
+func (m *CheckResultMutation) CheckAccessForEdit(ctx context.Context) error {
+	var objectID string
+
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	// check the id from the args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "check_result",
+		ObjectID:    objectID,
+		SubjectType: caller.SubjectType(),
+		SubjectID:   caller.SubjectID,
+		Context:     newOrganizationContextKey(caller.SubjectEmail),
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
+func (m *CheckResultMutation) CheckAccessForDelete(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
+		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
+
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		log.Error().Msg("unable to get caller from context")
+		return privacy.Skipf("unable to get caller from context")
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "check_result",
 		ObjectID:    objectID,
 		SubjectType: caller.SubjectType(),
 		SubjectID:   caller.SubjectID,

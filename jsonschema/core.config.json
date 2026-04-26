@@ -36,6 +36,18 @@
       },
       "type": "array"
     },
+    "awssecurityhub.Config": {
+      "properties": {
+        "accesskeyid": {
+          "type": "string"
+        },
+        "secretaccesskey": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "azureentraid.Config": {
       "properties": {
         "clientid": {
@@ -133,6 +145,9 @@
         },
         "oidclocal": {
           "$ref": "#/$defs/oidclocal.Config"
+        },
+        "awssecurityhub": {
+          "$ref": "#/$defs/awssecurityhub.Config"
         }
       },
       "additionalProperties": false,

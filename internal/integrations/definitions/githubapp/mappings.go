@@ -15,7 +15,6 @@ func webhookBaseEntries(category, externalIDExpr string) []providerkit.CelMapEnt
 	return []providerkit.CelMapEntry{
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: externalIDExpr},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: "resource"},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilitySource, Expr: `"github"`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: strconv.Quote(category)},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'state' in payload ? payload.state : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, Expr: `'html_url' in payload ? payload.html_url : ""`},
@@ -37,7 +36,6 @@ func pollBaseEntries(category, externalIDExpr string) []providerkit.CelMapEntry 
 	return []providerkit.CelMapEntry{
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: externalIDExpr},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: "resource"},
-		{Key: integrationgenerated.IntegrationMappingVulnerabilitySource, Expr: `"github"`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: strconv.Quote(category)},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'State' in payload ? payload.State : ""`},
 		{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, Expr: `'Number' in payload && payload.Number != 0 ? "https://github.com/" + resource + "/security/dependabot/" + string(payload.Number) : ""`},
@@ -130,7 +128,6 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingAssetDisplayName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetName, Expr: "payload.NameWithOwner"},
 	{Key: integrationgenerated.IntegrationMappingAssetAssetType, Expr: `"REPOSITORY"`},
-	{Key: integrationgenerated.IntegrationMappingAssetSourceType, Expr: `"IMPORTED"`},
 	{Key: integrationgenerated.IntegrationMappingAssetWebsite, Expr: "payload.URL"},
 	{Key: integrationgenerated.IntegrationMappingAssetObservedAt, Expr: "payload.UpdatedAt"},
 	{Key: integrationgenerated.IntegrationMappingAssetCategories, Expr: `payload.IsPrivate ? ["private", "repository"] : ["public", "repository"]`},
@@ -139,13 +136,12 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 // mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Login`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `payload.CanonicalEmail`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `payload.CanonicalEmail != "" ? payload.CanonicalEmail : payload.Login`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Login`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `payload.AvatarURL`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `payload.Org`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryInstanceID, Expr: `payload.Org`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `payload.GivenName`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `payload.FamilyName`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn("ACTIVE")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
 })
 

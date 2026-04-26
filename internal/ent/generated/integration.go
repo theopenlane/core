@@ -131,6 +131,8 @@ type IntegrationEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// CheckResults holds the value of the check_results edge.
+	CheckResults []*CheckResult `json:"check_results,omitempty"`
 	// platform associated with this integration
 	Platform *Platform `json:"platform,omitempty"`
 	// NotificationTemplates holds the value of the notification_templates edge.
@@ -145,9 +147,9 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
 	namedSecrets               map[string][]*Hush
 	namedFiles                 map[string][]*File
@@ -163,6 +165,7 @@ type IntegrationEdges struct {
 	namedDirectoryGroups       map[string][]*DirectoryGroup
 	namedDirectoryMemberships  map[string][]*DirectoryMembership
 	namedDirectorySyncRuns     map[string][]*DirectorySyncRun
+	namedCheckResults          map[string][]*CheckResult
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedEmailTemplates        map[string][]*EmailTemplate
 	namedIntegrationWebhooks   map[string][]*IntegrationWebhook
@@ -329,12 +332,21 @@ func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) 
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 
+// CheckResultsOrErr returns the CheckResults value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) CheckResultsOrErr() ([]*CheckResult, error) {
+	if e.loadedTypes[17] {
+		return e.CheckResults, nil
+	}
+	return nil, &NotLoadedError{edge: "check_results"}
+}
+
 // PlatformOrErr returns the Platform value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 	if e.Platform != nil {
 		return e.Platform, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform"}
@@ -343,7 +355,7 @@ func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -352,7 +364,7 @@ func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate,
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -361,7 +373,7 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -370,7 +382,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -379,7 +391,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -741,6 +753,11 @@ func (_m *Integration) QueryDirectoryMemberships() *DirectoryMembershipQuery {
 // QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Integration entity.
 func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
+}
+
+// QueryCheckResults queries the "check_results" edge of the Integration entity.
+func (_m *Integration) QueryCheckResults() *CheckResultQuery {
+	return NewIntegrationClient(_m.config).QueryCheckResults(_m)
 }
 
 // QueryPlatform queries the "platform" edge of the Integration entity.
@@ -1232,6 +1249,30 @@ func (_m *Integration) appendNamedDirectorySyncRuns(name string, edges ...*Direc
 		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
 	} else {
 		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
+	}
+}
+
+// NamedCheckResults returns the CheckResults named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedCheckResults(name string) ([]*CheckResult, error) {
+	if _m.Edges.namedCheckResults == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCheckResults[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedCheckResults(name string, edges ...*CheckResult) {
+	if _m.Edges.namedCheckResults == nil {
+		_m.Edges.namedCheckResults = make(map[string][]*CheckResult)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCheckResults[name] = []*CheckResult{}
+	} else {
+		_m.Edges.namedCheckResults[name] = append(_m.Edges.namedCheckResults[name], edges...)
 	}
 }
 

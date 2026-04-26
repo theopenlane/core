@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -796,6 +797,21 @@ func (_u *IntegrationUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Integ
 	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *IntegrationUpdate) AddCheckResultIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *IntegrationUpdate) AddCheckResults(v ...*CheckResult) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
 func (_u *IntegrationUpdate) AddNotificationTemplateIDs(ids ...string) *IntegrationUpdate {
 	_u.mutation.AddNotificationTemplateIDs(ids...)
@@ -1186,6 +1202,27 @@ func (_u *IntegrationUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *In
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *IntegrationUpdate) ClearCheckResults() *IntegrationUpdate {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *IntegrationUpdate) RemoveCheckResultIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *IntegrationUpdate) RemoveCheckResults(v ...*CheckResult) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
@@ -2288,6 +2325,54 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.NotificationTemplatesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3293,6 +3378,21 @@ func (_u *IntegrationUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *In
 	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *IntegrationUpdateOne) AddCheckResultIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *IntegrationUpdateOne) AddCheckResults(v ...*CheckResult) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddNotificationTemplateIDs adds the "notification_templates" edge to the NotificationTemplate entity by IDs.
 func (_u *IntegrationUpdateOne) AddNotificationTemplateIDs(ids ...string) *IntegrationUpdateOne {
 	_u.mutation.AddNotificationTemplateIDs(ids...)
@@ -3683,6 +3783,27 @@ func (_u *IntegrationUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *IntegrationUpdateOne) ClearCheckResults() *IntegrationUpdateOne {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *IntegrationUpdateOne) RemoveCheckResultIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *IntegrationUpdateOne) RemoveCheckResults(v ...*CheckResult) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearNotificationTemplates clears all "notification_templates" edges to the NotificationTemplate entity.
@@ -4810,6 +4931,54 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CheckResultsTable,
+			Columns: []string{integration.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.CheckResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -202,6 +202,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Control_checkResults(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "platforms":
@@ -502,6 +504,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Control_checkResults(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "platforms":
@@ -744,6 +748,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Control_checkResults(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "platforms":
@@ -986,6 +992,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_scope(ctx, field)
 			case "standard":
 				return ec.fieldContext_Control_standard(ctx, field)
+			case "checkResults":
+				return ec.fieldContext_Control_checkResults(ctx, field)
 			case "programs":
 				return ec.fieldContext_Control_programs(ctx, field)
 			case "platforms":

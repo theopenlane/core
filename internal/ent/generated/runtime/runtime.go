@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -865,6 +866,65 @@ func init() {
 	campaigntargetDescID := campaigntargetMixinFields2[0].Descriptor()
 	// campaigntarget.DefaultID holds the default value on creation for the id field.
 	campaigntarget.DefaultID = campaigntargetDescID.Default.(func() string)
+	checkresultMixin := schema.CheckResult{}.Mixin()
+	checkresult.Policy = privacy.NewPolicies(schema.CheckResult{})
+	checkresult.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := checkresult.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	checkresultMixinHooks0 := checkresultMixin[0].Hooks()
+	checkresultMixinHooks1 := checkresultMixin[1].Hooks()
+	checkresultMixinHooks3 := checkresultMixin[3].Hooks()
+	checkresultMixinHooks5 := checkresultMixin[5].Hooks()
+	checkresultMixinHooks6 := checkresultMixin[6].Hooks()
+
+	checkresult.Hooks[1] = checkresultMixinHooks0[0]
+
+	checkresult.Hooks[2] = checkresultMixinHooks1[0]
+
+	checkresult.Hooks[3] = checkresultMixinHooks3[0]
+
+	checkresult.Hooks[4] = checkresultMixinHooks5[0]
+
+	checkresult.Hooks[5] = checkresultMixinHooks6[0]
+
+	checkresult.Hooks[6] = checkresultMixinHooks6[1]
+
+	checkresult.Hooks[7] = checkresultMixinHooks6[2]
+	checkresultMixinInters1 := checkresultMixin[1].Interceptors()
+	checkresultMixinInters5 := checkresultMixin[5].Interceptors()
+	checkresult.Interceptors[0] = checkresultMixinInters1[0]
+	checkresult.Interceptors[1] = checkresultMixinInters5[0]
+	checkresultMixinFields0 := checkresultMixin[0].Fields()
+	_ = checkresultMixinFields0
+	checkresultMixinFields2 := checkresultMixin[2].Fields()
+	_ = checkresultMixinFields2
+	checkresultMixinFields3 := checkresultMixin[3].Fields()
+	_ = checkresultMixinFields3
+	checkresultFields := schema.CheckResult{}.Fields()
+	_ = checkresultFields
+	// checkresultDescCreatedAt is the schema descriptor for created_at field.
+	checkresultDescCreatedAt := checkresultMixinFields0[0].Descriptor()
+	// checkresult.DefaultCreatedAt holds the default value on creation for the created_at field.
+	checkresult.DefaultCreatedAt = checkresultDescCreatedAt.Default.(func() time.Time)
+	// checkresultDescUpdatedAt is the schema descriptor for updated_at field.
+	checkresultDescUpdatedAt := checkresultMixinFields0[1].Descriptor()
+	// checkresult.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	checkresult.DefaultUpdatedAt = checkresultDescUpdatedAt.Default.(func() time.Time)
+	// checkresult.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	checkresult.UpdateDefaultUpdatedAt = checkresultDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// checkresultDescTags is the schema descriptor for tags field.
+	checkresultDescTags := checkresultMixinFields3[0].Descriptor()
+	// checkresult.DefaultTags holds the default value on creation for the tags field.
+	checkresult.DefaultTags = checkresultDescTags.Default.([]string)
+	// checkresultDescID is the schema descriptor for id field.
+	checkresultDescID := checkresultMixinFields2[0].Descriptor()
+	// checkresult.DefaultID holds the default value on creation for the id field.
+	checkresult.DefaultID = checkresultDescID.Default.(func() string)
 	contactMixin := schema.Contact{}.Mixin()
 	contact.Policy = privacy.NewPolicies(schema.Contact{})
 	contact.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -1837,7 +1897,7 @@ func init() {
 	// directorymembership.DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	directorymembership.DirectoryGroupIDValidator = directorymembershipDescDirectoryGroupID.Validators[0].(func(string) error)
 	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershipDescObservedAt := directorymembershipFields[12].Descriptor()
+	directorymembershipDescObservedAt := directorymembershipFields[13].Descriptor()
 	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
 	// directorymembershipDescID is the schema descriptor for id field.

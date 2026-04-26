@@ -156,6 +156,12 @@ func CampaignTargetEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func CheckResultEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup checkresult edge")))
+
+	return nil
+}
+
 func ContactEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")))
 

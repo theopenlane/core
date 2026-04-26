@@ -84,13 +84,20 @@ func logRequestBody(logger zerolog.Logger, reqBody []byte) {
 	logger.Info().Bytes("REQUEST_BODY", reqBody).Msg("request_body")
 }
 
-// redactSecretFields redacts sensitive fields from the request body
-func redactSecretFields(bodymap map[string]interface{}) map[string]interface{} {
-	secretFields := []string{"new_password", "old_password", "password", "access_token", "refresh_token"}
+var secretFields = []string{"new_password", "old_password", "password", "access_token", "refresh_token", "private_key", "serviceAccountKey"}
 
-	for i := 0; i < len(secretFields); i++ {
-		if _, ok := bodymap[secretFields[i]]; ok {
-			bodymap[secretFields[i]] = "********"
+// redactSecretFields redacts sensitive fields from the request body, recursing into nested maps
+func redactSecretFields(bodymap map[string]interface{}) map[string]interface{} {
+	for k, v := range bodymap {
+		for _, secret := range secretFields {
+			if k == secret {
+				bodymap[k] = "********"
+				break
+			}
+		}
+
+		if nested, ok := v.(map[string]interface{}); ok {
+			bodymap[k] = redactSecretFields(nested)
 		}
 	}
 
