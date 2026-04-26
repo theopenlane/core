@@ -164,7 +164,7 @@ func TestMutationCreateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateCustomTypeEnumInput{
-				Name:       "JustDoIt",
+				Name:       "Just Do It",
 				ObjectType: "task",
 			},
 			client: suite.client.apiWithToken,
