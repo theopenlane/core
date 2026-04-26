@@ -462,6 +462,9 @@
         "verifybilling": {
           "type": "string"
         },
+        "billing": {
+          "type": "string"
+        },
         "questionnaire": {
           "type": "string"
         }
