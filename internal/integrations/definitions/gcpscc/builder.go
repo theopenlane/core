@@ -13,12 +13,12 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "gcp",
+				Family:      "Google Cloud",
 				DisplayName: "GCP Security Command Center",
 				Description: "Collect Google Cloud Security Command Center findings for security posture reporting.",
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/gcp-scc",
-				Tags:        []string{"vulnerabilities", "assets"},
+				Tags:        []string{"vulnerabilities", "assets", "findings", "risks"},
 				Active:      true,
 				Visible:     true,
 			},

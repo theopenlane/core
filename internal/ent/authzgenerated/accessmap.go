@@ -1092,9 +1092,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
-	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "subprocessors": {
 	ObjectType:      "subprocessor",
 	SkipEditCheck:   false,
@@ -1337,9 +1337,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
-	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "secrets": {
 	ObjectType:      "secret",
 	SkipEditCheck:   false,
@@ -1653,9 +1653,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
-	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "avatar_file": {
 	ObjectType:      "avatar_file",
 	SkipEditCheck:   false,
@@ -2998,9 +2998,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
-	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	ObjectType:      "organization",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "directory_sync_runs": {
 	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,

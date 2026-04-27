@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -126,7 +127,13 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, IdentityHolder{}),
 		defaultEdgeFrom(f, Scan{}),
 		defaultEdgeToWithPagination(f, Event{}),
-		defaultEdgeToWithPagination(f, Integration{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: Integration{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(f, Hush{}),
 		defaultEdgeToWithPagination(f, TrustCenterEntity{}),
 		nonUniqueEdgeFrom(&edgeDefinition{

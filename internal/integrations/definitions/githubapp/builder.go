@@ -21,7 +21,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Family:      "github",
+				Family:      "GitHub",
 				DisplayName: "GitHub App",
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
 				Category:    "source-control",

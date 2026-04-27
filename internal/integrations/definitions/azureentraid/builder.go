@@ -14,7 +14,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "azure",
+				Family:      "Azure",
 				DisplayName: "Azure EntraID",
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
 				Category:    "identity",

@@ -13,7 +13,7 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "azure",
+				Family:      "Azure",
 				DisplayName: "Microsoft Defender for Cloud",
 				Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
 				Category:    "security-posture",

@@ -30,7 +30,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "slack",
+				Family:      "Slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
 				Category:    "collaboration",

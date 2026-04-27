@@ -24,7 +24,7 @@ func (d CheckSync) IngestHandle() types.IngestHandler {
 }
 
 // Run collects AWS IAM users, and optionally groups and memberships
-func (CheckSync) Run(ctx context.Context, client *configservice.Client, cfg CheckSync) ([]types.IngestPayloadSet, error) {
+func (CheckSync) Run(_ context.Context, _ *configservice.Client, _ CheckSync) ([]types.IngestPayloadSet, error) {
 
 	return nil, nil
 }

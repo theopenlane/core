@@ -5,11 +5,38 @@ import (
 	"context"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // persistCheckResultInput upserts one CheckResult record using the ingest lookup key fields
-func persistCheckResultInput(_ context.Context, _ *ent.Client, _ *ent.Integration, _ ent.CreateCheckResultInput) error {
-	// Custom persistence logic required for CheckResult.
-	// Implement lookup and upsert logic below using the createInput fields.
-	panic("not implemented: persistCheckResultInput")
+func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateCheckResultInput) error {
+	if createInput.ParentExternalID == nil {
+		return ErrIngestUpsertKeyMissing
+	}
+
+	if createInput.Source == "" && integration.Name != "" {
+		createInput.Source = integration.Name
+	}
+
+	where := []predicate.CheckResult{
+		checkresult.ParentExternalID(*createInput.ParentExternalID),
+		checkresult.IntegrationID(*createInput.IntegrationID),
+	}
+
+	return persistRoundTripUpsert(
+		ctx,
+		createInput,
+		func(ctx context.Context) (*ent.CheckResult, error) {
+			return db.CheckResult.Query().
+				Where(where...).
+				Only(ctx)
+		},
+		func(ctx context.Context, input ent.CreateCheckResultInput) error {
+			return db.CheckResult.Create().SetInput(input).Exec(ctx)
+		},
+		func(ctx context.Context, existing *ent.CheckResult, input ent.UpdateCheckResultInput) error {
+			return db.CheckResult.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+		},
+	)
 }

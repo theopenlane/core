@@ -13,7 +13,7 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "cloudflare",
+				Family:      "Cloudflare",
 				DisplayName: "Cloudflare",
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
 				Category:    "security-posture",

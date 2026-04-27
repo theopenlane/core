@@ -13,7 +13,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "aws",
+				Family:      "Amazon Web Services",
 				DisplayName: "AWS",
 				Description: "Collect AWS Security Hub findings, AWS IAM users and groups, using a shared AWS assume-role credential.",
 				Category:    "security-posture",

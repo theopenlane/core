@@ -22,7 +22,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "google",
+				Family:      "Google Workspace",
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
 				Category:    "identity",

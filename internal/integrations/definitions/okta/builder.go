@@ -13,7 +13,7 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "okta",
+				Family:      "Okta",
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
 				Category:    "identity",
