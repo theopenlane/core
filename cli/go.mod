@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.25.9
 
 require (
-	github.com/99designs/gqlgen v0.17.89
+	github.com/99designs/gqlgen v0.17.90
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -19,7 +19,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.16.8
 	github.com/theopenlane/core/common v1.0.20
-	github.com/theopenlane/go-client v0.9.4
+	github.com/theopenlane/go-client v0.9.5
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.27.6
 	github.com/theopenlane/utils v0.7.0
@@ -83,7 +83,7 @@ require (
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.32 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.33 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
