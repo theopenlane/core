@@ -2643,9 +2643,13 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		td.Name = gofakeit.HipsterWord() + "-" + ulids.New().String()
 	}
 
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	requireNoError(t, err)
+
 	mutation := td.client.db.CustomTypeEnum.Create().
 		SetName(td.Name).
-		SetObjectType(td.ObjectType)
+		SetObjectType(td.ObjectType).
+		SetOwnerID(orgID)
 
 	// default to "task" only if not explicitly set (including empty for global enums)
 	if td.ObjectType == "" && td.Field == "" {

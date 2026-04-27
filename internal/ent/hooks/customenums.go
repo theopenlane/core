@@ -162,12 +162,21 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			mut := m.(utils.GenericMutation)
 			client := mut.Client()
 
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+			}
+
 			// look up the enum by name, object type, and field
 			// and ensure it exists
 			enumPredicates := []predicate.CustomTypeEnum{
 				customtypeenum.NameEqualFold(enumValue),
 				customtypeenum.Field(in.Field),
 				customtypeenum.DeletedAtIsNil(),
+				customtypeenum.Or(
+					customtypeenum.SystemOwned(true),
+					customtypeenum.OwnerID(orgID),
+				),
 			}
 
 			// lookupEnum fetches a custom enum by object type
@@ -178,7 +187,6 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			}
 
 			var enum *generated.CustomTypeEnum
-			var err error
 
 			if in.AllowGlobal {
 				enum, err = lookupEnum("")
