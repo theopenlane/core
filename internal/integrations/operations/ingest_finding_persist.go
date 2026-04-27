@@ -19,6 +19,11 @@ func persistFindingInput(ctx context.Context, db *ent.Client, integration *ent.I
 		createInput.Source = &integration.Name
 	}
 
+	if createInput.Description != nil && *createInput.Description != "" {
+		normalized := normalizeDescription(*createInput.Description)
+		createInput.Description = &normalized
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

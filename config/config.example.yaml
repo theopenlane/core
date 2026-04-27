@@ -168,6 +168,9 @@ entconfig:
         maximumsentences: 10
         type: lexrank
 integrations:
+    awssecurityhub:
+        accessKeyId: ""
+        secretAccessKey: ""
     azureentraid:
         clientid: ""
         clientsecret: ""

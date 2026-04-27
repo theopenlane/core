@@ -18,7 +18,7 @@ func Builder() registry.Builder {
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare/overview",
-				Tags:        []string{"directory-sync", "assets"},
+				Tags:        []string{"directory", "assets"},
 				Active:      true,
 				Visible:     true,
 			},

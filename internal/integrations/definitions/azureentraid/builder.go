@@ -19,7 +19,7 @@ func Builder(cfg Config) registry.Builder {
 				Description: "Connect to Microsoft Graph to validate tenant access and inspect Azure Entra ID organization metadata.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
-				Tags:        []string{"directory-sync"},
+				Tags:        []string{"directory"},
 				Active:      false,
 				Visible:     true,
 			},

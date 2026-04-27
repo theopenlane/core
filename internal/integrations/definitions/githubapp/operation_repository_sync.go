@@ -11,9 +11,6 @@ import (
 // repositoryAssetVariant is the mapping variant for repository asset payloads
 const repositoryAssetVariant = "repository"
 
-// RepositorySync collects repositories accessible to the installation as assets
-type RepositorySync struct{}
-
 // IngestHandle adapts repository sync to the ingest operation registration boundary
 func (r RepositorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClient(gitHubClient, r.Run)

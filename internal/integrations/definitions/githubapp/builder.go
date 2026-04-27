@@ -26,7 +26,7 @@ func Builder(cfg Config) registry.Builder {
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
 				Category:    "source-control",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
-				Tags:        []string{"vulnerabilities", "assets"},
+				Tags:        []string{"vulnerabilities", "assets", "directory"},
 				Active:      true,
 				Visible:     true,
 			},
@@ -112,6 +112,7 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: repositorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.RepositorySync.Disable }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
@@ -126,6 +127,7 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: vulnerabilityCollectSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.VulnerabilitySync.Disable }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
@@ -140,6 +142,7 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					Ingest: []types.IngestContract{
 						{
 							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,

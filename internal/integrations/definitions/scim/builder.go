@@ -18,7 +18,7 @@ func Builder() registry.Builder {
 				Description: "Synchronize directory objects through SCIM",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/scim/overview",
-				Tags:        []string{"directory-sync"},
+				Tags:        []string{"directory"},
 				Active:      true,
 				Visible:     true,
 			},

@@ -41,7 +41,7 @@ func (r SecurityLevel) String() string { return string(r) }
 func ToSecurityLevel(r string) *SecurityLevel {
 	// edge case to convert MODERATE -> Medium
 	if strings.EqualFold(r, "MODERATE") {
-		r = SecurityLevelMedium.String()
+		return &SecurityLevelMedium
 	}
 
 	return parse(r, securityLevelValues, &SecurityLevelInvalid)

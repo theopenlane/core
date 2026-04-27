@@ -80,7 +80,6 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, Expr: `'member' in payload && payload.member != null && 'id' in payload.member ? payload.member.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, Expr: `'group' in payload && payload.group != null && 'id' in payload.group ? payload.group.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipSource, Expr: `dyn("aws-iam")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipMetadata, Expr: "payload"},
 })
 

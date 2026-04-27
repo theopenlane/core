@@ -27,7 +27,7 @@ func Builder(cfg Config) registry.Builder {
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
-				Tags:        []string{"directory-sync"},
+				Tags:        []string{"directory"},
 				Active:      true,
 				Visible:     true,
 			},

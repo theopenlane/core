@@ -32,7 +32,6 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, Expr: `'member' in payload && payload.member != null && 'value' in payload.member ? payload.member.value : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, Expr: `'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipSource, Expr: `dyn("scim")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipMetadata, Expr: "payload"},
 })
 

@@ -77,17 +77,11 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	collected := 0
 
-	filter, err := buildFilters(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 collectLoop:
 	for _, sourceName := range sources {
 		logx.FromContext(ctx).Info().Str("source", sourceName).Msg("gspscc: listing findings for source")
 		req := &securitycenterpb.ListFindingsRequest{
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
-			Filter:   filter,
 		}
 
 		if sourceName != "" {
@@ -124,9 +118,7 @@ collectLoop:
 			switch {
 			case finding.ParentDisplayName == "Risk Engine":
 				riskEnvelopes = append(riskEnvelopes, envelope)
-			case finding.ParentDisplayName == "IAM Recommender":
-				findingEnvelopes = append(findingEnvelopes, envelope)
-			case strings.EqualFold(finding.FindingClass.String(), "VULNERABILITY"):
+			case strings.EqualFold(finding.FindingClass.String(), "VULNERABILITY") && finding.Vulnerability != nil:
 				vulnEnvelopes = append(vulnEnvelopes, envelope)
 			default:
 				findingEnvelopes = append(findingEnvelopes, envelope)
@@ -143,17 +135,13 @@ collectLoop:
 		},
 		{
 			Schema:    integrationgenerated.IntegrationMappingSchemaRisk,
-			Envelopes: findingEnvelopes,
+			Envelopes: riskEnvelopes,
 		},
 		{
 			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
-			Envelopes: findingEnvelopes,
+			Envelopes: vulnEnvelopes,
 		},
 	}, nil
-}
-
-func buildFilters(ctx context.Context) (string, error) {
-	return "", nil
 }
 
 // buildFindingEnvelope serializes a finding into a mapping envelope

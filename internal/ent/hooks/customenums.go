@@ -120,14 +120,6 @@ func HookCustomTypeEnumCreate() ent.Hook {
 				return nil, fmt.Errorf("%w: %s is not a valid field for object type %s", ErrInvalidGlobalEnumField, fieldName, objectType)
 			}
 
-			// update casing for consistency and avoid duplicates like `Open` vs. OPEN
-			n, ok := m.Name()
-			if !ok {
-				return next.Mutate(ctx, m)
-			}
-
-			m.SetName(strings.ToLower(n))
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
@@ -173,7 +165,7 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			// look up the enum by name, object type, and field
 			// and ensure it exists
 			enumPredicates := []predicate.CustomTypeEnum{
-				customtypeenum.Name(enumValue),
+				customtypeenum.NameEqualFold(enumValue),
 				customtypeenum.Field(in.Field),
 				customtypeenum.DeletedAtIsNil(),
 			}
@@ -185,14 +177,22 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					Only(ctx)
 			}
 
+			// lookupAllEnum fetches a custom enum by object type
+			lookupAllEnum := func(objectType string) ([]string, error) {
+				return client.CustomTypeEnum.Query().
+					Where(append(enumPredicates, customtypeenum.ObjectType(objectType))...).
+					Select(customtypeenum.FieldName).
+					Strings(ctx)
+			}
+
 			var enum *generated.CustomTypeEnum
 			var err error
 
 			if in.AllowGlobal {
 				enum, err = lookupEnum("")
-				if err != nil && generated.IsNotFound(err) {
-					enum, err = lookupEnum(in.ObjectType)
-				}
+				// if err != nil && generated.IsNotFound(err) {
+				// 	enum, err = lookupEnum(in.ObjectType)
+				// }
 			} else {
 				enum, err = lookupEnum(in.ObjectType)
 			}
@@ -210,8 +210,23 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					}
 
 				default:
+					var enumNames []string
+					if in.AllowGlobal {
+						enumNames, err = lookupAllEnum("")
+						if err != nil && generated.IsNotFound(err) {
+							enumNames, err = lookupAllEnum(in.ObjectType)
+						}
+					} else {
+						enumNames, err = lookupAllEnum(in.ObjectType)
+					}
+					logx.FromContext(ctx).Error().Err(err).Str("object_type", in.ObjectType).Strs("names", enumNames).Msg("error looking up custom enums")
 					return nil, err
 				}
+			}
+
+			if enum.Name != enumValue {
+				// match casing of the existing enum
+				m.SetField(in.SchemaFieldName, enum.Name)
 			}
 
 			// set the edge field on the mutation to the enum ID

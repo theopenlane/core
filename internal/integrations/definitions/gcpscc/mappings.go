@@ -8,7 +8,6 @@ import (
 
 // mapExprFinding is the CEL mapping expression for GCP Security Command Center finding payloads
 var mapExprFinding = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: integrationgenerated.IntegrationMappingFindingSource, Expr: `'parent_display_name' in payload ? payload.parent_display_name : ""`},
 	{Key: integrationgenerated.IntegrationMappingFindingExternalID, Expr: `'finding_id' in payload ? payload.finding_id : 'name' in payload ? payload.name : ""`},
 	{Key: integrationgenerated.IntegrationMappingFindingExternalOwnerID, Expr: "resource"},
 	{Key: integrationgenerated.IntegrationMappingFindingCategory, Expr: `'category' in payload ? payload.category : ""`},
@@ -59,14 +58,13 @@ var mapExprFinding = providerkit.CelMapExpr([]providerkit.CelMapEntry{
   : []
 `},
 	{Key: integrationgenerated.IntegrationMappingFindingExploitability, Expr: `'attack_exposure_score' in payload ? payload.attack_exposure_score : null`},
-	{Key: integrationgenerated.IntegrationMappingFindingScore, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'cvssv4' in payload.vulnerability.cve && payload.vulnerability.cve.cvssv4 != null ? payload.vulnerability.cve.cvssv4.base_score : null`},
+	{Key: integrationgenerated.IntegrationMappingFindingRecommendedActions, Expr: `'next_steps' in payload ? payload.next_steps : ""`},
 })
 
 // mapExprVuln is the CEL mapping expression for GCP Security Command Center vuln payloads
 var mapExprVuln = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	// use CVE ID -> fall back to category -> name
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'id' in payload.vulnerability.cve && payload.vulnerability.cve.id != "" ? payload.vulnerability.cve.id : ('category' in payload && payload.category != "" ? payload.category : ('name' in payload ? payload.name : ""))`},
-	// use CVE ID -> parse CVE from description
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityCveID, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'id' in payload.vulnerability.cve && payload.vulnerability.cve.id != "" ? payload.vulnerability.cve.id : ""`},
 
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'finding_id' in payload ? payload.finding_id : 'name' in payload ? payload.name : ""`},
@@ -74,15 +72,20 @@ var mapExprVuln = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerabilityStatusName, Expr: `'state' in payload && payload.state == "ACTIVE" ? "Open" : "Closed"`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityOpen, Expr: `'state' in payload && payload.state == "ACTIVE" ? true : false`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `'severity' in payload && payload.severity != "SEVERITY_UNSPECIFIED" ? payload.severity : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'description' in payload && payload.description != "" ? payload.description : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalURI, Expr: `'external_uri' in payload ? payload.external_uri : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDiscoveredAt, Expr: `'create_time' in payload ? payload.create_time : null`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySourceUpdatedAt, Expr: `'event_time' in payload ? payload.event_time : ('create_time' in payload ? payload.create_time : null)`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityRawPayload, Expr: "payload"},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityFixAvailable, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'upstream_fix_available' in payload.vulnerability.cve ? payload.vulnerability.cve.upstream_fix_available : false`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilityFirstPatchedVersion, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'fixed_package' in payload.vulnerability.cve  && 'package_version' in payload.vulnerability.cve.fixed_package ? payload.vulnerability.cve.fixedPackage.package_version : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityFixAvailable, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'fixed_package' in payload.vulnerability && 'package_version' in payload.vulnerability.fixed_package && payload.vulnerability.fixed_package.package_version != "" ? true : false`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityFirstPatchedVersion, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'fixed_package' in payload.vulnerability  && 'package_version' in payload.vulnerability.fixed_package ? payload.vulnerability.fixed_package.package_version : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityVulnerableVersionRange, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'offending_package' in payload.vulnerability && 'package_version' in payload.vulnerability.offending_package ? payload.vulnerability.offending_package.package_version : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityPackageName, Expr: `'vulnerability' in payload && 'offending_package' in payload.vulnerability  && 'package_name' in payload.vulnerability.offending_package ? payload.vulnerability.offending_package.package_name : ""`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityScore, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'cvssv3' in payload.vulnerability.cve && payload.vulnerability.cve.cvssv3 != null && 'base_score' in payload.vulnerability.cve.cvssv3 ? payload.vulnerability.cve.cvssv3.base_score : null`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityVector, Expr: `'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'cvssv3' in payload.vulnerability.cve && payload.vulnerability.cve.cvssv3 != null && 'attack_vector' in payload.vulnerability.cve.cvssv3 ? payload.vulnerability.cve.cvssv3.attack_vector : null`},
+	{Key: integrationgenerated.IntegrationMappingVulnerabilityDependencyScope, Expr: `'category' in payload && payload.category  == 'GKE_RUNTIME_OS_VULNERABILITY' ? "RUNTIME" : ""`},
 })
 
 // mapExprRisk is the CEL mapping expression for GCP Security Command Center risk payloads
@@ -90,7 +93,7 @@ var mapExprRisk = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingRiskExternalID, Expr: `'finding_id' in payload ? payload.finding_id : 'name' in payload ? payload.name : ""`},
 	{Key: integrationgenerated.IntegrationMappingRiskName, Expr: `'category' in payload ? payload.category : ""`},
 	{Key: integrationgenerated.IntegrationMappingRiskStatus, Expr: `'state' in payload && payload.state == "ACTIVE" ? "OPEN" : "CLOSED"`},
-	{Key: integrationgenerated.IntegrationMappingRiskImpact, Expr: `'severity' in payload ? payload.severity : ""`},
+	{Key: integrationgenerated.IntegrationMappingRiskImpact, Expr: `'severity' in payload ? (payload.severity == "MEDIUM" ? "MODERATE" : payload.severity ) : ""`},
 	{Key: integrationgenerated.IntegrationMappingRiskObservedAt, Expr: `'create_time' in payload ? payload.create_time : ""`},
 	{Key: integrationgenerated.IntegrationMappingRiskDetails, Expr: `'description' in payload ? payload.description : ""`},
 	{Key: integrationgenerated.IntegrationMappingRiskRiskCategoryName, Expr: `'finding_class' in payload ? payload.finding_class : ""`},
