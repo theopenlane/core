@@ -182,8 +182,17 @@ func TestBuildIngestHeaders(t *testing.T) {
 		if _, ok := headers.Properties["delivery_id"]; ok {
 			t.Fatal("expected delivery_id to be omitted when empty")
 		}
-		if len(headers.Tags) != 2 {
-			t.Fatalf("expected 2 tags, got %d", len(headers.Tags))
+		if len(headers.Tags) != 3 {
+			t.Fatalf("expected 3 tags, got %d: %v", len(headers.Tags), headers.Tags)
+		}
+		if headers.Tags[0] != "def-001" {
+			t.Fatalf("expected first tag %q, got %q", "def-001", headers.Tags[0])
+		}
+		if headers.Tags[1] != "schema_finding" {
+			t.Fatalf("expected second tag %q, got %q", "schema_finding", headers.Tags[1])
+		}
+		if headers.Tags[2] != string(integrationgenerated.IntegrationIngestSourceWebhook) {
+			t.Fatalf("expected third tag %q, got %q", string(integrationgenerated.IntegrationIngestSourceWebhook), headers.Tags[2])
 		}
 	})
 
@@ -195,11 +204,14 @@ func TestBuildIngestHeaders(t *testing.T) {
 
 		headers := buildIngestHeaders(record, metadata)
 
-		if len(headers.Tags) != 1 {
-			t.Fatalf("expected 1 tag, got %d: %v", len(headers.Tags), headers.Tags)
+		if len(headers.Tags) != 2 {
+			t.Fatalf("expected 2 tags, got %d: %v", len(headers.Tags), headers.Tags)
 		}
-		if headers.Tags[0] != "asset" {
-			t.Fatalf("expected tag %q, got %q", "asset", headers.Tags[0])
+		if headers.Tags[0] != "" {
+			t.Fatalf("expected first tag to be empty definition id, got %q", headers.Tags[0])
+		}
+		if headers.Tags[1] != "schema_asset" {
+			t.Fatalf("expected second tag %q, got %q", "schema_asset", headers.Tags[1])
 		}
 	})
 }

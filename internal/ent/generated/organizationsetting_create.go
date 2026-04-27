@@ -448,6 +448,20 @@ func (_c *OrganizationSettingCreate) SetNillablePaymentMethodAdded(v *bool) *Org
 	return _c
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_c *OrganizationSettingCreate) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingCreate {
+	_c.mutation.SetPendingDeletionAt(v)
+	return _c
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_c *OrganizationSettingCreate) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingCreate {
+	if v != nil {
+		_c.SetPendingDeletionAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationSettingCreate) SetID(v string) *OrganizationSettingCreate {
 	_c.mutation.SetID(v)
@@ -794,6 +808,10 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
 		_node.PaymentMethodAdded = value
+	}
+	if value, ok := _c.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsetting.FieldPendingDeletionAt, field.TypeTime, value)
+		_node.PendingDeletionAt = &value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

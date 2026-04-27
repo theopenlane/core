@@ -598,6 +598,26 @@ func (_u *OrganizationSettingHistoryUpdate) SetNillablePaymentMethodAdded(v *boo
 	return _u
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_u *OrganizationSettingHistoryUpdate) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingHistoryUpdate {
+	_u.mutation.SetPendingDeletionAt(v)
+	return _u
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdate) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingHistoryUpdate {
+	if v != nil {
+		_u.SetPendingDeletionAt(*v)
+	}
+	return _u
+}
+
+// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
+func (_u *OrganizationSettingHistoryUpdate) ClearPendingDeletionAt() *OrganizationSettingHistoryUpdate {
+	_u.mutation.ClearPendingDeletionAt()
+	return _u
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (_u *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHistoryMutation {
 	return _u.mutation
@@ -869,6 +889,12 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime, value)
+	}
+	if _u.mutation.PendingDeletionAtCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1456,6 +1482,26 @@ func (_u *OrganizationSettingHistoryUpdateOne) SetNillablePaymentMethodAdded(v *
 	return _u
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_u *OrganizationSettingHistoryUpdateOne) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.SetPendingDeletionAt(v)
+	return _u
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_u *OrganizationSettingHistoryUpdateOne) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetPendingDeletionAt(*v)
+	}
+	return _u
+}
+
+// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
+func (_u *OrganizationSettingHistoryUpdateOne) ClearPendingDeletionAt() *OrganizationSettingHistoryUpdateOne {
+	_u.mutation.ClearPendingDeletionAt()
+	return _u
+}
+
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
 func (_u *OrganizationSettingHistoryUpdateOne) Mutation() *OrganizationSettingHistoryMutation {
 	return _u.mutation
@@ -1757,6 +1803,12 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime, value)
+	}
+	if _u.mutation.PendingDeletionAtCleared() {
+		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

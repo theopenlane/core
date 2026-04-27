@@ -149,6 +149,8 @@ query GetAllOrganizations {
 					taxIdentifier
 					geoLocation
 					tags
+					paymentMethodAdded
+					pendingDeletionAt
 				}
 				orgSubscriptions {
 					stripeSubscriptionStatus

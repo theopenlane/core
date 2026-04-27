@@ -1868,6 +1868,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsettinghistory.FieldMultifactorAuthEnforced},
 			organizationsettinghistory.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsettinghistory.FieldComplianceWebhookToken},
 			organizationsettinghistory.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldPaymentMethodAdded},
+			organizationsettinghistory.FieldPendingDeletionAt:                {Type: field.TypeTime, Column: organizationsettinghistory.FieldPendingDeletionAt},
 		},
 	}
 	graph.Nodes[43] = &sqlgraph.Node{
@@ -11113,6 +11114,11 @@ func (f *OrganizationSettingHistoryFilter) WhereComplianceWebhookToken(p entql.S
 // WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.
 func (f *OrganizationSettingHistoryFilter) WherePaymentMethodAdded(p entql.BoolP) {
 	f.Where(p.Field(organizationsettinghistory.FieldPaymentMethodAdded))
+}
+
+// WherePendingDeletionAt applies the entql time.Time predicate on the pending_deletion_at field.
+func (f *OrganizationSettingHistoryFilter) WherePendingDeletionAt(p entql.TimeP) {
+	f.Where(p.Field(organizationsettinghistory.FieldPendingDeletionAt))
 }
 
 // addPredicate implements the predicateAdder interface.

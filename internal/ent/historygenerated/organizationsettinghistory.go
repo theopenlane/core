@@ -93,7 +93,9 @@ type OrganizationSettingHistory struct {
 	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"payment_method_added,omitempty"`
-	selectValues       sql.SelectValues
+	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	PendingDeletionAt *models.DateTime `json:"pending_deletion_at,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -101,6 +103,8 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case organizationsettinghistory.FieldPendingDeletionAt:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case organizationsettinghistory.FieldTags, organizationsettinghistory.FieldDomains, organizationsettinghistory.FieldBillingAddress, organizationsettinghistory.FieldAllowedEmailDomains:
 			values[i] = new([]byte)
 		case organizationsettinghistory.FieldOperation:
@@ -352,6 +356,13 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.PaymentMethodAdded = value.Bool
 			}
+		case organizationsettinghistory.FieldPendingDeletionAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field pending_deletion_at", values[i])
+			} else if value.Valid {
+				_m.PendingDeletionAt = new(models.DateTime)
+				*_m.PendingDeletionAt = *value.S.(*models.DateTime)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -496,6 +507,11 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("payment_method_added=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PaymentMethodAdded))
+	builder.WriteString(", ")
+	if v := _m.PendingDeletionAt; v != nil {
+		builder.WriteString("pending_deletion_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

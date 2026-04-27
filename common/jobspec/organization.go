@@ -15,10 +15,7 @@ func (OrganizationDeletionReminderArgs) InsertOpts() river.InsertOpts {
 }
 
 // OrganizationDeletionReminderArgs for the periodic worker to delete an organization
-type OrganizationDeletionArgs struct {
-	// OrganizationID is the organization that is deleted
-	OrganizationID string `json:"organization_id"`
-}
+type OrganizationDeletionArgs struct{}
 
 // Kind satisfies the river.Job interface
 func (OrganizationDeletionArgs) Kind() string { return "org_deletion" }

@@ -242,6 +242,7 @@ func (Entity) Fields() []ent.Field {
 			GoType(enums.VendorTier("")).
 			Default(enums.VendorTierStandard.String()).
 			Optional().
+			Default(enums.VendorRiskImpactLow.String()).
 			Annotations(
 				entgql.OrderField("tier"),
 			),

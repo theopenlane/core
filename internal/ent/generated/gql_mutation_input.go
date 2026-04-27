@@ -17782,6 +17782,8 @@ type UpdateOrganizationSettingInput struct {
 	MultifactorAuthEnforced               *bool
 	ClearComplianceWebhookToken           bool
 	ComplianceWebhookToken                *string
+	ClearPendingDeletionAt                bool
+	PendingDeletionAt                     *models.DateTime
 	ClearOrganization                     bool
 	OrganizationID                        *string
 	ClearFiles                            bool
@@ -17931,6 +17933,12 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.ComplianceWebhookToken; v != nil {
 		m.SetComplianceWebhookToken(*v)
+	}
+	if i.ClearPendingDeletionAt {
+		m.ClearPendingDeletionAt()
+	}
+	if v := i.PendingDeletionAt; v != nil {
+		m.SetPendingDeletionAt(*v)
 	}
 	if i.ClearOrganization {
 		m.ClearOrganization()

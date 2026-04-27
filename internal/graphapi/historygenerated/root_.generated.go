@@ -1793,6 +1793,7 @@ type ComplexityRoot struct {
 		Operation                        func(childComplexity int) int
 		OrganizationID                   func(childComplexity int) int
 		PaymentMethodAdded               func(childComplexity int) int
+		PendingDeletionAt                func(childComplexity int) int
 		Ref                              func(childComplexity int) int
 		SamlCert                         func(childComplexity int) int
 		SamlIssuer                       func(childComplexity int) int
@@ -13007,6 +13008,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.PaymentMethodAdded(childComplexity), true
+
+	case "OrganizationSettingHistory.pendingDeletionAt":
+		if e.ComplexityRoot.OrganizationSettingHistory.PendingDeletionAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingHistory.PendingDeletionAt(childComplexity), true
 
 	case "OrganizationSettingHistory.ref":
 		if e.ComplexityRoot.OrganizationSettingHistory.Ref == nil {
@@ -44575,6 +44583,10 @@ type OrganizationSettingHistory implements Node {
   whether or not a payment method has been added to the account
   """
   paymentMethodAdded: Boolean!
+  """
+  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  """
+  pendingDeletionAt: DateTime
 }
 """
 A connection to a list of items.
@@ -45074,6 +45086,24 @@ input OrganizationSettingHistoryWhereInput {
   complianceWebhookTokenNotNil: Boolean
   complianceWebhookTokenEqualFold: String
   complianceWebhookTokenContainsFold: String
+  """
+  payment_method_added field predicates
+  """
+  paymentMethodAdded: Boolean
+  paymentMethodAddedNEQ: Boolean
+  """
+  pending_deletion_at field predicates
+  """
+  pendingDeletionAt: DateTime
+  pendingDeletionAtNEQ: DateTime
+  pendingDeletionAtIn: [DateTime!]
+  pendingDeletionAtNotIn: [DateTime!]
+  pendingDeletionAtGT: DateTime
+  pendingDeletionAtGTE: DateTime
+  pendingDeletionAtLT: DateTime
+  pendingDeletionAtLTE: DateTime
+  pendingDeletionAtIsNil: Boolean
+  pendingDeletionAtNotNil: Boolean
 }
 """
 Information about pagination in a connection.

@@ -964,7 +964,7 @@ var (
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
 		{Name: "risk_score_coverage", Type: field.TypeInt, Nullable: true},
-		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "STANDARD"},
+		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "LOW"},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
@@ -1945,6 +1945,7 @@ var (
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
+		{Name: "pending_deletion_at", Type: field.TypeTime, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{

@@ -4,6 +4,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
@@ -11,6 +12,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -239,6 +241,8 @@ func emitTyped[TInput any, TEvent any](
 ) error {
 	var input TInput
 	if err := json.Unmarshal(payload, &input); err != nil {
+		logx.FromContext(ctx).Error().Str("topic", string(topic.Name)).Str("integration", integration.Family).Err(err).Msg("integrations: error emitting type")
+
 		return ErrIngestMappedDocumentInvalid
 	}
 
@@ -260,6 +264,8 @@ func persistTyped[TInput any](
 ) error {
 	var input TInput
 	if err := json.Unmarshal(payload, &input); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integrations: error persisting type")
+
 		return ErrIngestMappedDocumentInvalid
 	}
 
@@ -350,7 +356,7 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 
 // buildIngestHeaders assembles Gala message headers for one ingest record
 func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated.IntegrationIngestMetadata) gala.Headers {
-	tags := []string{record.Schema}
+	tags := []string{metadata.DefinitionID, "schema_" + strings.ToLower(record.Schema)}
 	if metadata.Source != "" {
 		tags = append(tags, string(metadata.Source))
 	}

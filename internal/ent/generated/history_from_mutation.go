@@ -15612,6 +15612,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetPaymentMethodAdded(paymentMethodAdded)
 	}
 
+	if pendingDeletionAt, exists := m.PendingDeletionAt(); exists {
+		create = create.SetNillablePendingDeletionAt(&pendingDeletionAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15835,6 +15839,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded)
 		}
 
+		if pendingDeletionAt, exists := m.PendingDeletionAt(); exists {
+			create = create.SetNillablePendingDeletionAt(&pendingDeletionAt)
+		} else {
+			create = create.SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15902,6 +15912,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
+			SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt).
 			Save(ctx)
 		if err != nil {
 			return err
