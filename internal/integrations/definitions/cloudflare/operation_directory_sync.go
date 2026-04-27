@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -72,20 +71,15 @@ type cloudflareGroupMemberPayload struct {
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *cf.Client) ([]types.IngestPayloadSet, error) {
-		var cfg DirectorySync
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
-
-		return d.Run(ctx, request.Credentials, client, cfg)
+		return d.Run(ctx, request.Credentials, client)
 	})
 }
 
 // Run collects Cloudflare account members and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindings, client *cf.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindings, client *cf.Client) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve credentials")
+		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error attempting to resolve credentials")
 		return nil, err
 	}
 
@@ -106,7 +100,7 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 
 		envelope, err := providerkit.MarshalEnvelope(resource, m, ErrPayloadEncode)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare_directory_sync: error during cloudflare account members iteration")
+			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error during cloudflare account members iteration")
 
 			return nil, err
 		}
@@ -233,6 +227,9 @@ func listDirectoryGroups(ctx context.Context, client *cf.Client, accountID strin
 	permissionGroups, err := parseResponseData(ctx, iterPerm, func(g iam.PermissionGroupListResponse) cloudflareGroupPayload {
 		return cloudflareGroupPayload{ID: g.ID, Name: g.Name, Payload: g}
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	groups = append(groups, permissionGroups...)
 
@@ -243,6 +240,9 @@ func listDirectoryGroups(ctx context.Context, client *cf.Client, accountID strin
 	roles, err := parseResponseData(ctx, iterRoles, func(g shared.Role) cloudflareGroupPayload {
 		return cloudflareGroupPayload{ID: g.ID, Name: g.Name, Description: g.Description, Payload: g}
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	groups = append(groups, roles...)
 

@@ -25,6 +25,31 @@ type GenericMutation interface {
 	ClearedFields() []string
 }
 
+// SystemOwnedMutation is an interface for interacting with the system_owned field in mutations
+// it will add the system_owned_field and will automatically set the field to true if the user is a system admin
+type SystemOwnedMutation interface {
+	GenericMutation
+
+	FieldCleared(name string) bool
+	SystemOwned() (bool, bool)
+	SetSystemOwned(bool)
+	OldSystemOwned(context.Context) (bool, error)
+	SystemInternalID() (string, bool)
+	ClearSystemInternalID()
+	SetSystemInternalID(string)
+	InternalNotes() (string, bool)
+	ClearInternalNotes()
+	SetInternalNotes(string)
+}
+
+// OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
+type OrgOwnedMutation interface {
+	GenericMutation
+
+	OwnerID() (string, bool)
+	SetOwnerID(string)
+}
+
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by
 // removing any `nil` values from the input `source` slice. It iterates over each item in the source slice and appends it to the new slice only if it is not `nil` - the new slice is then returned
 func NewMutationPolicyWithoutNil(source privacy.MutationPolicy) privacy.MutationPolicy {

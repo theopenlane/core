@@ -5,7 +5,6 @@ import (
 	"slices"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 	securityhubtypes "github.com/aws/aws-sdk-go-v2/service/securityhub/types"
 
@@ -74,7 +73,7 @@ func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentia
 collectLoop:
 	for {
 		input := &securityhub.GetFindingsInput{
-			MaxResults: awssdk.Int32(pageSize),
+			MaxResults: aws.Int32(pageSize),
 			Filters:    filters,
 		}
 		if nextToken != nil {
@@ -193,7 +192,7 @@ func resolveFindingResource(finding securityhubtypes.AwsSecurityFinding) string 
 	}
 
 	if finding.AwsAccountId != nil {
-		return awssdk.ToString(finding.AwsAccountId)
+		return aws.ToString(finding.AwsAccountId)
 	}
 
 	return ""

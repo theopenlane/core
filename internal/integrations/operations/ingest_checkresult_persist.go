@@ -8,8 +8,8 @@ import (
 )
 
 // persistCheckResultInput upserts one CheckResult record using the ingest lookup key fields
-func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateCheckResultInput) error {
-// Custom persistence logic required for CheckResult.
+func persistCheckResultInput(_ context.Context, _ *ent.Client, _ *ent.Integration, _ ent.CreateCheckResultInput) error {
+	// Custom persistence logic required for CheckResult.
 	// Implement lookup and upsert logic below using the createInput fields.
 	panic("not implemented: persistCheckResultInput")
 }

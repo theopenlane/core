@@ -177,22 +177,14 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					Only(ctx)
 			}
 
-			// lookupAllEnum fetches a custom enum by object type
-			lookupAllEnum := func(objectType string) ([]string, error) {
-				return client.CustomTypeEnum.Query().
-					Where(append(enumPredicates, customtypeenum.ObjectType(objectType))...).
-					Select(customtypeenum.FieldName).
-					Strings(ctx)
-			}
-
 			var enum *generated.CustomTypeEnum
 			var err error
 
 			if in.AllowGlobal {
 				enum, err = lookupEnum("")
-				// if err != nil && generated.IsNotFound(err) {
-				// 	enum, err = lookupEnum(in.ObjectType)
-				// }
+				if err != nil && generated.IsNotFound(err) {
+					enum, err = lookupEnum(in.ObjectType)
+				}
 			} else {
 				enum, err = lookupEnum(in.ObjectType)
 			}
@@ -210,23 +202,15 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					}
 
 				default:
-					var enumNames []string
-					if in.AllowGlobal {
-						enumNames, err = lookupAllEnum("")
-						if err != nil && generated.IsNotFound(err) {
-							enumNames, err = lookupAllEnum(in.ObjectType)
-						}
-					} else {
-						enumNames, err = lookupAllEnum(in.ObjectType)
-					}
-					logx.FromContext(ctx).Error().Err(err).Str("object_type", in.ObjectType).Strs("names", enumNames).Msg("error looking up custom enums")
 					return nil, err
 				}
 			}
 
 			if enum.Name != enumValue {
 				// match casing of the existing enum
-				m.SetField(in.SchemaFieldName, enum.Name)
+				if err := m.SetField(in.SchemaFieldName, enum.Name); err != nil {
+					return nil, err
+				}
 			}
 
 			// set the edge field on the mutation to the enum ID
@@ -241,14 +225,14 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 
 // createCustomEnum creates a new CustomTypeEnum when one doesn't exist and autocreate is enabled
 func createCustomEnum(ctx context.Context, client *generated.Client, in CustomEnumFilter, enumValue string) (*generated.CustomTypeEnum, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
-	}
-
 	objectType := in.ObjectType
 	if in.AllowGlobal {
 		objectType = ""
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 	}
 
 	return client.CustomTypeEnum.Create().

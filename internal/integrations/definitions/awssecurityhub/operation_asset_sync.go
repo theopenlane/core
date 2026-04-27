@@ -24,7 +24,7 @@ func (d AssetSync) IngestHandle() types.IngestHandler {
 }
 
 // Run collects AWS IAM users, and optionally groups and memberships
-func (AssetSync) Run(ctx context.Context, client *configservice.Client, cfg AssetSync) ([]types.IngestPayloadSet, error) {
+func (AssetSync) Run(_ context.Context, _ *configservice.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
 
 	return nil, nil
 }
