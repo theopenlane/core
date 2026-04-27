@@ -1,4 +1,4 @@
-h1:77tJi+/yyYPSk3oV8CW/QkVbTTgRmF5QDakJNM1zb2Y=
+h1:fAkvJJ87gIkaSxuhnxnTvwfoCMVKWS+6I88dtIiXt34=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -119,3 +119,5 @@ h1:77tJi+/yyYPSk3oV8CW/QkVbTTgRmF5QDakJNM1zb2Y=
 20260417200323_file_category_and_name_history.sql h1:KW0FYnvmQQ5DQiAsgtB/xQSokP3N6UHi1yC6Oi4LOXU=
 20260420125531_organization_setting_pending_deletion_at.sql h1:3JbK+6fXYvRJ3RPtN3s1GkdZASupXGQCLAxA600bzW8=
 20260420125541_organization_setting_pending_deletion_at_history.sql h1:f2IWz2YuqDja9t1SM/sGZLo2EJFHHh5Cm2M1G4yCrdg=
+20260427193718_identity_holder_directory_membership.sql h1:+GxNAlg8i5a/BOOO0LDy5f+QH8A+vKQpGKzz97a9hE8=
+20260427193728_identity_holder_directory_membership_history.sql h1:nx05z5BX7qeZeXVWhyv7ou4bXtV30QffwhZJKmZhnIc=
