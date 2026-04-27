@@ -105,7 +105,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 
 	vendorInput := generated.CreateEntityInput{
 		Name:           &def.Family,
-		Tags:           append(def.Tags, "integration"),
+		Tags:           []string{"integration"},
 		ApprovedForUse: lo.ToPtr(true),
 		IntegrationIDs: []string{integrationID},
 	}
