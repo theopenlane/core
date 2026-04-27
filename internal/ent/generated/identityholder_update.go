@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -856,6 +857,21 @@ func (_u *IdentityHolderUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *Id
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *IdentityHolderUpdate) AddDirectoryMembershipIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IdentityHolderUpdate) AddDirectoryMemberships(v ...*DirectoryMembership) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *IdentityHolderUpdate) AddControlIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -1233,6 +1249,27 @@ func (_u *IdentityHolderUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IdentityHolderUpdate) ClearDirectoryMemberships() *IdentityHolderUpdate {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveDirectoryMembershipIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *IdentityHolderUpdate) RemoveDirectoryMemberships(v ...*DirectoryMembership) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2307,6 +2344,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3651,6 +3736,21 @@ func (_u *IdentityHolderUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) 
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddDirectoryMembershipIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IdentityHolderUpdateOne) AddDirectoryMemberships(v ...*DirectoryMembership) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddControlIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -4028,6 +4128,27 @@ func (_u *IdentityHolderUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccoun
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IdentityHolderUpdateOne) ClearDirectoryMemberships() *IdentityHolderUpdateOne {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveDirectoryMembershipIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *IdentityHolderUpdateOne) RemoveDirectoryMemberships(v ...*DirectoryMembership) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -5132,6 +5253,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryMembershipsTable,
+			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

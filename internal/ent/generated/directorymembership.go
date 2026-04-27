@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -52,6 +53,8 @@ type DirectoryMembership struct {
 	PlatformID string `json:"platform_id,omitempty"`
 	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
 	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
+	// deduplicated identity holder linked to this directory membership
+	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// directory account participating in this membership
@@ -96,6 +99,8 @@ type DirectoryMembershipEdges struct {
 	DirectorySyncRun *DirectorySyncRun `json:"directory_sync_run,omitempty"`
 	// platform associated with this directory membership
 	Platform *Platform `json:"platform,omitempty"`
+	// identity holder linked to this directory membership
+	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
 	// DirectoryAccount holds the value of the directory_account edge.
 	DirectoryAccount *DirectoryAccount `json:"directory_account,omitempty"`
 	// DirectoryGroup holds the value of the directory_group edge.
@@ -106,9 +111,9 @@ type DirectoryMembershipEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [11]map[string]int
 
 	namedEvents             map[string][]*Event
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
@@ -180,12 +185,23 @@ func (e DirectoryMembershipEdges) PlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "platform"}
 }
 
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e DirectoryMembershipEdges) IdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.IdentityHolder != nil {
+		return e.IdentityHolder, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
 // DirectoryAccountOrErr returns the DirectoryAccount value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e DirectoryMembershipEdges) DirectoryAccountOrErr() (*DirectoryAccount, error) {
 	if e.DirectoryAccount != nil {
 		return e.DirectoryAccount, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: directoryaccount.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_account"}
@@ -196,7 +212,7 @@ func (e DirectoryMembershipEdges) DirectoryAccountOrErr() (*DirectoryAccount, er
 func (e DirectoryMembershipEdges) DirectoryGroupOrErr() (*DirectoryGroup, error) {
 	if e.DirectoryGroup != nil {
 		return e.DirectoryGroup, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: directorygroup.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_group"}
@@ -205,7 +221,7 @@ func (e DirectoryMembershipEdges) DirectoryGroupOrErr() (*DirectoryGroup, error)
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryMembershipEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -214,7 +230,7 @@ func (e DirectoryMembershipEdges) EventsOrErr() ([]*Event, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryMembershipEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -227,7 +243,7 @@ func (*DirectoryMembership) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directorymembership.FieldMetadata:
 			values[i] = new([]byte)
-		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldLastConfirmedRunID:
+		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldIdentityHolderID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldFirstSeenAt, directorymembership.FieldLastSeenAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -330,6 +346,13 @@ func (_m *DirectoryMembership) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.DirectoryInstanceID = new(string)
 				*_m.DirectoryInstanceID = value.String
+			}
+		case directorymembership.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = new(string)
+				*_m.IdentityHolderID = value.String
 			}
 		case directorymembership.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -454,6 +477,11 @@ func (_m *DirectoryMembership) QueryPlatform() *PlatformQuery {
 	return NewDirectoryMembershipClient(_m.config).QueryPlatform(_m)
 }
 
+// QueryIdentityHolder queries the "identity_holder" edge of the DirectoryMembership entity.
+func (_m *DirectoryMembership) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewDirectoryMembershipClient(_m.config).QueryIdentityHolder(_m)
+}
+
 // QueryDirectoryAccount queries the "directory_account" edge of the DirectoryMembership entity.
 func (_m *DirectoryMembership) QueryDirectoryAccount() *DirectoryAccountQuery {
 	return NewDirectoryMembershipClient(_m.config).QueryDirectoryAccount(_m)
@@ -535,6 +563,11 @@ func (_m *DirectoryMembership) String() string {
 	builder.WriteString(", ")
 	if v := _m.DirectoryInstanceID; v != nil {
 		builder.WriteString("directory_instance_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.IdentityHolderID; v != nil {
+		builder.WriteString("identity_holder_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

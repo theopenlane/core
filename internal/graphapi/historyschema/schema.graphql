@@ -8722,6 +8722,10 @@ type DirectoryMembershipHistory implements Node {
 	"""
 	directoryInstanceID: String
 	"""
+	deduplicated identity holder linked to this directory membership
+	"""
+	identityHolderID: String
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: String!
@@ -9114,6 +9118,24 @@ input DirectoryMembershipHistoryWhereInput {
 	directoryInstanceIDNotNil: Boolean
 	directoryInstanceIDEqualFold: String
 	directoryInstanceIDContainsFold: String
+	"""
+	identity_holder_id field predicates
+	"""
+	identityHolderID: String
+	identityHolderIDNEQ: String
+	identityHolderIDIn: [String!]
+	identityHolderIDNotIn: [String!]
+	identityHolderIDGT: String
+	identityHolderIDGTE: String
+	identityHolderIDLT: String
+	identityHolderIDLTE: String
+	identityHolderIDContains: String
+	identityHolderIDHasPrefix: String
+	identityHolderIDHasSuffix: String
+	identityHolderIDIsNil: Boolean
+	identityHolderIDNotNil: Boolean
+	identityHolderIDEqualFold: String
+	identityHolderIDContainsFold: String
 	"""
 	directory_sync_run_id field predicates
 	"""

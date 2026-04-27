@@ -13,6 +13,7 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			environmentName
 			firstSeenAt
 			id
+			identityHolderID
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
@@ -45,6 +46,7 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			environmentName
 			firstSeenAt
 			id
+			identityHolderID
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
@@ -77,6 +79,7 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			environmentName
 			firstSeenAt
 			id
+			identityHolderID
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
@@ -146,6 +149,7 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		environmentName
 		firstSeenAt
 		id
+		identityHolderID
 		integrationID
 		lastConfirmedRunID
 		lastSeenAt
@@ -210,6 +214,7 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			environmentName
 			firstSeenAt
 			id
+			identityHolderID
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt

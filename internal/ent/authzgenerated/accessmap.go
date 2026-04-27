@@ -795,6 +795,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "identity_holder": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "directory_account": {
 	ObjectType:      "directory_account",
 	SkipEditCheck:   true,
@@ -1749,8 +1753,12 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "directory_accounts": {
 	ObjectType:      "directory_account",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "directory_memberships": {
+	ObjectType:      "directory_membership",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "controls": {
 	ObjectType:      "control",
 	SkipEditCheck:   false,

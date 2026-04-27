@@ -11176,6 +11176,7 @@ input CreateDirectoryMembershipInput {
   integrationID: ID!
   directorySyncRunID: ID!
   platformID: ID
+  identityHolderID: ID
   directoryAccountID: ID!
   directoryGroupID: ID!
   eventIDs: [ID!]
@@ -19237,6 +19238,10 @@ type DirectoryMembership implements Node {
   """
   directoryInstanceID: String
   """
+  deduplicated identity holder linked to this directory membership
+  """
+  identityHolderID: ID
+  """
   sync run that produced this snapshot
   """
   directorySyncRunID: ID!
@@ -19299,6 +19304,10 @@ type DirectoryMembership implements Node {
   platform associated with this directory membership
   """
   platform: Platform
+  """
+  identity holder linked to this directory membership
+  """
+  identityHolder: IdentityHolder
   directoryAccount: DirectoryAccount!
   directoryGroup: DirectoryGroup!
   events(
@@ -33164,6 +33173,37 @@ type IdentityHolder implements Node {
     """
     where: DirectoryAccountWhereInput
   ): DirectoryAccountConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -34171,6 +34211,11 @@ input IdentityHolderWhereInput {
   """
   hasDirectoryAccounts: Boolean
   hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
   """
   controls edge predicates
   """
@@ -73222,6 +73267,8 @@ input UpdateDirectoryMembershipInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  identityHolderID: ID
+  clearIdentityHolder: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean

@@ -1668,6 +1668,7 @@ var (
 		{Name: "directory_account_id", Type: field.TypeString},
 		{Name: "directory_group_id", Type: field.TypeString},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_id", Type: field.TypeString, Nullable: true},
@@ -1709,20 +1710,26 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "directory_memberships_integrations_directory_memberships",
+				Symbol:     "directory_memberships_identity_holders_directory_memberships",
 				Columns:    []*schema.Column{DirectoryMembershipsColumns[23]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_memberships_integrations_directory_memberships",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[24]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_memberships_organizations_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[24]},
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_memberships_platforms_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[25]},
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[26]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1731,7 +1738,7 @@ var (
 			{
 				Name:    "directorymembership_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[5], DirectoryMembershipsColumns[24]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[5], DirectoryMembershipsColumns[25]},
 			},
 			{
 				Name:    "directorymembership_directory_account_id_directory_group_id_directory_sync_run_id",
@@ -1751,12 +1758,17 @@ var (
 			{
 				Name:    "directorymembership_integration_id_directory_sync_run_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[23], DirectoryMembershipsColumns[22]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[24], DirectoryMembershipsColumns[22]},
+			},
+			{
+				Name:    "directorymembership_identity_holder_id",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[23]},
 			},
 			{
 				Name:    "directorymembership_platform_id_directory_sync_run_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[25], DirectoryMembershipsColumns[22]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[26], DirectoryMembershipsColumns[22]},
 			},
 			{
 				Name:    "directorymembership_directory_account_id_directory_group_id",
@@ -14075,9 +14087,10 @@ func init() {
 	DirectoryMembershipsTable.ForeignKeys[2].RefTable = DirectoryAccountsTable
 	DirectoryMembershipsTable.ForeignKeys[3].RefTable = DirectoryGroupsTable
 	DirectoryMembershipsTable.ForeignKeys[4].RefTable = DirectorySyncRunsTable
-	DirectoryMembershipsTable.ForeignKeys[5].RefTable = IntegrationsTable
-	DirectoryMembershipsTable.ForeignKeys[6].RefTable = OrganizationsTable
-	DirectoryMembershipsTable.ForeignKeys[7].RefTable = PlatformsTable
+	DirectoryMembershipsTable.ForeignKeys[5].RefTable = IdentityHoldersTable
+	DirectoryMembershipsTable.ForeignKeys[6].RefTable = IntegrationsTable
+	DirectoryMembershipsTable.ForeignKeys[7].RefTable = OrganizationsTable
+	DirectoryMembershipsTable.ForeignKeys[8].RefTable = PlatformsTable
 	DirectorySyncRunsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	DirectorySyncRunsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	DirectorySyncRunsTable.ForeignKeys[2].RefTable = IntegrationsTable

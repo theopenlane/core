@@ -5926,6 +5926,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
 	}
 
+	if identityHolderID, exists := m.IdentityHolderID(); exists {
+		create = create.SetNillableIdentityHolderID(&identityHolderID)
+	}
+
 	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 		create = create.SetDirectorySyncRunID(directorySyncRunID)
 	}
@@ -6083,6 +6087,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID)
 		}
 
+		if identityHolderID, exists := m.IdentityHolderID(); exists {
+			create = create.SetNillableIdentityHolderID(&identityHolderID)
+		} else {
+			create = create.SetNillableIdentityHolderID(directorymembership.IdentityHolderID)
+		}
+
 		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
 			create = create.SetDirectorySyncRunID(directorySyncRunID)
 		} else {
@@ -6203,6 +6213,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetIntegrationID(directorymembership.IntegrationID).
 			SetPlatformID(directorymembership.PlatformID).
 			SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID).
+			SetNillableIdentityHolderID(directorymembership.IdentityHolderID).
 			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
 			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
 			SetDirectoryGroupID(directorymembership.DirectoryGroupID).

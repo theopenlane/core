@@ -1825,19 +1825,19 @@ func init() {
 	// directorymembership.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorymembership.PlatformIDValidator = directorymembershipDescPlatformID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorymembershipDescDirectorySyncRunID := directorymembershipFields[3].Descriptor()
+	directorymembershipDescDirectorySyncRunID := directorymembershipFields[4].Descriptor()
 	// directorymembership.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
 	directorymembership.DirectorySyncRunIDValidator = directorymembershipDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryAccountID is the schema descriptor for directory_account_id field.
-	directorymembershipDescDirectoryAccountID := directorymembershipFields[4].Descriptor()
+	directorymembershipDescDirectoryAccountID := directorymembershipFields[5].Descriptor()
 	// directorymembership.DirectoryAccountIDValidator is a validator for the "directory_account_id" field. It is called by the builders before save.
 	directorymembership.DirectoryAccountIDValidator = directorymembershipDescDirectoryAccountID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryGroupID is the schema descriptor for directory_group_id field.
-	directorymembershipDescDirectoryGroupID := directorymembershipFields[5].Descriptor()
+	directorymembershipDescDirectoryGroupID := directorymembershipFields[6].Descriptor()
 	// directorymembership.DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	directorymembership.DirectoryGroupIDValidator = directorymembershipDescDirectoryGroupID.Validators[0].(func(string) error)
 	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershipDescObservedAt := directorymembershipFields[12].Descriptor()
+	directorymembershipDescObservedAt := directorymembershipFields[13].Descriptor()
 	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
 	// directorymembershipDescID is the schema descriptor for id field.

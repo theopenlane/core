@@ -784,7 +784,7 @@ func init() {
 	// directorymembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	directorymembershiphistory.UpdateDefaultUpdatedAt = directorymembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// directorymembershiphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[26].Descriptor()
+	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[27].Descriptor()
 	// directorymembershiphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembershiphistory.DefaultObservedAt = directorymembershiphistoryDescObservedAt.Default.(func() time.Time)
 	// directorymembershiphistoryDescID is the schema descriptor for id field.

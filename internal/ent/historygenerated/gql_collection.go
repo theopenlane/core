@@ -3527,6 +3527,11 @@ func (_q *DirectoryMembershipHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectoryInstanceID)
 				fieldSeen[directorymembershiphistory.FieldDirectoryInstanceID] = struct{}{}
 			}
+		case "identityHolderID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldIdentityHolderID)
+				fieldSeen[directorymembershiphistory.FieldIdentityHolderID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectorySyncRunID)

@@ -5919,6 +5919,7 @@ type CreateDirectoryMembershipInput struct {
 	IntegrationID        string
 	DirectorySyncRunID   string
 	PlatformID           *string
+	IdentityHolderID     *string
 	DirectoryAccountID   string
 	DirectoryGroupID     string
 	EventIDs             []string
@@ -5977,6 +5978,9 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
 	m.SetDirectoryAccountID(i.DirectoryAccountID)
 	m.SetDirectoryGroupID(i.DirectoryGroupID)
 	if v := i.EventIDs; len(v) > 0 {
@@ -6023,6 +6027,8 @@ type UpdateDirectoryMembershipInput struct {
 	EnvironmentID              *string
 	ClearScope                 bool
 	ScopeID                    *string
+	ClearIdentityHolder        bool
+	IdentityHolderID           *string
 	ClearEvents                bool
 	AddEventIDs                []string
 	RemoveEventIDs             []string
@@ -6116,6 +6122,12 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
+	}
+	if i.ClearIdentityHolder {
+		m.ClearIdentityHolder()
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()

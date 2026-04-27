@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -42,57 +43,59 @@ import (
 // IdentityHolderQuery is the builder for querying IdentityHolder entities.
 type IdentityHolderQuery struct {
 	config
-	ctx                          *QueryContext
-	order                        []identityholder.OrderOption
-	inters                       []Interceptor
-	predicates                   []predicate.IdentityHolder
-	withOwner                    *OrganizationQuery
-	withBlockedGroups            *GroupQuery
-	withEditors                  *GroupQuery
-	withViewers                  *GroupQuery
-	withInternalOwnerUser        *UserQuery
-	withInternalOwnerGroup       *GroupQuery
-	withEnvironment              *CustomTypeEnumQuery
-	withScope                    *CustomTypeEnumQuery
-	withEmployer                 *EntityQuery
-	withAssessmentResponses      *AssessmentResponseQuery
-	withAssessments              *AssessmentQuery
-	withTemplates                *TemplateQuery
-	withAssets                   *AssetQuery
-	withEntities                 *EntityQuery
-	withDirectoryAccounts        *DirectoryAccountQuery
-	withControls                 *ControlQuery
-	withSubcontrols              *SubcontrolQuery
-	withPlatforms                *PlatformQuery
-	withCampaigns                *CampaignQuery
-	withTasks                    *TaskQuery
-	withFiles                    *FileQuery
-	withFindings                 *FindingQuery
-	withWorkflowObjectRefs       *WorkflowObjectRefQuery
-	withAccessPlatforms          *PlatformQuery
-	withUser                     *UserQuery
-	withInternalPolicies         *InternalPolicyQuery
-	loadTotal                    []func(context.Context, []*IdentityHolder) error
-	modifiers                    []func(*sql.Selector)
-	withNamedBlockedGroups       map[string]*GroupQuery
-	withNamedEditors             map[string]*GroupQuery
-	withNamedViewers             map[string]*GroupQuery
-	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
-	withNamedAssessments         map[string]*AssessmentQuery
-	withNamedTemplates           map[string]*TemplateQuery
-	withNamedAssets              map[string]*AssetQuery
-	withNamedEntities            map[string]*EntityQuery
-	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
-	withNamedControls            map[string]*ControlQuery
-	withNamedSubcontrols         map[string]*SubcontrolQuery
-	withNamedPlatforms           map[string]*PlatformQuery
-	withNamedCampaigns           map[string]*CampaignQuery
-	withNamedTasks               map[string]*TaskQuery
-	withNamedFiles               map[string]*FileQuery
-	withNamedFindings            map[string]*FindingQuery
-	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
-	withNamedAccessPlatforms     map[string]*PlatformQuery
-	withNamedInternalPolicies    map[string]*InternalPolicyQuery
+	ctx                           *QueryContext
+	order                         []identityholder.OrderOption
+	inters                        []Interceptor
+	predicates                    []predicate.IdentityHolder
+	withOwner                     *OrganizationQuery
+	withBlockedGroups             *GroupQuery
+	withEditors                   *GroupQuery
+	withViewers                   *GroupQuery
+	withInternalOwnerUser         *UserQuery
+	withInternalOwnerGroup        *GroupQuery
+	withEnvironment               *CustomTypeEnumQuery
+	withScope                     *CustomTypeEnumQuery
+	withEmployer                  *EntityQuery
+	withAssessmentResponses       *AssessmentResponseQuery
+	withAssessments               *AssessmentQuery
+	withTemplates                 *TemplateQuery
+	withAssets                    *AssetQuery
+	withEntities                  *EntityQuery
+	withDirectoryAccounts         *DirectoryAccountQuery
+	withDirectoryMemberships      *DirectoryMembershipQuery
+	withControls                  *ControlQuery
+	withSubcontrols               *SubcontrolQuery
+	withPlatforms                 *PlatformQuery
+	withCampaigns                 *CampaignQuery
+	withTasks                     *TaskQuery
+	withFiles                     *FileQuery
+	withFindings                  *FindingQuery
+	withWorkflowObjectRefs        *WorkflowObjectRefQuery
+	withAccessPlatforms           *PlatformQuery
+	withUser                      *UserQuery
+	withInternalPolicies          *InternalPolicyQuery
+	loadTotal                     []func(context.Context, []*IdentityHolder) error
+	modifiers                     []func(*sql.Selector)
+	withNamedBlockedGroups        map[string]*GroupQuery
+	withNamedEditors              map[string]*GroupQuery
+	withNamedViewers              map[string]*GroupQuery
+	withNamedAssessmentResponses  map[string]*AssessmentResponseQuery
+	withNamedAssessments          map[string]*AssessmentQuery
+	withNamedTemplates            map[string]*TemplateQuery
+	withNamedAssets               map[string]*AssetQuery
+	withNamedEntities             map[string]*EntityQuery
+	withNamedDirectoryAccounts    map[string]*DirectoryAccountQuery
+	withNamedDirectoryMemberships map[string]*DirectoryMembershipQuery
+	withNamedControls             map[string]*ControlQuery
+	withNamedSubcontrols          map[string]*SubcontrolQuery
+	withNamedPlatforms            map[string]*PlatformQuery
+	withNamedCampaigns            map[string]*CampaignQuery
+	withNamedTasks                map[string]*TaskQuery
+	withNamedFiles                map[string]*FileQuery
+	withNamedFindings             map[string]*FindingQuery
+	withNamedWorkflowObjectRefs   map[string]*WorkflowObjectRefQuery
+	withNamedAccessPlatforms      map[string]*PlatformQuery
+	withNamedInternalPolicies     map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -498,6 +501,31 @@ func (_q *IdentityHolderQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DirectoryAccount
 		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships chains the current query on the "directory_memberships" edge.
+func (_q *IdentityHolderQuery) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryMembershipsTable, identityholder.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -966,37 +994,38 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		return nil
 	}
 	return &IdentityHolderQuery{
-		config:                  _q.config,
-		ctx:                     _q.ctx.Clone(),
-		order:                   append([]identityholder.OrderOption{}, _q.order...),
-		inters:                  append([]Interceptor{}, _q.inters...),
-		predicates:              append([]predicate.IdentityHolder{}, _q.predicates...),
-		withOwner:               _q.withOwner.Clone(),
-		withBlockedGroups:       _q.withBlockedGroups.Clone(),
-		withEditors:             _q.withEditors.Clone(),
-		withViewers:             _q.withViewers.Clone(),
-		withInternalOwnerUser:   _q.withInternalOwnerUser.Clone(),
-		withInternalOwnerGroup:  _q.withInternalOwnerGroup.Clone(),
-		withEnvironment:         _q.withEnvironment.Clone(),
-		withScope:               _q.withScope.Clone(),
-		withEmployer:            _q.withEmployer.Clone(),
-		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
-		withAssessments:         _q.withAssessments.Clone(),
-		withTemplates:           _q.withTemplates.Clone(),
-		withAssets:              _q.withAssets.Clone(),
-		withEntities:            _q.withEntities.Clone(),
-		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
-		withControls:            _q.withControls.Clone(),
-		withSubcontrols:         _q.withSubcontrols.Clone(),
-		withPlatforms:           _q.withPlatforms.Clone(),
-		withCampaigns:           _q.withCampaigns.Clone(),
-		withTasks:               _q.withTasks.Clone(),
-		withFiles:               _q.withFiles.Clone(),
-		withFindings:            _q.withFindings.Clone(),
-		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
-		withAccessPlatforms:     _q.withAccessPlatforms.Clone(),
-		withUser:                _q.withUser.Clone(),
-		withInternalPolicies:    _q.withInternalPolicies.Clone(),
+		config:                   _q.config,
+		ctx:                      _q.ctx.Clone(),
+		order:                    append([]identityholder.OrderOption{}, _q.order...),
+		inters:                   append([]Interceptor{}, _q.inters...),
+		predicates:               append([]predicate.IdentityHolder{}, _q.predicates...),
+		withOwner:                _q.withOwner.Clone(),
+		withBlockedGroups:        _q.withBlockedGroups.Clone(),
+		withEditors:              _q.withEditors.Clone(),
+		withViewers:              _q.withViewers.Clone(),
+		withInternalOwnerUser:    _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:   _q.withInternalOwnerGroup.Clone(),
+		withEnvironment:          _q.withEnvironment.Clone(),
+		withScope:                _q.withScope.Clone(),
+		withEmployer:             _q.withEmployer.Clone(),
+		withAssessmentResponses:  _q.withAssessmentResponses.Clone(),
+		withAssessments:          _q.withAssessments.Clone(),
+		withTemplates:            _q.withTemplates.Clone(),
+		withAssets:               _q.withAssets.Clone(),
+		withEntities:             _q.withEntities.Clone(),
+		withDirectoryAccounts:    _q.withDirectoryAccounts.Clone(),
+		withDirectoryMemberships: _q.withDirectoryMemberships.Clone(),
+		withControls:             _q.withControls.Clone(),
+		withSubcontrols:          _q.withSubcontrols.Clone(),
+		withPlatforms:            _q.withPlatforms.Clone(),
+		withCampaigns:            _q.withCampaigns.Clone(),
+		withTasks:                _q.withTasks.Clone(),
+		withFiles:                _q.withFiles.Clone(),
+		withFindings:             _q.withFindings.Clone(),
+		withWorkflowObjectRefs:   _q.withWorkflowObjectRefs.Clone(),
+		withAccessPlatforms:      _q.withAccessPlatforms.Clone(),
+		withUser:                 _q.withUser.Clone(),
+		withInternalPolicies:     _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1166,6 +1195,17 @@ func (_q *IdentityHolderQuery) WithDirectoryAccounts(opts ...func(*DirectoryAcco
 		opt(query)
 	}
 	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "directory_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithDirectoryMemberships(opts ...func(*DirectoryMembershipQuery)) *IdentityHolderQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryMemberships = query
 	return _q
 }
 
@@ -1374,7 +1414,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1390,6 +1430,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withAssets != nil,
 			_q.withEntities != nil,
 			_q.withDirectoryAccounts != nil,
+			_q.withDirectoryMemberships != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withPlatforms != nil,
@@ -1525,6 +1566,15 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *IdentityHolder) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
 			func(n *IdentityHolder, e *DirectoryAccount) {
 				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryMemberships; query != nil {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.DirectoryMemberships = []*DirectoryMembership{} },
+			func(n *IdentityHolder, e *DirectoryMembership) {
+				n.Edges.DirectoryMemberships = append(n.Edges.DirectoryMemberships, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -1669,6 +1719,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedDirectoryAccounts(name) },
 			func(n *IdentityHolder, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryMemberships {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedDirectoryMemberships(name) },
+			func(n *IdentityHolder, e *DirectoryMembership) { n.appendNamedDirectoryMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2310,6 +2367,39 @@ func (_q *IdentityHolderQuery) loadDirectoryAccounts(ctx context.Context, query 
 	}
 	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(identityholder.DirectoryAccountsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IdentityHolderID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "identity_holder_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadDirectoryMemberships(ctx context.Context, query *DirectoryMembershipQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *DirectoryMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*IdentityHolder)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorymembership.FieldIdentityHolderID)
+	}
+	query.Where(predicate.DirectoryMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(identityholder.DirectoryMembershipsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -3158,6 +3248,20 @@ func (_q *IdentityHolderQuery) WithNamedDirectoryAccounts(name string, opts ...f
 		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
 	}
 	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to the "directory_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedDirectoryMemberships(name string, opts ...func(*DirectoryMembershipQuery)) *IdentityHolderQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryMemberships == nil {
+		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
+	}
+	_q.withNamedDirectoryMemberships[name] = query
 	return _q
 }
 

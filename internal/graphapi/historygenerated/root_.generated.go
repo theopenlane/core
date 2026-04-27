@@ -690,6 +690,7 @@ type ComplexityRoot struct {
 		FirstSeenAt         func(childComplexity int) int
 		HistoryTime         func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		IdentityHolderID    func(childComplexity int) int
 		IntegrationID       func(childComplexity int) int
 		LastConfirmedRunID  func(childComplexity int) int
 		LastSeenAt          func(childComplexity int) int
@@ -7051,6 +7052,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.ID(childComplexity), true
+
+	case "DirectoryMembershipHistory.identityHolderID":
+		if e.ComplexityRoot.DirectoryMembershipHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.IdentityHolderID(childComplexity), true
 
 	case "DirectoryMembershipHistory.integrationID":
 		if e.ComplexityRoot.DirectoryMembershipHistory.IntegrationID == nil {
@@ -30867,6 +30875,10 @@ type DirectoryMembershipHistory implements Node {
   """
   directoryInstanceID: String
   """
+  deduplicated identity holder linked to this directory membership
+  """
+  identityHolderID: String
+  """
   sync run that produced this snapshot
   """
   directorySyncRunID: String!
@@ -31259,6 +31271,24 @@ input DirectoryMembershipHistoryWhereInput {
   directoryInstanceIDNotNil: Boolean
   directoryInstanceIDEqualFold: String
   directoryInstanceIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
   """
   directory_sync_run_id field predicates
   """

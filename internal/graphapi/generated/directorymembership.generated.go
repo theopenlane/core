@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryMembership_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -116,6 +118,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryMembership_identityHolder(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":
@@ -183,6 +187,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryMembership_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -219,6 +225,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryMembership_identityHolder(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":
@@ -315,6 +323,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_DirectoryMembership_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 			case "directoryAccountID":
@@ -351,6 +361,8 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_DirectoryMembership_identityHolder(ctx, field)
 			case "directoryAccount":
 				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
 			case "directoryGroup":

@@ -759,6 +759,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorymembershiphistory.FieldIntegrationID:       {Type: field.TypeString, Column: directorymembershiphistory.FieldIntegrationID},
 			directorymembershiphistory.FieldPlatformID:          {Type: field.TypeString, Column: directorymembershiphistory.FieldPlatformID},
 			directorymembershiphistory.FieldDirectoryInstanceID: {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryInstanceID},
+			directorymembershiphistory.FieldIdentityHolderID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldIdentityHolderID},
 			directorymembershiphistory.FieldDirectorySyncRunID:  {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectorySyncRunID},
 			directorymembershiphistory.FieldDirectoryAccountID:  {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryAccountID},
 			directorymembershiphistory.FieldDirectoryGroupID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryGroupID},
@@ -6269,6 +6270,11 @@ func (f *DirectoryMembershipHistoryFilter) WherePlatformID(p entql.StringP) {
 // WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
 func (f *DirectoryMembershipHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
 	f.Where(p.Field(directorymembershiphistory.FieldDirectoryInstanceID))
+}
+
+// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
+func (f *DirectoryMembershipHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(directorymembershiphistory.FieldIdentityHolderID))
 }
 
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.

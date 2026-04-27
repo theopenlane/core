@@ -6474,6 +6474,7 @@ type CreateDirectoryMembershipInput struct {
 	IntegrationID        string         `json:"integrationID"`
 	DirectorySyncRunID   string         `json:"directorySyncRunID"`
 	PlatformID           *string        `json:"platformID,omitempty"`
+	IdentityHolderID     *string        `json:"identityHolderID,omitempty"`
 	DirectoryAccountID   string         `json:"directoryAccountID"`
 	DirectoryGroupID     string         `json:"directoryGroupID"`
 	EventIDs             []string       `json:"eventIDs,omitempty"`
@@ -11733,6 +11734,8 @@ type DirectoryMembership struct {
 	PlatformID *string `json:"platformID,omitempty"`
 	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
 	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
+	// deduplicated identity holder linked to this directory membership
+	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// directory account participating in this membership
@@ -11765,7 +11768,9 @@ type DirectoryMembership struct {
 	// sync run that produced this snapshot
 	DirectorySyncRun *DirectorySyncRun `json:"directorySyncRun"`
 	// platform associated with this directory membership
-	Platform           *Platform                    `json:"platform,omitempty"`
+	Platform *Platform `json:"platform,omitempty"`
+	// identity holder linked to this directory membership
+	IdentityHolder     *IdentityHolder              `json:"identityHolder,omitempty"`
 	DirectoryAccount   *DirectoryAccount            `json:"directoryAccount"`
 	DirectoryGroup     *DirectoryGroup              `json:"directoryGroup"`
 	Events             *EventConnection             `json:"events"`
@@ -19347,33 +19352,34 @@ type IdentityHolder struct {
 	// additional metadata about the identity holder
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// URL of the avatar of the identity holder
-	AvatarRemoteURL     *string                       `json:"avatarRemoteURL,omitempty"`
-	Owner               *Organization                 `json:"owner,omitempty"`
-	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
-	Editors             *GroupConnection              `json:"editors"`
-	Viewers             *GroupConnection              `json:"viewers"`
-	InternalOwnerUser   *User                         `json:"internalOwnerUser,omitempty"`
-	InternalOwnerGroup  *Group                        `json:"internalOwnerGroup,omitempty"`
-	Environment         *CustomTypeEnum               `json:"environment,omitempty"`
-	Scope               *CustomTypeEnum               `json:"scope,omitempty"`
-	Employer            *Entity                       `json:"employer,omitempty"`
-	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
-	Assessments         *AssessmentConnection         `json:"assessments"`
-	Templates           *TemplateConnection           `json:"templates"`
-	Assets              *AssetConnection              `json:"assets"`
-	Entities            *EntityConnection             `json:"entities"`
-	DirectoryAccounts   *DirectoryAccountConnection   `json:"directoryAccounts"`
-	Controls            *ControlConnection            `json:"controls"`
-	Subcontrols         *SubcontrolConnection         `json:"subcontrols"`
-	Platforms           *PlatformConnection           `json:"platforms"`
-	Campaigns           *CampaignConnection           `json:"campaigns"`
-	Tasks               *TaskConnection               `json:"tasks"`
-	Files               *FileConnection               `json:"files"`
-	Findings            *FindingConnection            `json:"findings"`
-	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
-	AccessPlatforms     *PlatformConnection           `json:"accessPlatforms"`
-	User                *User                         `json:"user,omitempty"`
-	InternalPolicies    *InternalPolicyConnection     `json:"internalPolicies"`
+	AvatarRemoteURL      *string                        `json:"avatarRemoteURL,omitempty"`
+	Owner                *Organization                  `json:"owner,omitempty"`
+	BlockedGroups        *GroupConnection               `json:"blockedGroups"`
+	Editors              *GroupConnection               `json:"editors"`
+	Viewers              *GroupConnection               `json:"viewers"`
+	InternalOwnerUser    *User                          `json:"internalOwnerUser,omitempty"`
+	InternalOwnerGroup   *Group                         `json:"internalOwnerGroup,omitempty"`
+	Environment          *CustomTypeEnum                `json:"environment,omitempty"`
+	Scope                *CustomTypeEnum                `json:"scope,omitempty"`
+	Employer             *Entity                        `json:"employer,omitempty"`
+	AssessmentResponses  *AssessmentResponseConnection  `json:"assessmentResponses"`
+	Assessments          *AssessmentConnection          `json:"assessments"`
+	Templates            *TemplateConnection            `json:"templates"`
+	Assets               *AssetConnection               `json:"assets"`
+	Entities             *EntityConnection              `json:"entities"`
+	DirectoryAccounts    *DirectoryAccountConnection    `json:"directoryAccounts"`
+	DirectoryMemberships *DirectoryMembershipConnection `json:"directoryMemberships"`
+	Controls             *ControlConnection             `json:"controls"`
+	Subcontrols          *SubcontrolConnection          `json:"subcontrols"`
+	Platforms            *PlatformConnection            `json:"platforms"`
+	Campaigns            *CampaignConnection            `json:"campaigns"`
+	Tasks                *TaskConnection                `json:"tasks"`
+	Files                *FileConnection                `json:"files"`
+	Findings             *FindingConnection             `json:"findings"`
+	WorkflowObjectRefs   *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
+	AccessPlatforms      *PlatformConnection            `json:"accessPlatforms"`
+	User                 *User                          `json:"user,omitempty"`
+	InternalPolicies     *InternalPolicyConnection      `json:"internalPolicies"`
 	// Indicates if this identityHolder has pending changes awaiting workflow approval
 	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
 	// Indicates if this identityHolder has any workflow history (completed or failed instances)
@@ -19961,6 +19967,9 @@ type IdentityHolderWhereInput struct {
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
+	// directory_memberships edge predicates
+	HasDirectoryMemberships     *bool                            `json:"hasDirectoryMemberships,omitempty"`
+	HasDirectoryMembershipsWith []*DirectoryMembershipWhereInput `json:"hasDirectoryMembershipsWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -40161,6 +40170,8 @@ type UpdateDirectoryMembershipInput struct {
 	ClearEnvironment           *bool          `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string        `json:"scopeID,omitempty"`
 	ClearScope                 *bool          `json:"clearScope,omitempty"`
+	IdentityHolderID           *string        `json:"identityHolderID,omitempty"`
+	ClearIdentityHolder        *bool          `json:"clearIdentityHolder,omitempty"`
 	AddEventIDs                []string       `json:"addEventIDs,omitempty"`
 	RemoveEventIDs             []string       `json:"removeEventIDs,omitempty"`
 	ClearEvents                *bool          `json:"clearEvents,omitempty"`

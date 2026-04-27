@@ -224,6 +224,20 @@ func (_c *DirectoryMembershipHistoryCreate) SetNillableDirectoryInstanceID(v *st
 	return _c
 }
 
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *DirectoryMembershipHistoryCreate) SetIdentityHolderID(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableIdentityHolderID(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetDirectorySyncRunID sets the "directory_sync_run_id" field.
 func (_c *DirectoryMembershipHistoryCreate) SetDirectorySyncRunID(v string) *DirectoryMembershipHistoryCreate {
 	_c.mutation.SetDirectorySyncRunID(v)
@@ -588,6 +602,10 @@ func (_c *DirectoryMembershipHistoryCreate) createSpec() (*DirectoryMembershipHi
 	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldDirectoryInstanceID, field.TypeString, value)
 		_node.DirectoryInstanceID = &value
+	}
+	if value, ok := _c.mutation.IdentityHolderID(); ok {
+		_spec.SetField(directorymembershiphistory.FieldIdentityHolderID, field.TypeString, value)
+		_node.IdentityHolderID = &value
 	}
 	if value, ok := _c.mutation.DirectorySyncRunID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldDirectorySyncRunID, field.TypeString, value)

@@ -724,6 +724,7 @@ var (
 		{Name: "integration_id", Type: field.TypeString},
 		{Name: "platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_instance_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
 		{Name: "directory_account_id", Type: field.TypeString},
 		{Name: "directory_group_id", Type: field.TypeString},
