@@ -2904,27 +2904,27 @@ func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Ide
 	})
 }
 
-// HasDirectoryMemberships applies the HasEdge predicate on the "directory_memberships" edge.
-func HasDirectoryMemberships() predicate.IdentityHolder {
+// HasDirectoryGroups applies the HasEdge predicate on the "directory_groups" edge.
+func HasDirectoryGroups() predicate.IdentityHolder {
 	return predicate.IdentityHolder(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasDirectoryMembershipsWith applies the HasEdge predicate on the "directory_memberships" edge with a given conditions (other predicates).
-func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.IdentityHolder {
+// HasDirectoryGroupsWith applies the HasEdge predicate on the "directory_groups" edge with a given conditions (other predicates).
+func HasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) predicate.IdentityHolder {
 	return predicate.IdentityHolder(func(s *sql.Selector) {
-		step := newDirectoryMembershipsStep()
+		step := newDirectoryGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

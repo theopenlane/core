@@ -5608,6 +5608,7 @@ type CreateDirectoryGroupInput struct {
 	IntegrationID          string
 	DirectorySyncRunID     string
 	PlatformID             *string
+	IdentityHolderID       *string
 	WorkflowObjectRefIDs   []string
 }
 
@@ -5688,6 +5689,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -5743,6 +5747,8 @@ type UpdateDirectoryGroupInput struct {
 	EnvironmentID               *string
 	ClearScope                  bool
 	ScopeID                     *string
+	ClearIdentityHolder         bool
+	IdentityHolderID            *string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -5876,6 +5882,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
 	}
+	if i.ClearIdentityHolder {
+		m.ClearIdentityHolder()
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
 	}
@@ -5919,7 +5931,6 @@ type CreateDirectoryMembershipInput struct {
 	IntegrationID        string
 	DirectorySyncRunID   string
 	PlatformID           *string
-	IdentityHolderID     *string
 	DirectoryAccountID   string
 	DirectoryGroupID     string
 	EventIDs             []string
@@ -5978,9 +5989,6 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
-	if v := i.IdentityHolderID; v != nil {
-		m.SetIdentityHolderID(*v)
-	}
 	m.SetDirectoryAccountID(i.DirectoryAccountID)
 	m.SetDirectoryGroupID(i.DirectoryGroupID)
 	if v := i.EventIDs; len(v) > 0 {
@@ -6027,8 +6035,6 @@ type UpdateDirectoryMembershipInput struct {
 	EnvironmentID              *string
 	ClearScope                 bool
 	ScopeID                    *string
-	ClearIdentityHolder        bool
-	IdentityHolderID           *string
 	ClearEvents                bool
 	AddEventIDs                []string
 	RemoveEventIDs             []string
@@ -6122,12 +6128,6 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
-	}
-	if i.ClearIdentityHolder {
-		m.ClearIdentityHolder()
-	}
-	if v := i.IdentityHolderID; v != nil {
-		m.SetIdentityHolderID(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()
@@ -12292,6 +12292,7 @@ type CreateIdentityHolderInput struct {
 	AssetIDs               []string
 	EntityIDs              []string
 	DirectoryAccountIDs    []string
+	DirectoryGroupIDs      []string
 	ControlIDs             []string
 	SubcontrolIDs          []string
 	PlatformIDs            []string
@@ -12420,6 +12421,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
 	}
+	if v := i.DirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -12545,6 +12549,9 @@ type UpdateIdentityHolderInput struct {
 	ClearDirectoryAccounts      bool
 	AddDirectoryAccountIDs      []string
 	RemoveDirectoryAccountIDs   []string
+	ClearDirectoryGroups        bool
+	AddDirectoryGroupIDs        []string
+	RemoveDirectoryGroupIDs     []string
 	ClearControls               bool
 	AddControlIDs               []string
 	RemoveControlIDs            []string
@@ -12826,6 +12833,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
 		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearDirectoryGroups {
+		m.ClearDirectoryGroups()
+	}
+	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
+		m.RemoveDirectoryGroupIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()

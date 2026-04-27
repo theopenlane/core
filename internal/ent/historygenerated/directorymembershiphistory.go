@@ -54,8 +54,6 @@ type DirectoryMembershipHistory struct {
 	PlatformID string `json:"platform_id,omitempty"`
 	// stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
 	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
-	// deduplicated identity holder linked to this directory membership
-	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// directory account participating in this membership
@@ -92,7 +90,7 @@ func (*DirectoryMembershipHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembershiphistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectoryInstanceID, directorymembershiphistory.FieldIdentityHolderID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
+		case directorymembershiphistory.FieldID, directorymembershiphistory.FieldRef, directorymembershiphistory.FieldCreatedBy, directorymembershiphistory.FieldUpdatedBy, directorymembershiphistory.FieldDisplayID, directorymembershiphistory.FieldOwnerID, directorymembershiphistory.FieldEnvironmentName, directorymembershiphistory.FieldEnvironmentID, directorymembershiphistory.FieldScopeName, directorymembershiphistory.FieldScopeID, directorymembershiphistory.FieldIntegrationID, directorymembershiphistory.FieldPlatformID, directorymembershiphistory.FieldDirectoryInstanceID, directorymembershiphistory.FieldDirectorySyncRunID, directorymembershiphistory.FieldDirectoryAccountID, directorymembershiphistory.FieldDirectoryGroupID, directorymembershiphistory.FieldRole, directorymembershiphistory.FieldSource, directorymembershiphistory.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembershiphistory.FieldHistoryTime, directorymembershiphistory.FieldCreatedAt, directorymembershiphistory.FieldUpdatedAt, directorymembershiphistory.FieldFirstSeenAt, directorymembershiphistory.FieldLastSeenAt, directorymembershiphistory.FieldAddedAt, directorymembershiphistory.FieldRemovedAt, directorymembershiphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -213,13 +211,6 @@ func (_m *DirectoryMembershipHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.DirectoryInstanceID = new(string)
 				*_m.DirectoryInstanceID = value.String
-			}
-		case directorymembershiphistory.FieldIdentityHolderID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
-			} else if value.Valid {
-				_m.IdentityHolderID = new(string)
-				*_m.IdentityHolderID = value.String
 			}
 		case directorymembershiphistory.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -384,11 +375,6 @@ func (_m *DirectoryMembershipHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.DirectoryInstanceID; v != nil {
 		builder.WriteString("directory_instance_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.IdentityHolderID; v != nil {
-		builder.WriteString("identity_holder_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

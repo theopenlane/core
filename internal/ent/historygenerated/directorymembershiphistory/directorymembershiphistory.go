@@ -52,8 +52,6 @@ const (
 	FieldPlatformID = "platform_id"
 	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
 	FieldDirectoryInstanceID = "directory_instance_id"
-	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
-	FieldIdentityHolderID = "identity_holder_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldDirectoryAccountID holds the string denoting the directory_account_id field in the database.
@@ -101,7 +99,6 @@ var Columns = []string{
 	FieldIntegrationID,
 	FieldPlatformID,
 	FieldDirectoryInstanceID,
-	FieldIdentityHolderID,
 	FieldDirectorySyncRunID,
 	FieldDirectoryAccountID,
 	FieldDirectoryGroupID,
@@ -257,11 +254,6 @@ func ByPlatformID(opts ...sql.OrderTermOption) OrderOption {
 // ByDirectoryInstanceID orders the results by the directory_instance_id field.
 func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
-}
-
-// ByIdentityHolderID orders the results by the identity_holder_id field.
-func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
 }
 
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.

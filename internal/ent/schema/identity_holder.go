@@ -264,9 +264,9 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: p,
-			edgeSchema: DirectoryMembership{},
+			edgeSchema: DirectoryGroup{},
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(DirectoryMembership{}.Name()),
+				accessmap.EdgeViewCheck(DirectoryGroup{}.Name()),
 			},
 		}),
 		defaultEdgeFromWithPagination(p, Control{}),

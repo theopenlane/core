@@ -133,6 +133,11 @@ func DirectoryInstanceID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectoryInstanceID, v))
 }
 
+// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
+func IdentityHolderID(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
 // DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
 func DirectorySyncRunID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -1121,6 +1126,81 @@ func DirectoryInstanceIDEqualFold(v string) predicate.DirectoryGroup {
 // DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
 func DirectoryInstanceIDContainsFold(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
+}
+
+// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
+func IdentityHolderIDNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
+func IdentityHolderIDIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldIdentityHolderID, vs...))
+}
+
+// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
+func IdentityHolderIDGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
+func IdentityHolderIDLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
+func IdentityHolderIDLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
+func IdentityHolderIDContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
+func IdentityHolderIDHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
+func IdentityHolderIDNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldIdentityHolderID))
+}
+
+// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldIdentityHolderID, v))
+}
+
+// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
+func IdentityHolderIDContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldIdentityHolderID, v))
 }
 
 // DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.
@@ -2248,6 +2328,35 @@ func HasPlatformWith(preds ...predicate.Platform) predicate.DirectoryGroup {
 		step := newPlatformStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasIdentityHolder applies the HasEdge predicate on the "identity_holder" edge.
+func HasIdentityHolder() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, IdentityHolderTable, IdentityHolderColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIdentityHolderWith applies the HasEdge predicate on the "identity_holder" edge with a given conditions (other predicates).
+func HasIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(func(s *sql.Selector) {
+		step := newIdentityHolderStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IdentityHolder
 		step.Edge.Schema = schemaConfig.DirectoryGroup
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

@@ -14651,6 +14651,21 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				fieldSeen[directorygroup.FieldPlatformID] = struct{}{}
 			}
 
+		case "identityHolder":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IdentityHolderClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, identityholderImplementors)...); err != nil {
+				return err
+			}
+			_q.withIdentityHolder = query
+			if _, ok := fieldSeen[directorygroup.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldIdentityHolderID)
+				fieldSeen[directorygroup.FieldIdentityHolderID] = struct{}{}
+			}
+
 		case "accounts":
 			var (
 				alias = field.Alias
@@ -14698,10 +14713,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -14709,10 +14724,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Accounts)
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -14787,10 +14802,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -14798,10 +14813,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -14876,10 +14891,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[8] == nil {
-								nodes[i].Edges.totalCount[8] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[8][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -14887,10 +14902,10 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[8] == nil {
-								nodes[i].Edges.totalCount[8] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[8][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -14990,6 +15005,11 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[directorygroup.FieldDirectoryInstanceID]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldDirectoryInstanceID)
 				fieldSeen[directorygroup.FieldDirectoryInstanceID] = struct{}{}
+			}
+		case "identityHolderID":
+			if _, ok := fieldSeen[directorygroup.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldIdentityHolderID)
+				fieldSeen[directorygroup.FieldIdentityHolderID] = struct{}{}
 			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygroup.FieldDirectorySyncRunID]; !ok {
@@ -15267,21 +15287,6 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 				fieldSeen[directorymembership.FieldPlatformID] = struct{}{}
 			}
 
-		case "identityHolder":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&IdentityHolderClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, identityholderImplementors)...); err != nil {
-				return err
-			}
-			_q.withIdentityHolder = query
-			if _, ok := fieldSeen[directorymembership.FieldIdentityHolderID]; !ok {
-				selectedFields = append(selectedFields, directorymembership.FieldIdentityHolderID)
-				fieldSeen[directorymembership.FieldIdentityHolderID] = struct{}{}
-			}
-
 		case "directoryAccount":
 			var (
 				alias = field.Alias
@@ -15355,10 +15360,10 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[9] == nil {
-								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[9][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -15366,10 +15371,10 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryMembership) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[9] == nil {
-								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[9][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -15444,10 +15449,10 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[10] == nil {
-								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[10][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -15455,10 +15460,10 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryMembership) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[10] == nil {
-								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[10][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -15553,11 +15558,6 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[directorymembership.FieldDirectoryInstanceID]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldDirectoryInstanceID)
 				fieldSeen[directorymembership.FieldDirectoryInstanceID] = struct{}{}
-			}
-		case "identityHolderID":
-			if _, ok := fieldSeen[directorymembership.FieldIdentityHolderID]; !ok {
-				selectedFields = append(selectedFields, directorymembership.FieldIdentityHolderID)
-				fieldSeen[directorymembership.FieldIdentityHolderID] = struct{}{}
 			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembership.FieldDirectorySyncRunID]; !ok {
@@ -34009,17 +34009,17 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				*wq = *query
 			})
 
-		case "directoryMemberships":
+		case "directoryGroups":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
 			)
-			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			args := newDirectoryGroupPaginateArgs(fieldArgs(ctx, new(DirectoryGroupWhereInput), path...))
 			if err := validateFirstLast(args.first, args.last); err != nil {
 				return fmt.Errorf("validate first and last in path %q: %w", path, err)
 			}
-			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			pager, err := newDirectoryGroupPager(args.opts, args.last != nil)
 			if err != nil {
 				return fmt.Errorf("create new pager in path %q: %w", path, err)
 			}
@@ -34041,9 +34041,9 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
-							s.Where(sql.InValues(s.C(identityholder.DirectoryMembershipsColumn), ids...))
+							s.Where(sql.InValues(s.C(identityholder.DirectoryGroupsColumn), ids...))
 						})
-						if err := query.GroupBy(identityholder.DirectoryMembershipsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+						if err := query.GroupBy(identityholder.DirectoryGroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
 							return err
 						}
 						m := make(map[string]int, len(v))
@@ -34062,7 +34062,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				} else {
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*IdentityHolder) error {
 						for i := range nodes {
-							n := len(nodes[i].Edges.DirectoryMemberships)
+							n := len(nodes[i].Edges.DirectoryGroups)
 							if nodes[i].Edges.totalCount[15] == nil {
 								nodes[i].Edges.totalCount[15] = make(map[string]int)
 							}
@@ -34080,7 +34080,7 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 			}
 			path = append(path, edgesField, nodeField)
 			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
 					return err
 				}
 			}
@@ -34088,13 +34088,13 @@ func (_q *IdentityHolderQuery) collectField(ctx context.Context, oneNode bool, o
 				if oneNode {
 					pager.applyOrder(query.Limit(limit))
 				} else {
-					modify := entgql.LimitPerRow(identityholder.DirectoryMembershipsColumn, limit, pager.orderExpr(query))
+					modify := entgql.LimitPerRow(identityholder.DirectoryGroupsColumn, limit, pager.orderExpr(query))
 					query.modifiers = append(query.modifiers, modify)
 				}
 			} else {
 				query = pager.applyOrder(query)
 			}
-			_q.WithNamedDirectoryMemberships(alias, func(wq *DirectoryMembershipQuery) {
+			_q.WithNamedDirectoryGroups(alias, func(wq *DirectoryGroupQuery) {
 				*wq = *query
 			})
 

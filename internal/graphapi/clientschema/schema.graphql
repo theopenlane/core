@@ -12147,6 +12147,7 @@ input CreateDirectoryGroupInput {
 	integrationID: ID!
 	directorySyncRunID: ID!
 	platformID: ID
+	identityHolderID: ID
 	workflowObjectRefIDs: [ID!]
 }
 """
@@ -12208,7 +12209,6 @@ input CreateDirectoryMembershipInput {
 	integrationID: ID!
 	directorySyncRunID: ID!
 	platformID: ID
-	identityHolderID: ID
 	directoryAccountID: ID!
 	directoryGroupID: ID!
 	eventIDs: [ID!]
@@ -13517,6 +13517,7 @@ input CreateIdentityHolderInput {
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	directoryAccountIDs: [ID!]
+	directoryGroupIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	platformIDs: [ID!]
@@ -19844,6 +19845,10 @@ type DirectoryGroup implements Node {
 	"""
 	directoryInstanceID: String
 	"""
+	deduplicated identity holder linked to this directory group
+	"""
+	identityHolderID: ID
+	"""
 	sync run that produced this snapshot
 	"""
 	directorySyncRunID: ID!
@@ -19934,6 +19939,10 @@ type DirectoryGroup implements Node {
 	platform associated with this directory group
 	"""
 	platform: Platform
+	"""
+	identity holder linked to this directory group
+	"""
+	identityHolder: IdentityHolder
 	accounts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -20377,6 +20386,24 @@ input DirectoryGroupWhereInput {
 	directoryInstanceIDEqualFold: String
 	directoryInstanceIDContainsFold: String
 	"""
+	identity_holder_id field predicates
+	"""
+	identityHolderID: ID
+	identityHolderIDNEQ: ID
+	identityHolderIDIn: [ID!]
+	identityHolderIDNotIn: [ID!]
+	identityHolderIDGT: ID
+	identityHolderIDGTE: ID
+	identityHolderIDLT: ID
+	identityHolderIDLTE: ID
+	identityHolderIDContains: ID
+	identityHolderIDHasPrefix: ID
+	identityHolderIDHasSuffix: ID
+	identityHolderIDIsNil: Boolean
+	identityHolderIDNotNil: Boolean
+	identityHolderIDEqualFold: ID
+	identityHolderIDContainsFold: ID
+	"""
 	directory_sync_run_id field predicates
 	"""
 	directorySyncRunID: ID
@@ -20606,6 +20633,11 @@ input DirectoryGroupWhereInput {
 	hasPlatform: Boolean
 	hasPlatformWith: [PlatformWhereInput!]
 	"""
+	identity_holder edge predicates
+	"""
+	hasIdentityHolder: Boolean
+	hasIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	accounts edge predicates
 	"""
 	hasAccounts: Boolean
@@ -20667,10 +20699,6 @@ type DirectoryMembership implements Node {
 	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
 	"""
 	directoryInstanceID: String
-	"""
-	deduplicated identity holder linked to this directory membership
-	"""
-	identityHolderID: ID
 	"""
 	sync run that produced this snapshot
 	"""
@@ -20734,10 +20762,6 @@ type DirectoryMembership implements Node {
 	platform associated with this directory membership
 	"""
 	platform: Platform
-	"""
-	identity holder linked to this directory membership
-	"""
-	identityHolder: IdentityHolder
 	directoryAccount: DirectoryAccount!
 	directoryGroup: DirectoryGroup!
 	events(
@@ -35813,7 +35837,7 @@ type IdentityHolder implements Node {
 		"""
 		where: DirectoryAccountWhereInput
 	): DirectoryAccountConnection!
-	directoryMemberships(
+	directoryGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
 		"""
@@ -35835,15 +35859,15 @@ type IdentityHolder implements Node {
 		last: Int
 
 		"""
-		Ordering options for DirectoryMemberships returned from the connection.
+		Ordering options for DirectoryGroups returned from the connection.
 		"""
-		orderBy: [DirectoryMembershipOrder!]
+		orderBy: [DirectoryGroupOrder!]
 
 		"""
-		Filtering options for DirectoryMemberships returned from the connection.
+		Filtering options for DirectoryGroups returned from the connection.
 		"""
-		where: DirectoryMembershipWhereInput
-	): DirectoryMembershipConnection!
+		where: DirectoryGroupWhereInput
+	): DirectoryGroupConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -36934,10 +36958,10 @@ input IdentityHolderWhereInput {
 	hasDirectoryAccounts: Boolean
 	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
 	"""
-	directory_memberships edge predicates
+	directory_groups edge predicates
 	"""
-	hasDirectoryMemberships: Boolean
-	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+	hasDirectoryGroups: Boolean
+	hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -87463,6 +87487,8 @@ input UpdateDirectoryGroupInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
+	identityHolderID: ID
+	clearIdentityHolder: Boolean
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
@@ -87533,8 +87559,6 @@ input UpdateDirectoryMembershipInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
-	identityHolderID: ID
-	clearIdentityHolder: Boolean
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
@@ -89415,6 +89439,9 @@ input UpdateIdentityHolderInput {
 	addDirectoryAccountIDs: [ID!]
 	removeDirectoryAccountIDs: [ID!]
 	clearDirectoryAccounts: Boolean
+	addDirectoryGroupIDs: [ID!]
+	removeDirectoryGroupIDs: [ID!]
+	clearDirectoryGroups: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean

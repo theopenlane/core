@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -189,26 +188,6 @@ func (_u *DirectoryMembershipUpdate) ClearDirectoryInstanceID() *DirectoryMember
 	return _u
 }
 
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryMembershipUpdate) SetIdentityHolderID(v string) *DirectoryMembershipUpdate {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdate) SetNillableIdentityHolderID(v *string) *DirectoryMembershipUpdate {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryMembershipUpdate) ClearIdentityHolderID() *DirectoryMembershipUpdate {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipUpdate) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipUpdate {
 	_u.mutation.SetRole(v)
@@ -376,11 +355,6 @@ func (_u *DirectoryMembershipUpdate) SetScope(v *CustomTypeEnum) *DirectoryMembe
 	return _u.SetScopeID(v.ID)
 }
 
-// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
-func (_u *DirectoryMembershipUpdate) SetIdentityHolder(v *IdentityHolder) *DirectoryMembershipUpdate {
-	return _u.SetIdentityHolderID(v.ID)
-}
-
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdate) AddEventIDs(ids ...string) *DirectoryMembershipUpdate {
 	_u.mutation.AddEventIDs(ids...)
@@ -431,12 +405,6 @@ func (_u *DirectoryMembershipUpdate) ClearEnvironment() *DirectoryMembershipUpda
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryMembershipUpdate) ClearScope() *DirectoryMembershipUpdate {
 	_u.mutation.ClearScope()
-	return _u
-}
-
-// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
-func (_u *DirectoryMembershipUpdate) ClearIdentityHolder() *DirectoryMembershipUpdate {
-	_u.mutation.ClearIdentityHolder()
 	return _u
 }
 
@@ -746,37 +714,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.IdentityHolderCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorymembership.IdentityHolderTable,
-			Columns: []string{directorymembership.IdentityHolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorymembership.IdentityHolderTable,
-			Columns: []string{directorymembership.IdentityHolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -1049,26 +986,6 @@ func (_u *DirectoryMembershipUpdateOne) ClearDirectoryInstanceID() *DirectoryMem
 	return _u
 }
 
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryMembershipUpdateOne) SetIdentityHolderID(v string) *DirectoryMembershipUpdateOne {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdateOne) SetNillableIdentityHolderID(v *string) *DirectoryMembershipUpdateOne {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryMembershipUpdateOne) ClearIdentityHolderID() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipUpdateOne) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetRole(v)
@@ -1236,11 +1153,6 @@ func (_u *DirectoryMembershipUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryMe
 	return _u.SetScopeID(v.ID)
 }
 
-// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
-func (_u *DirectoryMembershipUpdateOne) SetIdentityHolder(v *IdentityHolder) *DirectoryMembershipUpdateOne {
-	return _u.SetIdentityHolderID(v.ID)
-}
-
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdateOne) AddEventIDs(ids ...string) *DirectoryMembershipUpdateOne {
 	_u.mutation.AddEventIDs(ids...)
@@ -1291,12 +1203,6 @@ func (_u *DirectoryMembershipUpdateOne) ClearEnvironment() *DirectoryMembershipU
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryMembershipUpdateOne) ClearScope() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearScope()
-	return _u
-}
-
-// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
-func (_u *DirectoryMembershipUpdateOne) ClearIdentityHolder() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearIdentityHolder()
 	return _u
 }
 
@@ -1628,37 +1534,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.IdentityHolderCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorymembership.IdentityHolderTable,
-			Columns: []string{directorymembership.IdentityHolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.IdentityHolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorymembership.IdentityHolderTable,
-			Columns: []string{directorymembership.IdentityHolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryMembership

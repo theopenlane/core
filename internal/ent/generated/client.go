@@ -6938,6 +6938,25 @@ func (c *DirectoryGroupClient) QueryPlatform(_m *DirectoryGroup) *PlatformQuery 
 	return query
 }
 
+// QueryIdentityHolder queries the identity_holder edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryIdentityHolder(_m *DirectoryGroup) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.IdentityHolderTable, directorygroup.IdentityHolderColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IdentityHolder
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAccounts queries the accounts edge of a DirectoryGroup.
 func (c *DirectoryGroupClient) QueryAccounts(_m *DirectoryGroup) *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: c.config}).Query()
@@ -7237,25 +7256,6 @@ func (c *DirectoryMembershipClient) QueryPlatform(_m *DirectoryMembership) *Plat
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.DirectoryMembership
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryIdentityHolder queries the identity_holder edge of a DirectoryMembership.
-func (c *DirectoryMembershipClient) QueryIdentityHolder(_m *DirectoryMembership) *IdentityHolderQuery {
-	query := (&IdentityHolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
-			sqlgraph.To(identityholder.Table, identityholder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.IdentityHolderTable, directorymembership.IdentityHolderColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
 		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -14407,19 +14407,19 @@ func (c *IdentityHolderClient) QueryDirectoryAccounts(_m *IdentityHolder) *Direc
 	return query
 }
 
-// QueryDirectoryMemberships queries the directory_memberships edge of a IdentityHolder.
-func (c *IdentityHolderClient) QueryDirectoryMemberships(_m *IdentityHolder) *DirectoryMembershipQuery {
-	query := (&DirectoryMembershipClient{config: c.config}).Query()
+// QueryDirectoryGroups queries the directory_groups edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryDirectoryGroups(_m *IdentityHolder) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
-			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryMembershipsTable, identityholder.DirectoryMembershipsColumn),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryGroupsTable, identityholder.DirectoryGroupsColumn),
 		)
 		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

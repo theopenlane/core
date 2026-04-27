@@ -124,8 +124,8 @@ const (
 	EdgeEntities = "entities"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
-	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
-	EdgeDirectoryMemberships = "directory_memberships"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -247,13 +247,13 @@ const (
 	DirectoryAccountsInverseTable = "directory_accounts"
 	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
 	DirectoryAccountsColumn = "identity_holder_id"
-	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
-	DirectoryMembershipsTable = "directory_memberships"
-	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
-	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
-	DirectoryMembershipsInverseTable = "directory_memberships"
-	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
-	DirectoryMembershipsColumn = "identity_holder_id"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "identity_holder_id"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_identity_holders"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -829,17 +829,17 @@ func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
-// ByDirectoryMembershipsCount orders the results by directory_memberships count.
-func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
 	}
 }
 
-// ByDirectoryMemberships orders the results by directory_memberships terms.
-func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1094,11 +1094,11 @@ func newDirectoryAccountsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
 	)
 }
-func newDirectoryMembershipsStep() *sqlgraph.Step {
+func newDirectoryGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

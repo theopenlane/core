@@ -3268,6 +3268,11 @@ func (_q *DirectoryGroupHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectoryInstanceID)
 				fieldSeen[directorygrouphistory.FieldDirectoryInstanceID] = struct{}{}
 			}
+		case "identityHolderID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldIdentityHolderID)
+				fieldSeen[directorygrouphistory.FieldIdentityHolderID] = struct{}{}
+			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygrouphistory.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectorySyncRunID)
@@ -3526,11 +3531,6 @@ func (_q *DirectoryMembershipHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectoryInstanceID]; !ok {
 				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectoryInstanceID)
 				fieldSeen[directorymembershiphistory.FieldDirectoryInstanceID] = struct{}{}
-			}
-		case "identityHolderID":
-			if _, ok := fieldSeen[directorymembershiphistory.FieldIdentityHolderID]; !ok {
-				selectedFields = append(selectedFields, directorymembershiphistory.FieldIdentityHolderID)
-				fieldSeen[directorymembershiphistory.FieldIdentityHolderID] = struct{}{}
 			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectorySyncRunID]; !ok {

@@ -139,8 +139,8 @@ type IdentityHolderEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
-	// DirectoryMemberships holds the value of the directory_memberships edge.
-	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
+	// DirectoryGroups holds the value of the directory_groups edge.
+	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -169,26 +169,26 @@ type IdentityHolderEdges struct {
 	// totalCount holds the count of the edges above.
 	totalCount [27]map[string]int
 
-	namedBlockedGroups        map[string][]*Group
-	namedEditors              map[string][]*Group
-	namedViewers              map[string][]*Group
-	namedAssessmentResponses  map[string][]*AssessmentResponse
-	namedAssessments          map[string][]*Assessment
-	namedTemplates            map[string][]*Template
-	namedAssets               map[string][]*Asset
-	namedEntities             map[string][]*Entity
-	namedDirectoryAccounts    map[string][]*DirectoryAccount
-	namedDirectoryMemberships map[string][]*DirectoryMembership
-	namedControls             map[string][]*Control
-	namedSubcontrols          map[string][]*Subcontrol
-	namedPlatforms            map[string][]*Platform
-	namedCampaigns            map[string][]*Campaign
-	namedTasks                map[string][]*Task
-	namedFiles                map[string][]*File
-	namedFindings             map[string][]*Finding
-	namedWorkflowObjectRefs   map[string][]*WorkflowObjectRef
-	namedAccessPlatforms      map[string][]*Platform
-	namedInternalPolicies     map[string][]*InternalPolicy
+	namedBlockedGroups       map[string][]*Group
+	namedEditors             map[string][]*Group
+	namedViewers             map[string][]*Group
+	namedAssessmentResponses map[string][]*AssessmentResponse
+	namedAssessments         map[string][]*Assessment
+	namedTemplates           map[string][]*Template
+	namedAssets              map[string][]*Asset
+	namedEntities            map[string][]*Entity
+	namedDirectoryAccounts   map[string][]*DirectoryAccount
+	namedDirectoryGroups     map[string][]*DirectoryGroup
+	namedControls            map[string][]*Control
+	namedSubcontrols         map[string][]*Subcontrol
+	namedPlatforms           map[string][]*Platform
+	namedCampaigns           map[string][]*Campaign
+	namedTasks               map[string][]*Task
+	namedFiles               map[string][]*File
+	namedFindings            map[string][]*Finding
+	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
+	namedAccessPlatforms     map[string][]*Platform
+	namedInternalPolicies    map[string][]*InternalPolicy
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -338,13 +338,13 @@ func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, erro
 	return nil, &NotLoadedError{edge: "directory_accounts"}
 }
 
-// DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
+// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
-func (e IdentityHolderEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
+func (e IdentityHolderEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 	if e.loadedTypes[15] {
-		return e.DirectoryMemberships, nil
+		return e.DirectoryGroups, nil
 	}
-	return nil, &NotLoadedError{edge: "directory_memberships"}
+	return nil, &NotLoadedError{edge: "directory_groups"}
 }
 
 // ControlsOrErr returns the Controls value or an error if the edge
@@ -809,9 +809,9 @@ func (_m *IdentityHolder) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	return NewIdentityHolderClient(_m.config).QueryDirectoryAccounts(_m)
 }
 
-// QueryDirectoryMemberships queries the "directory_memberships" edge of the IdentityHolder entity.
-func (_m *IdentityHolder) QueryDirectoryMemberships() *DirectoryMembershipQuery {
-	return NewIdentityHolderClient(_m.config).QueryDirectoryMemberships(_m)
+// QueryDirectoryGroups queries the "directory_groups" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryDirectoryGroups() *DirectoryGroupQuery {
+	return NewIdentityHolderClient(_m.config).QueryDirectoryGroups(_m)
 }
 
 // QueryControls queries the "controls" edge of the IdentityHolder entity.
@@ -1231,27 +1231,27 @@ func (_m *IdentityHolder) appendNamedDirectoryAccounts(name string, edges ...*Di
 	}
 }
 
-// NamedDirectoryMemberships returns the DirectoryMemberships named value or an error if the edge was not
+// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *IdentityHolder) NamedDirectoryMemberships(name string) ([]*DirectoryMembership, error) {
-	if _m.Edges.namedDirectoryMemberships == nil {
+func (_m *IdentityHolder) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
+	if _m.Edges.namedDirectoryGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedDirectoryMemberships[name]
+	nodes, ok := _m.Edges.namedDirectoryGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *IdentityHolder) appendNamedDirectoryMemberships(name string, edges ...*DirectoryMembership) {
-	if _m.Edges.namedDirectoryMemberships == nil {
-		_m.Edges.namedDirectoryMemberships = make(map[string][]*DirectoryMembership)
+func (_m *IdentityHolder) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
+		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
 	} else {
-		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
+		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
 	}
 }
 

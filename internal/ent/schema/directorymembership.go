@@ -60,10 +60,6 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance").
 			Optional().
 			Nillable(),
-		field.String("identity_holder_id").
-			Comment("deduplicated identity holder linked to this directory membership").
-			Optional().
-			Nillable(),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
@@ -176,15 +172,6 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 			immutable:  true,
 			comment:    "platform associated with this directory membership",
 		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: m,
-			edgeSchema: IdentityHolder{},
-			field:      "identity_holder_id",
-			comment:    "identity holder linked to this directory membership",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(IdentityHolder{}.Name()),
-			},
-		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: m,
 			edgeSchema: DirectoryAccount{},
@@ -223,7 +210,6 @@ func (DirectoryMembership) Indexes() []ent.Index {
 		index.Fields("directory_instance_id", "directory_account_id", "directory_group_id"),
 		index.Fields("directory_sync_run_id"),
 		index.Fields("integration_id", "directory_sync_run_id"),
-		index.Fields("identity_holder_id"),
 		index.Fields("platform_id", "directory_sync_run_id"),
 	}
 }

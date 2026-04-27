@@ -281,6 +281,7 @@ const (
 	IntegrationMappingDirectoryGroupExternalID             = "externalID"
 	IntegrationMappingDirectoryGroupExternalSharingAllowed = "externalSharingAllowed"
 	IntegrationMappingDirectoryGroupFirstSeenAt            = "firstSeenAt"
+	IntegrationMappingDirectoryGroupIdentityHolderID       = "identityHolderID"
 	IntegrationMappingDirectoryGroupIntegrationID          = "integrationID"
 	IntegrationMappingDirectoryGroupLastSeenAt             = "lastSeenAt"
 	IntegrationMappingDirectoryGroupMemberCount            = "memberCount"
@@ -307,7 +308,6 @@ const (
 	IntegrationMappingDirectoryMembershipEnvironmentID       = "environmentID"
 	IntegrationMappingDirectoryMembershipEnvironmentName     = "environmentName"
 	IntegrationMappingDirectoryMembershipFirstSeenAt         = "firstSeenAt"
-	IntegrationMappingDirectoryMembershipIdentityHolderID    = "identityHolderID"
 	IntegrationMappingDirectoryMembershipIntegrationID       = "integrationID"
 	IntegrationMappingDirectoryMembershipLastConfirmedRunID  = "lastConfirmedRunID"
 	IntegrationMappingDirectoryMembershipLastSeenAt          = "lastSeenAt"
@@ -1575,6 +1575,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "identityHolderID",
+				GoField:   "IdentityHolderID",
+				EntField:  "identity_holder_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "integrationID",
 				GoField:   "IntegrationID",
 				EntField:  "integration_id",
@@ -1713,6 +1722,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID":             {},
 			"externalSharingAllowed": {},
 			"firstSeenAt":            {},
+			"identityHolderID":       {},
 			"integrationID":          {},
 			"lastSeenAt":             {},
 			"memberCount":            {},
@@ -1814,15 +1824,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				GoField:   "FirstSeenAt",
 				EntField:  "first_seen_at",
 				Type:      "time.Time",
-				Required:  false,
-				UpsertKey: false,
-				LookupKey: false,
-			},
-			{
-				InputKey:  "identityHolderID",
-				GoField:   "IdentityHolderID",
-				EntField:  "identity_holder_id",
-				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
 				LookupKey: false,
@@ -1936,7 +1937,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"environmentID":       {},
 			"environmentName":     {},
 			"firstSeenAt":         {},
-			"identityHolderID":    {},
 			"integrationID":       {},
 			"lastConfirmedRunID":  {},
 			"lastSeenAt":          {},

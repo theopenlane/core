@@ -44,8 +44,6 @@ const (
 	FieldPlatformID = "platform_id"
 	// FieldDirectoryInstanceID holds the string denoting the directory_instance_id field in the database.
 	FieldDirectoryInstanceID = "directory_instance_id"
-	// FieldIdentityHolderID holds the string denoting the identity_holder_id field in the database.
-	FieldIdentityHolderID = "identity_holder_id"
 	// FieldDirectorySyncRunID holds the string denoting the directory_sync_run_id field in the database.
 	FieldDirectorySyncRunID = "directory_sync_run_id"
 	// FieldDirectoryAccountID holds the string denoting the directory_account_id field in the database.
@@ -82,8 +80,6 @@ const (
 	EdgeDirectorySyncRun = "directory_sync_run"
 	// EdgePlatform holds the string denoting the platform edge name in mutations.
 	EdgePlatform = "platform"
-	// EdgeIdentityHolder holds the string denoting the identity_holder edge name in mutations.
-	EdgeIdentityHolder = "identity_holder"
 	// EdgeDirectoryAccount holds the string denoting the directory_account edge name in mutations.
 	EdgeDirectoryAccount = "directory_account"
 	// EdgeDirectoryGroup holds the string denoting the directory_group edge name in mutations.
@@ -136,13 +132,6 @@ const (
 	PlatformInverseTable = "platforms"
 	// PlatformColumn is the table column denoting the platform relation/edge.
 	PlatformColumn = "platform_id"
-	// IdentityHolderTable is the table that holds the identity_holder relation/edge.
-	IdentityHolderTable = "directory_memberships"
-	// IdentityHolderInverseTable is the table name for the IdentityHolder entity.
-	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
-	IdentityHolderInverseTable = "identity_holders"
-	// IdentityHolderColumn is the table column denoting the identity_holder relation/edge.
-	IdentityHolderColumn = "identity_holder_id"
 	// DirectoryAccountTable is the table that holds the directory_account relation/edge.
 	DirectoryAccountTable = "directory_memberships"
 	// DirectoryAccountInverseTable is the table name for the DirectoryAccount entity.
@@ -189,7 +178,6 @@ var Columns = []string{
 	FieldIntegrationID,
 	FieldPlatformID,
 	FieldDirectoryInstanceID,
-	FieldIdentityHolderID,
 	FieldDirectorySyncRunID,
 	FieldDirectoryAccountID,
 	FieldDirectoryGroupID,
@@ -334,11 +322,6 @@ func ByDirectoryInstanceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryInstanceID, opts...).ToFunc()
 }
 
-// ByIdentityHolderID orders the results by the identity_holder_id field.
-func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldIdentityHolderID, opts...).ToFunc()
-}
-
 // ByDirectorySyncRunID orders the results by the directory_sync_run_id field.
 func ByDirectorySyncRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectorySyncRunID, opts...).ToFunc()
@@ -436,13 +419,6 @@ func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByIdentityHolderField orders the results by identity_holder field.
-func ByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByDirectoryAccountField orders the results by directory_account field.
 func ByDirectoryAccountField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -524,13 +500,6 @@ func newPlatformStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
-	)
-}
-func newIdentityHolderStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(IdentityHolderInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, IdentityHolderTable, IdentityHolderColumn),
 	)
 }
 func newDirectoryAccountStep() *sqlgraph.Step {

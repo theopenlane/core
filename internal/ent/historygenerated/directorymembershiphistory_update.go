@@ -186,26 +186,6 @@ func (_u *DirectoryMembershipHistoryUpdate) ClearDirectoryInstanceID() *Director
 	return _u
 }
 
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryMembershipHistoryUpdate) SetIdentityHolderID(v string) *DirectoryMembershipHistoryUpdate {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryMembershipHistoryUpdate) SetNillableIdentityHolderID(v *string) *DirectoryMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryMembershipHistoryUpdate) ClearIdentityHolderID() *DirectoryMembershipHistoryUpdate {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
 // SetRole sets the "role" field.
 func (_u *DirectoryMembershipHistoryUpdate) SetRole(v enums.DirectoryMembershipRole) *DirectoryMembershipHistoryUpdate {
 	_u.mutation.SetRole(v)
@@ -493,12 +473,6 @@ func (_u *DirectoryMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.DirectoryInstanceIDCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldDirectoryInstanceID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(directorymembershiphistory.FieldIdentityHolderID, field.TypeString, value)
-	}
-	if _u.mutation.IdentityHolderIDCleared() {
-		_spec.ClearField(directorymembershiphistory.FieldIdentityHolderID, field.TypeString)
-	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembershiphistory.FieldRole, field.TypeEnum, value)
 	}
@@ -720,26 +694,6 @@ func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableDirectoryInstanceID(v 
 // ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
 func (_u *DirectoryMembershipHistoryUpdateOne) ClearDirectoryInstanceID() *DirectoryMembershipHistoryUpdateOne {
 	_u.mutation.ClearDirectoryInstanceID()
-	return _u
-}
-
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryMembershipHistoryUpdateOne) SetIdentityHolderID(v string) *DirectoryMembershipHistoryUpdateOne {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableIdentityHolderID(v *string) *DirectoryMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryMembershipHistoryUpdateOne) ClearIdentityHolderID() *DirectoryMembershipHistoryUpdateOne {
-	_u.mutation.ClearIdentityHolderID()
 	return _u
 }
 
@@ -1059,12 +1013,6 @@ func (_u *DirectoryMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.DirectoryInstanceIDCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldDirectoryInstanceID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(directorymembershiphistory.FieldIdentityHolderID, field.TypeString, value)
-	}
-	if _u.mutation.IdentityHolderIDCleared() {
-		_spec.ClearField(directorymembershiphistory.FieldIdentityHolderID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembershiphistory.FieldRole, field.TypeEnum, value)

@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -719,19 +719,19 @@ func (_c *IdentityHolderCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *Id
 	return _c.AddDirectoryAccountIDs(ids...)
 }
 
-// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
-func (_c *IdentityHolderCreate) AddDirectoryMembershipIDs(ids ...string) *IdentityHolderCreate {
-	_c.mutation.AddDirectoryMembershipIDs(ids...)
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_c *IdentityHolderCreate) AddDirectoryGroupIDs(ids ...string) *IdentityHolderCreate {
+	_c.mutation.AddDirectoryGroupIDs(ids...)
 	return _c
 }
 
-// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
-func (_c *IdentityHolderCreate) AddDirectoryMemberships(v ...*DirectoryMembership) *IdentityHolderCreate {
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_c *IdentityHolderCreate) AddDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddDirectoryMembershipIDs(ids...)
+	return _c.AddDirectoryGroupIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -1469,18 +1469,18 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   identityholder.DirectoryMembershipsTable,
-			Columns: []string{identityholder.DirectoryMembershipsColumn},
+			Table:   identityholder.DirectoryGroupsTable,
+			Columns: []string{identityholder.DirectoryGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryMembership
+		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

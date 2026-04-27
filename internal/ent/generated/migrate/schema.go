@@ -1548,6 +1548,7 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_id", Type: field.TypeString, Nullable: true},
@@ -1577,20 +1578,26 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "directory_groups_integrations_directory_groups",
+				Symbol:     "directory_groups_identity_holders_directory_groups",
 				Columns:    []*schema.Column{DirectoryGroupsColumns[31]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_groups_integrations_directory_groups",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[32]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_groups_organizations_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[32]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_groups_platforms_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[33]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[34]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1599,12 +1606,12 @@ var (
 			{
 				Name:    "directorygroup_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[32]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[33]},
 			},
 			{
 				Name:    "directorygroup_integration_id_external_id_directory_sync_run_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[31], DirectoryGroupsColumns[10], DirectoryGroupsColumns[30]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[10], DirectoryGroupsColumns[30]},
 			},
 			{
 				Name:    "directorygroup_directory_instance_id_external_id",
@@ -1617,9 +1624,14 @@ var (
 				Columns: []*schema.Column{DirectoryGroupsColumns[9], DirectoryGroupsColumns[11]},
 			},
 			{
+				Name:    "directorygroup_identity_holder_id",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupsColumns[31]},
+			},
+			{
 				Name:    "directorygroup_platform_id_external_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[10]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[10]},
 			},
 			{
 				Name:    "directorygroup_directory_sync_run_id_email",
@@ -1629,17 +1641,17 @@ var (
 			{
 				Name:    "directorygroup_integration_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[31], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_platform_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_owner_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11]},
 			},
 		},
 	}
@@ -1668,7 +1680,6 @@ var (
 		{Name: "directory_account_id", Type: field.TypeString},
 		{Name: "directory_group_id", Type: field.TypeString},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
-		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_id", Type: field.TypeString, Nullable: true},
@@ -1710,26 +1721,20 @@ var (
 				OnDelete:   schema.NoAction,
 			},
 			{
-				Symbol:     "directory_memberships_identity_holders_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[23]},
-				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "directory_memberships_integrations_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[24]},
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[23]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_memberships_organizations_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[25]},
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_memberships_platforms_directory_memberships",
-				Columns:    []*schema.Column{DirectoryMembershipsColumns[26]},
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[25]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1738,7 +1743,7 @@ var (
 			{
 				Name:    "directorymembership_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[5], DirectoryMembershipsColumns[25]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[5], DirectoryMembershipsColumns[24]},
 			},
 			{
 				Name:    "directorymembership_directory_account_id_directory_group_id_directory_sync_run_id",
@@ -1758,17 +1763,12 @@ var (
 			{
 				Name:    "directorymembership_integration_id_directory_sync_run_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[24], DirectoryMembershipsColumns[22]},
-			},
-			{
-				Name:    "directorymembership_identity_holder_id",
-				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[23]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[23], DirectoryMembershipsColumns[22]},
 			},
 			{
 				Name:    "directorymembership_platform_id_directory_sync_run_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[26], DirectoryMembershipsColumns[22]},
+				Columns: []*schema.Column{DirectoryMembershipsColumns[25], DirectoryMembershipsColumns[22]},
 			},
 			{
 				Name:    "directorymembership_directory_account_id_directory_group_id",
@@ -14079,18 +14079,18 @@ func init() {
 	DirectoryGroupsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	DirectoryGroupsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	DirectoryGroupsTable.ForeignKeys[2].RefTable = DirectorySyncRunsTable
-	DirectoryGroupsTable.ForeignKeys[3].RefTable = IntegrationsTable
-	DirectoryGroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
-	DirectoryGroupsTable.ForeignKeys[5].RefTable = PlatformsTable
+	DirectoryGroupsTable.ForeignKeys[3].RefTable = IdentityHoldersTable
+	DirectoryGroupsTable.ForeignKeys[4].RefTable = IntegrationsTable
+	DirectoryGroupsTable.ForeignKeys[5].RefTable = OrganizationsTable
+	DirectoryGroupsTable.ForeignKeys[6].RefTable = PlatformsTable
 	DirectoryMembershipsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	DirectoryMembershipsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	DirectoryMembershipsTable.ForeignKeys[2].RefTable = DirectoryAccountsTable
 	DirectoryMembershipsTable.ForeignKeys[3].RefTable = DirectoryGroupsTable
 	DirectoryMembershipsTable.ForeignKeys[4].RefTable = DirectorySyncRunsTable
-	DirectoryMembershipsTable.ForeignKeys[5].RefTable = IdentityHoldersTable
-	DirectoryMembershipsTable.ForeignKeys[6].RefTable = IntegrationsTable
-	DirectoryMembershipsTable.ForeignKeys[7].RefTable = OrganizationsTable
-	DirectoryMembershipsTable.ForeignKeys[8].RefTable = PlatformsTable
+	DirectoryMembershipsTable.ForeignKeys[5].RefTable = IntegrationsTable
+	DirectoryMembershipsTable.ForeignKeys[6].RefTable = OrganizationsTable
+	DirectoryMembershipsTable.ForeignKeys[7].RefTable = PlatformsTable
 	DirectorySyncRunsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	DirectorySyncRunsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	DirectorySyncRunsTable.ForeignKeys[2].RefTable = IntegrationsTable
