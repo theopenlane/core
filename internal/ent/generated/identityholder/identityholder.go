@@ -253,7 +253,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
 	DirectoryGroupsInverseTable = "directory_groups"
 	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
-	DirectoryGroupsColumn = "identity_holder_id"
+	DirectoryGroupsColumn = "identity_holder_directory_groups"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_identity_holders"
 	// ControlsInverseTable is the table name for the Control entity.

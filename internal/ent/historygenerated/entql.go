@@ -711,7 +711,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygrouphistory.FieldIntegrationID:          {Type: field.TypeString, Column: directorygrouphistory.FieldIntegrationID},
 			directorygrouphistory.FieldPlatformID:             {Type: field.TypeString, Column: directorygrouphistory.FieldPlatformID},
 			directorygrouphistory.FieldDirectoryInstanceID:    {Type: field.TypeString, Column: directorygrouphistory.FieldDirectoryInstanceID},
-			directorygrouphistory.FieldIdentityHolderID:       {Type: field.TypeString, Column: directorygrouphistory.FieldIdentityHolderID},
 			directorygrouphistory.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygrouphistory.FieldDirectorySyncRunID},
 			directorygrouphistory.FieldExternalID:             {Type: field.TypeString, Column: directorygrouphistory.FieldExternalID},
 			directorygrouphistory.FieldEmail:                  {Type: field.TypeString, Column: directorygrouphistory.FieldEmail},
@@ -6055,11 +6054,6 @@ func (f *DirectoryGroupHistoryFilter) WherePlatformID(p entql.StringP) {
 // WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
 func (f *DirectoryGroupHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
 	f.Where(p.Field(directorygrouphistory.FieldDirectoryInstanceID))
-}
-
-// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
-func (f *DirectoryGroupHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldIdentityHolderID))
 }
 
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.

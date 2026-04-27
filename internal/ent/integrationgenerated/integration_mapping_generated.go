@@ -281,7 +281,6 @@ const (
 	IntegrationMappingDirectoryGroupExternalID             = "externalID"
 	IntegrationMappingDirectoryGroupExternalSharingAllowed = "externalSharingAllowed"
 	IntegrationMappingDirectoryGroupFirstSeenAt            = "firstSeenAt"
-	IntegrationMappingDirectoryGroupIdentityHolderID       = "identityHolderID"
 	IntegrationMappingDirectoryGroupIntegrationID          = "integrationID"
 	IntegrationMappingDirectoryGroupLastSeenAt             = "lastSeenAt"
 	IntegrationMappingDirectoryGroupMemberCount            = "memberCount"
@@ -1575,15 +1574,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
-				InputKey:  "identityHolderID",
-				GoField:   "IdentityHolderID",
-				EntField:  "identity_holder_id",
-				Type:      "string",
-				Required:  false,
-				UpsertKey: false,
-				LookupKey: false,
-			},
-			{
 				InputKey:  "integrationID",
 				GoField:   "IntegrationID",
 				EntField:  "integration_id",
@@ -1722,7 +1712,6 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalID":             {},
 			"externalSharingAllowed": {},
 			"firstSeenAt":            {},
-			"identityHolderID":       {},
 			"integrationID":          {},
 			"lastSeenAt":             {},
 			"memberCount":            {},

@@ -13,7 +13,6 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -69,10 +68,6 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("directory_instance_id"),
 			),
-		field.String("identity_holder_id").
-			Comment("deduplicated identity holder linked to this directory group").
-			Optional().
-			Nillable(),
 		field.String("directory_sync_run_id").
 			Comment("sync run that produced this snapshot").
 			NotEmpty().
@@ -228,15 +223,6 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			immutable:  true,
 			comment:    "platform associated with this directory group",
 		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: g,
-			edgeSchema: IdentityHolder{},
-			field:      "identity_holder_id",
-			comment:    "identity holder linked to this directory group",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(IdentityHolder{}.Name()),
-			},
-		}),
 		edge.From("accounts", DirectoryAccount.Type).
 			Ref("groups").
 			Annotations(
@@ -260,7 +246,6 @@ func (DirectoryGroup) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("directory_instance_id", "external_id"),
 		index.Fields("directory_instance_id", "email"),
-		index.Fields("identity_holder_id"),
 		index.Fields("platform_id", "external_id"),
 		index.Fields("directory_sync_run_id", "email"),
 		index.Fields("integration_id", "email"),

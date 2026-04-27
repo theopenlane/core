@@ -757,7 +757,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldIntegrationID:          {Type: field.TypeString, Column: directorygroup.FieldIntegrationID},
 			directorygroup.FieldPlatformID:             {Type: field.TypeString, Column: directorygroup.FieldPlatformID},
 			directorygroup.FieldDirectoryInstanceID:    {Type: field.TypeString, Column: directorygroup.FieldDirectoryInstanceID},
-			directorygroup.FieldIdentityHolderID:       {Type: field.TypeString, Column: directorygroup.FieldIdentityHolderID},
 			directorygroup.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygroup.FieldDirectorySyncRunID},
 			directorygroup.FieldExternalID:             {Type: field.TypeString, Column: directorygroup.FieldExternalID},
 			directorygroup.FieldEmail:                  {Type: field.TypeString, Column: directorygroup.FieldEmail},
@@ -6082,18 +6081,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"DirectoryGroup",
 		"Platform",
-	)
-	graph.MustAddE(
-		"identity_holder",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorygroup.IdentityHolderTable,
-			Columns: []string{directorygroup.IdentityHolderColumn},
-			Bidi:    false,
-		},
-		"DirectoryGroup",
-		"IdentityHolder",
 	)
 	graph.MustAddE(
 		"accounts",
@@ -22808,11 +22795,6 @@ func (f *DirectoryGroupFilter) WhereDirectoryInstanceID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldDirectoryInstanceID))
 }
 
-// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
-func (f *DirectoryGroupFilter) WhereIdentityHolderID(p entql.StringP) {
-	f.Where(p.Field(directorygroup.FieldIdentityHolderID))
-}
-
 // WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
 func (f *DirectoryGroupFilter) WhereDirectorySyncRunID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldDirectorySyncRunID))
@@ -22986,20 +22968,6 @@ func (f *DirectoryGroupFilter) WhereHasPlatform() {
 // WhereHasPlatformWith applies a predicate to check if query has an edge platform with a given conditions (other predicates).
 func (f *DirectoryGroupFilter) WhereHasPlatformWith(preds ...predicate.Platform) {
 	f.Where(entql.HasEdgeWith("platform", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasIdentityHolder applies a predicate to check if query has an edge identity_holder.
-func (f *DirectoryGroupFilter) WhereHasIdentityHolder() {
-	f.Where(entql.HasEdge("identity_holder"))
-}
-
-// WhereHasIdentityHolderWith applies a predicate to check if query has an edge identity_holder with a given conditions (other predicates).
-func (f *DirectoryGroupFilter) WhereHasIdentityHolderWith(preds ...predicate.IdentityHolder) {
-	f.Where(entql.HasEdgeWith("identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

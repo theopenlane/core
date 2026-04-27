@@ -3268,11 +3268,6 @@ func (_q *DirectoryGroupHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectoryInstanceID)
 				fieldSeen[directorygrouphistory.FieldDirectoryInstanceID] = struct{}{}
 			}
-		case "identityHolderID":
-			if _, ok := fieldSeen[directorygrouphistory.FieldIdentityHolderID]; !ok {
-				selectedFields = append(selectedFields, directorygrouphistory.FieldIdentityHolderID)
-				fieldSeen[directorygrouphistory.FieldIdentityHolderID] = struct{}{}
-			}
 		case "directorySyncRunID":
 			if _, ok := fieldSeen[directorygrouphistory.FieldDirectorySyncRunID]; !ok {
 				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectorySyncRunID)

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -53,8 +52,6 @@ type DirectoryGroup struct {
 	PlatformID string `json:"platform_id,omitempty"`
 	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
 	DirectoryInstanceID *string `json:"directory_instance_id,omitempty"`
-	// deduplicated identity holder linked to this directory group
-	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directory_sync_run_id,omitempty"`
 	// stable identifier from the directory system
@@ -95,8 +92,9 @@ type DirectoryGroup struct {
 	SourceVersion *string `json:"source_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DirectoryGroupQuery when eager-loading is set.
-	Edges        DirectoryGroupEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                            DirectoryGroupEdges `json:"edges"`
+	identity_holder_directory_groups *string
+	selectValues                     sql.SelectValues
 }
 
 // DirectoryGroupEdges holds the relations/edges for other nodes in the graph.
@@ -113,8 +111,6 @@ type DirectoryGroupEdges struct {
 	DirectorySyncRun *DirectorySyncRun `json:"directory_sync_run,omitempty"`
 	// platform associated with this directory group
 	Platform *Platform `json:"platform,omitempty"`
-	// identity holder linked to this directory group
-	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
 	// Accounts holds the value of the accounts edge.
 	Accounts []*DirectoryAccount `json:"accounts,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
@@ -123,9 +119,9 @@ type DirectoryGroupEdges struct {
 	Members []*DirectoryMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [9]map[string]int
 
 	namedAccounts           map[string][]*DirectoryAccount
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
@@ -198,21 +194,10 @@ func (e DirectoryGroupEdges) PlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "platform"}
 }
 
-// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e DirectoryGroupEdges) IdentityHolderOrErr() (*IdentityHolder, error) {
-	if e.IdentityHolder != nil {
-		return e.IdentityHolder, nil
-	} else if e.loadedTypes[6] {
-		return nil, &NotFoundError{label: identityholder.Label}
-	}
-	return nil, &NotLoadedError{edge: "identity_holder"}
-}
-
 // AccountsOrErr returns the Accounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) AccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[6] {
 		return e.Accounts, nil
 	}
 	return nil, &NotLoadedError{edge: "accounts"}
@@ -221,7 +206,7 @@ func (e DirectoryGroupEdges) AccountsOrErr() ([]*DirectoryAccount, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[7] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -230,7 +215,7 @@ func (e DirectoryGroupEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e DirectoryGroupEdges) MembersOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[8] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -247,10 +232,12 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygroup.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldIdentityHolderID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion:
+		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldFirstSeenAt, directorygroup.FieldLastSeenAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
+		case directorygroup.ForeignKeys[0]: // identity_holder_directory_groups
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -358,13 +345,6 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DirectoryInstanceID = new(string)
 				*_m.DirectoryInstanceID = value.String
-			}
-		case directorygroup.FieldIdentityHolderID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
-			} else if value.Valid {
-				_m.IdentityHolderID = new(string)
-				*_m.IdentityHolderID = value.String
 			}
 		case directorygroup.FieldDirectorySyncRunID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -492,6 +472,13 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
+		case directorygroup.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_directory_groups", values[i])
+			} else if value.Valid {
+				_m.identity_holder_directory_groups = new(string)
+				*_m.identity_holder_directory_groups = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -533,11 +520,6 @@ func (_m *DirectoryGroup) QueryDirectorySyncRun() *DirectorySyncRunQuery {
 // QueryPlatform queries the "platform" edge of the DirectoryGroup entity.
 func (_m *DirectoryGroup) QueryPlatform() *PlatformQuery {
 	return NewDirectoryGroupClient(_m.config).QueryPlatform(_m)
-}
-
-// QueryIdentityHolder queries the "identity_holder" edge of the DirectoryGroup entity.
-func (_m *DirectoryGroup) QueryIdentityHolder() *IdentityHolderQuery {
-	return NewDirectoryGroupClient(_m.config).QueryIdentityHolder(_m)
 }
 
 // QueryAccounts queries the "accounts" edge of the DirectoryGroup entity.
@@ -619,11 +601,6 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	if v := _m.DirectoryInstanceID; v != nil {
 		builder.WriteString("directory_instance_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.IdentityHolderID; v != nil {
-		builder.WriteString("identity_holder_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

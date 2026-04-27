@@ -741,15 +741,15 @@ func init() {
 	// directorygrouphistory.DefaultTags holds the default value on creation for the tags field.
 	directorygrouphistory.DefaultTags = directorygrouphistoryDescTags.Default.([]string)
 	// directorygrouphistoryDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[26].Descriptor()
+	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[25].Descriptor()
 	// directorygrouphistory.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygrouphistory.DefaultExternalSharingAllowed = directorygrouphistoryDescExternalSharingAllowed.Default.(bool)
 	// directorygrouphistoryDescObservedAt is the schema descriptor for observed_at field.
-	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[32].Descriptor()
+	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[31].Descriptor()
 	// directorygrouphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygrouphistory.DefaultObservedAt = directorygrouphistoryDescObservedAt.Default.(func() time.Time)
 	// directorygrouphistoryDescProfileHash is the schema descriptor for profile_hash field.
-	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[33].Descriptor()
+	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[32].Descriptor()
 	// directorygrouphistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directorygrouphistory.DefaultProfileHash = directorygrouphistoryDescProfileHash.Default.(string)
 	// directorygrouphistoryDescID is the schema descriptor for id field.

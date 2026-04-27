@@ -205,26 +205,6 @@ func (_u *DirectoryGroupHistoryUpdate) ClearDirectoryInstanceID() *DirectoryGrou
 	return _u
 }
 
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryGroupHistoryUpdate) SetIdentityHolderID(v string) *DirectoryGroupHistoryUpdate {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryGroupHistoryUpdate) SetNillableIdentityHolderID(v *string) *DirectoryGroupHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryGroupHistoryUpdate) ClearIdentityHolderID() *DirectoryGroupHistoryUpdate {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
 // SetEmail sets the "email" field.
 func (_u *DirectoryGroupHistoryUpdate) SetEmail(v string) *DirectoryGroupHistoryUpdate {
 	_u.mutation.SetEmail(v)
@@ -669,12 +649,6 @@ func (_u *DirectoryGroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.DirectoryInstanceIDCleared() {
 		_spec.ClearField(directorygrouphistory.FieldDirectoryInstanceID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(directorygrouphistory.FieldIdentityHolderID, field.TypeString, value)
-	}
-	if _u.mutation.IdentityHolderIDCleared() {
-		_spec.ClearField(directorygrouphistory.FieldIdentityHolderID, field.TypeString)
-	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(directorygrouphistory.FieldEmail, field.TypeString, value)
 	}
@@ -956,26 +930,6 @@ func (_u *DirectoryGroupHistoryUpdateOne) SetNillableDirectoryInstanceID(v *stri
 // ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
 func (_u *DirectoryGroupHistoryUpdateOne) ClearDirectoryInstanceID() *DirectoryGroupHistoryUpdateOne {
 	_u.mutation.ClearDirectoryInstanceID()
-	return _u
-}
-
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *DirectoryGroupHistoryUpdateOne) SetIdentityHolderID(v string) *DirectoryGroupHistoryUpdateOne {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *DirectoryGroupHistoryUpdateOne) SetNillableIdentityHolderID(v *string) *DirectoryGroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *DirectoryGroupHistoryUpdateOne) ClearIdentityHolderID() *DirectoryGroupHistoryUpdateOne {
-	_u.mutation.ClearIdentityHolderID()
 	return _u
 }
 
@@ -1452,12 +1406,6 @@ func (_u *DirectoryGroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *D
 	}
 	if _u.mutation.DirectoryInstanceIDCleared() {
 		_spec.ClearField(directorygrouphistory.FieldDirectoryInstanceID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(directorygrouphistory.FieldIdentityHolderID, field.TypeString, value)
-	}
-	if _u.mutation.IdentityHolderIDCleared() {
-		_spec.ClearField(directorygrouphistory.FieldIdentityHolderID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Email(); ok {
 		_spec.SetField(directorygrouphistory.FieldEmail, field.TypeString, value)

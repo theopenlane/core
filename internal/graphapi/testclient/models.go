@@ -6438,7 +6438,6 @@ type CreateDirectoryGroupInput struct {
 	IntegrationID        string   `json:"integrationID"`
 	DirectorySyncRunID   string   `json:"directorySyncRunID"`
 	PlatformID           *string  `json:"platformID,omitempty"`
-	IdentityHolderID     *string  `json:"identityHolderID,omitempty"`
 	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
@@ -11196,8 +11195,6 @@ type DirectoryGroup struct {
 	PlatformID *string `json:"platformID,omitempty"`
 	// stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
 	DirectoryInstanceID *string `json:"directoryInstanceID,omitempty"`
-	// deduplicated identity holder linked to this directory group
-	IdentityHolderID *string `json:"identityHolderID,omitempty"`
 	// sync run that produced this snapshot
 	DirectorySyncRunID string `json:"directorySyncRunID"`
 	// stable identifier from the directory system
@@ -11244,9 +11241,7 @@ type DirectoryGroup struct {
 	// sync run that produced this snapshot
 	DirectorySyncRun *DirectorySyncRun `json:"directorySyncRun"`
 	// platform associated with this directory group
-	Platform *Platform `json:"platform,omitempty"`
-	// identity holder linked to this directory group
-	IdentityHolder     *IdentityHolder                `json:"identityHolder,omitempty"`
+	Platform           *Platform                      `json:"platform,omitempty"`
 	Accounts           *DirectoryAccountConnection    `json:"accounts"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection   `json:"workflowObjectRefs"`
 	Members            *DirectoryMembershipConnection `json:"members"`
@@ -11515,22 +11510,6 @@ type DirectoryGroupWhereInput struct {
 	DirectoryInstanceIDNotNil       *bool    `json:"directoryInstanceIDNotNil,omitempty"`
 	DirectoryInstanceIDEqualFold    *string  `json:"directoryInstanceIDEqualFold,omitempty"`
 	DirectoryInstanceIDContainsFold *string  `json:"directoryInstanceIDContainsFold,omitempty"`
-	// identity_holder_id field predicates
-	IdentityHolderID             *string  `json:"identityHolderID,omitempty"`
-	IdentityHolderIdneq          *string  `json:"identityHolderIDNEQ,omitempty"`
-	IdentityHolderIDIn           []string `json:"identityHolderIDIn,omitempty"`
-	IdentityHolderIDNotIn        []string `json:"identityHolderIDNotIn,omitempty"`
-	IdentityHolderIdgt           *string  `json:"identityHolderIDGT,omitempty"`
-	IdentityHolderIdgte          *string  `json:"identityHolderIDGTE,omitempty"`
-	IdentityHolderIdlt           *string  `json:"identityHolderIDLT,omitempty"`
-	IdentityHolderIdlte          *string  `json:"identityHolderIDLTE,omitempty"`
-	IdentityHolderIDContains     *string  `json:"identityHolderIDContains,omitempty"`
-	IdentityHolderIDHasPrefix    *string  `json:"identityHolderIDHasPrefix,omitempty"`
-	IdentityHolderIDHasSuffix    *string  `json:"identityHolderIDHasSuffix,omitempty"`
-	IdentityHolderIDIsNil        *bool    `json:"identityHolderIDIsNil,omitempty"`
-	IdentityHolderIDNotNil       *bool    `json:"identityHolderIDNotNil,omitempty"`
-	IdentityHolderIDEqualFold    *string  `json:"identityHolderIDEqualFold,omitempty"`
-	IdentityHolderIDContainsFold *string  `json:"identityHolderIDContainsFold,omitempty"`
 	// directory_sync_run_id field predicates
 	DirectorySyncRunID             *string  `json:"directorySyncRunID,omitempty"`
 	DirectorySyncRunIdneq          *string  `json:"directorySyncRunIDNEQ,omitempty"`
@@ -11718,9 +11697,6 @@ type DirectoryGroupWhereInput struct {
 	// platform edge predicates
 	HasPlatform     *bool                 `json:"hasPlatform,omitempty"`
 	HasPlatformWith []*PlatformWhereInput `json:"hasPlatformWith,omitempty"`
-	// identity_holder edge predicates
-	HasIdentityHolder     *bool                       `json:"hasIdentityHolder,omitempty"`
-	HasIdentityHolderWith []*IdentityHolderWhereInput `json:"hasIdentityHolderWith,omitempty"`
 	// accounts edge predicates
 	HasAccounts     *bool                         `json:"hasAccounts,omitempty"`
 	HasAccountsWith []*DirectoryAccountWhereInput `json:"hasAccountsWith,omitempty"`
@@ -40143,8 +40119,6 @@ type UpdateDirectoryGroupInput struct {
 	ClearEnvironment           *bool    `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string  `json:"scopeID,omitempty"`
 	ClearScope                 *bool    `json:"clearScope,omitempty"`
-	IdentityHolderID           *string  `json:"identityHolderID,omitempty"`
-	ClearIdentityHolder        *bool    `json:"clearIdentityHolder,omitempty"`
 	AddWorkflowObjectRefIDs    []string `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs []string `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs    *bool    `json:"clearWorkflowObjectRefs,omitempty"`

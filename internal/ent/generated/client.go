@@ -6938,25 +6938,6 @@ func (c *DirectoryGroupClient) QueryPlatform(_m *DirectoryGroup) *PlatformQuery 
 	return query
 }
 
-// QueryIdentityHolder queries the identity_holder edge of a DirectoryGroup.
-func (c *DirectoryGroupClient) QueryIdentityHolder(_m *DirectoryGroup) *IdentityHolderQuery {
-	query := (&IdentityHolderClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
-			sqlgraph.To(identityholder.Table, identityholder.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.IdentityHolderTable, directorygroup.IdentityHolderColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.DirectoryGroup
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryAccounts queries the accounts edge of a DirectoryGroup.
 func (c *DirectoryGroupClient) QueryAccounts(_m *DirectoryGroup) *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: c.config}).Query()

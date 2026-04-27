@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
@@ -198,20 +197,6 @@ func (_c *DirectoryGroupCreate) SetDirectoryInstanceID(v string) *DirectoryGroup
 func (_c *DirectoryGroupCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryGroupCreate {
 	if v != nil {
 		_c.SetDirectoryInstanceID(*v)
-	}
-	return _c
-}
-
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_c *DirectoryGroupCreate) SetIdentityHolderID(v string) *DirectoryGroupCreate {
-	_c.mutation.SetIdentityHolderID(v)
-	return _c
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_c *DirectoryGroupCreate) SetNillableIdentityHolderID(v *string) *DirectoryGroupCreate {
-	if v != nil {
-		_c.SetIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -492,11 +477,6 @@ func (_c *DirectoryGroupCreate) SetDirectorySyncRun(v *DirectorySyncRun) *Direct
 // SetPlatform sets the "platform" edge to the Platform entity.
 func (_c *DirectoryGroupCreate) SetPlatform(v *Platform) *DirectoryGroupCreate {
 	return _c.SetPlatformID(v.ID)
-}
-
-// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
-func (_c *DirectoryGroupCreate) SetIdentityHolder(v *IdentityHolder) *DirectoryGroupCreate {
-	return _c.SetIdentityHolderID(v.ID)
 }
 
 // AddAccountIDs adds the "accounts" edge to the DirectoryAccount entity by IDs.
@@ -959,24 +939,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.PlatformID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.IdentityHolderIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directorygroup.IdentityHolderTable,
-			Columns: []string{directorygroup.IdentityHolderColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.IdentityHolderID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AccountsIDs(); len(nodes) > 0 {

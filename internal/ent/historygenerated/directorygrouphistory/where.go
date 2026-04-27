@@ -143,11 +143,6 @@ func DirectoryInstanceID(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectoryInstanceID, v))
 }
 
-// IdentityHolderID applies equality check predicate on the "identity_holder_id" field. It's identical to IdentityHolderIDEQ.
-func IdentityHolderID(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldIdentityHolderID, v))
-}
-
 // DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
 func DirectorySyncRunID(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldDirectorySyncRunID, v))
@@ -1271,81 +1266,6 @@ func DirectoryInstanceIDEqualFold(v string) predicate.DirectoryGroupHistory {
 // DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
 func DirectoryInstanceIDContainsFold(v string) predicate.DirectoryGroupHistory {
 	return predicate.DirectoryGroupHistory(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
-}
-
-// IdentityHolderIDEQ applies the EQ predicate on the "identity_holder_id" field.
-func IdentityHolderIDEQ(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldEQ(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDNEQ applies the NEQ predicate on the "identity_holder_id" field.
-func IdentityHolderIDNEQ(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldNEQ(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDIn applies the In predicate on the "identity_holder_id" field.
-func IdentityHolderIDIn(vs ...string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldIn(FieldIdentityHolderID, vs...))
-}
-
-// IdentityHolderIDNotIn applies the NotIn predicate on the "identity_holder_id" field.
-func IdentityHolderIDNotIn(vs ...string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldNotIn(FieldIdentityHolderID, vs...))
-}
-
-// IdentityHolderIDGT applies the GT predicate on the "identity_holder_id" field.
-func IdentityHolderIDGT(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldGT(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDGTE applies the GTE predicate on the "identity_holder_id" field.
-func IdentityHolderIDGTE(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldGTE(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDLT applies the LT predicate on the "identity_holder_id" field.
-func IdentityHolderIDLT(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldLT(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDLTE applies the LTE predicate on the "identity_holder_id" field.
-func IdentityHolderIDLTE(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldLTE(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDContains applies the Contains predicate on the "identity_holder_id" field.
-func IdentityHolderIDContains(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldContains(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDHasPrefix applies the HasPrefix predicate on the "identity_holder_id" field.
-func IdentityHolderIDHasPrefix(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldHasPrefix(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDHasSuffix applies the HasSuffix predicate on the "identity_holder_id" field.
-func IdentityHolderIDHasSuffix(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldHasSuffix(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDIsNil applies the IsNil predicate on the "identity_holder_id" field.
-func IdentityHolderIDIsNil() predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldIsNull(FieldIdentityHolderID))
-}
-
-// IdentityHolderIDNotNil applies the NotNil predicate on the "identity_holder_id" field.
-func IdentityHolderIDNotNil() predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldNotNull(FieldIdentityHolderID))
-}
-
-// IdentityHolderIDEqualFold applies the EqualFold predicate on the "identity_holder_id" field.
-func IdentityHolderIDEqualFold(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldEqualFold(FieldIdentityHolderID, v))
-}
-
-// IdentityHolderIDContainsFold applies the ContainsFold predicate on the "identity_holder_id" field.
-func IdentityHolderIDContainsFold(v string) predicate.DirectoryGroupHistory {
-	return predicate.DirectoryGroupHistory(sql.FieldContainsFold(FieldIdentityHolderID, v))
 }
 
 // DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.

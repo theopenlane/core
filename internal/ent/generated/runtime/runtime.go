@@ -1736,27 +1736,27 @@ func init() {
 	// directorygroup.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorygroup.PlatformIDValidator = directorygroupDescPlatformID.Validators[0].(func(string) error)
 	// directorygroupDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorygroupDescDirectorySyncRunID := directorygroupFields[4].Descriptor()
+	directorygroupDescDirectorySyncRunID := directorygroupFields[3].Descriptor()
 	// directorygroup.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
 	directorygroup.DirectorySyncRunIDValidator = directorygroupDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorygroupDescExternalID is the schema descriptor for external_id field.
-	directorygroupDescExternalID := directorygroupFields[5].Descriptor()
+	directorygroupDescExternalID := directorygroupFields[4].Descriptor()
 	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
 	// directorygroupDescEmail is the schema descriptor for email field.
-	directorygroupDescEmail := directorygroupFields[6].Descriptor()
+	directorygroupDescEmail := directorygroupFields[5].Descriptor()
 	// directorygroup.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	directorygroup.EmailValidator = directorygroupDescEmail.Validators[0].(func(string) error)
 	// directorygroupDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygroupDescExternalSharingAllowed := directorygroupFields[11].Descriptor()
+	directorygroupDescExternalSharingAllowed := directorygroupFields[10].Descriptor()
 	// directorygroup.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygroup.DefaultExternalSharingAllowed = directorygroupDescExternalSharingAllowed.Default.(bool)
 	// directorygroupDescObservedAt is the schema descriptor for observed_at field.
-	directorygroupDescObservedAt := directorygroupFields[17].Descriptor()
+	directorygroupDescObservedAt := directorygroupFields[16].Descriptor()
 	// directorygroup.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygroup.DefaultObservedAt = directorygroupDescObservedAt.Default.(func() time.Time)
 	// directorygroupDescProfileHash is the schema descriptor for profile_hash field.
-	directorygroupDescProfileHash := directorygroupFields[18].Descriptor()
+	directorygroupDescProfileHash := directorygroupFields[17].Descriptor()
 	// directorygroup.DefaultProfileHash holds the default value on creation for the profile_hash field.
 	directorygroup.DefaultProfileHash = directorygroupDescProfileHash.Default.(string)
 	// directorygroupDescID is the schema descriptor for id field.

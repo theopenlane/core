@@ -82,8 +82,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryGroup_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -134,8 +132,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryGroup_identityHolder(ctx, field)
 			case "accounts":
 				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
 			case "workflowObjectRefs":
@@ -203,8 +199,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryGroup_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -255,8 +249,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryGroup_identityHolder(ctx, field)
 			case "accounts":
 				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
 			case "workflowObjectRefs":
@@ -353,8 +345,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
 			case "directoryInstanceID":
 				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryGroup_identityHolderID(ctx, field)
 			case "directorySyncRunID":
 				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 			case "externalID":
@@ -405,8 +395,6 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
 			case "platform":
 				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryGroup_identityHolder(ctx, field)
 			case "accounts":
 				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
 			case "workflowObjectRefs":

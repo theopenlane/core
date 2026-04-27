@@ -2279,6 +2279,7 @@ func (_q *IntegrationQuery) loadDirectoryGroups(ctx context.Context, query *Dire
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorygroup.FieldIntegrationID)
 	}

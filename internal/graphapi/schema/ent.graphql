@@ -11115,7 +11115,6 @@ input CreateDirectoryGroupInput {
   integrationID: ID!
   directorySyncRunID: ID!
   platformID: ID
-  identityHolderID: ID
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -18451,10 +18450,6 @@ type DirectoryGroup implements Node {
   """
   directoryInstanceID: String
   """
-  deduplicated identity holder linked to this directory group
-  """
-  identityHolderID: ID
-  """
   sync run that produced this snapshot
   """
   directorySyncRunID: ID!
@@ -18545,10 +18540,6 @@ type DirectoryGroup implements Node {
   platform associated with this directory group
   """
   platform: Platform
-  """
-  identity holder linked to this directory group
-  """
-  identityHolder: IdentityHolder
   accounts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -18956,24 +18947,6 @@ input DirectoryGroupWhereInput {
   directoryInstanceIDEqualFold: String
   directoryInstanceIDContainsFold: String
   """
-  identity_holder_id field predicates
-  """
-  identityHolderID: ID
-  identityHolderIDNEQ: ID
-  identityHolderIDIn: [ID!]
-  identityHolderIDNotIn: [ID!]
-  identityHolderIDGT: ID
-  identityHolderIDGTE: ID
-  identityHolderIDLT: ID
-  identityHolderIDLTE: ID
-  identityHolderIDContains: ID
-  identityHolderIDHasPrefix: ID
-  identityHolderIDHasSuffix: ID
-  identityHolderIDIsNil: Boolean
-  identityHolderIDNotNil: Boolean
-  identityHolderIDEqualFold: ID
-  identityHolderIDContainsFold: ID
-  """
   directory_sync_run_id field predicates
   """
   directorySyncRunID: ID
@@ -19202,11 +19175,6 @@ input DirectoryGroupWhereInput {
   """
   hasPlatform: Boolean
   hasPlatformWith: [PlatformWhereInput!]
-  """
-  identity_holder edge predicates
-  """
-  hasIdentityHolder: Boolean
-  hasIdentityHolderWith: [IdentityHolderWhereInput!]
   """
   accounts edge predicates
   """
@@ -73221,8 +73189,6 @@ input UpdateDirectoryGroupInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
-  identityHolderID: ID
-  clearIdentityHolder: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean

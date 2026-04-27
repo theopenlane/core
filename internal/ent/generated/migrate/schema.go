@@ -1548,7 +1548,7 @@ var (
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_sync_run_id", Type: field.TypeString},
-		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_holder_directory_groups", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_id", Type: field.TypeString, Nullable: true},
@@ -1622,11 +1622,6 @@ var (
 				Name:    "directorygroup_directory_instance_id_email",
 				Unique:  false,
 				Columns: []*schema.Column{DirectoryGroupsColumns[9], DirectoryGroupsColumns[11]},
-			},
-			{
-				Name:    "directorygroup_identity_holder_id",
-				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[31]},
 			},
 			{
 				Name:    "directorygroup_platform_id_external_id",

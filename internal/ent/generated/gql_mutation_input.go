@@ -5608,7 +5608,6 @@ type CreateDirectoryGroupInput struct {
 	IntegrationID          string
 	DirectorySyncRunID     string
 	PlatformID             *string
-	IdentityHolderID       *string
 	WorkflowObjectRefIDs   []string
 }
 
@@ -5689,9 +5688,6 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
-	if v := i.IdentityHolderID; v != nil {
-		m.SetIdentityHolderID(*v)
-	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -5747,8 +5743,6 @@ type UpdateDirectoryGroupInput struct {
 	EnvironmentID               *string
 	ClearScope                  bool
 	ScopeID                     *string
-	ClearIdentityHolder         bool
-	IdentityHolderID            *string
 	ClearWorkflowObjectRefs     bool
 	AddWorkflowObjectRefIDs     []string
 	RemoveWorkflowObjectRefIDs  []string
@@ -5881,12 +5875,6 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeID; v != nil {
 		m.SetScopeID(*v)
-	}
-	if i.ClearIdentityHolder {
-		m.ClearIdentityHolder()
-	}
-	if v := i.IdentityHolderID; v != nil {
-		m.SetIdentityHolderID(*v)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()

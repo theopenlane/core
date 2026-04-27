@@ -2899,14 +2899,6 @@ func (_m *DirectoryGroup) Platform(ctx context.Context) (*Platform, error) {
 	return result, MaskNotFound(err)
 }
 
-func (_m *DirectoryGroup) IdentityHolder(ctx context.Context) (*IdentityHolder, error) {
-	result, err := _m.Edges.IdentityHolderOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryIdentityHolder().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *DirectoryGroup) Accounts(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryAccountOrder, where *DirectoryAccountWhereInput,
 ) (*DirectoryAccountConnection, error) {
@@ -2915,7 +2907,7 @@ func (_m *DirectoryGroup) Accounts(
 		WithDirectoryAccountFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
 	if nodes, err := _m.NamedAccounts(alias); err == nil || hasTotalCount {
 		pager, err := newDirectoryAccountPager(opts, last != nil)
 		if err != nil {
@@ -2936,7 +2928,7 @@ func (_m *DirectoryGroup) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -2957,7 +2949,7 @@ func (_m *DirectoryGroup) Members(
 		WithDirectoryMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newDirectoryMembershipPager(opts, last != nil)
 		if err != nil {

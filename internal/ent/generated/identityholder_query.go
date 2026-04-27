@@ -2395,9 +2395,7 @@ func (_q *IdentityHolderQuery) loadDirectoryGroups(ctx context.Context, query *D
 			init(nodes[i])
 		}
 	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(directorygroup.FieldIdentityHolderID)
-	}
+	query.withFKs = true
 	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(identityholder.DirectoryGroupsColumn), fks...))
 	}))
@@ -2406,13 +2404,13 @@ func (_q *IdentityHolderQuery) loadDirectoryGroups(ctx context.Context, query *D
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.IdentityHolderID
+		fk := n.identity_holder_directory_groups
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "identity_holder_id" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "identity_holder_directory_groups" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_directory_groups" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
