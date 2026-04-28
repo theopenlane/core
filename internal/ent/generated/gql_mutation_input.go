@@ -12280,6 +12280,7 @@ type CreateIdentityHolderInput struct {
 	AssetIDs               []string
 	EntityIDs              []string
 	DirectoryAccountIDs    []string
+	DirectoryGroupIDs      []string
 	ControlIDs             []string
 	SubcontrolIDs          []string
 	PlatformIDs            []string
@@ -12408,6 +12409,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
 	}
+	if v := i.DirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -12533,6 +12537,9 @@ type UpdateIdentityHolderInput struct {
 	ClearDirectoryAccounts      bool
 	AddDirectoryAccountIDs      []string
 	RemoveDirectoryAccountIDs   []string
+	ClearDirectoryGroups        bool
+	AddDirectoryGroupIDs        []string
+	RemoveDirectoryGroupIDs     []string
 	ClearControls               bool
 	AddControlIDs               []string
 	RemoveControlIDs            []string
@@ -12814,6 +12821,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
 		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearDirectoryGroups {
+		m.ClearDirectoryGroups()
+	}
+	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
+		m.RemoveDirectoryGroupIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()

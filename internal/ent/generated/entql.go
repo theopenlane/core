@@ -8999,6 +8999,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"DirectoryAccount",
 	)
 	graph.MustAddE(
+		"directory_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.DirectoryGroupsTable,
+			Columns: []string{identityholder.DirectoryGroupsColumn},
+			Bidi:    false,
+		},
+		"IdentityHolder",
+		"DirectoryGroup",
+	)
+	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -29548,6 +29560,20 @@ func (f *IdentityHolderFilter) WhereHasDirectoryAccounts() {
 // WhereHasDirectoryAccountsWith applies a predicate to check if query has an edge directory_accounts with a given conditions (other predicates).
 func (f *IdentityHolderFilter) WhereHasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) {
 	f.Where(entql.HasEdgeWith("directory_accounts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDirectoryGroups applies a predicate to check if query has an edge directory_groups.
+func (f *IdentityHolderFilter) WhereHasDirectoryGroups() {
+	f.Where(entql.HasEdge("directory_groups"))
+}
+
+// WhereHasDirectoryGroupsWith applies a predicate to check if query has an edge directory_groups with a given conditions (other predicates).
+func (f *IdentityHolderFilter) WhereHasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) {
+	f.Where(entql.HasEdgeWith("directory_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

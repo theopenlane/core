@@ -255,7 +255,20 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Template{}),
 		defaultEdgeToWithPagination(p, Asset{}),
 		defaultEdgeToWithPagination(p, Entity{}),
-		defaultEdgeToWithPagination(p, DirectoryAccount{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: DirectoryAccount{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(DirectoryAccount{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: DirectoryGroup{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(DirectoryGroup{}.Name()),
+			},
+		}),
 		defaultEdgeFromWithPagination(p, Control{}),
 		defaultEdgeFromWithPagination(p, Subcontrol{}),
 		defaultEdgeFromWithPagination(p, Platform{}),

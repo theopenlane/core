@@ -1,4 +1,4 @@
-h1:77tJi+/yyYPSk3oV8CW/QkVbTTgRmF5QDakJNM1zb2Y=
+h1:leRON1zdbxsw7wVJnB66xCB9zf30N0vEnADYN67lEVI=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -119,3 +119,5 @@ h1:77tJi+/yyYPSk3oV8CW/QkVbTTgRmF5QDakJNM1zb2Y=
 20260417200323_file_category_and_name_history.sql h1:KW0FYnvmQQ5DQiAsgtB/xQSokP3N6UHi1yC6Oi4LOXU=
 20260420125531_organization_setting_pending_deletion_at.sql h1:3JbK+6fXYvRJ3RPtN3s1GkdZASupXGQCLAxA600bzW8=
 20260420125541_organization_setting_pending_deletion_at_history.sql h1:f2IWz2YuqDja9t1SM/sGZLo2EJFHHh5Cm2M1G4yCrdg=
+20260427231655_identity_group_directory_edges.sql h1:3VFSDNAo3NNC+lHFXOiiM0ESrZPhEw2MWQY3Wk46Yg0=
+20260427231705_identity_group_directory_edges_history.sql h1:Eom7RxGBb6xNPRoKRrGZGdXFTyCRk4exIHm593CaXkg=

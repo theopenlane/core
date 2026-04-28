@@ -124,6 +124,8 @@ const (
 	EdgeEntities = "entities"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
@@ -245,6 +247,13 @@ const (
 	DirectoryAccountsInverseTable = "directory_accounts"
 	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
 	DirectoryAccountsColumn = "identity_holder_id"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "identity_holder_directory_groups"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_identity_holders"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -820,6 +829,20 @@ func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1069,6 +1092,13 @@ func newDirectoryAccountsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

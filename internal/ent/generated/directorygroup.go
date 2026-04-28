@@ -92,8 +92,9 @@ type DirectoryGroup struct {
 	SourceVersion *string `json:"source_version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DirectoryGroupQuery when eager-loading is set.
-	Edges        DirectoryGroupEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                            DirectoryGroupEdges `json:"edges"`
+	identity_holder_directory_groups *string
+	selectValues                     sql.SelectValues
 }
 
 // DirectoryGroupEdges holds the relations/edges for other nodes in the graph.
@@ -235,6 +236,8 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldFirstSeenAt, directorygroup.FieldLastSeenAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
+		case directorygroup.ForeignKeys[0]: // identity_holder_directory_groups
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -468,6 +471,13 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
+			}
+		case directorygroup.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_directory_groups", values[i])
+			} else if value.Valid {
+				_m.identity_holder_directory_groups = new(string)
+				*_m.identity_holder_directory_groups = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

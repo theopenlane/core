@@ -13516,6 +13516,7 @@ input CreateIdentityHolderInput {
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	directoryAccountIDs: [ID!]
+	directoryGroupIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	platformIDs: [ID!]
@@ -35804,6 +35805,37 @@ type IdentityHolder implements Node {
 		"""
 		where: DirectoryAccountWhereInput
 	): DirectoryAccountConnection!
+	directoryGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for DirectoryGroups returned from the connection.
+		"""
+		orderBy: [DirectoryGroupOrder!]
+
+		"""
+		Filtering options for DirectoryGroups returned from the connection.
+		"""
+		where: DirectoryGroupWhereInput
+	): DirectoryGroupConnection!
 	controls(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -36893,6 +36925,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasDirectoryAccounts: Boolean
 	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+	"""
+	directory_groups edge predicates
+	"""
+	hasDirectoryGroups: Boolean
+	hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
 	"""
 	controls edge predicates
 	"""
@@ -89368,6 +89405,9 @@ input UpdateIdentityHolderInput {
 	addDirectoryAccountIDs: [ID!]
 	removeDirectoryAccountIDs: [ID!]
 	clearDirectoryAccounts: Boolean
+	addDirectoryGroupIDs: [ID!]
+	removeDirectoryGroupIDs: [ID!]
+	clearDirectoryGroups: Boolean
 	addControlIDs: [ID!]
 	removeControlIDs: [ID!]
 	clearControls: Boolean
