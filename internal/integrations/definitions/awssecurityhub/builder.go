@@ -42,9 +42,15 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       awsAssumeRoleCredential.ID(),
-					Name:                "AWS Assume Role",
-					Description:         "Configure Security Hub access using a cross-account IAM role.",
+					CredentialRef: awsAssumeRoleCredential.ID(),
+					Name:          "AWS Assume Role",
+					Description:   "Configure Security Hub access using a cross-account IAM role.",
+					Meta: map[string]types.MetaInfo{
+						"Openlane Principal ARN": types.MetaInfo{
+							Value:     cfg.ARN,
+							AllowCopy: true,
+						},
+					},
 					CredentialRefs:      []types.CredentialSlotID{awsAssumeRoleCredential.ID()},
 					ClientRefs:          []types.ClientID{securityHubClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),

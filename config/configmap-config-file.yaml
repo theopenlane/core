@@ -1124,6 +1124,12 @@ data:
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
+      awssecurityhub:
+        {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}
+        arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

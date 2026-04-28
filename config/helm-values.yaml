@@ -553,6 +553,7 @@ coreConfiguration:
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
     awssecurityhub:
+      arn: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

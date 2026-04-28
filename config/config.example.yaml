@@ -170,6 +170,7 @@ entconfig:
 integrations:
     awssecurityhub:
         accessKeyId: ""
+        arn: ""
         secretAccessKey: ""
     azureentraid:
         clientid: ""

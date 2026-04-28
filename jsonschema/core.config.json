@@ -43,6 +43,9 @@
         },
         "secretaccesskey": {
           "type": "string"
+        },
+        "arn": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

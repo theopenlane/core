@@ -1696,6 +1696,7 @@ Slack contains settings for Slack notifications
 |----|----|-----------|--------|
 |**accesskeyid**|`string`|||
 |**secretaccesskey**|`string`|||
+|**arn**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>
