@@ -3,13 +3,13 @@ package graphapi
 import (
 	"context"
 	"strings"
-	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -98,22 +98,18 @@ func (r *mutationResolver) processTestEmail(ctx context.Context, state *testEmai
 	}
 	state.seenEmails[key] = struct{}{}
 
-	create := state.client.AssessmentResponse.Create().
-		SetAssessmentID(state.campaignObj.AssessmentID).
-		SetCampaignID(state.campaignObj.ID).
-		SetEmail(trimmed).
-		SetIsTest(true)
-
-	if state.campaignObj.EntityID != "" {
-		create.SetEntityID(state.campaignObj.EntityID)
+	rt := intruntime.FromClient(ctx, state.client)
+	if rt == nil {
+		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	if state.campaignObj.DueDate != nil && !state.campaignObj.DueDate.IsZero() {
-		create.SetDueDate(time.Time(*state.campaignObj.DueDate))
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, state.campaignObj, false, false, trimmed, nil)
+	if err != nil {
+		return err
 	}
 
-	if err := create.Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessmentresponse"})
+	if _, err := rt.Dispatch(ctx, req); err != nil {
+		return err
 	}
 
 	state.queued++

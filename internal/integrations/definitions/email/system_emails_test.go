@@ -192,6 +192,29 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 	assert.True(t, found, "expected uppercased role in intro")
 }
 
+func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
+	body := inviteEmail.Build(RuntimeEmailConfig{
+		CompanyName: "TestCo <script>",
+		ProductURL:  "https://app.testco.com",
+	}, InviteRequest{
+		InviterName: `Alice <img src=x onerror=alert(1)>`,
+		OrgName:     "Eng & <Ops>",
+		Role:        "admin<script>",
+		Token:       "tok",
+	})
+
+	require.NotEmpty(t, body.Intros.Unsafe)
+	intro := string(body.Intros.Unsafe[0])
+
+	assert.NotContains(t, intro, "<script>")
+	assert.NotContains(t, intro, "<img")
+	assert.Contains(t, intro, "TestCo &lt;script&gt;")
+	assert.Contains(t, intro, "Alice &lt;img src=x onerror=alert(1)&gt;")
+	assert.Contains(t, intro, "<strong>Eng &amp; &lt;Ops&gt;</strong>")
+	assert.Contains(t, intro, "ADMIN&lt;SCRIPT&gt;")
+	assert.NotContains(t, intro, "&amp;amp;")
+}
+
 // TestInviteEmailNoRole verifies the intro omits role text when empty
 func TestInviteEmailNoRole(t *testing.T) {
 	cfg := RuntimeEmailConfig{
@@ -368,10 +391,9 @@ func TestBillingChangedContent(t *testing.T) {
 	assert.Equal(t, "Billing Email Changed", body.Title)
 	assert.Contains(t, body.Intros.Paragraphs[0], "BillOrg")
 
-	require.NotEmpty(t, body.ContentBlocks)
-	block := string(body.ContentBlocks[0])
-	assert.Contains(t, block, "old@billing.com")
-	assert.Contains(t, block, "new@billing.com")
+	require.NotEmpty(t, body.Dictionary.Cells)
+	assert.Equal(t, "old@billing.com", body.Dictionary.Cells[0].Value)
+	assert.Equal(t, "new@billing.com", body.Dictionary.Cells[1].Value)
 }
 
 // TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration

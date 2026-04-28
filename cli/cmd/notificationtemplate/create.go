@@ -59,7 +59,8 @@ func createValidation() (input graphclient.CreateNotificationTemplateInput, err 
 		return input, cmd.NewRequiredFieldMissingError("channel")
 	}
 
-	input.Channel = enums.Channel(channel)
+	ch := enums.Channel(channel)
+	input.Channel = &ch
 
 	topicPattern := cmd.Config.String("topic-pattern")
 	if topicPattern == "" {

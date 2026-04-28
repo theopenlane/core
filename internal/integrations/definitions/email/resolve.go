@@ -3,36 +3,45 @@ package email
 import (
 	"context"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
-// ResolveEmailIntegration queries for email integrations belonging to the given
-// owner and returns the best match: the one flagged with campaign_email=true, or
-// the sole match when only one exists. Returns empty string when no integration
-// is found, allowing dispatch to fall back to the runtime provider
-func ResolveEmailIntegration(ctx context.Context, client *generated.Client, ownerID string) string {
+// ResolveCampaignEmailIntegration returns a connected email integration for
+// campaign dispatch, preferring an explicitly linked campaign integration, then
+// the owner-level campaign_email provider, then the sole connected email install.
+func ResolveCampaignEmailIntegration(ctx context.Context, client *generated.Client, ownerID string, preferredIntegrationID string) string {
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	integrations, err := client.Integration.Query().
+	query := client.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(ownerID),
 			integration.DefinitionIDEQ(DefinitionID.ID()),
-		).
-		All(systemCtx)
-	if err != nil || len(integrations) == 0 {
-		return ""
+			integration.StatusEQ(enums.IntegrationStatusConnected),
+		)
+
+	if preferredIntegrationID != "" {
+		preferred, err := query.Clone().Where(integration.IDEQ(preferredIntegrationID)).Only(systemCtx)
+		if err == nil {
+			return preferred.ID
+		}
 	}
 
-	if len(integrations) == 1 {
-		return integrations[0].ID
+	integrations, err := query.All(systemCtx)
+	if err != nil || len(integrations) == 0 {
+		return ""
 	}
 
 	for _, inst := range integrations {
 		if inst.CampaignEmail {
 			return inst.ID
 		}
+	}
+
+	if len(integrations) == 1 {
+		return integrations[0].ID
 	}
 
 	return ""

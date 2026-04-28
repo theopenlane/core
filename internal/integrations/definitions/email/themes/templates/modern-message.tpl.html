@@ -1,26 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" lang="en">
   <head>
-    <link
-      rel="preload"
-      as="image"
-      href="https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/logo-black.png" />
-    <link
-      rel="preload"
-      as="image"
-      href="https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-x-black.png" />
-    <link
-      rel="preload"
-      as="image"
-      href="https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-in-black.png" />
-    <link
-      rel="preload"
-      as="image"
-      href="https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-yt-black.png" />
-    <link
-      rel="preload"
-      as="image"
-      href="https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-gh-black.png" />
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <meta name="x-apple-disable-message-reformatting" />
     <style>
@@ -120,7 +100,7 @@
                               cellspacing="0"
                               role="presentation"
                               class="mobile_px-2"
-                              style="background-color:rgb(255,255,255);padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem">
+                              style="background-color:rgb(255,255,255);padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem{{ if eq .Config.CardStyle "elevated" }};border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.05){{ end }}">
                               <tbody>
                                 <tr>
                                   <td>
@@ -179,6 +159,7 @@
                                                       </tbody>
                                                     </table>
                                                   </td>
+                                                  {{ if .Config.HeaderText }}
                                                   <td
                                                     align="right"
                                                     data-id="__react-email-column"
@@ -187,10 +168,11 @@
                                                       style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;margin:0rem;text-align:right;font-family:Inter,system-ui,Arial,sans-serif;margin-top:0rem;margin-bottom:0rem;margin-left:0rem;margin-right:0rem">
                                                       <span
                                                         style="color:rgb(123,125,129)"
-                                                        >{{ .Config.CompanyName }}</span
+                                                        >{{ .Config.HeaderText }}</span
                                                       >
                                                     </p>
                                                   </td>
+                                                  {{ end }}
                                                 </tr>
                                               </tbody>
                                             </table>
@@ -323,10 +305,10 @@
                                                       cellpadding="0"
                                                       cellspacing="0"
                                                       role="presentation"
-                                                      style="margin-bottom:2rem">
+                                                      style="margin-bottom:0.75rem">
                                                       <tbody>
                                                         <tr>
-                                                          <td>
+                                                          <td align="center">
                                                             {{ range $social := .Config.Social }}
                                                             <a
                                                               href="{{ $social.URL }}"
@@ -345,24 +327,26 @@
                                                     {{ end }}
                                                     {{ if .Config.CompanyAddress }}
                                                     <p
-                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:rgb(123,125,129);margin-top:1rem;margin-bottom:1.25rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:rgb(123,125,129);margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
                                                       {{ .Config.CompanyAddress }}
                                                     </p>
                                                     {{ end }}
-                                                    {{ if .Config.UnsubscribeURL }}
                                                     <p
-                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:rgb(123,125,129);margin:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif;margin-top:0rem;margin-bottom:0rem;margin-left:0rem;margin-right:0rem">
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:rgb(123,125,129);margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      {{ if .Config.TermsURL }}<a href="{{ .Config.TermsURL }}" style="color:rgb(123,125,129);text-decoration-line:none" target="_blank">Terms</a>{{ end }}
+                                                      {{ if and .Config.TermsURL .Config.PrivacyURL }}&nbsp;·&nbsp;{{ end }}
+                                                      {{ if .Config.PrivacyURL }}<a href="{{ .Config.PrivacyURL }}" style="color:rgb(123,125,129);text-decoration-line:none" target="_blank">Privacy</a>{{ end }}
+                                                      {{ if or .Config.TermsURL .Config.PrivacyURL }}&nbsp;·&nbsp;{{ end }}
                                                       <a
-                                                        href="{{ .Config.UnsubscribeURL }}"
+                                                        href="{{ if .Config.UnsubscribeURL }}{{ .Config.UnsubscribeURL }}{{ else }}{{ .Config.ProductURL }}/unsubscribe?email={{ .Request.Email }}{{ end }}"
                                                         style="color:rgb(123,125,129);text-decoration-line:none"
                                                         target="_blank"
-                                                        >Unsubscribe</a
-                                                      >{{ with .Config.CompanyName }}
-                                                      <!-- -->from
-                                                      <!-- -->{{ . }}<!-- -->{{ end }}
-                                                      marketing emails.
+                                                        >Unsubscribe</a>
                                                     </p>
-                                                    {{ end }}
+                                                    <p
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:rgb(123,125,129);margin-top:0.25rem;margin-bottom:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      {{ if .Config.Copyright }}{{ .Config.Copyright }}{{ else }}&copy; {{ now | date "2006" }} {{ .Config.Corporation }} All rights reserved.{{ end }}
+                                                    </p>
                                                   </td>
                                                 </tr>
                                               </tbody>

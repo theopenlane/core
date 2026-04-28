@@ -1,6 +1,7 @@
 package email
 
 import (
+	"html"
 	"html/template"
 	"net/url"
 	"strings"
@@ -17,10 +18,10 @@ import (
 
 // Theme instances shared across email operations
 var (
-	standardTheme      = themes.Standard
-	trustCenterTheme   = themes.TrustCenter
-	questionnaireTheme = themes.Questionnaire
-	modernMessageTheme = themes.ModernMessage
+	standardTheme       = themes.Standard
+	trustCenterTheme    = themes.TrustCenter
+	questionnaireTheme  = themes.Questionnaire
+	modernMessageTheme  = themes.ModernMessage
 	openlaneModernTheme = themes.OpenlaneModern
 )
 
@@ -195,7 +196,7 @@ var (
 // --- Email operation definitions ---
 
 var verifyEmail = EmailOperation[VerifyEmailRequest]{
-	Op: VerifyEmailOp, Schema: verifyEmailSchema, Theme: standardTheme,
+	Op: VerifyEmailOp, Schema: verifyEmailSchema, Theme: modernMessageTheme,
 	Description: "System email prompting a new user to verify their email address",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) string {
 		return "Please verify your email address to login to " + cfg.CompanyName
@@ -205,6 +206,7 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 
 		return render.ContentBody{
 			Preheader: "Verify Your Email Address",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Name:      req.FirstName,
 			Title:     "Verify Your Email Address",
 			Intros: render.IntrosBlock{
@@ -226,7 +228,7 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 }
 
 var welcomeEmail = EmailOperation[WelcomeRequest]{
-	Op: WelcomeOp, Schema: welcomeSchema, Theme: standardTheme,
+	Op: WelcomeOp, Schema: welcomeSchema, Theme: modernMessageTheme,
 	Description: "System welcome email delivered after account signup",
 	Subject: func(cfg RuntimeEmailConfig, _ WelcomeRequest) string {
 		return "Welcome to " + cfg.CompanyName + "!"
@@ -234,6 +236,7 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 	Build: func(cfg RuntimeEmailConfig, req WelcomeRequest) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "Welcome to " + cfg.CompanyName + "!",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Icon:      &render.ContentIcon{Src: iconRocketURL, Alt: "Rocket"},
 			Name:      req.FirstName,
 			Title:     "Welcome to " + cfg.CompanyName + "!",
@@ -258,24 +261,29 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 }
 
 var inviteEmail = EmailOperation[InviteRequest]{
-	Op: InviteOp, Schema: inviteSchema, Theme: standardTheme,
+	Op: InviteOp, Schema: inviteSchema, Theme: modernMessageTheme,
 	Description: "System email inviting a user to join an organization",
 	Subject: func(cfg RuntimeEmailConfig, req InviteRequest) string {
 		return "Join Your Teammate " + req.InviterName + " on " + cfg.CompanyName + "!"
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteRequest) render.ContentBody {
 		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token)
+		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") +
+			render.Bold(req.OrgName) + " organization"
+		if req.Role != "" {
+			inviteIntro += template.HTML(" with the role of " + html.EscapeString(strings.ToUpper(req.Role)))
+		}
+		inviteIntro += "."
 
 		return render.ContentBody{
 			Preheader: "You've been invited to join " + cfg.CompanyName,
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Icon:      &render.ContentIcon{Src: iconUserPlusURL, Alt: "User-Plus"},
 			Name:      req.FirstName,
 			Title:     "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
 				Unsafe: []template.HTML{
-					template.HTML("You're in - let's build trust without the busywork. "+req.InviterName+" has invited you to collaborate in "+cfg.CompanyName+", as part of the ") +
-						render.Bold(req.OrgName) + " organization" +
-						lo.Ternary(req.Role != "", " with the role of "+template.HTML(strings.ToUpper(req.Role)), "") + ".",
+					inviteIntro,
 					"To get started (and verify your email), click the link below:",
 				},
 			},
@@ -292,7 +300,7 @@ var inviteEmail = EmailOperation[InviteRequest]{
 }
 
 var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
-	Op: InviteJoinedOp, Schema: inviteJoinedSchema, Theme: standardTheme,
+	Op: InviteJoinedOp, Schema: inviteJoinedSchema, Theme: modernMessageTheme,
 	Description: "System notification confirming an invited user has joined an organization",
 	Subject: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) string {
 		return "You've been added to an Organization on " + cfg.CompanyName
@@ -300,6 +308,7 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 	Build: func(cfg RuntimeEmailConfig, req InviteJoinedRequest) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Icon:      &render.ContentIcon{Src: iconUserCheckURL, Alt: "User-Check"},
 			Name:      req.FirstName,
 			Title:     "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
@@ -331,7 +340,7 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 }
 
 var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
-	Op: ResetRequestOp, Schema: resetRequestSchema, Theme: standardTheme,
+	Op: ResetRequestOp, Schema: resetRequestSchema, Theme: modernMessageTheme,
 	Description: "System email delivering a password reset link to a user",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) string {
 		return cfg.CompanyName + " Password Reset - Action Required"
@@ -341,6 +350,7 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 
 		return render.ContentBody{
 			Preheader: "Reset your " + cfg.CompanyName + " password",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Name:      req.FirstName,
 			Title:     "Reset your " + cfg.CompanyName + " password",
 			Intros: render.IntrosBlock{
@@ -363,7 +373,7 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 }
 
 var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
-	Op: ResetSuccessOp, Schema: resetSuccessSchema, Theme: standardTheme,
+	Op: ResetSuccessOp, Schema: resetSuccessSchema, Theme: modernMessageTheme,
 	Description: "System email confirming a successful password reset",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetSuccessRequest) string {
 		return cfg.CompanyName + " Password Reset Confirmation"
@@ -371,6 +381,7 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 	Build: func(cfg RuntimeEmailConfig, req PasswordResetSuccessRequest) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "Your " + cfg.CompanyName + " password has been reset",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Name:      req.FirstName,
 			Title:     "Your " + cfg.CompanyName + " password has been reset",
 			Intros: render.IntrosBlock{
@@ -384,7 +395,7 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 }
 
 var subscribeEmail = EmailOperation[SubscribeRequest]{
-	Op: SubscribeOp, Schema: subscribeSchema, Theme: standardTheme,
+	Op: SubscribeOp, Schema: subscribeSchema, Theme: modernMessageTheme,
 	Description: "System email confirming a subscriber's early access signup",
 	Subject: func(cfg RuntimeEmailConfig, _ SubscribeRequest) string {
 		return "You've been subscribed to " + cfg.CompanyName
@@ -394,6 +405,7 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 
 		return render.ContentBody{
 			Preheader: "You're In - Early Access Secured! Thanks for your interest in our beta program.",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Icon:      &render.ContentIcon{Src: iconBellURL, Alt: "Notification Bell"},
 			Name:      req.FirstName,
 			Title:     "You're In - Early Access Secured!",
@@ -424,7 +436,7 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 }
 
 var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
-	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: standardTheme,
+	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: modernMessageTheme,
 	Description: "System email prompting verification of the billing email on file",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyBillingRequest) string {
 		return "Please verify the billing email for " + cfg.CompanyName + " to ensure your account stays up to date"
@@ -434,6 +446,7 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 
 		return render.ContentBody{
 			Preheader: "Verify Your Email Address",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Name:      req.FirstName,
 			Title:     "Verify Your Billing Email Address",
 			Intros: render.IntrosBlock{
@@ -455,15 +468,16 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 }
 
 var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
-	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: trustCenterTheme,
+	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: modernMessageTheme,
 	Description: "System email requesting an NDA signature before granting trust center access",
 	PreHook:     resolveTrustCenterNDARequestFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDARequestEmail) string {
 		return req.OrgName + " Trust Center NDA Request"
 	},
-	Build: func(_ RuntimeEmailConfig, req TrustCenterNDARequestEmail) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDARequestEmail) render.ContentBody {
 		return render.ContentBody{
-			Title: "You requested access to " + req.OrgName + "'s Trust Center",
+			Header: render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
+			Title:  "You requested access to " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"To continue, please review and sign the Non-Disclosure Agreement (NDA). Once signed, you'll be granted access to protected Trust Center documents.",
@@ -477,14 +491,15 @@ var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
 }
 
 var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
-	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: trustCenterTheme,
+	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: modernMessageTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
 		return req.OrgName + " Trust Center NDA Signed"
 	},
-	Build: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDASignedEmail) render.ContentBody {
 		return render.ContentBody{
-			Title: "Your NDA with " + req.OrgName + " has been signed",
+			Header: render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
+			Title:  "Your NDA with " + req.OrgName + " has been signed",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"Thank you for signing the Non-Disclosure Agreement (NDA). You now have access to " + req.OrgName + "'s protected Trust Center documents.",
@@ -507,15 +522,16 @@ var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
 }
 
 var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
-	Op: TCAuthOp, Schema: tcAuthSchema, Theme: trustCenterTheme,
+	Op: TCAuthOp, Schema: tcAuthSchema, Theme: modernMessageTheme,
 	Description: "System email delivering a time-limited authentication link to a trust center",
 	PreHook:     resolveTrustCenterAuthFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterAuthEmail) string {
 		return "Access " + req.OrgName + "'s Trust Center"
 	},
-	Build: func(_ RuntimeEmailConfig, req TrustCenterAuthEmail) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req TrustCenterAuthEmail) render.ContentBody {
 		return render.ContentBody{
-			Title: "Access " + req.OrgName + "'s Trust Center",
+			Header: render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
+			Title:  "Access " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"You've been granted access to " + req.OrgName + "'s Trust Center. Click the button below to authenticate and view the available resources.",
@@ -534,14 +550,15 @@ var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
 }
 
 var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
-	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: questionnaireTheme,
+	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: modernMessageTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	Subject: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
 		return "Access " + req.AssessmentName + " Questionnaire from " + cfg.CompanyName
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) render.ContentBody {
 		return render.ContentBody{
-			Title: cfg.CompanyName + " sent you an assessment to complete",
+			Header: render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
+			Title:  cfg.CompanyName + " sent you an assessment to complete",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					cfg.CompanyName + " has shared a form (" + req.AssessmentName + ") for you to complete. Click the button below to access it.",
@@ -569,7 +586,7 @@ var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
 }
 
 var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
-	Op: BillingEmailChangedOp, Schema: billingEmailChangedSchema, Theme: standardTheme,
+	Op: BillingEmailChangedOp, Schema: billingEmailChangedSchema, Theme: modernMessageTheme,
 	Description: "System notification confirming a change to the billing email on file",
 	Subject: func(_ RuntimeEmailConfig, req BillingEmailChangedEmail) string {
 		return "Billing Email Changed for " + req.OrgName
@@ -577,6 +594,7 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 	Build: func(cfg RuntimeEmailConfig, req BillingEmailChangedEmail) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "Billing Email Changed",
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Title:     "Billing Email Changed",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
@@ -602,10 +620,8 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 
 var dispatchers = []EmailDispatcher{
 	verifyEmail,
-	verifyEmailModernEmail,
 	welcomeEmail,
 	inviteEmail,
-	inviteModernEmail,
 	inviteJoinedEmail,
 	resetRequestEmail,
 	resetSuccessEmail,

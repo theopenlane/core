@@ -31,8 +31,7 @@ type EmailDispatcher interface {
 	// and dispatches through the shared render/send pipeline. Additional newman options are
 	// appended after the operation's own MessageOptions
 	SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error
-	// RenderMessage decodes the payload and renders the email into a newman message
-	// without sending it, for use in batch send paths
+	// RenderMessage decodes the payload and renders the email into a newman message without sending it, for use in batch send paths
 	RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
 }
 
@@ -63,6 +62,8 @@ type CampaignContext struct {
 	CampaignName string `json:"campaignName,omitempty" jsonschema:"description=Campaign display name"`
 	// CampaignDescription is the long-form description of the campaign
 	CampaignDescription string `json:"campaignDescription,omitempty" jsonschema:"description=Campaign description"`
+	// CampaignDueDate is the response deadline for the campaign, formatted for display
+	CampaignDueDate string `json:"campaignDueDate,omitempty" jsonschema:"description=Campaign response due date"`
 }
 
 // EmailOperation is a generic helper which defines a single system email type as a registered integration operation
@@ -162,8 +163,7 @@ func (e EmailOperation[T]) dispatch(ctx context.Context, req types.OperationRequ
 	return nil
 }
 
-// renderToMessage assembles the per-op newman options, renders the email content,
-// and returns a newman message without sending it
+// renderToMessage renders the email content and returns a newman message without sending it
 func (e EmailOperation[T]) renderToMessage(client *EmailClient, input T, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	var opts []newman.MessageOption
 	if e.MessageOptions != nil {

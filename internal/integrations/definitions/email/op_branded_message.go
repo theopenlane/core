@@ -49,9 +49,10 @@ var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {
 		return req.Subject
 	},
-	Build: func(_ RuntimeEmailConfig, req BrandedMessageRequest) render.ContentBody {
+	Build: func(cfg RuntimeEmailConfig, req BrandedMessageRequest) render.ContentBody {
 		body := render.ContentBody{
 			Preheader: req.Preheader,
+			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
 			Name:      req.FirstName,
 			Title:     req.Title,
 			Intros:    render.IntrosBlock{Paragraphs: req.Intros},

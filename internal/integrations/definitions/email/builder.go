@@ -85,7 +85,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				},
 				types.OperationRegistration{
 					Name:         SendQuestionnaireCampaignOp.Name(),
-					Description:  "Dispatch a questionnaire campaign with anonymous access tokens to all pending targets",
+					Description:  "Dispatch a questionnaire campaign with anonymous access tokens to targets or a test recipient",
 					Topic:        DefinitionID.OperationTopic(SendQuestionnaireCampaignOp.Name()),
 					ClientRef:    emailClientRef.ID(),
 					ConfigSchema: sendQuestionnaireCampaignSchema,

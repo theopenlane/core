@@ -1,9 +1,11 @@
 {
-  "subject": "{{ .companyName }} — Your Campaign is Live",
-  "preheader": "Hi {{ .firstName }}, your {{ .campaignName }} campaign is ready",
+  "subject": "{{ .companyName }} - {{ .campaignName }} is Live",
+  "preheader": "Hi {{ .firstName }}, your campaign is ready - responses due {{ .campaignDueDate }}",
   "title": "Welcome to {{ .companyName }} Campaigns",
   "intros": [
     "Hi {{ .firstName }}, this message confirms your campaign delivery pipeline is wired up end-to-end.",
+    "Campaign: {{ .campaignName }}",
+    "Responses are due by {{ .campaignDueDate }}.",
     "{{ .companyName }} Campaigns coordinate attestations, trainings, and assessments across your organization."
   ],
   "buttonText": "View your Campaign",

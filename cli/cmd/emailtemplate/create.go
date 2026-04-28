@@ -27,11 +27,7 @@ func init() {
 	createCmd.Flags().StringP("key", "k", "", "stable identifier for the template")
 	createCmd.Flags().StringP("name", "n", "", "display name for the template")
 	createCmd.Flags().StringP("description", "d", "", "description of the template")
-	createCmd.Flags().String("template-context", "", "runtime data context (e.g. compliance, marketing)")
-	createCmd.Flags().String("subject-template", "", "subject template for email notifications")
-	createCmd.Flags().String("body-template", "", "body template for the email")
-	createCmd.Flags().String("text-template", "", "plain text fallback template")
-	createCmd.Flags().String("preheader-template", "", "preheader/preview text template")
+	createCmd.Flags().String("template-context", "", "runtime data context (e.g. CAMPAIGN_RECIPIENT, TRANSACTIONAL, WORKFLOW_ACTION)")
 	createCmd.Flags().String("template-format", "", "template format for rendering (TEXT, MARKDOWN, HTML)")
 	createCmd.Flags().String("locale", "", "locale for the template, e.g. en-US")
 	createCmd.Flags().Bool("active", true, "whether the template is active")
@@ -53,40 +49,17 @@ func createValidation() (input graphclient.CreateEmailTemplateInput, err error) 
 
 	input.Name = name
 
-	templateContext := cmd.Config.String("template-context")
-	if templateContext == "" {
-		return input, cmd.NewRequiredFieldMissingError("template context")
+	if templateContext := cmd.Config.String("template-context"); templateContext != "" {
+		tc := enums.TemplateContext(templateContext)
+		input.TemplateContext = &tc
 	}
-
-	input.TemplateContext = enums.TemplateContext(templateContext)
 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
 	}
 
-	subjectTemplate := cmd.Config.String("subject-template")
-	if subjectTemplate != "" {
-		input.SubjectTemplate = &subjectTemplate
-	}
-
-	bodyTemplate := cmd.Config.String("body-template")
-	if bodyTemplate != "" {
-		input.BodyTemplate = &bodyTemplate
-	}
-
-	textTemplate := cmd.Config.String("text-template")
-	if textTemplate != "" {
-		input.TextTemplate = &textTemplate
-	}
-
-	preheaderTemplate := cmd.Config.String("preheader-template")
-	if preheaderTemplate != "" {
-		input.PreheaderTemplate = &preheaderTemplate
-	}
-
-	templateFormat := cmd.Config.String("template-format")
-	if templateFormat != "" {
+	if templateFormat := cmd.Config.String("template-format"); templateFormat != "" {
 		f := enums.NotificationTemplateFormat(templateFormat)
 		input.Format = &f
 	}

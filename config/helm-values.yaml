@@ -532,19 +532,49 @@ coreConfiguration:
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
     email:
+      # -- Email provider API key
       apiKey: ""  # @schema type:string
       # -- Email service provider
       provider: "resend"  # @schema type:string; default:resend
+      # -- Sender email address
       fromEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      # -- Company display name
       companyName: "Openlane"  # @schema type:string; default:Openlane
+      # -- Company mailing address
       companyAddress: "5150 Broadway St San Antonio, TX 78209"  # @schema type:string; default:5150 Broadway St San Antonio, TX 78209
+      # -- Legal corporation name
       corporation: "theopenlane, Inc."  # @schema type:string; default:theopenlane, Inc.
+      # -- Support contact email address
       supportEmail: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
+      # -- Company logo URL
       logoURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"  # @schema type:string; default:https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public
+      # -- Root application URL used to construct email action links
       rootURL: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
+      # -- Product home URL
       productURL: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
+      # -- Documentation URL
       docsURL: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
-      questionnaireEmail: "no-reply@mail.theopenlane.io"  # @schema type:string; default:no-reply@mail.theopenlane.io
+      # -- Sender override for questionnaire auth emails
+      questionnaireEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      # -- Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year
+      copyright: ""  # @schema type:string
+      # -- Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time
+      troubleText: "If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"  # @schema type:string; default:If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser
+      # -- Terms of service link for email footers
+      termsURL: "https://www.theopenlane.io/legal/terms-of-service"  # @schema type:string; default:https://www.theopenlane.io/legal/terms-of-service
+      # -- Privacy policy link for email footers
+      privacyURL: "https://www.theopenlane.io/legal/privacy"  # @schema type:string; default:https://www.theopenlane.io/legal/privacy
+      # -- Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email
+      unsubscribeURL: ""  # @schema type:string
+      # -- Default domain for trust center URLs when no custom domain is configured
+      trustCenterDomain: "trustcenter.theopenlane.io"  # @schema type:string; default:trustcenter.theopenlane.io
+      # -- Text displayed in the upper-right corner of the modern theme header
+      headerText: ""  # @schema type:string
+      # -- Card visual style
+      cardStyle: "elevated"  # @schema type:string; default:elevated
+      # -- Short descriptive footer line rendered above the social row in modern themes
+      tagline: ""  # @schema type:string
+      social: []
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

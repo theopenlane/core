@@ -137,6 +137,9 @@
         "slack": {
           "$ref": "#/$defs/slack.Config"
         },
+        "slackRuntime": {
+          "$ref": "#/$defs/slack.RuntimeSlackConfig"
+        },
         "googleworkspace": {
           "$ref": "#/$defs/googleworkspace.Config"
         },
@@ -421,7 +424,8 @@
     "email.RuntimeEmailConfig": {
       "properties": {
         "apiKey": {
-          "type": "string"
+          "type": "string",
+          "description": "Email provider API key"
         },
         "provider": {
           "type": "string",
@@ -433,40 +437,92 @@
           "description": "Email service provider"
         },
         "fromEmail": {
-          "type": "string"
+          "type": "string",
+          "description": "Sender email address"
         },
         "companyName": {
-          "type": "string"
+          "type": "string",
+          "description": "Company display name"
         },
         "companyAddress": {
-          "type": "string"
+          "type": "string",
+          "description": "Company mailing address"
         },
         "corporation": {
-          "type": "string"
+          "type": "string",
+          "description": "Legal corporation name"
         },
         "supportEmail": {
-          "type": "string"
+          "type": "string",
+          "description": "Support contact email address"
         },
         "logoURL": {
-          "type": "string"
+          "type": "string",
+          "description": "Company logo URL"
         },
         "rootURL": {
-          "type": "string"
+          "type": "string",
+          "description": "Root application URL used to construct email action links"
         },
         "productURL": {
-          "type": "string"
+          "type": "string",
+          "description": "Product home URL"
         },
         "docsURL": {
-          "type": "string"
+          "type": "string",
+          "description": "Documentation URL"
         },
         "questionnaireEmail": {
-          "type": "string"
+          "type": "string",
+          "description": "Sender override for questionnaire auth emails"
+        },
+        "copyright": {
+          "type": "string",
+          "description": "Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"
+        },
+        "troubleText": {
+          "type": "string",
+          "description": "Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time"
+        },
+        "termsURL": {
+          "type": "string",
+          "description": "Terms of service link for email footers"
+        },
+        "privacyURL": {
+          "type": "string",
+          "description": "Privacy policy link for email footers"
+        },
+        "unsubscribeURL": {
+          "type": "string",
+          "description": "Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email"
+        },
+        "trustCenterDomain": {
+          "type": "string",
+          "description": "Default domain for trust center URLs when no custom domain is configured"
+        },
+        "headerText": {
+          "type": "string",
+          "description": "Text displayed in the upper-right corner of the modern theme header"
+        },
+        "cardStyle": {
+          "type": "string",
+          "enum": [
+            "flat",
+            "elevated"
+          ],
+          "description": "Card visual style"
+        },
+        "tagline": {
+          "type": "string",
+          "description": "Short descriptive footer line rendered above the social row in modern themes"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "provider"
+        "apiKey",
+        "provider",
+        "fromEmail"
       ]
     },
     "entconfig.Billing": {
@@ -1299,6 +1355,16 @@
         },
         "appid": {
           "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "slack.RuntimeSlackConfig": {
+      "properties": {
+        "webhookURL": {
+          "type": "string",
+          "description": "Slack incoming webhook URL used for system notifications"
         }
       },
       "additionalProperties": false,

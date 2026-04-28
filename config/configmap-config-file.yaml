@@ -970,6 +970,12 @@ data:
         appid: {{ .Values.openlane.coreConfiguration.integrations.slack.appid | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime }}
+      slackRuntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime.webhookURL }}
+        webhookURL: {{ .Values.openlane.coreConfiguration.integrations.slackRuntime.webhookURL | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
       googleworkspace:
         {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace.clientid }}
@@ -1049,6 +1055,38 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail }}
         questionnaireEmail: {{ .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.copyright }}
+        copyright: {{ .Values.openlane.coreConfiguration.integrations.email.copyright | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.troubleText }}
+        troubleText: {{ .Values.openlane.coreConfiguration.integrations.email.troubleText | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.termsURL }}
+        termsURL: {{ .Values.openlane.coreConfiguration.integrations.email.termsURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.privacyURL }}
+        privacyURL: {{ .Values.openlane.coreConfiguration.integrations.email.privacyURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.unsubscribeURL }}
+        unsubscribeURL: {{ .Values.openlane.coreConfiguration.integrations.email.unsubscribeURL | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.trustCenterDomain }}
+        trustCenterDomain: {{ .Values.openlane.coreConfiguration.integrations.email.trustCenterDomain | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.headerText }}
+        headerText: {{ .Values.openlane.coreConfiguration.integrations.email.headerText | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.cardStyle }}
+        cardStyle: {{ .Values.openlane.coreConfiguration.integrations.email.cardStyle | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.tagline }}
+        tagline: {{ .Values.openlane.coreConfiguration.integrations.email.tagline | quote }}
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.email.social | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        social:
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}

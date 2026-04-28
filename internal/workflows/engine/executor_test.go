@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -244,13 +245,16 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 
 	emailRecord, err := s.client.EmailTemplate.Create().
 		SetOwnerID(orgID).
-		SetKey(templateKey).
+		SetKey(emaildef.BrandedMessageOp.Name()).
 		SetName("Workflow Send Email").
 		SetLocale("en-US").
 		SetFormat(enums.NotificationTemplateFormatHTML).
-		SetSubjectTemplate("Hello {{ FirstName }}").
-		SetBodyTemplate("<p>Hi {{ FirstName }}</p>").
-		SetTextTemplate("Hi {{ FirstName }}").
+		SetTemplateContext(enums.TemplateContextWorkflowAction).
+		SetDefaults(map[string]any{
+			"subject": "Workflow Send Email",
+			"title":   "Workflow Send Email",
+			"intros":  []any{"Hi from workflow"},
+		}).
 		SetActive(true).
 		Save(seedCtx)
 	s.Require().NoError(err)
@@ -262,6 +266,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 		SetChannel(enums.ChannelEmail).
 		SetFormat(enums.NotificationTemplateFormatHTML).
 		SetTopicPattern("workflow.send_email").
+		SetTemplateContext(enums.TemplateContextWorkflowAction).
 		SetEmailTemplateID(emailRecord.ID).
 		SetActive(true).
 		Save(seedCtx)
@@ -300,17 +305,18 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().NoError(err)
+	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
 	s.Require().Len(msgs, 1)
 	s.Equal([]string{"person@example.com"}, msgs[0].To)
-	s.Equal("Hello Ada", msgs[0].Subject)
-	s.Contains(msgs[0].Text, "Hi Ada")
+	s.Equal("Workflow Send Email", msgs[0].Subject)
+	s.Contains(msgs[0].Text, "Hi from workflow")
 
 	// Cleanup seed templates so tests don't conflict on key uniqueness.
 	_, err = s.client.NotificationTemplate.Delete().Where(notificationtemplate.KeyEQ(templateKey)).Exec(seedCtx)
 	s.Require().NoError(err)
-	_, err = s.client.EmailTemplate.Delete().Where(emailtemplate.KeyEQ(templateKey)).Exec(seedCtx)
+	_, err = s.client.EmailTemplate.Delete().Where(emailtemplate.NameEQ("Workflow Send Email")).Exec(seedCtx)
 	s.Require().NoError(err)
 }
 

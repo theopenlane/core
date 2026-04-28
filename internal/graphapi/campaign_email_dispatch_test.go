@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
@@ -29,13 +30,13 @@ func TestCampaignEmailDispatch(t *testing.T) {
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Campaign Dispatch Test Template").
-		SetKey("campaign-dispatch-test").
+		SetKey(email.BrandedMessageOp.Name()).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		SetSubjectTemplate("Hello {{ .recipientFirstName }}").
-		SetBodyTemplate("# Welcome {{ .recipientFirstName }}\n\nCampaign: {{ .campaignName }}\n\n{{ .promoCode }}").
-		SetTextTemplate("Welcome {{ .recipientFirstName }} - Campaign: {{ .campaignName }}").
 		SetDefaults(map[string]any{
-			"promoCode": "DEFAULT123",
+			"subject":      "Hello {{ .firstName }}",
+			"title":        "Default Title",
+			"intros":       []any{"Campaign: {{ .campaignName }}"},
+			"primaryColor": "#333333",
 		}).
 		SaveX(ctx)
 
@@ -46,7 +47,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SetMetadata(map[string]any{
-			"promoCode": "SUMMER2025",
+			"title": "Campaign Override",
 		}).
 		SaveX(ctx)
 
@@ -136,25 +137,15 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	})
 
 	t.Run("metadata overrides defaults", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, "SUMMER2025"),
-			"expected metadata promoCode to override default")
-		assert.Assert(t, !strings.Contains(combined, "DEFAULT123"),
-			"default promoCode should be overridden by metadata")
+		assert.Assert(t, strings.Contains(combined, "Campaign Override"),
+			"expected metadata title to override default")
+		assert.Assert(t, !strings.Contains(combined, "Default Title"),
+			"default title should be overridden by metadata")
 	})
 
-	t.Run("branding colors applied to HTML", func(t *testing.T) {
-		// FreeMarkdown templates have no .button elements, so button colors
-		// are not inlined. Background and text colors are applied to wrapper
-		// and paragraph elements that exist in the rendered structure
-		assert.Assert(t, strings.Contains(combined, "#f0f0f0"),
-			"expected background color in rendered HTML")
-		assert.Assert(t, strings.Contains(combined, "#333333"),
-			"expected text color in rendered HTML")
-	})
-
-	t.Run("brand name in rendered output", func(t *testing.T) {
-		assert.Assert(t, strings.Contains(combined, "TestBrand"),
-			"expected brand name in rendered HTML")
+	t.Run("catalog defaults rendered", func(t *testing.T) {
+		assert.Assert(t, strings.Contains(combined, "Campaign: Dispatch Integration Test Campaign"),
+			"expected catalog default intro with campaign name")
 	})
 
 	t.Run("each target gets its own message", func(t *testing.T) {
@@ -199,10 +190,13 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("Skip Sent Test Template").
-		SetKey("skip-sent-test").
+		SetKey(email.BrandedMessageOp.Name()).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		SetSubjectTemplate("Test").
-		SetBodyTemplate("<p>Test</p>").
+		SetDefaults(map[string]any{
+			"subject": "Test",
+			"title":   "Test",
+			"intros":  []any{"Test"},
+		}).
 		SaveX(ctx)
 
 	campaignObj := suite.client.db.Campaign.Create().
@@ -283,10 +277,13 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 
 	emailTemplate := suite.client.db.EmailTemplate.Create().
 		SetName("No Branding Test Template").
-		SetKey("no-branding-test").
+		SetKey(email.BrandedMessageOp.Name()).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
-		SetSubjectTemplate("Hello {{ .recipientFirstName }}").
-		SetBodyTemplate("<p>Welcome {{ .recipientFirstName }}</p>").
+		SetDefaults(map[string]any{
+			"subject": "Hello {{ .firstName }}",
+			"title":   "Welcome {{ .firstName }}",
+			"intros":  []any{"Welcome {{ .firstName }}"},
+		}).
 		SaveX(ctx)
 
 	campaignObj := suite.client.db.Campaign.Create().
@@ -405,4 +402,94 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 
 	messages := mockSender.Messages()
 	assert.Assert(t, is.Len(messages, 0))
+}
+
+// TestQuestionnaireTestEmailDispatch verifies the questionnaire test-send
+// operation creates a test assessment response and sends one auth email.
+func TestQuestionnaireTestEmailDispatch(t *testing.T) {
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+
+	assessmentObj := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	campaignObj := suite.client.db.Campaign.Create().
+		SetName("Questionnaire Test Send Campaign").
+		SetOwnerID(testUser1.OrganizationID).
+		SetCampaignType(enums.CampaignTypeQuestionnaire).
+		SetAssessmentID(assessmentObj.ID).
+		SetRecurrenceFrequency(enums.FrequencyNone).
+		SaveX(ctx)
+
+	var responseIDs []string
+	defer func() {
+		if len(responseIDs) > 0 {
+			(&Cleanup[*generated.AssessmentResponseDeleteOne]{
+				client: suite.client.db.AssessmentResponse,
+				IDs:    responseIDs,
+			}).MustDelete(testUser1.UserCtx, t)
+		}
+		(&Cleanup[*generated.CampaignDeleteOne]{
+			client: suite.client.db.Campaign,
+			ID:     campaignObj.ID,
+		}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.AssessmentDeleteOne]{
+			client: suite.client.db.Assessment,
+			ID:     assessmentObj.ID,
+		}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.TemplateDeleteOne]{
+			client: suite.client.db.Template,
+			ID:     assessmentObj.TemplateID,
+		}).MustDelete(testUser1.UserCtx, t)
+	}()
+
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
+	emailClient := &email.EmailClient{
+		Sender: mockSender,
+		Config: email.RuntimeEmailConfig{
+			FromEmail:   "questionnaire@test.example",
+			CompanyName: "QuestionnaireCo",
+			ProductURL:  "https://app.example.com",
+		},
+	}
+
+	recipient := "test-recipient@test.example"
+	cfg := email.SendQuestionnaireCampaignRequest{
+		CampaignID: campaignObj.ID,
+		TestEmail:  recipient,
+	}
+	req := types.OperationRequest{
+		Client: emailClient,
+		DB:     suite.client.db,
+	}
+
+	configBytes, err := json.Marshal(cfg)
+	assert.NilError(t, err)
+	req.Config = configBytes
+
+	_, err = email.SendQuestionnaireCampaign{}.Run(ctx, req, emailClient, cfg)
+	assert.NilError(t, err)
+
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 1))
+	assert.Assert(t, strings.Contains(strings.Join(messages[0].To, " "), recipient))
+
+	count, err := suite.client.db.AssessmentResponse.Query().
+		Where(
+			assessmentresponse.CampaignIDEQ(campaignObj.ID),
+			assessmentresponse.EmailEqualFold(recipient),
+			assessmentresponse.IsTest(true),
+		).
+		Count(ctx)
+	assert.NilError(t, err)
+	assert.Equal(t, count, 1)
+
+	responseIDs, err = suite.client.db.AssessmentResponse.Query().
+		Where(
+			assessmentresponse.CampaignIDEQ(campaignObj.ID),
+			assessmentresponse.EmailEqualFold(recipient),
+			assessmentresponse.IsTest(true),
+		).
+		IDs(ctx)
+	assert.NilError(t, err)
 }

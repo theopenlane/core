@@ -263,8 +263,8 @@ func runDualApprovalDemo(ctx context.Context, config openlane.Config, apiClient 
 			},
 		},
 
-		Title:    "Control approval completed",
-		Body:     "Workflow {{instance_id}} approved control {{object_id}}.",
+		Title: "Control approval completed",
+		Body:  "Workflow {{instance_id}} approved control {{object_id}}.",
 	}
 
 	notificationParamsBytes, err := marshalParams("notification params (completion)", notificationParams)
@@ -870,8 +870,8 @@ func runWebhookDemo(ctx context.Context, config openlane.Config, apiClient *open
 			},
 		},
 
-		Title:    "Control description updated",
-		Body:     "Workflow {{instance_id}} updated control {{object_id}} description.",
+		Title: "Control description updated",
+		Body:  "Workflow {{instance_id}} updated control {{object_id}} description.",
 	}
 	notificationBytes, err := marshalParams("notification params (control description)", notificationParams)
 	if err != nil {
@@ -1001,7 +1001,7 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 		Key:           templateKey,
 		Name:          "Control Description Updated (Template)",
 		Description:   ptr("Template-driven notification for control description updates"),
-		Channel:       channel,
+		Channel:       &channel,
 		Format:        ptr(enums.NotificationTemplateFormatText),
 		TopicPattern:  topicPattern,
 		TitleTemplate: &titleTemplate,
@@ -1335,7 +1335,7 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 		Key:           templateKey,
 		Name:          "Slack Control Approved (Template)",
 		Description:   ptr("Template-driven Slack notification for control approvals"),
-		Channel:       enums.ChannelSlack,
+		Channel:       ptr(enums.ChannelSlack),
 		Format:        ptr(enums.NotificationTemplateFormatText),
 		TopicPattern:  topicPattern,
 		TitleTemplate: &titleTemplate,
@@ -1494,8 +1494,8 @@ func runFieldUpdateDemo(ctx context.Context, config openlane.Config, apiClient *
 			},
 		},
 
-		Title:    "Control auto-enriched",
-		Body:     "Workflow {{instance_id}} updated control {{object_id}} fields.",
+		Title: "Control auto-enriched",
+		Body:  "Workflow {{instance_id}} updated control {{object_id}} fields.",
 	}
 	notificationBytes, err := marshalParams("notification params (auto-enrich)", notificationParams)
 	if err != nil {

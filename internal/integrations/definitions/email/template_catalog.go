@@ -7,35 +7,28 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 )
 
-// nonTemplateConfigFields are RuntimeEmailConfig json keys that are excluded from
-// the template variable picker. They are credentials or internal routing knobs
-// that are not meaningful template content, but remain reserved so user-supplied
-// jsonconfig cannot redefine them
+// nonTemplateConfigFields are json keys that are excluded from the template variable picker
 var nonTemplateConfigFields = map[string]struct{}{
 	"apiKey":             {},
 	"provider":           {},
 	"questionnaireEmail": {},
+	"social":             {},
 }
 
-// computedVariables are template variables injected at render time that are not
-// backed by RuntimeEmailConfig fields, such as time-derived or per-recipient values
+// computedVariables are template variables injected at render time
 var computedVariables = []models.TemplateVariable{
 	{Name: "year", Description: "Current year for copyright notices"},
-	{Name: "email", Description: "Recipient email address"},
-	{Name: "firstName", Description: "Recipient first name"},
-	{Name: "lastName", Description: "Recipient last name"},
 }
 
-// campaignVariables are additional template variables available in campaign email contexts
-var campaignVariables = []models.TemplateVariable{
-	{Name: "campaignName", Description: "Campaign name"},
-	{Name: "campaignDescription", Description: "Campaign description"},
-}
+// payloadVariables are template variables derived from the operation payload and injected at render time
+var payloadVariables = lo.Map(
+	append(providerkit.PropertyDescriptors[RecipientInfo](), providerkit.PropertyDescriptors[CampaignContext]()...),
+	func(p providerkit.PropertyDescriptor, _ int) models.TemplateVariable {
+		return models.TemplateVariable{Name: p.Name, Description: p.Description}
+	},
+)
 
-// baseVariables are the template variables available to template authors in all
-// email contexts. Config-backed entries are reflected from RuntimeEmailConfig so
-// adding a new field with a jsonschema description automatically exposes it to
-// templates without a second source of truth
+// baseVariables are the template variables available to template authors in all email contexts
 var baseVariables = buildBaseVariables()
 
 // buildBaseVariables reflects RuntimeEmailConfig for config-backed template
@@ -54,18 +47,15 @@ func buildBaseVariables() []models.TemplateVariable {
 	return append(configVars, computedVariables...)
 }
 
-// allVariables is baseVariables + campaignVariables
-var allVariables = append(append([]models.TemplateVariable{}, baseVariables...), campaignVariables...)
+// allVariables is the complete appended set
+var allVariables = append(append([]models.TemplateVariable{}, baseVariables...), payloadVariables...)
 
-// TemplateVariables returns all system-provided template variables available for
-// use in email templates, including campaign-specific variables
+// TemplateVariables returns all system-provided template variables available for use in email templates
 func TemplateVariables() []models.TemplateVariable {
 	return allVariables
 }
 
-// reservedFieldNames is the set of top-level template data keys injected by the
-// system at render time. Used by the emailtemplate hook to exclude these from
-// jsonconfig so it only describes user-supplied inputs
+// reservedFieldNames is the set of top-level template data keys injected by the system at render time
 var reservedFieldNames = func() map[string]struct{} {
 	names := lo.SliceToMap(allVariables, func(v models.TemplateVariable) (string, struct{}) {
 		return v.Name, struct{}{}
@@ -80,8 +70,7 @@ var reservedFieldNames = func() map[string]struct{} {
 	return names
 }()
 
-// ReservedFieldNames returns the set of top-level template variable names that are
-// injected by the system at render time and should be excluded from jsonconfig
+// ReservedFieldNames returns the set of top-level template variable names
 func ReservedFieldNames() map[string]struct{} {
 	return reservedFieldNames
 }

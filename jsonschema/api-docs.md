@@ -126,6 +126,7 @@ Config contains the configuration for the core server
     "integrations": {
         "githubapp": {},
         "slack": {},
+        "slackRuntime": {},
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
@@ -1541,6 +1542,7 @@ Slack contains settings for Slack notifications
 |----|----|-----------|--------|
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
+|[**slackRuntime**](#integrationsslackruntime)|`object`|||
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
@@ -1554,6 +1556,7 @@ Slack contains settings for Slack notifications
 {
     "githubapp": {},
     "slack": {},
+    "slackRuntime": {},
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
@@ -1586,6 +1589,16 @@ Slack contains settings for Slack notifications
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**appid**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsslackruntime"></a>
+### integrations\.slackRuntime: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**webhookURL**|`string`|Slack incoming webhook URL used for system notifications<br/>||
 
 **Additional Properties:** not allowed  
 <a name="integrationsgoogleworkspace"></a>
@@ -1645,18 +1658,27 @@ Slack contains settings for Slack notifications
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**apiKey**|`string`||no|
+|**apiKey**|`string`|Email provider API key<br/>|yes|
 |**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"sendgrid"`, `"postmark"`<br/>|yes|
-|**fromEmail**|`string`||no|
-|**companyName**|`string`||no|
-|**companyAddress**|`string`||no|
-|**corporation**|`string`||no|
-|**supportEmail**|`string`||no|
-|**logoURL**|`string`||no|
-|**rootURL**|`string`||no|
-|**productURL**|`string`||no|
-|**docsURL**|`string`||no|
-|**questionnaireEmail**|`string`||no|
+|**fromEmail**|`string`|Sender email address<br/>|yes|
+|**companyName**|`string`|Company display name<br/>|no|
+|**companyAddress**|`string`|Company mailing address<br/>|no|
+|**corporation**|`string`|Legal corporation name<br/>|no|
+|**supportEmail**|`string`|Support contact email address<br/>|no|
+|**logoURL**|`string`|Company logo URL<br/>|no|
+|**rootURL**|`string`|Root application URL used to construct email action links<br/>|no|
+|**productURL**|`string`|Product home URL<br/>|no|
+|**docsURL**|`string`|Documentation URL<br/>|no|
+|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
+|**copyright**|`string`|Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year<br/>|no|
+|**troubleText**|`string`|Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time<br/>|no|
+|**termsURL**|`string`|Terms of service link for email footers<br/>|no|
+|**privacyURL**|`string`|Privacy policy link for email footers<br/>|no|
+|**unsubscribeURL**|`string`|Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email<br/>|no|
+|**trustCenterDomain**|`string`|Default domain for trust center URLs when no custom domain is configured<br/>|no|
+|**headerText**|`string`|Text displayed in the upper-right corner of the modern theme header<br/>|no|
+|**cardStyle**|`string`|Card visual style<br/>Enum: `"flat"`, `"elevated"`<br/>|no|
+|**tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

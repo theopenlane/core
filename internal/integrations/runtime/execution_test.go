@@ -9,6 +9,9 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/samber/do/v2"
+	"github.com/theopenlane/iam/auth"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -21,6 +24,57 @@ func TestExecuteOperationNilInstallation(t *testing.T) {
 	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
+	}
+}
+
+func TestBootstrapHandlerContextRuntimeRehydratesProcessDependencies(t *testing.T) {
+	t.Parallel()
+
+	db := &ent.Client{}
+	injector := do.New()
+	do.ProvideValue(injector, db)
+
+	rt := &Runtime{injector: injector}
+	caller := &auth.Caller{
+		SubjectID:      "user_123",
+		OrganizationID: "org_123",
+	}
+	metadata := types.ExecutionMetadata{
+		OwnerID:      "org_123",
+		DefinitionID: "email",
+		Operation:    "send_email",
+		Runtime:      true,
+	}
+
+	ctx := auth.WithCaller(context.Background(), caller)
+	gotCtx, integration, gotMetadata, err := rt.bootstrapHandlerContext(ctx, metadata)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if integration != nil {
+		t.Fatalf("expected no integration for runtime execution, got %#v", integration)
+	}
+	if gotMetadata != metadata {
+		t.Fatalf("expected metadata passthrough, got %#v", gotMetadata)
+	}
+	if ent.FromContext(gotCtx) != db {
+		t.Fatal("expected ent client to be reattached to handler context")
+	}
+
+	gotCaller, ok := auth.CallerFromContext(gotCtx)
+	if !ok || gotCaller == nil {
+		t.Fatal("expected original caller to remain on handler context")
+	}
+	if gotCaller.SubjectID != caller.SubjectID || gotCaller.OrganizationID != caller.OrganizationID {
+		t.Fatalf("expected original caller, got %#v", gotCaller)
+	}
+
+	gotExecution, ok := types.ExecutionMetadataFromContext(gotCtx)
+	if !ok {
+		t.Fatal("expected execution metadata on handler context")
+	}
+	if gotExecution != metadata {
+		t.Fatalf("expected execution metadata %#v, got %#v", metadata, gotExecution)
 	}
 }
 

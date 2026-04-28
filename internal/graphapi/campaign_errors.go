@@ -16,4 +16,6 @@ var (
 	ErrCampaignDispatchScheduledAtInPast = errors.New("scheduledAt must be in the future")
 	// ErrCampaignDispatchScheduleRequired is returned when scheduling a job without a schedule time.
 	ErrCampaignDispatchScheduleRequired = errors.New("schedule time is required")
+	// ErrCampaignDispatchRuntimeRequired is returned when integration runtime dispatch is unavailable.
+	ErrCampaignDispatchRuntimeRequired = errors.New("campaign dispatch requires integration runtime")
 )

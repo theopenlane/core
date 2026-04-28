@@ -170,6 +170,15 @@ func OperationSchema[T any]() (json.RawMessage, types.OperationRef[T]) {
 	return schema, types.NewOperationRef[T](SchemaID(schema))
 }
 
+// OperationSchemaVariant reflects the same schema as OperationSchema but registers
+// the operation under a composite key of TypeName.variant, allowing the same input
+// type to back multiple catalog entries (e.g. themed visual variants)
+func OperationSchemaVariant[T any](variant string) (json.RawMessage, types.OperationRef[T]) {
+	schema := SchemaFrom[T]()
+
+	return schema, types.NewOperationRef[T](SchemaID(schema) + "." + variant)
+}
+
 // WebhookEventSchema reflects a webhook event payload type and returns both the JSON schema
 // and a typed webhook event ref whose name is derived from the schema definition key
 func WebhookEventSchema[T any]() (json.RawMessage, types.WebhookEventRef[T]) {

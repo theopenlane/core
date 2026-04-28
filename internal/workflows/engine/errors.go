@@ -65,6 +65,8 @@ var (
 	ErrNotificationTemplateReferenceConflict = errors.New("notification template reference conflict")
 	// ErrSendEmailTemplateRequired is returned when send_email action has no template reference
 	ErrSendEmailTemplateRequired = errors.New("send_email action requires template_id or template_key")
+	// ErrSendEmailEmailTemplateRequired is returned when the workflow notification template is not linked to an email template
+	ErrSendEmailEmailTemplateRequired = errors.New("send_email notification template requires email_template_id")
 	// ErrSendEmailTemplateReferenceConflict is returned when send_email action has both template_id and template_key
 	ErrSendEmailTemplateReferenceConflict = errors.New("send_email template reference conflict")
 	// ErrSendEmailNoRecipients is returned when send_email action resolves no recipient emails

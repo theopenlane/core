@@ -127,6 +127,9 @@ func validateNotificationTemplateData(template *generated.NotificationTemplate, 
 	if template == nil {
 		return nil
 	}
+	if len(template.Jsonconfig) == 0 {
+		return nil
+	}
 
 	result, err := jsonx.ValidateSchema(template.Jsonconfig, data)
 	if err != nil {

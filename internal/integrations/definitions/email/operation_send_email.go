@@ -23,6 +23,8 @@ type SendEmailRequest struct {
 	To string `json:"to" jsonschema:"required,description=Recipient email address"`
 	// Tags are delivery metadata tags for provider webhook correlation
 	Tags []newman.Tag `json:"tags,omitempty" jsonschema:"description=Delivery tracking tags"`
+	// From is an optional sender address override
+	From string `json:"from,omitempty" jsonschema:"description=Sender email address override"`
 	// ReplyTo is an optional reply-to address
 	ReplyTo string `json:"replyTo,omitempty" jsonschema:"description=Reply-to email address"`
 }
@@ -48,9 +50,7 @@ func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *Em
 		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
 	}
 
-	payload, err := buildDispatchPayload(template.Defaults,
-		RecipientInfo{Email: cfg.To, Tags: cfg.Tags},
-	)
+	payload, err := buildDispatchPayload(template.Defaults, RecipientInfo{Email: cfg.To, Tags: cfg.Tags})
 	if err != nil {
 		return nil, err
 	}
@@ -60,6 +60,9 @@ func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *Em
 	}
 	if cfg.ReplyTo != "" {
 		extraOpts = append(extraOpts, newman.WithReplyTo(cfg.ReplyTo))
+	}
+	if cfg.From != "" {
+		extraOpts = append(extraOpts, newman.WithFrom(cfg.From))
 	}
 
 	if err := dispatcher.SendByKey(ctx, req, client, payload, extraOpts...); err != nil {

@@ -23,7 +23,7 @@ func HookCampaignResolveEmailIntegration() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			integrationID := emaildef.ResolveEmailIntegration(ctx, m.Client(), ownerID)
+			integrationID := emaildef.ResolveCampaignEmailIntegration(ctx, m.Client(), ownerID, "")
 			if integrationID != "" {
 				m.SetIntegrationID(integrationID)
 			}
