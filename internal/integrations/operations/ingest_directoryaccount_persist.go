@@ -5,37 +5,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
-
-// markRemovedDirectoryAccounts sets status=DELETED and removed_at=now on any DirectoryAccount for
-// the given integration that was not observed during the sync that started at syncStartedAt
-func markRemovedDirectoryAccounts(ctx context.Context, db *ent.Client, integrationID string, syncStartedAt time.Time) error {
-	now := time.Now()
-	return db.DirectoryAccount.Update().
-		Where(
-			directoryaccount.IntegrationID(integrationID),
-			directoryaccount.StatusNEQ(enums.DirectoryAccountStatusDeleted),
-			directoryaccount.Or(
-				// seen in a prior sync but absent from this one
-				directoryaccount.And(
-					directoryaccount.LastSeenAtNotNil(),
-					directoryaccount.LastSeenAtLT(syncStartedAt),
-				),
-				// created before this sync started and never subsequently confirmed
-				directoryaccount.And(
-					directoryaccount.LastSeenAtIsNil(),
-					directoryaccount.FirstSeenAtLT(syncStartedAt),
-				),
-			),
-		).
-		SetStatus(enums.DirectoryAccountStatusDeleted).
-		SetRemovedAt(now).
-		Exec(ctx)
-}
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields
 func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrationDef *ent.Integration, createInput ent.CreateDirectoryAccountInput) error {

@@ -123,9 +123,8 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 	}
 
 	if directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization {
-		integrationID := ic.Integration.ID
 		defer func() {
-			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, integrationID, syncStartedAt, err); finalizeErr != nil {
+			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, syncStartedAt, err); finalizeErr != nil {
 				err = errors.Join(err, finalizeErr)
 			}
 		}()
@@ -263,7 +262,7 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 
 // finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
 // is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
-func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, integrationID string, syncStartedAt time.Time, ingestErr error) error {
+func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, syncStartedAt time.Time, ingestErr error) error {
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())
 
