@@ -145,8 +145,7 @@ func Builder(cfg Config) registry.Builder {
 					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					Ingest: []types.IngestContract{
 						{
-							Schema:         integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-							ExhaustiveSync: true,
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
