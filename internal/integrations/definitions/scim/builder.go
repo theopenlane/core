@@ -20,7 +20,7 @@ func Builder() registry.Builder {
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/scim/overview",
 				Tags:        []string{"directory"},
 				Active:      true,
-				Visible:     true,
+				Visible:     false,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: providerkit.SchemaFrom[UserInput](),

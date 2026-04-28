@@ -86,7 +86,10 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 // if it doesn't exist, it will create the record, add data from the system-owned subprocessors, and link the integration
 func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.Definition, integrationID string) {
 	vendorIDs, err := r.DB().Entity.Query().Where(
-		entity.NameEqualFold(def.Family),
+		entity.Or(
+			entity.NameEqualFold(def.Family),
+			entity.DisplayNameEqualFold(def.Family),
+		),
 		entity.OwnerID(ownerID),
 	).IDs(ctx)
 	if err != nil {
