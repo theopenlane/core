@@ -3,7 +3,6 @@ package email
 import (
 	"encoding/json"
 	"fmt"
-	"maps"
 	"strconv"
 	"time"
 
@@ -12,32 +11,37 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// interpolatePayload executes Go template expressions in the raw JSON payload
-// against a variable map built from the email client config and the payload's
-// own recipient and campaign fields. Returns the interpolated JSON ready for
-// unmarshal into the typed input struct
+// interpolatePayload executes Go template expressions in the raw JSON payload against a variable map
 func interpolatePayload(client *EmailClient, payload json.RawMessage) (json.RawMessage, error) {
 	if len(payload) == 0 {
 		return payload, nil
 	}
 
-	vars, err := buildTemplateVars(client.Config, payload)
+	var document map[string]any
+	if err := jsonx.RoundTrip(payload, &document); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	vars, err := buildTemplateVars(client.Config, document)
 	if err != nil {
 		return nil, fmt.Errorf("%w: building template vars: %w", ErrTemplateRenderFailed, err)
 	}
 
-	result, err := render.ExecuteTextTemplate("payload", string(payload), vars)
+	interpolated, err := interpolateTemplateValue(document, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
 	}
 
-	return json.RawMessage(result), nil
+	result, err := jsonx.ToRawMessage(interpolated)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	return result, nil
 }
 
-// buildTemplateVars constructs the template variable map from the runtime config,
-// computed variables, and payload-derived recipient/campaign fields. The keys match
-// the variable names advertised by the template catalog
-func buildTemplateVars(cfg RuntimeEmailConfig, payload json.RawMessage) (map[string]any, error) {
+// buildTemplateVars constructs the template variable map
+func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any) (map[string]any, error) {
 	var vars map[string]any
 	if err := jsonx.RoundTrip(cfg, &vars); err != nil {
 		return nil, err
@@ -49,10 +53,55 @@ func buildTemplateVars(cfg RuntimeEmailConfig, payload json.RawMessage) (map[str
 
 	vars["year"] = strconv.Itoa(time.Now().Year())
 
-	var payloadVars map[string]any
-	if err := json.Unmarshal(payload, &payloadVars); err == nil {
-		maps.Copy(vars, payloadVars)
+	for _, variable := range payloadVariables {
+		vars[variable.Name] = ""
+
+		if value, ok := payloadVars[variable.Name]; ok {
+			vars[variable.Name] = value
+		}
 	}
 
 	return vars, nil
+}
+
+// interpolateTemplateValue recursively executes template expressions in strings within the value
+func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
+	switch typed := value.(type) {
+	case string:
+		return executeTemplateString(typed, vars)
+	case []any:
+		out := make([]any, 0, len(typed))
+		for _, item := range typed {
+			rendered, err := interpolateTemplateValue(item, vars)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, rendered)
+		}
+
+		return out, nil
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for key, item := range typed {
+			rendered, err := interpolateTemplateValue(item, vars)
+			if err != nil {
+				return nil, err
+			}
+			out[key] = rendered
+		}
+
+		return out, nil
+	default:
+		return value, nil
+	}
+}
+
+// executeTemplateString executes the template expressions in the input string against the variable map
+func executeTemplateString(text string, vars map[string]any) (string, error) {
+	result, err := render.ExecuteTextTemplate("payload-value", text, vars)
+	if err != nil {
+		return "", err
+	}
+
+	return result, nil
 }

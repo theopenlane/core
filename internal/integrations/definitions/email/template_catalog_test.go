@@ -23,7 +23,7 @@ func TestTemplateVariables_ContainsBaseVars(t *testing.T) {
 
 	for _, expected := range []string{
 		"companyName", "fromEmail", "productURL", "year",
-		"recipientEmail", "recipientFirstName", "recipientLastName",
+		"email", "firstName", "lastName",
 	} {
 		assert.Contains(t, names, expected, "missing base variable: %s", expected)
 	}

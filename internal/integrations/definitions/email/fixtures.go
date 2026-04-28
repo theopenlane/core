@@ -26,21 +26,10 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			RecipientInfo: r,
 			Token:         "test-verify-token-12345",
 		},
-		"VerifyEmailModernRequest": VerifyEmailModernRequest{
-			RecipientInfo: r,
-			Token:         "test-verify-token-12345",
-		},
 		"WelcomeRequest": WelcomeRequest{
 			RecipientInfo: r,
 		},
 		"InviteRequest": InviteRequest{
-			RecipientInfo: r,
-			InviterName:   "Jane Smith",
-			OrgName:       "Acme Corp",
-			Role:          "admin",
-			Token:         "test-invite-token-12345",
-		},
-		"InviteModernRequest": InviteModernRequest{
 			RecipientInfo: r,
 			InviterName:   "Jane Smith",
 			OrgName:       "Acme Corp",
@@ -73,9 +62,11 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			NDAURL:        "https://trustcenter.example.com/securecorp/access/sign-nda?token=test",
 		},
 		"TrustCenterNDASignedEmail": TrustCenterNDASignedEmail{
-			RecipientInfo:  r,
-			OrgName:        "SecureCorp",
-			TrustCenterURL: "https://trustcenter.example.com/securecorp",
+			RecipientInfo:      r,
+			OrgName:            "SecureCorp",
+			TrustCenterURL:     "https://trustcenter.example.com/securecorp",
+			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
+			AttachmentData:     []byte("%PDF-1.4 test NDA document content"),
 		},
 		"TrustCenterAuthEmail": TrustCenterAuthEmail{
 			RecipientInfo: r,
@@ -100,7 +91,7 @@ func TestFixture(name, toEmail string) json.RawMessage {
 				CampaignName:        "Test Campaign",
 				CampaignDescription: "A test campaign to verify branded message rendering",
 			},
-			Subject:    "{{ .companyName }} — Test Branded Message",
+			Subject:    "{{ .companyName }} - Test Branded Message",
 			Preheader:  "Hi {{ .firstName }}, this is a test branded message",
 			Title:      "Welcome to {{ .companyName }}",
 			Intros:     []string{"Hi {{ .firstName }}, this branded message was sent via the email-test CLI.", "All templates are rendering correctly for {{ .companyName }}."},

@@ -63,19 +63,27 @@ type RuntimeEmailConfig struct {
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsURL" koanf:"docsURL" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
 	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
-	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" jsonschema:"description=Sender override for questionnaire auth emails" default:"no-reply@mail.theopenlane.io"`
-	// Copyright is the copyright notice for email footers
-	Copyright string `json:"copyright,omitempty" koanf:"copyright" jsonschema:"description=Copyright notice for email footers" default:"© theopenlane, Inc. All rights reserved."`
+	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
+	// Copyright is an optional copyright override for email footers; when empty the template renders © {year} {corporation}
+	Copyright string `json:"copyright,omitempty" koanf:"copyright" jsonschema:"description=Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"`
 	// TroubleText is the fallback help text shown below action buttons; {ACTION} is replaced with button text at render time
 	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" jsonschema:"description=Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
-	// UnsubscribeURL is the unsubscribe link for email footers
-	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" jsonschema:"description=Unsubscribe link for email footers" default:"https://console.theopenlane.io/unsubscribe"`
+	// TermsURL is the terms of service link for email footers
+	TermsURL string `json:"termsURL,omitempty" koanf:"termsURL" jsonschema:"description=Terms of service link for email footers" default:"https://www.theopenlane.io/legal/terms-of-service"`
+	// PrivacyURL is the privacy policy link for email footers
+	PrivacyURL string `json:"privacyURL,omitempty" koanf:"privacyURL" jsonschema:"description=Privacy policy link for email footers" default:"https://www.theopenlane.io/legal/privacy"`
+	// UnsubscribeURL is an optional unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" jsonschema:"description=Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email"`
 	// TrustCenterDomain is the default domain for trust center URLs when no custom domain is configured
 	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" jsonschema:"description=Default domain for trust center URLs when no custom domain is configured" default:"trustcenter.theopenlane.io"`
+	// HeaderText is the optional text displayed in the upper-right corner of the modern theme header row
+	HeaderText string `json:"headerText,omitempty" koanf:"headerText" jsonschema:"description=Text displayed in the upper-right corner of the modern theme header"`
+	// CardStyle controls the card visual style; elevated adds rounded corners and a drop shadow
+	CardStyle string `json:"cardStyle,omitempty" koanf:"cardStyle" jsonschema:"enum=flat,enum=elevated,description=Card visual style" default:"elevated"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" koanf:"tagline" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
-	Social []SocialLink `json:"social,omitempty" koanf:"social" jsonschema:"description=Ordered social footer entries for modern themes"`
+	Social []SocialLink `json:"social,omitempty" koanf:"social" jsonschema:"-"`
 }
 
 // SocialLink is a single social media footer entry: platform label, icon image URL, and destination URL
@@ -133,7 +141,7 @@ type EmailUserInput struct {
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
-	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Ordered social footer entries for modern themes"`
+	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
 }
 
 // ToRuntimeConfig converts customer user input to a RuntimeEmailConfig

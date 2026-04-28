@@ -29,11 +29,7 @@ func init() {
 	createCmd.Flags().StringP("key", "k", "", "stable identifier for the template (required)")
 	createCmd.Flags().StringP("name", "n", "", "display name for the template (required)")
 	createCmd.Flags().StringP("description", "d", "", "description of the template")
-	createCmd.Flags().String("template-context", "", "runtime data context: CAMPAIGN_RECIPIENT, TRANSACTIONAL, WORKFLOW_ACTION (required)")
-	createCmd.Flags().String("subject-template", "", "subject template for email notifications")
-	createCmd.Flags().String("body-template", "", "body template for the email")
-	createCmd.Flags().String("text-template", "", "plain text fallback template")
-	createCmd.Flags().String("preheader-template", "", "preheader/preview text template")
+	createCmd.Flags().String("template-context", "", "runtime data context: CAMPAIGN_RECIPIENT, TRANSACTIONAL, WORKFLOW_ACTION")
 	createCmd.Flags().String("template-format", "", "template format for rendering: TEXT, MARKDOWN, HTML")
 	createCmd.Flags().String("locale", "", "locale for the template, e.g. en-US")
 	createCmd.Flags().Bool("active", true, "whether the template is active")
@@ -86,19 +82,13 @@ func buildCreateInput() (graphclient.CreateEmailTemplateInput, error) {
 	}
 
 	input.Name = name
-
-	templateContext := cmd.Config.String("template-context")
-	if templateContext == "" {
-		return input, ErrTemplateContextRequired
-	}
-
-	input.TemplateContext = enums.TemplateContext(templateContext)
 	input.Description = lo.EmptyableToPtr(cmd.Config.String("description"))
-	input.SubjectTemplate = lo.EmptyableToPtr(cmd.Config.String("subject-template"))
-	input.BodyTemplate = lo.EmptyableToPtr(cmd.Config.String("body-template"))
-	input.TextTemplate = lo.EmptyableToPtr(cmd.Config.String("text-template"))
-	input.PreheaderTemplate = lo.EmptyableToPtr(cmd.Config.String("preheader-template"))
 	input.Locale = lo.EmptyableToPtr(cmd.Config.String("locale"))
+
+	if tc := cmd.Config.String("template-context"); tc != "" {
+		v := enums.TemplateContext(tc)
+		input.TemplateContext = &v
+	}
 
 	if format := cmd.Config.String("template-format"); format != "" {
 		f := enums.NotificationTemplateFormat(format)
@@ -139,12 +129,11 @@ func create(ctx context.Context) error {
 
 	tmpl := resp.CreateEmailTemplate.EmailTemplate
 
-	headers := []string{"ID", "Key", "Name", "Format", "Active"}
+	headers := []string{"ID", "Key", "Name", "Active"}
 	rows := [][]string{{
 		tmpl.ID,
 		tmpl.Key,
 		tmpl.Name,
-		string(tmpl.Format),
 		cmd.BoolStr(tmpl.Active),
 	}}
 

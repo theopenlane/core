@@ -9,9 +9,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
-
-type integrationPrimaryDirectorySkipKey struct{}
 
 // HookIntegrationPrimaryDirectory enforces the one-primary-directory-per-org invariant
 // When an integration is set as the primary directory, all sibling integrations in the
@@ -49,16 +48,17 @@ func HookIntegrationPrimaryDirectory() ent.Hook {
 
 // shouldSkipIntegrationPrimaryDirectorySync reports whether sibling clearing should be bypassed
 func shouldSkipIntegrationPrimaryDirectorySync(ctx context.Context) bool {
-	v, _ := ctx.Value(integrationPrimaryDirectorySkipKey{}).(bool)
-	return v
+	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
+	return metadata.SkipPrimaryDirectorySync
 }
 
 // withSkipIntegrationPrimaryDirectorySync marks a context to bypass recursive hook re-entry
 func withSkipIntegrationPrimaryDirectorySync(ctx context.Context) context.Context {
-	return context.WithValue(ctx, integrationPrimaryDirectorySkipKey{}, true)
-}
+	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
+	metadata.SkipPrimaryDirectorySync = true
 
-type integrationCampaignEmailSkipKey struct{}
+	return integrationtypes.WithExecutionMetadata(ctx, metadata)
+}
 
 // HookIntegrationCampaignEmail enforces the one-campaign-email-per-org invariant.
 // When an integration is flagged as the campaign email provider, all sibling
@@ -70,38 +70,40 @@ func HookIntegrationCampaignEmail() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			//			campaignEmail, ok := m.CampaignEmail()
-			//			if !ok || !campaignEmail {
-			//				return next.Mutate(ctx, m)
-			//			}
-			//
-			//			retVal, err := next.Mutate(ctx, m)
-			//			if err != nil {
-			//				return nil, err
-			//			}
-			//
-			//			inst := retVal.(*generated.Integration)
-			//
-			//			return retVal, m.Client().Integration.Update().
-			//				Where(
-			//					integration.OwnerID(inst.OwnerID),
-			//					integration.IDNEQ(inst.ID),
-			//					integration.CampaignEmail(true),
-			//				).
-			//				SetCampaignEmail(false).
-			//				Exec(privacy.DecisionContext(withSkipIntegrationCampaignEmailSync(ctx), privacy.Allow))
-			return next.Mutate(ctx, m)
+			campaignEmail, ok := m.CampaignEmail()
+			if !ok || !campaignEmail {
+				return next.Mutate(ctx, m)
+			}
+
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			inst := retVal.(*generated.Integration)
+
+			return retVal, m.Client().Integration.Update().
+				Where(
+					integration.OwnerID(inst.OwnerID),
+					integration.IDNEQ(inst.ID),
+					integration.CampaignEmail(true),
+				).
+				SetCampaignEmail(false).
+				Exec(privacy.DecisionContext(withSkipIntegrationCampaignEmailSync(ctx), privacy.Allow))
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
 // shouldSkipIntegrationCampaignEmailSync reports whether sibling clearing should be bypassed
 func shouldSkipIntegrationCampaignEmailSync(ctx context.Context) bool {
-	v, _ := ctx.Value(integrationCampaignEmailSkipKey{}).(bool)
-	return v
+	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
+	return metadata.SkipCampaignEmailSync
 }
 
 // withSkipIntegrationCampaignEmailSync marks a context to bypass recursive hook re-entry
 func withSkipIntegrationCampaignEmailSync(ctx context.Context) context.Context {
-	return context.WithValue(ctx, integrationCampaignEmailSkipKey{}, true)
+	metadata, _ := integrationtypes.ExecutionMetadataFromContext(ctx)
+	metadata.SkipCampaignEmailSync = true
+
+	return integrationtypes.WithExecutionMetadata(ctx, metadata)
 }

@@ -14,6 +14,8 @@ replace github.com/theopenlane/core/common => ./common
 
 replace github.com/theopenlane/newman => /Users/manderson/core_emailtemplates/newman
 
+replace github.com/theopenlane/go-client => /Users/manderson/go-client
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.40.0

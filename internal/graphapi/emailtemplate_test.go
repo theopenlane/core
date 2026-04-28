@@ -12,8 +12,17 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/utils/ulids"
 )
+
+func validEmailTemplateDefaults() map[string]any {
+	return map[string]any{
+		"subject": "Test subject",
+		"title":   "Test title",
+		"intros":  []any{"Test body"},
+	}
+}
 
 func TestQueryEmailTemplate(t *testing.T) {
 	// create an email template to be queried using testUser1
@@ -149,9 +158,10 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextCampaignRecipient,
+				Defaults:        validEmailTemplateDefaults(),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -159,16 +169,16 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, all input",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextTransactional,
 				Description:     lo.ToPtr("This is a description for the email template"),
 				Active:          lo.ToPtr(false),
 				Version:         lo.ToPtr(int64(1)),
 				Defaults: map[string]any{
-					"subject":   "{{ .companyName }} — Welcome",
-					"title":     "Welcome to {{ .companyName }}",
-					"intros":    []any{"Hi {{ .firstName }}, thanks for joining."},
+					"subject":    "{{ .companyName }} — Welcome",
+					"title":      "Welcome to {{ .companyName }}",
+					"intros":     []any{"Hi {{ .firstName }}, thanks for joining."},
 					"buttonText": "Get Started",
 					"buttonLink": "{{ .rootURL }}/dashboard",
 				},
@@ -179,9 +189,10 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextTransactional,
+				Defaults:        validEmailTemplateDefaults(),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -189,9 +200,10 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextCampaignRecipient,
+				Defaults:        validEmailTemplateDefaults(),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -199,9 +211,10 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				Name:            "Email Template Name " + ulids.New().String(),
 				TemplateContext: &enums.TemplateContextCampaignRecipient,
+				Defaults:        validEmailTemplateDefaults(),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -220,8 +233,9 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 		{
 			name: "missing required field, name",
 			request: testclient.CreateEmailTemplateInput{
-				Key:             "email_key_" + ulids.New().String(),
+				Key:             emaildef.BrandedMessageOp.Name(),
 				TemplateContext: &enums.TemplateContextCampaignRecipient,
+				Defaults:        validEmailTemplateDefaults(),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,

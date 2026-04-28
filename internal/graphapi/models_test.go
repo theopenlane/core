@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -2721,7 +2722,7 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 	}
 
 	if e.Key == "" {
-		e.Key = ulids.New().String()
+		e.Key = emaildef.BrandedMessageOp.Name()
 	}
 
 	if e.TemplateContext == nil {
@@ -2732,6 +2733,11 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 		SetName(e.Name).
 		SetKey(e.Key).
 		SetTemplateContext(*e.TemplateContext).
+		SetDefaults(map[string]any{
+			"subject": "Test subject",
+			"title":   "Test title",
+			"intros":  []any{"Test body"},
+		}).
 		Save(ctx)
 	requireNoError(t, err)
 

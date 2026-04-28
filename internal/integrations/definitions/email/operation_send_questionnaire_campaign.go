@@ -25,6 +25,12 @@ import (
 type SendQuestionnaireCampaignRequest struct {
 	// CampaignID is the identifier of the campaign to dispatch
 	CampaignID string `json:"campaignId" jsonschema:"required,description=Campaign identifier"`
+	// Resend allows previously sent, incomplete targets to receive another questionnaire link
+	Resend bool `json:"resend,omitempty" jsonschema:"description=Whether to include previously sent targets"`
+	// IncludeOverdue includes overdue targets when dispatching incomplete recipients
+	IncludeOverdue bool `json:"includeOverdue,omitempty" jsonschema:"description=Whether overdue targets should be included"`
+	// TestEmail dispatches a single test questionnaire email without adding a campaign target
+	TestEmail string `json:"testEmail,omitempty" jsonschema:"description=Recipient email for a test questionnaire send"`
 }
 
 // SendQuestionnaireCampaign dispatches questionnaire access emails to all pending campaign targets,
@@ -67,11 +73,21 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return nil, fmt.Errorf("%w: %w", ErrAssessmentNotFound, err)
 	}
 
+	if cfg.TestEmail != "" {
+		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, questionnaireRecipient{
+			Email:  cfg.TestEmail,
+			IsTest: true,
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire test email")
+
+			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, cfg.TestEmail)
+		}
+
+		return nil, nil
+	}
+
 	targets, err := req.DB.CampaignTarget.Query().
-		Where(
-			campaigntarget.CampaignIDEQ(cfg.CampaignID),
-			campaigntarget.SentAtIsNil(),
-		).
+		Where(campaigntarget.CampaignIDEQ(cfg.CampaignID)).
 		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign targets")
@@ -79,8 +95,13 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return nil, err
 	}
 
+	targets = filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
+
 	for _, target := range targets {
-		if err := sendQuestionnaireToTarget(ctx, req, req.DB, client, camp, assessmentObj.Name, target); err != nil {
+		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, questionnaireRecipient{
+			Email:            target.Email,
+			CampaignTargetID: target.ID,
+		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire email to target")
 
 			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, target.Email)
@@ -90,48 +111,77 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	return nil, nil
 }
 
-// sendQuestionnaireToTarget creates an assessment response, generates an anonymous access
+type questionnaireRecipient struct {
+	Email            string
+	CampaignTargetID string
+	IsTest           bool
+}
+
+// sendQuestionnaireToRecipient creates an assessment response, generates an anonymous access
 // token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
-// operation, and marks the target as sent
-func sendQuestionnaireToTarget(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, target *generated.CampaignTarget) error {
-	if err := createAssessmentResponse(ctx, db, camp, camp.AssessmentID, target); err != nil {
+// operation, and marks campaign targets as sent for non-test dispatches
+func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, recipient questionnaireRecipient) error {
+	response, err := createAssessmentResponseForRecipient(ctx, db, camp, camp.AssessmentID, recipient.Email, recipient.IsTest)
+	if err != nil {
 		return err
 	}
 
-	baseURL, err := url.Parse(client.Config.ProductURL + "/questionnaire")
+	authURL, err := questionnaireAuthURL(ctx, db, client, camp, recipient.Email)
 	if err != nil {
-		return fmt.Errorf("parse questionnaire URL: %w", err)
+		return err
 	}
 
-	anonSubjectID := ulids.New().String()
-	duration := db.TokenManager.Config().AssessmentAccessDuration
-
-	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, *baseURL, urlx.AnonTokenRequest{
-		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
-		SubjectID: anonSubjectID,
-		OrgID:     camp.OwnerID,
-		Email:     target.Email,
-		Duration:  duration,
-		ExtraClaims: func(c *tokens.Claims) {
-			c.AssessmentID = camp.AssessmentID
-		},
-	})
-	if err != nil {
-		return fmt.Errorf("generate questionnaire token URL: %w", err)
+	tags := make([]newman.Tag, 0, 2)
+	if recipient.CampaignTargetID != "" {
+		tags = append(tags, newman.Tag{Name: TagCampaignTargetID, Value: recipient.CampaignTargetID})
+	}
+	if recipient.IsTest {
+		tags = append(tags,
+			newman.Tag{Name: TagIsTest, Value: "true"},
+			newman.Tag{Name: TagAssessmentResponseID, Value: response.ID},
+		)
 	}
 
 	input := QuestionnaireAuthEmail{
 		RecipientInfo: RecipientInfo{
-			Email: target.Email,
-			Tags:  []newman.Tag{{Name: TagCampaignTargetID, Value: target.ID}},
+			Email: recipient.Email,
+			Tags:  tags,
 		},
 		AssessmentName: assessmentName,
-		AuthURL:        result.URL,
+		AuthURL:        authURL,
 	}
 
 	if err := questionnaireAuthEmail.dispatch(ctx, req, client, input); err != nil {
 		return err
 	}
 
-	return markCampaignTargetSent(ctx, db, target.ID)
+	if recipient.CampaignTargetID == "" {
+		return nil
+	}
+
+	return markCampaignTargetSent(ctx, db, recipient.CampaignTargetID)
+}
+
+// questionnaireAuthURL generates an anonymous access token URL for the campaign's assessment questionnaire
+func questionnaireAuthURL(ctx context.Context, db *generated.Client, client *EmailClient, camp *generated.Campaign, recipientEmail string) (string, error) {
+	baseURL, err := url.Parse(client.Config.ProductURL + "/questionnaire")
+	if err != nil {
+		return "", fmt.Errorf("parse questionnaire URL: %w", err)
+	}
+
+	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, *baseURL, urlx.AnonTokenRequest{
+		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
+		SubjectID: ulids.New().String(),
+		OrgID:     camp.OwnerID,
+		Email:     recipientEmail,
+		Duration:  db.TokenManager.Config().AssessmentAccessDuration,
+		ExtraClaims: func(c *tokens.Claims) {
+			c.AssessmentID = camp.AssessmentID
+		},
+	})
+	if err != nil {
+		return "", fmt.Errorf("generate questionnaire token URL: %w", err)
+	}
+
+	return result.URL, nil
 }

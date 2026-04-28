@@ -9,12 +9,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // TestCampaignTargetDispatchableOverdueResend ensures overdue targets can be resent.
 func TestCampaignTargetDispatchableOverdueResend(t *testing.T) {
-	dispatchable := campaignTargetDispatchable(enums.AssessmentResponseStatusOverdue, true, false)
+	dispatchable := emaildef.TargetDispatchable(enums.AssessmentResponseStatusOverdue, nil, true, false)
 	assert.Check(t, dispatchable)
 }
 

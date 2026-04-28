@@ -25,7 +25,7 @@ import (
 // and the client is resolved from the registry at execution time
 func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) (context.Context, *ent.Integration, types.ExecutionMetadata, error) {
 	if metadata.Runtime {
-		return ctx, nil, metadata, nil
+		return r.withHandlerContext(ctx, metadata), nil, metadata, nil
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -40,9 +40,18 @@ func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.Ex
 	metadata.DefinitionID = integration.DefinitionID
 
 	systemCtx = auth.WithCaller(systemCtx, auth.NewWebhookCaller(integration.OwnerID))
-	systemCtx = types.WithExecutionMetadata(systemCtx, metadata)
+	systemCtx = r.withHandlerContext(systemCtx, metadata)
 
 	return systemCtx, integration, metadata, nil
+}
+
+// withHandlerContext reattaches process-local dependencies after Gala restores
+// durable context values such as caller and integration execution metadata.
+func (r *Runtime) withHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) context.Context {
+	ctx = ent.NewContext(ctx, r.DB())
+	ctx = types.WithExecutionMetadata(ctx, metadata)
+
+	return ctx
 }
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,

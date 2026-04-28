@@ -8,10 +8,12 @@ import (
 
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -78,21 +80,27 @@ func buildDispatchPayload(defaults map[string]any, overlays ...any) (json.RawMes
 // markCampaignTargetSent records the current time as the sent_at timestamp on a campaign target
 func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID string) error {
 	now := models.DateTime(time.Now())
-	if err := db.CampaignTarget.UpdateOneID(targetID).SetSentAt(now).Exec(ctx); err != nil {
+	if err := db.CampaignTarget.UpdateOneID(targetID).
+		SetSentAt(now).
+		SetStatus(enums.AssessmentResponseStatusSent).
+		Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
 		return fmt.Errorf("mark sent: %w", err)
 	}
 
 	return nil
 }
 
-// createAssessmentResponse creates an assessment response record linking a
-// campaign target to the campaign's assessment for completion tracking
-func createAssessmentResponse(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, target *generated.CampaignTarget) error {
+// createAssessmentResponseForRecipient creates a new assessment response record for the campaign and recipient email
+func createAssessmentResponseForRecipient(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, email string, isTest bool) (*generated.AssessmentResponse, error) {
 	create := db.AssessmentResponse.Create().
 		SetAssessmentID(assessmentID).
 		SetCampaignID(camp.ID).
-		SetEmail(target.Email).
+		SetEmail(email).
 		SetOwnerID(camp.OwnerID)
+
+	if isTest {
+		create.SetIsTest(true)
+	}
 
 	if camp.EntityID != "" {
 		create.SetEntityID(camp.EntityID)
@@ -102,7 +110,7 @@ func createAssessmentResponse(ctx context.Context, db *generated.Client, camp *g
 		create.SetDueDate(time.Time(*camp.DueDate))
 	}
 
-	return create.Exec(ctx)
+	return create.Save(ctx)
 }
 
 // staticAttachmentsFromFiles converts File edge records to newman attachments
@@ -128,4 +136,23 @@ func staticAttachmentsFromFiles(ctx context.Context, files []*generated.File) []
 	}
 
 	return attachments
+}
+
+// TargetDispatchable reports whether a campaign target should be included in a
+// dispatch attempt for the requested action semantics
+func TargetDispatchable(status enums.AssessmentResponseStatus, sentAt *models.DateTime, resend bool, includeOverdue bool) bool {
+	if sentAt != nil && !sentAt.IsZero() && !resend {
+		return false
+	}
+
+	switch status {
+	case enums.AssessmentResponseStatusCompleted:
+		return false
+	case enums.AssessmentResponseStatusOverdue:
+		return includeOverdue || resend
+	case enums.AssessmentResponseStatusSent:
+		return resend
+	default:
+		return true
+	}
 }

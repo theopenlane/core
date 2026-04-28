@@ -249,6 +249,69 @@
       "title": "ReviewActionParams",
       "description": "Parameters for REQUEST_REVIEW actions that require user or group review"
     },
+    "SendEmailActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/send-email-action-params",
+      "properties": {
+        "targets": {
+          "items": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "USER",
+                  "GROUP",
+                  "ROLE",
+                  "RESOLVER",
+                  "CHANNEL"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "resolver_key": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "template_id": {
+          "type": "string"
+        },
+        "template_key": {
+          "type": "string"
+        },
+        "to": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "from": {
+          "type": "string"
+        },
+        "reply_to": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object"
+        },
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "TargetConfig": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://github.com/theopenlane/core/internal/workflows/target-config",
