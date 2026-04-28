@@ -14,7 +14,7 @@ import (
 func (d CheckSync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(configServiceClient, checkSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *configservice.Client, cfg CheckSync) ([]types.IngestPayloadSet, error) {
 		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("aws_iam: check sync is disabled")
+			logx.FromContext(ctx).Debug().Msg("awsconfig: check sync is disabled")
 
 			return nil, nil
 		}

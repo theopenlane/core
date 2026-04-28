@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -117,8 +116,6 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 
 // ConnectionRegistration returns the connection registration for the given credential slot
 func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegistration, error) {
-	log.Debug().Str("name", d.DisplayName).Interface("family", d.Family).Msg("integrations: connection registration")
-
 	reg, found := lo.Find(d.Connections, func(r ConnectionRegistration) bool {
 		return r.CredentialRef == ref
 	})

@@ -14,7 +14,7 @@ import (
 func (d AssetSync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(configServiceClient, assetSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *configservice.Client, cfg AssetSync) ([]types.IngestPayloadSet, error) {
 		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("aws_iam: check sync is disabled")
+			logx.FromContext(ctx).Debug().Msg("aws: check sync is disabled")
 
 			return nil, nil
 		}

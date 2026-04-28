@@ -134,11 +134,8 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings) (*securit
 		return nil, err
 	}
 
-	logx.FromContext(ctx).Debug().Interface("credential meta", meta).Msg("awssecurityhub: credential meta used for filters")
-
 	if meta.AccountScope != AccountScopeAll {
 		if len(meta.AccountIDs) > 0 {
-			logx.FromContext(ctx).Debug().Strs("account_ids", meta.AccountIDs).Msg("awssecurityhub: filtering by account ids")
 			accountFilters := make([]securityhubtypes.StringFilter, len(meta.AccountIDs))
 			for i, id := range meta.AccountIDs {
 				accountFilters[i] = securityhubtypes.StringFilter{
@@ -149,7 +146,6 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings) (*securit
 
 			filters.AwsAccountId = accountFilters
 		} else if meta.AccountID != "" {
-			logx.FromContext(ctx).Debug().Str("account_id", meta.AccountID).Msg("awssecurityhub: filtering by account id")
 			accountFilters := make([]securityhubtypes.StringFilter, 1)
 
 			accountFilters[0] = securityhubtypes.StringFilter{
@@ -162,8 +158,6 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings) (*securit
 	}
 
 	if len(meta.LinkedRegions) > 0 {
-		logx.FromContext(ctx).Debug().Strs("regions", meta.LinkedRegions).Msg("awssecurityhub: filtering by regions")
-
 		regionFilters := make([]securityhubtypes.StringFilter, len(meta.LinkedRegions))
 		for i, reg := range meta.LinkedRegions {
 			regionFilters[i] = securityhubtypes.StringFilter{

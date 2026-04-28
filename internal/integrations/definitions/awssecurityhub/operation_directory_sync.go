@@ -61,7 +61,7 @@ type iamMembershipPayload struct {
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(iamClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("aws_iam: directory sync is disabled")
+			logx.FromContext(ctx).Debug().Msg("awsiam: directory sync is disabled")
 
 			return nil, nil
 		}
