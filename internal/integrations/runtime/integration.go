@@ -5,7 +5,6 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -106,7 +105,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		}
 	}
 
-	vendorInput := generated.CreateEntityInput{
+	vendorInput := ent.CreateEntityInput{
 		Name:           &def.Family,
 		Tags:           []string{"integration"},
 		ApprovedForUse: lo.ToPtr(true),
