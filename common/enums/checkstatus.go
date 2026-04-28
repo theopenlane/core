@@ -13,7 +13,7 @@ var (
 	// CheckStatusUnknown indicates the unknown.
 	CheckStatusUnknown CheckStatus = "UNKNOWN"
 	// CheckStatusInvalid is used when an unknown or unsupported value is provided.
-	CheckStatusInvalid CheckStatus = "CheckSTATUS_INVALID"
+	CheckStatusInvalid CheckStatus = "CHECKSTATUS_INVALID"
 )
 
 var CheckStatusValues = []CheckStatus{

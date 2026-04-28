@@ -35,9 +35,6 @@ type ExecutionPolicy struct {
 type IngestContract struct {
 	// Schema is the normalized target schema emitted by the operation
 	Schema string `json:"schema"`
-	// ExhaustiveSync indicates the operation returns a complete snapshot of all records for
-	// this schema and this integration only handles active records so we need to mark them as deleted
-	ExhaustiveSync bool `json:"exhaustiveSync,omitempty"`
 }
 
 // OperationRequest bundles the inputs for executing one definition operation

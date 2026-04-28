@@ -108,7 +108,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 	}
 
 	directorySync := needsDirectorySyncRun(contracts)
-	markRemoved := hasExhaustiveDirectoryAccountContract(contracts)
 	syncStartedAt := time.Now()
 
 	directorySyncRunID := options.DirectorySyncRunID
@@ -126,7 +125,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 	if directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization {
 		integrationID := ic.Integration.ID
 		defer func() {
-			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, integrationID, syncStartedAt, markRemoved, err); finalizeErr != nil {
+			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, integrationID, syncStartedAt, err); finalizeErr != nil {
 				err = errors.Join(err, finalizeErr)
 			}
 		}()
@@ -264,7 +263,7 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 
 // finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
 // is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
-func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, integrationID string, syncStartedAt time.Time, markRemoved bool, ingestErr error) error {
+func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, integrationID string, syncStartedAt time.Time, ingestErr error) error {
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())
 
@@ -276,23 +275,7 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 		update.ClearError()
 	}
 
-	if err := update.Exec(ctx); err != nil {
-		return err
-	}
-
-	if ingestErr == nil && markRemoved {
-		return markRemovedDirectoryAccounts(ctx, db, integrationID, syncStartedAt)
-	}
-
-	return nil
-}
-
-// hasExhaustiveDirectoryAccountContract reports whether any contract in the list declares an
-// exhaustive directory account sync, meaning records absent from the sync should be marked removed
-func hasExhaustiveDirectoryAccountContract(contracts []types.IngestContract) bool {
-	return lo.ContainsBy(contracts, func(c types.IngestContract) bool {
-		return c.Schema == integrationgenerated.IntegrationMappingSchemaDirectoryAccount && c.ExhaustiveSync
-	})
+	return update.Exec(ctx)
 }
 
 // wrapIngestPersistError wraps the known errors from persistence operations so we don't need the same boilerplate in multiple functions
