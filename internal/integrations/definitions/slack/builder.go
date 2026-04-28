@@ -50,7 +50,6 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         slackCredential.ID(),
 					Name:        "Slack OAuth Credential",
 					Description: "OAuth credential used to access the Slack workspace",
-					Recommended: true,
 				},
 				{
 					Ref:         slackBotTokenCredential.ID(),
