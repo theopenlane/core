@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload_internalPolicies(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkCreatePayload_internalPolicies,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkCreatePayload_internalPolicies(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.InternalPolicy) graphql.Marshaler {
+			return ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InternalPolicyBulkCreatePayload",
@@ -51,143 +55,7 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_InternalPolicy_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "status":
-				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "details":
-				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_InternalPolicy_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_InternalPolicy_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
-			case "internalPolicyKindName":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
-			case "internalPolicyKindID":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
-			case "owner":
-				return ec.fieldContext_InternalPolicy_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_InternalPolicy_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_InternalPolicy_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
-			case "internalPolicyKind":
-				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_InternalPolicy_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_InternalPolicy_scope(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
-			case "controls":
-				return ec.fieldContext_InternalPolicy_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
-			case "narratives":
-				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "risks":
-				return ec.fieldContext_InternalPolicy_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
-			case "file":
-				return ec.fieldContext_InternalPolicy_file(ctx, field)
-			case "comments":
-				return ec.fieldContext_InternalPolicy_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
-			case "assets":
-				return ec.fieldContext_InternalPolicy_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_InternalPolicy_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
-			case "reviews":
-				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
+			return ec.childFields_InternalPolicy(ctx, field)
 		},
 	}
 	return fc, nil
@@ -198,28 +66,22 @@ func (ec *executionContext) _InternalPolicyBulkDeletePayload_deletedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InternalPolicyBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InternalPolicyBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InternalPolicyBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkDeletePayload) (ret graphql.Marshaler) {
@@ -227,28 +89,22 @@ func (ec *executionContext) _InternalPolicyBulkDeletePayload_notDeletedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InternalPolicyBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InternalPolicyBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InternalPolicyBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkDeletePayload) (ret graphql.Marshaler) {
@@ -256,28 +112,22 @@ func (ec *executionContext) _InternalPolicyBulkDeletePayload_error(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InternalPolicyBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InternalPolicyBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -285,17 +135,20 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.InternalPolicy) graphql.Marshaler {
+			return ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InternalPolicyBulkUpdatePayload",
@@ -303,143 +156,7 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_InternalPolicy_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "status":
-				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "details":
-				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_InternalPolicy_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_InternalPolicy_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
-			case "internalPolicyKindName":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
-			case "internalPolicyKindID":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
-			case "owner":
-				return ec.fieldContext_InternalPolicy_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_InternalPolicy_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_InternalPolicy_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
-			case "internalPolicyKind":
-				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_InternalPolicy_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_InternalPolicy_scope(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
-			case "controls":
-				return ec.fieldContext_InternalPolicy_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
-			case "narratives":
-				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "risks":
-				return ec.fieldContext_InternalPolicy_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
-			case "file":
-				return ec.fieldContext_InternalPolicy_file(ctx, field)
-			case "comments":
-				return ec.fieldContext_InternalPolicy_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
-			case "assets":
-				return ec.fieldContext_InternalPolicy_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_InternalPolicy_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
-			case "reviews":
-				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
+			return ec.childFields_InternalPolicy(ctx, field)
 		},
 	}
 	return fc, nil
@@ -450,28 +167,22 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload_updatedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InternalPolicyBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InternalPolicyBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyCreatePayload) (ret graphql.Marshaler) {
@@ -479,17 +190,20 @@ func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyCreatePayload_internalPolicy,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyCreatePayload_internalPolicy(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InternalPolicy, nil
 		},
 		nil,
-		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicy) graphql.Marshaler {
+			return ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InternalPolicyCreatePayload",
@@ -497,143 +211,7 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_InternalPolicy_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "status":
-				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "details":
-				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_InternalPolicy_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_InternalPolicy_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
-			case "internalPolicyKindName":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
-			case "internalPolicyKindID":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
-			case "owner":
-				return ec.fieldContext_InternalPolicy_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_InternalPolicy_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_InternalPolicy_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
-			case "internalPolicyKind":
-				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_InternalPolicy_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_InternalPolicy_scope(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
-			case "controls":
-				return ec.fieldContext_InternalPolicy_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
-			case "narratives":
-				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "risks":
-				return ec.fieldContext_InternalPolicy_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
-			case "file":
-				return ec.fieldContext_InternalPolicy_file(ctx, field)
-			case "comments":
-				return ec.fieldContext_InternalPolicy_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
-			case "assets":
-				return ec.fieldContext_InternalPolicy_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_InternalPolicy_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
-			case "reviews":
-				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
+			return ec.childFields_InternalPolicy(ctx, field)
 		},
 	}
 	return fc, nil
@@ -644,28 +222,22 @@ func (ec *executionContext) _InternalPolicyDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InternalPolicyDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InternalPolicyDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InternalPolicyUpdatePayload_internalPolicy(ctx context.Context, field graphql.CollectedField, obj *model.InternalPolicyUpdatePayload) (ret graphql.Marshaler) {
@@ -673,17 +245,20 @@ func (ec *executionContext) _InternalPolicyUpdatePayload_internalPolicy(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InternalPolicyUpdatePayload_internalPolicy,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicyUpdatePayload_internalPolicy(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InternalPolicy, nil
 		},
 		nil,
-		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicy) graphql.Marshaler {
+			return ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPolicy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InternalPolicyUpdatePayload",
@@ -691,143 +266,7 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_InternalPolicy_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_InternalPolicy_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_InternalPolicy_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_InternalPolicy_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_InternalPolicy_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_InternalPolicy_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_InternalPolicy_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_InternalPolicy_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_InternalPolicy_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_InternalPolicy_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_InternalPolicy_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_InternalPolicy_name(ctx, field)
-			case "status":
-				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "details":
-				return ec.fieldContext_InternalPolicy_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_InternalPolicy_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_InternalPolicy_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_InternalPolicy_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_InternalPolicy_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_InternalPolicy_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_InternalPolicy_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_InternalPolicy_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_InternalPolicy_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_InternalPolicy_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_InternalPolicy_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_InternalPolicy_fileID(ctx, field)
-			case "internalPolicyKindName":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
-			case "internalPolicyKindID":
-				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_InternalPolicy_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_InternalPolicy_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_InternalPolicy_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_InternalPolicy_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
-			case "owner":
-				return ec.fieldContext_InternalPolicy_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_InternalPolicy_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_InternalPolicy_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_InternalPolicy_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_InternalPolicy_delegate(ctx, field)
-			case "internalPolicyKind":
-				return ec.fieldContext_InternalPolicy_internalPolicyKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_InternalPolicy_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_InternalPolicy_scope(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_InternalPolicy_controlObjectives(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_InternalPolicy_controlImplementations(ctx, field)
-			case "controls":
-				return ec.fieldContext_InternalPolicy_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_InternalPolicy_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_InternalPolicy_procedures(ctx, field)
-			case "narratives":
-				return ec.fieldContext_InternalPolicy_narratives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_InternalPolicy_tasks(ctx, field)
-			case "risks":
-				return ec.fieldContext_InternalPolicy_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_InternalPolicy_programs(ctx, field)
-			case "file":
-				return ec.fieldContext_InternalPolicy_file(ctx, field)
-			case "comments":
-				return ec.fieldContext_InternalPolicy_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_InternalPolicy_discussions(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
-			case "assets":
-				return ec.fieldContext_InternalPolicy_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_InternalPolicy_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_InternalPolicy_identityHolders(ctx, field)
-			case "reviews":
-				return ec.fieldContext_InternalPolicy_reviews(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_InternalPolicy_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_InternalPolicy_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_InternalPolicy_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_InternalPolicy_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
+			return ec.childFields_InternalPolicy(ctx, field)
 		},
 	}
 	return fc, nil
@@ -867,7 +306,7 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -913,7 +352,7 @@ func (ec *executionContext) _InternalPolicyBulkDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -951,7 +390,7 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -990,7 +429,7 @@ func (ec *executionContext) _InternalPolicyCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1029,7 +468,7 @@ func (ec *executionContext) _InternalPolicyDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1068,7 +507,7 @@ func (ec *executionContext) _InternalPolicyUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

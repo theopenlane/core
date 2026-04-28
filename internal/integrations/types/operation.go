@@ -61,6 +61,8 @@ type OperationRegistration struct {
 	Name string `json:"name"`
 	// Description describes what the operation does
 	Description string `json:"description,omitempty"`
+	// RequiredPermissions lists what scopes or permissions are needed to retrieve data for the Operation
+	RequiredPermissions []string `json:"requiredPermissions,omitempty"`
 	// Topic is the gala topic used to execute the operation
 	Topic gala.TopicName `json:"topic"`
 	// ClientRef identifies which registered client the operation uses
@@ -76,4 +78,9 @@ type OperationRegistration struct {
 	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline,
 	// set for operations that produce ingest data and mutually exclusive with Handle
 	IngestHandle IngestHandler `json:"-"`
+	// DisabledForAll indicates if the sync is not currently available for use and no config params are shown to the user
+	DisabledForAll bool `json:"disabledForAll"`
+	// Disabled reports whether this operation is disabled for a given installation's user input JSON;
+	// when set, reconcile cycles are skipped entirely instead of running and returning empty results
+	Disabled func(userInput json.RawMessage) bool `json:"-"`
 }

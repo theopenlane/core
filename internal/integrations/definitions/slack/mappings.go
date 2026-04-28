@@ -17,8 +17,9 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAvatarRemoteURL, Expr: `'avatar_url' in payload ? payload.avatar_url : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountMfaState, Expr: `dyn('has_2fa' in payload && payload.has_2fa ? "ENABLED" : "DISABLED")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('deleted' in payload && payload.deleted ? "INACTIVE" : "ACTIVE")`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryName, Expr: `'team_id' in payload ? payload.team_id : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDirectoryInstanceID, Expr: `'team_id' in payload ? payload.team_id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountAccountType, Expr: `'is_bot' in payload && payload.is_bot ? "SERVICE" : 'is_external' in payload && payload.is_external ? "GUEST" : "USER"`},
 })
 
 // slackMappings returns the built-in Slack ingest mappings

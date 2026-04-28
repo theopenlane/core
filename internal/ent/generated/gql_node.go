@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -148,6 +149,11 @@ var campaigntargetImplementors = []string{"CampaignTarget", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*CampaignTarget) IsNode() {}
+
+var checkresultImplementors = []string{"CheckResult", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CheckResult) IsNode() {}
 
 var contactImplementors = []string{"Contact", "Node"}
 
@@ -721,6 +727,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(campaigntarget.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaigntargetImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case checkresult.Table:
+		query := c.CheckResult.Query().
+			Where(checkresult.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, checkresultImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1717,6 +1732,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.CampaignTarget.Query().
 			Where(campaigntarget.IDIn(ids...))
 		query, err := query.CollectFields(ctx, campaigntargetImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case checkresult.Table:
+		query := c.CheckResult.Query().
+			Where(checkresult.IDIn(ids...))
+		query, err := query.CollectFields(ctx, checkresultImplementors...)
 		if err != nil {
 			return nil, err
 		}

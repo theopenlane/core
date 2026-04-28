@@ -26,6 +26,8 @@ type Tx struct {
 	Campaign *CampaignClient
 	// CampaignTarget is the client for interacting with the CampaignTarget builders.
 	CampaignTarget *CampaignTargetClient
+	// CheckResult is the client for interacting with the CheckResult builders.
+	CheckResult *CheckResultClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// Control is the client for interacting with the Control builders.
@@ -364,6 +366,7 @@ func (tx *Tx) init() {
 	tx.Asset = NewAssetClient(tx.config)
 	tx.Campaign = NewCampaignClient(tx.config)
 	tx.CampaignTarget = NewCampaignTargetClient(tx.config)
+	tx.CheckResult = NewCheckResultClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
 	tx.Control = NewControlClient(tx.config)
 	tx.ControlImplementation = NewControlImplementationClient(tx.config)

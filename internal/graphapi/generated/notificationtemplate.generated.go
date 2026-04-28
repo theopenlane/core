@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _NotificationTemplateBulkCreatePayload_notificationT
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkCreatePayload_notificationTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkCreatePayload_notificationTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationTemplates, nil
 		},
 		nil,
-		ec.marshalONotificationTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.NotificationTemplate) graphql.Marshaler {
+			return ec.marshalONotificationTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkCreatePayload_notificationTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationTemplateBulkCreatePayload",
@@ -51,83 +55,7 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkCreatePayload_n
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_NotificationTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_NotificationTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_NotificationTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_NotificationTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_NotificationTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_NotificationTemplate_description(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationTemplate_channel(ctx, field)
-			case "format":
-				return ec.fieldContext_NotificationTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_NotificationTemplate_locale(ctx, field)
-			case "topicPattern":
-				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
-			case "destinations":
-				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_NotificationTemplate_emailTemplateID(ctx, field)
-			case "titleTemplate":
-				return ec.fieldContext_NotificationTemplate_titleTemplate(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_NotificationTemplate_subjectTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_NotificationTemplate_bodyTemplate(ctx, field)
-			case "blocks":
-				return ec.fieldContext_NotificationTemplate_blocks(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_NotificationTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_NotificationTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_NotificationTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_NotificationTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
-			case "integration":
-				return ec.fieldContext_NotificationTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_NotificationTemplate_workflowDefinition(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_NotificationTemplate_emailTemplate(ctx, field)
-			case "notifications":
-				return ec.fieldContext_NotificationTemplate_notifications(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplate", field.Name)
+			return ec.childFields_NotificationTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -138,28 +66,22 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_deletedIDs(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationTemplateBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -167,28 +89,22 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_notDeletedIDs
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationTemplateBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -196,28 +112,22 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload_error(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_notificationTemplates(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -225,17 +135,20 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_notificationT
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkUpdatePayload_notificationTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkUpdatePayload_notificationTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationTemplates, nil
 		},
 		nil,
-		ec.marshalONotificationTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.NotificationTemplate) graphql.Marshaler {
+			return ec.marshalONotificationTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_notificationTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationTemplateBulkUpdatePayload",
@@ -243,83 +156,7 @@ func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_n
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_NotificationTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_NotificationTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_NotificationTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_NotificationTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_NotificationTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_NotificationTemplate_description(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationTemplate_channel(ctx, field)
-			case "format":
-				return ec.fieldContext_NotificationTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_NotificationTemplate_locale(ctx, field)
-			case "topicPattern":
-				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
-			case "destinations":
-				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_NotificationTemplate_emailTemplateID(ctx, field)
-			case "titleTemplate":
-				return ec.fieldContext_NotificationTemplate_titleTemplate(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_NotificationTemplate_subjectTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_NotificationTemplate_bodyTemplate(ctx, field)
-			case "blocks":
-				return ec.fieldContext_NotificationTemplate_blocks(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_NotificationTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_NotificationTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_NotificationTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_NotificationTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
-			case "integration":
-				return ec.fieldContext_NotificationTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_NotificationTemplate_workflowDefinition(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_NotificationTemplate_emailTemplate(ctx, field)
-			case "notifications":
-				return ec.fieldContext_NotificationTemplate_notifications(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplate", field.Name)
+			return ec.childFields_NotificationTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -330,28 +167,22 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload_updatedIDs(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationTemplateBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationTemplateBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationTemplateCreatePayload_notificationTemplate(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateCreatePayload) (ret graphql.Marshaler) {
@@ -359,17 +190,20 @@ func (ec *executionContext) _NotificationTemplateCreatePayload_notificationTempl
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateCreatePayload_notificationTemplate,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateCreatePayload_notificationTemplate(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationTemplate, nil
 		},
 		nil,
-		ec.marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationTemplate) graphql.Marshaler {
+			return ec.marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateCreatePayload_notificationTemplate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationTemplateCreatePayload",
@@ -377,83 +211,7 @@ func (ec *executionContext) fieldContext_NotificationTemplateCreatePayload_notif
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_NotificationTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_NotificationTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_NotificationTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_NotificationTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_NotificationTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_NotificationTemplate_description(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationTemplate_channel(ctx, field)
-			case "format":
-				return ec.fieldContext_NotificationTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_NotificationTemplate_locale(ctx, field)
-			case "topicPattern":
-				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
-			case "destinations":
-				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_NotificationTemplate_emailTemplateID(ctx, field)
-			case "titleTemplate":
-				return ec.fieldContext_NotificationTemplate_titleTemplate(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_NotificationTemplate_subjectTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_NotificationTemplate_bodyTemplate(ctx, field)
-			case "blocks":
-				return ec.fieldContext_NotificationTemplate_blocks(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_NotificationTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_NotificationTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_NotificationTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_NotificationTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
-			case "integration":
-				return ec.fieldContext_NotificationTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_NotificationTemplate_workflowDefinition(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_NotificationTemplate_emailTemplate(ctx, field)
-			case "notifications":
-				return ec.fieldContext_NotificationTemplate_notifications(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplate", field.Name)
+			return ec.childFields_NotificationTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -464,28 +222,22 @@ func (ec *executionContext) _NotificationTemplateDeletePayload_deletedID(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationTemplateDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationTemplateDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationTemplateUpdatePayload_notificationTemplate(ctx context.Context, field graphql.CollectedField, obj *model.NotificationTemplateUpdatePayload) (ret graphql.Marshaler) {
@@ -493,17 +245,20 @@ func (ec *executionContext) _NotificationTemplateUpdatePayload_notificationTempl
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationTemplateUpdatePayload_notificationTemplate,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationTemplateUpdatePayload_notificationTemplate(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationTemplate, nil
 		},
 		nil,
-		ec.marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationTemplate) graphql.Marshaler {
+			return ec.marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationTemplateUpdatePayload_notificationTemplate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationTemplateUpdatePayload",
@@ -511,83 +266,7 @@ func (ec *executionContext) fieldContext_NotificationTemplateUpdatePayload_notif
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_NotificationTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_NotificationTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_NotificationTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_NotificationTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_NotificationTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_NotificationTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_NotificationTemplate_description(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationTemplate_channel(ctx, field)
-			case "format":
-				return ec.fieldContext_NotificationTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_NotificationTemplate_locale(ctx, field)
-			case "topicPattern":
-				return ec.fieldContext_NotificationTemplate_topicPattern(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_NotificationTemplate_integrationID(ctx, field)
-			case "destinations":
-				return ec.fieldContext_NotificationTemplate_destinations(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_NotificationTemplate_workflowDefinitionID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_NotificationTemplate_emailTemplateID(ctx, field)
-			case "titleTemplate":
-				return ec.fieldContext_NotificationTemplate_titleTemplate(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_NotificationTemplate_subjectTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_NotificationTemplate_bodyTemplate(ctx, field)
-			case "blocks":
-				return ec.fieldContext_NotificationTemplate_blocks(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_NotificationTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_NotificationTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_NotificationTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_NotificationTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_NotificationTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_NotificationTemplate_defaults(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationTemplate_owner(ctx, field)
-			case "integration":
-				return ec.fieldContext_NotificationTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_NotificationTemplate_workflowDefinition(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_NotificationTemplate_emailTemplate(ctx, field)
-			case "notifications":
-				return ec.fieldContext_NotificationTemplate_notifications(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplate", field.Name)
+			return ec.childFields_NotificationTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -627,7 +306,7 @@ func (ec *executionContext) _NotificationTemplateBulkCreatePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -673,7 +352,7 @@ func (ec *executionContext) _NotificationTemplateBulkDeletePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -711,7 +390,7 @@ func (ec *executionContext) _NotificationTemplateBulkUpdatePayload(ctx context.C
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -750,7 +429,7 @@ func (ec *executionContext) _NotificationTemplateCreatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -789,7 +468,7 @@ func (ec *executionContext) _NotificationTemplateDeletePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -828,7 +507,7 @@ func (ec *executionContext) _NotificationTemplateUpdatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

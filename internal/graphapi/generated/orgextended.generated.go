@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload_organization(c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_OrganizationTransferOwnershipPayload_organization,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrganizationTransferOwnershipPayload_organization(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Organization, nil
 		},
 		nil,
-		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_organization(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OrganizationTransferOwnershipPayload",
@@ -51,247 +55,7 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Organization_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Organization_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Organization_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Organization_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Organization_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Organization_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_Organization_name(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Organization_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Organization_description(ctx, field)
-			case "personalOrg":
-				return ec.fieldContext_Organization_personalOrg(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_Organization_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_Organization_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_Organization_avatarUpdatedAt(ctx, field)
-			case "dedicatedDb":
-				return ec.fieldContext_Organization_dedicatedDb(ctx, field)
-			case "stripeCustomerID":
-				return ec.fieldContext_Organization_stripeCustomerID(ctx, field)
-			case "controlCreators":
-				return ec.fieldContext_Organization_controlCreators(ctx, field)
-			case "controlImplementationCreators":
-				return ec.fieldContext_Organization_controlImplementationCreators(ctx, field)
-			case "controlObjectiveCreators":
-				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
-			case "evidenceCreators":
-				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
-			case "assetCreators":
-				return ec.fieldContext_Organization_assetCreators(ctx, field)
-			case "findingCreators":
-				return ec.fieldContext_Organization_findingCreators(ctx, field)
-			case "vulnerabilityCreators":
-				return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
-			case "groupCreators":
-				return ec.fieldContext_Organization_groupCreators(ctx, field)
-			case "internalPolicyCreators":
-				return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
-			case "mappedControlCreators":
-				return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
-			case "narrativeCreators":
-				return ec.fieldContext_Organization_narrativeCreators(ctx, field)
-			case "procedureCreators":
-				return ec.fieldContext_Organization_procedureCreators(ctx, field)
-			case "programCreators":
-				return ec.fieldContext_Organization_programCreators(ctx, field)
-			case "riskCreators":
-				return ec.fieldContext_Organization_riskCreators(ctx, field)
-			case "identityHolderCreators":
-				return ec.fieldContext_Organization_identityHolderCreators(ctx, field)
-			case "scheduledJobCreators":
-				return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
-			case "standardCreators":
-				return ec.fieldContext_Organization_standardCreators(ctx, field)
-			case "templateCreators":
-				return ec.fieldContext_Organization_templateCreators(ctx, field)
-			case "subprocessorCreators":
-				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
-			case "trustCenterDocCreators":
-				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
-			case "trustCenterSubprocessorCreators":
-				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
-			case "actionPlanCreators":
-				return ec.fieldContext_Organization_actionPlanCreators(ctx, field)
-			case "parent":
-				return ec.fieldContext_Organization_parent(ctx, field)
-			case "children":
-				return ec.fieldContext_Organization_children(ctx, field)
-			case "setting":
-				return ec.fieldContext_Organization_setting(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
-			case "apiTokens":
-				return ec.fieldContext_Organization_apiTokens(ctx, field)
-			case "emailBrandings":
-				return ec.fieldContext_Organization_emailBrandings(ctx, field)
-			case "emailTemplates":
-				return ec.fieldContext_Organization_emailTemplates(ctx, field)
-			case "notificationPreferences":
-				return ec.fieldContext_Organization_notificationPreferences(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_Organization_notificationTemplates(ctx, field)
-			case "users":
-				return ec.fieldContext_Organization_users(ctx, field)
-			case "files":
-				return ec.fieldContext_Organization_files(ctx, field)
-			case "events":
-				return ec.fieldContext_Organization_events(ctx, field)
-			case "secrets":
-				return ec.fieldContext_Organization_secrets(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_Organization_avatarFile(ctx, field)
-			case "groups":
-				return ec.fieldContext_Organization_groups(ctx, field)
-			case "templates":
-				return ec.fieldContext_Organization_templates(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Organization_integrations(ctx, field)
-			case "documents":
-				return ec.fieldContext_Organization_documents(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Organization_orgSubscriptions(ctx, field)
-			case "invites":
-				return ec.fieldContext_Organization_invites(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Organization_subscribers(ctx, field)
-			case "entities":
-				return ec.fieldContext_Organization_entities(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Organization_platforms(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Organization_identityHolders(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Organization_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Organization_campaignTargets(ctx, field)
-			case "entityTypes":
-				return ec.fieldContext_Organization_entityTypes(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Organization_contacts(ctx, field)
-			case "notes":
-				return ec.fieldContext_Organization_notes(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Organization_tasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Organization_programs(ctx, field)
-			case "systemDetails":
-				return ec.fieldContext_Organization_systemDetails(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Organization_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Organization_internalPolicies(ctx, field)
-			case "risks":
-				return ec.fieldContext_Organization_risks(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Organization_controlObjectives(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Organization_narratives(ctx, field)
-			case "controls":
-				return ec.fieldContext_Organization_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Organization_subcontrols(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Organization_controlImplementations(ctx, field)
-			case "mappedControls":
-				return ec.fieldContext_Organization_mappedControls(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Organization_evidence(ctx, field)
-			case "standards":
-				return ec.fieldContext_Organization_standards(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Organization_actionPlans(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_Organization_customDomains(ctx, field)
-			case "jobRunners":
-				return ec.fieldContext_Organization_jobRunners(ctx, field)
-			case "jobRunnerTokens":
-				return ec.fieldContext_Organization_jobRunnerTokens(ctx, field)
-			case "jobRunnerRegistrationTokens":
-				return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
-			case "dnsVerifications":
-				return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-			case "jobTemplates":
-				return ec.fieldContext_Organization_jobTemplates(ctx, field)
-			case "scheduledJobs":
-				return ec.fieldContext_Organization_scheduledJobs(ctx, field)
-			case "jobResults":
-				return ec.fieldContext_Organization_jobResults(ctx, field)
-			case "scheduledJobRuns":
-				return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
-			case "trustCenters":
-				return ec.fieldContext_Organization_trustCenters(ctx, field)
-			case "assets":
-				return ec.fieldContext_Organization_assets(ctx, field)
-			case "scans":
-				return ec.fieldContext_Organization_scans(ctx, field)
-			case "slaDefinitions":
-				return ec.fieldContext_Organization_slaDefinitions(ctx, field)
-			case "subprocessors":
-				return ec.fieldContext_Organization_subprocessors(ctx, field)
-			case "exports":
-				return ec.fieldContext_Organization_exports(ctx, field)
-			case "trustCenterWatermarkConfigs":
-				return ec.fieldContext_Organization_trustCenterWatermarkConfigs(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Organization_assessments(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Organization_assessmentResponses(ctx, field)
-			case "customTypeEnums":
-				return ec.fieldContext_Organization_customTypeEnums(ctx, field)
-			case "tagDefinitions":
-				return ec.fieldContext_Organization_tagDefinitions(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Organization_remediations(ctx, field)
-			case "findings":
-				return ec.fieldContext_Organization_findings(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Organization_reviews(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Organization_vulnerabilities(ctx, field)
-			case "workflowDefinitions":
-				return ec.fieldContext_Organization_workflowDefinitions(ctx, field)
-			case "workflowInstances":
-				return ec.fieldContext_Organization_workflowInstances(ctx, field)
-			case "workflowEvents":
-				return ec.fieldContext_Organization_workflowEvents(ctx, field)
-			case "workflowAssignments":
-				return ec.fieldContext_Organization_workflowAssignments(ctx, field)
-			case "workflowAssignmentTargets":
-				return ec.fieldContext_Organization_workflowAssignmentTargets(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Organization_workflowObjectRefs(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_Organization_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_Organization_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_Organization_directoryMemberships(ctx, field)
-			case "directorySyncRuns":
-				return ec.fieldContext_Organization_directorySyncRuns(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Organization_discussions(ctx, field)
-			case "vendorScoringConfigs":
-				return ec.fieldContext_Organization_vendorScoringConfigs(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_Organization_vendorRiskScores(ctx, field)
-			case "members":
-				return ec.fieldContext_Organization_members(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
+			return ec.childFields_Organization(ctx, field)
 		},
 	}
 	return fc, nil
@@ -302,28 +66,22 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload_invitationSent
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_OrganizationTransferOwnershipPayload_invitationSent,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrganizationTransferOwnershipPayload_invitationSent(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InvitationSent, nil
 		},
 		nil,
-		ec.marshalNBoolean2bool,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_invitationSent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "OrganizationTransferOwnershipPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("OrganizationTransferOwnershipPayload", field, false, false, errors.New("field of type Boolean does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -405,7 +163,7 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

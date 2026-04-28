@@ -162,12 +162,21 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			mut := m.(utils.GenericMutation)
 			client := mut.Client()
 
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
+			}
+
 			// look up the enum by name, object type, and field
 			// and ensure it exists
 			enumPredicates := []predicate.CustomTypeEnum{
-				customtypeenum.Name(enumValue),
+				customtypeenum.NameEqualFold(enumValue),
 				customtypeenum.Field(in.Field),
 				customtypeenum.DeletedAtIsNil(),
+				customtypeenum.Or(
+					customtypeenum.SystemOwned(true),
+					customtypeenum.OwnerID(orgID),
+				),
 			}
 
 			// lookupEnum fetches a custom enum by object type
@@ -178,7 +187,6 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			}
 
 			var enum *generated.CustomTypeEnum
-			var err error
 
 			if in.AllowGlobal {
 				enum, err = lookupEnum("")
@@ -206,6 +214,13 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 				}
 			}
 
+			if enum.Name != enumValue {
+				// match casing of the existing enum
+				if err := m.SetField(in.SchemaFieldName, enum.Name); err != nil {
+					return nil, err
+				}
+			}
+
 			// set the edge field on the mutation to the enum ID
 			if err := m.SetField(in.EdgeFieldName, enum.ID); err != nil {
 				return nil, err
@@ -218,14 +233,14 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 
 // createCustomEnum creates a new CustomTypeEnum when one doesn't exist and autocreate is enabled
 func createCustomEnum(ctx context.Context, client *generated.Client, in CustomEnumFilter, enumValue string) (*generated.CustomTypeEnum, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
-	}
-
 	objectType := in.ObjectType
 	if in.AllowGlobal {
 		objectType = ""
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s is not valid", ErrCustomEnumCreationFailed, enumValue)
 	}
 
 	return client.CustomTypeEnum.Create().

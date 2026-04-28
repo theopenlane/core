@@ -133,7 +133,8 @@ Config contains the configuration for the core server
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
-        "oidclocal": {}
+        "oidclocal": {},
+        "awssecurityhub": {}
     },
     "workflows": {
         "cel": {},
@@ -1594,6 +1595,7 @@ Slack contains settings for Slack notifications
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
+|[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1605,7 +1607,8 @@ Slack contains settings for Slack notifications
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
-    "oidclocal": {}
+    "oidclocal": {},
+    "awssecurityhub": {}
 }
 ```
 
@@ -1682,6 +1685,18 @@ Slack contains settings for Slack notifications
 |**clientsecret**|`string`|||
 |**discoveryurl**|`string`|||
 |**redirecturl**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsawssecurityhub"></a>
+### integrations\.awssecurityhub: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**arn**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

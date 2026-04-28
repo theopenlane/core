@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ProcedureBulkCreatePayload_procedures(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkCreatePayload_procedures,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkCreatePayload_procedures(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Procedure) graphql.Marshaler {
+			return ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProcedureBulkCreatePayload",
@@ -51,129 +55,7 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Procedure_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Procedure_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Procedure_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Procedure_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Procedure_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Procedure_status(ctx, field)
-			case "details":
-				return ec.fieldContext_Procedure_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_Procedure_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Procedure_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_Procedure_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_Procedure_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_Procedure_fileID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Procedure_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Procedure_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
-			case "procedureKindName":
-				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
-			case "procedureKindID":
-				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Procedure_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Procedure_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Procedure_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Procedure_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
-			case "owner":
-				return ec.fieldContext_Procedure_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Procedure_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_Procedure_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Procedure_delegate(ctx, field)
-			case "procedureKind":
-				return ec.fieldContext_Procedure_procedureKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Procedure_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Procedure_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Procedure_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Procedure_subcontrols(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Procedure_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Procedure_risks(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "comments":
-				return ec.fieldContext_Procedure_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Procedure_discussions(ctx, field)
-			case "file":
-				return ec.fieldContext_Procedure_file(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
+			return ec.childFields_Procedure(ctx, field)
 		},
 	}
 	return fc, nil
@@ -184,28 +66,22 @@ func (ec *executionContext) _ProcedureBulkDeletePayload_deletedIDs(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProcedureBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProcedureBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProcedureBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkDeletePayload) (ret graphql.Marshaler) {
@@ -213,28 +89,22 @@ func (ec *executionContext) _ProcedureBulkDeletePayload_notDeletedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProcedureBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProcedureBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProcedureBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkDeletePayload) (ret graphql.Marshaler) {
@@ -242,28 +112,22 @@ func (ec *executionContext) _ProcedureBulkDeletePayload_error(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProcedureBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProcedureBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ProcedureBulkUpdatePayload_procedures(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -271,17 +135,20 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload_procedures(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkUpdatePayload_procedures,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkUpdatePayload_procedures(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Procedure) graphql.Marshaler {
+			return ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProcedureBulkUpdatePayload",
@@ -289,129 +156,7 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Procedure_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Procedure_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Procedure_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Procedure_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Procedure_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Procedure_status(ctx, field)
-			case "details":
-				return ec.fieldContext_Procedure_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_Procedure_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Procedure_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_Procedure_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_Procedure_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_Procedure_fileID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Procedure_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Procedure_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
-			case "procedureKindName":
-				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
-			case "procedureKindID":
-				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Procedure_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Procedure_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Procedure_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Procedure_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
-			case "owner":
-				return ec.fieldContext_Procedure_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Procedure_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_Procedure_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Procedure_delegate(ctx, field)
-			case "procedureKind":
-				return ec.fieldContext_Procedure_procedureKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Procedure_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Procedure_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Procedure_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Procedure_subcontrols(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Procedure_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Procedure_risks(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "comments":
-				return ec.fieldContext_Procedure_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Procedure_discussions(ctx, field)
-			case "file":
-				return ec.fieldContext_Procedure_file(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
+			return ec.childFields_Procedure(ctx, field)
 		},
 	}
 	return fc, nil
@@ -422,28 +167,22 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload_updatedIDs(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProcedureBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProcedureBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProcedureCreatePayload_procedure(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureCreatePayload) (ret graphql.Marshaler) {
@@ -451,17 +190,20 @@ func (ec *executionContext) _ProcedureCreatePayload_procedure(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureCreatePayload_procedure,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureCreatePayload_procedure(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Procedure, nil
 		},
 		nil,
-		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Procedure) graphql.Marshaler {
+			return ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProcedureCreatePayload",
@@ -469,129 +211,7 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Procedure_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Procedure_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Procedure_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Procedure_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Procedure_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Procedure_status(ctx, field)
-			case "details":
-				return ec.fieldContext_Procedure_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_Procedure_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Procedure_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_Procedure_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_Procedure_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_Procedure_fileID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Procedure_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Procedure_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
-			case "procedureKindName":
-				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
-			case "procedureKindID":
-				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Procedure_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Procedure_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Procedure_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Procedure_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
-			case "owner":
-				return ec.fieldContext_Procedure_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Procedure_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_Procedure_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Procedure_delegate(ctx, field)
-			case "procedureKind":
-				return ec.fieldContext_Procedure_procedureKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Procedure_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Procedure_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Procedure_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Procedure_subcontrols(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Procedure_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Procedure_risks(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "comments":
-				return ec.fieldContext_Procedure_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Procedure_discussions(ctx, field)
-			case "file":
-				return ec.fieldContext_Procedure_file(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
+			return ec.childFields_Procedure(ctx, field)
 		},
 	}
 	return fc, nil
@@ -602,28 +222,22 @@ func (ec *executionContext) _ProcedureDeletePayload_deletedID(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProcedureDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProcedureDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProcedureUpdatePayload_procedure(ctx context.Context, field graphql.CollectedField, obj *model.ProcedureUpdatePayload) (ret graphql.Marshaler) {
@@ -631,17 +245,20 @@ func (ec *executionContext) _ProcedureUpdatePayload_procedure(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProcedureUpdatePayload_procedure,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProcedureUpdatePayload_procedure(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Procedure, nil
 		},
 		nil,
-		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Procedure) graphql.Marshaler {
+			return ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProcedureUpdatePayload",
@@ -649,129 +266,7 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Procedure_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Procedure_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Procedure_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Procedure_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Procedure_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Procedure_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Procedure_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Procedure_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Procedure_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_Procedure_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Procedure_status(ctx, field)
-			case "details":
-				return ec.fieldContext_Procedure_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
-			case "approvalRequired":
-				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
-			case "reviewDue":
-				return ec.fieldContext_Procedure_reviewDue(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Procedure_reviewFrequency(ctx, field)
-			case "approverID":
-				return ec.fieldContext_Procedure_approverID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Procedure_delegateID(ctx, field)
-			case "summary":
-				return ec.fieldContext_Procedure_summary(ctx, field)
-			case "tagSuggestions":
-				return ec.fieldContext_Procedure_tagSuggestions(ctx, field)
-			case "dismissedTagSuggestions":
-				return ec.fieldContext_Procedure_dismissedTagSuggestions(ctx, field)
-			case "controlSuggestions":
-				return ec.fieldContext_Procedure_controlSuggestions(ctx, field)
-			case "dismissedControlSuggestions":
-				return ec.fieldContext_Procedure_dismissedControlSuggestions(ctx, field)
-			case "improvementSuggestions":
-				return ec.fieldContext_Procedure_improvementSuggestions(ctx, field)
-			case "dismissedImprovementSuggestions":
-				return ec.fieldContext_Procedure_dismissedImprovementSuggestions(ctx, field)
-			case "url":
-				return ec.fieldContext_Procedure_url(ctx, field)
-			case "fileID":
-				return ec.fieldContext_Procedure_fileID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Procedure_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Procedure_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Procedure_systemInternalID(ctx, field)
-			case "procedureKindName":
-				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
-			case "procedureKindID":
-				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Procedure_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Procedure_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Procedure_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Procedure_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
-			case "owner":
-				return ec.fieldContext_Procedure_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Procedure_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Procedure_editors(ctx, field)
-			case "approver":
-				return ec.fieldContext_Procedure_approver(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Procedure_delegate(ctx, field)
-			case "procedureKind":
-				return ec.fieldContext_Procedure_procedureKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Procedure_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Procedure_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Procedure_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Procedure_subcontrols(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Procedure_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Procedure_programs(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Procedure_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Procedure_risks(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Procedure_tasks(ctx, field)
-			case "comments":
-				return ec.fieldContext_Procedure_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Procedure_discussions(ctx, field)
-			case "file":
-				return ec.fieldContext_Procedure_file(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Procedure_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Procedure_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Procedure_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Procedure_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
+			return ec.childFields_Procedure(ctx, field)
 		},
 	}
 	return fc, nil
@@ -811,7 +306,7 @@ func (ec *executionContext) _ProcedureBulkCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -857,7 +352,7 @@ func (ec *executionContext) _ProcedureBulkDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -895,7 +390,7 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -934,7 +429,7 @@ func (ec *executionContext) _ProcedureCreatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -973,7 +468,7 @@ func (ec *executionContext) _ProcedureDeletePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1012,7 +507,7 @@ func (ec *executionContext) _ProcedureUpdatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

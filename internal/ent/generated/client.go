@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -166,6 +167,8 @@ type Client struct {
 	Campaign *CampaignClient
 	// CampaignTarget is the client for interacting with the CampaignTarget builders.
 	CampaignTarget *CampaignTargetClient
+	// CheckResult is the client for interacting with the CheckResult builders.
+	CheckResult *CheckResultClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
 	// Control is the client for interacting with the Control builders.
@@ -393,6 +396,7 @@ func (c *Client) init() {
 	c.Asset = NewAssetClient(c.config)
 	c.Campaign = NewCampaignClient(c.config)
 	c.CampaignTarget = NewCampaignTargetClient(c.config)
+	c.CheckResult = NewCheckResultClient(c.config)
 	c.Contact = NewContactClient(c.config)
 	c.Control = NewControlClient(c.config)
 	c.ControlImplementation = NewControlImplementationClient(c.config)
@@ -715,6 +719,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Asset:                      NewAssetClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
 		CampaignTarget:             NewCampaignTargetClient(cfg),
+		CheckResult:                NewCheckResultClient(cfg),
 		Contact:                    NewContactClient(cfg),
 		Control:                    NewControlClient(cfg),
 		ControlImplementation:      NewControlImplementationClient(cfg),
@@ -841,6 +846,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Asset:                      NewAssetClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
 		CampaignTarget:             NewCampaignTargetClient(cfg),
+		CheckResult:                NewCheckResultClient(cfg),
 		Contact:                    NewContactClient(cfg),
 		Control:                    NewControlClient(cfg),
 		ControlImplementation:      NewControlImplementationClient(cfg),
@@ -971,9 +977,9 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
-		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
-		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
+		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
+		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
+		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
 		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
 		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
 		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
@@ -1005,9 +1011,9 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.Contact, c.Control, c.ControlImplementation,
-		c.ControlObjective, c.CustomDomain, c.CustomTypeEnum, c.DNSVerification,
-		c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
+		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
+		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
+		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
 		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
 		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
 		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
@@ -1123,6 +1129,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Campaign.mutate(ctx, m)
 	case *CampaignTargetMutation:
 		return c.CampaignTarget.mutate(ctx, m)
+	case *CheckResultMutation:
+		return c.CheckResult.mutate(ctx, m)
 	case *ContactMutation:
 		return c.Contact.mutate(ctx, m)
 	case *ControlMutation:
@@ -3926,6 +3934,255 @@ func (c *CampaignTargetClient) mutate(ctx context.Context, m *CampaignTargetMuta
 	}
 }
 
+// CheckResultClient is a client for the CheckResult schema.
+type CheckResultClient struct {
+	config
+}
+
+// NewCheckResultClient returns a client for the CheckResult from the given config.
+func NewCheckResultClient(c config) *CheckResultClient {
+	return &CheckResultClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `checkresult.Hooks(f(g(h())))`.
+func (c *CheckResultClient) Use(hooks ...Hook) {
+	c.hooks.CheckResult = append(c.hooks.CheckResult, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `checkresult.Intercept(f(g(h())))`.
+func (c *CheckResultClient) Intercept(interceptors ...Interceptor) {
+	c.inters.CheckResult = append(c.inters.CheckResult, interceptors...)
+}
+
+// Create returns a builder for creating a CheckResult entity.
+func (c *CheckResultClient) Create() *CheckResultCreate {
+	mutation := newCheckResultMutation(c.config, OpCreate)
+	return &CheckResultCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of CheckResult entities.
+func (c *CheckResultClient) CreateBulk(builders ...*CheckResultCreate) *CheckResultCreateBulk {
+	return &CheckResultCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *CheckResultClient) MapCreateBulk(slice any, setFunc func(*CheckResultCreate, int)) *CheckResultCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &CheckResultCreateBulk{err: fmt.Errorf("calling to CheckResultClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*CheckResultCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &CheckResultCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for CheckResult.
+func (c *CheckResultClient) Update() *CheckResultUpdate {
+	mutation := newCheckResultMutation(c.config, OpUpdate)
+	return &CheckResultUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *CheckResultClient) UpdateOne(_m *CheckResult) *CheckResultUpdateOne {
+	mutation := newCheckResultMutation(c.config, OpUpdateOne, withCheckResult(_m))
+	return &CheckResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *CheckResultClient) UpdateOneID(id string) *CheckResultUpdateOne {
+	mutation := newCheckResultMutation(c.config, OpUpdateOne, withCheckResultID(id))
+	return &CheckResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for CheckResult.
+func (c *CheckResultClient) Delete() *CheckResultDelete {
+	mutation := newCheckResultMutation(c.config, OpDelete)
+	return &CheckResultDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *CheckResultClient) DeleteOne(_m *CheckResult) *CheckResultDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *CheckResultClient) DeleteOneID(id string) *CheckResultDeleteOne {
+	builder := c.Delete().Where(checkresult.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &CheckResultDeleteOne{builder}
+}
+
+// Query returns a query builder for CheckResult.
+func (c *CheckResultClient) Query() *CheckResultQuery {
+	return &CheckResultQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeCheckResult},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a CheckResult entity by its id.
+func (c *CheckResultClient) Get(ctx context.Context, id string) (*CheckResult, error) {
+	return c.Query().Where(checkresult.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *CheckResultClient) GetX(ctx context.Context, id string) *CheckResult {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a CheckResult.
+func (c *CheckResultClient) QueryBlockedGroups(_m *CheckResult) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, checkresult.BlockedGroupsTable, checkresult.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a CheckResult.
+func (c *CheckResultClient) QueryEditors(_m *CheckResult) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, checkresult.EditorsTable, checkresult.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a CheckResult.
+func (c *CheckResultClient) QueryViewers(_m *CheckResult) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, checkresult.ViewersTable, checkresult.ViewersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a CheckResult.
+func (c *CheckResultClient) QueryControls(_m *CheckResult) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, checkresult.ControlsTable, checkresult.ControlsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.CheckResultControls
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a CheckResult.
+func (c *CheckResultClient) QueryFindings(_m *CheckResult) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, checkresult.FindingsTable, checkresult.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingCheckResults
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a CheckResult.
+func (c *CheckResultClient) QueryIntegration(_m *CheckResult) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, checkresult.IntegrationTable, checkresult.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.CheckResult
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *CheckResultClient) Hooks() []Hook {
+	hooks := c.hooks.CheckResult
+	return append(hooks[:len(hooks):len(hooks)], checkresult.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *CheckResultClient) Interceptors() []Interceptor {
+	inters := c.inters.CheckResult
+	return append(inters[:len(inters):len(inters)], checkresult.Interceptors[:]...)
+}
+
+func (c *CheckResultClient) mutate(ctx context.Context, m *CheckResultMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&CheckResultCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&CheckResultUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&CheckResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&CheckResultDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown CheckResult mutation op: %q", m.Op())
+	}
+}
+
 // ContactClient is a client for the Contact schema.
 type ContactClient struct {
 	config
@@ -4695,6 +4952,25 @@ func (c *ControlClient) QueryStandard(_m *Control) *StandardQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Standard
 		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCheckResults queries the check_results edge of a Control.
+func (c *ControlClient) QueryCheckResults(_m *Control) *CheckResultQuery {
+	query := (&CheckResultClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.CheckResultsTable, control.CheckResultsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResultControls
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -12097,6 +12373,25 @@ func (c *FindingClient) QueryWorkflowObjectRefs(_m *Finding) *WorkflowObjectRefQ
 	return query
 }
 
+// QueryCheckResults queries the check_results edge of a Finding.
+func (c *FindingClient) QueryCheckResults(_m *Finding) *CheckResultQuery {
+	query := (&CheckResultClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.CheckResultsTable, finding.CheckResultsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.FindingCheckResults
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlMappings queries the control_mappings edge of a Finding.
 func (c *FindingClient) QueryControlMappings(_m *Finding) *FindingControlQuery {
 	query := (&FindingControlClient{config: c.config}).Query()
@@ -15260,6 +15555,25 @@ func (c *IntegrationClient) QueryDirectorySyncRuns(_m *Integration) *DirectorySy
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.DirectorySyncRun
 		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCheckResults queries the check_results edge of a Integration.
+func (c *IntegrationClient) QueryCheckResults(_m *Integration) *CheckResultQuery {
+	query := (&CheckResultClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.CheckResultsTable, integration.CheckResultsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResult
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -37359,11 +37673,11 @@ func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposal
 type (
 	hooks struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
-		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
-		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
-		DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
+		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
+		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
+		Discussion, DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken,
+		Entity, EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
 		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
@@ -37383,11 +37697,11 @@ type (
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, Contact, Control, ControlImplementation, ControlObjective,
-		CustomDomain, CustomTypeEnum, DNSVerification, DirectoryAccount,
-		DirectoryGroup, DirectoryMembership, DirectorySyncRun, Discussion,
-		DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
+		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
+		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
+		Discussion, DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken,
+		Entity, EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
 		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,

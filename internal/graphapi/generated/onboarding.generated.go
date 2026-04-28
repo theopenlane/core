@@ -4,11 +4,12 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,17 +33,20 @@ func (ec *executionContext) _OnboardingCreatePayload_onboarding(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_OnboardingCreatePayload_onboarding,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OnboardingCreatePayload_onboarding(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Onboarding, nil
 		},
 		nil,
-		ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Onboarding) graphql.Marshaler {
+			return ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_OnboardingCreatePayload_onboarding(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "OnboardingCreatePayload",
@@ -50,27 +54,7 @@ func (ec *executionContext) fieldContext_OnboardingCreatePayload_onboarding(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Onboarding_id(ctx, field)
-			case "organizationID":
-				return ec.fieldContext_Onboarding_organizationID(ctx, field)
-			case "companyName":
-				return ec.fieldContext_Onboarding_companyName(ctx, field)
-			case "domains":
-				return ec.fieldContext_Onboarding_domains(ctx, field)
-			case "companyDetails":
-				return ec.fieldContext_Onboarding_companyDetails(ctx, field)
-			case "userDetails":
-				return ec.fieldContext_Onboarding_userDetails(ctx, field)
-			case "compliance":
-				return ec.fieldContext_Onboarding_compliance(ctx, field)
-			case "demoRequested":
-				return ec.fieldContext_Onboarding_demoRequested(ctx, field)
-			case "organization":
-				return ec.fieldContext_Onboarding_organization(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Onboarding", field.Name)
+			return ec.childFields_Onboarding(ctx, field)
 		},
 	}
 	return fc, nil
@@ -113,7 +97,7 @@ func (ec *executionContext) _OnboardingCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

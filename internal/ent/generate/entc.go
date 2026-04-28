@@ -357,6 +357,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			integrationmapping.WithIngestPackageName("operations"),
 			integrationmapping.WithIntegrationGeneratedPackage("github.com/theopenlane/core/internal/ent/integrationgenerated"),
 			integrationmapping.WithContextxPackage("github.com/theopenlane/utils/contextx"),
+			integrationmapping.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
 			integrationmapping.WithDoPackage("github.com/samber/do/v2"),
 			integrationmapping.WithLoPackage("github.com/samber/lo"),
 			integrationmapping.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),

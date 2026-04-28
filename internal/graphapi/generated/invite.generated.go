@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkCreatePayload_invites,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkCreatePayload_invites(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Invites, nil
 		},
 		nil,
-		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Invite) graphql.Marshaler {
+			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InviteBulkCreatePayload",
@@ -51,41 +55,7 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Invite_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Invite_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Invite_ownerID(ctx, field)
-			case "expires":
-				return ec.fieldContext_Invite_expires(ctx, field)
-			case "recipient":
-				return ec.fieldContext_Invite_recipient(ctx, field)
-			case "status":
-				return ec.fieldContext_Invite_status(ctx, field)
-			case "role":
-				return ec.fieldContext_Invite_role(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "ownershipTransfer":
-				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
-			case "owner":
-				return ec.fieldContext_Invite_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Invite_events(ctx, field)
-			case "groups":
-				return ec.fieldContext_Invite_groups(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
+			return ec.childFields_Invite(ctx, field)
 		},
 	}
 	return fc, nil
@@ -96,28 +66,22 @@ func (ec *executionContext) _InviteBulkDeletePayload_deletedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InviteBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InviteBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InviteBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkDeletePayload) (ret graphql.Marshaler) {
@@ -125,28 +89,22 @@ func (ec *executionContext) _InviteBulkDeletePayload_notDeletedIDs(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InviteBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InviteBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InviteBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkDeletePayload) (ret graphql.Marshaler) {
@@ -154,28 +112,22 @@ func (ec *executionContext) _InviteBulkDeletePayload_error(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InviteBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InviteBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _InviteBulkUpdatePayload_invites(ctx context.Context, field graphql.CollectedField, obj *model.InviteBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -183,17 +135,20 @@ func (ec *executionContext) _InviteBulkUpdatePayload_invites(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkUpdatePayload_invites,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkUpdatePayload_invites(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Invites, nil
 		},
 		nil,
-		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Invite) graphql.Marshaler {
+			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkUpdatePayload_invites(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InviteBulkUpdatePayload",
@@ -201,41 +156,7 @@ func (ec *executionContext) fieldContext_InviteBulkUpdatePayload_invites(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Invite_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Invite_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Invite_ownerID(ctx, field)
-			case "expires":
-				return ec.fieldContext_Invite_expires(ctx, field)
-			case "recipient":
-				return ec.fieldContext_Invite_recipient(ctx, field)
-			case "status":
-				return ec.fieldContext_Invite_status(ctx, field)
-			case "role":
-				return ec.fieldContext_Invite_role(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "ownershipTransfer":
-				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
-			case "owner":
-				return ec.fieldContext_Invite_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Invite_events(ctx, field)
-			case "groups":
-				return ec.fieldContext_Invite_groups(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
+			return ec.childFields_Invite(ctx, field)
 		},
 	}
 	return fc, nil
@@ -246,28 +167,22 @@ func (ec *executionContext) _InviteBulkUpdatePayload_updatedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InviteBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InviteBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, field graphql.CollectedField, obj *model.InviteCreatePayload) (ret graphql.Marshaler) {
@@ -275,17 +190,20 @@ func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteCreatePayload_invite,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteCreatePayload_invite(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Invite, nil
 		},
 		nil,
-		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
+			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InviteCreatePayload",
@@ -293,41 +211,7 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Invite_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Invite_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Invite_ownerID(ctx, field)
-			case "expires":
-				return ec.fieldContext_Invite_expires(ctx, field)
-			case "recipient":
-				return ec.fieldContext_Invite_recipient(ctx, field)
-			case "status":
-				return ec.fieldContext_Invite_status(ctx, field)
-			case "role":
-				return ec.fieldContext_Invite_role(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "ownershipTransfer":
-				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
-			case "owner":
-				return ec.fieldContext_Invite_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Invite_events(ctx, field)
-			case "groups":
-				return ec.fieldContext_Invite_groups(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
+			return ec.childFields_Invite(ctx, field)
 		},
 	}
 	return fc, nil
@@ -338,28 +222,22 @@ func (ec *executionContext) _InviteDeletePayload_deletedID(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "InviteDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("InviteDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, field graphql.CollectedField, obj *model.InviteUpdatePayload) (ret graphql.Marshaler) {
@@ -367,17 +245,20 @@ func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_InviteUpdatePayload_invite,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InviteUpdatePayload_invite(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Invite, nil
 		},
 		nil,
-		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
+			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "InviteUpdatePayload",
@@ -385,41 +266,7 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Invite_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Invite_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Invite_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Invite_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Invite_updatedBy(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Invite_ownerID(ctx, field)
-			case "expires":
-				return ec.fieldContext_Invite_expires(ctx, field)
-			case "recipient":
-				return ec.fieldContext_Invite_recipient(ctx, field)
-			case "status":
-				return ec.fieldContext_Invite_status(ctx, field)
-			case "role":
-				return ec.fieldContext_Invite_role(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "ownershipTransfer":
-				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
-			case "owner":
-				return ec.fieldContext_Invite_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Invite_events(ctx, field)
-			case "groups":
-				return ec.fieldContext_Invite_groups(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Invite", field.Name)
+			return ec.childFields_Invite(ctx, field)
 		},
 	}
 	return fc, nil
@@ -459,7 +306,7 @@ func (ec *executionContext) _InviteBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -505,7 +352,7 @@ func (ec *executionContext) _InviteBulkDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -543,7 +390,7 @@ func (ec *executionContext) _InviteBulkUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -582,7 +429,7 @@ func (ec *executionContext) _InviteCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -621,7 +468,7 @@ func (ec *executionContext) _InviteDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -660,7 +507,7 @@ func (ec *executionContext) _InviteUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

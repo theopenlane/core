@@ -336,7 +336,13 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, AssessmentResponse{}),
 		defaultEdgeToWithPagination(e, VendorRiskScore{}),
-		defaultEdgeToWithPagination(e, Integration{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Integration{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, Subprocessor{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: e,

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _UserSettingBulkCreatePayload_userSettings(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkCreatePayload_userSettings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkCreatePayload_userSettings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UserSettings, nil
 		},
 		nil,
-		ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.UserSetting) graphql.Marshaler {
+			return ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSettingBulkCreatePayload",
@@ -51,47 +55,7 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_UserSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
-			case "userID":
-				return ec.fieldContext_UserSetting_userID(ctx, field)
-			case "delegateUserID":
-				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
-			case "delegateStartAt":
-				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
-			case "delegateEndAt":
-				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
-			case "locked":
-				return ec.fieldContext_UserSetting_locked(ctx, field)
-			case "silencedAt":
-				return ec.fieldContext_UserSetting_silencedAt(ctx, field)
-			case "suspendedAt":
-				return ec.fieldContext_UserSetting_suspendedAt(ctx, field)
-			case "status":
-				return ec.fieldContext_UserSetting_status(ctx, field)
-			case "emailConfirmed":
-				return ec.fieldContext_UserSetting_emailConfirmed(ctx, field)
-			case "isWebauthnAllowed":
-				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
-			case "isTfaEnabled":
-				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "user":
-				return ec.fieldContext_UserSetting_user(ctx, field)
-			case "defaultOrg":
-				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
+			return ec.childFields_UserSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -102,28 +66,22 @@ func (ec *executionContext) _UserSettingBulkDeletePayload_deletedIDs(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("UserSettingBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _UserSettingBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkDeletePayload) (ret graphql.Marshaler) {
@@ -131,28 +89,22 @@ func (ec *executionContext) _UserSettingBulkDeletePayload_notDeletedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("UserSettingBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _UserSettingBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkDeletePayload) (ret graphql.Marshaler) {
@@ -160,28 +112,22 @@ func (ec *executionContext) _UserSettingBulkDeletePayload_error(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("UserSettingBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _UserSettingBulkUpdatePayload_userSettings(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -189,17 +135,20 @@ func (ec *executionContext) _UserSettingBulkUpdatePayload_userSettings(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkUpdatePayload_userSettings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkUpdatePayload_userSettings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UserSettings, nil
 		},
 		nil,
-		ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.UserSetting) graphql.Marshaler {
+			return ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkUpdatePayload_userSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSettingBulkUpdatePayload",
@@ -207,47 +156,7 @@ func (ec *executionContext) fieldContext_UserSettingBulkUpdatePayload_userSettin
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_UserSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
-			case "userID":
-				return ec.fieldContext_UserSetting_userID(ctx, field)
-			case "delegateUserID":
-				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
-			case "delegateStartAt":
-				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
-			case "delegateEndAt":
-				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
-			case "locked":
-				return ec.fieldContext_UserSetting_locked(ctx, field)
-			case "silencedAt":
-				return ec.fieldContext_UserSetting_silencedAt(ctx, field)
-			case "suspendedAt":
-				return ec.fieldContext_UserSetting_suspendedAt(ctx, field)
-			case "status":
-				return ec.fieldContext_UserSetting_status(ctx, field)
-			case "emailConfirmed":
-				return ec.fieldContext_UserSetting_emailConfirmed(ctx, field)
-			case "isWebauthnAllowed":
-				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
-			case "isTfaEnabled":
-				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "user":
-				return ec.fieldContext_UserSetting_user(ctx, field)
-			case "defaultOrg":
-				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
+			return ec.childFields_UserSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -258,28 +167,22 @@ func (ec *executionContext) _UserSettingBulkUpdatePayload_updatedIDs(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserSettingBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("UserSettingBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _UserSettingCreatePayload_userSetting(ctx context.Context, field graphql.CollectedField, obj *model.UserSettingCreatePayload) (ret graphql.Marshaler) {
@@ -287,17 +190,20 @@ func (ec *executionContext) _UserSettingCreatePayload_userSetting(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingCreatePayload_userSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingCreatePayload_userSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UserSetting, nil
 		},
 		nil,
-		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {
+			return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSettingCreatePayload",
@@ -305,47 +211,7 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_UserSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
-			case "userID":
-				return ec.fieldContext_UserSetting_userID(ctx, field)
-			case "delegateUserID":
-				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
-			case "delegateStartAt":
-				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
-			case "delegateEndAt":
-				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
-			case "locked":
-				return ec.fieldContext_UserSetting_locked(ctx, field)
-			case "silencedAt":
-				return ec.fieldContext_UserSetting_silencedAt(ctx, field)
-			case "suspendedAt":
-				return ec.fieldContext_UserSetting_suspendedAt(ctx, field)
-			case "status":
-				return ec.fieldContext_UserSetting_status(ctx, field)
-			case "emailConfirmed":
-				return ec.fieldContext_UserSetting_emailConfirmed(ctx, field)
-			case "isWebauthnAllowed":
-				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
-			case "isTfaEnabled":
-				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "user":
-				return ec.fieldContext_UserSetting_user(ctx, field)
-			case "defaultOrg":
-				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
+			return ec.childFields_UserSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -356,17 +222,20 @@ func (ec *executionContext) _UserSettingUpdatePayload_userSetting(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserSettingUpdatePayload_userSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserSettingUpdatePayload_userSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UserSetting, nil
 		},
 		nil,
-		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {
+			return ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserSettingUpdatePayload",
@@ -374,47 +243,7 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_UserSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_UserSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_UserSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_UserSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_UserSetting_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_UserSetting_tags(ctx, field)
-			case "userID":
-				return ec.fieldContext_UserSetting_userID(ctx, field)
-			case "delegateUserID":
-				return ec.fieldContext_UserSetting_delegateUserID(ctx, field)
-			case "delegateStartAt":
-				return ec.fieldContext_UserSetting_delegateStartAt(ctx, field)
-			case "delegateEndAt":
-				return ec.fieldContext_UserSetting_delegateEndAt(ctx, field)
-			case "locked":
-				return ec.fieldContext_UserSetting_locked(ctx, field)
-			case "silencedAt":
-				return ec.fieldContext_UserSetting_silencedAt(ctx, field)
-			case "suspendedAt":
-				return ec.fieldContext_UserSetting_suspendedAt(ctx, field)
-			case "status":
-				return ec.fieldContext_UserSetting_status(ctx, field)
-			case "emailConfirmed":
-				return ec.fieldContext_UserSetting_emailConfirmed(ctx, field)
-			case "isWebauthnAllowed":
-				return ec.fieldContext_UserSetting_isWebauthnAllowed(ctx, field)
-			case "isTfaEnabled":
-				return ec.fieldContext_UserSetting_isTfaEnabled(ctx, field)
-			case "user":
-				return ec.fieldContext_UserSetting_user(ctx, field)
-			case "defaultOrg":
-				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
+			return ec.childFields_UserSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -454,7 +283,7 @@ func (ec *executionContext) _UserSettingBulkCreatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -500,7 +329,7 @@ func (ec *executionContext) _UserSettingBulkDeletePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -538,7 +367,7 @@ func (ec *executionContext) _UserSettingBulkUpdatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -577,7 +406,7 @@ func (ec *executionContext) _UserSettingCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -616,7 +445,7 @@ func (ec *executionContext) _UserSettingUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

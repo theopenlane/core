@@ -1,6 +1,9 @@
 package celx
 
-import "github.com/google/cel-go/cel"
+import (
+	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/ext"
+)
 
 // NewEnv builds a CEL environment from the provided config and variable declarations
 func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
@@ -11,6 +14,10 @@ func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 		cel.ParserRecursionLimit(cfg.ParserRecursionLimit),
 		cel.ParserExpressionSizeLimit(cfg.ParserExpressionSizeLimit),
 		cel.CrossTypeNumericComparisons(cfg.CrossTypeNumericComparisons),
+		// add extensions for parsing
+		ext.Strings(),
+		cel.StdLib(),
+		indexByFunc,
 	)
 
 	if cfg.ComprehensionNestingLimit > 0 {

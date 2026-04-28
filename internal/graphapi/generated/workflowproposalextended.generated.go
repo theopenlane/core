@@ -4,11 +4,12 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,17 +33,20 @@ func (ec *executionContext) _WorkflowProposalSubmitPayload_workflowProposal(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalSubmitPayload_workflowProposal,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalSubmitPayload_workflowProposal(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.WorkflowProposal, nil
 		},
 		nil,
-		ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalSubmitPayload_workflowProposal(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowProposalSubmitPayload",
@@ -50,45 +54,7 @@ func (ec *executionContext) fieldContext_WorkflowProposalSubmitPayload_workflowP
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowProposal_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowProposal_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowProposal_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowProposal_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowProposal_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_WorkflowProposal_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowProposal_ownerID(ctx, field)
-			case "workflowObjectRefID":
-				return ec.fieldContext_WorkflowProposal_workflowObjectRefID(ctx, field)
-			case "domainKey":
-				return ec.fieldContext_WorkflowProposal_domainKey(ctx, field)
-			case "state":
-				return ec.fieldContext_WorkflowProposal_state(ctx, field)
-			case "revision":
-				return ec.fieldContext_WorkflowProposal_revision(ctx, field)
-			case "changes":
-				return ec.fieldContext_WorkflowProposal_changes(ctx, field)
-			case "proposedHash":
-				return ec.fieldContext_WorkflowProposal_proposedHash(ctx, field)
-			case "approvedHash":
-				return ec.fieldContext_WorkflowProposal_approvedHash(ctx, field)
-			case "submittedAt":
-				return ec.fieldContext_WorkflowProposal_submittedAt(ctx, field)
-			case "submittedByUserID":
-				return ec.fieldContext_WorkflowProposal_submittedByUserID(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowProposal_owner(ctx, field)
-			case "preview":
-				return ec.fieldContext_WorkflowProposal_preview(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowProposal", field.Name)
+			return ec.childFields_WorkflowProposal(ctx, field)
 		},
 	}
 	return fc, nil
@@ -99,17 +65,20 @@ func (ec *executionContext) _WorkflowProposalUpdatePayload_workflowProposal(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalUpdatePayload_workflowProposal,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalUpdatePayload_workflowProposal(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.WorkflowProposal, nil
 		},
 		nil,
-		ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalUpdatePayload_workflowProposal(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowProposalUpdatePayload",
@@ -117,45 +86,7 @@ func (ec *executionContext) fieldContext_WorkflowProposalUpdatePayload_workflowP
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowProposal_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowProposal_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowProposal_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowProposal_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowProposal_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_WorkflowProposal_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowProposal_ownerID(ctx, field)
-			case "workflowObjectRefID":
-				return ec.fieldContext_WorkflowProposal_workflowObjectRefID(ctx, field)
-			case "domainKey":
-				return ec.fieldContext_WorkflowProposal_domainKey(ctx, field)
-			case "state":
-				return ec.fieldContext_WorkflowProposal_state(ctx, field)
-			case "revision":
-				return ec.fieldContext_WorkflowProposal_revision(ctx, field)
-			case "changes":
-				return ec.fieldContext_WorkflowProposal_changes(ctx, field)
-			case "proposedHash":
-				return ec.fieldContext_WorkflowProposal_proposedHash(ctx, field)
-			case "approvedHash":
-				return ec.fieldContext_WorkflowProposal_approvedHash(ctx, field)
-			case "submittedAt":
-				return ec.fieldContext_WorkflowProposal_submittedAt(ctx, field)
-			case "submittedByUserID":
-				return ec.fieldContext_WorkflowProposal_submittedByUserID(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowProposal_owner(ctx, field)
-			case "preview":
-				return ec.fieldContext_WorkflowProposal_preview(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowProposal", field.Name)
+			return ec.childFields_WorkflowProposal(ctx, field)
 		},
 	}
 	return fc, nil
@@ -166,17 +97,20 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload_workflowProposal(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalWithdrawPayload_workflowProposal,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalWithdrawPayload_workflowProposal(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.WorkflowProposal, nil
 		},
 		nil,
-		ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalWithdrawPayload_workflowProposal(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowProposalWithdrawPayload",
@@ -184,45 +118,7 @@ func (ec *executionContext) fieldContext_WorkflowProposalWithdrawPayload_workflo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowProposal_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowProposal_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowProposal_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowProposal_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowProposal_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_WorkflowProposal_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowProposal_ownerID(ctx, field)
-			case "workflowObjectRefID":
-				return ec.fieldContext_WorkflowProposal_workflowObjectRefID(ctx, field)
-			case "domainKey":
-				return ec.fieldContext_WorkflowProposal_domainKey(ctx, field)
-			case "state":
-				return ec.fieldContext_WorkflowProposal_state(ctx, field)
-			case "revision":
-				return ec.fieldContext_WorkflowProposal_revision(ctx, field)
-			case "changes":
-				return ec.fieldContext_WorkflowProposal_changes(ctx, field)
-			case "proposedHash":
-				return ec.fieldContext_WorkflowProposal_proposedHash(ctx, field)
-			case "approvedHash":
-				return ec.fieldContext_WorkflowProposal_approvedHash(ctx, field)
-			case "submittedAt":
-				return ec.fieldContext_WorkflowProposal_submittedAt(ctx, field)
-			case "submittedByUserID":
-				return ec.fieldContext_WorkflowProposal_submittedByUserID(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowProposal_owner(ctx, field)
-			case "preview":
-				return ec.fieldContext_WorkflowProposal_preview(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowProposal", field.Name)
+			return ec.childFields_WorkflowProposal(ctx, field)
 		},
 	}
 	return fc, nil
@@ -302,7 +198,7 @@ func (ec *executionContext) _WorkflowProposalSubmitPayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -341,7 +237,7 @@ func (ec *executionContext) _WorkflowProposalUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -380,7 +276,7 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -5,6 +5,7 @@ package gqlhistorygenerated
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"sync/atomic"
 
 	"entgo.io/contrib/entgql"
@@ -322,6 +323,36 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	CheckResultHistory struct {
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Details          func(childComplexity int) int
+		ExternalURI      func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		IntegrationID    func(childComplexity int) int
+		LastObservedAt   func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		ParentExternalID func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Source           func(childComplexity int) int
+		Status           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+	}
+
+	CheckResultHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	CheckResultHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	ContactHistory struct {
 		Address       func(childComplexity int) int
 		Company       func(childComplexity int) int
@@ -632,6 +663,7 @@ type ComplexityRoot struct {
 		CreatedBy              func(childComplexity int) int
 		Description            func(childComplexity int) int
 		DirectoryInstanceID    func(childComplexity int) int
+		DirectoryName          func(childComplexity int) int
 		DirectorySyncRunID     func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		DisplayName            func(childComplexity int) int
@@ -683,6 +715,7 @@ type ComplexityRoot struct {
 		DirectoryAccountID  func(childComplexity int) int
 		DirectoryGroupID    func(childComplexity int) int
 		DirectoryInstanceID func(childComplexity int) int
+		DirectoryName       func(childComplexity int) int
 		DirectorySyncRunID  func(childComplexity int) int
 		DisplayID           func(childComplexity int) int
 		EnvironmentID       func(childComplexity int) int
@@ -2022,6 +2055,7 @@ type ComplexityRoot struct {
 		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
 		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
 		CampaignTargetHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
+		CheckResultHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CheckResultHistoryOrder, where *historygenerated.CheckResultHistoryWhereInput) int
 		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
 		ControlHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlHistoryOrder, where *historygenerated.ControlHistoryWhereInput) int
 		ControlImplementationHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlImplementationHistoryOrder, where *historygenerated.ControlImplementationHistoryWhereInput) int
@@ -3062,6 +3096,7 @@ type ComplexityRoot struct {
 		ExternalOwnerID         func(childComplexity int) int
 		ExternalURI             func(childComplexity int) int
 		FirstPatchedVersion     func(childComplexity int) int
+		FixAvailable            func(childComplexity int) int
 		FixedAt                 func(childComplexity int) int
 		HistoryTime             func(childComplexity int) int
 		ID                      func(childComplexity int) int
@@ -4987,6 +5022,153 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.CampaignTargetHistoryEdge.Node(childComplexity), true
 
+	case "CheckResultHistory.createdAt":
+		if e.ComplexityRoot.CheckResultHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.CreatedAt(childComplexity), true
+
+	case "CheckResultHistory.createdBy":
+		if e.ComplexityRoot.CheckResultHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.CreatedBy(childComplexity), true
+
+	case "CheckResultHistory.details":
+		if e.ComplexityRoot.CheckResultHistory.Details == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Details(childComplexity), true
+
+	case "CheckResultHistory.externalURI":
+		if e.ComplexityRoot.CheckResultHistory.ExternalURI == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ExternalURI(childComplexity), true
+
+	case "CheckResultHistory.historyTime":
+		if e.ComplexityRoot.CheckResultHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.HistoryTime(childComplexity), true
+
+	case "CheckResultHistory.id":
+		if e.ComplexityRoot.CheckResultHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ID(childComplexity), true
+
+	case "CheckResultHistory.integrationID":
+		if e.ComplexityRoot.CheckResultHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.IntegrationID(childComplexity), true
+
+	case "CheckResultHistory.lastObservedAt":
+		if e.ComplexityRoot.CheckResultHistory.LastObservedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.LastObservedAt(childComplexity), true
+
+	case "CheckResultHistory.operation":
+		if e.ComplexityRoot.CheckResultHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Operation(childComplexity), true
+
+	case "CheckResultHistory.parentExternalID":
+		if e.ComplexityRoot.CheckResultHistory.ParentExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.ParentExternalID(childComplexity), true
+
+	case "CheckResultHistory.ref":
+		if e.ComplexityRoot.CheckResultHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Ref(childComplexity), true
+
+	case "CheckResultHistory.source":
+		if e.ComplexityRoot.CheckResultHistory.Source == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Source(childComplexity), true
+
+	case "CheckResultHistory.status":
+		if e.ComplexityRoot.CheckResultHistory.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Status(childComplexity), true
+
+	case "CheckResultHistory.tags":
+		if e.ComplexityRoot.CheckResultHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.Tags(childComplexity), true
+
+	case "CheckResultHistory.updatedAt":
+		if e.ComplexityRoot.CheckResultHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.UpdatedAt(childComplexity), true
+
+	case "CheckResultHistory.updatedBy":
+		if e.ComplexityRoot.CheckResultHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistory.UpdatedBy(childComplexity), true
+
+	case "CheckResultHistoryConnection.edges":
+		if e.ComplexityRoot.CheckResultHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.Edges(childComplexity), true
+
+	case "CheckResultHistoryConnection.pageInfo":
+		if e.ComplexityRoot.CheckResultHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.PageInfo(childComplexity), true
+
+	case "CheckResultHistoryConnection.totalCount":
+		if e.ComplexityRoot.CheckResultHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryConnection.TotalCount(childComplexity), true
+
+	case "CheckResultHistoryEdge.cursor":
+		if e.ComplexityRoot.CheckResultHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryEdge.Cursor(childComplexity), true
+
+	case "CheckResultHistoryEdge.node":
+		if e.ComplexityRoot.CheckResultHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultHistoryEdge.Node(childComplexity), true
+
 	case "ContactHistory.address":
 		if e.ComplexityRoot.ContactHistory.Address == nil {
 			break
@@ -6709,6 +6891,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DirectoryGroupHistory.DirectoryInstanceID(childComplexity), true
 
+	case "DirectoryGroupHistory.directoryName":
+		if e.ComplexityRoot.DirectoryGroupHistory.DirectoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroupHistory.DirectoryName(childComplexity), true
+
 	case "DirectoryGroupHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryGroupHistory.DirectorySyncRunID == nil {
 			break
@@ -7002,6 +7191,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryInstanceID(childComplexity), true
+
+	case "DirectoryMembershipHistory.directoryName":
+		if e.ComplexityRoot.DirectoryMembershipHistory.DirectoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryMembershipHistory.DirectoryName(childComplexity), true
 
 	case "DirectoryMembershipHistory.directorySyncRunID":
 		if e.ComplexityRoot.DirectoryMembershipHistory.DirectorySyncRunID == nil {
@@ -14306,6 +14502,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.CampaignTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CampaignTargetHistoryOrder), args["where"].(*historygenerated.CampaignTargetHistoryWhereInput)), true
 
+	case "Query.checkResultHistories":
+		if e.ComplexityRoot.Query.CheckResultHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_checkResultHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.CheckResultHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.CheckResultHistoryOrder), args["where"].(*historygenerated.CheckResultHistoryWhereInput)), true
+
 	case "Query.contactHistories":
 		if e.ComplexityRoot.Query.ContactHistories == nil {
 			break
@@ -20365,6 +20573,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityHistory.FirstPatchedVersion(childComplexity), true
 
+	case "VulnerabilityHistory.fixAvailable":
+		if e.ComplexityRoot.VulnerabilityHistory.FixAvailable == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.FixAvailable(childComplexity), true
+
 	case "VulnerabilityHistory.fixedAt":
 		if e.ComplexityRoot.VulnerabilityHistory.FixedAt == nil {
 			break
@@ -21855,6 +22070,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCampaignHistoryWhereInput,
 		ec.unmarshalInputCampaignTargetHistoryOrder,
 		ec.unmarshalInputCampaignTargetHistoryWhereInput,
+		ec.unmarshalInputCheckResultHistoryOrder,
+		ec.unmarshalInputCheckResultHistoryWhereInput,
 		ec.unmarshalInputContactHistoryOrder,
 		ec.unmarshalInputContactHistoryWhereInput,
 		ec.unmarshalInputControlHistoryOrder,
@@ -22049,8 +22266,8 @@ func newExecutionContext(
 	opCtx *graphql.OperationContext,
 	execSchema *executableSchema,
 	deferredResults chan graphql.DeferredResult,
-) executionContext {
-	return executionContext{
+) *executionContext {
+	return &executionContext{
 		ExecutionContextState: graphql.NewExecutionContextState[ResolverRoot, DirectiveRoot, ComplexityRoot](
 			opCtx,
 			(*graphql.ExecutableSchemaState[ResolverRoot, DirectiveRoot, ComplexityRoot])(execSchema),
@@ -26077,6 +26294,346 @@ input CampaignTargetHistoryWhereInput {
   completedAtLTE: DateTime
   completedAtIsNil: Boolean
   completedAtNotNil: Boolean
+}
+type CheckResultHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: CheckResultHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  current status of the control
+  """
+  status: CheckResultHistoryCheckStatus!
+  """
+  source that set the check result
+  """
+  source: String!
+  """
+  timestamp the result was last updated
+  """
+  lastObservedAt: DateTime
+  """
+  link to the result in the source system
+  """
+  externalURI: String
+  """
+  optional details of the result
+  """
+  details: String
+  """
+  external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
+  """
+  parentExternalID: String
+  """
+  integration that owns this directory group
+  """
+  integrationID: String
+}
+"""
+CheckResultHistoryCheckStatus is enum for the field status
+"""
+enum CheckResultHistoryCheckStatus @goModel(model: "github.com/theopenlane/core/common/enums.CheckStatus") {
+  PASS
+  FAIL
+  UNKNOWN
+}
+"""
+A connection to a list of items.
+"""
+type CheckResultHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [CheckResultHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type CheckResultHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: CheckResultHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+CheckResultHistoryOpType is enum for the field operation
+"""
+enum CheckResultHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for CheckResultHistory connections
+"""
+input CheckResultHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order CheckResultHistories.
+  """
+  field: CheckResultHistoryOrderField!
+}
+"""
+Properties by which CheckResultHistory connections can be ordered.
+"""
+enum CheckResultHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  STATUS
+  source
+  observed_at
+}
+"""
+CheckResultHistoryWhereInput is used for filtering CheckResultHistory objects.
+Input was generated by ent.
+"""
+input CheckResultHistoryWhereInput {
+  not: CheckResultHistoryWhereInput
+  and: [CheckResultHistoryWhereInput!]
+  or: [CheckResultHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: CheckResultHistoryOpType
+  operationNEQ: CheckResultHistoryOpType
+  operationIn: [CheckResultHistoryOpType!]
+  operationNotIn: [CheckResultHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  status field predicates
+  """
+  status: CheckResultHistoryCheckStatus
+  statusNEQ: CheckResultHistoryCheckStatus
+  statusIn: [CheckResultHistoryCheckStatus!]
+  statusNotIn: [CheckResultHistoryCheckStatus!]
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  last_observed_at field predicates
+  """
+  lastObservedAt: DateTime
+  lastObservedAtNEQ: DateTime
+  lastObservedAtIn: [DateTime!]
+  lastObservedAtNotIn: [DateTime!]
+  lastObservedAtGT: DateTime
+  lastObservedAtGTE: DateTime
+  lastObservedAtLT: DateTime
+  lastObservedAtLTE: DateTime
+  lastObservedAtIsNil: Boolean
+  lastObservedAtNotNil: Boolean
+  """
+  external_uri field predicates
+  """
+  externalURI: String
+  externalURINEQ: String
+  externalURIIn: [String!]
+  externalURINotIn: [String!]
+  externalURIGT: String
+  externalURIGTE: String
+  externalURILT: String
+  externalURILTE: String
+  externalURIContains: String
+  externalURIHasPrefix: String
+  externalURIHasSuffix: String
+  externalURIIsNil: Boolean
+  externalURINotNil: Boolean
+  externalURIEqualFold: String
+  externalURIContainsFold: String
+  """
+  details field predicates
+  """
+  details: String
+  detailsNEQ: String
+  detailsIn: [String!]
+  detailsNotIn: [String!]
+  detailsGT: String
+  detailsGTE: String
+  detailsLT: String
+  detailsLTE: String
+  detailsContains: String
+  detailsHasPrefix: String
+  detailsHasSuffix: String
+  detailsIsNil: Boolean
+  detailsNotNil: Boolean
+  detailsEqualFold: String
+  detailsContainsFold: String
+  """
+  parent_external_id field predicates
+  """
+  parentExternalID: String
+  parentExternalIDNEQ: String
+  parentExternalIDIn: [String!]
+  parentExternalIDNotIn: [String!]
+  parentExternalIDGT: String
+  parentExternalIDGTE: String
+  parentExternalIDLT: String
+  parentExternalIDLTE: String
+  parentExternalIDContains: String
+  parentExternalIDHasPrefix: String
+  parentExternalIDHasSuffix: String
+  parentExternalIDIsNil: Boolean
+  parentExternalIDNotNil: Boolean
+  parentExternalIDEqualFold: String
+  parentExternalIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
 }
 type ContactHistory implements Node {
   id: ID!
@@ -30263,6 +30820,10 @@ type DirectoryGroupHistory implements Node {
   cursor or ETag supplied by the source system for auditing
   """
   sourceVersion: String
+  """
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
+  """
+  directoryName: String
 }
 """
 A connection to a list of items.
@@ -30343,6 +30904,7 @@ enum DirectoryGroupHistoryOrderField {
   external_id
   email
   display_name
+  directory_name
 }
 """
 DirectoryGroupHistoryWhereInput is used for filtering DirectoryGroupHistory objects.
@@ -30820,6 +31382,24 @@ input DirectoryGroupHistoryWhereInput {
   sourceVersionNotNil: Boolean
   sourceVersionEqualFold: String
   sourceVersionContainsFold: String
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
 }
 type DirectoryMembershipHistory implements Node {
   id: ID!
@@ -30886,6 +31466,10 @@ type DirectoryMembershipHistory implements Node {
   mechanism used to populate the membership (api, scim, csv, etc)
   """
   source: String
+  """
+  directory source label set by the integration (e.g. googleworkspace, github, slack)
+  """
+  directoryName: String
   """
   first time the membership was detected
   """
@@ -30981,6 +31565,7 @@ enum DirectoryMembershipHistoryOrderField {
   history_time
   created_at
   updated_at
+  directory_name
 }
 """
 DirectoryMembershipHistoryWhereInput is used for filtering DirectoryMembershipHistory objects.
@@ -31334,6 +31919,24 @@ input DirectoryMembershipHistoryWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+  """
+  directory_name field predicates
+  """
+  directoryName: String
+  directoryNameNEQ: String
+  directoryNameIn: [String!]
+  directoryNameNotIn: [String!]
+  directoryNameGT: String
+  directoryNameGTE: String
+  directoryNameLT: String
+  directoryNameLTE: String
+  directoryNameContains: String
+  directoryNameHasPrefix: String
+  directoryNameHasSuffix: String
+  directoryNameIsNil: Boolean
+  directoryNameNotNil: Boolean
+  directoryNameEqualFold: String
+  directoryNameContainsFold: String
   """
   first_seen_at field predicates
   """
@@ -36509,6 +37112,8 @@ enum FindingHistoryOrderField {
   external_owner_id
   category
   severity
+  event_time
+  reported_at
 }
 """
 FindingHistorySecurityLevel is enum for the field security_level
@@ -48002,6 +48607,37 @@ type Query {
     """
     where: CampaignTargetHistoryWhereInput
   ): CampaignTargetHistoryConnection!
+  checkResultHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CheckResultHistories returned from the connection.
+    """
+    orderBy: CheckResultHistoryOrder
+
+    """
+    Filtering options for CheckResultHistories returned from the connection.
+    """
+    where: CheckResultHistoryWhereInput
+  ): CheckResultHistoryConnection!
   contactHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62355,6 +62991,10 @@ type VulnerabilityHistory implements Node {
   """
   firstPatchedVersion: String
   """
+  indicates if there is a fix available for the vulnerability
+  """
+  fixAvailable: Boolean
+  """
   name of the vulnerable package or dependency
   """
   packageName: String
@@ -63122,6 +63762,13 @@ input VulnerabilityHistoryWhereInput {
   firstPatchedVersionNotNil: Boolean
   firstPatchedVersionEqualFold: String
   firstPatchedVersionContainsFold: String
+  """
+  fix_available field predicates
+  """
+  fixAvailable: Boolean
+  fixAvailableNEQ: Boolean
+  fixAvailableIsNil: Boolean
+  fixAvailableNotNil: Boolean
   """
   package_name field predicates
   """
@@ -66027,3 +66674,6617 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/en
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
+
+// childFields_* functions provide shared child field context lookups.
+// Each function is generated once per unique object type, deduplicating the
+// switch statements that were previously inlined in every fieldContext_* function.
+
+func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ActionPlanHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ActionPlanHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ActionPlanHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ActionPlanHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ActionPlanHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ActionPlanHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ActionPlanHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ActionPlanHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_ActionPlanHistory_tags(ctx, field)
+	case "revision":
+		return ec.fieldContext_ActionPlanHistory_revision(ctx, field)
+	case "name":
+		return ec.fieldContext_ActionPlanHistory_name(ctx, field)
+	case "status":
+		return ec.fieldContext_ActionPlanHistory_status(ctx, field)
+	case "details":
+		return ec.fieldContext_ActionPlanHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_ActionPlanHistory_detailsJSON(ctx, field)
+	case "approvalRequired":
+		return ec.fieldContext_ActionPlanHistory_approvalRequired(ctx, field)
+	case "reviewDue":
+		return ec.fieldContext_ActionPlanHistory_reviewDue(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_ActionPlanHistory_reviewFrequency(ctx, field)
+	case "approverID":
+		return ec.fieldContext_ActionPlanHistory_approverID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_ActionPlanHistory_delegateID(ctx, field)
+	case "summary":
+		return ec.fieldContext_ActionPlanHistory_summary(ctx, field)
+	case "tagSuggestions":
+		return ec.fieldContext_ActionPlanHistory_tagSuggestions(ctx, field)
+	case "dismissedTagSuggestions":
+		return ec.fieldContext_ActionPlanHistory_dismissedTagSuggestions(ctx, field)
+	case "controlSuggestions":
+		return ec.fieldContext_ActionPlanHistory_controlSuggestions(ctx, field)
+	case "dismissedControlSuggestions":
+		return ec.fieldContext_ActionPlanHistory_dismissedControlSuggestions(ctx, field)
+	case "improvementSuggestions":
+		return ec.fieldContext_ActionPlanHistory_improvementSuggestions(ctx, field)
+	case "dismissedImprovementSuggestions":
+		return ec.fieldContext_ActionPlanHistory_dismissedImprovementSuggestions(ctx, field)
+	case "url":
+		return ec.fieldContext_ActionPlanHistory_url(ctx, field)
+	case "fileID":
+		return ec.fieldContext_ActionPlanHistory_fileID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ActionPlanHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ActionPlanHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ActionPlanHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ActionPlanHistory_systemInternalID(ctx, field)
+	case "actionPlanKindName":
+		return ec.fieldContext_ActionPlanHistory_actionPlanKindName(ctx, field)
+	case "actionPlanKindID":
+		return ec.fieldContext_ActionPlanHistory_actionPlanKindID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_ActionPlanHistory_workflowEligibleMarker(ctx, field)
+	case "title":
+		return ec.fieldContext_ActionPlanHistory_title(ctx, field)
+	case "description":
+		return ec.fieldContext_ActionPlanHistory_description(ctx, field)
+	case "dueDate":
+		return ec.fieldContext_ActionPlanHistory_dueDate(ctx, field)
+	case "completedAt":
+		return ec.fieldContext_ActionPlanHistory_completedAt(ctx, field)
+	case "priority":
+		return ec.fieldContext_ActionPlanHistory_priority(ctx, field)
+	case "requiresApproval":
+		return ec.fieldContext_ActionPlanHistory_requiresApproval(ctx, field)
+	case "blocked":
+		return ec.fieldContext_ActionPlanHistory_blocked(ctx, field)
+	case "blockerReason":
+		return ec.fieldContext_ActionPlanHistory_blockerReason(ctx, field)
+	case "metadata":
+		return ec.fieldContext_ActionPlanHistory_metadata(ctx, field)
+	case "rawPayload":
+		return ec.fieldContext_ActionPlanHistory_rawPayload(ctx, field)
+	case "source":
+		return ec.fieldContext_ActionPlanHistory_source(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ActionPlanHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ActionPlanHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ActionPlanHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ActionPlanHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ActionPlanHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ActionPlanHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ActionPlanHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ActionPlanHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ActionPlanHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ActionPlanHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AssessmentHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AssessmentHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AssessmentHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_AssessmentHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_AssessmentHistory_name(ctx, field)
+	case "assessmentType":
+		return ec.fieldContext_AssessmentHistory_assessmentType(ctx, field)
+	case "templateID":
+		return ec.fieldContext_AssessmentHistory_templateID(ctx, field)
+	case "jsonconfig":
+		return ec.fieldContext_AssessmentHistory_jsonconfig(ctx, field)
+	case "uischema":
+		return ec.fieldContext_AssessmentHistory_uischema(ctx, field)
+	case "responseDueDuration":
+		return ec.fieldContext_AssessmentHistory_responseDueDuration(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssessmentResponseHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AssessmentResponseHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AssessmentResponseHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AssessmentResponseHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssessmentResponseHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssessmentResponseHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssessmentResponseHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssessmentResponseHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssessmentResponseHistory_ownerID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_AssessmentResponseHistory_assessmentID(ctx, field)
+	case "isTest":
+		return ec.fieldContext_AssessmentResponseHistory_isTest(ctx, field)
+	case "campaignID":
+		return ec.fieldContext_AssessmentResponseHistory_campaignID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_AssessmentResponseHistory_identityHolderID(ctx, field)
+	case "entityID":
+		return ec.fieldContext_AssessmentResponseHistory_entityID(ctx, field)
+	case "email":
+		return ec.fieldContext_AssessmentResponseHistory_email(ctx, field)
+	case "sendAttempts":
+		return ec.fieldContext_AssessmentResponseHistory_sendAttempts(ctx, field)
+	case "emailDeliveredAt":
+		return ec.fieldContext_AssessmentResponseHistory_emailDeliveredAt(ctx, field)
+	case "emailOpenedAt":
+		return ec.fieldContext_AssessmentResponseHistory_emailOpenedAt(ctx, field)
+	case "emailClickedAt":
+		return ec.fieldContext_AssessmentResponseHistory_emailClickedAt(ctx, field)
+	case "emailOpenCount":
+		return ec.fieldContext_AssessmentResponseHistory_emailOpenCount(ctx, field)
+	case "emailClickCount":
+		return ec.fieldContext_AssessmentResponseHistory_emailClickCount(ctx, field)
+	case "lastEmailEventAt":
+		return ec.fieldContext_AssessmentResponseHistory_lastEmailEventAt(ctx, field)
+	case "emailMetadata":
+		return ec.fieldContext_AssessmentResponseHistory_emailMetadata(ctx, field)
+	case "status":
+		return ec.fieldContext_AssessmentResponseHistory_status(ctx, field)
+	case "assignedAt":
+		return ec.fieldContext_AssessmentResponseHistory_assignedAt(ctx, field)
+	case "startedAt":
+		return ec.fieldContext_AssessmentResponseHistory_startedAt(ctx, field)
+	case "completedAt":
+		return ec.fieldContext_AssessmentResponseHistory_completedAt(ctx, field)
+	case "dueDate":
+		return ec.fieldContext_AssessmentResponseHistory_dueDate(ctx, field)
+	case "documentDataID":
+		return ec.fieldContext_AssessmentResponseHistory_documentDataID(ctx, field)
+	case "isDraft":
+		return ec.fieldContext_AssessmentResponseHistory_isDraft(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentResponseHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssessmentResponseHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssessmentResponseHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssessmentResponseHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentResponseHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssessmentResponseHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssessmentResponseHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssetHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AssetHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AssetHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AssetHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AssetHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AssetHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AssetHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AssetHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AssetHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_AssetHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AssetHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_AssetHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_AssetHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_AssetHistory_internalOwnerGroupID(ctx, field)
+	case "assetSubtypeName":
+		return ec.fieldContext_AssetHistory_assetSubtypeName(ctx, field)
+	case "assetSubtypeID":
+		return ec.fieldContext_AssetHistory_assetSubtypeID(ctx, field)
+	case "assetDataClassificationName":
+		return ec.fieldContext_AssetHistory_assetDataClassificationName(ctx, field)
+	case "assetDataClassificationID":
+		return ec.fieldContext_AssetHistory_assetDataClassificationID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_AssetHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_AssetHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_AssetHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_AssetHistory_scopeID(ctx, field)
+	case "accessModelName":
+		return ec.fieldContext_AssetHistory_accessModelName(ctx, field)
+	case "accessModelID":
+		return ec.fieldContext_AssetHistory_accessModelID(ctx, field)
+	case "encryptionStatusName":
+		return ec.fieldContext_AssetHistory_encryptionStatusName(ctx, field)
+	case "encryptionStatusID":
+		return ec.fieldContext_AssetHistory_encryptionStatusID(ctx, field)
+	case "securityTierName":
+		return ec.fieldContext_AssetHistory_securityTierName(ctx, field)
+	case "securityTierID":
+		return ec.fieldContext_AssetHistory_securityTierID(ctx, field)
+	case "criticalityName":
+		return ec.fieldContext_AssetHistory_criticalityName(ctx, field)
+	case "criticalityID":
+		return ec.fieldContext_AssetHistory_criticalityID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_AssetHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_AssetHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_AssetHistory_systemInternalID(ctx, field)
+	case "assetType":
+		return ec.fieldContext_AssetHistory_assetType(ctx, field)
+	case "name":
+		return ec.fieldContext_AssetHistory_name(ctx, field)
+	case "displayName":
+		return ec.fieldContext_AssetHistory_displayName(ctx, field)
+	case "description":
+		return ec.fieldContext_AssetHistory_description(ctx, field)
+	case "identifier":
+		return ec.fieldContext_AssetHistory_identifier(ctx, field)
+	case "website":
+		return ec.fieldContext_AssetHistory_website(ctx, field)
+	case "physicalLocation":
+		return ec.fieldContext_AssetHistory_physicalLocation(ctx, field)
+	case "region":
+		return ec.fieldContext_AssetHistory_region(ctx, field)
+	case "containsPii":
+		return ec.fieldContext_AssetHistory_containsPii(ctx, field)
+	case "sourceType":
+		return ec.fieldContext_AssetHistory_sourceType(ctx, field)
+	case "sourcePlatformID":
+		return ec.fieldContext_AssetHistory_sourcePlatformID(ctx, field)
+	case "sourceIdentifier":
+		return ec.fieldContext_AssetHistory_sourceIdentifier(ctx, field)
+	case "costCenter":
+		return ec.fieldContext_AssetHistory_costCenter(ctx, field)
+	case "estimatedMonthlyCost":
+		return ec.fieldContext_AssetHistory_estimatedMonthlyCost(ctx, field)
+	case "purchaseDate":
+		return ec.fieldContext_AssetHistory_purchaseDate(ctx, field)
+	case "cpe":
+		return ec.fieldContext_AssetHistory_cpe(ctx, field)
+	case "categories":
+		return ec.fieldContext_AssetHistory_categories(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_AssetHistory_integrationID(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_AssetHistory_observedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssetHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AssetHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AssetHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AssetHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AssetHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssetHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AssetHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AssetHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AssetHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssetHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_CampaignHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_CampaignHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_CampaignHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_CampaignHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_CampaignHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_CampaignHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_CampaignHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_CampaignHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_CampaignHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_CampaignHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_CampaignHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_CampaignHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_CampaignHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_CampaignHistory_internalOwnerGroupID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_CampaignHistory_workflowEligibleMarker(ctx, field)
+	case "name":
+		return ec.fieldContext_CampaignHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_CampaignHistory_description(ctx, field)
+	case "campaignType":
+		return ec.fieldContext_CampaignHistory_campaignType(ctx, field)
+	case "status":
+		return ec.fieldContext_CampaignHistory_status(ctx, field)
+	case "isActive":
+		return ec.fieldContext_CampaignHistory_isActive(ctx, field)
+	case "scheduledAt":
+		return ec.fieldContext_CampaignHistory_scheduledAt(ctx, field)
+	case "launchedAt":
+		return ec.fieldContext_CampaignHistory_launchedAt(ctx, field)
+	case "completedAt":
+		return ec.fieldContext_CampaignHistory_completedAt(ctx, field)
+	case "dueDate":
+		return ec.fieldContext_CampaignHistory_dueDate(ctx, field)
+	case "isRecurring":
+		return ec.fieldContext_CampaignHistory_isRecurring(ctx, field)
+	case "recurrenceFrequency":
+		return ec.fieldContext_CampaignHistory_recurrenceFrequency(ctx, field)
+	case "recurrenceInterval":
+		return ec.fieldContext_CampaignHistory_recurrenceInterval(ctx, field)
+	case "recurrenceCron":
+		return ec.fieldContext_CampaignHistory_recurrenceCron(ctx, field)
+	case "recurrenceTimezone":
+		return ec.fieldContext_CampaignHistory_recurrenceTimezone(ctx, field)
+	case "lastRunAt":
+		return ec.fieldContext_CampaignHistory_lastRunAt(ctx, field)
+	case "nextRunAt":
+		return ec.fieldContext_CampaignHistory_nextRunAt(ctx, field)
+	case "recurrenceEndAt":
+		return ec.fieldContext_CampaignHistory_recurrenceEndAt(ctx, field)
+	case "recipientCount":
+		return ec.fieldContext_CampaignHistory_recipientCount(ctx, field)
+	case "resendCount":
+		return ec.fieldContext_CampaignHistory_resendCount(ctx, field)
+	case "lastResentAt":
+		return ec.fieldContext_CampaignHistory_lastResentAt(ctx, field)
+	case "templateID":
+		return ec.fieldContext_CampaignHistory_templateID(ctx, field)
+	case "entityID":
+		return ec.fieldContext_CampaignHistory_entityID(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_CampaignHistory_assessmentID(ctx, field)
+	case "metadata":
+		return ec.fieldContext_CampaignHistory_metadata(ctx, field)
+	case "emailBrandingID":
+		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
+	case "emailTemplateID":
+		return ec.fieldContext_CampaignHistory_emailTemplateID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_CampaignHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CampaignHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_CampaignHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CampaignHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CampaignHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignTargetHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_CampaignTargetHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_CampaignTargetHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_CampaignTargetHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_CampaignTargetHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_CampaignTargetHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_CampaignTargetHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_CampaignTargetHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_CampaignTargetHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_CampaignTargetHistory_ownerID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_CampaignTargetHistory_workflowEligibleMarker(ctx, field)
+	case "campaignID":
+		return ec.fieldContext_CampaignTargetHistory_campaignID(ctx, field)
+	case "contactID":
+		return ec.fieldContext_CampaignTargetHistory_contactID(ctx, field)
+	case "userID":
+		return ec.fieldContext_CampaignTargetHistory_userID(ctx, field)
+	case "groupID":
+		return ec.fieldContext_CampaignTargetHistory_groupID(ctx, field)
+	case "email":
+		return ec.fieldContext_CampaignTargetHistory_email(ctx, field)
+	case "fullName":
+		return ec.fieldContext_CampaignTargetHistory_fullName(ctx, field)
+	case "status":
+		return ec.fieldContext_CampaignTargetHistory_status(ctx, field)
+	case "sentAt":
+		return ec.fieldContext_CampaignTargetHistory_sentAt(ctx, field)
+	case "completedAt":
+		return ec.fieldContext_CampaignTargetHistory_completedAt(ctx, field)
+	case "metadata":
+		return ec.fieldContext_CampaignTargetHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignTargetHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignTargetHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_CampaignTargetHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CampaignTargetHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_CampaignTargetHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignTargetHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_CampaignTargetHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CampaignTargetHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CampaignTargetHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CampaignTargetHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CheckResultHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_CheckResultHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_CheckResultHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_CheckResultHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_CheckResultHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_CheckResultHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_CheckResultHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_CheckResultHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_CheckResultHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_CheckResultHistory_tags(ctx, field)
+	case "status":
+		return ec.fieldContext_CheckResultHistory_status(ctx, field)
+	case "source":
+		return ec.fieldContext_CheckResultHistory_source(ctx, field)
+	case "lastObservedAt":
+		return ec.fieldContext_CheckResultHistory_lastObservedAt(ctx, field)
+	case "externalURI":
+		return ec.fieldContext_CheckResultHistory_externalURI(ctx, field)
+	case "details":
+		return ec.fieldContext_CheckResultHistory_details(ctx, field)
+	case "parentExternalID":
+		return ec.fieldContext_CheckResultHistory_parentExternalID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_CheckResultHistory_integrationID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CheckResultHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_CheckResultHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_CheckResultHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CheckResultHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_CheckResultHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CheckResultHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_CheckResultHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CheckResultHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CheckResultHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CheckResultHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ContactHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ContactHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ContactHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ContactHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ContactHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ContactHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ContactHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ContactHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ContactHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_ContactHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ContactHistory_ownerID(ctx, field)
+	case "fullName":
+		return ec.fieldContext_ContactHistory_fullName(ctx, field)
+	case "title":
+		return ec.fieldContext_ContactHistory_title(ctx, field)
+	case "company":
+		return ec.fieldContext_ContactHistory_company(ctx, field)
+	case "email":
+		return ec.fieldContext_ContactHistory_email(ctx, field)
+	case "phoneNumber":
+		return ec.fieldContext_ContactHistory_phoneNumber(ctx, field)
+	case "address":
+		return ec.fieldContext_ContactHistory_address(ctx, field)
+	case "status":
+		return ec.fieldContext_ContactHistory_status(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ContactHistory_externalID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_ContactHistory_integrationID(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_ContactHistory_observedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ContactHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ContactHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ContactHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ContactHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ContactHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ContactHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ContactHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ContactHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ContactHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ContactHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ControlHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ControlHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ControlHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ControlHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ControlHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ControlHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ControlHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ControlHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_ControlHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_ControlHistory_tags(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_ControlHistory_externalUUID(ctx, field)
+	case "title":
+		return ec.fieldContext_ControlHistory_title(ctx, field)
+	case "description":
+		return ec.fieldContext_ControlHistory_description(ctx, field)
+	case "descriptionJSON":
+		return ec.fieldContext_ControlHistory_descriptionJSON(ctx, field)
+	case "aliases":
+		return ec.fieldContext_ControlHistory_aliases(ctx, field)
+	case "referenceID":
+		return ec.fieldContext_ControlHistory_referenceID(ctx, field)
+	case "auditorReferenceID":
+		return ec.fieldContext_ControlHistory_auditorReferenceID(ctx, field)
+	case "responsiblePartyID":
+		return ec.fieldContext_ControlHistory_responsiblePartyID(ctx, field)
+	case "status":
+		return ec.fieldContext_ControlHistory_status(ctx, field)
+	case "implementationStatus":
+		return ec.fieldContext_ControlHistory_implementationStatus(ctx, field)
+	case "implementationDescription":
+		return ec.fieldContext_ControlHistory_implementationDescription(ctx, field)
+	case "publicRepresentation":
+		return ec.fieldContext_ControlHistory_publicRepresentation(ctx, field)
+	case "source":
+		return ec.fieldContext_ControlHistory_source(ctx, field)
+	case "sourceName":
+		return ec.fieldContext_ControlHistory_sourceName(ctx, field)
+	case "referenceFramework":
+		return ec.fieldContext_ControlHistory_referenceFramework(ctx, field)
+	case "referenceFrameworkRevision":
+		return ec.fieldContext_ControlHistory_referenceFrameworkRevision(ctx, field)
+	case "category":
+		return ec.fieldContext_ControlHistory_category(ctx, field)
+	case "categoryID":
+		return ec.fieldContext_ControlHistory_categoryID(ctx, field)
+	case "subcategory":
+		return ec.fieldContext_ControlHistory_subcategory(ctx, field)
+	case "mappedCategories":
+		return ec.fieldContext_ControlHistory_mappedCategories(ctx, field)
+	case "assessmentObjectives":
+		return ec.fieldContext_ControlHistory_assessmentObjectives(ctx, field)
+	case "assessmentMethods":
+		return ec.fieldContext_ControlHistory_assessmentMethods(ctx, field)
+	case "controlQuestions":
+		return ec.fieldContext_ControlHistory_controlQuestions(ctx, field)
+	case "implementationGuidance":
+		return ec.fieldContext_ControlHistory_implementationGuidance(ctx, field)
+	case "exampleEvidence":
+		return ec.fieldContext_ControlHistory_exampleEvidence(ctx, field)
+	case "references":
+		return ec.fieldContext_ControlHistory_references(ctx, field)
+	case "testingProcedures":
+		return ec.fieldContext_ControlHistory_testingProcedures(ctx, field)
+	case "evidenceRequests":
+		return ec.fieldContext_ControlHistory_evidenceRequests(ctx, field)
+	case "controlOwnerID":
+		return ec.fieldContext_ControlHistory_controlOwnerID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_ControlHistory_delegateID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ControlHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ControlHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ControlHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ControlHistory_systemInternalID(ctx, field)
+	case "controlKindName":
+		return ec.fieldContext_ControlHistory_controlKindName(ctx, field)
+	case "controlKindID":
+		return ec.fieldContext_ControlHistory_controlKindID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_ControlHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_ControlHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_ControlHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_ControlHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_ControlHistory_workflowEligibleMarker(ctx, field)
+	case "refCode":
+		return ec.fieldContext_ControlHistory_refCode(ctx, field)
+	case "standardID":
+		return ec.fieldContext_ControlHistory_standardID(ctx, field)
+	case "trustCenterVisibility":
+		return ec.fieldContext_ControlHistory_trustCenterVisibility(ctx, field)
+	case "isTrustCenterControl":
+		return ec.fieldContext_ControlHistory_isTrustCenterControl(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ControlHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ControlHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ControlHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ControlHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ControlHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlImplementationHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ControlImplementationHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ControlImplementationHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ControlImplementationHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ControlImplementationHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ControlImplementationHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ControlImplementationHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ControlImplementationHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ControlImplementationHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_ControlImplementationHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ControlImplementationHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ControlImplementationHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ControlImplementationHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ControlImplementationHistory_systemInternalID(ctx, field)
+	case "status":
+		return ec.fieldContext_ControlImplementationHistory_status(ctx, field)
+	case "implementationDate":
+		return ec.fieldContext_ControlImplementationHistory_implementationDate(ctx, field)
+	case "verified":
+		return ec.fieldContext_ControlImplementationHistory_verified(ctx, field)
+	case "verificationDate":
+		return ec.fieldContext_ControlImplementationHistory_verificationDate(ctx, field)
+	case "details":
+		return ec.fieldContext_ControlImplementationHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_ControlImplementationHistory_detailsJSON(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlImplementationHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlImplementationHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ControlImplementationHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ControlImplementationHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ControlImplementationHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlImplementationHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlImplementationHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ControlImplementationHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ControlImplementationHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlImplementationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlObjectiveHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ControlObjectiveHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ControlObjectiveHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ControlObjectiveHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ControlObjectiveHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ControlObjectiveHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ControlObjectiveHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ControlObjectiveHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ControlObjectiveHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_ControlObjectiveHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_ControlObjectiveHistory_tags(ctx, field)
+	case "revision":
+		return ec.fieldContext_ControlObjectiveHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ControlObjectiveHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ControlObjectiveHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ControlObjectiveHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ControlObjectiveHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_ControlObjectiveHistory_name(ctx, field)
+	case "desiredOutcome":
+		return ec.fieldContext_ControlObjectiveHistory_desiredOutcome(ctx, field)
+	case "desiredOutcomeJSON":
+		return ec.fieldContext_ControlObjectiveHistory_desiredOutcomeJSON(ctx, field)
+	case "status":
+		return ec.fieldContext_ControlObjectiveHistory_status(ctx, field)
+	case "source":
+		return ec.fieldContext_ControlObjectiveHistory_source(ctx, field)
+	case "controlObjectiveType":
+		return ec.fieldContext_ControlObjectiveHistory_controlObjectiveType(ctx, field)
+	case "category":
+		return ec.fieldContext_ControlObjectiveHistory_category(ctx, field)
+	case "subcategory":
+		return ec.fieldContext_ControlObjectiveHistory_subcategory(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlObjectiveHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ControlObjectiveHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ControlObjectiveHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ControlObjectiveHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlObjectiveHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ControlObjectiveHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ControlObjectiveHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_CustomDomainHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_CustomDomainHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_CustomDomainHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_CustomDomainHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_CustomDomainHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_CustomDomainHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_CustomDomainHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_CustomDomainHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_CustomDomainHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_CustomDomainHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_CustomDomainHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_CustomDomainHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_CustomDomainHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_CustomDomainHistory_systemInternalID(ctx, field)
+	case "cnameRecord":
+		return ec.fieldContext_CustomDomainHistory_cnameRecord(ctx, field)
+	case "mappableDomainID":
+		return ec.fieldContext_CustomDomainHistory_mappableDomainID(ctx, field)
+	case "dnsVerificationID":
+		return ec.fieldContext_CustomDomainHistory_dnsVerificationID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_CustomDomainHistory_trustCenterID(ctx, field)
+	case "domainType":
+		return ec.fieldContext_CustomDomainHistory_domainType(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CustomDomainHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_CustomDomainHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_CustomDomainHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_CustomDomainHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_CustomDomainHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CustomDomainHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_CustomDomainHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_CustomDomainHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_CustomDomainHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CustomDomainHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DNSVerificationHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DNSVerificationHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DNSVerificationHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DNSVerificationHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DNSVerificationHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DNSVerificationHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DNSVerificationHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DNSVerificationHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DNSVerificationHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_DNSVerificationHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DNSVerificationHistory_ownerID(ctx, field)
+	case "cloudflareHostnameID":
+		return ec.fieldContext_DNSVerificationHistory_cloudflareHostnameID(ctx, field)
+	case "dnsTxtRecord":
+		return ec.fieldContext_DNSVerificationHistory_dnsTxtRecord(ctx, field)
+	case "dnsTxtValue":
+		return ec.fieldContext_DNSVerificationHistory_dnsTxtValue(ctx, field)
+	case "dnsVerificationStatus":
+		return ec.fieldContext_DNSVerificationHistory_dnsVerificationStatus(ctx, field)
+	case "dnsVerificationStatusReason":
+		return ec.fieldContext_DNSVerificationHistory_dnsVerificationStatusReason(ctx, field)
+	case "acmeChallengePath":
+		return ec.fieldContext_DNSVerificationHistory_acmeChallengePath(ctx, field)
+	case "expectedAcmeChallengeValue":
+		return ec.fieldContext_DNSVerificationHistory_expectedAcmeChallengeValue(ctx, field)
+	case "acmeChallengeStatus":
+		return ec.fieldContext_DNSVerificationHistory_acmeChallengeStatus(ctx, field)
+	case "acmeChallengeStatusReason":
+		return ec.fieldContext_DNSVerificationHistory_acmeChallengeStatusReason(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DNSVerificationHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DNSVerificationHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DNSVerificationHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DNSVerificationHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DNSVerificationHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DNSVerificationHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DNSVerificationHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryAccountHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DirectoryAccountHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DirectoryAccountHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DirectoryAccountHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DirectoryAccountHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DirectoryAccountHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DirectoryAccountHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DirectoryAccountHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DirectoryAccountHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_DirectoryAccountHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_DirectoryAccountHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DirectoryAccountHistory_ownerID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_DirectoryAccountHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_DirectoryAccountHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_DirectoryAccountHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_DirectoryAccountHistory_scopeID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_DirectoryAccountHistory_integrationID(ctx, field)
+	case "directorySyncRunID":
+		return ec.fieldContext_DirectoryAccountHistory_directorySyncRunID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_DirectoryAccountHistory_platformID(ctx, field)
+	case "directoryInstanceID":
+		return ec.fieldContext_DirectoryAccountHistory_directoryInstanceID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_DirectoryAccountHistory_identityHolderID(ctx, field)
+	case "directoryName":
+		return ec.fieldContext_DirectoryAccountHistory_directoryName(ctx, field)
+	case "externalID":
+		return ec.fieldContext_DirectoryAccountHistory_externalID(ctx, field)
+	case "secondaryKey":
+		return ec.fieldContext_DirectoryAccountHistory_secondaryKey(ctx, field)
+	case "canonicalEmail":
+		return ec.fieldContext_DirectoryAccountHistory_canonicalEmail(ctx, field)
+	case "emailAliases":
+		return ec.fieldContext_DirectoryAccountHistory_emailAliases(ctx, field)
+	case "phoneNumber":
+		return ec.fieldContext_DirectoryAccountHistory_phoneNumber(ctx, field)
+	case "displayName":
+		return ec.fieldContext_DirectoryAccountHistory_displayName(ctx, field)
+	case "avatarRemoteURL":
+		return ec.fieldContext_DirectoryAccountHistory_avatarRemoteURL(ctx, field)
+	case "avatarLocalFileID":
+		return ec.fieldContext_DirectoryAccountHistory_avatarLocalFileID(ctx, field)
+	case "avatarUpdatedAt":
+		return ec.fieldContext_DirectoryAccountHistory_avatarUpdatedAt(ctx, field)
+	case "givenName":
+		return ec.fieldContext_DirectoryAccountHistory_givenName(ctx, field)
+	case "familyName":
+		return ec.fieldContext_DirectoryAccountHistory_familyName(ctx, field)
+	case "jobTitle":
+		return ec.fieldContext_DirectoryAccountHistory_jobTitle(ctx, field)
+	case "department":
+		return ec.fieldContext_DirectoryAccountHistory_department(ctx, field)
+	case "organizationUnit":
+		return ec.fieldContext_DirectoryAccountHistory_organizationUnit(ctx, field)
+	case "accountType":
+		return ec.fieldContext_DirectoryAccountHistory_accountType(ctx, field)
+	case "status":
+		return ec.fieldContext_DirectoryAccountHistory_status(ctx, field)
+	case "mfaState":
+		return ec.fieldContext_DirectoryAccountHistory_mfaState(ctx, field)
+	case "lastSeenIP":
+		return ec.fieldContext_DirectoryAccountHistory_lastSeenIP(ctx, field)
+	case "lastLoginAt":
+		return ec.fieldContext_DirectoryAccountHistory_lastLoginAt(ctx, field)
+	case "firstSeenAt":
+		return ec.fieldContext_DirectoryAccountHistory_firstSeenAt(ctx, field)
+	case "lastSeenAt":
+		return ec.fieldContext_DirectoryAccountHistory_lastSeenAt(ctx, field)
+	case "addedAt":
+		return ec.fieldContext_DirectoryAccountHistory_addedAt(ctx, field)
+	case "removedAt":
+		return ec.fieldContext_DirectoryAccountHistory_removedAt(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_DirectoryAccountHistory_observedAt(ctx, field)
+	case "profileHash":
+		return ec.fieldContext_DirectoryAccountHistory_profileHash(ctx, field)
+	case "profile":
+		return ec.fieldContext_DirectoryAccountHistory_profile(ctx, field)
+	case "metadata":
+		return ec.fieldContext_DirectoryAccountHistory_metadata(ctx, field)
+	case "rawProfileFileID":
+		return ec.fieldContext_DirectoryAccountHistory_rawProfileFileID(ctx, field)
+	case "sourceVersion":
+		return ec.fieldContext_DirectoryAccountHistory_sourceVersion(ctx, field)
+	case "primarySource":
+		return ec.fieldContext_DirectoryAccountHistory_primarySource(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryAccountHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryAccountHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DirectoryAccountHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DirectoryAccountHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DirectoryAccountHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryAccountHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryAccountHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DirectoryAccountHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DirectoryAccountHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryAccountHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryGroupHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DirectoryGroupHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DirectoryGroupHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DirectoryGroupHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DirectoryGroupHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DirectoryGroupHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DirectoryGroupHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DirectoryGroupHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DirectoryGroupHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_DirectoryGroupHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_DirectoryGroupHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DirectoryGroupHistory_ownerID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_DirectoryGroupHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_DirectoryGroupHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_DirectoryGroupHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_DirectoryGroupHistory_scopeID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_DirectoryGroupHistory_integrationID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_DirectoryGroupHistory_platformID(ctx, field)
+	case "directoryInstanceID":
+		return ec.fieldContext_DirectoryGroupHistory_directoryInstanceID(ctx, field)
+	case "directorySyncRunID":
+		return ec.fieldContext_DirectoryGroupHistory_directorySyncRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_DirectoryGroupHistory_externalID(ctx, field)
+	case "email":
+		return ec.fieldContext_DirectoryGroupHistory_email(ctx, field)
+	case "displayName":
+		return ec.fieldContext_DirectoryGroupHistory_displayName(ctx, field)
+	case "description":
+		return ec.fieldContext_DirectoryGroupHistory_description(ctx, field)
+	case "classification":
+		return ec.fieldContext_DirectoryGroupHistory_classification(ctx, field)
+	case "status":
+		return ec.fieldContext_DirectoryGroupHistory_status(ctx, field)
+	case "externalSharingAllowed":
+		return ec.fieldContext_DirectoryGroupHistory_externalSharingAllowed(ctx, field)
+	case "memberCount":
+		return ec.fieldContext_DirectoryGroupHistory_memberCount(ctx, field)
+	case "firstSeenAt":
+		return ec.fieldContext_DirectoryGroupHistory_firstSeenAt(ctx, field)
+	case "lastSeenAt":
+		return ec.fieldContext_DirectoryGroupHistory_lastSeenAt(ctx, field)
+	case "addedAt":
+		return ec.fieldContext_DirectoryGroupHistory_addedAt(ctx, field)
+	case "removedAt":
+		return ec.fieldContext_DirectoryGroupHistory_removedAt(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_DirectoryGroupHistory_observedAt(ctx, field)
+	case "profileHash":
+		return ec.fieldContext_DirectoryGroupHistory_profileHash(ctx, field)
+	case "profile":
+		return ec.fieldContext_DirectoryGroupHistory_profile(ctx, field)
+	case "metadata":
+		return ec.fieldContext_DirectoryGroupHistory_metadata(ctx, field)
+	case "rawProfileFileID":
+		return ec.fieldContext_DirectoryGroupHistory_rawProfileFileID(ctx, field)
+	case "sourceVersion":
+		return ec.fieldContext_DirectoryGroupHistory_sourceVersion(ctx, field)
+	case "directoryName":
+		return ec.fieldContext_DirectoryGroupHistory_directoryName(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryGroupHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryGroupHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DirectoryGroupHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DirectoryGroupHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DirectoryGroupHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryGroupHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryGroupHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DirectoryGroupHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DirectoryGroupHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryGroupHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryMembershipHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DirectoryMembershipHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DirectoryMembershipHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DirectoryMembershipHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DirectoryMembershipHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DirectoryMembershipHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DirectoryMembershipHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DirectoryMembershipHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DirectoryMembershipHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_DirectoryMembershipHistory_displayID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DirectoryMembershipHistory_ownerID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_DirectoryMembershipHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_DirectoryMembershipHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_DirectoryMembershipHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_DirectoryMembershipHistory_scopeID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_DirectoryMembershipHistory_integrationID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_DirectoryMembershipHistory_platformID(ctx, field)
+	case "directoryInstanceID":
+		return ec.fieldContext_DirectoryMembershipHistory_directoryInstanceID(ctx, field)
+	case "directorySyncRunID":
+		return ec.fieldContext_DirectoryMembershipHistory_directorySyncRunID(ctx, field)
+	case "directoryAccountID":
+		return ec.fieldContext_DirectoryMembershipHistory_directoryAccountID(ctx, field)
+	case "directoryGroupID":
+		return ec.fieldContext_DirectoryMembershipHistory_directoryGroupID(ctx, field)
+	case "role":
+		return ec.fieldContext_DirectoryMembershipHistory_role(ctx, field)
+	case "source":
+		return ec.fieldContext_DirectoryMembershipHistory_source(ctx, field)
+	case "directoryName":
+		return ec.fieldContext_DirectoryMembershipHistory_directoryName(ctx, field)
+	case "firstSeenAt":
+		return ec.fieldContext_DirectoryMembershipHistory_firstSeenAt(ctx, field)
+	case "lastSeenAt":
+		return ec.fieldContext_DirectoryMembershipHistory_lastSeenAt(ctx, field)
+	case "addedAt":
+		return ec.fieldContext_DirectoryMembershipHistory_addedAt(ctx, field)
+	case "removedAt":
+		return ec.fieldContext_DirectoryMembershipHistory_removedAt(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_DirectoryMembershipHistory_observedAt(ctx, field)
+	case "lastConfirmedRunID":
+		return ec.fieldContext_DirectoryMembershipHistory_lastConfirmedRunID(ctx, field)
+	case "metadata":
+		return ec.fieldContext_DirectoryMembershipHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryMembershipHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryMembershipHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DirectoryMembershipHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DirectoryMembershipHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DirectoryMembershipHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryMembershipHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DirectoryMembershipHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DirectoryMembershipHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DirectoryMembershipHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DirectoryMembershipHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DiscussionHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DiscussionHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DiscussionHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DiscussionHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DiscussionHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DiscussionHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DiscussionHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DiscussionHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DiscussionHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DiscussionHistory_ownerID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_DiscussionHistory_externalID(ctx, field)
+	case "isResolved":
+		return ec.fieldContext_DiscussionHistory_isResolved(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DiscussionHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DiscussionHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DiscussionHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DiscussionHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DiscussionHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DiscussionHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DiscussionHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DiscussionHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DiscussionHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DiscussionHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_DocumentDataHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DocumentDataHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_DocumentDataHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_DocumentDataHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_DocumentDataHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DocumentDataHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DocumentDataHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_DocumentDataHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_DocumentDataHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_DocumentDataHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_DocumentDataHistory_ownerID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_DocumentDataHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_DocumentDataHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_DocumentDataHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_DocumentDataHistory_scopeID(ctx, field)
+	case "templateID":
+		return ec.fieldContext_DocumentDataHistory_templateID(ctx, field)
+	case "data":
+		return ec.fieldContext_DocumentDataHistory_data(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DocumentDataHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_DocumentDataHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_DocumentDataHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_DocumentDataHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_DocumentDataHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DocumentDataHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_DocumentDataHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_DocumentDataHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_DocumentDataHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DocumentDataHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailBrandingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EmailBrandingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_EmailBrandingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_EmailBrandingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_EmailBrandingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EmailBrandingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EmailBrandingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_EmailBrandingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_EmailBrandingHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_EmailBrandingHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_EmailBrandingHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_EmailBrandingHistory_name(ctx, field)
+	case "brandName":
+		return ec.fieldContext_EmailBrandingHistory_brandName(ctx, field)
+	case "logoRemoteURL":
+		return ec.fieldContext_EmailBrandingHistory_logoRemoteURL(ctx, field)
+	case "primaryColor":
+		return ec.fieldContext_EmailBrandingHistory_primaryColor(ctx, field)
+	case "secondaryColor":
+		return ec.fieldContext_EmailBrandingHistory_secondaryColor(ctx, field)
+	case "backgroundColor":
+		return ec.fieldContext_EmailBrandingHistory_backgroundColor(ctx, field)
+	case "textColor":
+		return ec.fieldContext_EmailBrandingHistory_textColor(ctx, field)
+	case "buttonColor":
+		return ec.fieldContext_EmailBrandingHistory_buttonColor(ctx, field)
+	case "buttonTextColor":
+		return ec.fieldContext_EmailBrandingHistory_buttonTextColor(ctx, field)
+	case "linkColor":
+		return ec.fieldContext_EmailBrandingHistory_linkColor(ctx, field)
+	case "fontFamily":
+		return ec.fieldContext_EmailBrandingHistory_fontFamily(ctx, field)
+	case "isDefault":
+		return ec.fieldContext_EmailBrandingHistory_isDefault(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailBrandingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_EmailBrandingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_EmailBrandingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_EmailBrandingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailBrandingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_EmailBrandingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_EmailBrandingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EmailTemplateHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_EmailTemplateHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_EmailTemplateHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_EmailTemplateHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EmailTemplateHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EmailTemplateHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_EmailTemplateHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_EmailTemplateHistory_updatedBy(ctx, field)
+	case "revision":
+		return ec.fieldContext_EmailTemplateHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_EmailTemplateHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_EmailTemplateHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_EmailTemplateHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_EmailTemplateHistory_systemInternalID(ctx, field)
+	case "key":
+		return ec.fieldContext_EmailTemplateHistory_key(ctx, field)
+	case "name":
+		return ec.fieldContext_EmailTemplateHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_EmailTemplateHistory_description(ctx, field)
+	case "format":
+		return ec.fieldContext_EmailTemplateHistory_format(ctx, field)
+	case "locale":
+		return ec.fieldContext_EmailTemplateHistory_locale(ctx, field)
+	case "subjectTemplate":
+		return ec.fieldContext_EmailTemplateHistory_subjectTemplate(ctx, field)
+	case "preheaderTemplate":
+		return ec.fieldContext_EmailTemplateHistory_preheaderTemplate(ctx, field)
+	case "bodyTemplate":
+		return ec.fieldContext_EmailTemplateHistory_bodyTemplate(ctx, field)
+	case "textTemplate":
+		return ec.fieldContext_EmailTemplateHistory_textTemplate(ctx, field)
+	case "jsonconfig":
+		return ec.fieldContext_EmailTemplateHistory_jsonconfig(ctx, field)
+	case "uischema":
+		return ec.fieldContext_EmailTemplateHistory_uischema(ctx, field)
+	case "metadata":
+		return ec.fieldContext_EmailTemplateHistory_metadata(ctx, field)
+	case "active":
+		return ec.fieldContext_EmailTemplateHistory_active(ctx, field)
+	case "version":
+		return ec.fieldContext_EmailTemplateHistory_version(ctx, field)
+	case "templateContext":
+		return ec.fieldContext_EmailTemplateHistory_templateContext(ctx, field)
+	case "defaults":
+		return ec.fieldContext_EmailTemplateHistory_defaults(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_EmailTemplateHistory_integrationID(ctx, field)
+	case "workflowDefinitionID":
+		return ec.fieldContext_EmailTemplateHistory_workflowDefinitionID(ctx, field)
+	case "workflowInstanceID":
+		return ec.fieldContext_EmailTemplateHistory_workflowInstanceID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailTemplateHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailTemplateHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_EmailTemplateHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_EmailTemplateHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_EmailTemplateHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailTemplateHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailTemplateHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_EmailTemplateHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_EmailTemplateHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailTemplateHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EntityHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_EntityHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_EntityHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_EntityHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EntityHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EntityHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_EntityHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_EntityHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_EntityHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_EntityHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_EntityHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_EntityHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_EntityHistory_internalOwnerGroupID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_EntityHistory_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_EntityHistory_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_EntityHistory_reviewedByGroupID(ctx, field)
+	case "lastReviewedAt":
+		return ec.fieldContext_EntityHistory_lastReviewedAt(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_EntityHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
+	case "entityRelationshipStateName":
+		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
+	case "entityRelationshipStateID":
+		return ec.fieldContext_EntityHistory_entityRelationshipStateID(ctx, field)
+	case "entitySecurityQuestionnaireStatusName":
+		return ec.fieldContext_EntityHistory_entitySecurityQuestionnaireStatusName(ctx, field)
+	case "entitySecurityQuestionnaireStatusID":
+		return ec.fieldContext_EntityHistory_entitySecurityQuestionnaireStatusID(ctx, field)
+	case "entitySourceTypeName":
+		return ec.fieldContext_EntityHistory_entitySourceTypeName(ctx, field)
+	case "entitySourceTypeID":
+		return ec.fieldContext_EntityHistory_entitySourceTypeID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_EntityHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_EntityHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_EntityHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_EntityHistory_scopeID(ctx, field)
+	case "name":
+		return ec.fieldContext_EntityHistory_name(ctx, field)
+	case "displayName":
+		return ec.fieldContext_EntityHistory_displayName(ctx, field)
+	case "description":
+		return ec.fieldContext_EntityHistory_description(ctx, field)
+	case "domains":
+		return ec.fieldContext_EntityHistory_domains(ctx, field)
+	case "entityTypeID":
+		return ec.fieldContext_EntityHistory_entityTypeID(ctx, field)
+	case "status":
+		return ec.fieldContext_EntityHistory_status(ctx, field)
+	case "approvedForUse":
+		return ec.fieldContext_EntityHistory_approvedForUse(ctx, field)
+	case "linkedAssetIds":
+		return ec.fieldContext_EntityHistory_linkedAssetIds(ctx, field)
+	case "hasSoc2":
+		return ec.fieldContext_EntityHistory_hasSoc2(ctx, field)
+	case "soc2PeriodEnd":
+		return ec.fieldContext_EntityHistory_soc2PeriodEnd(ctx, field)
+	case "contractStartDate":
+		return ec.fieldContext_EntityHistory_contractStartDate(ctx, field)
+	case "contractEndDate":
+		return ec.fieldContext_EntityHistory_contractEndDate(ctx, field)
+	case "autoRenews":
+		return ec.fieldContext_EntityHistory_autoRenews(ctx, field)
+	case "terminationNoticeDays":
+		return ec.fieldContext_EntityHistory_terminationNoticeDays(ctx, field)
+	case "annualSpend":
+		return ec.fieldContext_EntityHistory_annualSpend(ctx, field)
+	case "spendCurrency":
+		return ec.fieldContext_EntityHistory_spendCurrency(ctx, field)
+	case "billingModel":
+		return ec.fieldContext_EntityHistory_billingModel(ctx, field)
+	case "renewalRisk":
+		return ec.fieldContext_EntityHistory_renewalRisk(ctx, field)
+	case "ssoEnforced":
+		return ec.fieldContext_EntityHistory_ssoEnforced(ctx, field)
+	case "mfaSupported":
+		return ec.fieldContext_EntityHistory_mfaSupported(ctx, field)
+	case "mfaEnforced":
+		return ec.fieldContext_EntityHistory_mfaEnforced(ctx, field)
+	case "statusPageURL":
+		return ec.fieldContext_EntityHistory_statusPageURL(ctx, field)
+	case "providedServices":
+		return ec.fieldContext_EntityHistory_providedServices(ctx, field)
+	case "links":
+		return ec.fieldContext_EntityHistory_links(ctx, field)
+	case "riskRating":
+		return ec.fieldContext_EntityHistory_riskRating(ctx, field)
+	case "riskScore":
+		return ec.fieldContext_EntityHistory_riskScore(ctx, field)
+	case "riskScoreCoverage":
+		return ec.fieldContext_EntityHistory_riskScoreCoverage(ctx, field)
+	case "tier":
+		return ec.fieldContext_EntityHistory_tier(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_EntityHistory_reviewFrequency(ctx, field)
+	case "nextReviewAt":
+		return ec.fieldContext_EntityHistory_nextReviewAt(ctx, field)
+	case "contractRenewalAt":
+		return ec.fieldContext_EntityHistory_contractRenewalAt(ctx, field)
+	case "vendorMetadata":
+		return ec.fieldContext_EntityHistory_vendorMetadata(ctx, field)
+	case "logoFileID":
+		return ec.fieldContext_EntityHistory_logoFileID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_EntityHistory_externalID(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_EntityHistory_observedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_EntityHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_EntityHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_EntityHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_EntityHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_EntityHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityTypeHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EntityTypeHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_EntityTypeHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_EntityTypeHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_EntityTypeHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EntityTypeHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EntityTypeHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_EntityTypeHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_EntityTypeHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_EntityTypeHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_EntityTypeHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_EntityTypeHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_EntityTypeHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_EntityTypeHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_EntityTypeHistory_name(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityTypeHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityTypeHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_EntityTypeHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_EntityTypeHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_EntityTypeHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityTypeHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_EntityTypeHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_EntityTypeHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_EntityTypeHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EntityTypeHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_EvidenceHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EvidenceHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_EvidenceHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_EvidenceHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_EvidenceHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EvidenceHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EvidenceHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_EvidenceHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_EvidenceHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_EvidenceHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_EvidenceHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_EvidenceHistory_ownerID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_EvidenceHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_EvidenceHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_EvidenceHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_EvidenceHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_EvidenceHistory_workflowEligibleMarker(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_EvidenceHistory_externalUUID(ctx, field)
+	case "name":
+		return ec.fieldContext_EvidenceHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_EvidenceHistory_description(ctx, field)
+	case "collectionProcedure":
+		return ec.fieldContext_EvidenceHistory_collectionProcedure(ctx, field)
+	case "creationDate":
+		return ec.fieldContext_EvidenceHistory_creationDate(ctx, field)
+	case "renewalDate":
+		return ec.fieldContext_EvidenceHistory_renewalDate(ctx, field)
+	case "source":
+		return ec.fieldContext_EvidenceHistory_source(ctx, field)
+	case "isAutomated":
+		return ec.fieldContext_EvidenceHistory_isAutomated(ctx, field)
+	case "url":
+		return ec.fieldContext_EvidenceHistory_url(ctx, field)
+	case "status":
+		return ec.fieldContext_EvidenceHistory_status(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_EvidenceHistory_reviewFrequency(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EvidenceHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_EvidenceHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_EvidenceHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_EvidenceHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_EvidenceHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EvidenceHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_EvidenceHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_EvidenceHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_EvidenceHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EvidenceHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_FileHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_FileHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_FileHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_FileHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_FileHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_FileHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_FileHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_FileHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_FileHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_FileHistory_tags(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_FileHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_FileHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_FileHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_FileHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_FileHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_FileHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_FileHistory_scopeID(ctx, field)
+	case "categoryName":
+		return ec.fieldContext_FileHistory_categoryName(ctx, field)
+	case "categoryID":
+		return ec.fieldContext_FileHistory_categoryID(ctx, field)
+	case "name":
+		return ec.fieldContext_FileHistory_name(ctx, field)
+	case "providedFileName":
+		return ec.fieldContext_FileHistory_providedFileName(ctx, field)
+	case "providedFileExtension":
+		return ec.fieldContext_FileHistory_providedFileExtension(ctx, field)
+	case "providedFileSize":
+		return ec.fieldContext_FileHistory_providedFileSize(ctx, field)
+	case "persistedFileSize":
+		return ec.fieldContext_FileHistory_persistedFileSize(ctx, field)
+	case "detectedMimeType":
+		return ec.fieldContext_FileHistory_detectedMimeType(ctx, field)
+	case "md5Hash":
+		return ec.fieldContext_FileHistory_md5Hash(ctx, field)
+	case "detectedContentType":
+		return ec.fieldContext_FileHistory_detectedContentType(ctx, field)
+	case "storeKey":
+		return ec.fieldContext_FileHistory_storeKey(ctx, field)
+	case "categoryType":
+		return ec.fieldContext_FileHistory_categoryType(ctx, field)
+	case "uri":
+		return ec.fieldContext_FileHistory_uri(ctx, field)
+	case "storageScheme":
+		return ec.fieldContext_FileHistory_storageScheme(ctx, field)
+	case "storageVolume":
+		return ec.fieldContext_FileHistory_storageVolume(ctx, field)
+	case "storagePath":
+		return ec.fieldContext_FileHistory_storagePath(ctx, field)
+	case "metadata":
+		return ec.fieldContext_FileHistory_metadata(ctx, field)
+	case "storageRegion":
+		return ec.fieldContext_FileHistory_storageRegion(ctx, field)
+	case "storageProvider":
+		return ec.fieldContext_FileHistory_storageProvider(ctx, field)
+	case "lastAccessedAt":
+		return ec.fieldContext_FileHistory_lastAccessedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FileHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_FileHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_FileHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_FileHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_FileHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FileHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_FileHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_FileHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_FileHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FileHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingControlHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_FindingControlHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_FindingControlHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_FindingControlHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_FindingControlHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_FindingControlHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_FindingControlHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_FindingControlHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_FindingControlHistory_updatedBy(ctx, field)
+	case "findingID":
+		return ec.fieldContext_FindingControlHistory_findingID(ctx, field)
+	case "controlID":
+		return ec.fieldContext_FindingControlHistory_controlID(ctx, field)
+	case "standardID":
+		return ec.fieldContext_FindingControlHistory_standardID(ctx, field)
+	case "externalStandard":
+		return ec.fieldContext_FindingControlHistory_externalStandard(ctx, field)
+	case "externalStandardVersion":
+		return ec.fieldContext_FindingControlHistory_externalStandardVersion(ctx, field)
+	case "externalControlID":
+		return ec.fieldContext_FindingControlHistory_externalControlID(ctx, field)
+	case "source":
+		return ec.fieldContext_FindingControlHistory_source(ctx, field)
+	case "metadata":
+		return ec.fieldContext_FindingControlHistory_metadata(ctx, field)
+	case "discoveredAt":
+		return ec.fieldContext_FindingControlHistory_discoveredAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingControlHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingControlHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_FindingControlHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_FindingControlHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_FindingControlHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingControlHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingControlHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_FindingControlHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_FindingControlHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingControlHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_FindingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_FindingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_FindingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_FindingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_FindingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_FindingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_FindingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_FindingHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_FindingHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_FindingHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_FindingHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_FindingHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_FindingHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_FindingHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_FindingHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_FindingHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_FindingHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_FindingHistory_scopeID(ctx, field)
+	case "findingStatusName":
+		return ec.fieldContext_FindingHistory_findingStatusName(ctx, field)
+	case "findingStatusID":
+		return ec.fieldContext_FindingHistory_findingStatusID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_FindingHistory_externalID(ctx, field)
+	case "securityLevel":
+		return ec.fieldContext_FindingHistory_securityLevel(ctx, field)
+	case "externalOwnerID":
+		return ec.fieldContext_FindingHistory_externalOwnerID(ctx, field)
+	case "source":
+		return ec.fieldContext_FindingHistory_source(ctx, field)
+	case "resourceName":
+		return ec.fieldContext_FindingHistory_resourceName(ctx, field)
+	case "displayName":
+		return ec.fieldContext_FindingHistory_displayName(ctx, field)
+	case "state":
+		return ec.fieldContext_FindingHistory_state(ctx, field)
+	case "category":
+		return ec.fieldContext_FindingHistory_category(ctx, field)
+	case "categories":
+		return ec.fieldContext_FindingHistory_categories(ctx, field)
+	case "findingClass":
+		return ec.fieldContext_FindingHistory_findingClass(ctx, field)
+	case "severity":
+		return ec.fieldContext_FindingHistory_severity(ctx, field)
+	case "numericSeverity":
+		return ec.fieldContext_FindingHistory_numericSeverity(ctx, field)
+	case "score":
+		return ec.fieldContext_FindingHistory_score(ctx, field)
+	case "impact":
+		return ec.fieldContext_FindingHistory_impact(ctx, field)
+	case "exploitability":
+		return ec.fieldContext_FindingHistory_exploitability(ctx, field)
+	case "priority":
+		return ec.fieldContext_FindingHistory_priority(ctx, field)
+	case "open":
+		return ec.fieldContext_FindingHistory_open(ctx, field)
+	case "blocksProduction":
+		return ec.fieldContext_FindingHistory_blocksProduction(ctx, field)
+	case "production":
+		return ec.fieldContext_FindingHistory_production(ctx, field)
+	case "public":
+		return ec.fieldContext_FindingHistory_public(ctx, field)
+	case "validated":
+		return ec.fieldContext_FindingHistory_validated(ctx, field)
+	case "assessmentID":
+		return ec.fieldContext_FindingHistory_assessmentID(ctx, field)
+	case "description":
+		return ec.fieldContext_FindingHistory_description(ctx, field)
+	case "recommendation":
+		return ec.fieldContext_FindingHistory_recommendation(ctx, field)
+	case "recommendedActions":
+		return ec.fieldContext_FindingHistory_recommendedActions(ctx, field)
+	case "references":
+		return ec.fieldContext_FindingHistory_references(ctx, field)
+	case "stepsToReproduce":
+		return ec.fieldContext_FindingHistory_stepsToReproduce(ctx, field)
+	case "targets":
+		return ec.fieldContext_FindingHistory_targets(ctx, field)
+	case "targetDetails":
+		return ec.fieldContext_FindingHistory_targetDetails(ctx, field)
+	case "vector":
+		return ec.fieldContext_FindingHistory_vector(ctx, field)
+	case "remediationSLA":
+		return ec.fieldContext_FindingHistory_remediationSLA(ctx, field)
+	case "eventTime":
+		return ec.fieldContext_FindingHistory_eventTime(ctx, field)
+	case "reportedAt":
+		return ec.fieldContext_FindingHistory_reportedAt(ctx, field)
+	case "sourceUpdatedAt":
+		return ec.fieldContext_FindingHistory_sourceUpdatedAt(ctx, field)
+	case "externalURI":
+		return ec.fieldContext_FindingHistory_externalURI(ctx, field)
+	case "metadata":
+		return ec.fieldContext_FindingHistory_metadata(ctx, field)
+	case "rawPayload":
+		return ec.fieldContext_FindingHistory_rawPayload(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_FindingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_FindingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_FindingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_FindingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_FindingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_FindingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FindingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_GroupHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_GroupHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_GroupHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_GroupHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_GroupHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_GroupHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_GroupHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_GroupHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_GroupHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_GroupHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_GroupHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_GroupHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_GroupHistory_description(ctx, field)
+	case "isManaged":
+		return ec.fieldContext_GroupHistory_isManaged(ctx, field)
+	case "gravatarLogoURL":
+		return ec.fieldContext_GroupHistory_gravatarLogoURL(ctx, field)
+	case "logoURL":
+		return ec.fieldContext_GroupHistory_logoURL(ctx, field)
+	case "avatarLocalFileID":
+		return ec.fieldContext_GroupHistory_avatarLocalFileID(ctx, field)
+	case "displayName":
+		return ec.fieldContext_GroupHistory_displayName(ctx, field)
+	case "oscalRole":
+		return ec.fieldContext_GroupHistory_oscalRole(ctx, field)
+	case "oscalPartyUUID":
+		return ec.fieldContext_GroupHistory_oscalPartyUUID(ctx, field)
+	case "oscalContactUuids":
+		return ec.fieldContext_GroupHistory_oscalContactUuids(ctx, field)
+	case "scimExternalID":
+		return ec.fieldContext_GroupHistory_scimExternalID(ctx, field)
+	case "scimDisplayName":
+		return ec.fieldContext_GroupHistory_scimDisplayName(ctx, field)
+	case "scimActive":
+		return ec.fieldContext_GroupHistory_scimActive(ctx, field)
+	case "scimGroupMailing":
+		return ec.fieldContext_GroupHistory_scimGroupMailing(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_GroupHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_GroupHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_GroupHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_GroupHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_GroupHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupMembershipHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_GroupMembershipHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_GroupMembershipHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_GroupMembershipHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_GroupMembershipHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_GroupMembershipHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_GroupMembershipHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_GroupMembershipHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_GroupMembershipHistory_updatedBy(ctx, field)
+	case "role":
+		return ec.fieldContext_GroupMembershipHistory_role(ctx, field)
+	case "groupID":
+		return ec.fieldContext_GroupMembershipHistory_groupID(ctx, field)
+	case "userID":
+		return ec.fieldContext_GroupMembershipHistory_userID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupMembershipHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_GroupMembershipHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_GroupMembershipHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_GroupMembershipHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupMembershipHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_GroupMembershipHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_GroupMembershipHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_GroupSettingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_GroupSettingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_GroupSettingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_GroupSettingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_GroupSettingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_GroupSettingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_GroupSettingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_GroupSettingHistory_updatedBy(ctx, field)
+	case "visibility":
+		return ec.fieldContext_GroupSettingHistory_visibility(ctx, field)
+	case "joinPolicy":
+		return ec.fieldContext_GroupSettingHistory_joinPolicy(ctx, field)
+	case "syncToSlack":
+		return ec.fieldContext_GroupSettingHistory_syncToSlack(ctx, field)
+	case "syncToGithub":
+		return ec.fieldContext_GroupSettingHistory_syncToGithub(ctx, field)
+	case "groupID":
+		return ec.fieldContext_GroupSettingHistory_groupID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupSettingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupSettingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_GroupSettingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_GroupSettingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_GroupSettingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupSettingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_GroupSettingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_GroupSettingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_GroupSettingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type GroupSettingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_HushHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_HushHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_HushHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_HushHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_HushHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_HushHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_HushHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_HushHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_HushHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_HushHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_HushHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_HushHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_HushHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_HushHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_HushHistory_description(ctx, field)
+	case "kind":
+		return ec.fieldContext_HushHistory_kind(ctx, field)
+	case "secretName":
+		return ec.fieldContext_HushHistory_secretName(ctx, field)
+	case "credentialSet":
+		return ec.fieldContext_HushHistory_credentialSet(ctx, field)
+	case "metadata":
+		return ec.fieldContext_HushHistory_metadata(ctx, field)
+	case "lastUsedAt":
+		return ec.fieldContext_HushHistory_lastUsedAt(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_HushHistory_expiresAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type HushHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_HushHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_HushHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_HushHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_HushHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type HushHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_HushHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_HushHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_HushHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type HushHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_IdentityHolderHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_IdentityHolderHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_IdentityHolderHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_IdentityHolderHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_IdentityHolderHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_IdentityHolderHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_IdentityHolderHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_IdentityHolderHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_IdentityHolderHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_IdentityHolderHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_IdentityHolderHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_IdentityHolderHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_IdentityHolderHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_IdentityHolderHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_IdentityHolderHistory_internalOwnerGroupID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_IdentityHolderHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_IdentityHolderHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_IdentityHolderHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_IdentityHolderHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_IdentityHolderHistory_workflowEligibleMarker(ctx, field)
+	case "fullName":
+		return ec.fieldContext_IdentityHolderHistory_fullName(ctx, field)
+	case "email":
+		return ec.fieldContext_IdentityHolderHistory_email(ctx, field)
+	case "alternateEmail":
+		return ec.fieldContext_IdentityHolderHistory_alternateEmail(ctx, field)
+	case "emailAliases":
+		return ec.fieldContext_IdentityHolderHistory_emailAliases(ctx, field)
+	case "phoneNumber":
+		return ec.fieldContext_IdentityHolderHistory_phoneNumber(ctx, field)
+	case "isOpenlaneUser":
+		return ec.fieldContext_IdentityHolderHistory_isOpenlaneUser(ctx, field)
+	case "userID":
+		return ec.fieldContext_IdentityHolderHistory_userID(ctx, field)
+	case "identityHolderType":
+		return ec.fieldContext_IdentityHolderHistory_identityHolderType(ctx, field)
+	case "status":
+		return ec.fieldContext_IdentityHolderHistory_status(ctx, field)
+	case "isActive":
+		return ec.fieldContext_IdentityHolderHistory_isActive(ctx, field)
+	case "title":
+		return ec.fieldContext_IdentityHolderHistory_title(ctx, field)
+	case "department":
+		return ec.fieldContext_IdentityHolderHistory_department(ctx, field)
+	case "team":
+		return ec.fieldContext_IdentityHolderHistory_team(ctx, field)
+	case "location":
+		return ec.fieldContext_IdentityHolderHistory_location(ctx, field)
+	case "startDate":
+		return ec.fieldContext_IdentityHolderHistory_startDate(ctx, field)
+	case "endDate":
+		return ec.fieldContext_IdentityHolderHistory_endDate(ctx, field)
+	case "employerEntityID":
+		return ec.fieldContext_IdentityHolderHistory_employerEntityID(ctx, field)
+	case "externalUserID":
+		return ec.fieldContext_IdentityHolderHistory_externalUserID(ctx, field)
+	case "externalReferenceID":
+		return ec.fieldContext_IdentityHolderHistory_externalReferenceID(ctx, field)
+	case "metadata":
+		return ec.fieldContext_IdentityHolderHistory_metadata(ctx, field)
+	case "avatarRemoteURL":
+		return ec.fieldContext_IdentityHolderHistory_avatarRemoteURL(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IdentityHolderHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_IdentityHolderHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_IdentityHolderHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_IdentityHolderHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_IdentityHolderHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IdentityHolderHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_IdentityHolderHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_IdentityHolderHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_IdentityHolderHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IdentityHolderHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_IntegrationHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_IntegrationHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_IntegrationHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_IntegrationHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_IntegrationHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_IntegrationHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_IntegrationHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_IntegrationHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_IntegrationHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_IntegrationHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_IntegrationHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_IntegrationHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_IntegrationHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_IntegrationHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_IntegrationHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_IntegrationHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_IntegrationHistory_scopeID(ctx, field)
+	case "name":
+		return ec.fieldContext_IntegrationHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_IntegrationHistory_description(ctx, field)
+	case "kind":
+		return ec.fieldContext_IntegrationHistory_kind(ctx, field)
+	case "integrationType":
+		return ec.fieldContext_IntegrationHistory_integrationType(ctx, field)
+	case "platformID":
+		return ec.fieldContext_IntegrationHistory_platformID(ctx, field)
+	case "metadata":
+		return ec.fieldContext_IntegrationHistory_metadata(ctx, field)
+	case "definitionID":
+		return ec.fieldContext_IntegrationHistory_definitionID(ctx, field)
+	case "definitionVersion":
+		return ec.fieldContext_IntegrationHistory_definitionVersion(ctx, field)
+	case "definitionSlug":
+		return ec.fieldContext_IntegrationHistory_definitionSlug(ctx, field)
+	case "family":
+		return ec.fieldContext_IntegrationHistory_family(ctx, field)
+	case "status":
+		return ec.fieldContext_IntegrationHistory_status(ctx, field)
+	case "providerMetadataSnapshot":
+		return ec.fieldContext_IntegrationHistory_providerMetadataSnapshot(ctx, field)
+	case "primaryDirectory":
+		return ec.fieldContext_IntegrationHistory_primaryDirectory(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_IntegrationHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_IntegrationHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_IntegrationHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_IntegrationHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_IntegrationHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_InternalPolicyHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_InternalPolicyHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_InternalPolicyHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_InternalPolicyHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_InternalPolicyHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_InternalPolicyHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_InternalPolicyHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_InternalPolicyHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_InternalPolicyHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_InternalPolicyHistory_tags(ctx, field)
+	case "revision":
+		return ec.fieldContext_InternalPolicyHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_InternalPolicyHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_InternalPolicyHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_InternalPolicyHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_InternalPolicyHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_InternalPolicyHistory_name(ctx, field)
+	case "status":
+		return ec.fieldContext_InternalPolicyHistory_status(ctx, field)
+	case "details":
+		return ec.fieldContext_InternalPolicyHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_InternalPolicyHistory_detailsJSON(ctx, field)
+	case "approvalRequired":
+		return ec.fieldContext_InternalPolicyHistory_approvalRequired(ctx, field)
+	case "reviewDue":
+		return ec.fieldContext_InternalPolicyHistory_reviewDue(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_InternalPolicyHistory_reviewFrequency(ctx, field)
+	case "approverID":
+		return ec.fieldContext_InternalPolicyHistory_approverID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_InternalPolicyHistory_delegateID(ctx, field)
+	case "summary":
+		return ec.fieldContext_InternalPolicyHistory_summary(ctx, field)
+	case "tagSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_tagSuggestions(ctx, field)
+	case "dismissedTagSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_dismissedTagSuggestions(ctx, field)
+	case "controlSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_controlSuggestions(ctx, field)
+	case "dismissedControlSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_dismissedControlSuggestions(ctx, field)
+	case "improvementSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_improvementSuggestions(ctx, field)
+	case "dismissedImprovementSuggestions":
+		return ec.fieldContext_InternalPolicyHistory_dismissedImprovementSuggestions(ctx, field)
+	case "url":
+		return ec.fieldContext_InternalPolicyHistory_url(ctx, field)
+	case "fileID":
+		return ec.fieldContext_InternalPolicyHistory_fileID(ctx, field)
+	case "internalPolicyKindName":
+		return ec.fieldContext_InternalPolicyHistory_internalPolicyKindName(ctx, field)
+	case "internalPolicyKindID":
+		return ec.fieldContext_InternalPolicyHistory_internalPolicyKindID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_InternalPolicyHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_InternalPolicyHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_InternalPolicyHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_InternalPolicyHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_InternalPolicyHistory_workflowEligibleMarker(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_InternalPolicyHistory_externalUUID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type InternalPolicyHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_InternalPolicyHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_InternalPolicyHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_InternalPolicyHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_InternalPolicyHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type InternalPolicyHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_InternalPolicyHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_InternalPolicyHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_InternalPolicyHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type InternalPolicyHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_JobTemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_JobTemplateHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_JobTemplateHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_JobTemplateHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_JobTemplateHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_JobTemplateHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_JobTemplateHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_JobTemplateHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_JobTemplateHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_JobTemplateHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_JobTemplateHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_JobTemplateHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_JobTemplateHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_JobTemplateHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_JobTemplateHistory_systemInternalID(ctx, field)
+	case "title":
+		return ec.fieldContext_JobTemplateHistory_title(ctx, field)
+	case "description":
+		return ec.fieldContext_JobTemplateHistory_description(ctx, field)
+	case "platform":
+		return ec.fieldContext_JobTemplateHistory_platform(ctx, field)
+	case "downloadURL":
+		return ec.fieldContext_JobTemplateHistory_downloadURL(ctx, field)
+	case "configuration":
+		return ec.fieldContext_JobTemplateHistory_configuration(ctx, field)
+	case "cron":
+		return ec.fieldContext_JobTemplateHistory_cron(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type JobTemplateHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_JobTemplateHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_JobTemplateHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_JobTemplateHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_JobTemplateHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type JobTemplateHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_JobTemplateHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_JobTemplateHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_JobTemplateHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type JobTemplateHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_MappableDomainHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_MappableDomainHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_MappableDomainHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_MappableDomainHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_MappableDomainHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_MappableDomainHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_MappableDomainHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_MappableDomainHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_MappableDomainHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_MappableDomainHistory_tags(ctx, field)
+	case "name":
+		return ec.fieldContext_MappableDomainHistory_name(ctx, field)
+	case "zoneID":
+		return ec.fieldContext_MappableDomainHistory_zoneID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappableDomainHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_MappableDomainHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_MappableDomainHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_MappableDomainHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_MappableDomainHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappableDomainHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_MappableDomainHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_MappableDomainHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_MappableDomainHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappableDomainHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_MappedControlHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_MappedControlHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_MappedControlHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_MappedControlHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_MappedControlHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_MappedControlHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_MappedControlHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_MappedControlHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_MappedControlHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_MappedControlHistory_tags(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_MappedControlHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_MappedControlHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_MappedControlHistory_systemInternalID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_MappedControlHistory_ownerID(ctx, field)
+	case "mappingType":
+		return ec.fieldContext_MappedControlHistory_mappingType(ctx, field)
+	case "relation":
+		return ec.fieldContext_MappedControlHistory_relation(ctx, field)
+	case "confidence":
+		return ec.fieldContext_MappedControlHistory_confidence(ctx, field)
+	case "source":
+		return ec.fieldContext_MappedControlHistory_source(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappedControlHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_MappedControlHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_MappedControlHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_MappedControlHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_MappedControlHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappedControlHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_MappedControlHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_MappedControlHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_MappedControlHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MappedControlHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_NarrativeHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_NarrativeHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_NarrativeHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_NarrativeHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_NarrativeHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_NarrativeHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_NarrativeHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_NarrativeHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_NarrativeHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_NarrativeHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_NarrativeHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_NarrativeHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_NarrativeHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_NarrativeHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_NarrativeHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_NarrativeHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_NarrativeHistory_description(ctx, field)
+	case "details":
+		return ec.fieldContext_NarrativeHistory_details(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NarrativeHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_NarrativeHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_NarrativeHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_NarrativeHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_NarrativeHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NarrativeHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_NarrativeHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_NarrativeHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_NarrativeHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NarrativeHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_NoteHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_NoteHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_NoteHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_NoteHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_NoteHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_NoteHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_NoteHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_NoteHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_NoteHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_NoteHistory_displayID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_NoteHistory_ownerID(ctx, field)
+	case "title":
+		return ec.fieldContext_NoteHistory_title(ctx, field)
+	case "text":
+		return ec.fieldContext_NoteHistory_text(ctx, field)
+	case "textJSON":
+		return ec.fieldContext_NoteHistory_textJSON(ctx, field)
+	case "noteRef":
+		return ec.fieldContext_NoteHistory_noteRef(ctx, field)
+	case "discussionID":
+		return ec.fieldContext_NoteHistory_discussionID(ctx, field)
+	case "isEdited":
+		return ec.fieldContext_NoteHistory_isEdited(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_NoteHistory_trustCenterID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NoteHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_NoteHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_NoteHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_NoteHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_NoteHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NoteHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_NoteHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_NoteHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_NoteHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NoteHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationPreferenceHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_NotificationPreferenceHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_NotificationPreferenceHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_NotificationPreferenceHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_NotificationPreferenceHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_NotificationPreferenceHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_NotificationPreferenceHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_NotificationPreferenceHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_NotificationPreferenceHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_NotificationPreferenceHistory_ownerID(ctx, field)
+	case "userID":
+		return ec.fieldContext_NotificationPreferenceHistory_userID(ctx, field)
+	case "channel":
+		return ec.fieldContext_NotificationPreferenceHistory_channel(ctx, field)
+	case "status":
+		return ec.fieldContext_NotificationPreferenceHistory_status(ctx, field)
+	case "provider":
+		return ec.fieldContext_NotificationPreferenceHistory_provider(ctx, field)
+	case "destination":
+		return ec.fieldContext_NotificationPreferenceHistory_destination(ctx, field)
+	case "config":
+		return ec.fieldContext_NotificationPreferenceHistory_config(ctx, field)
+	case "enabled":
+		return ec.fieldContext_NotificationPreferenceHistory_enabled(ctx, field)
+	case "cadence":
+		return ec.fieldContext_NotificationPreferenceHistory_cadence(ctx, field)
+	case "priority":
+		return ec.fieldContext_NotificationPreferenceHistory_priority(ctx, field)
+	case "topicPatterns":
+		return ec.fieldContext_NotificationPreferenceHistory_topicPatterns(ctx, field)
+	case "topicOverrides":
+		return ec.fieldContext_NotificationPreferenceHistory_topicOverrides(ctx, field)
+	case "templateID":
+		return ec.fieldContext_NotificationPreferenceHistory_templateID(ctx, field)
+	case "muteUntil":
+		return ec.fieldContext_NotificationPreferenceHistory_muteUntil(ctx, field)
+	case "quietHoursStart":
+		return ec.fieldContext_NotificationPreferenceHistory_quietHoursStart(ctx, field)
+	case "quietHoursEnd":
+		return ec.fieldContext_NotificationPreferenceHistory_quietHoursEnd(ctx, field)
+	case "timezone":
+		return ec.fieldContext_NotificationPreferenceHistory_timezone(ctx, field)
+	case "isDefault":
+		return ec.fieldContext_NotificationPreferenceHistory_isDefault(ctx, field)
+	case "verifiedAt":
+		return ec.fieldContext_NotificationPreferenceHistory_verifiedAt(ctx, field)
+	case "lastUsedAt":
+		return ec.fieldContext_NotificationPreferenceHistory_lastUsedAt(ctx, field)
+	case "lastError":
+		return ec.fieldContext_NotificationPreferenceHistory_lastError(ctx, field)
+	case "metadata":
+		return ec.fieldContext_NotificationPreferenceHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationPreferenceHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationPreferenceHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_NotificationPreferenceHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_NotificationPreferenceHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_NotificationPreferenceHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationPreferenceHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationPreferenceHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_NotificationPreferenceHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_NotificationPreferenceHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationPreferenceHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationTemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_NotificationTemplateHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_NotificationTemplateHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_NotificationTemplateHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_NotificationTemplateHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_NotificationTemplateHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_NotificationTemplateHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_NotificationTemplateHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_NotificationTemplateHistory_updatedBy(ctx, field)
+	case "revision":
+		return ec.fieldContext_NotificationTemplateHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_NotificationTemplateHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_NotificationTemplateHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_NotificationTemplateHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_NotificationTemplateHistory_systemInternalID(ctx, field)
+	case "key":
+		return ec.fieldContext_NotificationTemplateHistory_key(ctx, field)
+	case "name":
+		return ec.fieldContext_NotificationTemplateHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_NotificationTemplateHistory_description(ctx, field)
+	case "channel":
+		return ec.fieldContext_NotificationTemplateHistory_channel(ctx, field)
+	case "format":
+		return ec.fieldContext_NotificationTemplateHistory_format(ctx, field)
+	case "locale":
+		return ec.fieldContext_NotificationTemplateHistory_locale(ctx, field)
+	case "topicPattern":
+		return ec.fieldContext_NotificationTemplateHistory_topicPattern(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_NotificationTemplateHistory_integrationID(ctx, field)
+	case "destinations":
+		return ec.fieldContext_NotificationTemplateHistory_destinations(ctx, field)
+	case "workflowDefinitionID":
+		return ec.fieldContext_NotificationTemplateHistory_workflowDefinitionID(ctx, field)
+	case "emailTemplateID":
+		return ec.fieldContext_NotificationTemplateHistory_emailTemplateID(ctx, field)
+	case "titleTemplate":
+		return ec.fieldContext_NotificationTemplateHistory_titleTemplate(ctx, field)
+	case "subjectTemplate":
+		return ec.fieldContext_NotificationTemplateHistory_subjectTemplate(ctx, field)
+	case "bodyTemplate":
+		return ec.fieldContext_NotificationTemplateHistory_bodyTemplate(ctx, field)
+	case "blocks":
+		return ec.fieldContext_NotificationTemplateHistory_blocks(ctx, field)
+	case "jsonconfig":
+		return ec.fieldContext_NotificationTemplateHistory_jsonconfig(ctx, field)
+	case "uischema":
+		return ec.fieldContext_NotificationTemplateHistory_uischema(ctx, field)
+	case "metadata":
+		return ec.fieldContext_NotificationTemplateHistory_metadata(ctx, field)
+	case "active":
+		return ec.fieldContext_NotificationTemplateHistory_active(ctx, field)
+	case "version":
+		return ec.fieldContext_NotificationTemplateHistory_version(ctx, field)
+	case "templateContext":
+		return ec.fieldContext_NotificationTemplateHistory_templateContext(ctx, field)
+	case "defaults":
+		return ec.fieldContext_NotificationTemplateHistory_defaults(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationTemplateHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_NotificationTemplateHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_NotificationTemplateHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_NotificationTemplateHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_NotificationTemplateHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_NotificationTemplateHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_NotificationTemplateHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgMembershipHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OrgMembershipHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_OrgMembershipHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_OrgMembershipHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_OrgMembershipHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OrgMembershipHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OrgMembershipHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OrgMembershipHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OrgMembershipHistory_updatedBy(ctx, field)
+	case "role":
+		return ec.fieldContext_OrgMembershipHistory_role(ctx, field)
+	case "organizationID":
+		return ec.fieldContext_OrgMembershipHistory_organizationID(ctx, field)
+	case "userID":
+		return ec.fieldContext_OrgMembershipHistory_userID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgMembershipHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgMembershipHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OrgMembershipHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OrgMembershipHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OrgMembershipHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgMembershipHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgMembershipHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OrgMembershipHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OrgMembershipHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgMembershipHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgSubscriptionHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OrgSubscriptionHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_OrgSubscriptionHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_OrgSubscriptionHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_OrgSubscriptionHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OrgSubscriptionHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OrgSubscriptionHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OrgSubscriptionHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OrgSubscriptionHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_OrgSubscriptionHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_OrgSubscriptionHistory_ownerID(ctx, field)
+	case "stripeSubscriptionID":
+		return ec.fieldContext_OrgSubscriptionHistory_stripeSubscriptionID(ctx, field)
+	case "stripeSubscriptionStatus":
+		return ec.fieldContext_OrgSubscriptionHistory_stripeSubscriptionStatus(ctx, field)
+	case "active":
+		return ec.fieldContext_OrgSubscriptionHistory_active(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_OrgSubscriptionHistory_expiresAt(ctx, field)
+	case "trialExpiresAt":
+		return ec.fieldContext_OrgSubscriptionHistory_trialExpiresAt(ctx, field)
+	case "daysUntilDue":
+		return ec.fieldContext_OrgSubscriptionHistory_daysUntilDue(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgSubscriptionHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgSubscriptionHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OrgSubscriptionHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OrgSubscriptionHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OrgSubscriptionHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgSubscriptionHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OrgSubscriptionHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OrgSubscriptionHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OrgSubscriptionHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrgSubscriptionHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OrganizationHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_OrganizationHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_OrganizationHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_OrganizationHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OrganizationHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OrganizationHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OrganizationHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OrganizationHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_OrganizationHistory_tags(ctx, field)
+	case "name":
+		return ec.fieldContext_OrganizationHistory_name(ctx, field)
+	case "displayName":
+		return ec.fieldContext_OrganizationHistory_displayName(ctx, field)
+	case "description":
+		return ec.fieldContext_OrganizationHistory_description(ctx, field)
+	case "personalOrg":
+		return ec.fieldContext_OrganizationHistory_personalOrg(ctx, field)
+	case "avatarRemoteURL":
+		return ec.fieldContext_OrganizationHistory_avatarRemoteURL(ctx, field)
+	case "avatarLocalFileID":
+		return ec.fieldContext_OrganizationHistory_avatarLocalFileID(ctx, field)
+	case "avatarUpdatedAt":
+		return ec.fieldContext_OrganizationHistory_avatarUpdatedAt(ctx, field)
+	case "dedicatedDb":
+		return ec.fieldContext_OrganizationHistory_dedicatedDb(ctx, field)
+	case "stripeCustomerID":
+		return ec.fieldContext_OrganizationHistory_stripeCustomerID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OrganizationHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OrganizationHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OrganizationHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OrganizationHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OrganizationHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OrganizationSettingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_OrganizationSettingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_OrganizationSettingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_OrganizationSettingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OrganizationSettingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OrganizationSettingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OrganizationSettingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OrganizationSettingHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_OrganizationSettingHistory_tags(ctx, field)
+	case "domains":
+		return ec.fieldContext_OrganizationSettingHistory_domains(ctx, field)
+	case "billingContact":
+		return ec.fieldContext_OrganizationSettingHistory_billingContact(ctx, field)
+	case "billingEmail":
+		return ec.fieldContext_OrganizationSettingHistory_billingEmail(ctx, field)
+	case "billingPhone":
+		return ec.fieldContext_OrganizationSettingHistory_billingPhone(ctx, field)
+	case "billingAddress":
+		return ec.fieldContext_OrganizationSettingHistory_billingAddress(ctx, field)
+	case "taxIdentifier":
+		return ec.fieldContext_OrganizationSettingHistory_taxIdentifier(ctx, field)
+	case "geoLocation":
+		return ec.fieldContext_OrganizationSettingHistory_geoLocation(ctx, field)
+	case "organizationID":
+		return ec.fieldContext_OrganizationSettingHistory_organizationID(ctx, field)
+	case "billingNotificationsEnabled":
+		return ec.fieldContext_OrganizationSettingHistory_billingNotificationsEnabled(ctx, field)
+	case "allowedEmailDomains":
+		return ec.fieldContext_OrganizationSettingHistory_allowedEmailDomains(ctx, field)
+	case "allowMatchingDomainsAutojoin":
+		return ec.fieldContext_OrganizationSettingHistory_allowMatchingDomainsAutojoin(ctx, field)
+	case "identityProvider":
+		return ec.fieldContext_OrganizationSettingHistory_identityProvider(ctx, field)
+	case "identityProviderClientID":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientID(ctx, field)
+	case "identityProviderClientSecret":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientSecret(ctx, field)
+	case "identityProviderMetadataEndpoint":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderMetadataEndpoint(ctx, field)
+	case "identityProviderAuthTested":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderAuthTested(ctx, field)
+	case "identityProviderEntityID":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderEntityID(ctx, field)
+	case "oidcDiscoveryEndpoint":
+		return ec.fieldContext_OrganizationSettingHistory_oidcDiscoveryEndpoint(ctx, field)
+	case "samlSigninURL":
+		return ec.fieldContext_OrganizationSettingHistory_samlSigninURL(ctx, field)
+	case "samlIssuer":
+		return ec.fieldContext_OrganizationSettingHistory_samlIssuer(ctx, field)
+	case "samlCert":
+		return ec.fieldContext_OrganizationSettingHistory_samlCert(ctx, field)
+	case "identityProviderLoginEnforced":
+		return ec.fieldContext_OrganizationSettingHistory_identityProviderLoginEnforced(ctx, field)
+	case "multifactorAuthEnforced":
+		return ec.fieldContext_OrganizationSettingHistory_multifactorAuthEnforced(ctx, field)
+	case "complianceWebhookToken":
+		return ec.fieldContext_OrganizationSettingHistory_complianceWebhookToken(ctx, field)
+	case "paymentMethodAdded":
+		return ec.fieldContext_OrganizationSettingHistory_paymentMethodAdded(ctx, field)
+	case "pendingDeletionAt":
+		return ec.fieldContext_OrganizationSettingHistory_pendingDeletionAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationSettingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OrganizationSettingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OrganizationSettingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OrganizationSettingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationSettingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OrganizationSettingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OrganizationSettingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_PageInfo(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "hasNextPage":
+		return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+	case "hasPreviousPage":
+		return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+	case "startCursor":
+		return ec.fieldContext_PageInfo_startCursor(ctx, field)
+	case "endCursor":
+		return ec.fieldContext_PageInfo_endCursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+}
+
+func (ec *executionContext) childFields_PlatformHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_PlatformHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_PlatformHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_PlatformHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_PlatformHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_PlatformHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_PlatformHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_PlatformHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_PlatformHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_PlatformHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_PlatformHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_PlatformHistory_ownerID(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_PlatformHistory_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_PlatformHistory_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_PlatformHistory_internalOwnerGroupID(ctx, field)
+	case "businessOwner":
+		return ec.fieldContext_PlatformHistory_businessOwner(ctx, field)
+	case "businessOwnerUserID":
+		return ec.fieldContext_PlatformHistory_businessOwnerUserID(ctx, field)
+	case "businessOwnerGroupID":
+		return ec.fieldContext_PlatformHistory_businessOwnerGroupID(ctx, field)
+	case "technicalOwner":
+		return ec.fieldContext_PlatformHistory_technicalOwner(ctx, field)
+	case "technicalOwnerUserID":
+		return ec.fieldContext_PlatformHistory_technicalOwnerUserID(ctx, field)
+	case "technicalOwnerGroupID":
+		return ec.fieldContext_PlatformHistory_technicalOwnerGroupID(ctx, field)
+	case "securityOwner":
+		return ec.fieldContext_PlatformHistory_securityOwner(ctx, field)
+	case "securityOwnerUserID":
+		return ec.fieldContext_PlatformHistory_securityOwnerUserID(ctx, field)
+	case "securityOwnerGroupID":
+		return ec.fieldContext_PlatformHistory_securityOwnerGroupID(ctx, field)
+	case "platformKindName":
+		return ec.fieldContext_PlatformHistory_platformKindName(ctx, field)
+	case "platformKindID":
+		return ec.fieldContext_PlatformHistory_platformKindID(ctx, field)
+	case "platformDataClassificationName":
+		return ec.fieldContext_PlatformHistory_platformDataClassificationName(ctx, field)
+	case "platformDataClassificationID":
+		return ec.fieldContext_PlatformHistory_platformDataClassificationID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_PlatformHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_PlatformHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_PlatformHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_PlatformHistory_scopeID(ctx, field)
+	case "accessModelName":
+		return ec.fieldContext_PlatformHistory_accessModelName(ctx, field)
+	case "accessModelID":
+		return ec.fieldContext_PlatformHistory_accessModelID(ctx, field)
+	case "encryptionStatusName":
+		return ec.fieldContext_PlatformHistory_encryptionStatusName(ctx, field)
+	case "encryptionStatusID":
+		return ec.fieldContext_PlatformHistory_encryptionStatusID(ctx, field)
+	case "securityTierName":
+		return ec.fieldContext_PlatformHistory_securityTierName(ctx, field)
+	case "securityTierID":
+		return ec.fieldContext_PlatformHistory_securityTierID(ctx, field)
+	case "criticalityName":
+		return ec.fieldContext_PlatformHistory_criticalityName(ctx, field)
+	case "criticalityID":
+		return ec.fieldContext_PlatformHistory_criticalityID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_PlatformHistory_workflowEligibleMarker(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_PlatformHistory_externalUUID(ctx, field)
+	case "name":
+		return ec.fieldContext_PlatformHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_PlatformHistory_description(ctx, field)
+	case "businessPurpose":
+		return ec.fieldContext_PlatformHistory_businessPurpose(ctx, field)
+	case "scopeStatement":
+		return ec.fieldContext_PlatformHistory_scopeStatement(ctx, field)
+	case "trustBoundaryDescription":
+		return ec.fieldContext_PlatformHistory_trustBoundaryDescription(ctx, field)
+	case "dataFlowSummary":
+		return ec.fieldContext_PlatformHistory_dataFlowSummary(ctx, field)
+	case "status":
+		return ec.fieldContext_PlatformHistory_status(ctx, field)
+	case "physicalLocation":
+		return ec.fieldContext_PlatformHistory_physicalLocation(ctx, field)
+	case "region":
+		return ec.fieldContext_PlatformHistory_region(ctx, field)
+	case "containsPii":
+		return ec.fieldContext_PlatformHistory_containsPii(ctx, field)
+	case "sourceType":
+		return ec.fieldContext_PlatformHistory_sourceType(ctx, field)
+	case "sourceIdentifier":
+		return ec.fieldContext_PlatformHistory_sourceIdentifier(ctx, field)
+	case "costCenter":
+		return ec.fieldContext_PlatformHistory_costCenter(ctx, field)
+	case "estimatedMonthlyCost":
+		return ec.fieldContext_PlatformHistory_estimatedMonthlyCost(ctx, field)
+	case "purchaseDate":
+		return ec.fieldContext_PlatformHistory_purchaseDate(ctx, field)
+	case "platformOwnerID":
+		return ec.fieldContext_PlatformHistory_platformOwnerID(ctx, field)
+	case "externalReferenceID":
+		return ec.fieldContext_PlatformHistory_externalReferenceID(ctx, field)
+	case "metadata":
+		return ec.fieldContext_PlatformHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PlatformHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_PlatformHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_PlatformHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_PlatformHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_PlatformHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PlatformHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_PlatformHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_PlatformHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_PlatformHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PlatformHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ProcedureHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ProcedureHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ProcedureHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ProcedureHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ProcedureHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ProcedureHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ProcedureHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ProcedureHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_ProcedureHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_ProcedureHistory_tags(ctx, field)
+	case "revision":
+		return ec.fieldContext_ProcedureHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ProcedureHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_ProcedureHistory_name(ctx, field)
+	case "status":
+		return ec.fieldContext_ProcedureHistory_status(ctx, field)
+	case "details":
+		return ec.fieldContext_ProcedureHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_ProcedureHistory_detailsJSON(ctx, field)
+	case "approvalRequired":
+		return ec.fieldContext_ProcedureHistory_approvalRequired(ctx, field)
+	case "reviewDue":
+		return ec.fieldContext_ProcedureHistory_reviewDue(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_ProcedureHistory_reviewFrequency(ctx, field)
+	case "approverID":
+		return ec.fieldContext_ProcedureHistory_approverID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_ProcedureHistory_delegateID(ctx, field)
+	case "summary":
+		return ec.fieldContext_ProcedureHistory_summary(ctx, field)
+	case "tagSuggestions":
+		return ec.fieldContext_ProcedureHistory_tagSuggestions(ctx, field)
+	case "dismissedTagSuggestions":
+		return ec.fieldContext_ProcedureHistory_dismissedTagSuggestions(ctx, field)
+	case "controlSuggestions":
+		return ec.fieldContext_ProcedureHistory_controlSuggestions(ctx, field)
+	case "dismissedControlSuggestions":
+		return ec.fieldContext_ProcedureHistory_dismissedControlSuggestions(ctx, field)
+	case "improvementSuggestions":
+		return ec.fieldContext_ProcedureHistory_improvementSuggestions(ctx, field)
+	case "dismissedImprovementSuggestions":
+		return ec.fieldContext_ProcedureHistory_dismissedImprovementSuggestions(ctx, field)
+	case "url":
+		return ec.fieldContext_ProcedureHistory_url(ctx, field)
+	case "fileID":
+		return ec.fieldContext_ProcedureHistory_fileID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ProcedureHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ProcedureHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ProcedureHistory_systemInternalID(ctx, field)
+	case "procedureKindName":
+		return ec.fieldContext_ProcedureHistory_procedureKindName(ctx, field)
+	case "procedureKindID":
+		return ec.fieldContext_ProcedureHistory_procedureKindID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_ProcedureHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_ProcedureHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_ProcedureHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_ProcedureHistory_scopeID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_ProcedureHistory_workflowEligibleMarker(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProcedureHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ProcedureHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ProcedureHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ProcedureHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ProcedureHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProcedureHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ProcedureHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ProcedureHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ProcedureHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProcedureHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ProgramHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ProgramHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ProgramHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ProgramHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ProgramHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ProgramHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ProgramHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ProgramHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_ProgramHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_ProgramHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ProgramHistory_ownerID(ctx, field)
+	case "programKindName":
+		return ec.fieldContext_ProgramHistory_programKindName(ctx, field)
+	case "programKindID":
+		return ec.fieldContext_ProgramHistory_programKindID(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_ProgramHistory_externalUUID(ctx, field)
+	case "name":
+		return ec.fieldContext_ProgramHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_ProgramHistory_description(ctx, field)
+	case "status":
+		return ec.fieldContext_ProgramHistory_status(ctx, field)
+	case "frameworkName":
+		return ec.fieldContext_ProgramHistory_frameworkName(ctx, field)
+	case "startDate":
+		return ec.fieldContext_ProgramHistory_startDate(ctx, field)
+	case "endDate":
+		return ec.fieldContext_ProgramHistory_endDate(ctx, field)
+	case "auditorReady":
+		return ec.fieldContext_ProgramHistory_auditorReady(ctx, field)
+	case "auditorWriteComments":
+		return ec.fieldContext_ProgramHistory_auditorWriteComments(ctx, field)
+	case "auditorReadComments":
+		return ec.fieldContext_ProgramHistory_auditorReadComments(ctx, field)
+	case "auditFirm":
+		return ec.fieldContext_ProgramHistory_auditFirm(ctx, field)
+	case "auditor":
+		return ec.fieldContext_ProgramHistory_auditor(ctx, field)
+	case "auditorEmail":
+		return ec.fieldContext_ProgramHistory_auditorEmail(ctx, field)
+	case "programOwnerID":
+		return ec.fieldContext_ProgramHistory_programOwnerID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ProgramHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ProgramHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ProgramHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ProgramHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ProgramHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramMembershipHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ProgramMembershipHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ProgramMembershipHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ProgramMembershipHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ProgramMembershipHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ProgramMembershipHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ProgramMembershipHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ProgramMembershipHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ProgramMembershipHistory_updatedBy(ctx, field)
+	case "role":
+		return ec.fieldContext_ProgramMembershipHistory_role(ctx, field)
+	case "programID":
+		return ec.fieldContext_ProgramMembershipHistory_programID(ctx, field)
+	case "userID":
+		return ec.fieldContext_ProgramMembershipHistory_userID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramMembershipHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ProgramMembershipHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ProgramMembershipHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ProgramMembershipHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ProgramMembershipHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ProgramMembershipHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ProgramMembershipHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_RemediationHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_RemediationHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_RemediationHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_RemediationHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_RemediationHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_RemediationHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_RemediationHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_RemediationHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_RemediationHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_RemediationHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_RemediationHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_RemediationHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_RemediationHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_RemediationHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_RemediationHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_RemediationHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_RemediationHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_RemediationHistory_scopeID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_RemediationHistory_externalID(ctx, field)
+	case "externalOwnerID":
+		return ec.fieldContext_RemediationHistory_externalOwnerID(ctx, field)
+	case "title":
+		return ec.fieldContext_RemediationHistory_title(ctx, field)
+	case "status":
+		return ec.fieldContext_RemediationHistory_status(ctx, field)
+	case "state":
+		return ec.fieldContext_RemediationHistory_state(ctx, field)
+	case "intent":
+		return ec.fieldContext_RemediationHistory_intent(ctx, field)
+	case "summary":
+		return ec.fieldContext_RemediationHistory_summary(ctx, field)
+	case "explanation":
+		return ec.fieldContext_RemediationHistory_explanation(ctx, field)
+	case "instructions":
+		return ec.fieldContext_RemediationHistory_instructions(ctx, field)
+	case "ownerReference":
+		return ec.fieldContext_RemediationHistory_ownerReference(ctx, field)
+	case "repositoryURI":
+		return ec.fieldContext_RemediationHistory_repositoryURI(ctx, field)
+	case "pullRequestURI":
+		return ec.fieldContext_RemediationHistory_pullRequestURI(ctx, field)
+	case "ticketReference":
+		return ec.fieldContext_RemediationHistory_ticketReference(ctx, field)
+	case "dueAt":
+		return ec.fieldContext_RemediationHistory_dueAt(ctx, field)
+	case "completedAt":
+		return ec.fieldContext_RemediationHistory_completedAt(ctx, field)
+	case "prGeneratedAt":
+		return ec.fieldContext_RemediationHistory_prGeneratedAt(ctx, field)
+	case "error":
+		return ec.fieldContext_RemediationHistory_error(ctx, field)
+	case "source":
+		return ec.fieldContext_RemediationHistory_source(ctx, field)
+	case "externalURI":
+		return ec.fieldContext_RemediationHistory_externalURI(ctx, field)
+	case "metadata":
+		return ec.fieldContext_RemediationHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RemediationHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_RemediationHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_RemediationHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_RemediationHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_RemediationHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RemediationHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_RemediationHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_RemediationHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_RemediationHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RemediationHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ReviewHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ReviewHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ReviewHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ReviewHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ReviewHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ReviewHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ReviewHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ReviewHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_ReviewHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ReviewHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ReviewHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ReviewHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ReviewHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_ReviewHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_ReviewHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_ReviewHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_ReviewHistory_scopeID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ReviewHistory_externalID(ctx, field)
+	case "externalOwnerID":
+		return ec.fieldContext_ReviewHistory_externalOwnerID(ctx, field)
+	case "title":
+		return ec.fieldContext_ReviewHistory_title(ctx, field)
+	case "state":
+		return ec.fieldContext_ReviewHistory_state(ctx, field)
+	case "status":
+		return ec.fieldContext_ReviewHistory_status(ctx, field)
+	case "category":
+		return ec.fieldContext_ReviewHistory_category(ctx, field)
+	case "classification":
+		return ec.fieldContext_ReviewHistory_classification(ctx, field)
+	case "summary":
+		return ec.fieldContext_ReviewHistory_summary(ctx, field)
+	case "details":
+		return ec.fieldContext_ReviewHistory_details(ctx, field)
+	case "reporter":
+		return ec.fieldContext_ReviewHistory_reporter(ctx, field)
+	case "approved":
+		return ec.fieldContext_ReviewHistory_approved(ctx, field)
+	case "reviewedAt":
+		return ec.fieldContext_ReviewHistory_reviewedAt(ctx, field)
+	case "reportedAt":
+		return ec.fieldContext_ReviewHistory_reportedAt(ctx, field)
+	case "approvedAt":
+		return ec.fieldContext_ReviewHistory_approvedAt(ctx, field)
+	case "reviewerID":
+		return ec.fieldContext_ReviewHistory_reviewerID(ctx, field)
+	case "source":
+		return ec.fieldContext_ReviewHistory_source(ctx, field)
+	case "externalURI":
+		return ec.fieldContext_ReviewHistory_externalURI(ctx, field)
+	case "metadata":
+		return ec.fieldContext_ReviewHistory_metadata(ctx, field)
+	case "rawPayload":
+		return ec.fieldContext_ReviewHistory_rawPayload(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReviewHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ReviewHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ReviewHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ReviewHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ReviewHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReviewHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ReviewHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ReviewHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ReviewHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReviewHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_RiskHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_RiskHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_RiskHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_RiskHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_RiskHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_RiskHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_RiskHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_RiskHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_RiskHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_RiskHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_RiskHistory_ownerID(ctx, field)
+	case "riskKindName":
+		return ec.fieldContext_RiskHistory_riskKindName(ctx, field)
+	case "riskKindID":
+		return ec.fieldContext_RiskHistory_riskKindID(ctx, field)
+	case "riskCategoryName":
+		return ec.fieldContext_RiskHistory_riskCategoryName(ctx, field)
+	case "riskCategoryID":
+		return ec.fieldContext_RiskHistory_riskCategoryID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_RiskHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_RiskHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_RiskHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_RiskHistory_scopeID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_RiskHistory_externalID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_RiskHistory_integrationID(ctx, field)
+	case "observedAt":
+		return ec.fieldContext_RiskHistory_observedAt(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_RiskHistory_externalUUID(ctx, field)
+	case "name":
+		return ec.fieldContext_RiskHistory_name(ctx, field)
+	case "status":
+		return ec.fieldContext_RiskHistory_status(ctx, field)
+	case "impact":
+		return ec.fieldContext_RiskHistory_impact(ctx, field)
+	case "likelihood":
+		return ec.fieldContext_RiskHistory_likelihood(ctx, field)
+	case "score":
+		return ec.fieldContext_RiskHistory_score(ctx, field)
+	case "mitigation":
+		return ec.fieldContext_RiskHistory_mitigation(ctx, field)
+	case "mitigationJSON":
+		return ec.fieldContext_RiskHistory_mitigationJSON(ctx, field)
+	case "details":
+		return ec.fieldContext_RiskHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_RiskHistory_detailsJSON(ctx, field)
+	case "businessCosts":
+		return ec.fieldContext_RiskHistory_businessCosts(ctx, field)
+	case "businessCostsJSON":
+		return ec.fieldContext_RiskHistory_businessCostsJSON(ctx, field)
+	case "stakeholderID":
+		return ec.fieldContext_RiskHistory_stakeholderID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_RiskHistory_delegateID(ctx, field)
+	case "mitigatedAt":
+		return ec.fieldContext_RiskHistory_mitigatedAt(ctx, field)
+	case "reviewRequired":
+		return ec.fieldContext_RiskHistory_reviewRequired(ctx, field)
+	case "lastReviewedAt":
+		return ec.fieldContext_RiskHistory_lastReviewedAt(ctx, field)
+	case "reviewFrequency":
+		return ec.fieldContext_RiskHistory_reviewFrequency(ctx, field)
+	case "dueDate":
+		return ec.fieldContext_RiskHistory_dueDate(ctx, field)
+	case "nextReviewDueAt":
+		return ec.fieldContext_RiskHistory_nextReviewDueAt(ctx, field)
+	case "residualScore":
+		return ec.fieldContext_RiskHistory_residualScore(ctx, field)
+	case "riskDecision":
+		return ec.fieldContext_RiskHistory_riskDecision(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RiskHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_RiskHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_RiskHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_RiskHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_RiskHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RiskHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_RiskHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_RiskHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_RiskHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type RiskHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SLADefinitionHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_SLADefinitionHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_SLADefinitionHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_SLADefinitionHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_SLADefinitionHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_SLADefinitionHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_SLADefinitionHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_SLADefinitionHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_SLADefinitionHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_SLADefinitionHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_SLADefinitionHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_SLADefinitionHistory_ownerID(ctx, field)
+	case "slaDays":
+		return ec.fieldContext_SLADefinitionHistory_slaDays(ctx, field)
+	case "securityLevel":
+		return ec.fieldContext_SLADefinitionHistory_securityLevel(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SLADefinitionHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_SLADefinitionHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SLADefinitionHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SLADefinitionHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_SLADefinitionHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SLADefinitionHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SLADefinitionHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SLADefinitionHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SLADefinitionHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SLADefinitionHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ScanHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ScanHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ScanHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ScanHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ScanHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ScanHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ScanHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ScanHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ScanHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_ScanHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ScanHistory_ownerID(ctx, field)
+	case "reviewedBy":
+		return ec.fieldContext_ScanHistory_reviewedBy(ctx, field)
+	case "reviewedByUserID":
+		return ec.fieldContext_ScanHistory_reviewedByUserID(ctx, field)
+	case "reviewedByGroupID":
+		return ec.fieldContext_ScanHistory_reviewedByGroupID(ctx, field)
+	case "assignedTo":
+		return ec.fieldContext_ScanHistory_assignedTo(ctx, field)
+	case "assignedToUserID":
+		return ec.fieldContext_ScanHistory_assignedToUserID(ctx, field)
+	case "assignedToGroupID":
+		return ec.fieldContext_ScanHistory_assignedToGroupID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_ScanHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_ScanHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_ScanHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_ScanHistory_scopeID(ctx, field)
+	case "target":
+		return ec.fieldContext_ScanHistory_target(ctx, field)
+	case "scanType":
+		return ec.fieldContext_ScanHistory_scanType(ctx, field)
+	case "metadata":
+		return ec.fieldContext_ScanHistory_metadata(ctx, field)
+	case "scanDate":
+		return ec.fieldContext_ScanHistory_scanDate(ctx, field)
+	case "scanSchedule":
+		return ec.fieldContext_ScanHistory_scanSchedule(ctx, field)
+	case "nextScanRunAt":
+		return ec.fieldContext_ScanHistory_nextScanRunAt(ctx, field)
+	case "performedBy":
+		return ec.fieldContext_ScanHistory_performedBy(ctx, field)
+	case "performedByUserID":
+		return ec.fieldContext_ScanHistory_performedByUserID(ctx, field)
+	case "performedByGroupID":
+		return ec.fieldContext_ScanHistory_performedByGroupID(ctx, field)
+	case "generatedByPlatformID":
+		return ec.fieldContext_ScanHistory_generatedByPlatformID(ctx, field)
+	case "vulnerabilityIds":
+		return ec.fieldContext_ScanHistory_vulnerabilityIds(ctx, field)
+	case "status":
+		return ec.fieldContext_ScanHistory_status(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScanHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ScanHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ScanHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ScanHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ScanHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScanHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ScanHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ScanHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ScanHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScanHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ScheduledJobHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ScheduledJobHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_ScheduledJobHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_ScheduledJobHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_ScheduledJobHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ScheduledJobHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ScheduledJobHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ScheduledJobHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ScheduledJobHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_ScheduledJobHistory_displayID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_ScheduledJobHistory_ownerID(ctx, field)
+	case "jobID":
+		return ec.fieldContext_ScheduledJobHistory_jobID(ctx, field)
+	case "active":
+		return ec.fieldContext_ScheduledJobHistory_active(ctx, field)
+	case "configuration":
+		return ec.fieldContext_ScheduledJobHistory_configuration(ctx, field)
+	case "cron":
+		return ec.fieldContext_ScheduledJobHistory_cron(ctx, field)
+	case "jobRunnerID":
+		return ec.fieldContext_ScheduledJobHistory_jobRunnerID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_ScheduledJobHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ScheduledJobHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ScheduledJobHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ScheduledJobHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ScheduledJobHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ScheduledJobHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ScheduledJobHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_StandardHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_StandardHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_StandardHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_StandardHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_StandardHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_StandardHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_StandardHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_StandardHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_StandardHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_StandardHistory_tags(ctx, field)
+	case "revision":
+		return ec.fieldContext_StandardHistory_revision(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_StandardHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_StandardHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_StandardHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_StandardHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_StandardHistory_name(ctx, field)
+	case "shortName":
+		return ec.fieldContext_StandardHistory_shortName(ctx, field)
+	case "framework":
+		return ec.fieldContext_StandardHistory_framework(ctx, field)
+	case "description":
+		return ec.fieldContext_StandardHistory_description(ctx, field)
+	case "governingBodyLogoURL":
+		return ec.fieldContext_StandardHistory_governingBodyLogoURL(ctx, field)
+	case "governingBody":
+		return ec.fieldContext_StandardHistory_governingBody(ctx, field)
+	case "domains":
+		return ec.fieldContext_StandardHistory_domains(ctx, field)
+	case "link":
+		return ec.fieldContext_StandardHistory_link(ctx, field)
+	case "status":
+		return ec.fieldContext_StandardHistory_status(ctx, field)
+	case "isPublic":
+		return ec.fieldContext_StandardHistory_isPublic(ctx, field)
+	case "freeToUse":
+		return ec.fieldContext_StandardHistory_freeToUse(ctx, field)
+	case "standardType":
+		return ec.fieldContext_StandardHistory_standardType(ctx, field)
+	case "version":
+		return ec.fieldContext_StandardHistory_version(ctx, field)
+	case "logoFileID":
+		return ec.fieldContext_StandardHistory_logoFileID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type StandardHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_StandardHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_StandardHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_StandardHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_StandardHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type StandardHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_StandardHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_StandardHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_StandardHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type StandardHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_SubcontrolHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_SubcontrolHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_SubcontrolHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_SubcontrolHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_SubcontrolHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_SubcontrolHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_SubcontrolHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_SubcontrolHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_SubcontrolHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_SubcontrolHistory_tags(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_SubcontrolHistory_externalUUID(ctx, field)
+	case "title":
+		return ec.fieldContext_SubcontrolHistory_title(ctx, field)
+	case "description":
+		return ec.fieldContext_SubcontrolHistory_description(ctx, field)
+	case "descriptionJSON":
+		return ec.fieldContext_SubcontrolHistory_descriptionJSON(ctx, field)
+	case "aliases":
+		return ec.fieldContext_SubcontrolHistory_aliases(ctx, field)
+	case "referenceID":
+		return ec.fieldContext_SubcontrolHistory_referenceID(ctx, field)
+	case "auditorReferenceID":
+		return ec.fieldContext_SubcontrolHistory_auditorReferenceID(ctx, field)
+	case "responsiblePartyID":
+		return ec.fieldContext_SubcontrolHistory_responsiblePartyID(ctx, field)
+	case "status":
+		return ec.fieldContext_SubcontrolHistory_status(ctx, field)
+	case "implementationStatus":
+		return ec.fieldContext_SubcontrolHistory_implementationStatus(ctx, field)
+	case "implementationDescription":
+		return ec.fieldContext_SubcontrolHistory_implementationDescription(ctx, field)
+	case "publicRepresentation":
+		return ec.fieldContext_SubcontrolHistory_publicRepresentation(ctx, field)
+	case "source":
+		return ec.fieldContext_SubcontrolHistory_source(ctx, field)
+	case "sourceName":
+		return ec.fieldContext_SubcontrolHistory_sourceName(ctx, field)
+	case "referenceFramework":
+		return ec.fieldContext_SubcontrolHistory_referenceFramework(ctx, field)
+	case "referenceFrameworkRevision":
+		return ec.fieldContext_SubcontrolHistory_referenceFrameworkRevision(ctx, field)
+	case "category":
+		return ec.fieldContext_SubcontrolHistory_category(ctx, field)
+	case "categoryID":
+		return ec.fieldContext_SubcontrolHistory_categoryID(ctx, field)
+	case "subcategory":
+		return ec.fieldContext_SubcontrolHistory_subcategory(ctx, field)
+	case "mappedCategories":
+		return ec.fieldContext_SubcontrolHistory_mappedCategories(ctx, field)
+	case "assessmentObjectives":
+		return ec.fieldContext_SubcontrolHistory_assessmentObjectives(ctx, field)
+	case "assessmentMethods":
+		return ec.fieldContext_SubcontrolHistory_assessmentMethods(ctx, field)
+	case "controlQuestions":
+		return ec.fieldContext_SubcontrolHistory_controlQuestions(ctx, field)
+	case "implementationGuidance":
+		return ec.fieldContext_SubcontrolHistory_implementationGuidance(ctx, field)
+	case "exampleEvidence":
+		return ec.fieldContext_SubcontrolHistory_exampleEvidence(ctx, field)
+	case "references":
+		return ec.fieldContext_SubcontrolHistory_references(ctx, field)
+	case "testingProcedures":
+		return ec.fieldContext_SubcontrolHistory_testingProcedures(ctx, field)
+	case "evidenceRequests":
+		return ec.fieldContext_SubcontrolHistory_evidenceRequests(ctx, field)
+	case "controlOwnerID":
+		return ec.fieldContext_SubcontrolHistory_controlOwnerID(ctx, field)
+	case "delegateID":
+		return ec.fieldContext_SubcontrolHistory_delegateID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_SubcontrolHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_SubcontrolHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_SubcontrolHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_SubcontrolHistory_systemInternalID(ctx, field)
+	case "subcontrolKindName":
+		return ec.fieldContext_SubcontrolHistory_subcontrolKindName(ctx, field)
+	case "subcontrolKindID":
+		return ec.fieldContext_SubcontrolHistory_subcontrolKindID(ctx, field)
+	case "workflowEligibleMarker":
+		return ec.fieldContext_SubcontrolHistory_workflowEligibleMarker(ctx, field)
+	case "refCode":
+		return ec.fieldContext_SubcontrolHistory_refCode(ctx, field)
+	case "controlID":
+		return ec.fieldContext_SubcontrolHistory_controlID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SubcontrolHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SubcontrolHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_SubcontrolHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SubcontrolHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SubcontrolHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SubprocessorHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_SubprocessorHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_SubprocessorHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_SubprocessorHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_SubprocessorHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_SubprocessorHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_SubprocessorHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_SubprocessorHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_SubprocessorHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_SubprocessorHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_SubprocessorHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_SubprocessorHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_SubprocessorHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_SubprocessorHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_SubprocessorHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_SubprocessorHistory_description(ctx, field)
+	case "logoRemoteURL":
+		return ec.fieldContext_SubprocessorHistory_logoRemoteURL(ctx, field)
+	case "logoFileID":
+		return ec.fieldContext_SubprocessorHistory_logoFileID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubprocessorHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_SubprocessorHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SubprocessorHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SubprocessorHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_SubprocessorHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubprocessorHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SubprocessorHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SubprocessorHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SubprocessorHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubprocessorHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_SystemDetailHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_SystemDetailHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_SystemDetailHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_SystemDetailHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_SystemDetailHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_SystemDetailHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_SystemDetailHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_SystemDetailHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_SystemDetailHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_SystemDetailHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_SystemDetailHistory_ownerID(ctx, field)
+	case "programID":
+		return ec.fieldContext_SystemDetailHistory_programID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_SystemDetailHistory_platformID(ctx, field)
+	case "systemName":
+		return ec.fieldContext_SystemDetailHistory_systemName(ctx, field)
+	case "version":
+		return ec.fieldContext_SystemDetailHistory_version(ctx, field)
+	case "description":
+		return ec.fieldContext_SystemDetailHistory_description(ctx, field)
+	case "authorizationBoundary":
+		return ec.fieldContext_SystemDetailHistory_authorizationBoundary(ctx, field)
+	case "sensitivityLevel":
+		return ec.fieldContext_SystemDetailHistory_sensitivityLevel(ctx, field)
+	case "lastReviewed":
+		return ec.fieldContext_SystemDetailHistory_lastReviewed(ctx, field)
+	case "revisionHistory":
+		return ec.fieldContext_SystemDetailHistory_revisionHistory(ctx, field)
+	case "oscalMetadataJSON":
+		return ec.fieldContext_SystemDetailHistory_oscalMetadataJSON(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SystemDetailHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_SystemDetailHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SystemDetailHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SystemDetailHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_SystemDetailHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SystemDetailHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SystemDetailHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SystemDetailHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SystemDetailHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SystemDetailHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TaskHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TaskHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TaskHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TaskHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TaskHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TaskHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TaskHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TaskHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_TaskHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_TaskHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_TaskHistory_ownerID(ctx, field)
+	case "taskKindName":
+		return ec.fieldContext_TaskHistory_taskKindName(ctx, field)
+	case "taskKindID":
+		return ec.fieldContext_TaskHistory_taskKindID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_TaskHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_TaskHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_TaskHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_TaskHistory_scopeID(ctx, field)
+	case "externalUUID":
+		return ec.fieldContext_TaskHistory_externalUUID(ctx, field)
+	case "title":
+		return ec.fieldContext_TaskHistory_title(ctx, field)
+	case "details":
+		return ec.fieldContext_TaskHistory_details(ctx, field)
+	case "detailsJSON":
+		return ec.fieldContext_TaskHistory_detailsJSON(ctx, field)
+	case "status":
+		return ec.fieldContext_TaskHistory_status(ctx, field)
+	case "due":
+		return ec.fieldContext_TaskHistory_due(ctx, field)
+	case "completed":
+		return ec.fieldContext_TaskHistory_completed(ctx, field)
+	case "assigneeID":
+		return ec.fieldContext_TaskHistory_assigneeID(ctx, field)
+	case "assignerID":
+		return ec.fieldContext_TaskHistory_assignerID(ctx, field)
+	case "systemGenerated":
+		return ec.fieldContext_TaskHistory_systemGenerated(ctx, field)
+	case "idempotencyKey":
+		return ec.fieldContext_TaskHistory_idempotencyKey(ctx, field)
+	case "externalReferenceURL":
+		return ec.fieldContext_TaskHistory_externalReferenceURL(ctx, field)
+	case "parentTaskID":
+		return ec.fieldContext_TaskHistory_parentTaskID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TaskHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TaskHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TaskHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TaskHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TaskHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TaskHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TaskHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TaskHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TaskHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TaskHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TemplateHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TemplateHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TemplateHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TemplateHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TemplateHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TemplateHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TemplateHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TemplateHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_TemplateHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_TemplateHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_TemplateHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_TemplateHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_TemplateHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_TemplateHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_TemplateHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_TemplateHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_TemplateHistory_scopeID(ctx, field)
+	case "name":
+		return ec.fieldContext_TemplateHistory_name(ctx, field)
+	case "templateType":
+		return ec.fieldContext_TemplateHistory_templateType(ctx, field)
+	case "description":
+		return ec.fieldContext_TemplateHistory_description(ctx, field)
+	case "kind":
+		return ec.fieldContext_TemplateHistory_kind(ctx, field)
+	case "jsonconfig":
+		return ec.fieldContext_TemplateHistory_jsonconfig(ctx, field)
+	case "uischema":
+		return ec.fieldContext_TemplateHistory_uischema(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TemplateHistory_trustCenterID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TemplateHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TemplateHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TemplateHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TemplateHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TemplateHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TemplateHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TemplateHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TemplateHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TemplateHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TemplateHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterComplianceHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterComplianceHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterComplianceHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterComplianceHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterComplianceHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterComplianceHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterComplianceHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterComplianceHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterComplianceHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_TrustCenterComplianceHistory_tags(ctx, field)
+	case "standardID":
+		return ec.fieldContext_TrustCenterComplianceHistory_standardID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterComplianceHistory_trustCenterID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterComplianceHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterComplianceHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterComplianceHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterComplianceHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterComplianceHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterComplianceHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterComplianceHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterDocHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterDocHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterDocHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterDocHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterDocHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterDocHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterDocHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterDocHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterDocHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_TrustCenterDocHistory_tags(ctx, field)
+	case "trustCenterDocKindName":
+		return ec.fieldContext_TrustCenterDocHistory_trustCenterDocKindName(ctx, field)
+	case "trustCenterDocKindID":
+		return ec.fieldContext_TrustCenterDocHistory_trustCenterDocKindID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterDocHistory_trustCenterID(ctx, field)
+	case "title":
+		return ec.fieldContext_TrustCenterDocHistory_title(ctx, field)
+	case "fileID":
+		return ec.fieldContext_TrustCenterDocHistory_fileID(ctx, field)
+	case "originalFileID":
+		return ec.fieldContext_TrustCenterDocHistory_originalFileID(ctx, field)
+	case "watermarkingEnabled":
+		return ec.fieldContext_TrustCenterDocHistory_watermarkingEnabled(ctx, field)
+	case "watermarkStatus":
+		return ec.fieldContext_TrustCenterDocHistory_watermarkStatus(ctx, field)
+	case "visibility":
+		return ec.fieldContext_TrustCenterDocHistory_visibility(ctx, field)
+	case "standardID":
+		return ec.fieldContext_TrustCenterDocHistory_standardID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterDocHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterDocHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterDocHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterDocHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterDocHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterDocHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterDocHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterEntityHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterEntityHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterEntityHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterEntityHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterEntityHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterEntityHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterEntityHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterEntityHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterEntityHistory_updatedBy(ctx, field)
+	case "logoFileID":
+		return ec.fieldContext_TrustCenterEntityHistory_logoFileID(ctx, field)
+	case "url":
+		return ec.fieldContext_TrustCenterEntityHistory_url(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterEntityHistory_trustCenterID(ctx, field)
+	case "name":
+		return ec.fieldContext_TrustCenterEntityHistory_name(ctx, field)
+	case "entityTypeID":
+		return ec.fieldContext_TrustCenterEntityHistory_entityTypeID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterEntityHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterEntityHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterEntityHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterEntityHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterEntityHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterEntityHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterEntityHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterFAQHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterFAQHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterFAQHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterFAQHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterFAQHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterFAQHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterFAQHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterFAQHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterFAQHistory_updatedBy(ctx, field)
+	case "trustCenterFaqKindName":
+		return ec.fieldContext_TrustCenterFAQHistory_trustCenterFaqKindName(ctx, field)
+	case "trustCenterFaqKindID":
+		return ec.fieldContext_TrustCenterFAQHistory_trustCenterFaqKindID(ctx, field)
+	case "noteID":
+		return ec.fieldContext_TrustCenterFAQHistory_noteID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterFAQHistory_trustCenterID(ctx, field)
+	case "referenceLink":
+		return ec.fieldContext_TrustCenterFAQHistory_referenceLink(ctx, field)
+	case "displayOrder":
+		return ec.fieldContext_TrustCenterFAQHistory_displayOrder(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterFAQHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterFAQHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterFAQHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterFAQHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterFAQHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterFAQHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterFAQHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_TrustCenterHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_TrustCenterHistory_ownerID(ctx, field)
+	case "slug":
+		return ec.fieldContext_TrustCenterHistory_slug(ctx, field)
+	case "customDomainID":
+		return ec.fieldContext_TrustCenterHistory_customDomainID(ctx, field)
+	case "previewDomainID":
+		return ec.fieldContext_TrustCenterHistory_previewDomainID(ctx, field)
+	case "pirschDomainID":
+		return ec.fieldContext_TrustCenterHistory_pirschDomainID(ctx, field)
+	case "pirschIdentificationCode":
+		return ec.fieldContext_TrustCenterHistory_pirschIdentificationCode(ctx, field)
+	case "pirschAccessLink":
+		return ec.fieldContext_TrustCenterHistory_pirschAccessLink(ctx, field)
+	case "previewStatus":
+		return ec.fieldContext_TrustCenterHistory_previewStatus(ctx, field)
+	case "subprocessorURL":
+		return ec.fieldContext_TrustCenterHistory_subprocessorURL(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterNDARequestHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterNDARequestHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterNDARequestHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterNDARequestHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterNDARequestHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterNDARequestHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterNDARequestHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterNDARequestHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterNDARequestHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_TrustCenterNDARequestHistory_tags(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterNDARequestHistory_trustCenterID(ctx, field)
+	case "firstName":
+		return ec.fieldContext_TrustCenterNDARequestHistory_firstName(ctx, field)
+	case "lastName":
+		return ec.fieldContext_TrustCenterNDARequestHistory_lastName(ctx, field)
+	case "email":
+		return ec.fieldContext_TrustCenterNDARequestHistory_email(ctx, field)
+	case "companyName":
+		return ec.fieldContext_TrustCenterNDARequestHistory_companyName(ctx, field)
+	case "reason":
+		return ec.fieldContext_TrustCenterNDARequestHistory_reason(ctx, field)
+	case "accessLevel":
+		return ec.fieldContext_TrustCenterNDARequestHistory_accessLevel(ctx, field)
+	case "status":
+		return ec.fieldContext_TrustCenterNDARequestHistory_status(ctx, field)
+	case "approvedAt":
+		return ec.fieldContext_TrustCenterNDARequestHistory_approvedAt(ctx, field)
+	case "approvedByUserID":
+		return ec.fieldContext_TrustCenterNDARequestHistory_approvedByUserID(ctx, field)
+	case "signedAt":
+		return ec.fieldContext_TrustCenterNDARequestHistory_signedAt(ctx, field)
+	case "documentDataID":
+		return ec.fieldContext_TrustCenterNDARequestHistory_documentDataID(ctx, field)
+	case "fileID":
+		return ec.fieldContext_TrustCenterNDARequestHistory_fileID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterNDARequestHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterNDARequestHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterNDARequestHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterNDARequestHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterNDARequestHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterNDARequestHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterNDARequestHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterSettingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterSettingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterSettingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterSettingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterSettingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterSettingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterSettingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterSettingHistory_updatedBy(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterSettingHistory_trustCenterID(ctx, field)
+	case "title":
+		return ec.fieldContext_TrustCenterSettingHistory_title(ctx, field)
+	case "companyName":
+		return ec.fieldContext_TrustCenterSettingHistory_companyName(ctx, field)
+	case "companyDescription":
+		return ec.fieldContext_TrustCenterSettingHistory_companyDescription(ctx, field)
+	case "overview":
+		return ec.fieldContext_TrustCenterSettingHistory_overview(ctx, field)
+	case "logoRemoteURL":
+		return ec.fieldContext_TrustCenterSettingHistory_logoRemoteURL(ctx, field)
+	case "logoLocalFileID":
+		return ec.fieldContext_TrustCenterSettingHistory_logoLocalFileID(ctx, field)
+	case "faviconRemoteURL":
+		return ec.fieldContext_TrustCenterSettingHistory_faviconRemoteURL(ctx, field)
+	case "faviconLocalFileID":
+		return ec.fieldContext_TrustCenterSettingHistory_faviconLocalFileID(ctx, field)
+	case "heroImageLocalFileID":
+		return ec.fieldContext_TrustCenterSettingHistory_heroImageLocalFileID(ctx, field)
+	case "themeMode":
+		return ec.fieldContext_TrustCenterSettingHistory_themeMode(ctx, field)
+	case "primaryColor":
+		return ec.fieldContext_TrustCenterSettingHistory_primaryColor(ctx, field)
+	case "font":
+		return ec.fieldContext_TrustCenterSettingHistory_font(ctx, field)
+	case "foregroundColor":
+		return ec.fieldContext_TrustCenterSettingHistory_foregroundColor(ctx, field)
+	case "backgroundColor":
+		return ec.fieldContext_TrustCenterSettingHistory_backgroundColor(ctx, field)
+	case "accentColor":
+		return ec.fieldContext_TrustCenterSettingHistory_accentColor(ctx, field)
+	case "secondaryBackgroundColor":
+		return ec.fieldContext_TrustCenterSettingHistory_secondaryBackgroundColor(ctx, field)
+	case "secondaryForegroundColor":
+		return ec.fieldContext_TrustCenterSettingHistory_secondaryForegroundColor(ctx, field)
+	case "environment":
+		return ec.fieldContext_TrustCenterSettingHistory_environment(ctx, field)
+	case "removeBranding":
+		return ec.fieldContext_TrustCenterSettingHistory_removeBranding(ctx, field)
+	case "companyDomain":
+		return ec.fieldContext_TrustCenterSettingHistory_companyDomain(ctx, field)
+	case "securityContact":
+		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
+	case "ndaApprovalRequired":
+		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+	case "statusPageURL":
+		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSettingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterSettingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterSettingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterSettingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSettingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterSettingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterSettingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSubprocessorHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_updatedBy(ctx, field)
+	case "trustCenterSubprocessorKindName":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_trustCenterSubprocessorKindName(ctx, field)
+	case "trustCenterSubprocessorKindID":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_trustCenterSubprocessorKindID(ctx, field)
+	case "subprocessorID":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_subprocessorID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_trustCenterID(ctx, field)
+	case "countries":
+		return ec.fieldContext_TrustCenterSubprocessorHistory_countries(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSubprocessorHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterSubprocessorHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterSubprocessorHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterSubprocessorHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterSubprocessorHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterSubprocessorHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterSubprocessorHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterWatermarkConfigHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_updatedBy(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_ownerID(ctx, field)
+	case "trustCenterID":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_trustCenterID(ctx, field)
+	case "isEnabled":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_isEnabled(ctx, field)
+	case "logoID":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_logoID(ctx, field)
+	case "text":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_text(ctx, field)
+	case "fontSize":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_fontSize(ctx, field)
+	case "opacity":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_opacity(ctx, field)
+	case "rotation":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_rotation(ctx, field)
+	case "color":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_color(ctx, field)
+	case "font":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistory_font(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfigHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterWatermarkConfigHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfigHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterWatermarkConfigHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterWatermarkConfigHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfigHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_UserHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_UserHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_UserHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_UserHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_UserHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_UserHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_UserHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_UserHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_UserHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_UserHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_UserHistory_tags(ctx, field)
+	case "email":
+		return ec.fieldContext_UserHistory_email(ctx, field)
+	case "firstName":
+		return ec.fieldContext_UserHistory_firstName(ctx, field)
+	case "lastName":
+		return ec.fieldContext_UserHistory_lastName(ctx, field)
+	case "displayName":
+		return ec.fieldContext_UserHistory_displayName(ctx, field)
+	case "avatarRemoteURL":
+		return ec.fieldContext_UserHistory_avatarRemoteURL(ctx, field)
+	case "avatarLocalFileID":
+		return ec.fieldContext_UserHistory_avatarLocalFileID(ctx, field)
+	case "avatarUpdatedAt":
+		return ec.fieldContext_UserHistory_avatarUpdatedAt(ctx, field)
+	case "lastSeen":
+		return ec.fieldContext_UserHistory_lastSeen(ctx, field)
+	case "lastLoginProvider":
+		return ec.fieldContext_UserHistory_lastLoginProvider(ctx, field)
+	case "sub":
+		return ec.fieldContext_UserHistory_sub(ctx, field)
+	case "authProvider":
+		return ec.fieldContext_UserHistory_authProvider(ctx, field)
+	case "role":
+		return ec.fieldContext_UserHistory_role(ctx, field)
+	case "scimExternalID":
+		return ec.fieldContext_UserHistory_scimExternalID(ctx, field)
+	case "scimUsername":
+		return ec.fieldContext_UserHistory_scimUsername(ctx, field)
+	case "scimActive":
+		return ec.fieldContext_UserHistory_scimActive(ctx, field)
+	case "scimPreferredLanguage":
+		return ec.fieldContext_UserHistory_scimPreferredLanguage(ctx, field)
+	case "scimLocale":
+		return ec.fieldContext_UserHistory_scimLocale(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_UserHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_UserHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_UserHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_UserHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_UserHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_UserHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_UserHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_UserSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_UserSettingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_UserSettingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_UserSettingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_UserSettingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_UserSettingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_UserSettingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_UserSettingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_UserSettingHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_UserSettingHistory_tags(ctx, field)
+	case "userID":
+		return ec.fieldContext_UserSettingHistory_userID(ctx, field)
+	case "delegateUserID":
+		return ec.fieldContext_UserSettingHistory_delegateUserID(ctx, field)
+	case "delegateStartAt":
+		return ec.fieldContext_UserSettingHistory_delegateStartAt(ctx, field)
+	case "delegateEndAt":
+		return ec.fieldContext_UserSettingHistory_delegateEndAt(ctx, field)
+	case "locked":
+		return ec.fieldContext_UserSettingHistory_locked(ctx, field)
+	case "silencedAt":
+		return ec.fieldContext_UserSettingHistory_silencedAt(ctx, field)
+	case "suspendedAt":
+		return ec.fieldContext_UserSettingHistory_suspendedAt(ctx, field)
+	case "status":
+		return ec.fieldContext_UserSettingHistory_status(ctx, field)
+	case "emailConfirmed":
+		return ec.fieldContext_UserSettingHistory_emailConfirmed(ctx, field)
+	case "isWebauthnAllowed":
+		return ec.fieldContext_UserSettingHistory_isWebauthnAllowed(ctx, field)
+	case "isTfaEnabled":
+		return ec.fieldContext_UserSettingHistory_isTfaEnabled(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserSettingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_UserSettingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_UserSettingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_UserSettingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_UserSettingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserSettingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_UserSettingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_UserSettingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_UserSettingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserSettingHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorRiskScoreHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_VendorRiskScoreHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_VendorRiskScoreHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_VendorRiskScoreHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_VendorRiskScoreHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_VendorRiskScoreHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_VendorRiskScoreHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_VendorRiskScoreHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_VendorRiskScoreHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_VendorRiskScoreHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_VendorRiskScoreHistory_ownerID(ctx, field)
+	case "questionKey":
+		return ec.fieldContext_VendorRiskScoreHistory_questionKey(ctx, field)
+	case "questionName":
+		return ec.fieldContext_VendorRiskScoreHistory_questionName(ctx, field)
+	case "questionDescription":
+		return ec.fieldContext_VendorRiskScoreHistory_questionDescription(ctx, field)
+	case "questionCategory":
+		return ec.fieldContext_VendorRiskScoreHistory_questionCategory(ctx, field)
+	case "answerType":
+		return ec.fieldContext_VendorRiskScoreHistory_answerType(ctx, field)
+	case "impact":
+		return ec.fieldContext_VendorRiskScoreHistory_impact(ctx, field)
+	case "likelihood":
+		return ec.fieldContext_VendorRiskScoreHistory_likelihood(ctx, field)
+	case "score":
+		return ec.fieldContext_VendorRiskScoreHistory_score(ctx, field)
+	case "answer":
+		return ec.fieldContext_VendorRiskScoreHistory_answer(ctx, field)
+	case "notes":
+		return ec.fieldContext_VendorRiskScoreHistory_notes(ctx, field)
+	case "vendorScoringConfigID":
+		return ec.fieldContext_VendorRiskScoreHistory_vendorScoringConfigID(ctx, field)
+	case "entityID":
+		return ec.fieldContext_VendorRiskScoreHistory_entityID(ctx, field)
+	case "assessmentResponseID":
+		return ec.fieldContext_VendorRiskScoreHistory_assessmentResponseID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorRiskScoreHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorRiskScoreHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_VendorRiskScoreHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_VendorRiskScoreHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_VendorRiskScoreHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorRiskScoreHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorRiskScoreHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_VendorRiskScoreHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_VendorRiskScoreHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorRiskScoreHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorScoringConfigHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_VendorScoringConfigHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_VendorScoringConfigHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_VendorScoringConfigHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_VendorScoringConfigHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_VendorScoringConfigHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_VendorScoringConfigHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_VendorScoringConfigHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_VendorScoringConfigHistory_updatedBy(ctx, field)
+	case "tags":
+		return ec.fieldContext_VendorScoringConfigHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_VendorScoringConfigHistory_ownerID(ctx, field)
+	case "questions":
+		return ec.fieldContext_VendorScoringConfigHistory_questions(ctx, field)
+	case "scoringMode":
+		return ec.fieldContext_VendorScoringConfigHistory_scoringMode(ctx, field)
+	case "riskThresholds":
+		return ec.fieldContext_VendorScoringConfigHistory_riskThresholds(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfigHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorScoringConfigHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_VendorScoringConfigHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_VendorScoringConfigHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_VendorScoringConfigHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfigHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_VendorScoringConfigHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_VendorScoringConfigHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_VendorScoringConfigHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfigHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_VulnerabilityHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_VulnerabilityHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_VulnerabilityHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_VulnerabilityHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_VulnerabilityHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_VulnerabilityHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_VulnerabilityHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_VulnerabilityHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_VulnerabilityHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_VulnerabilityHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_VulnerabilityHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_VulnerabilityHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_VulnerabilityHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_VulnerabilityHistory_systemInternalID(ctx, field)
+	case "environmentName":
+		return ec.fieldContext_VulnerabilityHistory_environmentName(ctx, field)
+	case "environmentID":
+		return ec.fieldContext_VulnerabilityHistory_environmentID(ctx, field)
+	case "scopeName":
+		return ec.fieldContext_VulnerabilityHistory_scopeName(ctx, field)
+	case "scopeID":
+		return ec.fieldContext_VulnerabilityHistory_scopeID(ctx, field)
+	case "vulnerabilityStatusName":
+		return ec.fieldContext_VulnerabilityHistory_vulnerabilityStatusName(ctx, field)
+	case "vulnerabilityStatusID":
+		return ec.fieldContext_VulnerabilityHistory_vulnerabilityStatusID(ctx, field)
+	case "externalOwnerID":
+		return ec.fieldContext_VulnerabilityHistory_externalOwnerID(ctx, field)
+	case "securityLevel":
+		return ec.fieldContext_VulnerabilityHistory_securityLevel(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VulnerabilityHistory_externalID(ctx, field)
+	case "cveID":
+		return ec.fieldContext_VulnerabilityHistory_cveID(ctx, field)
+	case "source":
+		return ec.fieldContext_VulnerabilityHistory_source(ctx, field)
+	case "displayName":
+		return ec.fieldContext_VulnerabilityHistory_displayName(ctx, field)
+	case "category":
+		return ec.fieldContext_VulnerabilityHistory_category(ctx, field)
+	case "severity":
+		return ec.fieldContext_VulnerabilityHistory_severity(ctx, field)
+	case "score":
+		return ec.fieldContext_VulnerabilityHistory_score(ctx, field)
+	case "impact":
+		return ec.fieldContext_VulnerabilityHistory_impact(ctx, field)
+	case "exploitability":
+		return ec.fieldContext_VulnerabilityHistory_exploitability(ctx, field)
+	case "priority":
+		return ec.fieldContext_VulnerabilityHistory_priority(ctx, field)
+	case "summary":
+		return ec.fieldContext_VulnerabilityHistory_summary(ctx, field)
+	case "description":
+		return ec.fieldContext_VulnerabilityHistory_description(ctx, field)
+	case "vector":
+		return ec.fieldContext_VulnerabilityHistory_vector(ctx, field)
+	case "remediationSLA":
+		return ec.fieldContext_VulnerabilityHistory_remediationSLA(ctx, field)
+	case "open":
+		return ec.fieldContext_VulnerabilityHistory_open(ctx, field)
+	case "blocking":
+		return ec.fieldContext_VulnerabilityHistory_blocking(ctx, field)
+	case "production":
+		return ec.fieldContext_VulnerabilityHistory_production(ctx, field)
+	case "public":
+		return ec.fieldContext_VulnerabilityHistory_public(ctx, field)
+	case "validated":
+		return ec.fieldContext_VulnerabilityHistory_validated(ctx, field)
+	case "references":
+		return ec.fieldContext_VulnerabilityHistory_references(ctx, field)
+	case "impacts":
+		return ec.fieldContext_VulnerabilityHistory_impacts(ctx, field)
+	case "cweIds":
+		return ec.fieldContext_VulnerabilityHistory_cweIds(ctx, field)
+	case "vulnerableVersionRange":
+		return ec.fieldContext_VulnerabilityHistory_vulnerableVersionRange(ctx, field)
+	case "firstPatchedVersion":
+		return ec.fieldContext_VulnerabilityHistory_firstPatchedVersion(ctx, field)
+	case "fixAvailable":
+		return ec.fieldContext_VulnerabilityHistory_fixAvailable(ctx, field)
+	case "packageName":
+		return ec.fieldContext_VulnerabilityHistory_packageName(ctx, field)
+	case "packageEcosystem":
+		return ec.fieldContext_VulnerabilityHistory_packageEcosystem(ctx, field)
+	case "manifestPath":
+		return ec.fieldContext_VulnerabilityHistory_manifestPath(ctx, field)
+	case "dependencyScope":
+		return ec.fieldContext_VulnerabilityHistory_dependencyScope(ctx, field)
+	case "publishedAt":
+		return ec.fieldContext_VulnerabilityHistory_publishedAt(ctx, field)
+	case "discoveredAt":
+		return ec.fieldContext_VulnerabilityHistory_discoveredAt(ctx, field)
+	case "sourceUpdatedAt":
+		return ec.fieldContext_VulnerabilityHistory_sourceUpdatedAt(ctx, field)
+	case "dismissedAt":
+		return ec.fieldContext_VulnerabilityHistory_dismissedAt(ctx, field)
+	case "dismissedReason":
+		return ec.fieldContext_VulnerabilityHistory_dismissedReason(ctx, field)
+	case "dismissedComment":
+		return ec.fieldContext_VulnerabilityHistory_dismissedComment(ctx, field)
+	case "fixedAt":
+		return ec.fieldContext_VulnerabilityHistory_fixedAt(ctx, field)
+	case "autoDismissedAt":
+		return ec.fieldContext_VulnerabilityHistory_autoDismissedAt(ctx, field)
+	case "externalURI":
+		return ec.fieldContext_VulnerabilityHistory_externalURI(ctx, field)
+	case "metadata":
+		return ec.fieldContext_VulnerabilityHistory_metadata(ctx, field)
+	case "rawPayload":
+		return ec.fieldContext_VulnerabilityHistory_rawPayload(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_VulnerabilityHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_VulnerabilityHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_VulnerabilityHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_VulnerabilityHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_VulnerabilityHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowAssignmentHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowAssignmentHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowAssignmentHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowAssignmentHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowAssignmentHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowAssignmentHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowAssignmentHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowAssignmentHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowAssignmentHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_WorkflowAssignmentHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowAssignmentHistory_ownerID(ctx, field)
+	case "workflowInstanceID":
+		return ec.fieldContext_WorkflowAssignmentHistory_workflowInstanceID(ctx, field)
+	case "assignmentKey":
+		return ec.fieldContext_WorkflowAssignmentHistory_assignmentKey(ctx, field)
+	case "role":
+		return ec.fieldContext_WorkflowAssignmentHistory_role(ctx, field)
+	case "label":
+		return ec.fieldContext_WorkflowAssignmentHistory_label(ctx, field)
+	case "required":
+		return ec.fieldContext_WorkflowAssignmentHistory_required(ctx, field)
+	case "status":
+		return ec.fieldContext_WorkflowAssignmentHistory_status(ctx, field)
+	case "metadata":
+		return ec.fieldContext_WorkflowAssignmentHistory_metadata(ctx, field)
+	case "approvalMetadata":
+		return ec.fieldContext_WorkflowAssignmentHistory_approvalMetadata(ctx, field)
+	case "rejectionMetadata":
+		return ec.fieldContext_WorkflowAssignmentHistory_rejectionMetadata(ctx, field)
+	case "invalidationMetadata":
+		return ec.fieldContext_WorkflowAssignmentHistory_invalidationMetadata(ctx, field)
+	case "decidedAt":
+		return ec.fieldContext_WorkflowAssignmentHistory_decidedAt(ctx, field)
+	case "actorUserID":
+		return ec.fieldContext_WorkflowAssignmentHistory_actorUserID(ctx, field)
+	case "actorGroupID":
+		return ec.fieldContext_WorkflowAssignmentHistory_actorGroupID(ctx, field)
+	case "notes":
+		return ec.fieldContext_WorkflowAssignmentHistory_notes(ctx, field)
+	case "dueAt":
+		return ec.fieldContext_WorkflowAssignmentHistory_dueAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowAssignmentHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowAssignmentHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowAssignmentHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowAssignmentHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowAssignmentHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentTargetHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_ownerID(ctx, field)
+	case "workflowAssignmentID":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_workflowAssignmentID(ctx, field)
+	case "targetType":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_targetType(ctx, field)
+	case "targetUserID":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_targetUserID(ctx, field)
+	case "targetGroupID":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_targetGroupID(ctx, field)
+	case "resolverKey":
+		return ec.fieldContext_WorkflowAssignmentTargetHistory_resolverKey(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentTargetHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentTargetHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowAssignmentTargetHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowAssignmentTargetHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowAssignmentTargetHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentTargetHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowAssignmentTargetHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowAssignmentTargetHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowAssignmentTargetHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignmentTargetHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowDefinitionHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowDefinitionHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowDefinitionHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowDefinitionHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowDefinitionHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowDefinitionHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowDefinitionHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowDefinitionHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowDefinitionHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowDefinitionHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_WorkflowDefinitionHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowDefinitionHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_WorkflowDefinitionHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_WorkflowDefinitionHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_WorkflowDefinitionHistory_systemInternalID(ctx, field)
+	case "name":
+		return ec.fieldContext_WorkflowDefinitionHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_WorkflowDefinitionHistory_description(ctx, field)
+	case "workflowKind":
+		return ec.fieldContext_WorkflowDefinitionHistory_workflowKind(ctx, field)
+	case "schemaType":
+		return ec.fieldContext_WorkflowDefinitionHistory_schemaType(ctx, field)
+	case "revision":
+		return ec.fieldContext_WorkflowDefinitionHistory_revision(ctx, field)
+	case "draft":
+		return ec.fieldContext_WorkflowDefinitionHistory_draft(ctx, field)
+	case "publishedAt":
+		return ec.fieldContext_WorkflowDefinitionHistory_publishedAt(ctx, field)
+	case "cooldownSeconds":
+		return ec.fieldContext_WorkflowDefinitionHistory_cooldownSeconds(ctx, field)
+	case "isDefault":
+		return ec.fieldContext_WorkflowDefinitionHistory_isDefault(ctx, field)
+	case "active":
+		return ec.fieldContext_WorkflowDefinitionHistory_active(ctx, field)
+	case "definitionJSON":
+		return ec.fieldContext_WorkflowDefinitionHistory_definitionJSON(ctx, field)
+	case "trackedFields":
+		return ec.fieldContext_WorkflowDefinitionHistory_trackedFields(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinitionHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowDefinitionHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowDefinitionHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowDefinitionHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowDefinitionHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinitionHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowDefinitionHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowDefinitionHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowDefinitionHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowDefinitionHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowEventHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowEventHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowEventHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowEventHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowEventHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowEventHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowEventHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowEventHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowEventHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowEventHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_WorkflowEventHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowEventHistory_ownerID(ctx, field)
+	case "workflowInstanceID":
+		return ec.fieldContext_WorkflowEventHistory_workflowInstanceID(ctx, field)
+	case "eventType":
+		return ec.fieldContext_WorkflowEventHistory_eventType(ctx, field)
+	case "payload":
+		return ec.fieldContext_WorkflowEventHistory_payload(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowEventHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowEventHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowEventHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowEventHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowEventHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowEventHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowEventHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowEventHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowEventHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowEventHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowInstanceHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowInstanceHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowInstanceHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowInstanceHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowInstanceHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowInstanceHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowInstanceHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowInstanceHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowInstanceHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowInstanceHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_WorkflowInstanceHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowInstanceHistory_ownerID(ctx, field)
+	case "workflowDefinitionID":
+		return ec.fieldContext_WorkflowInstanceHistory_workflowDefinitionID(ctx, field)
+	case "workflowProposalID":
+		return ec.fieldContext_WorkflowInstanceHistory_workflowProposalID(ctx, field)
+	case "state":
+		return ec.fieldContext_WorkflowInstanceHistory_state(ctx, field)
+	case "context":
+		return ec.fieldContext_WorkflowInstanceHistory_context(ctx, field)
+	case "lastEvaluatedAt":
+		return ec.fieldContext_WorkflowInstanceHistory_lastEvaluatedAt(ctx, field)
+	case "definitionSnapshot":
+		return ec.fieldContext_WorkflowInstanceHistory_definitionSnapshot(ctx, field)
+	case "currentActionIndex":
+		return ec.fieldContext_WorkflowInstanceHistory_currentActionIndex(ctx, field)
+	case "controlID":
+		return ec.fieldContext_WorkflowInstanceHistory_controlID(ctx, field)
+	case "internalPolicyID":
+		return ec.fieldContext_WorkflowInstanceHistory_internalPolicyID(ctx, field)
+	case "evidenceID":
+		return ec.fieldContext_WorkflowInstanceHistory_evidenceID(ctx, field)
+	case "subcontrolID":
+		return ec.fieldContext_WorkflowInstanceHistory_subcontrolID(ctx, field)
+	case "actionPlanID":
+		return ec.fieldContext_WorkflowInstanceHistory_actionPlanID(ctx, field)
+	case "procedureID":
+		return ec.fieldContext_WorkflowInstanceHistory_procedureID(ctx, field)
+	case "campaignID":
+		return ec.fieldContext_WorkflowInstanceHistory_campaignID(ctx, field)
+	case "campaignTargetID":
+		return ec.fieldContext_WorkflowInstanceHistory_campaignTargetID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_WorkflowInstanceHistory_identityHolderID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_WorkflowInstanceHistory_platformID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowInstanceHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowInstanceHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowInstanceHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowInstanceHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowInstanceHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowInstanceHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowInstanceHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowInstanceHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowInstanceHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowInstanceHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowObjectRefHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_WorkflowObjectRefHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_WorkflowObjectRefHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_WorkflowObjectRefHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_WorkflowObjectRefHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_WorkflowObjectRefHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_WorkflowObjectRefHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_WorkflowObjectRefHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_WorkflowObjectRefHistory_updatedBy(ctx, field)
+	case "displayID":
+		return ec.fieldContext_WorkflowObjectRefHistory_displayID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_WorkflowObjectRefHistory_ownerID(ctx, field)
+	case "workflowInstanceID":
+		return ec.fieldContext_WorkflowObjectRefHistory_workflowInstanceID(ctx, field)
+	case "controlID":
+		return ec.fieldContext_WorkflowObjectRefHistory_controlID(ctx, field)
+	case "taskID":
+		return ec.fieldContext_WorkflowObjectRefHistory_taskID(ctx, field)
+	case "internalPolicyID":
+		return ec.fieldContext_WorkflowObjectRefHistory_internalPolicyID(ctx, field)
+	case "findingID":
+		return ec.fieldContext_WorkflowObjectRefHistory_findingID(ctx, field)
+	case "directoryAccountID":
+		return ec.fieldContext_WorkflowObjectRefHistory_directoryAccountID(ctx, field)
+	case "directoryGroupID":
+		return ec.fieldContext_WorkflowObjectRefHistory_directoryGroupID(ctx, field)
+	case "directoryMembershipID":
+		return ec.fieldContext_WorkflowObjectRefHistory_directoryMembershipID(ctx, field)
+	case "evidenceID":
+		return ec.fieldContext_WorkflowObjectRefHistory_evidenceID(ctx, field)
+	case "subcontrolID":
+		return ec.fieldContext_WorkflowObjectRefHistory_subcontrolID(ctx, field)
+	case "actionPlanID":
+		return ec.fieldContext_WorkflowObjectRefHistory_actionPlanID(ctx, field)
+	case "procedureID":
+		return ec.fieldContext_WorkflowObjectRefHistory_procedureID(ctx, field)
+	case "campaignID":
+		return ec.fieldContext_WorkflowObjectRefHistory_campaignID(ctx, field)
+	case "campaignTargetID":
+		return ec.fieldContext_WorkflowObjectRefHistory_campaignTargetID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_WorkflowObjectRefHistory_identityHolderID(ctx, field)
+	case "platformID":
+		return ec.fieldContext_WorkflowObjectRefHistory_platformID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRefHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowObjectRefHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_WorkflowObjectRefHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_WorkflowObjectRefHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_WorkflowObjectRefHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRefHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_WorkflowObjectRefHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_WorkflowObjectRefHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_WorkflowObjectRefHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRefHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "name":
+		return ec.fieldContext___Directive_name(ctx, field)
+	case "description":
+		return ec.fieldContext___Directive_description(ctx, field)
+	case "isRepeatable":
+		return ec.fieldContext___Directive_isRepeatable(ctx, field)
+	case "locations":
+		return ec.fieldContext___Directive_locations(ctx, field)
+	case "args":
+		return ec.fieldContext___Directive_args(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __Directive", field.Name)
+}
+
+func (ec *executionContext) childFields___EnumValue(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "name":
+		return ec.fieldContext___EnumValue_name(ctx, field)
+	case "description":
+		return ec.fieldContext___EnumValue_description(ctx, field)
+	case "isDeprecated":
+		return ec.fieldContext___EnumValue_isDeprecated(ctx, field)
+	case "deprecationReason":
+		return ec.fieldContext___EnumValue_deprecationReason(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __EnumValue", field.Name)
+}
+
+func (ec *executionContext) childFields___Field(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "name":
+		return ec.fieldContext___Field_name(ctx, field)
+	case "description":
+		return ec.fieldContext___Field_description(ctx, field)
+	case "args":
+		return ec.fieldContext___Field_args(ctx, field)
+	case "type":
+		return ec.fieldContext___Field_type(ctx, field)
+	case "isDeprecated":
+		return ec.fieldContext___Field_isDeprecated(ctx, field)
+	case "deprecationReason":
+		return ec.fieldContext___Field_deprecationReason(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __Field", field.Name)
+}
+
+func (ec *executionContext) childFields___InputValue(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "name":
+		return ec.fieldContext___InputValue_name(ctx, field)
+	case "description":
+		return ec.fieldContext___InputValue_description(ctx, field)
+	case "type":
+		return ec.fieldContext___InputValue_type(ctx, field)
+	case "defaultValue":
+		return ec.fieldContext___InputValue_defaultValue(ctx, field)
+	case "isDeprecated":
+		return ec.fieldContext___InputValue_isDeprecated(ctx, field)
+	case "deprecationReason":
+		return ec.fieldContext___InputValue_deprecationReason(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __InputValue", field.Name)
+}
+
+func (ec *executionContext) childFields___Schema(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "description":
+		return ec.fieldContext___Schema_description(ctx, field)
+	case "types":
+		return ec.fieldContext___Schema_types(ctx, field)
+	case "queryType":
+		return ec.fieldContext___Schema_queryType(ctx, field)
+	case "mutationType":
+		return ec.fieldContext___Schema_mutationType(ctx, field)
+	case "subscriptionType":
+		return ec.fieldContext___Schema_subscriptionType(ctx, field)
+	case "directives":
+		return ec.fieldContext___Schema_directives(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+}
+
+func (ec *executionContext) childFields___Type(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "kind":
+		return ec.fieldContext___Type_kind(ctx, field)
+	case "name":
+		return ec.fieldContext___Type_name(ctx, field)
+	case "description":
+		return ec.fieldContext___Type_description(ctx, field)
+	case "specifiedByURL":
+		return ec.fieldContext___Type_specifiedByURL(ctx, field)
+	case "fields":
+		return ec.fieldContext___Type_fields(ctx, field)
+	case "interfaces":
+		return ec.fieldContext___Type_interfaces(ctx, field)
+	case "possibleTypes":
+		return ec.fieldContext___Type_possibleTypes(ctx, field)
+	case "enumValues":
+		return ec.fieldContext___Type_enumValues(ctx, field)
+	case "inputFields":
+		return ec.fieldContext___Type_inputFields(ctx, field)
+	case "ofType":
+		return ec.fieldContext___Type_ofType(ctx, field)
+	case "isOneOf":
+		return ec.fieldContext___Type_isOneOf(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type __Type", field.Name)
+}

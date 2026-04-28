@@ -209,6 +209,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
+				entgql.OrderField("event_time"),
 				entx.IntegrationMappingField(),
 			),
 		field.Time("reported_at").
@@ -217,6 +218,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
+				entgql.OrderField("reported_at"),
 				entx.IntegrationMappingField(),
 			),
 		field.Time("source_updated_at").
@@ -263,6 +265,7 @@ func (f Finding) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				entx.IntegrationMappingField(),
 			).
 			Through("control_mappings", FindingControl.Type),
 		defaultEdgeToWithPagination(f, Subcontrol{}),
@@ -304,6 +307,7 @@ func (f Finding) Edges() []ent.Edge {
 			name:       "workflow_object_refs",
 			ref:        "finding",
 		}),
+		defaultEdgeToWithPagination(f, CheckResult{}),
 	}
 }
 

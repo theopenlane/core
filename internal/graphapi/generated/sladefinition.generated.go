@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _SLADefinitionBulkCreatePayload_slaDefinitions(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkCreatePayload_slaDefinitions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkCreatePayload_slaDefinitions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SLADefinitions, nil
 		},
 		nil,
-		ec.marshalOSLADefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinitionᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.SLADefinition) graphql.Marshaler {
+			return ec.marshalOSLADefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinitionᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkCreatePayload_slaDefinitions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SLADefinitionBulkCreatePayload",
@@ -51,37 +55,7 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkCreatePayload_slaDefin
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SLADefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SLADefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SLADefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SLADefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SLADefinition_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SLADefinition_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SLADefinition_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SLADefinition_ownerID(ctx, field)
-			case "slaDays":
-				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
-			case "securityLevel":
-				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
-			case "owner":
-				return ec.fieldContext_SLADefinition_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_SLADefinition_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_SLADefinition_viewers(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
+			return ec.childFields_SLADefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -92,28 +66,22 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_deletedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SLADefinitionBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SLADefinitionBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkDeletePayload) (ret graphql.Marshaler) {
@@ -121,28 +89,22 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_notDeletedIDs(ctx co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SLADefinitionBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SLADefinitionBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkDeletePayload) (ret graphql.Marshaler) {
@@ -150,28 +112,22 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_error(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SLADefinitionBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SLADefinitionBulkUpdatePayload_slaDefinitions(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -179,17 +135,20 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload_slaDefinitions(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkUpdatePayload_slaDefinitions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkUpdatePayload_slaDefinitions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SLADefinitions, nil
 		},
 		nil,
-		ec.marshalOSLADefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinitionᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.SLADefinition) graphql.Marshaler {
+			return ec.marshalOSLADefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinitionᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_slaDefinitions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SLADefinitionBulkUpdatePayload",
@@ -197,37 +156,7 @@ func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_slaDefin
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SLADefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SLADefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SLADefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SLADefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SLADefinition_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SLADefinition_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SLADefinition_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SLADefinition_ownerID(ctx, field)
-			case "slaDays":
-				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
-			case "securityLevel":
-				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
-			case "owner":
-				return ec.fieldContext_SLADefinition_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_SLADefinition_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_SLADefinition_viewers(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
+			return ec.childFields_SLADefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -238,28 +167,22 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload_updatedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SLADefinitionBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SLADefinitionCreatePayload_slaDefinition(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionCreatePayload) (ret graphql.Marshaler) {
@@ -267,17 +190,20 @@ func (ec *executionContext) _SLADefinitionCreatePayload_slaDefinition(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionCreatePayload_slaDefinition,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionCreatePayload_slaDefinition(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SLADefinition, nil
 		},
 		nil,
-		ec.marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinition,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SLADefinition) graphql.Marshaler {
+			return ec.marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionCreatePayload_slaDefinition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SLADefinitionCreatePayload",
@@ -285,37 +211,7 @@ func (ec *executionContext) fieldContext_SLADefinitionCreatePayload_slaDefinitio
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SLADefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SLADefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SLADefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SLADefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SLADefinition_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SLADefinition_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SLADefinition_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SLADefinition_ownerID(ctx, field)
-			case "slaDays":
-				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
-			case "securityLevel":
-				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
-			case "owner":
-				return ec.fieldContext_SLADefinition_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_SLADefinition_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_SLADefinition_viewers(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
+			return ec.childFields_SLADefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -326,28 +222,22 @@ func (ec *executionContext) _SLADefinitionDeletePayload_deletedID(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SLADefinitionDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SLADefinitionDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SLADefinitionUpdatePayload_slaDefinition(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionUpdatePayload) (ret graphql.Marshaler) {
@@ -355,17 +245,20 @@ func (ec *executionContext) _SLADefinitionUpdatePayload_slaDefinition(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SLADefinitionUpdatePayload_slaDefinition,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SLADefinitionUpdatePayload_slaDefinition(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SLADefinition, nil
 		},
 		nil,
-		ec.marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinition,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SLADefinition) graphql.Marshaler {
+			return ec.marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SLADefinitionUpdatePayload_slaDefinition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SLADefinitionUpdatePayload",
@@ -373,37 +266,7 @@ func (ec *executionContext) fieldContext_SLADefinitionUpdatePayload_slaDefinitio
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SLADefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SLADefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SLADefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SLADefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SLADefinition_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SLADefinition_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SLADefinition_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SLADefinition_ownerID(ctx, field)
-			case "slaDays":
-				return ec.fieldContext_SLADefinition_slaDays(ctx, field)
-			case "securityLevel":
-				return ec.fieldContext_SLADefinition_securityLevel(ctx, field)
-			case "owner":
-				return ec.fieldContext_SLADefinition_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_SLADefinition_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_SLADefinition_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_SLADefinition_viewers(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SLADefinition", field.Name)
+			return ec.childFields_SLADefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -443,7 +306,7 @@ func (ec *executionContext) _SLADefinitionBulkCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -489,7 +352,7 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -527,7 +390,7 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -566,7 +429,7 @@ func (ec *executionContext) _SLADefinitionCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -605,7 +468,7 @@ func (ec *executionContext) _SLADefinitionDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -644,7 +507,7 @@ func (ec *executionContext) _SLADefinitionUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

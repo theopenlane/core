@@ -4,11 +4,12 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,17 +33,20 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubmitTrustCenterNDAResponsePayload_documentData,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubmitTrustCenterNDAResponsePayload_documentData(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DocumentData, nil
 		},
 		nil,
-		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
+			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubmitTrustCenterNDAResponsePayload_documentData(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubmitTrustCenterNDAResponsePayload",
@@ -50,47 +54,7 @@ func (ec *executionContext) fieldContext_SubmitTrustCenterNDAResponsePayload_doc
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DocumentData_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DocumentData_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DocumentData_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DocumentData_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DocumentData_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DocumentData_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DocumentData_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DocumentData_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DocumentData_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DocumentData_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DocumentData_scopeID(ctx, field)
-			case "templateID":
-				return ec.fieldContext_DocumentData_templateID(ctx, field)
-			case "data":
-				return ec.fieldContext_DocumentData_data(ctx, field)
-			case "owner":
-				return ec.fieldContext_DocumentData_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DocumentData_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DocumentData_scope(ctx, field)
-			case "template":
-				return ec.fieldContext_DocumentData_template(ctx, field)
-			case "entities":
-				return ec.fieldContext_DocumentData_entities(ctx, field)
-			case "files":
-				return ec.fieldContext_DocumentData_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DocumentData", field.Name)
+			return ec.childFields_DocumentData(ctx, field)
 		},
 	}
 	return fc, nil
@@ -101,17 +65,20 @@ func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterNDACreatePayload_template,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDACreatePayload_template(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterNDACreatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterNDACreatePayload",
@@ -119,69 +86,7 @@ func (ec *executionContext) fieldContext_TrustCenterNDACreatePayload_template(_ 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -192,17 +97,20 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload_template(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterNDAUpdatePayload_template,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDAUpdatePayload_template(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterNDAUpdatePayload",
@@ -210,69 +118,7 @@ func (ec *executionContext) fieldContext_TrustCenterNDAUpdatePayload_template(_ 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -382,7 +228,7 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -421,7 +267,7 @@ func (ec *executionContext) _TrustCenterNDACreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -460,7 +306,7 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

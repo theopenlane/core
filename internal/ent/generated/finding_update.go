@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -1378,6 +1379,21 @@ func (_u *FindingUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Finding
 	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *FindingUpdate) AddCheckResultIDs(ids ...string) *FindingUpdate {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *FindingUpdate) AddCheckResults(v ...*CheckResult) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddControlMappingIDs adds the "control_mappings" edge to the FindingControl entity by IDs.
 func (_u *FindingUpdate) AddControlMappingIDs(ids ...string) *FindingUpdate {
 	_u.mutation.AddControlMappingIDs(ids...)
@@ -1855,6 +1871,27 @@ func (_u *FindingUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *Find
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *FindingUpdate) ClearCheckResults() *FindingUpdate {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *FindingUpdate) RemoveCheckResultIDs(ids ...string) *FindingUpdate {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *FindingUpdate) RemoveCheckResults(v ...*CheckResult) *FindingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearControlMappings clears all "control_mappings" edges to the FindingControl entity.
@@ -3401,6 +3438,54 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlMappingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4796,6 +4881,21 @@ func (_u *FindingUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Find
 	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *FindingUpdateOne) AddCheckResultIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *FindingUpdateOne) AddCheckResults(v ...*CheckResult) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
 // AddControlMappingIDs adds the "control_mappings" edge to the FindingControl entity by IDs.
 func (_u *FindingUpdateOne) AddControlMappingIDs(ids ...string) *FindingUpdateOne {
 	_u.mutation.AddControlMappingIDs(ids...)
@@ -5273,6 +5373,27 @@ func (_u *FindingUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *F
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *FindingUpdateOne) ClearCheckResults() *FindingUpdateOne {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *FindingUpdateOne) RemoveCheckResultIDs(ids ...string) *FindingUpdateOne {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *FindingUpdateOne) RemoveCheckResults(v ...*CheckResult) *FindingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearControlMappings clears all "control_mappings" edges to the FindingControl entity.
@@ -6844,6 +6965,54 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingCheckResults
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

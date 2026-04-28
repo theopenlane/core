@@ -62,6 +62,8 @@ type DirectoryMembership struct {
 	Role enums.DirectoryMembershipRole `json:"role,omitempty"`
 	// mechanism used to populate the membership (api, scim, csv, etc)
 	Source *string `json:"source,omitempty"`
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
+	DirectoryName *string `json:"directory_name,omitempty"`
 	// first time the membership was detected
 	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
 	// most recent time the membership was confirmed by directory ingest
@@ -227,7 +229,7 @@ func (*DirectoryMembership) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directorymembership.FieldMetadata:
 			values[i] = new([]byte)
-		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldLastConfirmedRunID:
+		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldDisplayID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryInstanceID, directorymembership.FieldDirectorySyncRunID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName, directorymembership.FieldLastConfirmedRunID:
 			values[i] = new(sql.NullString)
 		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldFirstSeenAt, directorymembership.FieldLastSeenAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -361,6 +363,13 @@ func (_m *DirectoryMembership) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.Source = new(string)
 				*_m.Source = value.String
+			}
+		case directorymembership.FieldDirectoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
+			} else if value.Valid {
+				_m.DirectoryName = new(string)
+				*_m.DirectoryName = value.String
 			}
 		case directorymembership.FieldFirstSeenAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -552,6 +561,11 @@ func (_m *DirectoryMembership) String() string {
 	builder.WriteString(", ")
 	if v := _m.Source; v != nil {
 		builder.WriteString("source=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DirectoryName; v != nil {
+		builder.WriteString("directory_name=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")

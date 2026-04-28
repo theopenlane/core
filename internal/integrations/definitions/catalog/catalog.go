@@ -19,7 +19,7 @@ import (
 // Builders returns the built-in reference definition builders
 func Builders(cfg Config) []registry.Builder {
 	return []registry.Builder{
-		awssecurityhub.Builder(),
+		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
 		cloudflare.Builder(),

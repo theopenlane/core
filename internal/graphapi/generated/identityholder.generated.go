@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _IdentityHolderBulkCreatePayload_identityHolders(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkCreatePayload_identityHolders,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkCreatePayload_identityHolders(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.IdentityHolders, nil
 		},
 		nil,
-		ec.marshalOIdentityHolder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identityHolders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "IdentityHolderBulkCreatePayload",
@@ -51,145 +55,7 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_IdentityHolder_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_IdentityHolder_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_IdentityHolder_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_IdentityHolder_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_IdentityHolder_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_IdentityHolder_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_IdentityHolder_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_IdentityHolder_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_IdentityHolder_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_IdentityHolder_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_IdentityHolder_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_IdentityHolder_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_IdentityHolder_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_IdentityHolder_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_IdentityHolder_workflowEligibleMarker(ctx, field)
-			case "fullName":
-				return ec.fieldContext_IdentityHolder_fullName(ctx, field)
-			case "email":
-				return ec.fieldContext_IdentityHolder_email(ctx, field)
-			case "alternateEmail":
-				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
-			case "isOpenlaneUser":
-				return ec.fieldContext_IdentityHolder_isOpenlaneUser(ctx, field)
-			case "userID":
-				return ec.fieldContext_IdentityHolder_userID(ctx, field)
-			case "identityHolderType":
-				return ec.fieldContext_IdentityHolder_identityHolderType(ctx, field)
-			case "status":
-				return ec.fieldContext_IdentityHolder_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_IdentityHolder_isActive(ctx, field)
-			case "title":
-				return ec.fieldContext_IdentityHolder_title(ctx, field)
-			case "department":
-				return ec.fieldContext_IdentityHolder_department(ctx, field)
-			case "team":
-				return ec.fieldContext_IdentityHolder_team(ctx, field)
-			case "location":
-				return ec.fieldContext_IdentityHolder_location(ctx, field)
-			case "startDate":
-				return ec.fieldContext_IdentityHolder_startDate(ctx, field)
-			case "endDate":
-				return ec.fieldContext_IdentityHolder_endDate(ctx, field)
-			case "employerEntityID":
-				return ec.fieldContext_IdentityHolder_employerEntityID(ctx, field)
-			case "externalUserID":
-				return ec.fieldContext_IdentityHolder_externalUserID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
-			case "owner":
-				return ec.fieldContext_IdentityHolder_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_IdentityHolder_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_IdentityHolder_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_IdentityHolder_scope(ctx, field)
-			case "employer":
-				return ec.fieldContext_IdentityHolder_employer(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_IdentityHolder_assessmentResponses(ctx, field)
-			case "assessments":
-				return ec.fieldContext_IdentityHolder_assessments(ctx, field)
-			case "templates":
-				return ec.fieldContext_IdentityHolder_templates(ctx, field)
-			case "assets":
-				return ec.fieldContext_IdentityHolder_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_IdentityHolder_entities(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_IdentityHolder_directoryGroups(ctx, field)
-			case "controls":
-				return ec.fieldContext_IdentityHolder_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_IdentityHolder_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
-			case "tasks":
-				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
-			case "files":
-				return ec.fieldContext_IdentityHolder_files(ctx, field)
-			case "findings":
-				return ec.fieldContext_IdentityHolder_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
-			case "accessPlatforms":
-				return ec.fieldContext_IdentityHolder_accessPlatforms(ctx, field)
-			case "user":
-				return ec.fieldContext_IdentityHolder_user(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_IdentityHolder_internalPolicies(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -200,28 +66,22 @@ func (ec *executionContext) _IdentityHolderBulkDeletePayload_deletedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "IdentityHolderBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("IdentityHolderBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _IdentityHolderBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkDeletePayload) (ret graphql.Marshaler) {
@@ -229,28 +89,22 @@ func (ec *executionContext) _IdentityHolderBulkDeletePayload_notDeletedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "IdentityHolderBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("IdentityHolderBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _IdentityHolderBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkDeletePayload) (ret graphql.Marshaler) {
@@ -258,28 +112,22 @@ func (ec *executionContext) _IdentityHolderBulkDeletePayload_error(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "IdentityHolderBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("IdentityHolderBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _IdentityHolderBulkUpdatePayload_identityHolders(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -287,17 +135,20 @@ func (ec *executionContext) _IdentityHolderBulkUpdatePayload_identityHolders(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkUpdatePayload_identityHolders,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkUpdatePayload_identityHolders(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.IdentityHolders, nil
 		},
 		nil,
-		ec.marshalOIdentityHolder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identityHolders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "IdentityHolderBulkUpdatePayload",
@@ -305,145 +156,7 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_identit
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_IdentityHolder_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_IdentityHolder_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_IdentityHolder_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_IdentityHolder_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_IdentityHolder_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_IdentityHolder_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_IdentityHolder_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_IdentityHolder_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_IdentityHolder_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_IdentityHolder_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_IdentityHolder_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_IdentityHolder_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_IdentityHolder_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_IdentityHolder_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_IdentityHolder_workflowEligibleMarker(ctx, field)
-			case "fullName":
-				return ec.fieldContext_IdentityHolder_fullName(ctx, field)
-			case "email":
-				return ec.fieldContext_IdentityHolder_email(ctx, field)
-			case "alternateEmail":
-				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
-			case "isOpenlaneUser":
-				return ec.fieldContext_IdentityHolder_isOpenlaneUser(ctx, field)
-			case "userID":
-				return ec.fieldContext_IdentityHolder_userID(ctx, field)
-			case "identityHolderType":
-				return ec.fieldContext_IdentityHolder_identityHolderType(ctx, field)
-			case "status":
-				return ec.fieldContext_IdentityHolder_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_IdentityHolder_isActive(ctx, field)
-			case "title":
-				return ec.fieldContext_IdentityHolder_title(ctx, field)
-			case "department":
-				return ec.fieldContext_IdentityHolder_department(ctx, field)
-			case "team":
-				return ec.fieldContext_IdentityHolder_team(ctx, field)
-			case "location":
-				return ec.fieldContext_IdentityHolder_location(ctx, field)
-			case "startDate":
-				return ec.fieldContext_IdentityHolder_startDate(ctx, field)
-			case "endDate":
-				return ec.fieldContext_IdentityHolder_endDate(ctx, field)
-			case "employerEntityID":
-				return ec.fieldContext_IdentityHolder_employerEntityID(ctx, field)
-			case "externalUserID":
-				return ec.fieldContext_IdentityHolder_externalUserID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
-			case "owner":
-				return ec.fieldContext_IdentityHolder_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_IdentityHolder_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_IdentityHolder_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_IdentityHolder_scope(ctx, field)
-			case "employer":
-				return ec.fieldContext_IdentityHolder_employer(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_IdentityHolder_assessmentResponses(ctx, field)
-			case "assessments":
-				return ec.fieldContext_IdentityHolder_assessments(ctx, field)
-			case "templates":
-				return ec.fieldContext_IdentityHolder_templates(ctx, field)
-			case "assets":
-				return ec.fieldContext_IdentityHolder_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_IdentityHolder_entities(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_IdentityHolder_directoryGroups(ctx, field)
-			case "controls":
-				return ec.fieldContext_IdentityHolder_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_IdentityHolder_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
-			case "tasks":
-				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
-			case "files":
-				return ec.fieldContext_IdentityHolder_files(ctx, field)
-			case "findings":
-				return ec.fieldContext_IdentityHolder_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
-			case "accessPlatforms":
-				return ec.fieldContext_IdentityHolder_accessPlatforms(ctx, field)
-			case "user":
-				return ec.fieldContext_IdentityHolder_user(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_IdentityHolder_internalPolicies(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -454,28 +167,22 @@ func (ec *executionContext) _IdentityHolderBulkUpdatePayload_updatedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "IdentityHolderBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("IdentityHolderBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _IdentityHolderCreatePayload_identityHolder(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderCreatePayload) (ret graphql.Marshaler) {
@@ -483,17 +190,20 @@ func (ec *executionContext) _IdentityHolderCreatePayload_identityHolder(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderCreatePayload_identityHolder,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderCreatePayload_identityHolder(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.IdentityHolder, nil
 		},
 		nil,
-		ec.marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolder,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "IdentityHolderCreatePayload",
@@ -501,145 +211,7 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_IdentityHolder_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_IdentityHolder_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_IdentityHolder_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_IdentityHolder_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_IdentityHolder_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_IdentityHolder_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_IdentityHolder_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_IdentityHolder_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_IdentityHolder_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_IdentityHolder_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_IdentityHolder_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_IdentityHolder_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_IdentityHolder_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_IdentityHolder_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_IdentityHolder_workflowEligibleMarker(ctx, field)
-			case "fullName":
-				return ec.fieldContext_IdentityHolder_fullName(ctx, field)
-			case "email":
-				return ec.fieldContext_IdentityHolder_email(ctx, field)
-			case "alternateEmail":
-				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
-			case "isOpenlaneUser":
-				return ec.fieldContext_IdentityHolder_isOpenlaneUser(ctx, field)
-			case "userID":
-				return ec.fieldContext_IdentityHolder_userID(ctx, field)
-			case "identityHolderType":
-				return ec.fieldContext_IdentityHolder_identityHolderType(ctx, field)
-			case "status":
-				return ec.fieldContext_IdentityHolder_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_IdentityHolder_isActive(ctx, field)
-			case "title":
-				return ec.fieldContext_IdentityHolder_title(ctx, field)
-			case "department":
-				return ec.fieldContext_IdentityHolder_department(ctx, field)
-			case "team":
-				return ec.fieldContext_IdentityHolder_team(ctx, field)
-			case "location":
-				return ec.fieldContext_IdentityHolder_location(ctx, field)
-			case "startDate":
-				return ec.fieldContext_IdentityHolder_startDate(ctx, field)
-			case "endDate":
-				return ec.fieldContext_IdentityHolder_endDate(ctx, field)
-			case "employerEntityID":
-				return ec.fieldContext_IdentityHolder_employerEntityID(ctx, field)
-			case "externalUserID":
-				return ec.fieldContext_IdentityHolder_externalUserID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
-			case "owner":
-				return ec.fieldContext_IdentityHolder_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_IdentityHolder_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_IdentityHolder_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_IdentityHolder_scope(ctx, field)
-			case "employer":
-				return ec.fieldContext_IdentityHolder_employer(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_IdentityHolder_assessmentResponses(ctx, field)
-			case "assessments":
-				return ec.fieldContext_IdentityHolder_assessments(ctx, field)
-			case "templates":
-				return ec.fieldContext_IdentityHolder_templates(ctx, field)
-			case "assets":
-				return ec.fieldContext_IdentityHolder_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_IdentityHolder_entities(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_IdentityHolder_directoryGroups(ctx, field)
-			case "controls":
-				return ec.fieldContext_IdentityHolder_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_IdentityHolder_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
-			case "tasks":
-				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
-			case "files":
-				return ec.fieldContext_IdentityHolder_files(ctx, field)
-			case "findings":
-				return ec.fieldContext_IdentityHolder_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
-			case "accessPlatforms":
-				return ec.fieldContext_IdentityHolder_accessPlatforms(ctx, field)
-			case "user":
-				return ec.fieldContext_IdentityHolder_user(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_IdentityHolder_internalPolicies(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -650,28 +222,22 @@ func (ec *executionContext) _IdentityHolderDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "IdentityHolderDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("IdentityHolderDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _IdentityHolderUpdatePayload_identityHolder(ctx context.Context, field graphql.CollectedField, obj *model.IdentityHolderUpdatePayload) (ret graphql.Marshaler) {
@@ -679,17 +245,20 @@ func (ec *executionContext) _IdentityHolderUpdatePayload_identityHolder(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_IdentityHolderUpdatePayload_identityHolder,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolderUpdatePayload_identityHolder(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.IdentityHolder, nil
 		},
 		nil,
-		ec.marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolder,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "IdentityHolderUpdatePayload",
@@ -697,145 +266,7 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_IdentityHolder_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_IdentityHolder_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_IdentityHolder_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_IdentityHolder_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_IdentityHolder_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_IdentityHolder_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_IdentityHolder_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_IdentityHolder_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_IdentityHolder_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_IdentityHolder_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_IdentityHolder_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_IdentityHolder_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_IdentityHolder_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_IdentityHolder_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_IdentityHolder_workflowEligibleMarker(ctx, field)
-			case "fullName":
-				return ec.fieldContext_IdentityHolder_fullName(ctx, field)
-			case "email":
-				return ec.fieldContext_IdentityHolder_email(ctx, field)
-			case "alternateEmail":
-				return ec.fieldContext_IdentityHolder_alternateEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_IdentityHolder_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_IdentityHolder_phoneNumber(ctx, field)
-			case "isOpenlaneUser":
-				return ec.fieldContext_IdentityHolder_isOpenlaneUser(ctx, field)
-			case "userID":
-				return ec.fieldContext_IdentityHolder_userID(ctx, field)
-			case "identityHolderType":
-				return ec.fieldContext_IdentityHolder_identityHolderType(ctx, field)
-			case "status":
-				return ec.fieldContext_IdentityHolder_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_IdentityHolder_isActive(ctx, field)
-			case "title":
-				return ec.fieldContext_IdentityHolder_title(ctx, field)
-			case "department":
-				return ec.fieldContext_IdentityHolder_department(ctx, field)
-			case "team":
-				return ec.fieldContext_IdentityHolder_team(ctx, field)
-			case "location":
-				return ec.fieldContext_IdentityHolder_location(ctx, field)
-			case "startDate":
-				return ec.fieldContext_IdentityHolder_startDate(ctx, field)
-			case "endDate":
-				return ec.fieldContext_IdentityHolder_endDate(ctx, field)
-			case "employerEntityID":
-				return ec.fieldContext_IdentityHolder_employerEntityID(ctx, field)
-			case "externalUserID":
-				return ec.fieldContext_IdentityHolder_externalUserID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_IdentityHolder_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_IdentityHolder_avatarRemoteURL(ctx, field)
-			case "owner":
-				return ec.fieldContext_IdentityHolder_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_IdentityHolder_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_IdentityHolder_internalOwnerGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_IdentityHolder_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_IdentityHolder_scope(ctx, field)
-			case "employer":
-				return ec.fieldContext_IdentityHolder_employer(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_IdentityHolder_assessmentResponses(ctx, field)
-			case "assessments":
-				return ec.fieldContext_IdentityHolder_assessments(ctx, field)
-			case "templates":
-				return ec.fieldContext_IdentityHolder_templates(ctx, field)
-			case "assets":
-				return ec.fieldContext_IdentityHolder_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_IdentityHolder_entities(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_IdentityHolder_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_IdentityHolder_directoryGroups(ctx, field)
-			case "controls":
-				return ec.fieldContext_IdentityHolder_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_IdentityHolder_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_IdentityHolder_platforms(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
-			case "tasks":
-				return ec.fieldContext_IdentityHolder_tasks(ctx, field)
-			case "files":
-				return ec.fieldContext_IdentityHolder_files(ctx, field)
-			case "findings":
-				return ec.fieldContext_IdentityHolder_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_IdentityHolder_workflowObjectRefs(ctx, field)
-			case "accessPlatforms":
-				return ec.fieldContext_IdentityHolder_accessPlatforms(ctx, field)
-			case "user":
-				return ec.fieldContext_IdentityHolder_user(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_IdentityHolder_internalPolicies(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_IdentityHolder_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_IdentityHolder_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_IdentityHolder_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_IdentityHolder_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IdentityHolder", field.Name)
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -875,7 +306,7 @@ func (ec *executionContext) _IdentityHolderBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -921,7 +352,7 @@ func (ec *executionContext) _IdentityHolderBulkDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -959,7 +390,7 @@ func (ec *executionContext) _IdentityHolderBulkUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -998,7 +429,7 @@ func (ec *executionContext) _IdentityHolderCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1037,7 +468,7 @@ func (ec *executionContext) _IdentityHolderDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1076,7 +507,7 @@ func (ec *executionContext) _IdentityHolderUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

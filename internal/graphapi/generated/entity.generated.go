@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _EntityBulkCreatePayload_entities(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkCreatePayload_entities,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkCreatePayload_entities(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entities, nil
 		},
 		nil,
-		ec.marshalOEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Entity) graphql.Marshaler {
+			return ec.marshalOEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityBulkCreatePayload",
@@ -51,203 +55,7 @@ func (ec *executionContext) fieldContext_EntityBulkCreatePayload_entities(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Entity_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Entity_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Entity_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Entity_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Entity_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Entity_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Entity_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Entity_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Entity_systemInternalID(ctx, field)
-			case "entityRelationshipStateName":
-				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
-			case "entityRelationshipStateID":
-				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
-			case "entitySecurityQuestionnaireStatusName":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
-			case "entitySecurityQuestionnaireStatusID":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
-			case "entitySourceTypeName":
-				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
-			case "entitySourceTypeID":
-				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Entity_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Entity_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Entity_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Entity_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Entity_name(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Entity_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Entity_description(ctx, field)
-			case "domains":
-				return ec.fieldContext_Entity_domains(ctx, field)
-			case "entityTypeID":
-				return ec.fieldContext_Entity_entityTypeID(ctx, field)
-			case "status":
-				return ec.fieldContext_Entity_status(ctx, field)
-			case "approvedForUse":
-				return ec.fieldContext_Entity_approvedForUse(ctx, field)
-			case "linkedAssetIds":
-				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
-			case "hasSoc2":
-				return ec.fieldContext_Entity_hasSoc2(ctx, field)
-			case "soc2PeriodEnd":
-				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
-			case "contractStartDate":
-				return ec.fieldContext_Entity_contractStartDate(ctx, field)
-			case "contractEndDate":
-				return ec.fieldContext_Entity_contractEndDate(ctx, field)
-			case "autoRenews":
-				return ec.fieldContext_Entity_autoRenews(ctx, field)
-			case "terminationNoticeDays":
-				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
-			case "annualSpend":
-				return ec.fieldContext_Entity_annualSpend(ctx, field)
-			case "spendCurrency":
-				return ec.fieldContext_Entity_spendCurrency(ctx, field)
-			case "billingModel":
-				return ec.fieldContext_Entity_billingModel(ctx, field)
-			case "renewalRisk":
-				return ec.fieldContext_Entity_renewalRisk(ctx, field)
-			case "ssoEnforced":
-				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
-			case "mfaSupported":
-				return ec.fieldContext_Entity_mfaSupported(ctx, field)
-			case "mfaEnforced":
-				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_Entity_statusPageURL(ctx, field)
-			case "providedServices":
-				return ec.fieldContext_Entity_providedServices(ctx, field)
-			case "links":
-				return ec.fieldContext_Entity_links(ctx, field)
-			case "riskRating":
-				return ec.fieldContext_Entity_riskRating(ctx, field)
-			case "riskScore":
-				return ec.fieldContext_Entity_riskScore(ctx, field)
-			case "riskScoreCoverage":
-				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
-			case "tier":
-				return ec.fieldContext_Entity_tier(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
-			case "contractRenewalAt":
-				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
-			case "vendorMetadata":
-				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Entity_logoFileID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Entity_externalID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Entity_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Entity_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Entity_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Entity_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Entity_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
-			case "entityRelationshipState":
-				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
-			case "entitySecurityQuestionnaireStatus":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
-			case "entitySourceType":
-				return ec.fieldContext_Entity_entitySourceType(ctx, field)
-			case "environment":
-				return ec.fieldContext_Entity_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Entity_scope(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Entity_contacts(ctx, field)
-			case "documents":
-				return ec.fieldContext_Entity_documents(ctx, field)
-			case "notes":
-				return ec.fieldContext_Entity_notes(ctx, field)
-			case "files":
-				return ec.fieldContext_Entity_files(ctx, field)
-			case "assets":
-				return ec.fieldContext_Entity_assets(ctx, field)
-			case "scans":
-				return ec.fieldContext_Entity_scans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Entity_campaigns(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Entity_integrations(ctx, field)
-			case "subprocessors":
-				return ec.fieldContext_Entity_subprocessors(ctx, field)
-			case "authMethods":
-				return ec.fieldContext_Entity_authMethods(ctx, field)
-			case "employerIdentityHolders":
-				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Entity_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Entity_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Entity_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Entity_platforms(ctx, field)
-			case "outOfScopePlatforms":
-				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
-			case "sourcePlatforms":
-				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
-			case "entityType":
-				return ec.fieldContext_Entity_entityType(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Entity_logoFile(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Entity_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
+			return ec.childFields_Entity(ctx, field)
 		},
 	}
 	return fc, nil
@@ -258,28 +66,22 @@ func (ec *executionContext) _EntityBulkDeletePayload_deletedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EntityBulkDeletePayload) (ret graphql.Marshaler) {
@@ -287,28 +89,22 @@ func (ec *executionContext) _EntityBulkDeletePayload_notDeletedIDs(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.EntityBulkDeletePayload) (ret graphql.Marshaler) {
@@ -316,28 +112,22 @@ func (ec *executionContext) _EntityBulkDeletePayload_error(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EntityBulkUpdatePayload_entities(ctx context.Context, field graphql.CollectedField, obj *model.EntityBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -345,17 +135,20 @@ func (ec *executionContext) _EntityBulkUpdatePayload_entities(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkUpdatePayload_entities,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkUpdatePayload_entities(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entities, nil
 		},
 		nil,
-		ec.marshalOEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Entity) graphql.Marshaler {
+			return ec.marshalOEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityBulkUpdatePayload",
@@ -363,203 +156,7 @@ func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_entities(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Entity_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Entity_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Entity_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Entity_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Entity_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Entity_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Entity_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Entity_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Entity_systemInternalID(ctx, field)
-			case "entityRelationshipStateName":
-				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
-			case "entityRelationshipStateID":
-				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
-			case "entitySecurityQuestionnaireStatusName":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
-			case "entitySecurityQuestionnaireStatusID":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
-			case "entitySourceTypeName":
-				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
-			case "entitySourceTypeID":
-				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Entity_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Entity_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Entity_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Entity_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Entity_name(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Entity_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Entity_description(ctx, field)
-			case "domains":
-				return ec.fieldContext_Entity_domains(ctx, field)
-			case "entityTypeID":
-				return ec.fieldContext_Entity_entityTypeID(ctx, field)
-			case "status":
-				return ec.fieldContext_Entity_status(ctx, field)
-			case "approvedForUse":
-				return ec.fieldContext_Entity_approvedForUse(ctx, field)
-			case "linkedAssetIds":
-				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
-			case "hasSoc2":
-				return ec.fieldContext_Entity_hasSoc2(ctx, field)
-			case "soc2PeriodEnd":
-				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
-			case "contractStartDate":
-				return ec.fieldContext_Entity_contractStartDate(ctx, field)
-			case "contractEndDate":
-				return ec.fieldContext_Entity_contractEndDate(ctx, field)
-			case "autoRenews":
-				return ec.fieldContext_Entity_autoRenews(ctx, field)
-			case "terminationNoticeDays":
-				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
-			case "annualSpend":
-				return ec.fieldContext_Entity_annualSpend(ctx, field)
-			case "spendCurrency":
-				return ec.fieldContext_Entity_spendCurrency(ctx, field)
-			case "billingModel":
-				return ec.fieldContext_Entity_billingModel(ctx, field)
-			case "renewalRisk":
-				return ec.fieldContext_Entity_renewalRisk(ctx, field)
-			case "ssoEnforced":
-				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
-			case "mfaSupported":
-				return ec.fieldContext_Entity_mfaSupported(ctx, field)
-			case "mfaEnforced":
-				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_Entity_statusPageURL(ctx, field)
-			case "providedServices":
-				return ec.fieldContext_Entity_providedServices(ctx, field)
-			case "links":
-				return ec.fieldContext_Entity_links(ctx, field)
-			case "riskRating":
-				return ec.fieldContext_Entity_riskRating(ctx, field)
-			case "riskScore":
-				return ec.fieldContext_Entity_riskScore(ctx, field)
-			case "riskScoreCoverage":
-				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
-			case "tier":
-				return ec.fieldContext_Entity_tier(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
-			case "contractRenewalAt":
-				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
-			case "vendorMetadata":
-				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Entity_logoFileID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Entity_externalID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Entity_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Entity_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Entity_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Entity_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Entity_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
-			case "entityRelationshipState":
-				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
-			case "entitySecurityQuestionnaireStatus":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
-			case "entitySourceType":
-				return ec.fieldContext_Entity_entitySourceType(ctx, field)
-			case "environment":
-				return ec.fieldContext_Entity_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Entity_scope(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Entity_contacts(ctx, field)
-			case "documents":
-				return ec.fieldContext_Entity_documents(ctx, field)
-			case "notes":
-				return ec.fieldContext_Entity_notes(ctx, field)
-			case "files":
-				return ec.fieldContext_Entity_files(ctx, field)
-			case "assets":
-				return ec.fieldContext_Entity_assets(ctx, field)
-			case "scans":
-				return ec.fieldContext_Entity_scans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Entity_campaigns(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Entity_integrations(ctx, field)
-			case "subprocessors":
-				return ec.fieldContext_Entity_subprocessors(ctx, field)
-			case "authMethods":
-				return ec.fieldContext_Entity_authMethods(ctx, field)
-			case "employerIdentityHolders":
-				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Entity_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Entity_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Entity_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Entity_platforms(ctx, field)
-			case "outOfScopePlatforms":
-				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
-			case "sourcePlatforms":
-				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
-			case "entityType":
-				return ec.fieldContext_Entity_entityType(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Entity_logoFile(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Entity_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
+			return ec.childFields_Entity(ctx, field)
 		},
 	}
 	return fc, nil
@@ -570,28 +167,22 @@ func (ec *executionContext) _EntityBulkUpdatePayload_updatedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityCreatePayload_entity(ctx context.Context, field graphql.CollectedField, obj *model.EntityCreatePayload) (ret graphql.Marshaler) {
@@ -599,17 +190,20 @@ func (ec *executionContext) _EntityCreatePayload_entity(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityCreatePayload_entity,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityCreatePayload_entity(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entity, nil
 		},
 		nil,
-		ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Entity) graphql.Marshaler {
+			return ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityCreatePayload",
@@ -617,203 +211,7 @@ func (ec *executionContext) fieldContext_EntityCreatePayload_entity(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Entity_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Entity_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Entity_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Entity_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Entity_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Entity_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Entity_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Entity_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Entity_systemInternalID(ctx, field)
-			case "entityRelationshipStateName":
-				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
-			case "entityRelationshipStateID":
-				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
-			case "entitySecurityQuestionnaireStatusName":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
-			case "entitySecurityQuestionnaireStatusID":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
-			case "entitySourceTypeName":
-				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
-			case "entitySourceTypeID":
-				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Entity_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Entity_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Entity_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Entity_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Entity_name(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Entity_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Entity_description(ctx, field)
-			case "domains":
-				return ec.fieldContext_Entity_domains(ctx, field)
-			case "entityTypeID":
-				return ec.fieldContext_Entity_entityTypeID(ctx, field)
-			case "status":
-				return ec.fieldContext_Entity_status(ctx, field)
-			case "approvedForUse":
-				return ec.fieldContext_Entity_approvedForUse(ctx, field)
-			case "linkedAssetIds":
-				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
-			case "hasSoc2":
-				return ec.fieldContext_Entity_hasSoc2(ctx, field)
-			case "soc2PeriodEnd":
-				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
-			case "contractStartDate":
-				return ec.fieldContext_Entity_contractStartDate(ctx, field)
-			case "contractEndDate":
-				return ec.fieldContext_Entity_contractEndDate(ctx, field)
-			case "autoRenews":
-				return ec.fieldContext_Entity_autoRenews(ctx, field)
-			case "terminationNoticeDays":
-				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
-			case "annualSpend":
-				return ec.fieldContext_Entity_annualSpend(ctx, field)
-			case "spendCurrency":
-				return ec.fieldContext_Entity_spendCurrency(ctx, field)
-			case "billingModel":
-				return ec.fieldContext_Entity_billingModel(ctx, field)
-			case "renewalRisk":
-				return ec.fieldContext_Entity_renewalRisk(ctx, field)
-			case "ssoEnforced":
-				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
-			case "mfaSupported":
-				return ec.fieldContext_Entity_mfaSupported(ctx, field)
-			case "mfaEnforced":
-				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_Entity_statusPageURL(ctx, field)
-			case "providedServices":
-				return ec.fieldContext_Entity_providedServices(ctx, field)
-			case "links":
-				return ec.fieldContext_Entity_links(ctx, field)
-			case "riskRating":
-				return ec.fieldContext_Entity_riskRating(ctx, field)
-			case "riskScore":
-				return ec.fieldContext_Entity_riskScore(ctx, field)
-			case "riskScoreCoverage":
-				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
-			case "tier":
-				return ec.fieldContext_Entity_tier(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
-			case "contractRenewalAt":
-				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
-			case "vendorMetadata":
-				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Entity_logoFileID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Entity_externalID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Entity_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Entity_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Entity_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Entity_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Entity_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
-			case "entityRelationshipState":
-				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
-			case "entitySecurityQuestionnaireStatus":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
-			case "entitySourceType":
-				return ec.fieldContext_Entity_entitySourceType(ctx, field)
-			case "environment":
-				return ec.fieldContext_Entity_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Entity_scope(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Entity_contacts(ctx, field)
-			case "documents":
-				return ec.fieldContext_Entity_documents(ctx, field)
-			case "notes":
-				return ec.fieldContext_Entity_notes(ctx, field)
-			case "files":
-				return ec.fieldContext_Entity_files(ctx, field)
-			case "assets":
-				return ec.fieldContext_Entity_assets(ctx, field)
-			case "scans":
-				return ec.fieldContext_Entity_scans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Entity_campaigns(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Entity_integrations(ctx, field)
-			case "subprocessors":
-				return ec.fieldContext_Entity_subprocessors(ctx, field)
-			case "authMethods":
-				return ec.fieldContext_Entity_authMethods(ctx, field)
-			case "employerIdentityHolders":
-				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Entity_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Entity_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Entity_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Entity_platforms(ctx, field)
-			case "outOfScopePlatforms":
-				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
-			case "sourcePlatforms":
-				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
-			case "entityType":
-				return ec.fieldContext_Entity_entityType(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Entity_logoFile(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Entity_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
+			return ec.childFields_Entity(ctx, field)
 		},
 	}
 	return fc, nil
@@ -824,28 +222,22 @@ func (ec *executionContext) _EntityDeletePayload_deletedID(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityUpdatePayload_entity(ctx context.Context, field graphql.CollectedField, obj *model.EntityUpdatePayload) (ret graphql.Marshaler) {
@@ -853,17 +245,20 @@ func (ec *executionContext) _EntityUpdatePayload_entity(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityUpdatePayload_entity,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityUpdatePayload_entity(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entity, nil
 		},
 		nil,
-		ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Entity) graphql.Marshaler {
+			return ec.marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntity(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityUpdatePayload",
@@ -871,203 +266,7 @@ func (ec *executionContext) fieldContext_EntityUpdatePayload_entity(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Entity_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Entity_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Entity_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Entity_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Entity_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Entity_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Entity_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Entity_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Entity_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Entity_internalOwnerGroupID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Entity_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Entity_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Entity_reviewedByGroupID(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Entity_lastReviewedAt(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Entity_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Entity_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Entity_systemInternalID(ctx, field)
-			case "entityRelationshipStateName":
-				return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
-			case "entityRelationshipStateID":
-				return ec.fieldContext_Entity_entityRelationshipStateID(ctx, field)
-			case "entitySecurityQuestionnaireStatusName":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusName(ctx, field)
-			case "entitySecurityQuestionnaireStatusID":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatusID(ctx, field)
-			case "entitySourceTypeName":
-				return ec.fieldContext_Entity_entitySourceTypeName(ctx, field)
-			case "entitySourceTypeID":
-				return ec.fieldContext_Entity_entitySourceTypeID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Entity_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Entity_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Entity_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Entity_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Entity_name(ctx, field)
-			case "displayName":
-				return ec.fieldContext_Entity_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_Entity_description(ctx, field)
-			case "domains":
-				return ec.fieldContext_Entity_domains(ctx, field)
-			case "entityTypeID":
-				return ec.fieldContext_Entity_entityTypeID(ctx, field)
-			case "status":
-				return ec.fieldContext_Entity_status(ctx, field)
-			case "approvedForUse":
-				return ec.fieldContext_Entity_approvedForUse(ctx, field)
-			case "linkedAssetIds":
-				return ec.fieldContext_Entity_linkedAssetIds(ctx, field)
-			case "hasSoc2":
-				return ec.fieldContext_Entity_hasSoc2(ctx, field)
-			case "soc2PeriodEnd":
-				return ec.fieldContext_Entity_soc2PeriodEnd(ctx, field)
-			case "contractStartDate":
-				return ec.fieldContext_Entity_contractStartDate(ctx, field)
-			case "contractEndDate":
-				return ec.fieldContext_Entity_contractEndDate(ctx, field)
-			case "autoRenews":
-				return ec.fieldContext_Entity_autoRenews(ctx, field)
-			case "terminationNoticeDays":
-				return ec.fieldContext_Entity_terminationNoticeDays(ctx, field)
-			case "annualSpend":
-				return ec.fieldContext_Entity_annualSpend(ctx, field)
-			case "spendCurrency":
-				return ec.fieldContext_Entity_spendCurrency(ctx, field)
-			case "billingModel":
-				return ec.fieldContext_Entity_billingModel(ctx, field)
-			case "renewalRisk":
-				return ec.fieldContext_Entity_renewalRisk(ctx, field)
-			case "ssoEnforced":
-				return ec.fieldContext_Entity_ssoEnforced(ctx, field)
-			case "mfaSupported":
-				return ec.fieldContext_Entity_mfaSupported(ctx, field)
-			case "mfaEnforced":
-				return ec.fieldContext_Entity_mfaEnforced(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_Entity_statusPageURL(ctx, field)
-			case "providedServices":
-				return ec.fieldContext_Entity_providedServices(ctx, field)
-			case "links":
-				return ec.fieldContext_Entity_links(ctx, field)
-			case "riskRating":
-				return ec.fieldContext_Entity_riskRating(ctx, field)
-			case "riskScore":
-				return ec.fieldContext_Entity_riskScore(ctx, field)
-			case "riskScoreCoverage":
-				return ec.fieldContext_Entity_riskScoreCoverage(ctx, field)
-			case "tier":
-				return ec.fieldContext_Entity_tier(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Entity_reviewFrequency(ctx, field)
-			case "nextReviewAt":
-				return ec.fieldContext_Entity_nextReviewAt(ctx, field)
-			case "contractRenewalAt":
-				return ec.fieldContext_Entity_contractRenewalAt(ctx, field)
-			case "vendorMetadata":
-				return ec.fieldContext_Entity_vendorMetadata(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Entity_logoFileID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Entity_externalID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Entity_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Entity_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Entity_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Entity_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Entity_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Entity_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Entity_internalOwnerGroup(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Entity_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
-			case "entityRelationshipState":
-				return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
-			case "entitySecurityQuestionnaireStatus":
-				return ec.fieldContext_Entity_entitySecurityQuestionnaireStatus(ctx, field)
-			case "entitySourceType":
-				return ec.fieldContext_Entity_entitySourceType(ctx, field)
-			case "environment":
-				return ec.fieldContext_Entity_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Entity_scope(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Entity_contacts(ctx, field)
-			case "documents":
-				return ec.fieldContext_Entity_documents(ctx, field)
-			case "notes":
-				return ec.fieldContext_Entity_notes(ctx, field)
-			case "files":
-				return ec.fieldContext_Entity_files(ctx, field)
-			case "assets":
-				return ec.fieldContext_Entity_assets(ctx, field)
-			case "scans":
-				return ec.fieldContext_Entity_scans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Entity_campaigns(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Entity_assessmentResponses(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_Entity_vendorRiskScores(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Entity_integrations(ctx, field)
-			case "subprocessors":
-				return ec.fieldContext_Entity_subprocessors(ctx, field)
-			case "authMethods":
-				return ec.fieldContext_Entity_authMethods(ctx, field)
-			case "employerIdentityHolders":
-				return ec.fieldContext_Entity_employerIdentityHolders(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Entity_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Entity_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Entity_subcontrols(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Entity_platforms(ctx, field)
-			case "outOfScopePlatforms":
-				return ec.fieldContext_Entity_outOfScopePlatforms(ctx, field)
-			case "sourcePlatforms":
-				return ec.fieldContext_Entity_sourcePlatforms(ctx, field)
-			case "entityType":
-				return ec.fieldContext_Entity_entityType(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Entity_logoFile(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Entity_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Entity", field.Name)
+			return ec.childFields_Entity(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1107,7 +306,7 @@ func (ec *executionContext) _EntityBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1153,7 +352,7 @@ func (ec *executionContext) _EntityBulkDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1191,7 +390,7 @@ func (ec *executionContext) _EntityBulkUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1230,7 +429,7 @@ func (ec *executionContext) _EntityCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1269,7 +468,7 @@ func (ec *executionContext) _EntityDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1308,7 +507,7 @@ func (ec *executionContext) _EntityUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

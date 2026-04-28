@@ -24,6 +24,7 @@ extend-exclude = [
   ".task/*",
   "common/openapi/",
   "plans.yaml",
+  "internal/integrations/**/**/examples/*.json",
 ]
 ignore-hidden = true
 ignore-files = true

@@ -4,19 +4,25 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // resolveInstallationMetadata derives AWS connection metadata from whichever credential is bound.
-// Either an assume-role credential or a service account credential may be configured independently
-func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
+// It uses the assume-role credential when present, otherwise falls back to the service account credential.
+func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	_, hasAssumeRole := req.Credentials.Resolve(awsAssumeRoleCredential.ID())
 	if !hasAssumeRole {
-		return InstallationMetadata{}, false, nil
+		return InstallationMetadata{}, true, nil
 	}
 
-	assumeRole, _, err := awsAssumeRoleCredential.Resolve(req.Credentials)
+	assumeRole, ok, err := awsAssumeRoleCredential.Resolve(req.Credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error resolving assume role credentials")
 		return InstallationMetadata{}, false, ErrCredentialMetadataInvalid
+	}
+
+	if !ok {
+		return InstallationMetadata{}, ok, nil
 	}
 
 	return InstallationMetadata{

@@ -4,6 +4,7 @@ package operations
 import (
 	"context"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 )
@@ -12,6 +13,10 @@ import (
 func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateAssetInput) error {
 	if createInput.SourceIdentifier == nil || *createInput.SourceIdentifier == "" {
 		return ErrIngestUpsertKeyMissing
+	}
+
+	if createInput.SourceType == nil {
+		createInput.SourceType = &enums.SourceTypeImported
 	}
 
 	return persistRoundTripUpsert(

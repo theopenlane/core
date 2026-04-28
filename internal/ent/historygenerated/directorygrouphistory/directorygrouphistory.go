@@ -92,6 +92,8 @@ const (
 	FieldRawProfileFileID = "raw_profile_file_id"
 	// FieldSourceVersion holds the string denoting the source_version field in the database.
 	FieldSourceVersion = "source_version"
+	// FieldDirectoryName holds the string denoting the directory_name field in the database.
+	FieldDirectoryName = "directory_name"
 	// Table holds the table name of the directorygrouphistory in the database.
 	Table = "directory_group_history"
 )
@@ -135,6 +137,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldRawProfileFileID,
 	FieldSourceVersion,
+	FieldDirectoryName,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -381,6 +384,11 @@ func ByRawProfileFileID(opts ...sql.OrderTermOption) OrderOption {
 // BySourceVersion orders the results by the source_version field.
 func BySourceVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSourceVersion, opts...).ToFunc()
+}
+
+// ByDirectoryName orders the results by the directory_name field.
+func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
 }
 
 var (

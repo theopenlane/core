@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -308,6 +309,33 @@ func (f TraverseCampaignTargetHistory) Traverse(ctx context.Context, q historyge
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.CampaignTargetHistoryQuery", q)
+}
+
+// The CheckResultHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CheckResultHistoryFunc func(context.Context, *historygenerated.CheckResultHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CheckResultHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.CheckResultHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.CheckResultHistoryQuery", q)
+}
+
+// The TraverseCheckResultHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCheckResultHistory func(context.Context, *historygenerated.CheckResultHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCheckResultHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCheckResultHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.CheckResultHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.CheckResultHistoryQuery", q)
 }
 
 // The ContactHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2296,6 +2324,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.CampaignHistoryQuery, predicate.CampaignHistory, campaignhistory.OrderOption]{typ: historygenerated.TypeCampaignHistory, tq: q}, nil
 	case *historygenerated.CampaignTargetHistoryQuery:
 		return &query[*historygenerated.CampaignTargetHistoryQuery, predicate.CampaignTargetHistory, campaigntargethistory.OrderOption]{typ: historygenerated.TypeCampaignTargetHistory, tq: q}, nil
+	case *historygenerated.CheckResultHistoryQuery:
+		return &query[*historygenerated.CheckResultHistoryQuery, predicate.CheckResultHistory, checkresulthistory.OrderOption]{typ: historygenerated.TypeCheckResultHistory, tq: q}, nil
 	case *historygenerated.ContactHistoryQuery:
 		return &query[*historygenerated.ContactHistoryQuery, predicate.ContactHistory, contacthistory.OrderOption]{typ: historygenerated.TypeContactHistory, tq: q}, nil
 	case *historygenerated.ControlHistoryQuery:

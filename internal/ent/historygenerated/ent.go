@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -159,6 +160,7 @@ func checkColumn(t, c string) error {
 			assethistory.Table:                      assethistory.ValidColumn,
 			campaignhistory.Table:                   campaignhistory.ValidColumn,
 			campaigntargethistory.Table:             campaigntargethistory.ValidColumn,
+			checkresulthistory.Table:                checkresulthistory.ValidColumn,
 			contacthistory.Table:                    contacthistory.ValidColumn,
 			controlhistory.Table:                    controlhistory.ValidColumn,
 			controlimplementationhistory.Table:      controlimplementationhistory.ValidColumn,

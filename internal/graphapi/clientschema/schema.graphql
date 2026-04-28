@@ -6377,6 +6377,557 @@ scalar Change
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+type CheckResult implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	current status of the control
+	"""
+	status: CheckResultCheckStatus!
+	"""
+	source that set the check result
+	"""
+	source: String!
+	"""
+	timestamp the result was last updated
+	"""
+	lastObservedAt: DateTime
+	"""
+	link to the result in the source system
+	"""
+	externalURI: String
+	"""
+	optional details of the result
+	"""
+	details: String
+	"""
+	external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
+	"""
+	parentExternalID: String
+	"""
+	integration that owns this directory group
+	"""
+	integrationID: ID
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	controls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Controls returned from the connection.
+		"""
+		orderBy: [ControlOrder!]
+
+		"""
+		Filtering options for Controls returned from the connection.
+		"""
+		where: ControlWhereInput
+	): ControlConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	"""
+	integration that owns this control health
+	"""
+	integration: Integration
+}
+"""
+Return response for createBulkCheckResult mutation
+"""
+type CheckResultBulkCreatePayload {
+	"""
+	Created checkResults
+	"""
+	checkResults: [CheckResult!]
+}
+"""
+Return response for deleteBulkCheckResult mutation
+"""
+type CheckResultBulkDeletePayload {
+	"""
+	Deleted checkResult IDs
+	"""
+	deletedIDs: [ID!]!
+	"""
+	Error returned when the bulk delete is only partially applied
+	"""
+	error: String
+	"""
+	IDs of checkResults that were not deleted
+	"""
+	notDeletedIDs: [ID!]
+}
+"""
+Return response for updateBulkCheckResult mutation
+"""
+type CheckResultBulkUpdatePayload {
+	"""
+	Updated checkResults
+	"""
+	checkResults: [CheckResult!]
+	"""
+	IDs of the updated checkResults
+	"""
+	updatedIDs: [ID!]
+}
+"""
+CheckResultCheckStatus is enum for the field status
+"""
+enum CheckResultCheckStatus @goModel(model: "github.com/theopenlane/core/common/enums.CheckStatus") {
+	PASS
+	FAIL
+	UNKNOWN
+}
+"""
+A connection to a list of items.
+"""
+type CheckResultConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [CheckResultEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+Return response for createCheckResult mutation
+"""
+type CheckResultCreatePayload {
+	"""
+	Created checkResult
+	"""
+	checkResult: CheckResult!
+}
+"""
+Return response for deleteCheckResult mutation
+"""
+type CheckResultDeletePayload {
+	"""
+	Deleted checkResult ID
+	"""
+	deletedID: ID!
+}
+"""
+An edge in a connection.
+"""
+type CheckResultEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: CheckResult
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+Ordering options for CheckResult connections
+"""
+input CheckResultOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order CheckResults.
+	"""
+	field: CheckResultOrderField!
+}
+"""
+Properties by which CheckResult connections can be ordered.
+"""
+enum CheckResultOrderField {
+	created_at
+	updated_at
+	STATUS
+	source
+	observed_at
+}
+"""
+Return response for updateCheckResult mutation
+"""
+type CheckResultUpdatePayload {
+	"""
+	Updated checkResult
+	"""
+	checkResult: CheckResult!
+}
+"""
+CheckResultWhereInput is used for filtering CheckResult objects.
+Input was generated by ent.
+"""
+input CheckResultWhereInput {
+	not: CheckResultWhereInput
+	and: [CheckResultWhereInput!]
+	or: [CheckResultWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	status field predicates
+	"""
+	status: CheckResultCheckStatus
+	statusNEQ: CheckResultCheckStatus
+	statusIn: [CheckResultCheckStatus!]
+	statusNotIn: [CheckResultCheckStatus!]
+	"""
+	source field predicates
+	"""
+	source: String
+	sourceNEQ: String
+	sourceIn: [String!]
+	sourceNotIn: [String!]
+	sourceGT: String
+	sourceGTE: String
+	sourceLT: String
+	sourceLTE: String
+	sourceContains: String
+	sourceHasPrefix: String
+	sourceHasSuffix: String
+	sourceEqualFold: String
+	sourceContainsFold: String
+	"""
+	last_observed_at field predicates
+	"""
+	lastObservedAt: DateTime
+	lastObservedAtNEQ: DateTime
+	lastObservedAtIn: [DateTime!]
+	lastObservedAtNotIn: [DateTime!]
+	lastObservedAtGT: DateTime
+	lastObservedAtGTE: DateTime
+	lastObservedAtLT: DateTime
+	lastObservedAtLTE: DateTime
+	lastObservedAtIsNil: Boolean
+	lastObservedAtNotNil: Boolean
+	"""
+	external_uri field predicates
+	"""
+	externalURI: String
+	externalURINEQ: String
+	externalURIIn: [String!]
+	externalURINotIn: [String!]
+	externalURIGT: String
+	externalURIGTE: String
+	externalURILT: String
+	externalURILTE: String
+	externalURIContains: String
+	externalURIHasPrefix: String
+	externalURIHasSuffix: String
+	externalURIIsNil: Boolean
+	externalURINotNil: Boolean
+	externalURIEqualFold: String
+	externalURIContainsFold: String
+	"""
+	details field predicates
+	"""
+	details: String
+	detailsNEQ: String
+	detailsIn: [String!]
+	detailsNotIn: [String!]
+	detailsGT: String
+	detailsGTE: String
+	detailsLT: String
+	detailsLTE: String
+	detailsContains: String
+	detailsHasPrefix: String
+	detailsHasSuffix: String
+	detailsIsNil: Boolean
+	detailsNotNil: Boolean
+	detailsEqualFold: String
+	detailsContainsFold: String
+	"""
+	parent_external_id field predicates
+	"""
+	parentExternalID: String
+	parentExternalIDNEQ: String
+	parentExternalIDIn: [String!]
+	parentExternalIDNotIn: [String!]
+	parentExternalIDGT: String
+	parentExternalIDGTE: String
+	parentExternalIDLT: String
+	parentExternalIDLTE: String
+	parentExternalIDContains: String
+	parentExternalIDHasPrefix: String
+	parentExternalIDHasSuffix: String
+	parentExternalIDIsNil: Boolean
+	parentExternalIDNotNil: Boolean
+	parentExternalIDEqualFold: String
+	parentExternalIDContainsFold: String
+	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDGT: ID
+	integrationIDGTE: ID
+	integrationIDLT: ID
+	integrationIDLTE: ID
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
+	"""
+	controls edge predicates
+	"""
+	hasControls: Boolean
+	hasControlsWith: [ControlWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
+	"""
+	Filter for tagsHas to contain a specific value
+	"""
+	tagsHas: String
+}
 """
 CloneControlInput is used to clone controls and their subcontrols
 under an organization (ownerID)
@@ -7755,6 +8306,37 @@ type Control implements Node {
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	standard: Standard
+	checkResults(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CheckResults returned from the connection.
+		"""
+		orderBy: [CheckResultOrder!]
+
+		"""
+		Filtering options for CheckResults returned from the connection.
+		"""
+		where: CheckResultWhereInput
+	): CheckResultConnection!
 	programs(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -10748,6 +11330,11 @@ input ControlWhereInput {
 	hasStandard: Boolean
 	hasStandardWith: [StandardWhereInput!]
 	"""
+	check_results edge predicates
+	"""
+	hasCheckResults: Boolean
+	hasCheckResultsWith: [CheckResultWhereInput!]
+	"""
 	programs edge predicates
 	"""
 	hasPrograms: Boolean
@@ -11419,6 +12006,46 @@ input CreateCampaignWithTargetsInput {
 	targets: [CreateCampaignTargetInput!]
 }
 """
+CreateCheckResultInput is used for create CheckResult object.
+Input was generated by ent.
+"""
+input CreateCheckResultInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	current status of the control
+	"""
+	status: CheckResultCheckStatus
+	"""
+	source that set the check result
+	"""
+	source: String!
+	"""
+	timestamp the result was last updated
+	"""
+	lastObservedAt: DateTime
+	"""
+	link to the result in the source system
+	"""
+	externalURI: String
+	"""
+	optional details of the result
+	"""
+	details: String
+	"""
+	external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
+	"""
+	parentExternalID: String
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
+	controlIDs: [ID!]
+	findingIDs: [ID!]
+	integrationID: ID
+}
+"""
 CreateContactInput is used for create Contact object.
 Input was generated by ent.
 """
@@ -11694,6 +12321,7 @@ input CreateControlInput {
 	environmentID: ID
 	scopeID: ID
 	standardID: ID
+	checkResultIDs: [ID!]
 	programIDs: [ID!]
 	platformIDs: [ID!]
 	assetIDs: [ID!]
@@ -12141,6 +12769,10 @@ input CreateDirectoryGroupInput {
 	cursor or ETag supplied by the source system for auditing
 	"""
 	sourceVersion: String
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
@@ -12174,6 +12806,10 @@ input CreateDirectoryMembershipInput {
 	mechanism used to populate the membership (api, scim, csv, etc)
 	"""
 	source: String
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
 	"""
 	first time the membership was detected
 	"""
@@ -13204,6 +13840,7 @@ input CreateFindingInput {
 	commentIDs: [ID!]
 	fileIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	checkResultIDs: [ID!]
 }
 input CreateFullProgramInput {
 	program: CreateProgramInput!
@@ -16767,6 +17404,10 @@ input CreateVulnerabilityInput {
 	"""
 	firstPatchedVersion: String
 	"""
+	indicates if there is a fix available for the vulnerability
+	"""
+	fixAvailable: Boolean
+	"""
 	name of the vulnerable package or dependency
 	"""
 	packageName: String
@@ -19919,6 +20560,10 @@ type DirectoryGroup implements Node {
 	cursor or ETag supplied by the source system for auditing
 	"""
 	sourceVersion: String
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -20125,6 +20770,7 @@ enum DirectoryGroupOrderField {
 	external_id
 	email
 	display_name
+	directory_name
 }
 """
 Return response for updateDirectoryGroup mutation
@@ -20576,6 +21222,24 @@ input DirectoryGroupWhereInput {
 	sourceVersionEqualFold: String
 	sourceVersionContainsFold: String
 	"""
+	directory_name field predicates
+	"""
+	directoryName: String
+	directoryNameNEQ: String
+	directoryNameIn: [String!]
+	directoryNameNotIn: [String!]
+	directoryNameGT: String
+	directoryNameGTE: String
+	directoryNameLT: String
+	directoryNameLTE: String
+	directoryNameContains: String
+	directoryNameHasPrefix: String
+	directoryNameHasSuffix: String
+	directoryNameIsNil: Boolean
+	directoryNameNotNil: Boolean
+	directoryNameEqualFold: String
+	directoryNameContainsFold: String
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -20687,6 +21351,10 @@ type DirectoryMembership implements Node {
 	mechanism used to populate the membership (api, scim, csv, etc)
 	"""
 	source: String
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
 	"""
 	first time the membership was detected
 	"""
@@ -20879,6 +21547,7 @@ Properties by which DirectoryMembership connections can be ordered.
 enum DirectoryMembershipOrderField {
 	created_at
 	updated_at
+	directory_name
 }
 """
 Return response for updateDirectoryMembership mutation
@@ -21069,6 +21738,24 @@ input DirectoryMembershipWhereInput {
 	sourceNotNil: Boolean
 	sourceEqualFold: String
 	sourceContainsFold: String
+	"""
+	directory_name field predicates
+	"""
+	directoryName: String
+	directoryNameNEQ: String
+	directoryNameIn: [String!]
+	directoryNameNotIn: [String!]
+	directoryNameGT: String
+	directoryNameGTE: String
+	directoryNameLT: String
+	directoryNameLTE: String
+	directoryNameContains: String
+	directoryNameHasPrefix: String
+	directoryNameHasSuffix: String
+	directoryNameIsNil: Boolean
+	directoryNameNotNil: Boolean
+	directoryNameEqualFold: String
+	directoryNameContainsFold: String
 	"""
 	first_seen_at field predicates
 	"""
@@ -28582,6 +29269,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
 	ASSESSMENT
 	ASSET
 	CAMPAIGN
+	CHECK_RESULT
 	CONTACT
 	CONTROL
 	DIRECTORY_MEMBERSHIP
@@ -30686,6 +31374,37 @@ type Finding implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	checkResults(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CheckResults returned from the connection.
+		"""
+		orderBy: [CheckResultOrder!]
+
+		"""
+		Filtering options for CheckResults returned from the connection.
+		"""
+		where: CheckResultWhereInput
+	): CheckResultConnection!
 	controlMappings(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -31130,6 +31849,8 @@ enum FindingOrderField {
 	external_owner_id
 	category
 	severity
+	event_time
+	reported_at
 }
 """
 FindingSecurityLevel is enum for the field security_level
@@ -31979,6 +32700,11 @@ input FindingWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	check_results edge predicates
+	"""
+	hasCheckResults: Boolean
+	hasCheckResultsWith: [CheckResultWhereInput!]
 	"""
 	control_mappings edge predicates
 	"""
@@ -37529,6 +38255,37 @@ type Integration implements Node {
 		"""
 		where: DirectorySyncRunWhereInput
 	): DirectorySyncRunConnection!
+	checkResults(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CheckResults returned from the connection.
+		"""
+		orderBy: [CheckResultOrder!]
+
+		"""
+		Filtering options for CheckResults returned from the connection.
+		"""
+		where: CheckResultWhereInput
+	): CheckResultConnection!
 	"""
 	platform associated with this integration
 	"""
@@ -38160,6 +38917,11 @@ input IntegrationWhereInput {
 	"""
 	hasDirectorySyncRuns: Boolean
 	hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
+	"""
+	check_results edge predicates
+	"""
+	hasCheckResults: Boolean
+	hasCheckResultsWith: [CheckResultWhereInput!]
 	"""
 	platform edge predicates
 	"""
@@ -43267,6 +44029,88 @@ type Mutation {
 		"""
 		id: ID!
 	): CampaignTargetDeletePayload!
+	"""
+	Create a new checkResult
+	"""
+	createCheckResult(
+		"""
+		values of the checkResult
+		"""
+		input: CreateCheckResultInput!
+	): CheckResultCreatePayload!
+	"""
+	Create multiple new checkResults
+	"""
+	createBulkCheckResult(
+		"""
+		values of the checkResult
+		"""
+		input: [CreateCheckResultInput!]
+	): CheckResultBulkCreatePayload!
+	"""
+	Create multiple new checkResults via file upload
+	"""
+	createBulkCSVCheckResult(
+		"""
+		csv file containing values of the checkResult
+		"""
+		input: Upload!
+	): CheckResultBulkCreatePayload!
+	"""
+	Update multiple existing checkResults
+	"""
+	updateBulkCheckResult(
+		"""
+		IDs of the checkResults to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the checkResults with
+		"""
+		input: UpdateCheckResultInput!
+	): CheckResultBulkUpdatePayload!
+	"""
+	Update multiple existing checkResults via file upload
+	"""
+	updateBulkCSVCheckResult(
+		"""
+		csv file containing values of the checkResult, must include ID column
+		"""
+		input: Upload!
+	): CheckResultBulkUpdatePayload!
+	"""
+	Update an existing checkResult
+	"""
+	updateCheckResult(
+		"""
+		ID of the checkResult
+		"""
+		id: ID!
+
+		"""
+		New values for the checkResult
+		"""
+		input: UpdateCheckResultInput!
+	): CheckResultUpdatePayload!
+	"""
+	Delete an existing checkResult
+	"""
+	deleteCheckResult(
+		"""
+		ID of the checkResult
+		"""
+		id: ID!
+	): CheckResultDeletePayload!
+	"""
+	Delete multiple checkResults
+	"""
+	deleteBulkCheckResult(
+		"""
+		IDs of the checkResults to delete
+		"""
+		ids: [ID!]!
+	): CheckResultBulkDeletePayload!
 	"""
 	Create a new contact
 	"""
@@ -62821,6 +63665,37 @@ type Query {
 		"""
 		where: CampaignTargetWhereInput
 	): CampaignTargetConnection!
+	checkResults(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CheckResults returned from the connection.
+		"""
+		orderBy: [CheckResultOrder!]
+
+		"""
+		Filtering options for CheckResults returned from the connection.
+		"""
+		where: CheckResultWhereInput
+	): CheckResultConnection!
 	contacts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -65612,6 +66487,15 @@ type Query {
 		"""
 		id: ID!
 	): CampaignTarget!
+	"""
+	Look up checkResult by ID
+	"""
+	checkResult(
+		"""
+		ID of the checkResult
+		"""
+		id: ID!
+	): CheckResult!
 	"""
 	Look up contact by ID
 	"""
@@ -86488,6 +87372,61 @@ input UpdateCampaignTargetInput {
 	clearWorkflowObjectRefs: Boolean
 }
 """
+UpdateCheckResultInput is used for update CheckResult object.
+Input was generated by ent.
+"""
+input UpdateCheckResultInput {
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	appendTags: [String!]
+	clearTags: Boolean
+	"""
+	current status of the control
+	"""
+	status: CheckResultCheckStatus
+	"""
+	source that set the check result
+	"""
+	source: String
+	"""
+	timestamp the result was last updated
+	"""
+	lastObservedAt: DateTime
+	clearLastObservedAt: Boolean
+	"""
+	link to the result in the source system
+	"""
+	externalURI: String
+	clearExternalURI: Boolean
+	"""
+	optional details of the result
+	"""
+	details: String
+	clearDetails: Boolean
+	"""
+	external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
+	"""
+	parentExternalID: String
+	clearParentExternalID: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
+	addControlIDs: [ID!]
+	removeControlIDs: [ID!]
+	clearControls: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+}
+"""
 UpdateContactInput is used for update Contact object.
 Input was generated by ent.
 """
@@ -86883,6 +87822,9 @@ input UpdateControlInput {
 	clearScope: Boolean
 	standardID: ID
 	clearStandard: Boolean
+	addCheckResultIDs: [ID!]
+	removeCheckResultIDs: [ID!]
+	clearCheckResults: Boolean
 	addProgramIDs: [ID!]
 	removeProgramIDs: [ID!]
 	clearPrograms: Boolean
@@ -87449,6 +88391,11 @@ input UpdateDirectoryGroupInput {
 	"""
 	sourceVersion: String
 	clearSourceVersion: Boolean
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
+	clearDirectoryName: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	environmentID: ID
@@ -87489,6 +88436,11 @@ input UpdateDirectoryMembershipInput {
 	"""
 	source: String
 	clearSource: Boolean
+	"""
+	directory source label set by the integration (e.g. googleworkspace, github, slack)
+	"""
+	directoryName: String
+	clearDirectoryName: Boolean
 	"""
 	first time the membership was detected
 	"""
@@ -88939,6 +89891,9 @@ input UpdateFindingInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addCheckResultIDs: [ID!]
+	removeCheckResultIDs: [ID!]
+	clearCheckResults: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -93869,6 +94824,11 @@ input UpdateVulnerabilityInput {
 	firstPatchedVersion: String
 	clearFirstPatchedVersion: Boolean
 	"""
+	indicates if there is a fix available for the vulnerability
+	"""
+	fixAvailable: Boolean
+	clearFixAvailable: Boolean
+	"""
 	name of the vulnerable package or dependency
 	"""
 	packageName: String
@@ -96752,6 +97712,10 @@ type Vulnerability implements Node {
 	"""
 	firstPatchedVersion: String
 	"""
+	indicates if there is a fix available for the vulnerability
+	"""
+	fixAvailable: Boolean
+	"""
 	name of the vulnerable package or dependency
 	"""
 	packageName: String
@@ -98149,6 +99113,13 @@ input VulnerabilityWhereInput {
 	firstPatchedVersionNotNil: Boolean
 	firstPatchedVersionEqualFold: String
 	firstPatchedVersionContainsFold: String
+	"""
+	fix_available field predicates
+	"""
+	fixAvailable: Boolean
+	fixAvailableNEQ: Boolean
+	fixAvailableIsNil: Boolean
+	fixAvailableNotNil: Boolean
 	"""
 	package_name field predicates
 	"""

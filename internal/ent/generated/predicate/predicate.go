@@ -27,6 +27,9 @@ type Campaign func(*sql.Selector)
 // CampaignTarget is the predicate function for campaigntarget builders.
 type CampaignTarget func(*sql.Selector)
 
+// CheckResult is the predicate function for checkresult builders.
+type CheckResult func(*sql.Selector)
+
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 

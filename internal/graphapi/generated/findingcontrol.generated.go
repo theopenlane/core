@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _FindingControlBulkCreatePayload_findingControls(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_FindingControlBulkCreatePayload_findingControls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlBulkCreatePayload_findingControls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.FindingControls, nil
 		},
 		nil,
-		ec.marshalOFindingControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.FindingControl) graphql.Marshaler {
+			return ec.marshalOFindingControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_FindingControlBulkCreatePayload_findingControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "FindingControlBulkCreatePayload",
@@ -51,43 +55,7 @@ func (ec *executionContext) fieldContext_FindingControlBulkCreatePayload_finding
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_FindingControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_FindingControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_FindingControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FindingControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FindingControl_updatedBy(ctx, field)
-			case "findingID":
-				return ec.fieldContext_FindingControl_findingID(ctx, field)
-			case "controlID":
-				return ec.fieldContext_FindingControl_controlID(ctx, field)
-			case "standardID":
-				return ec.fieldContext_FindingControl_standardID(ctx, field)
-			case "externalStandard":
-				return ec.fieldContext_FindingControl_externalStandard(ctx, field)
-			case "externalStandardVersion":
-				return ec.fieldContext_FindingControl_externalStandardVersion(ctx, field)
-			case "externalControlID":
-				return ec.fieldContext_FindingControl_externalControlID(ctx, field)
-			case "source":
-				return ec.fieldContext_FindingControl_source(ctx, field)
-			case "metadata":
-				return ec.fieldContext_FindingControl_metadata(ctx, field)
-			case "discoveredAt":
-				return ec.fieldContext_FindingControl_discoveredAt(ctx, field)
-			case "finding":
-				return ec.fieldContext_FindingControl_finding(ctx, field)
-			case "control":
-				return ec.fieldContext_FindingControl_control(ctx, field)
-			case "standard":
-				return ec.fieldContext_FindingControl_standard(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type FindingControl", field.Name)
+			return ec.childFields_FindingControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -98,17 +66,20 @@ func (ec *executionContext) _FindingControlCreatePayload_findingControl(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_FindingControlCreatePayload_findingControl,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlCreatePayload_findingControl(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.FindingControl, nil
 		},
 		nil,
-		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingControl) graphql.Marshaler {
+			return ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_FindingControlCreatePayload_findingControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "FindingControlCreatePayload",
@@ -116,43 +87,7 @@ func (ec *executionContext) fieldContext_FindingControlCreatePayload_findingCont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_FindingControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_FindingControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_FindingControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FindingControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FindingControl_updatedBy(ctx, field)
-			case "findingID":
-				return ec.fieldContext_FindingControl_findingID(ctx, field)
-			case "controlID":
-				return ec.fieldContext_FindingControl_controlID(ctx, field)
-			case "standardID":
-				return ec.fieldContext_FindingControl_standardID(ctx, field)
-			case "externalStandard":
-				return ec.fieldContext_FindingControl_externalStandard(ctx, field)
-			case "externalStandardVersion":
-				return ec.fieldContext_FindingControl_externalStandardVersion(ctx, field)
-			case "externalControlID":
-				return ec.fieldContext_FindingControl_externalControlID(ctx, field)
-			case "source":
-				return ec.fieldContext_FindingControl_source(ctx, field)
-			case "metadata":
-				return ec.fieldContext_FindingControl_metadata(ctx, field)
-			case "discoveredAt":
-				return ec.fieldContext_FindingControl_discoveredAt(ctx, field)
-			case "finding":
-				return ec.fieldContext_FindingControl_finding(ctx, field)
-			case "control":
-				return ec.fieldContext_FindingControl_control(ctx, field)
-			case "standard":
-				return ec.fieldContext_FindingControl_standard(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type FindingControl", field.Name)
+			return ec.childFields_FindingControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -163,28 +98,22 @@ func (ec *executionContext) _FindingControlDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_FindingControlDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_FindingControlDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "FindingControlDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("FindingControlDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _FindingControlUpdatePayload_findingControl(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlUpdatePayload) (ret graphql.Marshaler) {
@@ -192,17 +121,20 @@ func (ec *executionContext) _FindingControlUpdatePayload_findingControl(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_FindingControlUpdatePayload_findingControl,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlUpdatePayload_findingControl(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.FindingControl, nil
 		},
 		nil,
-		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingControl) graphql.Marshaler {
+			return ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_FindingControlUpdatePayload_findingControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "FindingControlUpdatePayload",
@@ -210,43 +142,7 @@ func (ec *executionContext) fieldContext_FindingControlUpdatePayload_findingCont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_FindingControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_FindingControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_FindingControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FindingControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FindingControl_updatedBy(ctx, field)
-			case "findingID":
-				return ec.fieldContext_FindingControl_findingID(ctx, field)
-			case "controlID":
-				return ec.fieldContext_FindingControl_controlID(ctx, field)
-			case "standardID":
-				return ec.fieldContext_FindingControl_standardID(ctx, field)
-			case "externalStandard":
-				return ec.fieldContext_FindingControl_externalStandard(ctx, field)
-			case "externalStandardVersion":
-				return ec.fieldContext_FindingControl_externalStandardVersion(ctx, field)
-			case "externalControlID":
-				return ec.fieldContext_FindingControl_externalControlID(ctx, field)
-			case "source":
-				return ec.fieldContext_FindingControl_source(ctx, field)
-			case "metadata":
-				return ec.fieldContext_FindingControl_metadata(ctx, field)
-			case "discoveredAt":
-				return ec.fieldContext_FindingControl_discoveredAt(ctx, field)
-			case "finding":
-				return ec.fieldContext_FindingControl_finding(ctx, field)
-			case "control":
-				return ec.fieldContext_FindingControl_control(ctx, field)
-			case "standard":
-				return ec.fieldContext_FindingControl_standard(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type FindingControl", field.Name)
+			return ec.childFields_FindingControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -286,7 +182,7 @@ func (ec *executionContext) _FindingControlBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -325,7 +221,7 @@ func (ec *executionContext) _FindingControlCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -364,7 +260,7 @@ func (ec *executionContext) _FindingControlDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -403,7 +299,7 @@ func (ec *executionContext) _FindingControlUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

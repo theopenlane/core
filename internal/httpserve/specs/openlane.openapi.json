@@ -2917,9 +2917,6 @@
               }
             },
             "description": "ACME challenge response"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -2944,9 +2941,6 @@
               }
             },
             "description": "JSON Web Key Set"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -2971,9 +2965,6 @@
               }
             },
             "description": "Static file content"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -2998,9 +2989,6 @@
               }
             },
             "description": "Static file content"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3038,9 +3026,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3064,9 +3049,6 @@
               }
             },
             "description": "OpenAPI specification"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3115,9 +3097,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3178,9 +3157,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3205,9 +3181,6 @@
               }
             },
             "description": "CSRF token"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3231,9 +3204,6 @@
               }
             },
             "description": "CSV file content"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -3262,9 +3232,6 @@
               }
             },
             "description": "Static file content"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3330,9 +3297,6 @@
               }
             },
             "description": "Successful GraphQL response"
-          },
-          "default": {
-            "description": ""
           }
         },
         "summary": "GraphQL History Endpoint",
@@ -3357,9 +3321,6 @@
               }
             },
             "description": "Health check status"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3426,7 +3387,7 @@
                 "examples": {
                   "error": {
                     "value": {
-                      "error": "Get \"https://www.googleapis.com/oauth2/v2/userinfo?alt=json\u0026prettyPrint=false\": dial tcp: lookup www.googleapis.com: no such host",
+                      "error": "googleapi: Error 401: Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project., unauthorized",
                       "error_code": "INVALID_INPUT",
                       "success": false
                     }
@@ -3438,9 +3399,6 @@
               }
             },
             "description": "Invalid Input"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3465,9 +3423,6 @@
               }
             },
             "description": "User information"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -3538,9 +3493,6 @@
               }
             },
             "description": "Successful GraphQL response"
-          },
-          "default": {
-            "description": ""
           }
         },
         "summary": "GraphQL Endpoint",
@@ -3568,9 +3520,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -3613,9 +3562,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -3678,9 +3624,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -3708,9 +3651,6 @@
               }
             },
             "description": "Health check status"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3762,9 +3702,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3832,9 +3769,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3859,9 +3793,6 @@
               }
             },
             "description": "Webhook acknowledgment"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -3886,9 +3817,6 @@
               }
             },
             "description": "Static file content"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -4646,9 +4574,6 @@
               }
             },
             "description": "Success"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -4711,9 +4636,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -4786,9 +4708,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -4837,9 +4756,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -4908,9 +4824,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -4985,9 +4898,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5036,9 +4946,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5107,9 +5014,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5175,9 +5079,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5239,9 +5140,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5267,9 +5165,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5296,9 +5191,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5325,9 +5217,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5354,9 +5243,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5416,9 +5302,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5485,9 +5368,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5540,9 +5420,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5619,9 +5496,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5684,9 +5558,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5781,9 +5652,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5845,9 +5713,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -5924,9 +5789,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -5984,9 +5846,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6054,9 +5913,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6131,9 +5987,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6201,9 +6054,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6275,9 +6125,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -6353,9 +6200,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6396,9 +6240,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],
@@ -6456,9 +6297,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [
@@ -6518,9 +6356,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
           }
         },
         "security": [],

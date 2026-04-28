@@ -552,6 +552,8 @@ coreConfiguration:
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
+    awssecurityhub:
+      arn: ""  # @schema type:string
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -955,6 +957,22 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
+    # -- core-integrations-awssecurityhub-accesskeyid secret configuration
+    core-integrations-awssecurityhub-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.awssecurityhub.accessKeyId
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
+    # -- core-integrations-awssecurityhub-secretaccesskey secret configuration
+    core-integrations-awssecurityhub-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.awssecurityhub.secretAccessKey
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret

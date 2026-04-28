@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DiscussionBulkCreatePayload_discussions(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DiscussionBulkCreatePayload_discussions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DiscussionBulkCreatePayload_discussions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Discussions, nil
 		},
 		nil,
-		ec.marshalODiscussion2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussionᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Discussion) graphql.Marshaler {
+			return ec.marshalODiscussion2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussionᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DiscussionBulkCreatePayload_discussions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DiscussionBulkCreatePayload",
@@ -51,39 +55,7 @@ func (ec *executionContext) fieldContext_DiscussionBulkCreatePayload_discussions
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Discussion_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Discussion_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Discussion_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Discussion_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Discussion_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Discussion_ownerID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Discussion_externalID(ctx, field)
-			case "isResolved":
-				return ec.fieldContext_Discussion_isResolved(ctx, field)
-			case "owner":
-				return ec.fieldContext_Discussion_owner(ctx, field)
-			case "comments":
-				return ec.fieldContext_Discussion_comments(ctx, field)
-			case "control":
-				return ec.fieldContext_Discussion_control(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Discussion_subcontrol(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Discussion_procedure(ctx, field)
-			case "risk":
-				return ec.fieldContext_Discussion_risk(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Discussion_internalPolicy(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Discussion", field.Name)
+			return ec.childFields_Discussion(ctx, field)
 		},
 	}
 	return fc, nil
@@ -94,17 +66,20 @@ func (ec *executionContext) _DiscussionCreatePayload_discussion(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DiscussionCreatePayload_discussion,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DiscussionCreatePayload_discussion(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Discussion, nil
 		},
 		nil,
-		ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
+			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DiscussionCreatePayload_discussion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DiscussionCreatePayload",
@@ -112,39 +87,7 @@ func (ec *executionContext) fieldContext_DiscussionCreatePayload_discussion(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Discussion_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Discussion_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Discussion_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Discussion_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Discussion_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Discussion_ownerID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Discussion_externalID(ctx, field)
-			case "isResolved":
-				return ec.fieldContext_Discussion_isResolved(ctx, field)
-			case "owner":
-				return ec.fieldContext_Discussion_owner(ctx, field)
-			case "comments":
-				return ec.fieldContext_Discussion_comments(ctx, field)
-			case "control":
-				return ec.fieldContext_Discussion_control(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Discussion_subcontrol(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Discussion_procedure(ctx, field)
-			case "risk":
-				return ec.fieldContext_Discussion_risk(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Discussion_internalPolicy(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Discussion", field.Name)
+			return ec.childFields_Discussion(ctx, field)
 		},
 	}
 	return fc, nil
@@ -155,28 +98,22 @@ func (ec *executionContext) _DiscussionDeletePayload_deletedID(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DiscussionDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DiscussionDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DiscussionDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DiscussionDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DiscussionDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DiscussionUpdatePayload_discussion(ctx context.Context, field graphql.CollectedField, obj *model.DiscussionUpdatePayload) (ret graphql.Marshaler) {
@@ -184,17 +121,20 @@ func (ec *executionContext) _DiscussionUpdatePayload_discussion(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DiscussionUpdatePayload_discussion,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DiscussionUpdatePayload_discussion(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Discussion, nil
 		},
 		nil,
-		ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
+			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DiscussionUpdatePayload_discussion(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DiscussionUpdatePayload",
@@ -202,39 +142,7 @@ func (ec *executionContext) fieldContext_DiscussionUpdatePayload_discussion(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Discussion_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Discussion_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Discussion_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Discussion_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Discussion_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Discussion_ownerID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Discussion_externalID(ctx, field)
-			case "isResolved":
-				return ec.fieldContext_Discussion_isResolved(ctx, field)
-			case "owner":
-				return ec.fieldContext_Discussion_owner(ctx, field)
-			case "comments":
-				return ec.fieldContext_Discussion_comments(ctx, field)
-			case "control":
-				return ec.fieldContext_Discussion_control(ctx, field)
-			case "subcontrol":
-				return ec.fieldContext_Discussion_subcontrol(ctx, field)
-			case "procedure":
-				return ec.fieldContext_Discussion_procedure(ctx, field)
-			case "risk":
-				return ec.fieldContext_Discussion_risk(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_Discussion_internalPolicy(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Discussion", field.Name)
+			return ec.childFields_Discussion(ctx, field)
 		},
 	}
 	return fc, nil
@@ -274,7 +182,7 @@ func (ec *executionContext) _DiscussionBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -313,7 +221,7 @@ func (ec *executionContext) _DiscussionCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -352,7 +260,7 @@ func (ec *executionContext) _DiscussionDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -391,7 +299,7 @@ func (ec *executionContext) _DiscussionUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

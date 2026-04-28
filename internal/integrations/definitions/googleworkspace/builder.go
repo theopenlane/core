@@ -8,18 +8,26 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+var directorySyncScopes = []string{
+	"https://www.googleapis.com/auth/admin.directory.user.readonly",
+	"https://www.googleapis.com/auth/admin.directory.group.readonly",
+	"https://www.googleapis.com/auth/admin.directory.orgunit.readonly",
+	"https://www.googleapis.com/auth/admin.directory.domain.readonly",
+	"https://www.googleapis.com/auth/admin.directory.customer.readonly",
+}
+
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "google",
+				Family:      "Google Workspace",
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
-				Tags:        []string{"directory-sync"},
+				Tags:        []string{"directory"},
 				Active:      true,
 				Visible:     true,
 			},
@@ -53,13 +61,7 @@ func Builder(cfg Config) registry.Builder {
 							AuthURL:      "https://accounts.google.com/o/oauth2/v2/auth",
 							TokenURL:     "https://oauth2.googleapis.com/token",
 							RedirectURL:  cfg.RedirectURL,
-							Scopes: []string{
-								"https://www.googleapis.com/auth/admin.directory.user.readonly",
-								"https://www.googleapis.com/auth/admin.directory.group.readonly",
-								"https://www.googleapis.com/auth/admin.directory.orgunit.readonly",
-								"https://www.googleapis.com/auth/admin.directory.domain.readonly",
-								"https://www.googleapis.com/auth/admin.directory.customer.readonly",
-							},
+							Scopes:       directorySyncScopes,
 							AuthParams: map[string]string{
 								"access_type": "offline",
 								"prompt":      "consent",
@@ -116,7 +118,8 @@ func Builder(cfg Config) registry.Builder {
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
+					IngestHandle:        DirectorySync{}.IngestHandle(),
+					RequiredPermissions: directorySyncScopes,
 				},
 			},
 			Mappings: googleWorkspaceMappings(),

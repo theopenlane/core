@@ -257,6 +257,30 @@ func (f CampaignTargetHistoryMutationRuleFunc) EvalMutation(ctx context.Context,
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.CampaignTargetHistoryMutation", m)
 }
 
+// The CheckResultHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CheckResultHistoryQueryRuleFunc func(context.Context, *historygenerated.CheckResultHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CheckResultHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.CheckResultHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.CheckResultHistoryQuery", q)
+}
+
+// The CheckResultHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CheckResultHistoryMutationRuleFunc func(context.Context, *historygenerated.CheckResultHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CheckResultHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.CheckResultHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.CheckResultHistoryMutation", m)
+}
+
 // The ContactHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ContactHistoryQueryRuleFunc func(context.Context, *historygenerated.ContactHistoryQuery) error
@@ -2056,6 +2080,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.CampaignTargetHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.CheckResultHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.ContactHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.ControlHistoryQuery:
@@ -2220,6 +2246,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.CampaignHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.CampaignTargetHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.CheckResultHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.ContactHistoryMutation:
 		return m.Filter(), nil

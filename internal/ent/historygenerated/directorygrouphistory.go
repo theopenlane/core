@@ -94,6 +94,8 @@ type DirectoryGroupHistory struct {
 	RawProfileFileID *string `json:"raw_profile_file_id,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion *string `json:"source_version,omitempty"`
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
+	DirectoryName *string `json:"directory_name,omitempty"`
 	selectValues  sql.SelectValues
 }
 
@@ -110,7 +112,7 @@ func (*DirectoryGroupHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygrouphistory.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectoryInstanceID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion:
+		case directorygrouphistory.FieldID, directorygrouphistory.FieldRef, directorygrouphistory.FieldCreatedBy, directorygrouphistory.FieldUpdatedBy, directorygrouphistory.FieldDisplayID, directorygrouphistory.FieldOwnerID, directorygrouphistory.FieldEnvironmentName, directorygrouphistory.FieldEnvironmentID, directorygrouphistory.FieldScopeName, directorygrouphistory.FieldScopeID, directorygrouphistory.FieldIntegrationID, directorygrouphistory.FieldPlatformID, directorygrouphistory.FieldDirectoryInstanceID, directorygrouphistory.FieldDirectorySyncRunID, directorygrouphistory.FieldExternalID, directorygrouphistory.FieldEmail, directorygrouphistory.FieldDisplayName, directorygrouphistory.FieldDescription, directorygrouphistory.FieldClassification, directorygrouphistory.FieldStatus, directorygrouphistory.FieldProfileHash, directorygrouphistory.FieldRawProfileFileID, directorygrouphistory.FieldSourceVersion, directorygrouphistory.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorygrouphistory.FieldHistoryTime, directorygrouphistory.FieldCreatedAt, directorygrouphistory.FieldUpdatedAt, directorygrouphistory.FieldFirstSeenAt, directorygrouphistory.FieldLastSeenAt, directorygrouphistory.FieldAddedAt, directorygrouphistory.FieldRemovedAt, directorygrouphistory.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -366,6 +368,13 @@ func (_m *DirectoryGroupHistory) assignValues(columns []string, values []any) er
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
+		case directorygrouphistory.FieldDirectoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
+			} else if value.Valid {
+				_m.DirectoryName = new(string)
+				*_m.DirectoryName = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -525,6 +534,11 @@ func (_m *DirectoryGroupHistory) String() string {
 	builder.WriteString(", ")
 	if v := _m.SourceVersion; v != nil {
 		builder.WriteString("source_version=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DirectoryName; v != nil {
+		builder.WriteString("directory_name=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

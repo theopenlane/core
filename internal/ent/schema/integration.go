@@ -180,6 +180,7 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
 		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
+		defaultEdgeToWithPagination(i, CheckResult{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: Platform{},

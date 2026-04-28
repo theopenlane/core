@@ -16,7 +16,6 @@ func TestResolveCredential(t *testing.T) {
 		raw, err := jsonx.ToRawMessage(CredentialSchema{
 			ProjectID:         "project-123",
 			OrganizationID:    "org-123",
-			SourceID:          "source-123",
 			ServiceAccountKey: "\"{\\n  \\\"type\\\":\\\"service_account\\\"\\n}\"",
 		})
 		require.NoError(t, err)
@@ -30,7 +29,6 @@ func TestResolveCredential(t *testing.T) {
 
 		assert.Equal(t, "project-123", meta.ProjectID)
 		assert.Equal(t, "org-123", meta.OrganizationID)
-		assert.Equal(t, "source-123", meta.SourceID)
 		assert.Equal(t, projectScopeAll, meta.ProjectScope)
 		assert.Equal(t, "{\n  \"type\":\"service_account\"\n}", meta.ServiceAccountKey)
 	})

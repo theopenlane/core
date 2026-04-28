@@ -7,6 +7,8 @@ var (
 	ErrAPITokenMissing = errors.New("cloudflare: api token missing")
 	// ErrCredentialInvalid indicates credential metadata could not be decoded
 	ErrCredentialInvalid = errors.New("cloudflare: credential invalid")
+	// ErrCredentialMetadataRequired indicates no credential metadata was provided
+	ErrCredentialMetadataRequired = errors.New("cloudflare: credential metadata required")
 	// ErrTokenVerificationFailed indicates the Cloudflare token verification failed
 	ErrTokenVerificationFailed = errors.New("cloudflare: token verification failed")
 	// ErrTokenNotActive indicates the Cloudflare token is not in an active state
@@ -17,6 +19,8 @@ var (
 	ErrResultEncode = errors.New("cloudflare: result encode failed")
 	// ErrMembersFetchFailed indicates the account members list request failed
 	ErrMembersFetchFailed = errors.New("cloudflare: members fetch failed")
+	// ErrMembersFetchFailed indicates the account members list request failed
+	ErrGroupsFetchFailed = errors.New("cloudflare: groups fetch failed")
 	// ErrPayloadEncode indicates a collected Cloudflare payload could not be serialized for ingest
 	ErrPayloadEncode = errors.New("cloudflare: ingest payload encode failed")
 	// ErrAccountIDMissing indicates the account ID is missing from user input

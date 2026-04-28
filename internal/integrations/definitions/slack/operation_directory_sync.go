@@ -41,10 +41,15 @@ type slackUserPayload struct {
 	IsAdmin bool `json:"is_admin,omitempty"`
 	// Has2FA reports whether 2FA is enabled for the user
 	Has2FA bool `json:"has_2fa,omitempty"`
+	// IsRestricted reports whether this user is a restricted user (e.g. multi channel guest)
+	IsRestricted bool `json:"is_restricted,omitempty"`
+	// IsUltraRestricted reports whether this user is a restricted user (e.g. single channel guest)
+	IsUltraRestricted bool `json:"is_ultra_restricted,omitempty"`
+	// IsStranger reports whether this user is a external user (e.g. slack-connect)
+	IsStranger bool `json:"is_stranger,omitempty"`
+	// IsExternal reports whether this user is a external user (e.g. slack-connect)
+	IsExternal bool `json:"is_external,omitempty"`
 }
-
-// DirectorySync collects Slack workspace users for directory account ingest
-type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
@@ -70,22 +75,7 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.I
 			continue
 		}
 
-		payload := slackUserPayload{
-			ID:          user.ID,
-			TeamID:      user.TeamID,
-			Name:        user.Name,
-			RealName:    user.RealName,
-			Email:       user.Profile.Email,
-			FirstName:   user.Profile.FirstName,
-			LastName:    user.Profile.LastName,
-			DisplayName: user.Profile.DisplayName,
-			Title:       user.Profile.Title,
-			AvatarURL:   user.Profile.Image192,
-			Deleted:     user.Deleted,
-			IsBot:       user.IsBot,
-			IsAdmin:     user.IsAdmin,
-			Has2FA:      user.Has2FA,
-		}
+		payload := normalizeUser(user)
 
 		resource := user.TeamID + "/" + user.ID
 
@@ -103,4 +93,27 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.I
 			Envelopes: envelopes,
 		},
 	}, nil
+}
+
+func normalizeUser(user slackgo.User) slackUserPayload {
+	return slackUserPayload{
+		ID:                user.ID,
+		TeamID:            user.TeamID,
+		Name:              user.Name,
+		RealName:          user.RealName,
+		Email:             user.Profile.Email,
+		FirstName:         user.Profile.FirstName,
+		LastName:          user.Profile.LastName,
+		DisplayName:       user.Profile.DisplayName,
+		Title:             user.Profile.Title,
+		AvatarURL:         user.Profile.Image192,
+		Deleted:           user.Deleted,
+		IsBot:             user.IsBot,
+		IsAdmin:           user.IsAdmin,
+		Has2FA:            user.Has2FA,
+		IsRestricted:      user.IsRestricted,
+		IsUltraRestricted: user.IsUltraRestricted,
+		IsStranger:        user.IsStranger,
+		IsExternal:        user.IsRestricted || user.IsStranger,
+	}
 }

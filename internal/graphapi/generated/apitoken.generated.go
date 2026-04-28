@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkCreatePayload_apiTokens,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkCreatePayload_apiTokens(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.APITokens, nil
 		},
 		nil,
-		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.APIToken) graphql.Marshaler {
+			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "APITokenBulkCreatePayload",
@@ -51,47 +55,7 @@ func (ec *executionContext) fieldContext_APITokenBulkCreatePayload_apiTokens(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_APIToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_APIToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_APIToken_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_APIToken_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_APIToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_APIToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_APIToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_APIToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_APIToken_scopes(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_APIToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_APIToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_APIToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_APIToken_revokedAt(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
-			case "owner":
-				return ec.fieldContext_APIToken_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
+			return ec.childFields_APIToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -102,28 +66,22 @@ func (ec *executionContext) _APITokenBulkDeletePayload_deletedIDs(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("APITokenBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _APITokenBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkDeletePayload) (ret graphql.Marshaler) {
@@ -131,28 +89,22 @@ func (ec *executionContext) _APITokenBulkDeletePayload_notDeletedIDs(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("APITokenBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _APITokenBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkDeletePayload) (ret graphql.Marshaler) {
@@ -160,28 +112,22 @@ func (ec *executionContext) _APITokenBulkDeletePayload_error(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("APITokenBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _APITokenBulkUpdatePayload_apiTokens(ctx context.Context, field graphql.CollectedField, obj *model.APITokenBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -189,17 +135,20 @@ func (ec *executionContext) _APITokenBulkUpdatePayload_apiTokens(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkUpdatePayload_apiTokens,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkUpdatePayload_apiTokens(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.APITokens, nil
 		},
 		nil,
-		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.APIToken) graphql.Marshaler {
+			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkUpdatePayload_apiTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "APITokenBulkUpdatePayload",
@@ -207,47 +156,7 @@ func (ec *executionContext) fieldContext_APITokenBulkUpdatePayload_apiTokens(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_APIToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_APIToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_APIToken_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_APIToken_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_APIToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_APIToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_APIToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_APIToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_APIToken_scopes(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_APIToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_APIToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_APIToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_APIToken_revokedAt(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
-			case "owner":
-				return ec.fieldContext_APIToken_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
+			return ec.childFields_APIToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -258,28 +167,22 @@ func (ec *executionContext) _APITokenBulkUpdatePayload_updatedIDs(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("APITokenBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenCreatePayload) (ret graphql.Marshaler) {
@@ -287,17 +190,20 @@ func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenCreatePayload_apiToken,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenCreatePayload_apiToken(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.APIToken, nil
 		},
 		nil,
-		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
+			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "APITokenCreatePayload",
@@ -305,47 +211,7 @@ func (ec *executionContext) fieldContext_APITokenCreatePayload_apiToken(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_APIToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_APIToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_APIToken_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_APIToken_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_APIToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_APIToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_APIToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_APIToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_APIToken_scopes(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_APIToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_APIToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_APIToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_APIToken_revokedAt(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
-			case "owner":
-				return ec.fieldContext_APIToken_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
+			return ec.childFields_APIToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -356,28 +222,22 @@ func (ec *executionContext) _APITokenDeletePayload_deletedID(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "APITokenDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("APITokenDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context, field graphql.CollectedField, obj *model.APITokenUpdatePayload) (ret graphql.Marshaler) {
@@ -385,17 +245,20 @@ func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_APITokenUpdatePayload_apiToken,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_APITokenUpdatePayload_apiToken(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.APIToken, nil
 		},
 		nil,
-		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
+			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "APITokenUpdatePayload",
@@ -403,47 +266,7 @@ func (ec *executionContext) fieldContext_APITokenUpdatePayload_apiToken(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_APIToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_APIToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_APIToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_APIToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_APIToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_APIToken_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_APIToken_ownerID(ctx, field)
-			case "name":
-				return ec.fieldContext_APIToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_APIToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_APIToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_APIToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_APIToken_scopes(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_APIToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_APIToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_APIToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_APIToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_APIToken_revokedAt(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_APIToken_ssoAuthorizations(ctx, field)
-			case "owner":
-				return ec.fieldContext_APIToken_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type APIToken", field.Name)
+			return ec.childFields_APIToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -483,7 +306,7 @@ func (ec *executionContext) _APITokenBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -529,7 +352,7 @@ func (ec *executionContext) _APITokenBulkDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -567,7 +390,7 @@ func (ec *executionContext) _APITokenBulkUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -606,7 +429,7 @@ func (ec *executionContext) _APITokenCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -645,7 +468,7 @@ func (ec *executionContext) _APITokenDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -684,7 +507,7 @@ func (ec *executionContext) _APITokenUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

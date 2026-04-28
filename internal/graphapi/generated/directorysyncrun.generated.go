@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload_directorySyncRuns
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectorySyncRunBulkCreatePayload_directorySyncRuns,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectorySyncRunBulkCreatePayload_directorySyncRuns(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectorySyncRuns, nil
 		},
 		nil,
-		ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DirectorySyncRun) graphql.Marshaler {
+			return ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectorySyncRunBulkCreatePayload_directorySyncRuns(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectorySyncRunBulkCreatePayload",
@@ -51,71 +55,7 @@ func (ec *executionContext) fieldContext_DirectorySyncRunBulkCreatePayload_direc
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectorySyncRun_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectorySyncRun_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectorySyncRun_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectorySyncRun_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectorySyncRun_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectorySyncRun_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectorySyncRun_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectorySyncRun_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectorySyncRun_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectorySyncRun_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_DirectorySyncRun_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_DirectorySyncRun_completedAt(ctx, field)
-			case "sourceCursor":
-				return ec.fieldContext_DirectorySyncRun_sourceCursor(ctx, field)
-			case "fullCount":
-				return ec.fieldContext_DirectorySyncRun_fullCount(ctx, field)
-			case "deltaCount":
-				return ec.fieldContext_DirectorySyncRun_deltaCount(ctx, field)
-			case "error":
-				return ec.fieldContext_DirectorySyncRun_error(ctx, field)
-			case "rawManifestFileID":
-				return ec.fieldContext_DirectorySyncRun_rawManifestFileID(ctx, field)
-			case "stats":
-				return ec.fieldContext_DirectorySyncRun_stats(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectorySyncRun_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectorySyncRun_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_DirectorySyncRun_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_DirectorySyncRun_directoryMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRun", field.Name)
+			return ec.childFields_DirectorySyncRun(ctx, field)
 		},
 	}
 	return fc, nil
@@ -126,17 +66,20 @@ func (ec *executionContext) _DirectorySyncRunCreatePayload_directorySyncRun(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectorySyncRunCreatePayload_directorySyncRun,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectorySyncRunCreatePayload_directorySyncRun(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectorySyncRun, nil
 		},
 		nil,
-		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
+			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectorySyncRunCreatePayload_directorySyncRun(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectorySyncRunCreatePayload",
@@ -144,71 +87,7 @@ func (ec *executionContext) fieldContext_DirectorySyncRunCreatePayload_directory
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectorySyncRun_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectorySyncRun_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectorySyncRun_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectorySyncRun_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectorySyncRun_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectorySyncRun_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectorySyncRun_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectorySyncRun_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectorySyncRun_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectorySyncRun_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_DirectorySyncRun_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_DirectorySyncRun_completedAt(ctx, field)
-			case "sourceCursor":
-				return ec.fieldContext_DirectorySyncRun_sourceCursor(ctx, field)
-			case "fullCount":
-				return ec.fieldContext_DirectorySyncRun_fullCount(ctx, field)
-			case "deltaCount":
-				return ec.fieldContext_DirectorySyncRun_deltaCount(ctx, field)
-			case "error":
-				return ec.fieldContext_DirectorySyncRun_error(ctx, field)
-			case "rawManifestFileID":
-				return ec.fieldContext_DirectorySyncRun_rawManifestFileID(ctx, field)
-			case "stats":
-				return ec.fieldContext_DirectorySyncRun_stats(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectorySyncRun_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectorySyncRun_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_DirectorySyncRun_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_DirectorySyncRun_directoryMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRun", field.Name)
+			return ec.childFields_DirectorySyncRun(ctx, field)
 		},
 	}
 	return fc, nil
@@ -219,28 +98,22 @@ func (ec *executionContext) _DirectorySyncRunDeletePayload_deletedID(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectorySyncRunDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectorySyncRunDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectorySyncRunDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectorySyncRunDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DirectorySyncRunDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DirectorySyncRunUpdatePayload_directorySyncRun(ctx context.Context, field graphql.CollectedField, obj *model.DirectorySyncRunUpdatePayload) (ret graphql.Marshaler) {
@@ -248,17 +121,20 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload_directorySyncRun(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectorySyncRunUpdatePayload_directorySyncRun,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectorySyncRunUpdatePayload_directorySyncRun(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectorySyncRun, nil
 		},
 		nil,
-		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
+			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectorySyncRunUpdatePayload_directorySyncRun(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectorySyncRunUpdatePayload",
@@ -266,71 +142,7 @@ func (ec *executionContext) fieldContext_DirectorySyncRunUpdatePayload_directory
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectorySyncRun_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectorySyncRun_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectorySyncRun_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectorySyncRun_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectorySyncRun_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectorySyncRun_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectorySyncRun_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectorySyncRun_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectorySyncRun_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectorySyncRun_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectorySyncRun_status(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_DirectorySyncRun_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_DirectorySyncRun_completedAt(ctx, field)
-			case "sourceCursor":
-				return ec.fieldContext_DirectorySyncRun_sourceCursor(ctx, field)
-			case "fullCount":
-				return ec.fieldContext_DirectorySyncRun_fullCount(ctx, field)
-			case "deltaCount":
-				return ec.fieldContext_DirectorySyncRun_deltaCount(ctx, field)
-			case "error":
-				return ec.fieldContext_DirectorySyncRun_error(ctx, field)
-			case "rawManifestFileID":
-				return ec.fieldContext_DirectorySyncRun_rawManifestFileID(ctx, field)
-			case "stats":
-				return ec.fieldContext_DirectorySyncRun_stats(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectorySyncRun_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectorySyncRun_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_DirectorySyncRun_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_DirectorySyncRun_directoryMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRun", field.Name)
+			return ec.childFields_DirectorySyncRun(ctx, field)
 		},
 	}
 	return fc, nil
@@ -370,7 +182,7 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -409,7 +221,7 @@ func (ec *executionContext) _DirectorySyncRunCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -448,7 +260,7 @@ func (ec *executionContext) _DirectorySyncRunDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -487,7 +299,7 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -25,8 +26,8 @@ const (
 	findingsMaxPageSize = 1000
 )
 
-// FindingsConfig holds per-invocation parameters for the findings.collect operation
-type FindingsConfig struct {
+// FindingsSync holds per-invocation parameters for the findings.collect operation
+type FindingsSync struct {
 	// PageSize controls the number of findings per API page
 	PageSize int `json:"page_size,omitempty"`
 	// MaxFindings caps the total number of findings returned
@@ -38,13 +39,13 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 		return f.Run(ctx, request.Credentials, client, cfg)
 	})
 }
 
 // Run collects GCP SCC findings from configured sources
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsConfig) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -70,19 +71,20 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	maxFindings := cfg.MaxFindings
 	marshaler := protojson.MarshalOptions{UseProtoNames: true}
-	envelopes := make([]types.MappingEnvelope, 0)
-
-	if maxFindings > 0 {
-		envelopes = make([]types.MappingEnvelope, 0, maxFindings)
-	}
+	findingEnvelopes := make([]types.MappingEnvelope, 0)
+	vulnEnvelopes := make([]types.MappingEnvelope, 0)
+	riskEnvelopes := make([]types.MappingEnvelope, 0)
 
 	collected := 0
 
 collectLoop:
 	for _, sourceName := range sources {
 		req := &securitycenterpb.ListFindingsRequest{
-			Parent:   sourceName,
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
+		}
+
+		if sourceName != "" {
+			req.Parent = sourceName
 		}
 
 		it := c.ListFindings(ctx, req)
@@ -94,6 +96,7 @@ collectLoop:
 			}
 
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error listing findings")
 				return nil, ErrListFindingsFailed
 			}
 
@@ -111,15 +114,31 @@ collectLoop:
 				return nil, err
 			}
 
-			envelopes = append(envelopes, envelope)
+			switch {
+			case finding.ParentDisplayName == "Risk Engine":
+				riskEnvelopes = append(riskEnvelopes, envelope)
+			case strings.EqualFold(finding.FindingClass.String(), "VULNERABILITY") && finding.Vulnerability != nil:
+				vulnEnvelopes = append(vulnEnvelopes, envelope)
+			default:
+				findingEnvelopes = append(findingEnvelopes, envelope)
+			}
+
 			collected++
 		}
 	}
 
 	return []types.IngestPayloadSet{
 		{
+			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Envelopes: findingEnvelopes,
+		},
+		{
+			Schema:    integrationgenerated.IntegrationMappingSchemaRisk,
+			Envelopes: riskEnvelopes,
+		},
+		{
 			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
-			Envelopes: envelopes,
+			Envelopes: vulnEnvelopes,
 		},
 	}, nil
 }
@@ -184,17 +203,9 @@ func resolveParents(meta CredentialSchema) ([]string, error) {
 
 // resolveSources resolves source resource names from credential metadata
 func resolveSources(meta CredentialSchema) ([]string, error) {
-	raw := make([]string, 0, 1+len(meta.SourceIDs))
+	raw := make([]string, 0, len(meta.SourceIDs))
 
 	raw = append(raw, meta.SourceIDs...)
-
-	if len(raw) == 0 && meta.SourceID != "" {
-		raw = append(raw, meta.SourceID)
-	}
-
-	if len(raw) == 0 {
-		return nil, ErrSourceIDRequired
-	}
 
 	parents, err := resolveParents(meta)
 	if err != nil {
@@ -218,7 +229,9 @@ func resolveSources(meta CredentialSchema) ([]string, error) {
 	}))
 
 	if len(out) == 0 {
-		return nil, ErrSourceIDRequired
+		out = lo.Map(parents, func(parent string, _ int) string {
+			return fmt.Sprintf("%s/sources/-", parent)
+		})
 	}
 
 	return out, nil

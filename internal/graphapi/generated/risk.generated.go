@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _RiskBulkCreatePayload_risks(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkCreatePayload_risks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkCreatePayload_risks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Risk) graphql.Marshaler {
+			return ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RiskBulkCreatePayload",
@@ -51,141 +55,7 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Risk_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Risk_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Risk_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Risk_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Risk_ownerID(ctx, field)
-			case "riskKindName":
-				return ec.fieldContext_Risk_riskKindName(ctx, field)
-			case "riskKindID":
-				return ec.fieldContext_Risk_riskKindID(ctx, field)
-			case "riskCategoryName":
-				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
-			case "riskCategoryID":
-				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Risk_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Risk_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Risk_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Risk_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Risk_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Risk_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Risk_observedAt(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Risk_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Risk_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Risk_status(ctx, field)
-			case "impact":
-				return ec.fieldContext_Risk_impact(ctx, field)
-			case "likelihood":
-				return ec.fieldContext_Risk_likelihood(ctx, field)
-			case "score":
-				return ec.fieldContext_Risk_score(ctx, field)
-			case "mitigation":
-				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "mitigationJSON":
-				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
-			case "details":
-				return ec.fieldContext_Risk_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Risk_detailsJSON(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
-			case "businessCostsJSON":
-				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
-			case "stakeholderID":
-				return ec.fieldContext_Risk_stakeholderID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Risk_delegateID(ctx, field)
-			case "mitigatedAt":
-				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
-			case "reviewRequired":
-				return ec.fieldContext_Risk_reviewRequired(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Risk_dueDate(ctx, field)
-			case "nextReviewDueAt":
-				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
-			case "residualScore":
-				return ec.fieldContext_Risk_residualScore(ctx, field)
-			case "riskDecision":
-				return ec.fieldContext_Risk_riskDecision(ctx, field)
-			case "owner":
-				return ec.fieldContext_Risk_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Risk_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Risk_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "riskKind":
-				return ec.fieldContext_Risk_riskKind(ctx, field)
-			case "riskCategory":
-				return ec.fieldContext_Risk_riskCategory(ctx, field)
-			case "environment":
-				return ec.fieldContext_Risk_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Risk_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Risk_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Risk_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Risk_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Risk_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Risk_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Risk_platforms(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Risk_tasks(ctx, field)
-			case "assets":
-				return ec.fieldContext_Risk_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Risk_entities(ctx, field)
-			case "scans":
-				return ec.fieldContext_Risk_scans(ctx, field)
-			case "stakeholder":
-				return ec.fieldContext_Risk_stakeholder(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Risk_delegate(ctx, field)
-			case "comments":
-				return ec.fieldContext_Risk_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Risk_discussions(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Risk_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Risk_remediations(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
+			return ec.childFields_Risk(ctx, field)
 		},
 	}
 	return fc, nil
@@ -196,28 +66,22 @@ func (ec *executionContext) _RiskBulkDeletePayload_deletedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RiskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("RiskBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _RiskBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkDeletePayload) (ret graphql.Marshaler) {
@@ -225,28 +89,22 @@ func (ec *executionContext) _RiskBulkDeletePayload_notDeletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RiskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("RiskBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _RiskBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkDeletePayload) (ret graphql.Marshaler) {
@@ -254,28 +112,22 @@ func (ec *executionContext) _RiskBulkDeletePayload_error(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RiskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("RiskBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -283,17 +135,20 @@ func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkUpdatePayload_risks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkUpdatePayload_risks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Risk) graphql.Marshaler {
+			return ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RiskBulkUpdatePayload",
@@ -301,141 +156,7 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Risk_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Risk_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Risk_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Risk_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Risk_ownerID(ctx, field)
-			case "riskKindName":
-				return ec.fieldContext_Risk_riskKindName(ctx, field)
-			case "riskKindID":
-				return ec.fieldContext_Risk_riskKindID(ctx, field)
-			case "riskCategoryName":
-				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
-			case "riskCategoryID":
-				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Risk_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Risk_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Risk_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Risk_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Risk_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Risk_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Risk_observedAt(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Risk_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Risk_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Risk_status(ctx, field)
-			case "impact":
-				return ec.fieldContext_Risk_impact(ctx, field)
-			case "likelihood":
-				return ec.fieldContext_Risk_likelihood(ctx, field)
-			case "score":
-				return ec.fieldContext_Risk_score(ctx, field)
-			case "mitigation":
-				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "mitigationJSON":
-				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
-			case "details":
-				return ec.fieldContext_Risk_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Risk_detailsJSON(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
-			case "businessCostsJSON":
-				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
-			case "stakeholderID":
-				return ec.fieldContext_Risk_stakeholderID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Risk_delegateID(ctx, field)
-			case "mitigatedAt":
-				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
-			case "reviewRequired":
-				return ec.fieldContext_Risk_reviewRequired(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Risk_dueDate(ctx, field)
-			case "nextReviewDueAt":
-				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
-			case "residualScore":
-				return ec.fieldContext_Risk_residualScore(ctx, field)
-			case "riskDecision":
-				return ec.fieldContext_Risk_riskDecision(ctx, field)
-			case "owner":
-				return ec.fieldContext_Risk_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Risk_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Risk_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "riskKind":
-				return ec.fieldContext_Risk_riskKind(ctx, field)
-			case "riskCategory":
-				return ec.fieldContext_Risk_riskCategory(ctx, field)
-			case "environment":
-				return ec.fieldContext_Risk_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Risk_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Risk_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Risk_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Risk_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Risk_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Risk_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Risk_platforms(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Risk_tasks(ctx, field)
-			case "assets":
-				return ec.fieldContext_Risk_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Risk_entities(ctx, field)
-			case "scans":
-				return ec.fieldContext_Risk_scans(ctx, field)
-			case "stakeholder":
-				return ec.fieldContext_Risk_stakeholder(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Risk_delegate(ctx, field)
-			case "comments":
-				return ec.fieldContext_Risk_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Risk_discussions(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Risk_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Risk_remediations(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
+			return ec.childFields_Risk(ctx, field)
 		},
 	}
 	return fc, nil
@@ -446,28 +167,22 @@ func (ec *executionContext) _RiskBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RiskBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("RiskBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskCreatePayload) (ret graphql.Marshaler) {
@@ -475,17 +190,20 @@ func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskCreatePayload_risk,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskCreatePayload_risk(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Risk, nil
 		},
 		nil,
-		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Risk) graphql.Marshaler {
+			return ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RiskCreatePayload",
@@ -493,141 +211,7 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Risk_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Risk_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Risk_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Risk_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Risk_ownerID(ctx, field)
-			case "riskKindName":
-				return ec.fieldContext_Risk_riskKindName(ctx, field)
-			case "riskKindID":
-				return ec.fieldContext_Risk_riskKindID(ctx, field)
-			case "riskCategoryName":
-				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
-			case "riskCategoryID":
-				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Risk_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Risk_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Risk_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Risk_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Risk_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Risk_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Risk_observedAt(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Risk_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Risk_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Risk_status(ctx, field)
-			case "impact":
-				return ec.fieldContext_Risk_impact(ctx, field)
-			case "likelihood":
-				return ec.fieldContext_Risk_likelihood(ctx, field)
-			case "score":
-				return ec.fieldContext_Risk_score(ctx, field)
-			case "mitigation":
-				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "mitigationJSON":
-				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
-			case "details":
-				return ec.fieldContext_Risk_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Risk_detailsJSON(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
-			case "businessCostsJSON":
-				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
-			case "stakeholderID":
-				return ec.fieldContext_Risk_stakeholderID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Risk_delegateID(ctx, field)
-			case "mitigatedAt":
-				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
-			case "reviewRequired":
-				return ec.fieldContext_Risk_reviewRequired(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Risk_dueDate(ctx, field)
-			case "nextReviewDueAt":
-				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
-			case "residualScore":
-				return ec.fieldContext_Risk_residualScore(ctx, field)
-			case "riskDecision":
-				return ec.fieldContext_Risk_riskDecision(ctx, field)
-			case "owner":
-				return ec.fieldContext_Risk_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Risk_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Risk_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "riskKind":
-				return ec.fieldContext_Risk_riskKind(ctx, field)
-			case "riskCategory":
-				return ec.fieldContext_Risk_riskCategory(ctx, field)
-			case "environment":
-				return ec.fieldContext_Risk_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Risk_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Risk_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Risk_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Risk_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Risk_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Risk_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Risk_platforms(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Risk_tasks(ctx, field)
-			case "assets":
-				return ec.fieldContext_Risk_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Risk_entities(ctx, field)
-			case "scans":
-				return ec.fieldContext_Risk_scans(ctx, field)
-			case "stakeholder":
-				return ec.fieldContext_Risk_stakeholder(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Risk_delegate(ctx, field)
-			case "comments":
-				return ec.fieldContext_Risk_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Risk_discussions(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Risk_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Risk_remediations(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
+			return ec.childFields_Risk(ctx, field)
 		},
 	}
 	return fc, nil
@@ -638,28 +222,22 @@ func (ec *executionContext) _RiskDeletePayload_deletedID(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RiskDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("RiskDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _RiskUpdatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskUpdatePayload) (ret graphql.Marshaler) {
@@ -667,17 +245,20 @@ func (ec *executionContext) _RiskUpdatePayload_risk(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_RiskUpdatePayload_risk,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskUpdatePayload_risk(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Risk, nil
 		},
 		nil,
-		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Risk) graphql.Marshaler {
+			return ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "RiskUpdatePayload",
@@ -685,141 +266,7 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Risk_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Risk_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Risk_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Risk_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Risk_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Risk_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Risk_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Risk_ownerID(ctx, field)
-			case "riskKindName":
-				return ec.fieldContext_Risk_riskKindName(ctx, field)
-			case "riskKindID":
-				return ec.fieldContext_Risk_riskKindID(ctx, field)
-			case "riskCategoryName":
-				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
-			case "riskCategoryID":
-				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Risk_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Risk_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Risk_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Risk_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Risk_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Risk_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Risk_observedAt(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Risk_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Risk_name(ctx, field)
-			case "status":
-				return ec.fieldContext_Risk_status(ctx, field)
-			case "impact":
-				return ec.fieldContext_Risk_impact(ctx, field)
-			case "likelihood":
-				return ec.fieldContext_Risk_likelihood(ctx, field)
-			case "score":
-				return ec.fieldContext_Risk_score(ctx, field)
-			case "mitigation":
-				return ec.fieldContext_Risk_mitigation(ctx, field)
-			case "mitigationJSON":
-				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
-			case "details":
-				return ec.fieldContext_Risk_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Risk_detailsJSON(ctx, field)
-			case "businessCosts":
-				return ec.fieldContext_Risk_businessCosts(ctx, field)
-			case "businessCostsJSON":
-				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
-			case "stakeholderID":
-				return ec.fieldContext_Risk_stakeholderID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Risk_delegateID(ctx, field)
-			case "mitigatedAt":
-				return ec.fieldContext_Risk_mitigatedAt(ctx, field)
-			case "reviewRequired":
-				return ec.fieldContext_Risk_reviewRequired(ctx, field)
-			case "lastReviewedAt":
-				return ec.fieldContext_Risk_lastReviewedAt(ctx, field)
-			case "reviewFrequency":
-				return ec.fieldContext_Risk_reviewFrequency(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Risk_dueDate(ctx, field)
-			case "nextReviewDueAt":
-				return ec.fieldContext_Risk_nextReviewDueAt(ctx, field)
-			case "residualScore":
-				return ec.fieldContext_Risk_residualScore(ctx, field)
-			case "riskDecision":
-				return ec.fieldContext_Risk_riskDecision(ctx, field)
-			case "owner":
-				return ec.fieldContext_Risk_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Risk_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Risk_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Risk_viewers(ctx, field)
-			case "riskKind":
-				return ec.fieldContext_Risk_riskKind(ctx, field)
-			case "riskCategory":
-				return ec.fieldContext_Risk_riskCategory(ctx, field)
-			case "environment":
-				return ec.fieldContext_Risk_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Risk_scope(ctx, field)
-			case "controls":
-				return ec.fieldContext_Risk_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Risk_subcontrols(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Risk_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Risk_internalPolicies(ctx, field)
-			case "programs":
-				return ec.fieldContext_Risk_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Risk_platforms(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Risk_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Risk_tasks(ctx, field)
-			case "assets":
-				return ec.fieldContext_Risk_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Risk_entities(ctx, field)
-			case "scans":
-				return ec.fieldContext_Risk_scans(ctx, field)
-			case "stakeholder":
-				return ec.fieldContext_Risk_stakeholder(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Risk_delegate(ctx, field)
-			case "comments":
-				return ec.fieldContext_Risk_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Risk_discussions(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Risk_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Risk_remediations(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Risk", field.Name)
+			return ec.childFields_Risk(ctx, field)
 		},
 	}
 	return fc, nil
@@ -859,7 +306,7 @@ func (ec *executionContext) _RiskBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -905,7 +352,7 @@ func (ec *executionContext) _RiskBulkDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -943,7 +390,7 @@ func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -982,7 +429,7 @@ func (ec *executionContext) _RiskCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1021,7 +468,7 @@ func (ec *executionContext) _RiskDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1060,7 +507,7 @@ func (ec *executionContext) _RiskUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

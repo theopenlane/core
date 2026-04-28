@@ -2,6 +2,7 @@ package types //nolint:revive
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -75,6 +76,8 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Recommended indicates the method that is recommend if there are multiple options
+	Recommended bool `json:"recommended,omitempty"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -85,6 +88,8 @@ type ConnectionRegistration struct {
 	Name string `json:"name,omitempty"`
 	// Description explains what the connection mode does
 	Description string `json:"description,omitempty"`
+	// Meta is additional data the user might need to setup the integration with key-value pairs
+	Meta map[string]MetaInfo `json:"meta,omitempty"`
 	// CredentialRefs lists the credential slots used by this connection mode
 	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
 	// ClientRefs lists the clients initialized by this connection mode
@@ -97,6 +102,14 @@ type ConnectionRegistration struct {
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Disconnect describes how this connection mode tears down an installation
 	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
+}
+
+// MetaInfo is data to store for the UI to present to the user during credential setup of an integration
+type MetaInfo struct {
+	// Value is the Value to show to the user
+	Value string
+	// allow copy will display a opy to clipboard button
+	AllowCopy bool
 }
 
 // CredentialRegistration returns the credential registration for the given ref
@@ -117,7 +130,7 @@ func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegi
 		return r.CredentialRef == ref
 	})
 	if !found {
-		return ConnectionRegistration{}, ErrConnectionRefNotFound
+		return ConnectionRegistration{}, fmt.Errorf("%w: %s not found", ErrConnectionRefNotFound, ref)
 	}
 
 	return reg, nil

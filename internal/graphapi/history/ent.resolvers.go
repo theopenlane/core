@@ -227,6 +227,38 @@ func (r *queryResolver) CampaignTargetHistories(ctx context.Context, after *entg
 	return res, err
 }
 
+// CheckResultHistories is the resolver for the checkResultHistories field.
+func (r *queryResolver) CheckResultHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CheckResultHistoryOrder, where *historygenerated.CheckResultHistoryWhereInput) (*historygenerated.CheckResultHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.CheckResultHistoryOrder{
+			Field:     historygenerated.CheckResultHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).CheckResultHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "checkresulthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithCheckResultHistoryOrder(orderBy),
+		historygenerated.WithCheckResultHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "checkresulthistory"})
+	}
+
+	return res, err
+}
+
 // ContactHistories is the resolver for the contactHistories field.
 func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) (*historygenerated.ContactHistoryConnection, error) {
 	// set page limit if nothing was set

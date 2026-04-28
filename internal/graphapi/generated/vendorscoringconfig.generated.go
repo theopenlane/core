@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _VendorScoringConfigBulkCreatePayload_vendorScoringC
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkCreatePayload_vendorScoringConfigs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkCreatePayload_vendorScoringConfigs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.VendorScoringConfigs, nil
 		},
 		nil,
-		ec.marshalOVendorScoringConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.VendorScoringConfig) graphql.Marshaler {
+			return ec.marshalOVendorScoringConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkCreatePayload_vendorScoringConfigs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "VendorScoringConfigBulkCreatePayload",
@@ -51,33 +55,7 @@ func (ec *executionContext) fieldContext_VendorScoringConfigBulkCreatePayload_ve
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_VendorScoringConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_VendorScoringConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_VendorScoringConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_VendorScoringConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_VendorScoringConfig_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_VendorScoringConfig_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
-			case "questions":
-				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
-			case "scoringMode":
-				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
-			case "riskThresholds":
-				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
-			case "owner":
-				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_VendorScoringConfig_vendorRiskScores(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfig", field.Name)
+			return ec.childFields_VendorScoringConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -88,28 +66,22 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_deletedIDs(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "VendorScoringConfigBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkDeletePayload) (ret graphql.Marshaler) {
@@ -117,28 +89,22 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_notDeletedIDs(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "VendorScoringConfigBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkDeletePayload) (ret graphql.Marshaler) {
@@ -146,28 +112,22 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_error(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "VendorScoringConfigBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -175,17 +135,20 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_vendorScoringC
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.VendorScoringConfigs, nil
 		},
 		nil,
-		ec.marshalOVendorScoringConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.VendorScoringConfig) graphql.Marshaler {
+			return ec.marshalOVendorScoringConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "VendorScoringConfigBulkUpdatePayload",
@@ -193,33 +156,7 @@ func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_ve
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_VendorScoringConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_VendorScoringConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_VendorScoringConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_VendorScoringConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_VendorScoringConfig_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_VendorScoringConfig_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
-			case "questions":
-				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
-			case "scoringMode":
-				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
-			case "riskThresholds":
-				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
-			case "owner":
-				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_VendorScoringConfig_vendorRiskScores(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfig", field.Name)
+			return ec.childFields_VendorScoringConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -230,28 +167,22 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_updatedIDs(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "VendorScoringConfigBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _VendorScoringConfigCreatePayload_vendorScoringConfig(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigCreatePayload) (ret graphql.Marshaler) {
@@ -259,17 +190,20 @@ func (ec *executionContext) _VendorScoringConfigCreatePayload_vendorScoringConfi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigCreatePayload_vendorScoringConfig,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigCreatePayload_vendorScoringConfig(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.VendorScoringConfig, nil
 		},
 		nil,
-		ec.marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorScoringConfig) graphql.Marshaler {
+			return ec.marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigCreatePayload_vendorScoringConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "VendorScoringConfigCreatePayload",
@@ -277,33 +211,7 @@ func (ec *executionContext) fieldContext_VendorScoringConfigCreatePayload_vendor
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_VendorScoringConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_VendorScoringConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_VendorScoringConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_VendorScoringConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_VendorScoringConfig_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_VendorScoringConfig_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
-			case "questions":
-				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
-			case "scoringMode":
-				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
-			case "riskThresholds":
-				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
-			case "owner":
-				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_VendorScoringConfig_vendorRiskScores(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfig", field.Name)
+			return ec.childFields_VendorScoringConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -314,28 +222,22 @@ func (ec *executionContext) _VendorScoringConfigDeletePayload_deletedID(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "VendorScoringConfigDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("VendorScoringConfigDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _VendorScoringConfigUpdatePayload_vendorScoringConfig(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigUpdatePayload) (ret graphql.Marshaler) {
@@ -343,17 +245,20 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload_vendorScoringConfi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_VendorScoringConfigUpdatePayload_vendorScoringConfig,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VendorScoringConfigUpdatePayload_vendorScoringConfig(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.VendorScoringConfig, nil
 		},
 		nil,
-		ec.marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorScoringConfig) graphql.Marshaler {
+			return ec.marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_VendorScoringConfigUpdatePayload_vendorScoringConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "VendorScoringConfigUpdatePayload",
@@ -361,33 +266,7 @@ func (ec *executionContext) fieldContext_VendorScoringConfigUpdatePayload_vendor
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_VendorScoringConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_VendorScoringConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_VendorScoringConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_VendorScoringConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_VendorScoringConfig_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_VendorScoringConfig_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_VendorScoringConfig_ownerID(ctx, field)
-			case "questions":
-				return ec.fieldContext_VendorScoringConfig_questions(ctx, field)
-			case "scoringMode":
-				return ec.fieldContext_VendorScoringConfig_scoringMode(ctx, field)
-			case "riskThresholds":
-				return ec.fieldContext_VendorScoringConfig_riskThresholds(ctx, field)
-			case "owner":
-				return ec.fieldContext_VendorScoringConfig_owner(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_VendorScoringConfig_vendorRiskScores(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfig", field.Name)
+			return ec.childFields_VendorScoringConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -427,7 +306,7 @@ func (ec *executionContext) _VendorScoringConfigBulkCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -473,7 +352,7 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -511,7 +390,7 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -550,7 +429,7 @@ func (ec *executionContext) _VendorScoringConfigCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -589,7 +468,7 @@ func (ec *executionContext) _VendorScoringConfigDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -628,7 +507,7 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -14,6 +14,23 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+func TestMappingExpressionsValid(t *testing.T) {
+	for _, m := range googleWorkspaceMappings() {
+		name := m.Schema
+		if m.Variant != "" {
+			name += "/" + m.Variant
+		}
+
+		t.Run(name+"/filter", func(t *testing.T) {
+			assert.NoError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
+		})
+
+		t.Run(name+"/map", func(t *testing.T) {
+			assert.NoError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
+		})
+	}
+}
+
 // TestGoogleWorkspaceMappingsEvalMap verifies Google Workspace payloads map into directory schemas
 func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryAccount).MapExpr, types.MappingEnvelope{
@@ -83,7 +100,6 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "alice@example.com", membershipMapped["directoryAccountID"])
 	assert.Equal(t, "eng@example.com", membershipMapped["directoryGroupID"])
 	assert.Equal(t, "OWNER", membershipMapped["role"])
-	assert.Equal(t, "google_workspace", membershipMapped["source"])
 }
 
 // TestGoogleWorkspaceMappingsFallbacks verifies graceful fallback when fields are missing from the payload

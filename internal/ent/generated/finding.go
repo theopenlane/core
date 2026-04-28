@@ -190,13 +190,15 @@ type FindingEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// CheckResults holds the value of the check_results edge.
+	CheckResults []*CheckResult `json:"check_results,omitempty"`
 	// ControlMappings holds the value of the control_mappings edge.
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -219,6 +221,7 @@ type FindingEdges struct {
 	namedComments           map[string][]*Note
 	namedFiles              map[string][]*File
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
+	namedCheckResults       map[string][]*CheckResult
 	namedControlMappings    map[string][]*FindingControl
 }
 
@@ -455,10 +458,19 @@ func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
+// CheckResultsOrErr returns the CheckResults value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) CheckResultsOrErr() ([]*CheckResult, error) {
+	if e.loadedTypes[25] {
+		return e.CheckResults, nil
+	}
+	return nil, &NotLoadedError{edge: "check_results"}
+}
+
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -991,6 +1003,11 @@ func (_m *Finding) QueryFiles() *FileQuery {
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Finding entity.
 func (_m *Finding) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewFindingClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryCheckResults queries the "check_results" edge of the Finding entity.
+func (_m *Finding) QueryCheckResults() *CheckResultQuery {
+	return NewFindingClient(_m.config).QueryCheckResults(_m)
 }
 
 // QueryControlMappings queries the "control_mappings" edge of the Finding entity.
@@ -1700,6 +1717,30 @@ func (_m *Finding) appendNamedWorkflowObjectRefs(name string, edges ...*Workflow
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedCheckResults returns the CheckResults named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedCheckResults(name string) ([]*CheckResult, error) {
+	if _m.Edges.namedCheckResults == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCheckResults[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedCheckResults(name string, edges ...*CheckResult) {
+	if _m.Edges.namedCheckResults == nil {
+		_m.Edges.namedCheckResults = make(map[string][]*CheckResult)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCheckResults[name] = []*CheckResult{}
+	} else {
+		_m.Edges.namedCheckResults[name] = append(_m.Edges.namedCheckResults[name], edges...)
 	}
 }
 

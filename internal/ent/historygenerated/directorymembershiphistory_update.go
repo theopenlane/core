@@ -226,6 +226,26 @@ func (_u *DirectoryMembershipHistoryUpdate) ClearSource() *DirectoryMembershipHi
 	return _u
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryMembershipHistoryUpdate) SetDirectoryName(v string) *DirectoryMembershipHistoryUpdate {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryMembershipHistoryUpdate) SetNillableDirectoryName(v *string) *DirectoryMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryMembershipHistoryUpdate) ClearDirectoryName() *DirectoryMembershipHistoryUpdate {
+	_u.mutation.ClearDirectoryName()
+	return _u
+}
+
 // SetFirstSeenAt sets the "first_seen_at" field.
 func (_u *DirectoryMembershipHistoryUpdate) SetFirstSeenAt(v time.Time) *DirectoryMembershipHistoryUpdate {
 	_u.mutation.SetFirstSeenAt(v)
@@ -485,6 +505,12 @@ func (_u *DirectoryMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldSource, field.TypeString)
 	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorymembershiphistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldDirectoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.FirstSeenAt(); ok {
 		_spec.SetField(directorymembershiphistory.FieldFirstSeenAt, field.TypeTime, value)
 	}
@@ -734,6 +760,26 @@ func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableSource(v *string) *Dir
 // ClearSource clears the value of the "source" field.
 func (_u *DirectoryMembershipHistoryUpdateOne) ClearSource() *DirectoryMembershipHistoryUpdateOne {
 	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetDirectoryName sets the "directory_name" field.
+func (_u *DirectoryMembershipHistoryUpdateOne) SetDirectoryName(v string) *DirectoryMembershipHistoryUpdateOne {
+	_u.mutation.SetDirectoryName(v)
+	return _u
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_u *DirectoryMembershipHistoryUpdateOne) SetNillableDirectoryName(v *string) *DirectoryMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetDirectoryName(*v)
+	}
+	return _u
+}
+
+// ClearDirectoryName clears the value of the "directory_name" field.
+func (_u *DirectoryMembershipHistoryUpdateOne) ClearDirectoryName() *DirectoryMembershipHistoryUpdateOne {
+	_u.mutation.ClearDirectoryName()
 	return _u
 }
 
@@ -1025,6 +1071,12 @@ func (_u *DirectoryMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(directorymembershiphistory.FieldSource, field.TypeString)
+	}
+	if value, ok := _u.mutation.DirectoryName(); ok {
+		_spec.SetField(directorymembershiphistory.FieldDirectoryName, field.TypeString, value)
+	}
+	if _u.mutation.DirectoryNameCleared() {
+		_spec.ClearField(directorymembershiphistory.FieldDirectoryName, field.TypeString)
 	}
 	if value, ok := _u.mutation.FirstSeenAt(); ok {
 		_spec.SetField(directorymembershiphistory.FieldFirstSeenAt, field.TypeTime, value)

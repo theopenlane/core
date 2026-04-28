@@ -1,7 +1,8 @@
 package awssecurityhub
 
 import (
-	"github.com/aws/aws-sdk-go-v2/service/auditmanager"
+	"github.com/aws/aws-sdk-go-v2/service/configservice"
+	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -19,18 +20,63 @@ var (
 	awsServiceAccountSchema, awsServiceAccountCredential = providerkit.CredentialSchema[ServiceAccountCredentialSchema]()
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	securityHubClient = types.NewClientRef[*securityhub.Client]()
-	// AuditManagerClient is the client ref for the AWS Audit Manager client used by this definition
-	auditManagerClient = types.NewClientRef[*auditmanager.Client]()
+	// configServiceClient is the client ref for the AWS Config client used by config controls operations
+	configServiceClient = types.NewClientRef[*configservice.Client]()
+	// iamClient is the client ref for the AWS IAM client used by directory sync operations
+	iamClient = types.NewClientRef[*iam.Client]()
 	// healthCheckSchema is the AWS Security Hub health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
-	// assessmentsCollectSchema is the AWS Security Hub assessment collection operation
-	assessmentsCollectSchema, assessmentsCollectOperation = providerkit.OperationSchema[AssessmentsConfig]()
-	// vulnerabilitiesCollectSchema is the AWS Security Hub vulnerabilities collection operation
-	vulnerabilitiesCollectSchema, vulnerabilitiesCollectOperation = providerkit.OperationSchema[FindingsConfig]()
+	// findingsCollectSchema is the AWS Security Hub finding and vulnerabilities collection operation
+	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingSync]()
+	// directorySyncSchema is the AWS IAM directory sync operation schema
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// checkSyncSchema is the AWS Config check sync operation schema
+	checkSyncSchema, checkSyncOperation = providerkit.OperationSchema[CheckSync]()
+	// assetSyncSchema is the AWS Config check sync operation schema
+	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
 )
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// FindingSync includes the configuration for findings from AWS Security Hub
+	FindingSync FindingSyncConfig `json:"findingSync,omitempty" jsonschema:"title=AWS Security Hub Sync"`
+	// DirectorySync includes the configuration for identity accounts from AWS IAM
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
+	// CheckSync includes the configuration for rules from AWS Config
+	CheckSync CheckSync `json:"checkSync,omitempty" jsonschema:"title=AWS Config Rule Sync"`
+	// AssetSync includes the configuration for assets from AWS
+	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=AWS Asset Sync"`
+}
+
+type DirectorySync struct {
+	// Disable is used to disable the directory sync operation from aws
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from AWS IAM"`
+	// DisableGroupSync will just sync users and no groups or group memberships
+	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.path.startsWith('/engineering/')"`
+}
+
+// FindingSyncConfig are configuration settings for the findings sync
+type FindingSyncConfig struct {
+	// Disable will stop any of this type of ingest from being performed
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from AWS Security Hub"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"`
+}
+
+// CheckSync are the configuration settings for the check sync from AWS Config
+type CheckSync struct {
+	// Disable will stop any of this type of ingest from being performed
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of checks from AWS Config"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"`
+}
+
+// AssetSync are the configuration settings for the asset sync
+type AssetSync struct {
+	// Disable will stop any of this type of ingest from being performed
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of assets from AWS"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }
@@ -38,9 +84,9 @@ type UserInput struct {
 // AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs shared by the service clients
 type AssumeRoleCredentialSchema struct {
 	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
-	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment."`
+	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment.,secret=true"`
 	// ExternalID is the external ID required in the tenant role trust policy
-	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy."`
+	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy." jsonschema_extras:"generate=true"`
 	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
 	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Home Region,description=AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."`
 	// AccountID is the AWS account ID for reference in assessment summaries and run metadata

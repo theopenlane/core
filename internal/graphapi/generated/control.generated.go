@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ControlBulkCreatePayload_controls(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkCreatePayload_controls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkCreatePayload_controls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Control) graphql.Marshaler {
+			return ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlBulkCreatePayload",
@@ -51,191 +55,7 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Control_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Control_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Control_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Control_tags(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Control_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Control_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Control_description(ctx, field)
-			case "descriptionJSON":
-				return ec.fieldContext_Control_descriptionJSON(ctx, field)
-			case "aliases":
-				return ec.fieldContext_Control_aliases(ctx, field)
-			case "referenceID":
-				return ec.fieldContext_Control_referenceID(ctx, field)
-			case "auditorReferenceID":
-				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
-			case "responsiblePartyID":
-				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
-			case "status":
-				return ec.fieldContext_Control_status(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Control_implementationStatus(ctx, field)
-			case "implementationDescription":
-				return ec.fieldContext_Control_implementationDescription(ctx, field)
-			case "publicRepresentation":
-				return ec.fieldContext_Control_publicRepresentation(ctx, field)
-			case "source":
-				return ec.fieldContext_Control_source(ctx, field)
-			case "sourceName":
-				return ec.fieldContext_Control_sourceName(ctx, field)
-			case "referenceFramework":
-				return ec.fieldContext_Control_referenceFramework(ctx, field)
-			case "referenceFrameworkRevision":
-				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "category":
-				return ec.fieldContext_Control_category(ctx, field)
-			case "categoryID":
-				return ec.fieldContext_Control_categoryID(ctx, field)
-			case "subcategory":
-				return ec.fieldContext_Control_subcategory(ctx, field)
-			case "mappedCategories":
-				return ec.fieldContext_Control_mappedCategories(ctx, field)
-			case "assessmentObjectives":
-				return ec.fieldContext_Control_assessmentObjectives(ctx, field)
-			case "assessmentMethods":
-				return ec.fieldContext_Control_assessmentMethods(ctx, field)
-			case "controlQuestions":
-				return ec.fieldContext_Control_controlQuestions(ctx, field)
-			case "implementationGuidance":
-				return ec.fieldContext_Control_implementationGuidance(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_Control_exampleEvidence(ctx, field)
-			case "references":
-				return ec.fieldContext_Control_references(ctx, field)
-			case "testingProcedures":
-				return ec.fieldContext_Control_testingProcedures(ctx, field)
-			case "evidenceRequests":
-				return ec.fieldContext_Control_evidenceRequests(ctx, field)
-			case "controlOwnerID":
-				return ec.fieldContext_Control_controlOwnerID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Control_delegateID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Control_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Control_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Control_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Control_systemInternalID(ctx, field)
-			case "controlKindName":
-				return ec.fieldContext_Control_controlKindName(ctx, field)
-			case "controlKindID":
-				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Control_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Control_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Control_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Control_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
-			case "refCode":
-				return ec.fieldContext_Control_refCode(ctx, field)
-			case "standardID":
-				return ec.fieldContext_Control_standardID(ctx, field)
-			case "trustCenterVisibility":
-				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
-			case "isTrustCenterControl":
-				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Control_evidence(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Control_controlObjectives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Control_tasks(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Control_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Control_risks(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Control_actionPlans(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Control_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "comments":
-				return ec.fieldContext_Control_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Control_discussions(ctx, field)
-			case "controlOwner":
-				return ec.fieldContext_Control_controlOwner(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Control_delegate(ctx, field)
-			case "responsibleParty":
-				return ec.fieldContext_Control_responsibleParty(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Control_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Control_remediations(ctx, field)
-			case "scans":
-				return ec.fieldContext_Control_scans(ctx, field)
-			case "owner":
-				return ec.fieldContext_Control_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Control_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Control_editors(ctx, field)
-			case "controlKind":
-				return ec.fieldContext_Control_controlKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Control_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Control_scope(ctx, field)
-			case "standard":
-				return ec.fieldContext_Control_standard(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Control_platforms(ctx, field)
-			case "assets":
-				return ec.fieldContext_Control_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Control_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Control_identityHolders(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Control_campaigns(ctx, field)
-			case "findings":
-				return ec.fieldContext_Control_findings(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Control_controlImplementations(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
-			case "scheduledJobs":
-				return ec.fieldContext_Control_scheduledJobs(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
-			case "controlMappings":
-				return ec.fieldContext_Control_controlMappings(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Control_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
+			return ec.childFields_Control(ctx, field)
 		},
 	}
 	return fc, nil
@@ -246,28 +66,22 @@ func (ec *executionContext) _ControlBulkDeletePayload_deletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ControlBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -275,28 +89,22 @@ func (ec *executionContext) _ControlBulkDeletePayload_notDeletedIDs(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ControlBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -304,28 +112,22 @@ func (ec *executionContext) _ControlBulkDeletePayload_error(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlBulkUpdatePayload_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -333,17 +135,20 @@ func (ec *executionContext) _ControlBulkUpdatePayload_controls(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkUpdatePayload_controls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkUpdatePayload_controls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Control) graphql.Marshaler {
+			return ec.marshalOControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlBulkUpdatePayload",
@@ -351,191 +156,7 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Control_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Control_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Control_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Control_tags(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Control_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Control_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Control_description(ctx, field)
-			case "descriptionJSON":
-				return ec.fieldContext_Control_descriptionJSON(ctx, field)
-			case "aliases":
-				return ec.fieldContext_Control_aliases(ctx, field)
-			case "referenceID":
-				return ec.fieldContext_Control_referenceID(ctx, field)
-			case "auditorReferenceID":
-				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
-			case "responsiblePartyID":
-				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
-			case "status":
-				return ec.fieldContext_Control_status(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Control_implementationStatus(ctx, field)
-			case "implementationDescription":
-				return ec.fieldContext_Control_implementationDescription(ctx, field)
-			case "publicRepresentation":
-				return ec.fieldContext_Control_publicRepresentation(ctx, field)
-			case "source":
-				return ec.fieldContext_Control_source(ctx, field)
-			case "sourceName":
-				return ec.fieldContext_Control_sourceName(ctx, field)
-			case "referenceFramework":
-				return ec.fieldContext_Control_referenceFramework(ctx, field)
-			case "referenceFrameworkRevision":
-				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "category":
-				return ec.fieldContext_Control_category(ctx, field)
-			case "categoryID":
-				return ec.fieldContext_Control_categoryID(ctx, field)
-			case "subcategory":
-				return ec.fieldContext_Control_subcategory(ctx, field)
-			case "mappedCategories":
-				return ec.fieldContext_Control_mappedCategories(ctx, field)
-			case "assessmentObjectives":
-				return ec.fieldContext_Control_assessmentObjectives(ctx, field)
-			case "assessmentMethods":
-				return ec.fieldContext_Control_assessmentMethods(ctx, field)
-			case "controlQuestions":
-				return ec.fieldContext_Control_controlQuestions(ctx, field)
-			case "implementationGuidance":
-				return ec.fieldContext_Control_implementationGuidance(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_Control_exampleEvidence(ctx, field)
-			case "references":
-				return ec.fieldContext_Control_references(ctx, field)
-			case "testingProcedures":
-				return ec.fieldContext_Control_testingProcedures(ctx, field)
-			case "evidenceRequests":
-				return ec.fieldContext_Control_evidenceRequests(ctx, field)
-			case "controlOwnerID":
-				return ec.fieldContext_Control_controlOwnerID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Control_delegateID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Control_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Control_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Control_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Control_systemInternalID(ctx, field)
-			case "controlKindName":
-				return ec.fieldContext_Control_controlKindName(ctx, field)
-			case "controlKindID":
-				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Control_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Control_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Control_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Control_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
-			case "refCode":
-				return ec.fieldContext_Control_refCode(ctx, field)
-			case "standardID":
-				return ec.fieldContext_Control_standardID(ctx, field)
-			case "trustCenterVisibility":
-				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
-			case "isTrustCenterControl":
-				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Control_evidence(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Control_controlObjectives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Control_tasks(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Control_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Control_risks(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Control_actionPlans(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Control_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "comments":
-				return ec.fieldContext_Control_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Control_discussions(ctx, field)
-			case "controlOwner":
-				return ec.fieldContext_Control_controlOwner(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Control_delegate(ctx, field)
-			case "responsibleParty":
-				return ec.fieldContext_Control_responsibleParty(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Control_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Control_remediations(ctx, field)
-			case "scans":
-				return ec.fieldContext_Control_scans(ctx, field)
-			case "owner":
-				return ec.fieldContext_Control_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Control_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Control_editors(ctx, field)
-			case "controlKind":
-				return ec.fieldContext_Control_controlKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Control_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Control_scope(ctx, field)
-			case "standard":
-				return ec.fieldContext_Control_standard(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Control_platforms(ctx, field)
-			case "assets":
-				return ec.fieldContext_Control_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Control_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Control_identityHolders(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Control_campaigns(ctx, field)
-			case "findings":
-				return ec.fieldContext_Control_findings(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Control_controlImplementations(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
-			case "scheduledJobs":
-				return ec.fieldContext_Control_scheduledJobs(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
-			case "controlMappings":
-				return ec.fieldContext_Control_controlMappings(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Control_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
+			return ec.childFields_Control(ctx, field)
 		},
 	}
 	return fc, nil
@@ -546,28 +167,22 @@ func (ec *executionContext) _ControlBulkUpdatePayload_updatedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ControlCreatePayload_control(ctx context.Context, field graphql.CollectedField, obj *model.ControlCreatePayload) (ret graphql.Marshaler) {
@@ -575,17 +190,20 @@ func (ec *executionContext) _ControlCreatePayload_control(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCreatePayload_control,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCreatePayload_control(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Control, nil
 		},
 		nil,
-		ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Control) graphql.Marshaler {
+			return ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlCreatePayload",
@@ -593,191 +211,7 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Control_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Control_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Control_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Control_tags(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Control_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Control_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Control_description(ctx, field)
-			case "descriptionJSON":
-				return ec.fieldContext_Control_descriptionJSON(ctx, field)
-			case "aliases":
-				return ec.fieldContext_Control_aliases(ctx, field)
-			case "referenceID":
-				return ec.fieldContext_Control_referenceID(ctx, field)
-			case "auditorReferenceID":
-				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
-			case "responsiblePartyID":
-				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
-			case "status":
-				return ec.fieldContext_Control_status(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Control_implementationStatus(ctx, field)
-			case "implementationDescription":
-				return ec.fieldContext_Control_implementationDescription(ctx, field)
-			case "publicRepresentation":
-				return ec.fieldContext_Control_publicRepresentation(ctx, field)
-			case "source":
-				return ec.fieldContext_Control_source(ctx, field)
-			case "sourceName":
-				return ec.fieldContext_Control_sourceName(ctx, field)
-			case "referenceFramework":
-				return ec.fieldContext_Control_referenceFramework(ctx, field)
-			case "referenceFrameworkRevision":
-				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "category":
-				return ec.fieldContext_Control_category(ctx, field)
-			case "categoryID":
-				return ec.fieldContext_Control_categoryID(ctx, field)
-			case "subcategory":
-				return ec.fieldContext_Control_subcategory(ctx, field)
-			case "mappedCategories":
-				return ec.fieldContext_Control_mappedCategories(ctx, field)
-			case "assessmentObjectives":
-				return ec.fieldContext_Control_assessmentObjectives(ctx, field)
-			case "assessmentMethods":
-				return ec.fieldContext_Control_assessmentMethods(ctx, field)
-			case "controlQuestions":
-				return ec.fieldContext_Control_controlQuestions(ctx, field)
-			case "implementationGuidance":
-				return ec.fieldContext_Control_implementationGuidance(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_Control_exampleEvidence(ctx, field)
-			case "references":
-				return ec.fieldContext_Control_references(ctx, field)
-			case "testingProcedures":
-				return ec.fieldContext_Control_testingProcedures(ctx, field)
-			case "evidenceRequests":
-				return ec.fieldContext_Control_evidenceRequests(ctx, field)
-			case "controlOwnerID":
-				return ec.fieldContext_Control_controlOwnerID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Control_delegateID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Control_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Control_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Control_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Control_systemInternalID(ctx, field)
-			case "controlKindName":
-				return ec.fieldContext_Control_controlKindName(ctx, field)
-			case "controlKindID":
-				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Control_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Control_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Control_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Control_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
-			case "refCode":
-				return ec.fieldContext_Control_refCode(ctx, field)
-			case "standardID":
-				return ec.fieldContext_Control_standardID(ctx, field)
-			case "trustCenterVisibility":
-				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
-			case "isTrustCenterControl":
-				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Control_evidence(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Control_controlObjectives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Control_tasks(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Control_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Control_risks(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Control_actionPlans(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Control_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "comments":
-				return ec.fieldContext_Control_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Control_discussions(ctx, field)
-			case "controlOwner":
-				return ec.fieldContext_Control_controlOwner(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Control_delegate(ctx, field)
-			case "responsibleParty":
-				return ec.fieldContext_Control_responsibleParty(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Control_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Control_remediations(ctx, field)
-			case "scans":
-				return ec.fieldContext_Control_scans(ctx, field)
-			case "owner":
-				return ec.fieldContext_Control_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Control_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Control_editors(ctx, field)
-			case "controlKind":
-				return ec.fieldContext_Control_controlKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Control_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Control_scope(ctx, field)
-			case "standard":
-				return ec.fieldContext_Control_standard(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Control_platforms(ctx, field)
-			case "assets":
-				return ec.fieldContext_Control_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Control_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Control_identityHolders(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Control_campaigns(ctx, field)
-			case "findings":
-				return ec.fieldContext_Control_findings(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Control_controlImplementations(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
-			case "scheduledJobs":
-				return ec.fieldContext_Control_scheduledJobs(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
-			case "controlMappings":
-				return ec.fieldContext_Control_controlMappings(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Control_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
+			return ec.childFields_Control(ctx, field)
 		},
 	}
 	return fc, nil
@@ -788,28 +222,22 @@ func (ec *executionContext) _ControlDeletePayload_deletedID(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ControlUpdatePayload_control(ctx context.Context, field graphql.CollectedField, obj *model.ControlUpdatePayload) (ret graphql.Marshaler) {
@@ -817,17 +245,20 @@ func (ec *executionContext) _ControlUpdatePayload_control(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlUpdatePayload_control,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlUpdatePayload_control(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Control, nil
 		},
 		nil,
-		ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Control) graphql.Marshaler {
+			return ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlUpdatePayload",
@@ -835,191 +266,7 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Control_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Control_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Control_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Control_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Control_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Control_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Control_tags(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Control_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Control_title(ctx, field)
-			case "description":
-				return ec.fieldContext_Control_description(ctx, field)
-			case "descriptionJSON":
-				return ec.fieldContext_Control_descriptionJSON(ctx, field)
-			case "aliases":
-				return ec.fieldContext_Control_aliases(ctx, field)
-			case "referenceID":
-				return ec.fieldContext_Control_referenceID(ctx, field)
-			case "auditorReferenceID":
-				return ec.fieldContext_Control_auditorReferenceID(ctx, field)
-			case "responsiblePartyID":
-				return ec.fieldContext_Control_responsiblePartyID(ctx, field)
-			case "status":
-				return ec.fieldContext_Control_status(ctx, field)
-			case "implementationStatus":
-				return ec.fieldContext_Control_implementationStatus(ctx, field)
-			case "implementationDescription":
-				return ec.fieldContext_Control_implementationDescription(ctx, field)
-			case "publicRepresentation":
-				return ec.fieldContext_Control_publicRepresentation(ctx, field)
-			case "source":
-				return ec.fieldContext_Control_source(ctx, field)
-			case "sourceName":
-				return ec.fieldContext_Control_sourceName(ctx, field)
-			case "referenceFramework":
-				return ec.fieldContext_Control_referenceFramework(ctx, field)
-			case "referenceFrameworkRevision":
-				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "category":
-				return ec.fieldContext_Control_category(ctx, field)
-			case "categoryID":
-				return ec.fieldContext_Control_categoryID(ctx, field)
-			case "subcategory":
-				return ec.fieldContext_Control_subcategory(ctx, field)
-			case "mappedCategories":
-				return ec.fieldContext_Control_mappedCategories(ctx, field)
-			case "assessmentObjectives":
-				return ec.fieldContext_Control_assessmentObjectives(ctx, field)
-			case "assessmentMethods":
-				return ec.fieldContext_Control_assessmentMethods(ctx, field)
-			case "controlQuestions":
-				return ec.fieldContext_Control_controlQuestions(ctx, field)
-			case "implementationGuidance":
-				return ec.fieldContext_Control_implementationGuidance(ctx, field)
-			case "exampleEvidence":
-				return ec.fieldContext_Control_exampleEvidence(ctx, field)
-			case "references":
-				return ec.fieldContext_Control_references(ctx, field)
-			case "testingProcedures":
-				return ec.fieldContext_Control_testingProcedures(ctx, field)
-			case "evidenceRequests":
-				return ec.fieldContext_Control_evidenceRequests(ctx, field)
-			case "controlOwnerID":
-				return ec.fieldContext_Control_controlOwnerID(ctx, field)
-			case "delegateID":
-				return ec.fieldContext_Control_delegateID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Control_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Control_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Control_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Control_systemInternalID(ctx, field)
-			case "controlKindName":
-				return ec.fieldContext_Control_controlKindName(ctx, field)
-			case "controlKindID":
-				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Control_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Control_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Control_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Control_scopeID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
-			case "refCode":
-				return ec.fieldContext_Control_refCode(ctx, field)
-			case "standardID":
-				return ec.fieldContext_Control_standardID(ctx, field)
-			case "trustCenterVisibility":
-				return ec.fieldContext_Control_trustCenterVisibility(ctx, field)
-			case "isTrustCenterControl":
-				return ec.fieldContext_Control_isTrustCenterControl(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Control_evidence(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Control_controlObjectives(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Control_tasks(ctx, field)
-			case "narratives":
-				return ec.fieldContext_Control_narratives(ctx, field)
-			case "risks":
-				return ec.fieldContext_Control_risks(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Control_actionPlans(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Control_procedures(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Control_internalPolicies(ctx, field)
-			case "comments":
-				return ec.fieldContext_Control_comments(ctx, field)
-			case "discussions":
-				return ec.fieldContext_Control_discussions(ctx, field)
-			case "controlOwner":
-				return ec.fieldContext_Control_controlOwner(ctx, field)
-			case "delegate":
-				return ec.fieldContext_Control_delegate(ctx, field)
-			case "responsibleParty":
-				return ec.fieldContext_Control_responsibleParty(ctx, field)
-			case "reviews":
-				return ec.fieldContext_Control_reviews(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Control_remediations(ctx, field)
-			case "scans":
-				return ec.fieldContext_Control_scans(ctx, field)
-			case "owner":
-				return ec.fieldContext_Control_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Control_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Control_editors(ctx, field)
-			case "controlKind":
-				return ec.fieldContext_Control_controlKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Control_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Control_scope(ctx, field)
-			case "standard":
-				return ec.fieldContext_Control_standard(ctx, field)
-			case "programs":
-				return ec.fieldContext_Control_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Control_platforms(ctx, field)
-			case "assets":
-				return ec.fieldContext_Control_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Control_entities(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Control_identityHolders(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Control_campaigns(ctx, field)
-			case "findings":
-				return ec.fieldContext_Control_findings(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Control_controlImplementations(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Control_subcontrols(ctx, field)
-			case "scheduledJobs":
-				return ec.fieldContext_Control_scheduledJobs(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
-			case "controlMappings":
-				return ec.fieldContext_Control_controlMappings(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Control_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Control_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Control_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
+			return ec.childFields_Control(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1059,7 +306,7 @@ func (ec *executionContext) _ControlBulkCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1105,7 +352,7 @@ func (ec *executionContext) _ControlBulkDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1143,7 +390,7 @@ func (ec *executionContext) _ControlBulkUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1182,7 +429,7 @@ func (ec *executionContext) _ControlCreatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1221,7 +468,7 @@ func (ec *executionContext) _ControlDeletePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1260,7 +507,7 @@ func (ec *executionContext) _ControlUpdatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

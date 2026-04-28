@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _EventBulkCreatePayload_events(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkCreatePayload_events,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkCreatePayload_events(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Events, nil
 		},
 		nil,
-		ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Event) graphql.Marshaler {
+			return ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EventBulkCreatePayload",
@@ -51,53 +55,7 @@ func (ec *executionContext) fieldContext_EventBulkCreatePayload_events(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Event_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Event_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Event_tags(ctx, field)
-			case "eventID":
-				return ec.fieldContext_Event_eventID(ctx, field)
-			case "correlationID":
-				return ec.fieldContext_Event_correlationID(ctx, field)
-			case "eventType":
-				return ec.fieldContext_Event_eventType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Event_metadata(ctx, field)
-			case "users":
-				return ec.fieldContext_Event_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Event_groups(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Event_integrations(ctx, field)
-			case "organizations":
-				return ec.fieldContext_Event_organizations(ctx, field)
-			case "invites":
-				return ec.fieldContext_Event_invites(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
-			case "secrets":
-				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_Event_orgMemberships(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_Event_groupMemberships(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Event_subscribers(ctx, field)
-			case "files":
-				return ec.fieldContext_Event_files(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
+			return ec.childFields_Event(ctx, field)
 		},
 	}
 	return fc, nil
@@ -108,28 +66,22 @@ func (ec *executionContext) _EventBulkDeletePayload_deletedIDs(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EventBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EventBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EventBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EventBulkDeletePayload) (ret graphql.Marshaler) {
@@ -137,28 +89,22 @@ func (ec *executionContext) _EventBulkDeletePayload_notDeletedIDs(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EventBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EventBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EventBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.EventBulkDeletePayload) (ret graphql.Marshaler) {
@@ -166,28 +112,22 @@ func (ec *executionContext) _EventBulkDeletePayload_error(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EventBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EventBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EventBulkUpdatePayload_events(ctx context.Context, field graphql.CollectedField, obj *model.EventBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -195,17 +135,20 @@ func (ec *executionContext) _EventBulkUpdatePayload_events(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkUpdatePayload_events,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkUpdatePayload_events(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Events, nil
 		},
 		nil,
-		ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Event) graphql.Marshaler {
+			return ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkUpdatePayload_events(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EventBulkUpdatePayload",
@@ -213,53 +156,7 @@ func (ec *executionContext) fieldContext_EventBulkUpdatePayload_events(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Event_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Event_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Event_tags(ctx, field)
-			case "eventID":
-				return ec.fieldContext_Event_eventID(ctx, field)
-			case "correlationID":
-				return ec.fieldContext_Event_correlationID(ctx, field)
-			case "eventType":
-				return ec.fieldContext_Event_eventType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Event_metadata(ctx, field)
-			case "users":
-				return ec.fieldContext_Event_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Event_groups(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Event_integrations(ctx, field)
-			case "organizations":
-				return ec.fieldContext_Event_organizations(ctx, field)
-			case "invites":
-				return ec.fieldContext_Event_invites(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
-			case "secrets":
-				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_Event_orgMemberships(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_Event_groupMemberships(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Event_subscribers(ctx, field)
-			case "files":
-				return ec.fieldContext_Event_files(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
+			return ec.childFields_Event(ctx, field)
 		},
 	}
 	return fc, nil
@@ -270,28 +167,22 @@ func (ec *executionContext) _EventBulkUpdatePayload_updatedIDs(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EventBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EventBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EventCreatePayload_event(ctx context.Context, field graphql.CollectedField, obj *model.EventCreatePayload) (ret graphql.Marshaler) {
@@ -299,17 +190,20 @@ func (ec *executionContext) _EventCreatePayload_event(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventCreatePayload_event,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventCreatePayload_event(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Event, nil
 		},
 		nil,
-		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Event) graphql.Marshaler {
+			return ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EventCreatePayload",
@@ -317,53 +211,7 @@ func (ec *executionContext) fieldContext_EventCreatePayload_event(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Event_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Event_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Event_tags(ctx, field)
-			case "eventID":
-				return ec.fieldContext_Event_eventID(ctx, field)
-			case "correlationID":
-				return ec.fieldContext_Event_correlationID(ctx, field)
-			case "eventType":
-				return ec.fieldContext_Event_eventType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Event_metadata(ctx, field)
-			case "users":
-				return ec.fieldContext_Event_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Event_groups(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Event_integrations(ctx, field)
-			case "organizations":
-				return ec.fieldContext_Event_organizations(ctx, field)
-			case "invites":
-				return ec.fieldContext_Event_invites(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
-			case "secrets":
-				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_Event_orgMemberships(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_Event_groupMemberships(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Event_subscribers(ctx, field)
-			case "files":
-				return ec.fieldContext_Event_files(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
+			return ec.childFields_Event(ctx, field)
 		},
 	}
 	return fc, nil
@@ -374,28 +222,22 @@ func (ec *executionContext) _EventDeletePayload_deletedID(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EventDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EventDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EventUpdatePayload_event(ctx context.Context, field graphql.CollectedField, obj *model.EventUpdatePayload) (ret graphql.Marshaler) {
@@ -403,17 +245,20 @@ func (ec *executionContext) _EventUpdatePayload_event(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EventUpdatePayload_event,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EventUpdatePayload_event(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Event, nil
 		},
 		nil,
-		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Event) graphql.Marshaler {
+			return ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EventUpdatePayload",
@@ -421,53 +266,7 @@ func (ec *executionContext) fieldContext_EventUpdatePayload_event(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Event_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Event_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Event_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Event_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Event_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Event_tags(ctx, field)
-			case "eventID":
-				return ec.fieldContext_Event_eventID(ctx, field)
-			case "correlationID":
-				return ec.fieldContext_Event_correlationID(ctx, field)
-			case "eventType":
-				return ec.fieldContext_Event_eventType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Event_metadata(ctx, field)
-			case "users":
-				return ec.fieldContext_Event_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Event_groups(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Event_integrations(ctx, field)
-			case "organizations":
-				return ec.fieldContext_Event_organizations(ctx, field)
-			case "invites":
-				return ec.fieldContext_Event_invites(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_Event_personalAccessTokens(ctx, field)
-			case "secrets":
-				return ec.fieldContext_Event_secrets(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_Event_orgMemberships(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_Event_groupMemberships(ctx, field)
-			case "subscribers":
-				return ec.fieldContext_Event_subscribers(ctx, field)
-			case "files":
-				return ec.fieldContext_Event_files(ctx, field)
-			case "orgSubscriptions":
-				return ec.fieldContext_Event_orgSubscriptions(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Event", field.Name)
+			return ec.childFields_Event(ctx, field)
 		},
 	}
 	return fc, nil
@@ -507,7 +306,7 @@ func (ec *executionContext) _EventBulkCreatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -553,7 +352,7 @@ func (ec *executionContext) _EventBulkDeletePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -591,7 +390,7 @@ func (ec *executionContext) _EventBulkUpdatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -630,7 +429,7 @@ func (ec *executionContext) _EventCreatePayload(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -669,7 +468,7 @@ func (ec *executionContext) _EventDeletePayload(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -708,7 +507,7 @@ func (ec *executionContext) _EventUpdatePayload(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

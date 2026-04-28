@@ -213,7 +213,7 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, 
 		Where(user.EmailEqualFold(email)).
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from email")
+		logx.FromContext(ctx).Error().Str("email", email).Err(err).Msg("error obtaining user from email")
 
 		return nil, err
 	}

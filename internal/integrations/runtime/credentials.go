@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -303,6 +304,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 func (r *Runtime) resolveConnectionFromState(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, bool, error) {
 	state, err := def.ProviderState(installation.ProviderState)
 	if err != nil {
+		log.Error().Err(err).Msg("integrations: error getting provider state")
 		return types.ConnectionRegistration{}, false, err
 	}
 
@@ -312,6 +314,8 @@ func (r *Runtime) resolveConnectionFromState(def types.Definition, installation 
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
 	if err != nil {
+		log.Error().Err(err).Msg("integrations: error connecting during registration")
+
 		return types.ConnectionRegistration{}, false, ErrConnectionNotFound
 	}
 
@@ -357,6 +361,7 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 
 	connection, err = def.ConnectionRegistration(credentialRef)
 	if err != nil {
+		log.Error().Err(err).Msg("integrations: error connecting during registration")
 		return types.ConnectionRegistration{}, ErrConnectionNotFound
 	}
 

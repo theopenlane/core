@@ -5,10 +5,11 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -34,28 +35,22 @@ func (ec *executionContext) _GroupPermission_objectType(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermission_objectType,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermission_objectType(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ObjectType, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermission_objectType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermission",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermission", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
@@ -63,28 +58,22 @@ func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermission_permissions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermission_permissions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Permissions, nil
 		},
 		nil,
-		ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐPermission,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.Permission) graphql.Marshaler {
+			return ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐPermission(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermission_permissions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermission",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Permission does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermission", field, false, false, errors.New("field of type Permission does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermission_id(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
@@ -92,28 +81,22 @@ func (ec *executionContext) _GroupPermission_id(ctx context.Context, field graph
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermission_id,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermission_id(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermission_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermission",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermission", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermission_displayID(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
@@ -121,28 +104,22 @@ func (ec *executionContext) _GroupPermission_displayID(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermission_displayID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermission_displayID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DisplayID, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermission_displayID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermission",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermission", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermission_name(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermission) (ret graphql.Marshaler) {
@@ -150,28 +127,22 @@ func (ec *executionContext) _GroupPermission_name(ctx context.Context, field gra
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermission_name,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermission_name(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Name, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermission_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermission",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermission", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionConnection) (ret graphql.Marshaler) {
@@ -179,17 +150,20 @@ func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermissionConnection_edges,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermissionConnection_edges(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Edges, nil
 		},
 		nil,
-		ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.GroupPermissionEdge) graphql.Marshaler {
+			return ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermissionConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupPermissionConnection",
@@ -197,13 +171,7 @@ func (ec *executionContext) fieldContext_GroupPermissionConnection_edges(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_GroupPermissionEdge_node(ctx, field)
-			case "cursor":
-				return ec.fieldContext_GroupPermissionEdge_cursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupPermissionEdge", field.Name)
+			return ec.childFields_GroupPermissionEdge(ctx, field)
 		},
 	}
 	return fc, nil
@@ -214,17 +182,20 @@ func (ec *executionContext) _GroupPermissionConnection_pageInfo(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermissionConnection_pageInfo,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermissionConnection_pageInfo(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PageInfo, nil
 		},
 		nil,
-		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermissionConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupPermissionConnection",
@@ -232,17 +203,7 @@ func (ec *executionContext) fieldContext_GroupPermissionConnection_pageInfo(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+			return ec.childFields_PageInfo(ctx, field)
 		},
 	}
 	return fc, nil
@@ -253,28 +214,22 @@ func (ec *executionContext) _GroupPermissionConnection_totalCount(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermissionConnection_totalCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermissionConnection_totalCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TotalCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermissionConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermissionConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermissionConnection", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.GroupPermissionEdge) (ret graphql.Marshaler) {
@@ -282,17 +237,20 @@ func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermissionEdge_node,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermissionEdge_node(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Node, nil
 		},
 		nil,
-		ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.GroupPermission) graphql.Marshaler {
+			return ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermissionEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupPermissionEdge",
@@ -300,19 +258,7 @@ func (ec *executionContext) fieldContext_GroupPermissionEdge_node(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "objectType":
-				return ec.fieldContext_GroupPermission_objectType(ctx, field)
-			case "permissions":
-				return ec.fieldContext_GroupPermission_permissions(ctx, field)
-			case "id":
-				return ec.fieldContext_GroupPermission_id(ctx, field)
-			case "displayID":
-				return ec.fieldContext_GroupPermission_displayID(ctx, field)
-			case "name":
-				return ec.fieldContext_GroupPermission_name(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupPermission", field.Name)
+			return ec.childFields_GroupPermission(ctx, field)
 		},
 	}
 	return fc, nil
@@ -323,28 +269,22 @@ func (ec *executionContext) _GroupPermissionEdge_cursor(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupPermissionEdge_cursor,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupPermissionEdge_cursor(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Cursor, nil
 		},
 		nil,
-		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupPermissionEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupPermissionEdge",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Cursor does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupPermissionEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -821,7 +761,7 @@ func (ec *executionContext) _GroupPermission(ctx context.Context, sel ast.Select
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -867,7 +807,7 @@ func (ec *executionContext) _GroupPermissionConnection(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -908,7 +848,7 @@ func (ec *executionContext) _GroupPermissionEdge(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -38,6 +38,7 @@ type schemaRegistration struct {
 // ingestSchemaOrder defines the registration order for ingest schema listeners
 var ingestSchemaOrder = []string{
 	integrationgenerated.IntegrationMappingSchemaAsset,
+	integrationgenerated.IntegrationMappingSchemaCheckResult,
 	integrationgenerated.IntegrationMappingSchemaContact,
 	integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 	integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
@@ -63,6 +64,20 @@ var schemaRegistrations = map[string]schemaRegistration{
 			return payload.Metadata.IntegrationID, payload.Input
 		},
 		persistAssetInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaCheckResult: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestCheckResultRequestedTopic,
+		prepareCheckResultInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateCheckResultInput) integrationgenerated.IntegrationIngestCheckResultRequested {
+			return integrationgenerated.IntegrationIngestCheckResultRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestCheckResultRequested) (string, ent.CreateCheckResultInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistCheckResultInput,
 	),
 	integrationgenerated.IntegrationMappingSchemaContact: buildSchemaRegistration(
 		integrationgenerated.IntegrationIngestContactRequestedTopic,
@@ -385,6 +400,14 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
 
 	input = integrationgenerated.PrepareAssetInput(input, integration)
+
+	return input
+}
+
+// prepareCheckResultInput applies integration-scoped defaults before emit or sync persistence.
+func prepareCheckResultInput(_ context.Context, input ent.CreateCheckResultInput, integration *ent.Integration) ent.CreateCheckResultInput {
+
+	input = integrationgenerated.PrepareCheckResultInput(input, integration)
 
 	return input
 }

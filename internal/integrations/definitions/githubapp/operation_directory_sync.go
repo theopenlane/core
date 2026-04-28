@@ -58,9 +58,6 @@ type orgNode struct {
 	Login string
 }
 
-// DirectorySync collects GitHub organization members for directory account ingest
-type DirectorySync struct{}
-
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(gitHubClient, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {

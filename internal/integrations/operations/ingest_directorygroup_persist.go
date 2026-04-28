@@ -14,6 +14,10 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 		return ErrIngestUpsertKeyMissing
 	}
 
+	if createInput.DirectoryName == nil && integration.Name != "" {
+		createInput.DirectoryName = &integration.Name
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

@@ -116,6 +116,8 @@ const (
 	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
 	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
+	EdgeCheckResults = "check_results"
 	// EdgePlatform holds the string denoting the platform edge name in mutations.
 	EdgePlatform = "platform"
 	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
@@ -235,6 +237,13 @@ const (
 	DirectorySyncRunsInverseTable = "directory_sync_runs"
 	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
 	DirectorySyncRunsColumn = "integration_id"
+	// CheckResultsTable is the table that holds the check_results relation/edge.
+	CheckResultsTable = "check_results"
+	// CheckResultsInverseTable is the table name for the CheckResult entity.
+	// It exists in this package in order to avoid circular dependency with the "checkresult" package.
+	CheckResultsInverseTable = "check_results"
+	// CheckResultsColumn is the table column denoting the check_results relation/edge.
+	CheckResultsColumn = "integration_id"
 	// PlatformTable is the table that holds the platform relation/edge.
 	PlatformTable = "integrations"
 	// PlatformInverseTable is the table name for the Platform entity.
@@ -754,6 +763,20 @@ func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByCheckResultsCount orders the results by check_results count.
+func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCheckResultsStep(), opts...)
+	}
+}
+
+// ByCheckResults orders the results by check_results terms.
+func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCheckResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPlatformField orders the results by platform field.
 func ByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -947,6 +970,13 @@ func newDirectorySyncRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newCheckResultsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CheckResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CheckResultsTable, CheckResultsColumn),
 	)
 }
 func newPlatformStep() *sqlgraph.Step {

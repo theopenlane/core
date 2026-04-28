@@ -20,7 +20,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return InstallationMetadata{}, false, err
 	}
 
-	if meta.OrganizationID == "" && meta.ProjectID == "" && meta.SourceID == "" && len(meta.SourceIDs) == 0 {
+	if meta.OrganizationID == "" && meta.ProjectID == "" && len(meta.SourceIDs) == 0 {
 		return InstallationMetadata{}, false, nil
 	}
 
@@ -34,7 +34,6 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		ProjectID:           meta.ProjectID,
 		ProjectScope:        meta.ProjectScope,
 		ProjectIDs:          meta.ProjectIDs,
-		SourceID:            meta.SourceID,
 		SourceIDs:           meta.SourceIDs,
 		ServiceAccountEmail: serviceAccount.ClientEmail,
 	}, true, nil

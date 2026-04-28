@@ -55,6 +55,12 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 			continue
 		}
 
+		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
+			logx.FromContext(ctx).Debug().Str("integration_id", integration.ID).Str("operation", op.Name).Msg("operation is disabled, skipping reconcile")
+
+			continue
+		}
+
 		metadata := types.ExecutionMetadata{
 			OwnerID:       integration.OwnerID,
 			IntegrationID: integration.ID,
@@ -120,6 +126,12 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	operation, err := r.Registry().Operation(installation.DefinitionID, envelope.Operation)
 	if err != nil {
 		return 0, err
+	}
+
+	if operation.Disabled != nil && operation.Disabled(installation.Config.ClientConfig) {
+		logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Msg("operation is disabled, stopping reconcile cycle")
+
+		return 0, operations.ErrOperationDisabled
 	}
 
 	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operations.DispatchRequest{

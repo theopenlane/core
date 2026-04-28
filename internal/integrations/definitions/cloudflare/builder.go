@@ -13,17 +13,17 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "cloudflare",
+				Family:      "Cloudflare",
 				DisplayName: "Cloudflare",
 				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare/overview",
-				Tags:        []string{"directory-sync", "assets"},
+				Tags:        []string{"directory", "assets"},
 				Active:      true,
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: providerkit.SchemaFrom[DirectorySync](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
@@ -77,8 +77,15 @@ func Builder() registry.Builder {
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
+					IngestHandle:        DirectorySync{}.IngestHandle(),
+					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 				},
 			},
 			Mappings: cloudflareMappings(),

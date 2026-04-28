@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TagDefinitionBulkCreatePayload_tagDefinitions(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TagDefinitionBulkCreatePayload_tagDefinitions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TagDefinitionBulkCreatePayload_tagDefinitions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TagDefinitions, nil
 		},
 		nil,
-		ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TagDefinition) graphql.Marshaler {
+			return ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TagDefinitionBulkCreatePayload_tagDefinitions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TagDefinitionBulkCreatePayload",
@@ -51,39 +55,7 @@ func (ec *executionContext) fieldContext_TagDefinitionBulkCreatePayload_tagDefin
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TagDefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TagDefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TagDefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TagDefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TagDefinition_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TagDefinition_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_TagDefinition_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_TagDefinition_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_TagDefinition_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_TagDefinition_name(ctx, field)
-			case "aliases":
-				return ec.fieldContext_TagDefinition_aliases(ctx, field)
-			case "slug":
-				return ec.fieldContext_TagDefinition_slug(ctx, field)
-			case "description":
-				return ec.fieldContext_TagDefinition_description(ctx, field)
-			case "color":
-				return ec.fieldContext_TagDefinition_color(ctx, field)
-			case "owner":
-				return ec.fieldContext_TagDefinition_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TagDefinition", field.Name)
+			return ec.childFields_TagDefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -94,17 +66,20 @@ func (ec *executionContext) _TagDefinitionCreatePayload_tagDefinition(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TagDefinitionCreatePayload_tagDefinition,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TagDefinitionCreatePayload_tagDefinition(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TagDefinition, nil
 		},
 		nil,
-		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
+			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TagDefinitionCreatePayload_tagDefinition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TagDefinitionCreatePayload",
@@ -112,39 +87,7 @@ func (ec *executionContext) fieldContext_TagDefinitionCreatePayload_tagDefinitio
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TagDefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TagDefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TagDefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TagDefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TagDefinition_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TagDefinition_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_TagDefinition_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_TagDefinition_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_TagDefinition_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_TagDefinition_name(ctx, field)
-			case "aliases":
-				return ec.fieldContext_TagDefinition_aliases(ctx, field)
-			case "slug":
-				return ec.fieldContext_TagDefinition_slug(ctx, field)
-			case "description":
-				return ec.fieldContext_TagDefinition_description(ctx, field)
-			case "color":
-				return ec.fieldContext_TagDefinition_color(ctx, field)
-			case "owner":
-				return ec.fieldContext_TagDefinition_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TagDefinition", field.Name)
+			return ec.childFields_TagDefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -155,28 +98,22 @@ func (ec *executionContext) _TagDefinitionDeletePayload_deletedID(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TagDefinitionDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TagDefinitionDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TagDefinitionDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TagDefinitionDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TagDefinitionDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TagDefinitionUpdatePayload_tagDefinition(ctx context.Context, field graphql.CollectedField, obj *model.TagDefinitionUpdatePayload) (ret graphql.Marshaler) {
@@ -184,17 +121,20 @@ func (ec *executionContext) _TagDefinitionUpdatePayload_tagDefinition(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TagDefinitionUpdatePayload_tagDefinition,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TagDefinitionUpdatePayload_tagDefinition(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TagDefinition, nil
 		},
 		nil,
-		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
+			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TagDefinitionUpdatePayload_tagDefinition(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TagDefinitionUpdatePayload",
@@ -202,39 +142,7 @@ func (ec *executionContext) fieldContext_TagDefinitionUpdatePayload_tagDefinitio
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TagDefinition_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TagDefinition_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TagDefinition_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TagDefinition_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TagDefinition_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TagDefinition_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_TagDefinition_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_TagDefinition_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_TagDefinition_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_TagDefinition_name(ctx, field)
-			case "aliases":
-				return ec.fieldContext_TagDefinition_aliases(ctx, field)
-			case "slug":
-				return ec.fieldContext_TagDefinition_slug(ctx, field)
-			case "description":
-				return ec.fieldContext_TagDefinition_description(ctx, field)
-			case "color":
-				return ec.fieldContext_TagDefinition_color(ctx, field)
-			case "owner":
-				return ec.fieldContext_TagDefinition_owner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TagDefinition", field.Name)
+			return ec.childFields_TagDefinition(ctx, field)
 		},
 	}
 	return fc, nil
@@ -274,7 +182,7 @@ func (ec *executionContext) _TagDefinitionBulkCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -313,7 +221,7 @@ func (ec *executionContext) _TagDefinitionCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -352,7 +260,7 @@ func (ec *executionContext) _TagDefinitionDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -391,7 +299,7 @@ func (ec *executionContext) _TagDefinitionUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

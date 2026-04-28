@@ -1,0 +1,43 @@
+{
+  "errors": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "success": true,
+  "result": [
+    {
+      "id": "023e105f4ecef8ad9ca31a8372d0c353",
+      "created_on": "2025-01-01T12:21:02.0000Z",
+      "email_domain": "example.com",
+      "enabled": false,
+      "updated_on": "2025-01-01T12:21:02.0000Z",
+      "use_fedramp_language": false,
+      "verification": {
+        "code": "cloudflare_dashboard_sso=023e105f4ecef8ad9ca31a8372d0c353",
+        "status": "pending"
+      }
+    }
+  ],
+  "result_info": {
+    "count": 1,
+    "page": 1,
+    "per_page": 20,
+    "total_count": 2000
+  }
+}

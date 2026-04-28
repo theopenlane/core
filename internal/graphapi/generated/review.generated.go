@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ReviewBulkCreatePayload_reviews(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkCreatePayload_reviews,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkCreatePayload_reviews(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Reviews, nil
 		},
 		nil,
-		ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Review) graphql.Marshaler {
+			return ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ReviewBulkCreatePayload",
@@ -51,119 +55,7 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Review_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Review_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Review_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Review_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Review_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Review_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Review_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Review_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Review_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Review_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Review_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Review_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Review_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Review_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Review_externalID(ctx, field)
-			case "externalOwnerID":
-				return ec.fieldContext_Review_externalOwnerID(ctx, field)
-			case "title":
-				return ec.fieldContext_Review_title(ctx, field)
-			case "state":
-				return ec.fieldContext_Review_state(ctx, field)
-			case "status":
-				return ec.fieldContext_Review_status(ctx, field)
-			case "category":
-				return ec.fieldContext_Review_category(ctx, field)
-			case "classification":
-				return ec.fieldContext_Review_classification(ctx, field)
-			case "summary":
-				return ec.fieldContext_Review_summary(ctx, field)
-			case "details":
-				return ec.fieldContext_Review_details(ctx, field)
-			case "reporter":
-				return ec.fieldContext_Review_reporter(ctx, field)
-			case "approved":
-				return ec.fieldContext_Review_approved(ctx, field)
-			case "reviewedAt":
-				return ec.fieldContext_Review_reviewedAt(ctx, field)
-			case "reportedAt":
-				return ec.fieldContext_Review_reportedAt(ctx, field)
-			case "approvedAt":
-				return ec.fieldContext_Review_approvedAt(ctx, field)
-			case "reviewerID":
-				return ec.fieldContext_Review_reviewerID(ctx, field)
-			case "source":
-				return ec.fieldContext_Review_source(ctx, field)
-			case "externalURI":
-				return ec.fieldContext_Review_externalURI(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Review_metadata(ctx, field)
-			case "rawPayload":
-				return ec.fieldContext_Review_rawPayload(ctx, field)
-			case "owner":
-				return ec.fieldContext_Review_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Review_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Review_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Review_viewers(ctx, field)
-			case "environment":
-				return ec.fieldContext_Review_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Review_scope(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Review_integrations(ctx, field)
-			case "findings":
-				return ec.fieldContext_Review_findings(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Review_vulnerabilities(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Review_actionPlans(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Review_remediations(ctx, field)
-			case "controls":
-				return ec.fieldContext_Review_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Review_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_Review_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Review_programs(ctx, field)
-			case "assets":
-				return ec.fieldContext_Review_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Review_entities(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Review_tasks(ctx, field)
-			case "reviewer":
-				return ec.fieldContext_Review_reviewer(ctx, field)
-			case "comments":
-				return ec.fieldContext_Review_comments(ctx, field)
-			case "files":
-				return ec.fieldContext_Review_files(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Review_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
+			return ec.childFields_Review(ctx, field)
 		},
 	}
 	return fc, nil
@@ -174,28 +66,22 @@ func (ec *executionContext) _ReviewBulkDeletePayload_deletedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ReviewBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ReviewBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
@@ -203,28 +89,22 @@ func (ec *executionContext) _ReviewBulkDeletePayload_notDeletedIDs(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ReviewBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ReviewBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkDeletePayload) (ret graphql.Marshaler) {
@@ -232,28 +112,22 @@ func (ec *executionContext) _ReviewBulkDeletePayload_error(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ReviewBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ReviewBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ReviewBulkUpdatePayload_reviews(ctx context.Context, field graphql.CollectedField, obj *model.ReviewBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -261,17 +135,20 @@ func (ec *executionContext) _ReviewBulkUpdatePayload_reviews(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkUpdatePayload_reviews,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkUpdatePayload_reviews(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Reviews, nil
 		},
 		nil,
-		ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Review) graphql.Marshaler {
+			return ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_reviews(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ReviewBulkUpdatePayload",
@@ -279,119 +156,7 @@ func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_reviews(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Review_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Review_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Review_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Review_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Review_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Review_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Review_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Review_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Review_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Review_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Review_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Review_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Review_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Review_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Review_externalID(ctx, field)
-			case "externalOwnerID":
-				return ec.fieldContext_Review_externalOwnerID(ctx, field)
-			case "title":
-				return ec.fieldContext_Review_title(ctx, field)
-			case "state":
-				return ec.fieldContext_Review_state(ctx, field)
-			case "status":
-				return ec.fieldContext_Review_status(ctx, field)
-			case "category":
-				return ec.fieldContext_Review_category(ctx, field)
-			case "classification":
-				return ec.fieldContext_Review_classification(ctx, field)
-			case "summary":
-				return ec.fieldContext_Review_summary(ctx, field)
-			case "details":
-				return ec.fieldContext_Review_details(ctx, field)
-			case "reporter":
-				return ec.fieldContext_Review_reporter(ctx, field)
-			case "approved":
-				return ec.fieldContext_Review_approved(ctx, field)
-			case "reviewedAt":
-				return ec.fieldContext_Review_reviewedAt(ctx, field)
-			case "reportedAt":
-				return ec.fieldContext_Review_reportedAt(ctx, field)
-			case "approvedAt":
-				return ec.fieldContext_Review_approvedAt(ctx, field)
-			case "reviewerID":
-				return ec.fieldContext_Review_reviewerID(ctx, field)
-			case "source":
-				return ec.fieldContext_Review_source(ctx, field)
-			case "externalURI":
-				return ec.fieldContext_Review_externalURI(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Review_metadata(ctx, field)
-			case "rawPayload":
-				return ec.fieldContext_Review_rawPayload(ctx, field)
-			case "owner":
-				return ec.fieldContext_Review_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Review_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Review_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Review_viewers(ctx, field)
-			case "environment":
-				return ec.fieldContext_Review_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Review_scope(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Review_integrations(ctx, field)
-			case "findings":
-				return ec.fieldContext_Review_findings(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Review_vulnerabilities(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Review_actionPlans(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Review_remediations(ctx, field)
-			case "controls":
-				return ec.fieldContext_Review_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Review_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_Review_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Review_programs(ctx, field)
-			case "assets":
-				return ec.fieldContext_Review_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Review_entities(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Review_tasks(ctx, field)
-			case "reviewer":
-				return ec.fieldContext_Review_reviewer(ctx, field)
-			case "comments":
-				return ec.fieldContext_Review_comments(ctx, field)
-			case "files":
-				return ec.fieldContext_Review_files(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Review_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
+			return ec.childFields_Review(ctx, field)
 		},
 	}
 	return fc, nil
@@ -402,28 +167,22 @@ func (ec *executionContext) _ReviewBulkUpdatePayload_updatedIDs(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ReviewBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ReviewBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ReviewCreatePayload_review(ctx context.Context, field graphql.CollectedField, obj *model.ReviewCreatePayload) (ret graphql.Marshaler) {
@@ -431,17 +190,20 @@ func (ec *executionContext) _ReviewCreatePayload_review(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewCreatePayload_review,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewCreatePayload_review(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Review, nil
 		},
 		nil,
-		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Review) graphql.Marshaler {
+			return ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ReviewCreatePayload",
@@ -449,119 +211,7 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Review_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Review_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Review_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Review_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Review_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Review_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Review_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Review_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Review_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Review_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Review_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Review_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Review_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Review_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Review_externalID(ctx, field)
-			case "externalOwnerID":
-				return ec.fieldContext_Review_externalOwnerID(ctx, field)
-			case "title":
-				return ec.fieldContext_Review_title(ctx, field)
-			case "state":
-				return ec.fieldContext_Review_state(ctx, field)
-			case "status":
-				return ec.fieldContext_Review_status(ctx, field)
-			case "category":
-				return ec.fieldContext_Review_category(ctx, field)
-			case "classification":
-				return ec.fieldContext_Review_classification(ctx, field)
-			case "summary":
-				return ec.fieldContext_Review_summary(ctx, field)
-			case "details":
-				return ec.fieldContext_Review_details(ctx, field)
-			case "reporter":
-				return ec.fieldContext_Review_reporter(ctx, field)
-			case "approved":
-				return ec.fieldContext_Review_approved(ctx, field)
-			case "reviewedAt":
-				return ec.fieldContext_Review_reviewedAt(ctx, field)
-			case "reportedAt":
-				return ec.fieldContext_Review_reportedAt(ctx, field)
-			case "approvedAt":
-				return ec.fieldContext_Review_approvedAt(ctx, field)
-			case "reviewerID":
-				return ec.fieldContext_Review_reviewerID(ctx, field)
-			case "source":
-				return ec.fieldContext_Review_source(ctx, field)
-			case "externalURI":
-				return ec.fieldContext_Review_externalURI(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Review_metadata(ctx, field)
-			case "rawPayload":
-				return ec.fieldContext_Review_rawPayload(ctx, field)
-			case "owner":
-				return ec.fieldContext_Review_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Review_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Review_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Review_viewers(ctx, field)
-			case "environment":
-				return ec.fieldContext_Review_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Review_scope(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Review_integrations(ctx, field)
-			case "findings":
-				return ec.fieldContext_Review_findings(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Review_vulnerabilities(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Review_actionPlans(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Review_remediations(ctx, field)
-			case "controls":
-				return ec.fieldContext_Review_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Review_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_Review_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Review_programs(ctx, field)
-			case "assets":
-				return ec.fieldContext_Review_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Review_entities(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Review_tasks(ctx, field)
-			case "reviewer":
-				return ec.fieldContext_Review_reviewer(ctx, field)
-			case "comments":
-				return ec.fieldContext_Review_comments(ctx, field)
-			case "files":
-				return ec.fieldContext_Review_files(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Review_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
+			return ec.childFields_Review(ctx, field)
 		},
 	}
 	return fc, nil
@@ -572,28 +222,22 @@ func (ec *executionContext) _ReviewDeletePayload_deletedID(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ReviewDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ReviewDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ReviewUpdatePayload_review(ctx context.Context, field graphql.CollectedField, obj *model.ReviewUpdatePayload) (ret graphql.Marshaler) {
@@ -601,17 +245,20 @@ func (ec *executionContext) _ReviewUpdatePayload_review(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ReviewUpdatePayload_review,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReviewUpdatePayload_review(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Review, nil
 		},
 		nil,
-		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Review) graphql.Marshaler {
+			return ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ReviewUpdatePayload",
@@ -619,119 +266,7 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Review_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Review_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Review_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Review_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Review_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Review_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Review_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Review_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Review_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Review_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Review_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Review_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Review_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Review_scopeID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Review_externalID(ctx, field)
-			case "externalOwnerID":
-				return ec.fieldContext_Review_externalOwnerID(ctx, field)
-			case "title":
-				return ec.fieldContext_Review_title(ctx, field)
-			case "state":
-				return ec.fieldContext_Review_state(ctx, field)
-			case "status":
-				return ec.fieldContext_Review_status(ctx, field)
-			case "category":
-				return ec.fieldContext_Review_category(ctx, field)
-			case "classification":
-				return ec.fieldContext_Review_classification(ctx, field)
-			case "summary":
-				return ec.fieldContext_Review_summary(ctx, field)
-			case "details":
-				return ec.fieldContext_Review_details(ctx, field)
-			case "reporter":
-				return ec.fieldContext_Review_reporter(ctx, field)
-			case "approved":
-				return ec.fieldContext_Review_approved(ctx, field)
-			case "reviewedAt":
-				return ec.fieldContext_Review_reviewedAt(ctx, field)
-			case "reportedAt":
-				return ec.fieldContext_Review_reportedAt(ctx, field)
-			case "approvedAt":
-				return ec.fieldContext_Review_approvedAt(ctx, field)
-			case "reviewerID":
-				return ec.fieldContext_Review_reviewerID(ctx, field)
-			case "source":
-				return ec.fieldContext_Review_source(ctx, field)
-			case "externalURI":
-				return ec.fieldContext_Review_externalURI(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Review_metadata(ctx, field)
-			case "rawPayload":
-				return ec.fieldContext_Review_rawPayload(ctx, field)
-			case "owner":
-				return ec.fieldContext_Review_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Review_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Review_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Review_viewers(ctx, field)
-			case "environment":
-				return ec.fieldContext_Review_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Review_scope(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Review_integrations(ctx, field)
-			case "findings":
-				return ec.fieldContext_Review_findings(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Review_vulnerabilities(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Review_actionPlans(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Review_remediations(ctx, field)
-			case "controls":
-				return ec.fieldContext_Review_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Review_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_Review_risks(ctx, field)
-			case "programs":
-				return ec.fieldContext_Review_programs(ctx, field)
-			case "assets":
-				return ec.fieldContext_Review_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Review_entities(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Review_tasks(ctx, field)
-			case "reviewer":
-				return ec.fieldContext_Review_reviewer(ctx, field)
-			case "comments":
-				return ec.fieldContext_Review_comments(ctx, field)
-			case "files":
-				return ec.fieldContext_Review_files(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Review_internalPolicies(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Review", field.Name)
+			return ec.childFields_Review(ctx, field)
 		},
 	}
 	return fc, nil
@@ -771,7 +306,7 @@ func (ec *executionContext) _ReviewBulkCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -817,7 +352,7 @@ func (ec *executionContext) _ReviewBulkDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -855,7 +390,7 @@ func (ec *executionContext) _ReviewBulkUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -894,7 +429,7 @@ func (ec *executionContext) _ReviewCreatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -933,7 +468,7 @@ func (ec *executionContext) _ReviewDeletePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -972,7 +507,7 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

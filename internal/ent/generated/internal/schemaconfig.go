@@ -26,6 +26,8 @@ type SchemaConfig struct {
 	CampaignGroups                     string // Campaign-groups->Group table.
 	CampaignIdentityHolders            string // Campaign-identity_holders->IdentityHolder table.
 	CampaignTarget                     string // CampaignTarget table.
+	CheckResult                        string // CheckResult table.
+	CheckResultControls                string // CheckResult-controls->Control table.
 	Contact                            string // Contact table.
 	ContactFiles                       string // Contact-files->File table.
 	Control                            string // Control table.
@@ -97,6 +99,7 @@ type SchemaConfig struct {
 	FindingTasks                       string // Finding-tasks->Task table.
 	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
 	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
+	FindingCheckResults                string // Finding-check_results->CheckResult table.
 	FindingControl                     string // FindingControl table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.

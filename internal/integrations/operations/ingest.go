@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
@@ -140,6 +141,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 		for _, envelope := range payloadSet.Envelopes {
 			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("integration: error mapping ingest record")
 				return err
 			}
 
@@ -165,6 +167,7 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integration: ingest filter failed")
 		return mappedIngestRecord{}, false, ErrIngestFilterFailed
 	}
 	if !matched {
@@ -173,6 +176,8 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integration: error transforming ingest")
+
 		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
 	}
 
@@ -254,7 +259,8 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 	return run.ID, nil
 }
 
-// finalizeDirectorySyncRun marks the directory sync run as completed or failed
+// finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
+// is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
 func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error) error {
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())

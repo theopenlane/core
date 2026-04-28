@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HealthCheck holds the result of a GCP SCC health check
@@ -30,11 +31,13 @@ func (h HealthCheck) Handle() types.OperationHandler {
 func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client) (json.RawMessage, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve credentials")
 		return nil, err
 	}
 
 	parents, err := resolveParents(meta)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve parents")
 		return nil, err
 	}
 
@@ -52,6 +55,7 @@ func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings
 		}
 
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: failed to list sources")
 			return nil, ErrListSourcesFailed
 		}
 	}

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload_trustCe
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterWatermarkConfigs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterWatermarkConfig) graphql.Marshaler {
+			return ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePayload_trustCenterWatermarkConfigs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterWatermarkConfigBulkCreatePayload",
@@ -51,49 +55,7 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterWatermarkConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
-			case "isEnabled":
-				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
-			case "logoID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
-			case "text":
-				return ec.fieldContext_TrustCenterWatermarkConfig_text(ctx, field)
-			case "fontSize":
-				return ec.fieldContext_TrustCenterWatermarkConfig_fontSize(ctx, field)
-			case "opacity":
-				return ec.fieldContext_TrustCenterWatermarkConfig_opacity(ctx, field)
-			case "rotation":
-				return ec.fieldContext_TrustCenterWatermarkConfig_rotation(ctx, field)
-			case "color":
-				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
-			case "owner":
-				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterWatermarkConfig_file(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfig", field.Name)
+			return ec.childFields_TrustCenterWatermarkConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -104,17 +66,20 @@ func (ec *executionContext) _TrustCenterWatermarkConfigCreatePayload_trustCenter
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterWatermarkConfigCreatePayload_trustCenterWatermarkConfig,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterWatermarkConfigCreatePayload_trustCenterWatermarkConfig(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterWatermarkConfig, nil
 		},
 		nil,
-		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
+			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload_trustCenterWatermarkConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterWatermarkConfigCreatePayload",
@@ -122,49 +87,7 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterWatermarkConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
-			case "isEnabled":
-				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
-			case "logoID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
-			case "text":
-				return ec.fieldContext_TrustCenterWatermarkConfig_text(ctx, field)
-			case "fontSize":
-				return ec.fieldContext_TrustCenterWatermarkConfig_fontSize(ctx, field)
-			case "opacity":
-				return ec.fieldContext_TrustCenterWatermarkConfig_opacity(ctx, field)
-			case "rotation":
-				return ec.fieldContext_TrustCenterWatermarkConfig_rotation(ctx, field)
-			case "color":
-				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
-			case "owner":
-				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterWatermarkConfig_file(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfig", field.Name)
+			return ec.childFields_TrustCenterWatermarkConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -175,28 +98,22 @@ func (ec *executionContext) _TrustCenterWatermarkConfigDeletePayload_deletedID(c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterWatermarkConfigDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterWatermarkConfigDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterWatermarkConfigDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterWatermarkConfigDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload_trustCenterWatermarkConfig(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterWatermarkConfigUpdatePayload) (ret graphql.Marshaler) {
@@ -204,17 +121,20 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload_trustCenter
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterWatermarkConfigUpdatePayload_trustCenterWatermarkConfig,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterWatermarkConfigUpdatePayload_trustCenterWatermarkConfig(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterWatermarkConfig, nil
 		},
 		nil,
-		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
+			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload_trustCenterWatermarkConfig(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterWatermarkConfigUpdatePayload",
@@ -222,49 +142,7 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterWatermarkConfig_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterWatermarkConfig_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
-			case "isEnabled":
-				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
-			case "logoID":
-				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
-			case "text":
-				return ec.fieldContext_TrustCenterWatermarkConfig_text(ctx, field)
-			case "fontSize":
-				return ec.fieldContext_TrustCenterWatermarkConfig_fontSize(ctx, field)
-			case "opacity":
-				return ec.fieldContext_TrustCenterWatermarkConfig_opacity(ctx, field)
-			case "rotation":
-				return ec.fieldContext_TrustCenterWatermarkConfig_rotation(ctx, field)
-			case "color":
-				return ec.fieldContext_TrustCenterWatermarkConfig_color(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
-			case "owner":
-				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterWatermarkConfig_file(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterWatermarkConfig", field.Name)
+			return ec.childFields_TrustCenterWatermarkConfig(ctx, field)
 		},
 	}
 	return fc, nil
@@ -304,7 +182,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload(ctx con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -343,7 +221,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigCreatePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -382,7 +260,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigDeletePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -421,7 +299,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

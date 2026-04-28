@@ -35,7 +35,7 @@ var (
 	// repositorySyncSchema is the operation schema for the GitHub repository sync operation
 	repositorySyncSchema, repositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
 	// vulnerabilityCollectSchema is the operation schema for the GitHub vulnerability collection operation
-	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilityCollectConfig]()
+	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilitySync]()
 	// directorySyncSchema is the operation schema for the GitHub directory sync operationß
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
@@ -65,8 +65,35 @@ type githubAppCredential struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// VulnerabilitySync includes the configuration for findings from GitHub Security
+	VulnerabilitySync VulnerabilitySyncConfig `json:"findingSync,omitempty" jsonschema:"title=GitHub Security Hub Sync"`
+	// DirectorySync includes the configuration for identity accounts from GitHub organization members
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
+	// RepositorySync included the configuration of repos as assets from GitHub
+	RepositorySync RepositorySync `json:"repositorySync,omitempty" jsonschema:"title=Repository Account Sync"`
+}
+
+type DirectorySync struct {
+	// Disable is used to disable the directory sync operation from GitHub
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from GitHub"`
+	// DisableGroupSync will just sync users and no groups or group memberships
+	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.Org == 'my-org'"`
+}
+
+type VulnerabilitySyncConfig struct {
+	// Disable is used to disable the directory sync operation from GitHub
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
+}
+
+type RepositorySync struct {
+	// Disable is used to disable the directory sync operation from GitHub
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload_trustCente
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSubprocessors, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterSubprocessor) graphql.Marshaler {
+			return ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayload_trustCenterSubprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSubprocessorBulkCreatePayload",
@@ -51,39 +55,7 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayloa
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSubprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSubprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "trustCenterSubprocessorKindName":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindName(ctx, field)
-			case "trustCenterSubprocessorKindID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindID(ctx, field)
-			case "subprocessorID":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
-			case "countries":
-				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
-			case "trustCenterSubprocessorKind":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
-			case "subprocessor":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
+			return ec.childFields_TrustCenterSubprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -94,28 +66,22 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_deletedIDs
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,28 +89,22 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_notDeleted
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -152,28 +112,22 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload_error(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -181,17 +135,20 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_trustCente
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSubprocessors, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterSubprocessor) graphql.Marshaler {
+			return ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSubprocessorBulkUpdatePayload",
@@ -199,39 +156,7 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayloa
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSubprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSubprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "trustCenterSubprocessorKindName":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindName(ctx, field)
-			case "trustCenterSubprocessorKindID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindID(ctx, field)
-			case "subprocessorID":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
-			case "countries":
-				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
-			case "trustCenterSubprocessorKind":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
-			case "subprocessor":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
+			return ec.childFields_TrustCenterSubprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -242,28 +167,22 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_updatedIDs
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSubprocessorBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorCreatePayload) (ret graphql.Marshaler) {
@@ -271,17 +190,20 @@ func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSub
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSubprocessor, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSubprocessor) graphql.Marshaler {
+			return ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_trustCenterSubprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSubprocessorCreatePayload",
@@ -289,39 +211,7 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_tr
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSubprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSubprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "trustCenterSubprocessorKindName":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindName(ctx, field)
-			case "trustCenterSubprocessorKindID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindID(ctx, field)
-			case "subprocessorID":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
-			case "countries":
-				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
-			case "trustCenterSubprocessorKind":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
-			case "subprocessor":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
+			return ec.childFields_TrustCenterSubprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -332,28 +222,22 @@ func (ec *executionContext) _TrustCenterSubprocessorDeletePayload_deletedID(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSubprocessorDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSubprocessorDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSubprocessorUpdatePayload) (ret graphql.Marshaler) {
@@ -361,17 +245,20 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload_trustCenterSub
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSubprocessor, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSubprocessor) graphql.Marshaler {
+			return ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSubprocessorUpdatePayload_trustCenterSubprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSubprocessorUpdatePayload",
@@ -379,39 +266,7 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorUpdatePayload_tr
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSubprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSubprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSubprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSubprocessor_updatedBy(ctx, field)
-			case "trustCenterSubprocessorKindName":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindName(ctx, field)
-			case "trustCenterSubprocessorKindID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKindID(ctx, field)
-			case "subprocessorID":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessorID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterID(ctx, field)
-			case "countries":
-				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
-			case "trustCenterSubprocessorKind":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenterSubprocessorKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
-			case "subprocessor":
-				return ec.fieldContext_TrustCenterSubprocessor_subprocessor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessor", field.Name)
+			return ec.childFields_TrustCenterSubprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -451,7 +306,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -497,7 +352,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkDeletePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -535,7 +390,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload(ctx contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -574,7 +429,7 @@ func (ec *executionContext) _TrustCenterSubprocessorCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -613,7 +468,7 @@ func (ec *executionContext) _TrustCenterSubprocessorDeletePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -652,7 +507,7 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

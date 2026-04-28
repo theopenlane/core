@@ -14,6 +14,10 @@ func persistEntityInput(ctx context.Context, db *ent.Client, integration *ent.In
 		return ErrIngestUpsertKeyMissing
 	}
 
+	if createInput.EntitySourceTypeName == nil && integration.Name != "" {
+		createInput.EntitySourceTypeName = &integration.Name
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

@@ -246,6 +246,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 			logIntegrationScopeSkipped(ctx, params.DefinitionID, string(operationName), params.InstallationID, params.ScopeExpression)
 			return nil
 		}
+
 		return err
 	}
 

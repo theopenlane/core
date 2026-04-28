@@ -1,0 +1,199 @@
+mutation CreateBulkCSVCheckResult ($input: Upload!) {
+	createBulkCSVCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
+	createBulkCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+mutation CreateCheckResult ($input: CreateCheckResultInput!) {
+	createCheckResult(input: $input) {
+		checkResult {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}
+mutation DeleteBulkCheckResult ($ids: [ID!]!) {
+	deleteBulkCheckResult(ids: $ids) {
+		deletedIDs
+	}
+}
+mutation DeleteCheckResult ($deleteCheckResultId: ID!) {
+	deleteCheckResult(id: $deleteCheckResultId) {
+		deletedID
+	}
+}
+query GetAllCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!]) {
+	checkResults(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				details
+				externalURI
+				id
+				integrationID
+				lastObservedAt
+				parentExternalID
+				source
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+query GetCheckResultByID ($checkResultId: ID!) {
+	checkResult(id: $checkResultId) {
+		createdAt
+		createdBy
+		details
+		externalURI
+		id
+		integrationID
+		lastObservedAt
+		parentExternalID
+		source
+		status
+		tags
+		updatedAt
+		updatedBy
+	}
+}
+query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!], $where: CheckResultWhereInput) {
+	checkResults(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				details
+				externalURI
+				id
+				integrationID
+				lastObservedAt
+				parentExternalID
+				source
+				status
+				tags
+				updatedAt
+				updatedBy
+			}
+		}
+	}
+}
+mutation UpdateBulkCSVCheckResult ($input: Upload!) {
+	updateBulkCSVCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
+}
+mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
+	updateBulkCheckResult(ids: $ids, input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+		updatedIDs
+	}
+}
+mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResultInput!) {
+	updateCheckResult(id: $updateCheckResultId, input: $input) {
+		checkResult {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			lastObservedAt
+			parentExternalID
+			source
+			status
+			tags
+			updatedAt
+			updatedBy
+		}
+	}
+}

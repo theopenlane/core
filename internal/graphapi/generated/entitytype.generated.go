@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _EntityTypeBulkCreatePayload_entityTypes(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkCreatePayload_entityTypes,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkCreatePayload_entityTypes(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityTypes, nil
 		},
 		nil,
-		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EntityType) graphql.Marshaler {
+			return ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityTypeBulkCreatePayload",
@@ -51,35 +55,7 @@ func (ec *executionContext) fieldContext_EntityTypeBulkCreatePayload_entityTypes
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EntityType_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EntityType_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EntityType_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_EntityType_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EntityType_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EntityType_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EntityType_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_EntityType_name(ctx, field)
-			case "owner":
-				return ec.fieldContext_EntityType_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_EntityType_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
+			return ec.childFields_EntityType(ctx, field)
 		},
 	}
 	return fc, nil
@@ -90,28 +66,22 @@ func (ec *executionContext) _EntityTypeBulkDeletePayload_deletedIDs(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityTypeBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityTypeBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityTypeBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeBulkDeletePayload) (ret graphql.Marshaler) {
@@ -119,28 +89,22 @@ func (ec *executionContext) _EntityTypeBulkDeletePayload_notDeletedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityTypeBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityTypeBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityTypeBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeBulkDeletePayload) (ret graphql.Marshaler) {
@@ -148,28 +112,22 @@ func (ec *executionContext) _EntityTypeBulkDeletePayload_error(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityTypeBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityTypeBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EntityTypeBulkUpdatePayload_entityTypes(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -177,17 +135,20 @@ func (ec *executionContext) _EntityTypeBulkUpdatePayload_entityTypes(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkUpdatePayload_entityTypes,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkUpdatePayload_entityTypes(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityTypes, nil
 		},
 		nil,
-		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EntityType) graphql.Marshaler {
+			return ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkUpdatePayload_entityTypes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityTypeBulkUpdatePayload",
@@ -195,35 +156,7 @@ func (ec *executionContext) fieldContext_EntityTypeBulkUpdatePayload_entityTypes
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EntityType_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EntityType_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EntityType_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_EntityType_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EntityType_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EntityType_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EntityType_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_EntityType_name(ctx, field)
-			case "owner":
-				return ec.fieldContext_EntityType_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_EntityType_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
+			return ec.childFields_EntityType(ctx, field)
 		},
 	}
 	return fc, nil
@@ -234,28 +167,22 @@ func (ec *executionContext) _EntityTypeBulkUpdatePayload_updatedIDs(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityTypeBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityTypeBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityTypeCreatePayload_entityType(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeCreatePayload) (ret graphql.Marshaler) {
@@ -263,17 +190,20 @@ func (ec *executionContext) _EntityTypeCreatePayload_entityType(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeCreatePayload_entityType,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeCreatePayload_entityType(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityType, nil
 		},
 		nil,
-		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityType) graphql.Marshaler {
+			return ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityTypeCreatePayload",
@@ -281,35 +211,7 @@ func (ec *executionContext) fieldContext_EntityTypeCreatePayload_entityType(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EntityType_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EntityType_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EntityType_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_EntityType_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EntityType_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EntityType_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EntityType_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_EntityType_name(ctx, field)
-			case "owner":
-				return ec.fieldContext_EntityType_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_EntityType_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
+			return ec.childFields_EntityType(ctx, field)
 		},
 	}
 	return fc, nil
@@ -320,28 +222,22 @@ func (ec *executionContext) _EntityTypeDeletePayload_deletedID(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EntityTypeDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EntityTypeDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EntityTypeUpdatePayload_entityType(ctx context.Context, field graphql.CollectedField, obj *model.EntityTypeUpdatePayload) (ret graphql.Marshaler) {
@@ -349,17 +245,20 @@ func (ec *executionContext) _EntityTypeUpdatePayload_entityType(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EntityTypeUpdatePayload_entityType,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EntityTypeUpdatePayload_entityType(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityType, nil
 		},
 		nil,
-		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityType) graphql.Marshaler {
+			return ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EntityTypeUpdatePayload",
@@ -367,35 +266,7 @@ func (ec *executionContext) fieldContext_EntityTypeUpdatePayload_entityType(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EntityType_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EntityType_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EntityType_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EntityType_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EntityType_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_EntityType_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EntityType_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EntityType_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EntityType_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EntityType_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_EntityType_name(ctx, field)
-			case "owner":
-				return ec.fieldContext_EntityType_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_EntityType_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EntityType", field.Name)
+			return ec.childFields_EntityType(ctx, field)
 		},
 	}
 	return fc, nil
@@ -435,7 +306,7 @@ func (ec *executionContext) _EntityTypeBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -481,7 +352,7 @@ func (ec *executionContext) _EntityTypeBulkDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -519,7 +390,7 @@ func (ec *executionContext) _EntityTypeBulkUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -558,7 +429,7 @@ func (ec *executionContext) _EntityTypeCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -597,7 +468,7 @@ func (ec *executionContext) _EntityTypeDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -636,7 +507,7 @@ func (ec *executionContext) _EntityTypeUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
