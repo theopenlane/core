@@ -46,7 +46,7 @@ func Builder(cfg Config) registry.Builder {
 					Name:          "AWS Assume Role",
 					Description:   "Configure Security Hub access using a cross-account IAM role.",
 					Meta: map[string]types.MetaInfo{
-						"Openlane Principal ARN": types.MetaInfo{
+						"Openlane Principal ARN": {
 							Value:     cfg.ARN,
 							AllowCopy: true,
 						},
