@@ -7610,7 +7610,6 @@ type CreateIdentityHolderInput struct {
 	AssetIDs              []string `json:"assetIDs,omitempty"`
 	EntityIDs             []string `json:"entityIDs,omitempty"`
 	DirectoryAccountIDs   []string `json:"directoryAccountIDs,omitempty"`
-	DirectoryGroupIDs     []string `json:"directoryGroupIDs,omitempty"`
 	ControlIDs            []string `json:"controlIDs,omitempty"`
 	SubcontrolIDs         []string `json:"subcontrolIDs,omitempty"`
 	PlatformIDs           []string `json:"platformIDs,omitempty"`
@@ -19729,7 +19728,6 @@ type IdentityHolder struct {
 	Assets              *AssetConnection              `json:"assets"`
 	Entities            *EntityConnection             `json:"entities"`
 	DirectoryAccounts   *DirectoryAccountConnection   `json:"directoryAccounts"`
-	DirectoryGroups     *DirectoryGroupConnection     `json:"directoryGroups"`
 	Controls            *ControlConnection            `json:"controls"`
 	Subcontrols         *SubcontrolConnection         `json:"subcontrols"`
 	Platforms           *PlatformConnection           `json:"platforms"`
@@ -20328,9 +20326,6 @@ type IdentityHolderWhereInput struct {
 	// directory_accounts edge predicates
 	HasDirectoryAccounts     *bool                         `json:"hasDirectoryAccounts,omitempty"`
 	HasDirectoryAccountsWith []*DirectoryAccountWhereInput `json:"hasDirectoryAccountsWith,omitempty"`
-	// directory_groups edge predicates
-	HasDirectoryGroups     *bool                       `json:"hasDirectoryGroups,omitempty"`
-	HasDirectoryGroupsWith []*DirectoryGroupWhereInput `json:"hasDirectoryGroupsWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -41976,9 +41971,6 @@ type UpdateIdentityHolderInput struct {
 	AddDirectoryAccountIDs      []string `json:"addDirectoryAccountIDs,omitempty"`
 	RemoveDirectoryAccountIDs   []string `json:"removeDirectoryAccountIDs,omitempty"`
 	ClearDirectoryAccounts      *bool    `json:"clearDirectoryAccounts,omitempty"`
-	AddDirectoryGroupIDs        []string `json:"addDirectoryGroupIDs,omitempty"`
-	RemoveDirectoryGroupIDs     []string `json:"removeDirectoryGroupIDs,omitempty"`
-	ClearDirectoryGroups        *bool    `json:"clearDirectoryGroups,omitempty"`
 	AddControlIDs               []string `json:"addControlIDs,omitempty"`
 	RemoveControlIDs            []string `json:"removeControlIDs,omitempty"`
 	ClearControls               *bool    `json:"clearControls,omitempty"`

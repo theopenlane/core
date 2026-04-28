@@ -967,7 +967,6 @@ func (_q *DirectorySyncRunQuery) loadDirectoryGroups(ctx context.Context, query 
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorygroup.FieldDirectorySyncRunID)
 	}

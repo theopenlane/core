@@ -139,8 +139,6 @@ type IdentityHolderEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
-	// DirectoryGroups holds the value of the directory_groups edge.
-	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
@@ -165,9 +163,9 @@ type IdentityHolderEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [26]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -178,7 +176,6 @@ type IdentityHolderEdges struct {
 	namedAssets              map[string][]*Asset
 	namedEntities            map[string][]*Entity
 	namedDirectoryAccounts   map[string][]*DirectoryAccount
-	namedDirectoryGroups     map[string][]*DirectoryGroup
 	namedControls            map[string][]*Control
 	namedSubcontrols         map[string][]*Subcontrol
 	namedPlatforms           map[string][]*Platform
@@ -338,19 +335,10 @@ func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, erro
 	return nil, &NotLoadedError{edge: "directory_accounts"}
 }
 
-// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e IdentityHolderEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[15] {
-		return e.DirectoryGroups, nil
-	}
-	return nil, &NotLoadedError{edge: "directory_groups"}
-}
-
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -359,7 +347,7 @@ func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -368,7 +356,7 @@ func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -377,7 +365,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -386,7 +374,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -395,7 +383,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -404,7 +392,7 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[21] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -413,7 +401,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[22] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -422,7 +410,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[23] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -433,7 +421,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[25] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -442,7 +430,7 @@ func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[25] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -807,11 +795,6 @@ func (_m *IdentityHolder) QueryEntities() *EntityQuery {
 // QueryDirectoryAccounts queries the "directory_accounts" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	return NewIdentityHolderClient(_m.config).QueryDirectoryAccounts(_m)
-}
-
-// QueryDirectoryGroups queries the "directory_groups" edge of the IdentityHolder entity.
-func (_m *IdentityHolder) QueryDirectoryGroups() *DirectoryGroupQuery {
-	return NewIdentityHolderClient(_m.config).QueryDirectoryGroups(_m)
 }
 
 // QueryControls queries the "controls" edge of the IdentityHolder entity.
@@ -1228,30 +1211,6 @@ func (_m *IdentityHolder) appendNamedDirectoryAccounts(name string, edges ...*Di
 		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
 	} else {
 		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
-	}
-}
-
-// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *IdentityHolder) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
-	if _m.Edges.namedDirectoryGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedDirectoryGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *IdentityHolder) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
-	if _m.Edges.namedDirectoryGroups == nil {
-		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
-	} else {
-		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
 	}
 }
 

@@ -14683,25 +14683,6 @@ func (c *IdentityHolderClient) QueryDirectoryAccounts(_m *IdentityHolder) *Direc
 	return query
 }
 
-// QueryDirectoryGroups queries the directory_groups edge of a IdentityHolder.
-func (c *IdentityHolderClient) QueryDirectoryGroups(_m *IdentityHolder) *DirectoryGroupQuery {
-	query := (&DirectoryGroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
-			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryGroupsTable, identityholder.DirectoryGroupsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryControls queries the controls edge of a IdentityHolder.
 func (c *IdentityHolderClient) QueryControls(_m *IdentityHolder) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
