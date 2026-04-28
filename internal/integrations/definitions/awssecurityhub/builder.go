@@ -147,7 +147,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    configServiceClient.ID(),
 					ConfigSchema: checkSyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.CheckSync.Disable }),
+					//  updated when DisabledForAll is removed
+					Disabled: providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaCheckResult,
@@ -170,7 +171,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    securityHubClient.ID(),
 					ConfigSchema: assetSyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.AssetSync.Disable }),
+					//  updated when DisabledForAll is removed
+					Disabled: providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,

@@ -79,7 +79,6 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 collectLoop:
 	for _, sourceName := range sources {
-		logx.FromContext(ctx).Info().Str("source", sourceName).Msg("gspscc: listing findings for source")
 		req := &securitycenterpb.ListFindingsRequest{
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
 		}

@@ -10,13 +10,7 @@ import (
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `'primaryEmail' in payload ? payload.primaryEmail : ""`},
-	{Key: integrationgenerated.IntegrationMappingDirectoryAccountPhoneNumber, Expr: `'phones' in payload && size(payload.phones) > 0
-  ? (
-      size(payload.phones.filter(p, p.type == "work")) > 0
-        ? payload.phones.filter(p, p.type == "work")[0].value
-        : payload.phones[0].value
-    )
-  : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountPhoneNumber, Expr: `'recoveryPhone' in payload ? payload.recoveryPhone : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'name' in payload && 'fullName' in payload.name ? payload.name.fullName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountGivenName, Expr: `'name' in payload && 'givenName' in payload.name ? payload.name.givenName : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountFamilyName, Expr: `'name' in payload && 'familyName' in payload.name ? payload.name.familyName : ""`},
