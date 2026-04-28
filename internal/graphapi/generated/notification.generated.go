@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,28 +34,22 @@ func (ec *executionContext) _ActionNotificationsReadPayload_readIDs(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ActionNotificationsReadPayload_readIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ActionNotificationsReadPayload_readIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ReadIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v []*string) graphql.Marshaler {
+			return ec.marshalNID2ᚕᚖstring(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ActionNotificationsReadPayload_readIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ActionNotificationsReadPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ActionNotificationsReadPayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationCreatePayload_notification(ctx context.Context, field graphql.CollectedField, obj *model.NotificationCreatePayload) (ret graphql.Marshaler) {
@@ -62,17 +57,20 @@ func (ec *executionContext) _NotificationCreatePayload_notification(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationCreatePayload_notification,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationCreatePayload_notification(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Notification, nil
 		},
 		nil,
-		ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationCreatePayload_notification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationCreatePayload",
@@ -80,47 +78,7 @@ func (ec *executionContext) fieldContext_NotificationCreatePayload_notification(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Notification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Notification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Notification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Notification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Notification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Notification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Notification_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_Notification_userID(ctx, field)
-			case "notificationType":
-				return ec.fieldContext_Notification_notificationType(ctx, field)
-			case "objectType":
-				return ec.fieldContext_Notification_objectType(ctx, field)
-			case "title":
-				return ec.fieldContext_Notification_title(ctx, field)
-			case "body":
-				return ec.fieldContext_Notification_body(ctx, field)
-			case "data":
-				return ec.fieldContext_Notification_data(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Notification_templateID(ctx, field)
-			case "readAt":
-				return ec.fieldContext_Notification_readAt(ctx, field)
-			case "channels":
-				return ec.fieldContext_Notification_channels(ctx, field)
-			case "topic":
-				return ec.fieldContext_Notification_topic(ctx, field)
-			case "owner":
-				return ec.fieldContext_Notification_owner(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_Notification_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
+			return ec.childFields_Notification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -131,17 +89,20 @@ func (ec *executionContext) _NotificationUpdatePayload_notification(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationUpdatePayload_notification,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationUpdatePayload_notification(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Notification, nil
 		},
 		nil,
-		ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationUpdatePayload_notification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationUpdatePayload",
@@ -149,47 +110,7 @@ func (ec *executionContext) fieldContext_NotificationUpdatePayload_notification(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Notification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Notification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Notification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Notification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Notification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Notification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Notification_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_Notification_userID(ctx, field)
-			case "notificationType":
-				return ec.fieldContext_Notification_notificationType(ctx, field)
-			case "objectType":
-				return ec.fieldContext_Notification_objectType(ctx, field)
-			case "title":
-				return ec.fieldContext_Notification_title(ctx, field)
-			case "body":
-				return ec.fieldContext_Notification_body(ctx, field)
-			case "data":
-				return ec.fieldContext_Notification_data(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Notification_templateID(ctx, field)
-			case "readAt":
-				return ec.fieldContext_Notification_readAt(ctx, field)
-			case "channels":
-				return ec.fieldContext_Notification_channels(ctx, field)
-			case "topic":
-				return ec.fieldContext_Notification_topic(ctx, field)
-			case "owner":
-				return ec.fieldContext_Notification_owner(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_Notification_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
+			return ec.childFields_Notification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -232,7 +153,7 @@ func (ec *executionContext) _ActionNotificationsReadPayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -271,7 +192,7 @@ func (ec *executionContext) _NotificationCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -310,7 +231,7 @@ func (ec *executionContext) _NotificationUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

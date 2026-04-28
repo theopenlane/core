@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload_scheduledJobs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ScheduledJobs, nil
 		},
 		nil,
-		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ScheduledJob) graphql.Marshaler {
+			return ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScheduledJobBulkCreatePayload",
@@ -51,43 +55,7 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ScheduledJob_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ScheduledJob_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ScheduledJob_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ScheduledJob_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "jobID":
-				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
-			case "active":
-				return ec.fieldContext_ScheduledJob_active(ctx, field)
-			case "configuration":
-				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
-			case "cron":
-				return ec.fieldContext_ScheduledJob_cron(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
-			case "owner":
-				return ec.fieldContext_ScheduledJob_owner(ctx, field)
-			case "jobTemplate":
-				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
-			case "controls":
-				return ec.fieldContext_ScheduledJob_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
+			return ec.childFields_ScheduledJob(ctx, field)
 		},
 	}
 	return fc, nil
@@ -98,28 +66,22 @@ func (ec *executionContext) _ScheduledJobBulkDeletePayload_deletedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScheduledJobBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScheduledJobBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScheduledJobBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkDeletePayload) (ret graphql.Marshaler) {
@@ -127,28 +89,22 @@ func (ec *executionContext) _ScheduledJobBulkDeletePayload_notDeletedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScheduledJobBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScheduledJobBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScheduledJobBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkDeletePayload) (ret graphql.Marshaler) {
@@ -156,28 +112,22 @@ func (ec *executionContext) _ScheduledJobBulkDeletePayload_error(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScheduledJobBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScheduledJobBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ScheduledJobBulkUpdatePayload_scheduledJobs(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -185,17 +135,20 @@ func (ec *executionContext) _ScheduledJobBulkUpdatePayload_scheduledJobs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkUpdatePayload_scheduledJobs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkUpdatePayload_scheduledJobs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ScheduledJobs, nil
 		},
 		nil,
-		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ScheduledJob) graphql.Marshaler {
+			return ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkUpdatePayload_scheduledJobs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScheduledJobBulkUpdatePayload",
@@ -203,43 +156,7 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkUpdatePayload_scheduled
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ScheduledJob_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ScheduledJob_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ScheduledJob_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ScheduledJob_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "jobID":
-				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
-			case "active":
-				return ec.fieldContext_ScheduledJob_active(ctx, field)
-			case "configuration":
-				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
-			case "cron":
-				return ec.fieldContext_ScheduledJob_cron(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
-			case "owner":
-				return ec.fieldContext_ScheduledJob_owner(ctx, field)
-			case "jobTemplate":
-				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
-			case "controls":
-				return ec.fieldContext_ScheduledJob_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
+			return ec.childFields_ScheduledJob(ctx, field)
 		},
 	}
 	return fc, nil
@@ -250,28 +167,22 @@ func (ec *executionContext) _ScheduledJobBulkUpdatePayload_updatedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScheduledJobBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScheduledJobBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobCreatePayload) (ret graphql.Marshaler) {
@@ -279,17 +190,20 @@ func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobCreatePayload_scheduledJob,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobCreatePayload_scheduledJob(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ScheduledJob, nil
 		},
 		nil,
-		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ScheduledJob) graphql.Marshaler {
+			return ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScheduledJobCreatePayload",
@@ -297,43 +211,7 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ScheduledJob_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ScheduledJob_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ScheduledJob_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ScheduledJob_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "jobID":
-				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
-			case "active":
-				return ec.fieldContext_ScheduledJob_active(ctx, field)
-			case "configuration":
-				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
-			case "cron":
-				return ec.fieldContext_ScheduledJob_cron(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
-			case "owner":
-				return ec.fieldContext_ScheduledJob_owner(ctx, field)
-			case "jobTemplate":
-				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
-			case "controls":
-				return ec.fieldContext_ScheduledJob_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
+			return ec.childFields_ScheduledJob(ctx, field)
 		},
 	}
 	return fc, nil
@@ -344,28 +222,22 @@ func (ec *executionContext) _ScheduledJobDeletePayload_deletedID(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScheduledJobDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScheduledJobDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScheduledJobUpdatePayload_scheduledJob(ctx context.Context, field graphql.CollectedField, obj *model.ScheduledJobUpdatePayload) (ret graphql.Marshaler) {
@@ -373,17 +245,20 @@ func (ec *executionContext) _ScheduledJobUpdatePayload_scheduledJob(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ScheduledJob, nil
 		},
 		nil,
-		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ScheduledJob) graphql.Marshaler {
+			return ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScheduledJobUpdatePayload",
@@ -391,43 +266,7 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ScheduledJob_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ScheduledJob_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ScheduledJob_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ScheduledJob_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-			case "jobID":
-				return ec.fieldContext_ScheduledJob_jobID(ctx, field)
-			case "active":
-				return ec.fieldContext_ScheduledJob_active(ctx, field)
-			case "configuration":
-				return ec.fieldContext_ScheduledJob_configuration(ctx, field)
-			case "cron":
-				return ec.fieldContext_ScheduledJob_cron(ctx, field)
-			case "jobRunnerID":
-				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
-			case "owner":
-				return ec.fieldContext_ScheduledJob_owner(ctx, field)
-			case "jobTemplate":
-				return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
-			case "controls":
-				return ec.fieldContext_ScheduledJob_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
-			case "jobRunner":
-				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
+			return ec.childFields_ScheduledJob(ctx, field)
 		},
 	}
 	return fc, nil
@@ -467,7 +306,7 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -513,7 +352,7 @@ func (ec *executionContext) _ScheduledJobBulkDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -551,7 +390,7 @@ func (ec *executionContext) _ScheduledJobBulkUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -590,7 +429,7 @@ func (ec *executionContext) _ScheduledJobCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -629,7 +468,7 @@ func (ec *executionContext) _ScheduledJobDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -668,7 +507,7 @@ func (ec *executionContext) _ScheduledJobUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

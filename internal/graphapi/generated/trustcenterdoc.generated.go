@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TrustCenterDocBulkCreatePayload_trustCenterDocs(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkCreatePayload_trustCenterDocs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkCreatePayload_trustCenterDocs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterDocs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterDoc) graphql.Marshaler {
+			return ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCenterDocs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterDocBulkCreatePayload",
@@ -51,55 +55,7 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterDoc_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterDoc_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterDoc_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterDoc_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
-			case "fileID":
-				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
-			case "originalFileID":
-				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
-			case "watermarkingEnabled":
-				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
-			case "watermarkStatus":
-				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
-			case "visibility":
-				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
-			case "standardID":
-				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
-			case "standard":
-				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
-			case "originalFile":
-				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
+			return ec.childFields_TrustCenterDoc(ctx, field)
 		},
 	}
 	return fc, nil
@@ -110,28 +66,22 @@ func (ec *executionContext) _TrustCenterDocBulkDeletePayload_deletedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterDocBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterDocBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterDocBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocBulkDeletePayload) (ret graphql.Marshaler) {
@@ -139,28 +89,22 @@ func (ec *executionContext) _TrustCenterDocBulkDeletePayload_notDeletedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterDocBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterDocBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterDocBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocBulkDeletePayload) (ret graphql.Marshaler) {
@@ -168,28 +112,22 @@ func (ec *executionContext) _TrustCenterDocBulkDeletePayload_error(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterDocBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterDocBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -197,17 +135,20 @@ func (ec *executionContext) _TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkUpdatePayload_trustCenterDocs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterDocs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterDoc) graphql.Marshaler {
+			return ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCenterDocs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterDocBulkUpdatePayload",
@@ -215,55 +156,7 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterDoc_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterDoc_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterDoc_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterDoc_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
-			case "fileID":
-				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
-			case "originalFileID":
-				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
-			case "watermarkingEnabled":
-				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
-			case "watermarkStatus":
-				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
-			case "visibility":
-				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
-			case "standardID":
-				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
-			case "standard":
-				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
-			case "originalFile":
-				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
+			return ec.childFields_TrustCenterDoc(ctx, field)
 		},
 	}
 	return fc, nil
@@ -274,28 +167,22 @@ func (ec *executionContext) _TrustCenterDocBulkUpdatePayload_updatedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterDocBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterDocBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterDocCreatePayload_trustCenterDoc(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocCreatePayload) (ret graphql.Marshaler) {
@@ -303,17 +190,20 @@ func (ec *executionContext) _TrustCenterDocCreatePayload_trustCenterDoc(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocCreatePayload_trustCenterDoc,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocCreatePayload_trustCenterDoc(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterDoc, nil
 		},
 		nil,
-		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterDoc) graphql.Marshaler {
+			return ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenterDoc(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterDocCreatePayload",
@@ -321,55 +211,7 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterDoc_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterDoc_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterDoc_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterDoc_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
-			case "fileID":
-				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
-			case "originalFileID":
-				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
-			case "watermarkingEnabled":
-				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
-			case "watermarkStatus":
-				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
-			case "visibility":
-				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
-			case "standardID":
-				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
-			case "standard":
-				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
-			case "originalFile":
-				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
+			return ec.childFields_TrustCenterDoc(ctx, field)
 		},
 	}
 	return fc, nil
@@ -380,28 +222,22 @@ func (ec *executionContext) _TrustCenterDocDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterDocDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterDocDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterDocUpdatePayload_trustCenterDoc(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterDocUpdatePayload) (ret graphql.Marshaler) {
@@ -409,17 +245,20 @@ func (ec *executionContext) _TrustCenterDocUpdatePayload_trustCenterDoc(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDocUpdatePayload_trustCenterDoc,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDocUpdatePayload_trustCenterDoc(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterDoc, nil
 		},
 		nil,
-		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterDoc) graphql.Marshaler {
+			return ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenterDoc(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterDocUpdatePayload",
@@ -427,55 +266,7 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterDoc_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterDoc_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterDoc_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterDoc_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
-			case "fileID":
-				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
-			case "originalFileID":
-				return ec.fieldContext_TrustCenterDoc_originalFileID(ctx, field)
-			case "watermarkingEnabled":
-				return ec.fieldContext_TrustCenterDoc_watermarkingEnabled(ctx, field)
-			case "watermarkStatus":
-				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
-			case "visibility":
-				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
-			case "standardID":
-				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
-			case "standard":
-				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
-			case "file":
-				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
-			case "originalFile":
-				return ec.fieldContext_TrustCenterDoc_originalFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDoc", field.Name)
+			return ec.childFields_TrustCenterDoc(ctx, field)
 		},
 	}
 	return fc, nil
@@ -515,7 +306,7 @@ func (ec *executionContext) _TrustCenterDocBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -561,7 +352,7 @@ func (ec *executionContext) _TrustCenterDocBulkDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -599,7 +390,7 @@ func (ec *executionContext) _TrustCenterDocBulkUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -638,7 +429,7 @@ func (ec *executionContext) _TrustCenterDocCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -677,7 +468,7 @@ func (ec *executionContext) _TrustCenterDocDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -716,7 +507,7 @@ func (ec *executionContext) _TrustCenterDocUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

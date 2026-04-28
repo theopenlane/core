@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _AssessmentResponseCreatePayload_assessmentResponse(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_AssessmentResponseCreatePayload_assessmentResponse,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentResponseCreatePayload_assessmentResponse(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.AssessmentResponse, nil
 		},
 		nil,
-		ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponse,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
+			return ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessmentResponse(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AssessmentResponseCreatePayload",
@@ -51,77 +55,7 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_AssessmentResponse_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_AssessmentResponse_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_AssessmentResponse_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_AssessmentResponse_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_AssessmentResponse_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_AssessmentResponse_ownerID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_AssessmentResponse_assessmentID(ctx, field)
-			case "isTest":
-				return ec.fieldContext_AssessmentResponse_isTest(ctx, field)
-			case "campaignID":
-				return ec.fieldContext_AssessmentResponse_campaignID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_AssessmentResponse_identityHolderID(ctx, field)
-			case "entityID":
-				return ec.fieldContext_AssessmentResponse_entityID(ctx, field)
-			case "email":
-				return ec.fieldContext_AssessmentResponse_email(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_AssessmentResponse_sendAttempts(ctx, field)
-			case "emailDeliveredAt":
-				return ec.fieldContext_AssessmentResponse_emailDeliveredAt(ctx, field)
-			case "emailOpenedAt":
-				return ec.fieldContext_AssessmentResponse_emailOpenedAt(ctx, field)
-			case "emailClickedAt":
-				return ec.fieldContext_AssessmentResponse_emailClickedAt(ctx, field)
-			case "emailOpenCount":
-				return ec.fieldContext_AssessmentResponse_emailOpenCount(ctx, field)
-			case "emailClickCount":
-				return ec.fieldContext_AssessmentResponse_emailClickCount(ctx, field)
-			case "lastEmailEventAt":
-				return ec.fieldContext_AssessmentResponse_lastEmailEventAt(ctx, field)
-			case "emailMetadata":
-				return ec.fieldContext_AssessmentResponse_emailMetadata(ctx, field)
-			case "status":
-				return ec.fieldContext_AssessmentResponse_status(ctx, field)
-			case "assignedAt":
-				return ec.fieldContext_AssessmentResponse_assignedAt(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_AssessmentResponse_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
-			case "documentDataID":
-				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
-			case "isDraft":
-				return ec.fieldContext_AssessmentResponse_isDraft(ctx, field)
-			case "owner":
-				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
-			case "assessment":
-				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
-			case "campaign":
-				return ec.fieldContext_AssessmentResponse_campaign(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_AssessmentResponse_identityHolder(ctx, field)
-			case "entity":
-				return ec.fieldContext_AssessmentResponse_entity(ctx, field)
-			case "document":
-				return ec.fieldContext_AssessmentResponse_document(ctx, field)
-			case "vendorRiskScores":
-				return ec.fieldContext_AssessmentResponse_vendorRiskScores(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
+			return ec.childFields_AssessmentResponse(ctx, field)
 		},
 	}
 	return fc, nil
@@ -132,28 +66,22 @@ func (ec *executionContext) _AssessmentResponseDeletePayload_deletedID(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_AssessmentResponseDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentResponseDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_AssessmentResponseDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentResponseDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("AssessmentResponseDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -193,7 +121,7 @@ func (ec *executionContext) _AssessmentResponseCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -232,7 +160,7 @@ func (ec *executionContext) _AssessmentResponseDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

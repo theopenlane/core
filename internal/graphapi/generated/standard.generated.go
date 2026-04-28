@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _StandardBulkCreatePayload_standards(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_StandardBulkCreatePayload_standards,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_StandardBulkCreatePayload_standards(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Standards, nil
 		},
 		nil,
-		ec.marshalOStandard2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Standard) graphql.Marshaler {
+			return ec.marshalOStandard2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "StandardBulkCreatePayload",
@@ -51,71 +55,7 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Standard_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Standard_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Standard_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Standard_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Standard_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Standard_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Standard_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Standard_name(ctx, field)
-			case "shortName":
-				return ec.fieldContext_Standard_shortName(ctx, field)
-			case "framework":
-				return ec.fieldContext_Standard_framework(ctx, field)
-			case "description":
-				return ec.fieldContext_Standard_description(ctx, field)
-			case "governingBodyLogoURL":
-				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
-			case "governingBody":
-				return ec.fieldContext_Standard_governingBody(ctx, field)
-			case "domains":
-				return ec.fieldContext_Standard_domains(ctx, field)
-			case "link":
-				return ec.fieldContext_Standard_link(ctx, field)
-			case "status":
-				return ec.fieldContext_Standard_status(ctx, field)
-			case "isPublic":
-				return ec.fieldContext_Standard_isPublic(ctx, field)
-			case "freeToUse":
-				return ec.fieldContext_Standard_freeToUse(ctx, field)
-			case "standardType":
-				return ec.fieldContext_Standard_standardType(ctx, field)
-			case "version":
-				return ec.fieldContext_Standard_version(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Standard_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Standard_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Standard_controls(ctx, field)
-			case "trustCenterCompliances":
-				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
-			case "trustCenterDocs":
-				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
-			case "applicablePlatforms":
-				return ec.fieldContext_Standard_applicablePlatforms(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Standard_logoFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
+			return ec.childFields_Standard(ctx, field)
 		},
 	}
 	return fc, nil
@@ -126,17 +66,20 @@ func (ec *executionContext) _StandardCreatePayload_standard(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_StandardCreatePayload_standard,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_StandardCreatePayload_standard(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Standard, nil
 		},
 		nil,
-		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Standard) graphql.Marshaler {
+			return ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "StandardCreatePayload",
@@ -144,71 +87,7 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Standard_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Standard_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Standard_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Standard_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Standard_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Standard_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Standard_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Standard_name(ctx, field)
-			case "shortName":
-				return ec.fieldContext_Standard_shortName(ctx, field)
-			case "framework":
-				return ec.fieldContext_Standard_framework(ctx, field)
-			case "description":
-				return ec.fieldContext_Standard_description(ctx, field)
-			case "governingBodyLogoURL":
-				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
-			case "governingBody":
-				return ec.fieldContext_Standard_governingBody(ctx, field)
-			case "domains":
-				return ec.fieldContext_Standard_domains(ctx, field)
-			case "link":
-				return ec.fieldContext_Standard_link(ctx, field)
-			case "status":
-				return ec.fieldContext_Standard_status(ctx, field)
-			case "isPublic":
-				return ec.fieldContext_Standard_isPublic(ctx, field)
-			case "freeToUse":
-				return ec.fieldContext_Standard_freeToUse(ctx, field)
-			case "standardType":
-				return ec.fieldContext_Standard_standardType(ctx, field)
-			case "version":
-				return ec.fieldContext_Standard_version(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Standard_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Standard_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Standard_controls(ctx, field)
-			case "trustCenterCompliances":
-				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
-			case "trustCenterDocs":
-				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
-			case "applicablePlatforms":
-				return ec.fieldContext_Standard_applicablePlatforms(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Standard_logoFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
+			return ec.childFields_Standard(ctx, field)
 		},
 	}
 	return fc, nil
@@ -219,28 +98,22 @@ func (ec *executionContext) _StandardDeletePayload_deletedID(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_StandardDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_StandardDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_StandardDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "StandardDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("StandardDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _StandardUpdatePayload_standard(ctx context.Context, field graphql.CollectedField, obj *model.StandardUpdatePayload) (ret graphql.Marshaler) {
@@ -248,17 +121,20 @@ func (ec *executionContext) _StandardUpdatePayload_standard(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_StandardUpdatePayload_standard,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_StandardUpdatePayload_standard(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Standard, nil
 		},
 		nil,
-		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Standard) graphql.Marshaler {
+			return ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "StandardUpdatePayload",
@@ -266,71 +142,7 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Standard_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Standard_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Standard_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Standard_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Standard_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Standard_tags(ctx, field)
-			case "revision":
-				return ec.fieldContext_Standard_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Standard_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Standard_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Standard_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Standard_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Standard_name(ctx, field)
-			case "shortName":
-				return ec.fieldContext_Standard_shortName(ctx, field)
-			case "framework":
-				return ec.fieldContext_Standard_framework(ctx, field)
-			case "description":
-				return ec.fieldContext_Standard_description(ctx, field)
-			case "governingBodyLogoURL":
-				return ec.fieldContext_Standard_governingBodyLogoURL(ctx, field)
-			case "governingBody":
-				return ec.fieldContext_Standard_governingBody(ctx, field)
-			case "domains":
-				return ec.fieldContext_Standard_domains(ctx, field)
-			case "link":
-				return ec.fieldContext_Standard_link(ctx, field)
-			case "status":
-				return ec.fieldContext_Standard_status(ctx, field)
-			case "isPublic":
-				return ec.fieldContext_Standard_isPublic(ctx, field)
-			case "freeToUse":
-				return ec.fieldContext_Standard_freeToUse(ctx, field)
-			case "standardType":
-				return ec.fieldContext_Standard_standardType(ctx, field)
-			case "version":
-				return ec.fieldContext_Standard_version(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Standard_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Standard_owner(ctx, field)
-			case "controls":
-				return ec.fieldContext_Standard_controls(ctx, field)
-			case "trustCenterCompliances":
-				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
-			case "trustCenterDocs":
-				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
-			case "applicablePlatforms":
-				return ec.fieldContext_Standard_applicablePlatforms(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Standard_logoFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
+			return ec.childFields_Standard(ctx, field)
 		},
 	}
 	return fc, nil
@@ -370,7 +182,7 @@ func (ec *executionContext) _StandardBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -409,7 +221,7 @@ func (ec *executionContext) _StandardCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -448,7 +260,7 @@ func (ec *executionContext) _StandardDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -487,7 +299,7 @@ func (ec *executionContext) _StandardUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

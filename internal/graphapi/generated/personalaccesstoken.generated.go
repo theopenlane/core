@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _PersonalAccessTokenBulkCreatePayload_personalAccess
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PersonalAccessTokenBulkCreatePayload_personalAccessTokens,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonalAccessTokenBulkCreatePayload_personalAccessTokens(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PersonalAccessTokens, nil
 		},
 		nil,
-		ec.marshalOPersonalAccessToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.PersonalAccessToken) graphql.Marshaler {
+			return ec.marshalOPersonalAccessToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_personalAccessTokens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PersonalAccessTokenBulkCreatePayload",
@@ -51,49 +55,7 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenBulkCreatePayload_pe
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_PersonalAccessToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
-			case "organizations":
-				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
-			case "events":
-				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
+			return ec.childFields_PersonalAccessToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -104,17 +66,20 @@ func (ec *executionContext) _PersonalAccessTokenCreatePayload_personalAccessToke
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PersonalAccessTokenCreatePayload_personalAccessToken,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonalAccessTokenCreatePayload_personalAccessToken(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PersonalAccessToken, nil
 		},
 		nil,
-		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.PersonalAccessToken) graphql.Marshaler {
+			return ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_personalAccessToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PersonalAccessTokenCreatePayload",
@@ -122,49 +87,7 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenCreatePayload_person
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_PersonalAccessToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
-			case "organizations":
-				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
-			case "events":
-				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
+			return ec.childFields_PersonalAccessToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -175,28 +98,22 @@ func (ec *executionContext) _PersonalAccessTokenDeletePayload_deletedID(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PersonalAccessTokenDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonalAccessTokenDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PersonalAccessTokenDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PersonalAccessTokenDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("PersonalAccessTokenDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _PersonalAccessTokenUpdatePayload_personalAccessToken(ctx context.Context, field graphql.CollectedField, obj *model.PersonalAccessTokenUpdatePayload) (ret graphql.Marshaler) {
@@ -204,17 +121,20 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload_personalAccessToke
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PersonalAccessTokenUpdatePayload_personalAccessToken,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PersonalAccessTokenUpdatePayload_personalAccessToken(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PersonalAccessToken, nil
 		},
 		nil,
-		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.PersonalAccessToken) graphql.Marshaler {
+			return ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_personalAccessToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PersonalAccessTokenUpdatePayload",
@@ -222,49 +142,7 @@ func (ec *executionContext) fieldContext_PersonalAccessTokenUpdatePayload_person
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_PersonalAccessToken_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_PersonalAccessToken_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_PersonalAccessToken_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_PersonalAccessToken_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_PersonalAccessToken_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_PersonalAccessToken_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_PersonalAccessToken_name(ctx, field)
-			case "token":
-				return ec.fieldContext_PersonalAccessToken_token(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_PersonalAccessToken_expiresAt(ctx, field)
-			case "description":
-				return ec.fieldContext_PersonalAccessToken_description(ctx, field)
-			case "scopes":
-				return ec.fieldContext_PersonalAccessToken_scopes(ctx, field)
-			case "ssoAuthorizations":
-				return ec.fieldContext_PersonalAccessToken_ssoAuthorizations(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_PersonalAccessToken_lastUsedAt(ctx, field)
-			case "isActive":
-				return ec.fieldContext_PersonalAccessToken_isActive(ctx, field)
-			case "revokedReason":
-				return ec.fieldContext_PersonalAccessToken_revokedReason(ctx, field)
-			case "revokedBy":
-				return ec.fieldContext_PersonalAccessToken_revokedBy(ctx, field)
-			case "revokedAt":
-				return ec.fieldContext_PersonalAccessToken_revokedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_PersonalAccessToken_owner(ctx, field)
-			case "organizations":
-				return ec.fieldContext_PersonalAccessToken_organizations(ctx, field)
-			case "events":
-				return ec.fieldContext_PersonalAccessToken_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PersonalAccessToken", field.Name)
+			return ec.childFields_PersonalAccessToken(ctx, field)
 		},
 	}
 	return fc, nil
@@ -304,7 +182,7 @@ func (ec *executionContext) _PersonalAccessTokenBulkCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -343,7 +221,7 @@ func (ec *executionContext) _PersonalAccessTokenCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -382,7 +260,7 @@ func (ec *executionContext) _PersonalAccessTokenDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -421,7 +299,7 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

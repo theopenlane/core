@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload_programMembershi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkCreatePayload_programMemberships,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkCreatePayload_programMemberships(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProgramMemberships, nil
 		},
 		nil,
-		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ProgramMembership) graphql.Marshaler {
+			return ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_programMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProgramMembershipBulkCreatePayload",
@@ -51,29 +55,7 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkCreatePayload_prog
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ProgramMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "role":
-				return ec.fieldContext_ProgramMembership_role(ctx, field)
-			case "programID":
-				return ec.fieldContext_ProgramMembership_programID(ctx, field)
-			case "userID":
-				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "program":
-				return ec.fieldContext_ProgramMembership_program(ctx, field)
-			case "user":
-				return ec.fieldContext_ProgramMembership_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
+			return ec.childFields_ProgramMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -84,28 +66,22 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_deletedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProgramMembershipBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkDeletePayload) (ret graphql.Marshaler) {
@@ -113,28 +89,22 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_notDeletedIDs(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProgramMembershipBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProgramMembershipBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkDeletePayload) (ret graphql.Marshaler) {
@@ -142,28 +112,22 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload_error(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProgramMembershipBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_programMemberships(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -171,17 +135,20 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_programMembershi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProgramMemberships, nil
 		},
 		nil,
-		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.ProgramMembership) graphql.Marshaler {
+			return ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProgramMembershipBulkUpdatePayload",
@@ -189,29 +156,7 @@ func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_prog
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ProgramMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "role":
-				return ec.fieldContext_ProgramMembership_role(ctx, field)
-			case "programID":
-				return ec.fieldContext_ProgramMembership_programID(ctx, field)
-			case "userID":
-				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "program":
-				return ec.fieldContext_ProgramMembership_program(ctx, field)
-			case "user":
-				return ec.fieldContext_ProgramMembership_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
+			return ec.childFields_ProgramMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -222,28 +167,22 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload_updatedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProgramMembershipBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProgramMembershipBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipCreatePayload) (ret graphql.Marshaler) {
@@ -251,17 +190,20 @@ func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipCreatePayload_programMembership,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipCreatePayload_programMembership(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProgramMembership, nil
 		},
 		nil,
-		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProgramMembership) graphql.Marshaler {
+			return ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProgramMembershipCreatePayload",
@@ -269,29 +211,7 @@ func (ec *executionContext) fieldContext_ProgramMembershipCreatePayload_programM
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ProgramMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "role":
-				return ec.fieldContext_ProgramMembership_role(ctx, field)
-			case "programID":
-				return ec.fieldContext_ProgramMembership_programID(ctx, field)
-			case "userID":
-				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "program":
-				return ec.fieldContext_ProgramMembership_program(ctx, field)
-			case "user":
-				return ec.fieldContext_ProgramMembership_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
+			return ec.childFields_ProgramMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -302,28 +222,22 @@ func (ec *executionContext) _ProgramMembershipDeletePayload_deletedID(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ProgramMembershipDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ProgramMembershipDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ctx context.Context, field graphql.CollectedField, obj *model.ProgramMembershipUpdatePayload) (ret graphql.Marshaler) {
@@ -331,17 +245,20 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ProgramMembershipUpdatePayload_programMembership,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ProgramMembershipUpdatePayload_programMembership(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProgramMembership, nil
 		},
 		nil,
-		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProgramMembership) graphql.Marshaler {
+			return ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ProgramMembershipUpdatePayload",
@@ -349,29 +266,7 @@ func (ec *executionContext) fieldContext_ProgramMembershipUpdatePayload_programM
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_ProgramMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_ProgramMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_ProgramMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_ProgramMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_ProgramMembership_updatedBy(ctx, field)
-			case "role":
-				return ec.fieldContext_ProgramMembership_role(ctx, field)
-			case "programID":
-				return ec.fieldContext_ProgramMembership_programID(ctx, field)
-			case "userID":
-				return ec.fieldContext_ProgramMembership_userID(ctx, field)
-			case "program":
-				return ec.fieldContext_ProgramMembership_program(ctx, field)
-			case "user":
-				return ec.fieldContext_ProgramMembership_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProgramMembership", field.Name)
+			return ec.childFields_ProgramMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -411,7 +306,7 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -457,7 +352,7 @@ func (ec *executionContext) _ProgramMembershipBulkDeletePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -495,7 +390,7 @@ func (ec *executionContext) _ProgramMembershipBulkUpdatePayload(ctx context.Cont
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -534,7 +429,7 @@ func (ec *executionContext) _ProgramMembershipCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -573,7 +468,7 @@ func (ec *executionContext) _ProgramMembershipDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -612,7 +507,7 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

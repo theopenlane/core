@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CustomTypeEnumBulkCreatePayload_customTypeEnums,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CustomTypeEnums, nil
 		},
 		nil,
-		ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_CustomTypeEnumBulkCreatePayload_customTypeEnums(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CustomTypeEnumBulkCreatePayload",
@@ -51,61 +55,7 @@ func (ec *executionContext) fieldContext_CustomTypeEnumBulkCreatePayload_customT
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CustomTypeEnum_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_CustomTypeEnum_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_CustomTypeEnum_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_CustomTypeEnum_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_CustomTypeEnum_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_CustomTypeEnum_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_CustomTypeEnum_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_CustomTypeEnum_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_CustomTypeEnum_systemInternalID(ctx, field)
-			case "objectType":
-				return ec.fieldContext_CustomTypeEnum_objectType(ctx, field)
-			case "field":
-				return ec.fieldContext_CustomTypeEnum_field(ctx, field)
-			case "name":
-				return ec.fieldContext_CustomTypeEnum_name(ctx, field)
-			case "description":
-				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
-			case "color":
-				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
-			case "icon":
-				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
-			case "owner":
-				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
-			case "tasks":
-				return ec.fieldContext_CustomTypeEnum_tasks(ctx, field)
-			case "controls":
-				return ec.fieldContext_CustomTypeEnum_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_CustomTypeEnum_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_CustomTypeEnum_risks(ctx, field)
-			case "riskCategories":
-				return ec.fieldContext_CustomTypeEnum_riskCategories(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_CustomTypeEnum_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_CustomTypeEnum_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
+			return ec.childFields_CustomTypeEnum(ctx, field)
 		},
 	}
 	return fc, nil
@@ -116,17 +66,20 @@ func (ec *executionContext) _CustomTypeEnumCreatePayload_customTypeEnum(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CustomTypeEnumCreatePayload_customTypeEnum,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomTypeEnumCreatePayload_customTypeEnum(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CustomTypeEnum, nil
 		},
 		nil,
-		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CustomTypeEnumCreatePayload_customTypeEnum(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CustomTypeEnumCreatePayload",
@@ -134,61 +87,7 @@ func (ec *executionContext) fieldContext_CustomTypeEnumCreatePayload_customTypeE
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CustomTypeEnum_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_CustomTypeEnum_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_CustomTypeEnum_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_CustomTypeEnum_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_CustomTypeEnum_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_CustomTypeEnum_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_CustomTypeEnum_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_CustomTypeEnum_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_CustomTypeEnum_systemInternalID(ctx, field)
-			case "objectType":
-				return ec.fieldContext_CustomTypeEnum_objectType(ctx, field)
-			case "field":
-				return ec.fieldContext_CustomTypeEnum_field(ctx, field)
-			case "name":
-				return ec.fieldContext_CustomTypeEnum_name(ctx, field)
-			case "description":
-				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
-			case "color":
-				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
-			case "icon":
-				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
-			case "owner":
-				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
-			case "tasks":
-				return ec.fieldContext_CustomTypeEnum_tasks(ctx, field)
-			case "controls":
-				return ec.fieldContext_CustomTypeEnum_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_CustomTypeEnum_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_CustomTypeEnum_risks(ctx, field)
-			case "riskCategories":
-				return ec.fieldContext_CustomTypeEnum_riskCategories(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_CustomTypeEnum_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_CustomTypeEnum_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
+			return ec.childFields_CustomTypeEnum(ctx, field)
 		},
 	}
 	return fc, nil
@@ -199,28 +98,22 @@ func (ec *executionContext) _CustomTypeEnumDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CustomTypeEnumDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomTypeEnumDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CustomTypeEnumDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CustomTypeEnumDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("CustomTypeEnumDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _CustomTypeEnumUpdatePayload_customTypeEnum(ctx context.Context, field graphql.CollectedField, obj *model.CustomTypeEnumUpdatePayload) (ret graphql.Marshaler) {
@@ -228,17 +121,20 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload_customTypeEnum(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CustomTypeEnumUpdatePayload_customTypeEnum,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomTypeEnumUpdatePayload_customTypeEnum(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CustomTypeEnum, nil
 		},
 		nil,
-		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
+			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CustomTypeEnumUpdatePayload_customTypeEnum(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CustomTypeEnumUpdatePayload",
@@ -246,61 +142,7 @@ func (ec *executionContext) fieldContext_CustomTypeEnumUpdatePayload_customTypeE
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CustomTypeEnum_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_CustomTypeEnum_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_CustomTypeEnum_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_CustomTypeEnum_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_CustomTypeEnum_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_CustomTypeEnum_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_CustomTypeEnum_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_CustomTypeEnum_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_CustomTypeEnum_systemInternalID(ctx, field)
-			case "objectType":
-				return ec.fieldContext_CustomTypeEnum_objectType(ctx, field)
-			case "field":
-				return ec.fieldContext_CustomTypeEnum_field(ctx, field)
-			case "name":
-				return ec.fieldContext_CustomTypeEnum_name(ctx, field)
-			case "description":
-				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
-			case "color":
-				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
-			case "icon":
-				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
-			case "owner":
-				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
-			case "tasks":
-				return ec.fieldContext_CustomTypeEnum_tasks(ctx, field)
-			case "controls":
-				return ec.fieldContext_CustomTypeEnum_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_CustomTypeEnum_subcontrols(ctx, field)
-			case "risks":
-				return ec.fieldContext_CustomTypeEnum_risks(ctx, field)
-			case "riskCategories":
-				return ec.fieldContext_CustomTypeEnum_riskCategories(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_CustomTypeEnum_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_CustomTypeEnum_procedures(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
-			case "programs":
-				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
-			case "platforms":
-				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
+			return ec.childFields_CustomTypeEnum(ctx, field)
 		},
 	}
 	return fc, nil
@@ -340,7 +182,7 @@ func (ec *executionContext) _CustomTypeEnumBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -379,7 +221,7 @@ func (ec *executionContext) _CustomTypeEnumCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -418,7 +260,7 @@ func (ec *executionContext) _CustomTypeEnumDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -457,7 +299,7 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -5,7 +5,7 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
@@ -33,28 +33,22 @@ func (ec *executionContext) _SearchContext_entityID(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchContext_entityID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchContext_entityID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityID, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchContext_entityID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchContext",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SearchContext_entityType(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -62,28 +56,22 @@ func (ec *executionContext) _SearchContext_entityType(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchContext_entityType,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchContext_entityType(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EntityType, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchContext_entityType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchContext",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SearchContext_matchedFields(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -91,28 +79,22 @@ func (ec *executionContext) _SearchContext_matchedFields(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchContext_matchedFields,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchContext_matchedFields(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MatchedFields, nil
 		},
 		nil,
-		ec.marshalNString2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNString2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchContext_matchedFields(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchContext",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchContext", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SearchContext_snippets(ctx context.Context, field graphql.CollectedField, obj *models.SearchContext) (ret graphql.Marshaler) {
@@ -120,17 +102,20 @@ func (ec *executionContext) _SearchContext_snippets(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchContext_snippets,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchContext_snippets(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Snippets, nil
 		},
 		nil,
-		ec.marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchSnippetᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*models.SearchSnippet) graphql.Marshaler {
+			return ec.marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchSnippetᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchContext_snippets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchContext",
@@ -138,13 +123,7 @@ func (ec *executionContext) fieldContext_SearchContext_snippets(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "field":
-				return ec.fieldContext_SearchSnippet_field(ctx, field)
-			case "text":
-				return ec.fieldContext_SearchSnippet_text(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SearchSnippet", field.Name)
+			return ec.childFields_SearchSnippet(ctx, field)
 		},
 	}
 	return fc, nil
@@ -155,28 +134,22 @@ func (ec *executionContext) _SearchSnippet_field(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchSnippet_field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchSnippet_field(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Field, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchSnippet_field(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchSnippet",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SearchSnippet_text(ctx context.Context, field graphql.CollectedField, obj *models.SearchSnippet) (ret graphql.Marshaler) {
@@ -184,28 +157,22 @@ func (ec *executionContext) _SearchSnippet_text(ctx context.Context, field graph
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchSnippet_text,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchSnippet_text(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Text, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchSnippet_text(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchSnippet",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchSnippet", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -257,7 +224,7 @@ func (ec *executionContext) _SearchContext(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -301,7 +268,7 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TaskBulkCreatePayload_tasks(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkCreatePayload_tasks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkCreatePayload_tasks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Task) graphql.Marshaler {
+			return ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TaskBulkCreatePayload",
@@ -51,115 +55,7 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Task_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Task_ownerID(ctx, field)
-			case "taskKindName":
-				return ec.fieldContext_Task_taskKindName(ctx, field)
-			case "taskKindID":
-				return ec.fieldContext_Task_taskKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Task_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Task_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Task_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Task_scopeID(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Task_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "details":
-				return ec.fieldContext_Task_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Task_detailsJSON(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "due":
-				return ec.fieldContext_Task_due(ctx, field)
-			case "completed":
-				return ec.fieldContext_Task_completed(ctx, field)
-			case "assigneeID":
-				return ec.fieldContext_Task_assigneeID(ctx, field)
-			case "assignerID":
-				return ec.fieldContext_Task_assignerID(ctx, field)
-			case "systemGenerated":
-				return ec.fieldContext_Task_systemGenerated(ctx, field)
-			case "idempotencyKey":
-				return ec.fieldContext_Task_idempotencyKey(ctx, field)
-			case "externalReferenceURL":
-				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
-			case "parentTaskID":
-				return ec.fieldContext_Task_parentTaskID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Task_owner(ctx, field)
-			case "taskKind":
-				return ec.fieldContext_Task_taskKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Task_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Task_scope(ctx, field)
-			case "assigner":
-				return ec.fieldContext_Task_assigner(ctx, field)
-			case "assignee":
-				return ec.fieldContext_Task_assignee(ctx, field)
-			case "comments":
-				return ec.fieldContext_Task_comments(ctx, field)
-			case "groups":
-				return ec.fieldContext_Task_groups(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Task_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Task_procedures(ctx, field)
-			case "controls":
-				return ec.fieldContext_Task_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Task_subcontrols(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Task_controlObjectives(ctx, field)
-			case "programs":
-				return ec.fieldContext_Task_programs(ctx, field)
-			case "risks":
-				return ec.fieldContext_Task_risks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Task_platforms(ctx, field)
-			case "scans":
-				return ec.fieldContext_Task_scans(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Task_identityHolders(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Task_controlImplementations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Task_actionPlans(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Task_evidence(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Task_vulnerabilities(ctx, field)
-			case "findings":
-				return ec.fieldContext_Task_findings(ctx, field)
-			case "parent":
-				return ec.fieldContext_Task_parent(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Task_tasks(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return ec.childFields_Task(ctx, field)
 		},
 	}
 	return fc, nil
@@ -170,28 +66,22 @@ func (ec *executionContext) _TaskBulkDeletePayload_deletedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TaskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TaskBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TaskBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkDeletePayload) (ret graphql.Marshaler) {
@@ -199,28 +89,22 @@ func (ec *executionContext) _TaskBulkDeletePayload_notDeletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TaskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TaskBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TaskBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkDeletePayload) (ret graphql.Marshaler) {
@@ -228,28 +112,22 @@ func (ec *executionContext) _TaskBulkDeletePayload_error(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TaskBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TaskBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TaskBulkUpdatePayload_tasks(ctx context.Context, field graphql.CollectedField, obj *model.TaskBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -257,17 +135,20 @@ func (ec *executionContext) _TaskBulkUpdatePayload_tasks(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkUpdatePayload_tasks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkUpdatePayload_tasks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Task) graphql.Marshaler {
+			return ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TaskBulkUpdatePayload",
@@ -275,115 +156,7 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Task_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Task_ownerID(ctx, field)
-			case "taskKindName":
-				return ec.fieldContext_Task_taskKindName(ctx, field)
-			case "taskKindID":
-				return ec.fieldContext_Task_taskKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Task_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Task_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Task_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Task_scopeID(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Task_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "details":
-				return ec.fieldContext_Task_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Task_detailsJSON(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "due":
-				return ec.fieldContext_Task_due(ctx, field)
-			case "completed":
-				return ec.fieldContext_Task_completed(ctx, field)
-			case "assigneeID":
-				return ec.fieldContext_Task_assigneeID(ctx, field)
-			case "assignerID":
-				return ec.fieldContext_Task_assignerID(ctx, field)
-			case "systemGenerated":
-				return ec.fieldContext_Task_systemGenerated(ctx, field)
-			case "idempotencyKey":
-				return ec.fieldContext_Task_idempotencyKey(ctx, field)
-			case "externalReferenceURL":
-				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
-			case "parentTaskID":
-				return ec.fieldContext_Task_parentTaskID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Task_owner(ctx, field)
-			case "taskKind":
-				return ec.fieldContext_Task_taskKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Task_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Task_scope(ctx, field)
-			case "assigner":
-				return ec.fieldContext_Task_assigner(ctx, field)
-			case "assignee":
-				return ec.fieldContext_Task_assignee(ctx, field)
-			case "comments":
-				return ec.fieldContext_Task_comments(ctx, field)
-			case "groups":
-				return ec.fieldContext_Task_groups(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Task_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Task_procedures(ctx, field)
-			case "controls":
-				return ec.fieldContext_Task_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Task_subcontrols(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Task_controlObjectives(ctx, field)
-			case "programs":
-				return ec.fieldContext_Task_programs(ctx, field)
-			case "risks":
-				return ec.fieldContext_Task_risks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Task_platforms(ctx, field)
-			case "scans":
-				return ec.fieldContext_Task_scans(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Task_identityHolders(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Task_controlImplementations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Task_actionPlans(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Task_evidence(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Task_vulnerabilities(ctx, field)
-			case "findings":
-				return ec.fieldContext_Task_findings(ctx, field)
-			case "parent":
-				return ec.fieldContext_Task_parent(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Task_tasks(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return ec.childFields_Task(ctx, field)
 		},
 	}
 	return fc, nil
@@ -394,28 +167,22 @@ func (ec *executionContext) _TaskBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TaskBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TaskBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TaskCreatePayload_task(ctx context.Context, field graphql.CollectedField, obj *model.TaskCreatePayload) (ret graphql.Marshaler) {
@@ -423,17 +190,20 @@ func (ec *executionContext) _TaskCreatePayload_task(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskCreatePayload_task,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskCreatePayload_task(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Task, nil
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Task) graphql.Marshaler {
+			return ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TaskCreatePayload",
@@ -441,115 +211,7 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Task_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Task_ownerID(ctx, field)
-			case "taskKindName":
-				return ec.fieldContext_Task_taskKindName(ctx, field)
-			case "taskKindID":
-				return ec.fieldContext_Task_taskKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Task_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Task_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Task_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Task_scopeID(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Task_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "details":
-				return ec.fieldContext_Task_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Task_detailsJSON(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "due":
-				return ec.fieldContext_Task_due(ctx, field)
-			case "completed":
-				return ec.fieldContext_Task_completed(ctx, field)
-			case "assigneeID":
-				return ec.fieldContext_Task_assigneeID(ctx, field)
-			case "assignerID":
-				return ec.fieldContext_Task_assignerID(ctx, field)
-			case "systemGenerated":
-				return ec.fieldContext_Task_systemGenerated(ctx, field)
-			case "idempotencyKey":
-				return ec.fieldContext_Task_idempotencyKey(ctx, field)
-			case "externalReferenceURL":
-				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
-			case "parentTaskID":
-				return ec.fieldContext_Task_parentTaskID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Task_owner(ctx, field)
-			case "taskKind":
-				return ec.fieldContext_Task_taskKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Task_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Task_scope(ctx, field)
-			case "assigner":
-				return ec.fieldContext_Task_assigner(ctx, field)
-			case "assignee":
-				return ec.fieldContext_Task_assignee(ctx, field)
-			case "comments":
-				return ec.fieldContext_Task_comments(ctx, field)
-			case "groups":
-				return ec.fieldContext_Task_groups(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Task_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Task_procedures(ctx, field)
-			case "controls":
-				return ec.fieldContext_Task_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Task_subcontrols(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Task_controlObjectives(ctx, field)
-			case "programs":
-				return ec.fieldContext_Task_programs(ctx, field)
-			case "risks":
-				return ec.fieldContext_Task_risks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Task_platforms(ctx, field)
-			case "scans":
-				return ec.fieldContext_Task_scans(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Task_identityHolders(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Task_controlImplementations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Task_actionPlans(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Task_evidence(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Task_vulnerabilities(ctx, field)
-			case "findings":
-				return ec.fieldContext_Task_findings(ctx, field)
-			case "parent":
-				return ec.fieldContext_Task_parent(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Task_tasks(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return ec.childFields_Task(ctx, field)
 		},
 	}
 	return fc, nil
@@ -560,28 +222,22 @@ func (ec *executionContext) _TaskDeletePayload_deletedID(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TaskDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TaskDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TaskUpdatePayload_task(ctx context.Context, field graphql.CollectedField, obj *model.TaskUpdatePayload) (ret graphql.Marshaler) {
@@ -589,17 +245,20 @@ func (ec *executionContext) _TaskUpdatePayload_task(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TaskUpdatePayload_task,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TaskUpdatePayload_task(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Task, nil
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Task) graphql.Marshaler {
+			return ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TaskUpdatePayload",
@@ -607,115 +266,7 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Task_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Task_ownerID(ctx, field)
-			case "taskKindName":
-				return ec.fieldContext_Task_taskKindName(ctx, field)
-			case "taskKindID":
-				return ec.fieldContext_Task_taskKindID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Task_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Task_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Task_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Task_scopeID(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Task_externalUUID(ctx, field)
-			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "details":
-				return ec.fieldContext_Task_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Task_detailsJSON(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "due":
-				return ec.fieldContext_Task_due(ctx, field)
-			case "completed":
-				return ec.fieldContext_Task_completed(ctx, field)
-			case "assigneeID":
-				return ec.fieldContext_Task_assigneeID(ctx, field)
-			case "assignerID":
-				return ec.fieldContext_Task_assignerID(ctx, field)
-			case "systemGenerated":
-				return ec.fieldContext_Task_systemGenerated(ctx, field)
-			case "idempotencyKey":
-				return ec.fieldContext_Task_idempotencyKey(ctx, field)
-			case "externalReferenceURL":
-				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
-			case "parentTaskID":
-				return ec.fieldContext_Task_parentTaskID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Task_owner(ctx, field)
-			case "taskKind":
-				return ec.fieldContext_Task_taskKind(ctx, field)
-			case "environment":
-				return ec.fieldContext_Task_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Task_scope(ctx, field)
-			case "assigner":
-				return ec.fieldContext_Task_assigner(ctx, field)
-			case "assignee":
-				return ec.fieldContext_Task_assignee(ctx, field)
-			case "comments":
-				return ec.fieldContext_Task_comments(ctx, field)
-			case "groups":
-				return ec.fieldContext_Task_groups(ctx, field)
-			case "internalPolicies":
-				return ec.fieldContext_Task_internalPolicies(ctx, field)
-			case "procedures":
-				return ec.fieldContext_Task_procedures(ctx, field)
-			case "controls":
-				return ec.fieldContext_Task_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Task_subcontrols(ctx, field)
-			case "controlObjectives":
-				return ec.fieldContext_Task_controlObjectives(ctx, field)
-			case "programs":
-				return ec.fieldContext_Task_programs(ctx, field)
-			case "risks":
-				return ec.fieldContext_Task_risks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Task_platforms(ctx, field)
-			case "scans":
-				return ec.fieldContext_Task_scans(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Task_identityHolders(ctx, field)
-			case "controlImplementations":
-				return ec.fieldContext_Task_controlImplementations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Task_actionPlans(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Task_evidence(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Task_vulnerabilities(ctx, field)
-			case "findings":
-				return ec.fieldContext_Task_findings(ctx, field)
-			case "parent":
-				return ec.fieldContext_Task_parent(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Task_tasks(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return ec.childFields_Task(ctx, field)
 		},
 	}
 	return fc, nil
@@ -755,7 +306,7 @@ func (ec *executionContext) _TaskBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -801,7 +352,7 @@ func (ec *executionContext) _TaskBulkDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -839,7 +390,7 @@ func (ec *executionContext) _TaskBulkUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -878,7 +429,7 @@ func (ec *executionContext) _TaskCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -917,7 +468,7 @@ func (ec *executionContext) _TaskDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -956,7 +507,7 @@ func (ec *executionContext) _TaskUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

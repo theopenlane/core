@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _PlatformBulkCreatePayload_platforms(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PlatformBulkCreatePayload_platforms,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PlatformBulkCreatePayload_platforms(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Platforms, nil
 		},
 		nil,
-		ec.marshalOPlatform2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Platform) graphql.Marshaler {
+			return ec.marshalOPlatform2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PlatformBulkCreatePayload",
@@ -51,223 +55,7 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Platform_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Platform_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Platform_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Platform_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Platform_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Platform_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Platform_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Platform_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Platform_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Platform_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Platform_internalOwnerGroupID(ctx, field)
-			case "businessOwner":
-				return ec.fieldContext_Platform_businessOwner(ctx, field)
-			case "businessOwnerUserID":
-				return ec.fieldContext_Platform_businessOwnerUserID(ctx, field)
-			case "businessOwnerGroupID":
-				return ec.fieldContext_Platform_businessOwnerGroupID(ctx, field)
-			case "technicalOwner":
-				return ec.fieldContext_Platform_technicalOwner(ctx, field)
-			case "technicalOwnerUserID":
-				return ec.fieldContext_Platform_technicalOwnerUserID(ctx, field)
-			case "technicalOwnerGroupID":
-				return ec.fieldContext_Platform_technicalOwnerGroupID(ctx, field)
-			case "securityOwner":
-				return ec.fieldContext_Platform_securityOwner(ctx, field)
-			case "securityOwnerUserID":
-				return ec.fieldContext_Platform_securityOwnerUserID(ctx, field)
-			case "securityOwnerGroupID":
-				return ec.fieldContext_Platform_securityOwnerGroupID(ctx, field)
-			case "platformKindName":
-				return ec.fieldContext_Platform_platformKindName(ctx, field)
-			case "platformKindID":
-				return ec.fieldContext_Platform_platformKindID(ctx, field)
-			case "platformDataClassificationName":
-				return ec.fieldContext_Platform_platformDataClassificationName(ctx, field)
-			case "platformDataClassificationID":
-				return ec.fieldContext_Platform_platformDataClassificationID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Platform_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Platform_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Platform_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Platform_scopeID(ctx, field)
-			case "accessModelName":
-				return ec.fieldContext_Platform_accessModelName(ctx, field)
-			case "accessModelID":
-				return ec.fieldContext_Platform_accessModelID(ctx, field)
-			case "encryptionStatusName":
-				return ec.fieldContext_Platform_encryptionStatusName(ctx, field)
-			case "encryptionStatusID":
-				return ec.fieldContext_Platform_encryptionStatusID(ctx, field)
-			case "securityTierName":
-				return ec.fieldContext_Platform_securityTierName(ctx, field)
-			case "securityTierID":
-				return ec.fieldContext_Platform_securityTierID(ctx, field)
-			case "criticalityName":
-				return ec.fieldContext_Platform_criticalityName(ctx, field)
-			case "criticalityID":
-				return ec.fieldContext_Platform_criticalityID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Platform_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Platform_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Platform_description(ctx, field)
-			case "businessPurpose":
-				return ec.fieldContext_Platform_businessPurpose(ctx, field)
-			case "scopeStatement":
-				return ec.fieldContext_Platform_scopeStatement(ctx, field)
-			case "trustBoundaryDescription":
-				return ec.fieldContext_Platform_trustBoundaryDescription(ctx, field)
-			case "dataFlowSummary":
-				return ec.fieldContext_Platform_dataFlowSummary(ctx, field)
-			case "status":
-				return ec.fieldContext_Platform_status(ctx, field)
-			case "physicalLocation":
-				return ec.fieldContext_Platform_physicalLocation(ctx, field)
-			case "region":
-				return ec.fieldContext_Platform_region(ctx, field)
-			case "containsPii":
-				return ec.fieldContext_Platform_containsPii(ctx, field)
-			case "sourceType":
-				return ec.fieldContext_Platform_sourceType(ctx, field)
-			case "sourceIdentifier":
-				return ec.fieldContext_Platform_sourceIdentifier(ctx, field)
-			case "costCenter":
-				return ec.fieldContext_Platform_costCenter(ctx, field)
-			case "estimatedMonthlyCost":
-				return ec.fieldContext_Platform_estimatedMonthlyCost(ctx, field)
-			case "purchaseDate":
-				return ec.fieldContext_Platform_purchaseDate(ctx, field)
-			case "platformOwnerID":
-				return ec.fieldContext_Platform_platformOwnerID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_Platform_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Platform_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_Platform_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Platform_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Platform_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Platform_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Platform_internalOwnerGroup(ctx, field)
-			case "businessOwnerUser":
-				return ec.fieldContext_Platform_businessOwnerUser(ctx, field)
-			case "businessOwnerGroup":
-				return ec.fieldContext_Platform_businessOwnerGroup(ctx, field)
-			case "technicalOwnerUser":
-				return ec.fieldContext_Platform_technicalOwnerUser(ctx, field)
-			case "technicalOwnerGroup":
-				return ec.fieldContext_Platform_technicalOwnerGroup(ctx, field)
-			case "securityOwnerUser":
-				return ec.fieldContext_Platform_securityOwnerUser(ctx, field)
-			case "securityOwnerGroup":
-				return ec.fieldContext_Platform_securityOwnerGroup(ctx, field)
-			case "platformKind":
-				return ec.fieldContext_Platform_platformKind(ctx, field)
-			case "platformDataClassification":
-				return ec.fieldContext_Platform_platformDataClassification(ctx, field)
-			case "environment":
-				return ec.fieldContext_Platform_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Platform_scope(ctx, field)
-			case "accessModel":
-				return ec.fieldContext_Platform_accessModel(ctx, field)
-			case "encryptionStatus":
-				return ec.fieldContext_Platform_encryptionStatus(ctx, field)
-			case "securityTier":
-				return ec.fieldContext_Platform_securityTier(ctx, field)
-			case "criticality":
-				return ec.fieldContext_Platform_criticality(ctx, field)
-			case "assets":
-				return ec.fieldContext_Platform_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Platform_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Platform_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Platform_files(ctx, field)
-			case "architectureDiagrams":
-				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
-			case "dataFlowDiagrams":
-				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
-			case "trustBoundaryDiagrams":
-				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
-			case "risks":
-				return ec.fieldContext_Platform_risks(ctx, field)
-			case "controls":
-				return ec.fieldContext_Platform_controls(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Platform_assessments(ctx, field)
-			case "scans":
-				return ec.fieldContext_Platform_scans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Platform_tasks(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Platform_identityHolders(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Platform_integrations(ctx, field)
-			case "directorySyncRuns":
-				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_Platform_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
-			case "sourceAssets":
-				return ec.fieldContext_Platform_sourceAssets(ctx, field)
-			case "sourceEntities":
-				return ec.fieldContext_Platform_sourceEntities(ctx, field)
-			case "outOfScopeAssets":
-				return ec.fieldContext_Platform_outOfScopeAssets(ctx, field)
-			case "outOfScopeVendors":
-				return ec.fieldContext_Platform_outOfScopeVendors(ctx, field)
-			case "applicableFrameworks":
-				return ec.fieldContext_Platform_applicableFrameworks(ctx, field)
-			case "generatedScans":
-				return ec.fieldContext_Platform_generatedScans(ctx, field)
-			case "platformOwner":
-				return ec.fieldContext_Platform_platformOwner(ctx, field)
-			case "systemDetail":
-				return ec.fieldContext_Platform_systemDetail(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
+			return ec.childFields_Platform(ctx, field)
 		},
 	}
 	return fc, nil
@@ -278,17 +66,20 @@ func (ec *executionContext) _PlatformCreatePayload_platform(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PlatformCreatePayload_platform,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PlatformCreatePayload_platform(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Platform, nil
 		},
 		nil,
-		ec.marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatform,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Platform) graphql.Marshaler {
+			return ec.marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatform(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PlatformCreatePayload",
@@ -296,223 +87,7 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Platform_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Platform_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Platform_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Platform_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Platform_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Platform_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Platform_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Platform_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Platform_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Platform_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Platform_internalOwnerGroupID(ctx, field)
-			case "businessOwner":
-				return ec.fieldContext_Platform_businessOwner(ctx, field)
-			case "businessOwnerUserID":
-				return ec.fieldContext_Platform_businessOwnerUserID(ctx, field)
-			case "businessOwnerGroupID":
-				return ec.fieldContext_Platform_businessOwnerGroupID(ctx, field)
-			case "technicalOwner":
-				return ec.fieldContext_Platform_technicalOwner(ctx, field)
-			case "technicalOwnerUserID":
-				return ec.fieldContext_Platform_technicalOwnerUserID(ctx, field)
-			case "technicalOwnerGroupID":
-				return ec.fieldContext_Platform_technicalOwnerGroupID(ctx, field)
-			case "securityOwner":
-				return ec.fieldContext_Platform_securityOwner(ctx, field)
-			case "securityOwnerUserID":
-				return ec.fieldContext_Platform_securityOwnerUserID(ctx, field)
-			case "securityOwnerGroupID":
-				return ec.fieldContext_Platform_securityOwnerGroupID(ctx, field)
-			case "platformKindName":
-				return ec.fieldContext_Platform_platformKindName(ctx, field)
-			case "platformKindID":
-				return ec.fieldContext_Platform_platformKindID(ctx, field)
-			case "platformDataClassificationName":
-				return ec.fieldContext_Platform_platformDataClassificationName(ctx, field)
-			case "platformDataClassificationID":
-				return ec.fieldContext_Platform_platformDataClassificationID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Platform_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Platform_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Platform_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Platform_scopeID(ctx, field)
-			case "accessModelName":
-				return ec.fieldContext_Platform_accessModelName(ctx, field)
-			case "accessModelID":
-				return ec.fieldContext_Platform_accessModelID(ctx, field)
-			case "encryptionStatusName":
-				return ec.fieldContext_Platform_encryptionStatusName(ctx, field)
-			case "encryptionStatusID":
-				return ec.fieldContext_Platform_encryptionStatusID(ctx, field)
-			case "securityTierName":
-				return ec.fieldContext_Platform_securityTierName(ctx, field)
-			case "securityTierID":
-				return ec.fieldContext_Platform_securityTierID(ctx, field)
-			case "criticalityName":
-				return ec.fieldContext_Platform_criticalityName(ctx, field)
-			case "criticalityID":
-				return ec.fieldContext_Platform_criticalityID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Platform_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Platform_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Platform_description(ctx, field)
-			case "businessPurpose":
-				return ec.fieldContext_Platform_businessPurpose(ctx, field)
-			case "scopeStatement":
-				return ec.fieldContext_Platform_scopeStatement(ctx, field)
-			case "trustBoundaryDescription":
-				return ec.fieldContext_Platform_trustBoundaryDescription(ctx, field)
-			case "dataFlowSummary":
-				return ec.fieldContext_Platform_dataFlowSummary(ctx, field)
-			case "status":
-				return ec.fieldContext_Platform_status(ctx, field)
-			case "physicalLocation":
-				return ec.fieldContext_Platform_physicalLocation(ctx, field)
-			case "region":
-				return ec.fieldContext_Platform_region(ctx, field)
-			case "containsPii":
-				return ec.fieldContext_Platform_containsPii(ctx, field)
-			case "sourceType":
-				return ec.fieldContext_Platform_sourceType(ctx, field)
-			case "sourceIdentifier":
-				return ec.fieldContext_Platform_sourceIdentifier(ctx, field)
-			case "costCenter":
-				return ec.fieldContext_Platform_costCenter(ctx, field)
-			case "estimatedMonthlyCost":
-				return ec.fieldContext_Platform_estimatedMonthlyCost(ctx, field)
-			case "purchaseDate":
-				return ec.fieldContext_Platform_purchaseDate(ctx, field)
-			case "platformOwnerID":
-				return ec.fieldContext_Platform_platformOwnerID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_Platform_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Platform_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_Platform_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Platform_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Platform_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Platform_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Platform_internalOwnerGroup(ctx, field)
-			case "businessOwnerUser":
-				return ec.fieldContext_Platform_businessOwnerUser(ctx, field)
-			case "businessOwnerGroup":
-				return ec.fieldContext_Platform_businessOwnerGroup(ctx, field)
-			case "technicalOwnerUser":
-				return ec.fieldContext_Platform_technicalOwnerUser(ctx, field)
-			case "technicalOwnerGroup":
-				return ec.fieldContext_Platform_technicalOwnerGroup(ctx, field)
-			case "securityOwnerUser":
-				return ec.fieldContext_Platform_securityOwnerUser(ctx, field)
-			case "securityOwnerGroup":
-				return ec.fieldContext_Platform_securityOwnerGroup(ctx, field)
-			case "platformKind":
-				return ec.fieldContext_Platform_platformKind(ctx, field)
-			case "platformDataClassification":
-				return ec.fieldContext_Platform_platformDataClassification(ctx, field)
-			case "environment":
-				return ec.fieldContext_Platform_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Platform_scope(ctx, field)
-			case "accessModel":
-				return ec.fieldContext_Platform_accessModel(ctx, field)
-			case "encryptionStatus":
-				return ec.fieldContext_Platform_encryptionStatus(ctx, field)
-			case "securityTier":
-				return ec.fieldContext_Platform_securityTier(ctx, field)
-			case "criticality":
-				return ec.fieldContext_Platform_criticality(ctx, field)
-			case "assets":
-				return ec.fieldContext_Platform_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Platform_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Platform_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Platform_files(ctx, field)
-			case "architectureDiagrams":
-				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
-			case "dataFlowDiagrams":
-				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
-			case "trustBoundaryDiagrams":
-				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
-			case "risks":
-				return ec.fieldContext_Platform_risks(ctx, field)
-			case "controls":
-				return ec.fieldContext_Platform_controls(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Platform_assessments(ctx, field)
-			case "scans":
-				return ec.fieldContext_Platform_scans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Platform_tasks(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Platform_identityHolders(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Platform_integrations(ctx, field)
-			case "directorySyncRuns":
-				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_Platform_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
-			case "sourceAssets":
-				return ec.fieldContext_Platform_sourceAssets(ctx, field)
-			case "sourceEntities":
-				return ec.fieldContext_Platform_sourceEntities(ctx, field)
-			case "outOfScopeAssets":
-				return ec.fieldContext_Platform_outOfScopeAssets(ctx, field)
-			case "outOfScopeVendors":
-				return ec.fieldContext_Platform_outOfScopeVendors(ctx, field)
-			case "applicableFrameworks":
-				return ec.fieldContext_Platform_applicableFrameworks(ctx, field)
-			case "generatedScans":
-				return ec.fieldContext_Platform_generatedScans(ctx, field)
-			case "platformOwner":
-				return ec.fieldContext_Platform_platformOwner(ctx, field)
-			case "systemDetail":
-				return ec.fieldContext_Platform_systemDetail(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
+			return ec.childFields_Platform(ctx, field)
 		},
 	}
 	return fc, nil
@@ -523,28 +98,22 @@ func (ec *executionContext) _PlatformDeletePayload_deletedID(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PlatformDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PlatformDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PlatformDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "PlatformDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("PlatformDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _PlatformUpdatePayload_platform(ctx context.Context, field graphql.CollectedField, obj *model.PlatformUpdatePayload) (ret graphql.Marshaler) {
@@ -552,17 +121,20 @@ func (ec *executionContext) _PlatformUpdatePayload_platform(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_PlatformUpdatePayload_platform,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PlatformUpdatePayload_platform(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Platform, nil
 		},
 		nil,
-		ec.marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatform,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Platform) graphql.Marshaler {
+			return ec.marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatform(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "PlatformUpdatePayload",
@@ -570,223 +142,7 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Platform_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Platform_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Platform_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Platform_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Platform_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Platform_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Platform_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Platform_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Platform_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Platform_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Platform_internalOwnerGroupID(ctx, field)
-			case "businessOwner":
-				return ec.fieldContext_Platform_businessOwner(ctx, field)
-			case "businessOwnerUserID":
-				return ec.fieldContext_Platform_businessOwnerUserID(ctx, field)
-			case "businessOwnerGroupID":
-				return ec.fieldContext_Platform_businessOwnerGroupID(ctx, field)
-			case "technicalOwner":
-				return ec.fieldContext_Platform_technicalOwner(ctx, field)
-			case "technicalOwnerUserID":
-				return ec.fieldContext_Platform_technicalOwnerUserID(ctx, field)
-			case "technicalOwnerGroupID":
-				return ec.fieldContext_Platform_technicalOwnerGroupID(ctx, field)
-			case "securityOwner":
-				return ec.fieldContext_Platform_securityOwner(ctx, field)
-			case "securityOwnerUserID":
-				return ec.fieldContext_Platform_securityOwnerUserID(ctx, field)
-			case "securityOwnerGroupID":
-				return ec.fieldContext_Platform_securityOwnerGroupID(ctx, field)
-			case "platformKindName":
-				return ec.fieldContext_Platform_platformKindName(ctx, field)
-			case "platformKindID":
-				return ec.fieldContext_Platform_platformKindID(ctx, field)
-			case "platformDataClassificationName":
-				return ec.fieldContext_Platform_platformDataClassificationName(ctx, field)
-			case "platformDataClassificationID":
-				return ec.fieldContext_Platform_platformDataClassificationID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Platform_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Platform_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Platform_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Platform_scopeID(ctx, field)
-			case "accessModelName":
-				return ec.fieldContext_Platform_accessModelName(ctx, field)
-			case "accessModelID":
-				return ec.fieldContext_Platform_accessModelID(ctx, field)
-			case "encryptionStatusName":
-				return ec.fieldContext_Platform_encryptionStatusName(ctx, field)
-			case "encryptionStatusID":
-				return ec.fieldContext_Platform_encryptionStatusID(ctx, field)
-			case "securityTierName":
-				return ec.fieldContext_Platform_securityTierName(ctx, field)
-			case "securityTierID":
-				return ec.fieldContext_Platform_securityTierID(ctx, field)
-			case "criticalityName":
-				return ec.fieldContext_Platform_criticalityName(ctx, field)
-			case "criticalityID":
-				return ec.fieldContext_Platform_criticalityID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Platform_workflowEligibleMarker(ctx, field)
-			case "externalUUID":
-				return ec.fieldContext_Platform_externalUUID(ctx, field)
-			case "name":
-				return ec.fieldContext_Platform_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Platform_description(ctx, field)
-			case "businessPurpose":
-				return ec.fieldContext_Platform_businessPurpose(ctx, field)
-			case "scopeStatement":
-				return ec.fieldContext_Platform_scopeStatement(ctx, field)
-			case "trustBoundaryDescription":
-				return ec.fieldContext_Platform_trustBoundaryDescription(ctx, field)
-			case "dataFlowSummary":
-				return ec.fieldContext_Platform_dataFlowSummary(ctx, field)
-			case "status":
-				return ec.fieldContext_Platform_status(ctx, field)
-			case "physicalLocation":
-				return ec.fieldContext_Platform_physicalLocation(ctx, field)
-			case "region":
-				return ec.fieldContext_Platform_region(ctx, field)
-			case "containsPii":
-				return ec.fieldContext_Platform_containsPii(ctx, field)
-			case "sourceType":
-				return ec.fieldContext_Platform_sourceType(ctx, field)
-			case "sourceIdentifier":
-				return ec.fieldContext_Platform_sourceIdentifier(ctx, field)
-			case "costCenter":
-				return ec.fieldContext_Platform_costCenter(ctx, field)
-			case "estimatedMonthlyCost":
-				return ec.fieldContext_Platform_estimatedMonthlyCost(ctx, field)
-			case "purchaseDate":
-				return ec.fieldContext_Platform_purchaseDate(ctx, field)
-			case "platformOwnerID":
-				return ec.fieldContext_Platform_platformOwnerID(ctx, field)
-			case "externalReferenceID":
-				return ec.fieldContext_Platform_externalReferenceID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Platform_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_Platform_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Platform_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Platform_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Platform_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Platform_internalOwnerGroup(ctx, field)
-			case "businessOwnerUser":
-				return ec.fieldContext_Platform_businessOwnerUser(ctx, field)
-			case "businessOwnerGroup":
-				return ec.fieldContext_Platform_businessOwnerGroup(ctx, field)
-			case "technicalOwnerUser":
-				return ec.fieldContext_Platform_technicalOwnerUser(ctx, field)
-			case "technicalOwnerGroup":
-				return ec.fieldContext_Platform_technicalOwnerGroup(ctx, field)
-			case "securityOwnerUser":
-				return ec.fieldContext_Platform_securityOwnerUser(ctx, field)
-			case "securityOwnerGroup":
-				return ec.fieldContext_Platform_securityOwnerGroup(ctx, field)
-			case "platformKind":
-				return ec.fieldContext_Platform_platformKind(ctx, field)
-			case "platformDataClassification":
-				return ec.fieldContext_Platform_platformDataClassification(ctx, field)
-			case "environment":
-				return ec.fieldContext_Platform_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Platform_scope(ctx, field)
-			case "accessModel":
-				return ec.fieldContext_Platform_accessModel(ctx, field)
-			case "encryptionStatus":
-				return ec.fieldContext_Platform_encryptionStatus(ctx, field)
-			case "securityTier":
-				return ec.fieldContext_Platform_securityTier(ctx, field)
-			case "criticality":
-				return ec.fieldContext_Platform_criticality(ctx, field)
-			case "assets":
-				return ec.fieldContext_Platform_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Platform_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Platform_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Platform_files(ctx, field)
-			case "architectureDiagrams":
-				return ec.fieldContext_Platform_architectureDiagrams(ctx, field)
-			case "dataFlowDiagrams":
-				return ec.fieldContext_Platform_dataFlowDiagrams(ctx, field)
-			case "trustBoundaryDiagrams":
-				return ec.fieldContext_Platform_trustBoundaryDiagrams(ctx, field)
-			case "risks":
-				return ec.fieldContext_Platform_risks(ctx, field)
-			case "controls":
-				return ec.fieldContext_Platform_controls(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Platform_assessments(ctx, field)
-			case "scans":
-				return ec.fieldContext_Platform_scans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Platform_tasks(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Platform_identityHolders(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Platform_integrations(ctx, field)
-			case "directorySyncRuns":
-				return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
-			case "directoryAccounts":
-				return ec.fieldContext_Platform_directoryAccounts(ctx, field)
-			case "directoryGroups":
-				return ec.fieldContext_Platform_directoryGroups(ctx, field)
-			case "directoryMemberships":
-				return ec.fieldContext_Platform_directoryMemberships(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Platform_workflowObjectRefs(ctx, field)
-			case "sourceAssets":
-				return ec.fieldContext_Platform_sourceAssets(ctx, field)
-			case "sourceEntities":
-				return ec.fieldContext_Platform_sourceEntities(ctx, field)
-			case "outOfScopeAssets":
-				return ec.fieldContext_Platform_outOfScopeAssets(ctx, field)
-			case "outOfScopeVendors":
-				return ec.fieldContext_Platform_outOfScopeVendors(ctx, field)
-			case "applicableFrameworks":
-				return ec.fieldContext_Platform_applicableFrameworks(ctx, field)
-			case "generatedScans":
-				return ec.fieldContext_Platform_generatedScans(ctx, field)
-			case "platformOwner":
-				return ec.fieldContext_Platform_platformOwner(ctx, field)
-			case "systemDetail":
-				return ec.fieldContext_Platform_systemDetail(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Platform_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Platform_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Platform_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Platform_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Platform", field.Name)
+			return ec.childFields_Platform(ctx, field)
 		},
 	}
 	return fc, nil
@@ -826,7 +182,7 @@ func (ec *executionContext) _PlatformBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -865,7 +221,7 @@ func (ec *executionContext) _PlatformCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -904,7 +260,7 @@ func (ec *executionContext) _PlatformDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -943,7 +299,7 @@ func (ec *executionContext) _PlatformUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

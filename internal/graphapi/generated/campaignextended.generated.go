@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload_campaign(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignCreateWithTargetsPayload_campaign,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignCreateWithTargetsPayload_campaign(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Campaign, nil
 		},
 		nil,
-		ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
+			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campaign(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CampaignCreateWithTargetsPayload",
@@ -51,131 +55,7 @@ func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campai
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Campaign_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Campaign_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Campaign_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Campaign_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Campaign_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Campaign_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Campaign_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Campaign_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Campaign_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Campaign_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Campaign_internalOwnerGroupID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Campaign_workflowEligibleMarker(ctx, field)
-			case "name":
-				return ec.fieldContext_Campaign_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Campaign_description(ctx, field)
-			case "campaignType":
-				return ec.fieldContext_Campaign_campaignType(ctx, field)
-			case "status":
-				return ec.fieldContext_Campaign_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_Campaign_isActive(ctx, field)
-			case "scheduledAt":
-				return ec.fieldContext_Campaign_scheduledAt(ctx, field)
-			case "launchedAt":
-				return ec.fieldContext_Campaign_launchedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_Campaign_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Campaign_dueDate(ctx, field)
-			case "isRecurring":
-				return ec.fieldContext_Campaign_isRecurring(ctx, field)
-			case "recurrenceFrequency":
-				return ec.fieldContext_Campaign_recurrenceFrequency(ctx, field)
-			case "recurrenceInterval":
-				return ec.fieldContext_Campaign_recurrenceInterval(ctx, field)
-			case "recurrenceCron":
-				return ec.fieldContext_Campaign_recurrenceCron(ctx, field)
-			case "recurrenceTimezone":
-				return ec.fieldContext_Campaign_recurrenceTimezone(ctx, field)
-			case "lastRunAt":
-				return ec.fieldContext_Campaign_lastRunAt(ctx, field)
-			case "nextRunAt":
-				return ec.fieldContext_Campaign_nextRunAt(ctx, field)
-			case "recurrenceEndAt":
-				return ec.fieldContext_Campaign_recurrenceEndAt(ctx, field)
-			case "recipientCount":
-				return ec.fieldContext_Campaign_recipientCount(ctx, field)
-			case "resendCount":
-				return ec.fieldContext_Campaign_resendCount(ctx, field)
-			case "lastResentAt":
-				return ec.fieldContext_Campaign_lastResentAt(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Campaign_templateID(ctx, field)
-			case "entityID":
-				return ec.fieldContext_Campaign_entityID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_Campaign_assessmentID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Campaign_metadata(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Campaign_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Campaign_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Campaign_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Campaign_internalOwnerGroup(ctx, field)
-			case "assessment":
-				return ec.fieldContext_Campaign_assessment(ctx, field)
-			case "template":
-				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
-			case "entity":
-				return ec.fieldContext_Campaign_entity(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Campaign_campaignTargets(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Campaign_assessmentResponses(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Campaign_contacts(ctx, field)
-			case "users":
-				return ec.fieldContext_Campaign_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Campaign_groups(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Campaign_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Campaign_controls(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Campaign_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Campaign_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Campaign_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Campaign_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Campaign", field.Name)
+			return ec.childFields_Campaign(ctx, field)
 		},
 	}
 	return fc, nil
@@ -186,17 +66,20 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload_campaignTargets(ct
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignCreateWithTargetsPayload_campaignTargets,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignCreateWithTargetsPayload_campaignTargets(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CampaignTargets, nil
 		},
 		nil,
-		ec.marshalOCampaignTarget2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.CampaignTarget) graphql.Marshaler {
+			return ec.marshalOCampaignTarget2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campaignTargets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CampaignCreateWithTargetsPayload",
@@ -204,63 +87,7 @@ func (ec *executionContext) fieldContext_CampaignCreateWithTargetsPayload_campai
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CampaignTarget_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_CampaignTarget_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_CampaignTarget_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_CampaignTarget_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_CampaignTarget_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_CampaignTarget_ownerID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_CampaignTarget_workflowEligibleMarker(ctx, field)
-			case "campaignID":
-				return ec.fieldContext_CampaignTarget_campaignID(ctx, field)
-			case "contactID":
-				return ec.fieldContext_CampaignTarget_contactID(ctx, field)
-			case "userID":
-				return ec.fieldContext_CampaignTarget_userID(ctx, field)
-			case "groupID":
-				return ec.fieldContext_CampaignTarget_groupID(ctx, field)
-			case "email":
-				return ec.fieldContext_CampaignTarget_email(ctx, field)
-			case "fullName":
-				return ec.fieldContext_CampaignTarget_fullName(ctx, field)
-			case "status":
-				return ec.fieldContext_CampaignTarget_status(ctx, field)
-			case "sentAt":
-				return ec.fieldContext_CampaignTarget_sentAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_CampaignTarget_completedAt(ctx, field)
-			case "metadata":
-				return ec.fieldContext_CampaignTarget_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_CampaignTarget_owner(ctx, field)
-			case "campaign":
-				return ec.fieldContext_CampaignTarget_campaign(ctx, field)
-			case "contact":
-				return ec.fieldContext_CampaignTarget_contact(ctx, field)
-			case "user":
-				return ec.fieldContext_CampaignTarget_user(ctx, field)
-			case "group":
-				return ec.fieldContext_CampaignTarget_group(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_CampaignTarget_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_CampaignTarget_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_CampaignTarget_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_CampaignTarget_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_CampaignTarget_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CampaignTarget", field.Name)
+			return ec.childFields_CampaignTarget(ctx, field)
 		},
 	}
 	return fc, nil
@@ -271,17 +98,20 @@ func (ec *executionContext) _CampaignLaunchPayload_campaign(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignLaunchPayload_campaign,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignLaunchPayload_campaign(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Campaign, nil
 		},
 		nil,
-		ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
+			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignLaunchPayload_campaign(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CampaignLaunchPayload",
@@ -289,131 +119,7 @@ func (ec *executionContext) fieldContext_CampaignLaunchPayload_campaign(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Campaign_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Campaign_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Campaign_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Campaign_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Campaign_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Campaign_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Campaign_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Campaign_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Campaign_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Campaign_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Campaign_internalOwnerGroupID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Campaign_workflowEligibleMarker(ctx, field)
-			case "name":
-				return ec.fieldContext_Campaign_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Campaign_description(ctx, field)
-			case "campaignType":
-				return ec.fieldContext_Campaign_campaignType(ctx, field)
-			case "status":
-				return ec.fieldContext_Campaign_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_Campaign_isActive(ctx, field)
-			case "scheduledAt":
-				return ec.fieldContext_Campaign_scheduledAt(ctx, field)
-			case "launchedAt":
-				return ec.fieldContext_Campaign_launchedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_Campaign_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Campaign_dueDate(ctx, field)
-			case "isRecurring":
-				return ec.fieldContext_Campaign_isRecurring(ctx, field)
-			case "recurrenceFrequency":
-				return ec.fieldContext_Campaign_recurrenceFrequency(ctx, field)
-			case "recurrenceInterval":
-				return ec.fieldContext_Campaign_recurrenceInterval(ctx, field)
-			case "recurrenceCron":
-				return ec.fieldContext_Campaign_recurrenceCron(ctx, field)
-			case "recurrenceTimezone":
-				return ec.fieldContext_Campaign_recurrenceTimezone(ctx, field)
-			case "lastRunAt":
-				return ec.fieldContext_Campaign_lastRunAt(ctx, field)
-			case "nextRunAt":
-				return ec.fieldContext_Campaign_nextRunAt(ctx, field)
-			case "recurrenceEndAt":
-				return ec.fieldContext_Campaign_recurrenceEndAt(ctx, field)
-			case "recipientCount":
-				return ec.fieldContext_Campaign_recipientCount(ctx, field)
-			case "resendCount":
-				return ec.fieldContext_Campaign_resendCount(ctx, field)
-			case "lastResentAt":
-				return ec.fieldContext_Campaign_lastResentAt(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Campaign_templateID(ctx, field)
-			case "entityID":
-				return ec.fieldContext_Campaign_entityID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_Campaign_assessmentID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Campaign_metadata(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Campaign_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Campaign_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Campaign_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Campaign_internalOwnerGroup(ctx, field)
-			case "assessment":
-				return ec.fieldContext_Campaign_assessment(ctx, field)
-			case "template":
-				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
-			case "entity":
-				return ec.fieldContext_Campaign_entity(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Campaign_campaignTargets(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Campaign_assessmentResponses(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Campaign_contacts(ctx, field)
-			case "users":
-				return ec.fieldContext_Campaign_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Campaign_groups(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Campaign_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Campaign_controls(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Campaign_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Campaign_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Campaign_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Campaign_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Campaign", field.Name)
+			return ec.childFields_Campaign(ctx, field)
 		},
 	}
 	return fc, nil
@@ -424,28 +130,22 @@ func (ec *executionContext) _CampaignLaunchPayload_queuedCount(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignLaunchPayload_queuedCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignLaunchPayload_queuedCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.QueuedCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignLaunchPayload_queuedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CampaignLaunchPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _CampaignLaunchPayload_skippedCount(ctx context.Context, field graphql.CollectedField, obj *model.CampaignLaunchPayload) (ret graphql.Marshaler) {
@@ -453,28 +153,22 @@ func (ec *executionContext) _CampaignLaunchPayload_skippedCount(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignLaunchPayload_skippedCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignLaunchPayload_skippedCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SkippedCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignLaunchPayload_skippedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CampaignLaunchPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("CampaignLaunchPayload", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _CampaignTestEmailPayload_campaign(ctx context.Context, field graphql.CollectedField, obj *model.CampaignTestEmailPayload) (ret graphql.Marshaler) {
@@ -482,17 +176,20 @@ func (ec *executionContext) _CampaignTestEmailPayload_campaign(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignTestEmailPayload_campaign,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignTestEmailPayload_campaign(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Campaign, nil
 		},
 		nil,
-		ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
+			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignTestEmailPayload_campaign(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "CampaignTestEmailPayload",
@@ -500,131 +197,7 @@ func (ec *executionContext) fieldContext_CampaignTestEmailPayload_campaign(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Campaign_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Campaign_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Campaign_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Campaign_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Campaign_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Campaign_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_Campaign_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Campaign_ownerID(ctx, field)
-			case "internalOwner":
-				return ec.fieldContext_Campaign_internalOwner(ctx, field)
-			case "internalOwnerUserID":
-				return ec.fieldContext_Campaign_internalOwnerUserID(ctx, field)
-			case "internalOwnerGroupID":
-				return ec.fieldContext_Campaign_internalOwnerGroupID(ctx, field)
-			case "workflowEligibleMarker":
-				return ec.fieldContext_Campaign_workflowEligibleMarker(ctx, field)
-			case "name":
-				return ec.fieldContext_Campaign_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Campaign_description(ctx, field)
-			case "campaignType":
-				return ec.fieldContext_Campaign_campaignType(ctx, field)
-			case "status":
-				return ec.fieldContext_Campaign_status(ctx, field)
-			case "isActive":
-				return ec.fieldContext_Campaign_isActive(ctx, field)
-			case "scheduledAt":
-				return ec.fieldContext_Campaign_scheduledAt(ctx, field)
-			case "launchedAt":
-				return ec.fieldContext_Campaign_launchedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_Campaign_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_Campaign_dueDate(ctx, field)
-			case "isRecurring":
-				return ec.fieldContext_Campaign_isRecurring(ctx, field)
-			case "recurrenceFrequency":
-				return ec.fieldContext_Campaign_recurrenceFrequency(ctx, field)
-			case "recurrenceInterval":
-				return ec.fieldContext_Campaign_recurrenceInterval(ctx, field)
-			case "recurrenceCron":
-				return ec.fieldContext_Campaign_recurrenceCron(ctx, field)
-			case "recurrenceTimezone":
-				return ec.fieldContext_Campaign_recurrenceTimezone(ctx, field)
-			case "lastRunAt":
-				return ec.fieldContext_Campaign_lastRunAt(ctx, field)
-			case "nextRunAt":
-				return ec.fieldContext_Campaign_nextRunAt(ctx, field)
-			case "recurrenceEndAt":
-				return ec.fieldContext_Campaign_recurrenceEndAt(ctx, field)
-			case "recipientCount":
-				return ec.fieldContext_Campaign_recipientCount(ctx, field)
-			case "resendCount":
-				return ec.fieldContext_Campaign_resendCount(ctx, field)
-			case "lastResentAt":
-				return ec.fieldContext_Campaign_lastResentAt(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Campaign_templateID(ctx, field)
-			case "entityID":
-				return ec.fieldContext_Campaign_entityID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_Campaign_assessmentID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Campaign_metadata(ctx, field)
-			case "emailBrandingID":
-				return ec.fieldContext_Campaign_emailBrandingID(ctx, field)
-			case "emailTemplateID":
-				return ec.fieldContext_Campaign_emailTemplateID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Campaign_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Campaign_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Campaign_viewers(ctx, field)
-			case "internalOwnerUser":
-				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
-			case "internalOwnerGroup":
-				return ec.fieldContext_Campaign_internalOwnerGroup(ctx, field)
-			case "assessment":
-				return ec.fieldContext_Campaign_assessment(ctx, field)
-			case "template":
-				return ec.fieldContext_Campaign_template(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_Campaign_emailBranding(ctx, field)
-			case "emailTemplate":
-				return ec.fieldContext_Campaign_emailTemplate(ctx, field)
-			case "entity":
-				return ec.fieldContext_Campaign_entity(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Campaign_campaignTargets(ctx, field)
-			case "assessmentResponses":
-				return ec.fieldContext_Campaign_assessmentResponses(ctx, field)
-			case "contacts":
-				return ec.fieldContext_Campaign_contacts(ctx, field)
-			case "users":
-				return ec.fieldContext_Campaign_users(ctx, field)
-			case "groups":
-				return ec.fieldContext_Campaign_groups(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Campaign_identityHolders(ctx, field)
-			case "controls":
-				return ec.fieldContext_Campaign_controls(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_Campaign_workflowObjectRefs(ctx, field)
-			case "hasPendingWorkflow":
-				return ec.fieldContext_Campaign_hasPendingWorkflow(ctx, field)
-			case "hasWorkflowHistory":
-				return ec.fieldContext_Campaign_hasWorkflowHistory(ctx, field)
-			case "activeWorkflowInstances":
-				return ec.fieldContext_Campaign_activeWorkflowInstances(ctx, field)
-			case "workflowTimeline":
-				return ec.fieldContext_Campaign_workflowTimeline(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Campaign", field.Name)
+			return ec.childFields_Campaign(ctx, field)
 		},
 	}
 	return fc, nil
@@ -635,28 +208,22 @@ func (ec *executionContext) _CampaignTestEmailPayload_queuedCount(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignTestEmailPayload_queuedCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignTestEmailPayload_queuedCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.QueuedCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignTestEmailPayload_queuedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CampaignTestEmailPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _CampaignTestEmailPayload_skippedCount(ctx context.Context, field graphql.CollectedField, obj *model.CampaignTestEmailPayload) (ret graphql.Marshaler) {
@@ -664,28 +231,22 @@ func (ec *executionContext) _CampaignTestEmailPayload_skippedCount(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_CampaignTestEmailPayload_skippedCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CampaignTestEmailPayload_skippedCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SkippedCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_CampaignTestEmailPayload_skippedCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "CampaignTestEmailPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("CampaignTestEmailPayload", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -882,7 +443,7 @@ func (ec *executionContext) _CampaignCreateWithTargetsPayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -931,7 +492,7 @@ func (ec *executionContext) _CampaignLaunchPayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -980,7 +541,7 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

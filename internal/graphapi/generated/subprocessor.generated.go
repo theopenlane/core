@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload_subprocessors(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkCreatePayload_subprocessors,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkCreatePayload_subprocessors(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Subprocessor) graphql.Marshaler {
+			return ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubprocessorBulkCreatePayload",
@@ -51,45 +55,7 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subprocessor_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subprocessor_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Subprocessor_description(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
-			case "trustCenterSubprocessors":
-				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
-			case "entities":
-				return ec.fieldContext_Subprocessor_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
+			return ec.childFields_Subprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -100,28 +66,22 @@ func (ec *executionContext) _SubprocessorBulkDeletePayload_deletedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SubprocessorBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -129,28 +89,22 @@ func (ec *executionContext) _SubprocessorBulkDeletePayload_notDeletedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubprocessorBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SubprocessorBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorBulkDeletePayload) (ret graphql.Marshaler) {
@@ -158,28 +112,22 @@ func (ec *executionContext) _SubprocessorBulkDeletePayload_error(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubprocessorBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubprocessorBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SubprocessorBulkUpdatePayload_subprocessors(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -187,17 +135,20 @@ func (ec *executionContext) _SubprocessorBulkUpdatePayload_subprocessors(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkUpdatePayload_subprocessors,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkUpdatePayload_subprocessors(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Subprocessor) graphql.Marshaler {
+			return ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkUpdatePayload_subprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubprocessorBulkUpdatePayload",
@@ -205,45 +156,7 @@ func (ec *executionContext) fieldContext_SubprocessorBulkUpdatePayload_subproces
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subprocessor_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subprocessor_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Subprocessor_description(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
-			case "trustCenterSubprocessors":
-				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
-			case "entities":
-				return ec.fieldContext_Subprocessor_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
+			return ec.childFields_Subprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -254,28 +167,22 @@ func (ec *executionContext) _SubprocessorBulkUpdatePayload_updatedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubprocessorBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubprocessorBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SubprocessorCreatePayload_subprocessor(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorCreatePayload) (ret graphql.Marshaler) {
@@ -283,17 +190,20 @@ func (ec *executionContext) _SubprocessorCreatePayload_subprocessor(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorCreatePayload_subprocessor,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorCreatePayload_subprocessor(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subprocessor, nil
 		},
 		nil,
-		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subprocessor) graphql.Marshaler {
+			return ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubprocessorCreatePayload",
@@ -301,45 +211,7 @@ func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subprocessor_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subprocessor_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Subprocessor_description(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
-			case "trustCenterSubprocessors":
-				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
-			case "entities":
-				return ec.fieldContext_Subprocessor_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
+			return ec.childFields_Subprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -350,28 +222,22 @@ func (ec *executionContext) _SubprocessorDeletePayload_deletedID(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubprocessorDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubprocessorDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SubprocessorUpdatePayload_subprocessor(ctx context.Context, field graphql.CollectedField, obj *model.SubprocessorUpdatePayload) (ret graphql.Marshaler) {
@@ -379,17 +245,20 @@ func (ec *executionContext) _SubprocessorUpdatePayload_subprocessor(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubprocessorUpdatePayload_subprocessor,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubprocessorUpdatePayload_subprocessor(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subprocessor, nil
 		},
 		nil,
-		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subprocessor) graphql.Marshaler {
+			return ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubprocessorUpdatePayload",
@@ -397,45 +266,7 @@ func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subprocessor_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subprocessor_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subprocessor_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subprocessor_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subprocessor_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subprocessor_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subprocessor_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Subprocessor_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Subprocessor_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Subprocessor_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Subprocessor_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Subprocessor_description(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoFileID":
-				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
-			case "trustCenterSubprocessors":
-				return ec.fieldContext_Subprocessor_trustCenterSubprocessors(ctx, field)
-			case "entities":
-				return ec.fieldContext_Subprocessor_entities(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subprocessor", field.Name)
+			return ec.childFields_Subprocessor(ctx, field)
 		},
 	}
 	return fc, nil
@@ -475,7 +306,7 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -521,7 +352,7 @@ func (ec *executionContext) _SubprocessorBulkDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -559,7 +390,7 @@ func (ec *executionContext) _SubprocessorBulkUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -598,7 +429,7 @@ func (ec *executionContext) _SubprocessorCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -637,7 +468,7 @@ func (ec *executionContext) _SubprocessorDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -676,7 +507,7 @@ func (ec *executionContext) _SubprocessorUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

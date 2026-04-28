@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _NotificationPreferenceBulkCreatePayload_notificatio
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkCreatePayload_notificationPreferences,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkCreatePayload_notificationPreferences(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationPreferences, nil
 		},
 		nil,
-		ec.marshalONotificationPreference2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.NotificationPreference) graphql.Marshaler {
+			return ec.marshalONotificationPreference2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkCreatePayload_notificationPreferences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationPreferenceBulkCreatePayload",
@@ -51,69 +55,7 @@ func (ec *executionContext) fieldContext_NotificationPreferenceBulkCreatePayload
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationPreference_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationPreference_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationPreference_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationPreference_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationPreference_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationPreference_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_NotificationPreference_userID(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationPreference_channel(ctx, field)
-			case "status":
-				return ec.fieldContext_NotificationPreference_status(ctx, field)
-			case "provider":
-				return ec.fieldContext_NotificationPreference_provider(ctx, field)
-			case "destination":
-				return ec.fieldContext_NotificationPreference_destination(ctx, field)
-			case "config":
-				return ec.fieldContext_NotificationPreference_config(ctx, field)
-			case "enabled":
-				return ec.fieldContext_NotificationPreference_enabled(ctx, field)
-			case "cadence":
-				return ec.fieldContext_NotificationPreference_cadence(ctx, field)
-			case "priority":
-				return ec.fieldContext_NotificationPreference_priority(ctx, field)
-			case "topicPatterns":
-				return ec.fieldContext_NotificationPreference_topicPatterns(ctx, field)
-			case "topicOverrides":
-				return ec.fieldContext_NotificationPreference_topicOverrides(ctx, field)
-			case "templateID":
-				return ec.fieldContext_NotificationPreference_templateID(ctx, field)
-			case "muteUntil":
-				return ec.fieldContext_NotificationPreference_muteUntil(ctx, field)
-			case "quietHoursStart":
-				return ec.fieldContext_NotificationPreference_quietHoursStart(ctx, field)
-			case "quietHoursEnd":
-				return ec.fieldContext_NotificationPreference_quietHoursEnd(ctx, field)
-			case "timezone":
-				return ec.fieldContext_NotificationPreference_timezone(ctx, field)
-			case "isDefault":
-				return ec.fieldContext_NotificationPreference_isDefault(ctx, field)
-			case "verifiedAt":
-				return ec.fieldContext_NotificationPreference_verifiedAt(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_NotificationPreference_lastUsedAt(ctx, field)
-			case "lastError":
-				return ec.fieldContext_NotificationPreference_lastError(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationPreference_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationPreference_owner(ctx, field)
-			case "user":
-				return ec.fieldContext_NotificationPreference_user(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_NotificationPreference_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationPreference", field.Name)
+			return ec.childFields_NotificationPreference(ctx, field)
 		},
 	}
 	return fc, nil
@@ -124,28 +66,22 @@ func (ec *executionContext) _NotificationPreferenceBulkDeletePayload_deletedIDs(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationPreferenceBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationPreferenceBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationPreferenceBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceBulkDeletePayload) (ret graphql.Marshaler) {
@@ -153,28 +89,22 @@ func (ec *executionContext) _NotificationPreferenceBulkDeletePayload_notDeletedI
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationPreferenceBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationPreferenceBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationPreferenceBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceBulkDeletePayload) (ret graphql.Marshaler) {
@@ -182,28 +112,22 @@ func (ec *executionContext) _NotificationPreferenceBulkDeletePayload_error(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationPreferenceBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationPreferenceBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationPreferenceBulkUpdatePayload_notificationPreferences(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -211,17 +135,20 @@ func (ec *executionContext) _NotificationPreferenceBulkUpdatePayload_notificatio
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkUpdatePayload_notificationPreferences,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_notificationPreferences(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationPreferences, nil
 		},
 		nil,
-		ec.marshalONotificationPreference2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.NotificationPreference) graphql.Marshaler {
+			return ec.marshalONotificationPreference2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkUpdatePayload_notificationPreferences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationPreferenceBulkUpdatePayload",
@@ -229,69 +156,7 @@ func (ec *executionContext) fieldContext_NotificationPreferenceBulkUpdatePayload
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationPreference_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationPreference_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationPreference_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationPreference_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationPreference_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationPreference_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_NotificationPreference_userID(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationPreference_channel(ctx, field)
-			case "status":
-				return ec.fieldContext_NotificationPreference_status(ctx, field)
-			case "provider":
-				return ec.fieldContext_NotificationPreference_provider(ctx, field)
-			case "destination":
-				return ec.fieldContext_NotificationPreference_destination(ctx, field)
-			case "config":
-				return ec.fieldContext_NotificationPreference_config(ctx, field)
-			case "enabled":
-				return ec.fieldContext_NotificationPreference_enabled(ctx, field)
-			case "cadence":
-				return ec.fieldContext_NotificationPreference_cadence(ctx, field)
-			case "priority":
-				return ec.fieldContext_NotificationPreference_priority(ctx, field)
-			case "topicPatterns":
-				return ec.fieldContext_NotificationPreference_topicPatterns(ctx, field)
-			case "topicOverrides":
-				return ec.fieldContext_NotificationPreference_topicOverrides(ctx, field)
-			case "templateID":
-				return ec.fieldContext_NotificationPreference_templateID(ctx, field)
-			case "muteUntil":
-				return ec.fieldContext_NotificationPreference_muteUntil(ctx, field)
-			case "quietHoursStart":
-				return ec.fieldContext_NotificationPreference_quietHoursStart(ctx, field)
-			case "quietHoursEnd":
-				return ec.fieldContext_NotificationPreference_quietHoursEnd(ctx, field)
-			case "timezone":
-				return ec.fieldContext_NotificationPreference_timezone(ctx, field)
-			case "isDefault":
-				return ec.fieldContext_NotificationPreference_isDefault(ctx, field)
-			case "verifiedAt":
-				return ec.fieldContext_NotificationPreference_verifiedAt(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_NotificationPreference_lastUsedAt(ctx, field)
-			case "lastError":
-				return ec.fieldContext_NotificationPreference_lastError(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationPreference_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationPreference_owner(ctx, field)
-			case "user":
-				return ec.fieldContext_NotificationPreference_user(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_NotificationPreference_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationPreference", field.Name)
+			return ec.childFields_NotificationPreference(ctx, field)
 		},
 	}
 	return fc, nil
@@ -302,28 +167,22 @@ func (ec *executionContext) _NotificationPreferenceBulkUpdatePayload_updatedIDs(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationPreferenceBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationPreferenceBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationPreferenceCreatePayload_notificationPreference(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceCreatePayload) (ret graphql.Marshaler) {
@@ -331,17 +190,20 @@ func (ec *executionContext) _NotificationPreferenceCreatePayload_notificationPre
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceCreatePayload_notificationPreference,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceCreatePayload_notificationPreference(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationPreference, nil
 		},
 		nil,
-		ec.marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreference,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationPreference) graphql.Marshaler {
+			return ec.marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceCreatePayload_notificationPreference(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationPreferenceCreatePayload",
@@ -349,69 +211,7 @@ func (ec *executionContext) fieldContext_NotificationPreferenceCreatePayload_not
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationPreference_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationPreference_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationPreference_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationPreference_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationPreference_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationPreference_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_NotificationPreference_userID(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationPreference_channel(ctx, field)
-			case "status":
-				return ec.fieldContext_NotificationPreference_status(ctx, field)
-			case "provider":
-				return ec.fieldContext_NotificationPreference_provider(ctx, field)
-			case "destination":
-				return ec.fieldContext_NotificationPreference_destination(ctx, field)
-			case "config":
-				return ec.fieldContext_NotificationPreference_config(ctx, field)
-			case "enabled":
-				return ec.fieldContext_NotificationPreference_enabled(ctx, field)
-			case "cadence":
-				return ec.fieldContext_NotificationPreference_cadence(ctx, field)
-			case "priority":
-				return ec.fieldContext_NotificationPreference_priority(ctx, field)
-			case "topicPatterns":
-				return ec.fieldContext_NotificationPreference_topicPatterns(ctx, field)
-			case "topicOverrides":
-				return ec.fieldContext_NotificationPreference_topicOverrides(ctx, field)
-			case "templateID":
-				return ec.fieldContext_NotificationPreference_templateID(ctx, field)
-			case "muteUntil":
-				return ec.fieldContext_NotificationPreference_muteUntil(ctx, field)
-			case "quietHoursStart":
-				return ec.fieldContext_NotificationPreference_quietHoursStart(ctx, field)
-			case "quietHoursEnd":
-				return ec.fieldContext_NotificationPreference_quietHoursEnd(ctx, field)
-			case "timezone":
-				return ec.fieldContext_NotificationPreference_timezone(ctx, field)
-			case "isDefault":
-				return ec.fieldContext_NotificationPreference_isDefault(ctx, field)
-			case "verifiedAt":
-				return ec.fieldContext_NotificationPreference_verifiedAt(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_NotificationPreference_lastUsedAt(ctx, field)
-			case "lastError":
-				return ec.fieldContext_NotificationPreference_lastError(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationPreference_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationPreference_owner(ctx, field)
-			case "user":
-				return ec.fieldContext_NotificationPreference_user(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_NotificationPreference_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationPreference", field.Name)
+			return ec.childFields_NotificationPreference(ctx, field)
 		},
 	}
 	return fc, nil
@@ -422,28 +222,22 @@ func (ec *executionContext) _NotificationPreferenceDeletePayload_deletedID(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "NotificationPreferenceDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("NotificationPreferenceDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _NotificationPreferenceUpdatePayload_notificationPreference(ctx context.Context, field graphql.CollectedField, obj *model.NotificationPreferenceUpdatePayload) (ret graphql.Marshaler) {
@@ -451,17 +245,20 @@ func (ec *executionContext) _NotificationPreferenceUpdatePayload_notificationPre
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_NotificationPreferenceUpdatePayload_notificationPreference,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_NotificationPreferenceUpdatePayload_notificationPreference(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationPreference, nil
 		},
 		nil,
-		ec.marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreference,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationPreference) graphql.Marshaler {
+			return ec.marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_NotificationPreferenceUpdatePayload_notificationPreference(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "NotificationPreferenceUpdatePayload",
@@ -469,69 +266,7 @@ func (ec *executionContext) fieldContext_NotificationPreferenceUpdatePayload_not
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_NotificationPreference_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_NotificationPreference_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_NotificationPreference_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_NotificationPreference_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_NotificationPreference_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_NotificationPreference_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_NotificationPreference_userID(ctx, field)
-			case "channel":
-				return ec.fieldContext_NotificationPreference_channel(ctx, field)
-			case "status":
-				return ec.fieldContext_NotificationPreference_status(ctx, field)
-			case "provider":
-				return ec.fieldContext_NotificationPreference_provider(ctx, field)
-			case "destination":
-				return ec.fieldContext_NotificationPreference_destination(ctx, field)
-			case "config":
-				return ec.fieldContext_NotificationPreference_config(ctx, field)
-			case "enabled":
-				return ec.fieldContext_NotificationPreference_enabled(ctx, field)
-			case "cadence":
-				return ec.fieldContext_NotificationPreference_cadence(ctx, field)
-			case "priority":
-				return ec.fieldContext_NotificationPreference_priority(ctx, field)
-			case "topicPatterns":
-				return ec.fieldContext_NotificationPreference_topicPatterns(ctx, field)
-			case "topicOverrides":
-				return ec.fieldContext_NotificationPreference_topicOverrides(ctx, field)
-			case "templateID":
-				return ec.fieldContext_NotificationPreference_templateID(ctx, field)
-			case "muteUntil":
-				return ec.fieldContext_NotificationPreference_muteUntil(ctx, field)
-			case "quietHoursStart":
-				return ec.fieldContext_NotificationPreference_quietHoursStart(ctx, field)
-			case "quietHoursEnd":
-				return ec.fieldContext_NotificationPreference_quietHoursEnd(ctx, field)
-			case "timezone":
-				return ec.fieldContext_NotificationPreference_timezone(ctx, field)
-			case "isDefault":
-				return ec.fieldContext_NotificationPreference_isDefault(ctx, field)
-			case "verifiedAt":
-				return ec.fieldContext_NotificationPreference_verifiedAt(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_NotificationPreference_lastUsedAt(ctx, field)
-			case "lastError":
-				return ec.fieldContext_NotificationPreference_lastError(ctx, field)
-			case "metadata":
-				return ec.fieldContext_NotificationPreference_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_NotificationPreference_owner(ctx, field)
-			case "user":
-				return ec.fieldContext_NotificationPreference_user(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_NotificationPreference_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationPreference", field.Name)
+			return ec.childFields_NotificationPreference(ctx, field)
 		},
 	}
 	return fc, nil
@@ -571,7 +306,7 @@ func (ec *executionContext) _NotificationPreferenceBulkCreatePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -617,7 +352,7 @@ func (ec *executionContext) _NotificationPreferenceBulkDeletePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -655,7 +390,7 @@ func (ec *executionContext) _NotificationPreferenceBulkUpdatePayload(ctx context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -694,7 +429,7 @@ func (ec *executionContext) _NotificationPreferenceCreatePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -733,7 +468,7 @@ func (ec *executionContext) _NotificationPreferenceDeletePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -772,7 +507,7 @@ func (ec *executionContext) _NotificationPreferenceUpdatePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

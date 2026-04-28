@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _EmailTemplateBulkCreatePayload_emailTemplates(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkCreatePayload_emailTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkCreatePayload_emailTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailTemplates, nil
 		},
 		nil,
-		ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EmailTemplate) graphql.Marshaler {
+			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EmailTemplateBulkCreatePayload",
@@ -51,89 +55,7 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -144,28 +66,22 @@ func (ec *executionContext) _EmailTemplateBulkDeletePayload_deletedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -173,28 +89,22 @@ func (ec *executionContext) _EmailTemplateBulkDeletePayload_notDeletedIDs(ctx co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -202,28 +112,22 @@ func (ec *executionContext) _EmailTemplateBulkDeletePayload_error(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateBulkUpdatePayload_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -231,17 +135,20 @@ func (ec *executionContext) _EmailTemplateBulkUpdatePayload_emailTemplates(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkUpdatePayload_emailTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkUpdatePayload_emailTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailTemplates, nil
 		},
 		nil,
-		ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EmailTemplate) graphql.Marshaler {
+			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EmailTemplateBulkUpdatePayload",
@@ -249,89 +156,7 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -342,28 +167,22 @@ func (ec *executionContext) _EmailTemplateBulkUpdatePayload_updatedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateCreatePayload_emailTemplate(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCreatePayload) (ret graphql.Marshaler) {
@@ -371,17 +190,20 @@ func (ec *executionContext) _EmailTemplateCreatePayload_emailTemplate(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCreatePayload_emailTemplate,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCreatePayload_emailTemplate(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailTemplate, nil
 		},
 		nil,
-		ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
+			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EmailTemplateCreatePayload",
@@ -389,89 +211,7 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -482,28 +222,22 @@ func (ec *executionContext) _EmailTemplateDeletePayload_deletedID(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateUpdatePayload_emailTemplate(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateUpdatePayload) (ret graphql.Marshaler) {
@@ -511,17 +245,20 @@ func (ec *executionContext) _EmailTemplateUpdatePayload_emailTemplate(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateUpdatePayload_emailTemplate,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateUpdatePayload_emailTemplate(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailTemplate, nil
 		},
 		nil,
-		ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
+			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EmailTemplateUpdatePayload",
@@ -529,89 +266,7 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "subjectTemplate":
-				return ec.fieldContext_EmailTemplate_subjectTemplate(ctx, field)
-			case "preheaderTemplate":
-				return ec.fieldContext_EmailTemplate_preheaderTemplate(ctx, field)
-			case "bodyTemplate":
-				return ec.fieldContext_EmailTemplate_bodyTemplate(ctx, field)
-			case "textTemplate":
-				return ec.fieldContext_EmailTemplate_textTemplate(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_EmailTemplate_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_EmailTemplate_uischema(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "emailBranding":
-				return ec.fieldContext_EmailTemplate_emailBranding(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -651,7 +306,7 @@ func (ec *executionContext) _EmailTemplateBulkCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -697,7 +352,7 @@ func (ec *executionContext) _EmailTemplateBulkDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -735,7 +390,7 @@ func (ec *executionContext) _EmailTemplateBulkUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -774,7 +429,7 @@ func (ec *executionContext) _EmailTemplateCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -813,7 +468,7 @@ func (ec *executionContext) _EmailTemplateDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -852,7 +507,7 @@ func (ec *executionContext) _EmailTemplateUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

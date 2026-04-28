@@ -5,12 +5,13 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -34,28 +35,22 @@ func (ec *executionContext) _WorkflowFieldDiff_field(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_field(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Field, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_field(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowFieldDiff_label(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -63,28 +58,22 @@ func (ec *executionContext) _WorkflowFieldDiff_label(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_label,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_label(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Label, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowFieldDiff_type(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -92,28 +81,22 @@ func (ec *executionContext) _WorkflowFieldDiff_type(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_type,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_type(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Type, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowFieldDiff_currentValue(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -121,28 +104,22 @@ func (ec *executionContext) _WorkflowFieldDiff_currentValue(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_currentValue,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_currentValue(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CurrentValue, nil
 		},
 		nil,
-		ec.marshalOAny2interface,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOAny2interface(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_currentValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Any does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowFieldDiff_proposedValue(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -150,28 +127,22 @@ func (ec *executionContext) _WorkflowFieldDiff_proposedValue(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_proposedValue,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_proposedValue(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProposedValue, nil
 		},
 		nil,
-		ec.marshalOAny2interface,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOAny2interface(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_proposedValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Any does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowFieldDiff_diff(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowFieldDiff) (ret graphql.Marshaler) {
@@ -179,28 +150,22 @@ func (ec *executionContext) _WorkflowFieldDiff_diff(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowFieldDiff_diff,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowFieldDiff_diff(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Diff, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowFieldDiff_diff(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_proposalID(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -208,28 +173,22 @@ func (ec *executionContext) _WorkflowProposalPreview_proposalID(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_proposalID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_proposalID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProposalID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_proposalID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_domainKey(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -237,28 +196,22 @@ func (ec *executionContext) _WorkflowProposalPreview_domainKey(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_domainKey,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_domainKey(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DomainKey, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_domainKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_state(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -266,28 +219,22 @@ func (ec *executionContext) _WorkflowProposalPreview_state(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_state,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_state(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.State, nil
 		},
 		nil,
-		ec.marshalNWorkflowProposalState2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐWorkflowProposalState,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.WorkflowProposalState) graphql.Marshaler {
+			return ec.marshalNWorkflowProposalState2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐWorkflowProposalState(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_state(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type WorkflowProposalState does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type WorkflowProposalState does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_submittedAt(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -295,28 +242,22 @@ func (ec *executionContext) _WorkflowProposalPreview_submittedAt(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_submittedAt,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_submittedAt(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SubmittedAt, nil
 		},
 		nil,
-		ec.marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime,
+		func(ctx context.Context, selections ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_submittedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type DateTime does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type DateTime does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_submittedByUserID(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -324,28 +265,22 @@ func (ec *executionContext) _WorkflowProposalPreview_submittedByUserID(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_submittedByUserID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_submittedByUserID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SubmittedByUserID, nil
 		},
 		nil,
-		ec.marshalOID2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_submittedByUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_proposedChanges(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -353,28 +288,22 @@ func (ec *executionContext) _WorkflowProposalPreview_proposedChanges(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_proposedChanges,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_proposedChanges(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ProposedChanges, nil
 		},
 		nil,
-		ec.marshalOMap2map,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_proposedChanges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Map does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_currentValues(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -382,28 +311,22 @@ func (ec *executionContext) _WorkflowProposalPreview_currentValues(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_currentValues,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_currentValues(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CurrentValues, nil
 		},
 		nil,
-		ec.marshalOMap2map,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_currentValues(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowProposalPreview",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Map does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("WorkflowProposalPreview", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
 func (ec *executionContext) _WorkflowProposalPreview_diffs(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowProposalPreview) (ret graphql.Marshaler) {
@@ -411,17 +334,20 @@ func (ec *executionContext) _WorkflowProposalPreview_diffs(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowProposalPreview_diffs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowProposalPreview_diffs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Diffs, nil
 		},
 		nil,
-		ec.marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.WorkflowFieldDiff) graphql.Marshaler {
+			return ec.marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowProposalPreview_diffs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowProposalPreview",
@@ -429,21 +355,7 @@ func (ec *executionContext) fieldContext_WorkflowProposalPreview_diffs(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "field":
-				return ec.fieldContext_WorkflowFieldDiff_field(ctx, field)
-			case "label":
-				return ec.fieldContext_WorkflowFieldDiff_label(ctx, field)
-			case "type":
-				return ec.fieldContext_WorkflowFieldDiff_type(ctx, field)
-			case "currentValue":
-				return ec.fieldContext_WorkflowFieldDiff_currentValue(ctx, field)
-			case "proposedValue":
-				return ec.fieldContext_WorkflowFieldDiff_proposedValue(ctx, field)
-			case "diff":
-				return ec.fieldContext_WorkflowFieldDiff_diff(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowFieldDiff", field.Name)
+			return ec.childFields_WorkflowFieldDiff(ctx, field)
 		},
 	}
 	return fc, nil
@@ -496,7 +408,7 @@ func (ec *executionContext) _WorkflowFieldDiff(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -558,7 +470,7 @@ func (ec *executionContext) _WorkflowProposalPreview(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

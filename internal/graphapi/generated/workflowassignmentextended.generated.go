@@ -4,11 +4,12 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,17 +33,20 @@ func (ec *executionContext) _WorkflowAssignmentApprovePayload_workflowAssignment
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowAssignmentApprovePayload_workflowAssignment,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowAssignmentApprovePayload_workflowAssignment(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.WorkflowAssignment, nil
 		},
 		nil,
-		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
+			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowAssignmentApprovePayload_workflowAssignment(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowAssignmentApprovePayload",
@@ -50,65 +54,7 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentApprovePayload_workfl
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowAssignment_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowAssignment_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowAssignment_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowAssignment_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowAssignment_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_WorkflowAssignment_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_WorkflowAssignment_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowAssignment_ownerID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_WorkflowAssignment_workflowInstanceID(ctx, field)
-			case "assignmentKey":
-				return ec.fieldContext_WorkflowAssignment_assignmentKey(ctx, field)
-			case "role":
-				return ec.fieldContext_WorkflowAssignment_role(ctx, field)
-			case "label":
-				return ec.fieldContext_WorkflowAssignment_label(ctx, field)
-			case "required":
-				return ec.fieldContext_WorkflowAssignment_required(ctx, field)
-			case "status":
-				return ec.fieldContext_WorkflowAssignment_status(ctx, field)
-			case "metadata":
-				return ec.fieldContext_WorkflowAssignment_metadata(ctx, field)
-			case "approvalMetadata":
-				return ec.fieldContext_WorkflowAssignment_approvalMetadata(ctx, field)
-			case "rejectionMetadata":
-				return ec.fieldContext_WorkflowAssignment_rejectionMetadata(ctx, field)
-			case "invalidationMetadata":
-				return ec.fieldContext_WorkflowAssignment_invalidationMetadata(ctx, field)
-			case "decidedAt":
-				return ec.fieldContext_WorkflowAssignment_decidedAt(ctx, field)
-			case "actorUserID":
-				return ec.fieldContext_WorkflowAssignment_actorUserID(ctx, field)
-			case "actorGroupID":
-				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
-			case "notes":
-				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
-			case "dueAt":
-				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_WorkflowAssignment_workflowInstance(ctx, field)
-			case "workflowAssignmentTargets":
-				return ec.fieldContext_WorkflowAssignment_workflowAssignmentTargets(ctx, field)
-			case "user":
-				return ec.fieldContext_WorkflowAssignment_user(ctx, field)
-			case "group":
-				return ec.fieldContext_WorkflowAssignment_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignment", field.Name)
+			return ec.childFields_WorkflowAssignment(ctx, field)
 		},
 	}
 	return fc, nil
@@ -119,17 +65,20 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload_workflowAssignment(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_WorkflowAssignmentRejectPayload_workflowAssignment,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkflowAssignmentRejectPayload_workflowAssignment(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.WorkflowAssignment, nil
 		},
 		nil,
-		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
+			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_WorkflowAssignmentRejectPayload_workflowAssignment(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "WorkflowAssignmentRejectPayload",
@@ -137,65 +86,7 @@ func (ec *executionContext) fieldContext_WorkflowAssignmentRejectPayload_workflo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowAssignment_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowAssignment_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowAssignment_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowAssignment_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowAssignment_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_WorkflowAssignment_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_WorkflowAssignment_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowAssignment_ownerID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_WorkflowAssignment_workflowInstanceID(ctx, field)
-			case "assignmentKey":
-				return ec.fieldContext_WorkflowAssignment_assignmentKey(ctx, field)
-			case "role":
-				return ec.fieldContext_WorkflowAssignment_role(ctx, field)
-			case "label":
-				return ec.fieldContext_WorkflowAssignment_label(ctx, field)
-			case "required":
-				return ec.fieldContext_WorkflowAssignment_required(ctx, field)
-			case "status":
-				return ec.fieldContext_WorkflowAssignment_status(ctx, field)
-			case "metadata":
-				return ec.fieldContext_WorkflowAssignment_metadata(ctx, field)
-			case "approvalMetadata":
-				return ec.fieldContext_WorkflowAssignment_approvalMetadata(ctx, field)
-			case "rejectionMetadata":
-				return ec.fieldContext_WorkflowAssignment_rejectionMetadata(ctx, field)
-			case "invalidationMetadata":
-				return ec.fieldContext_WorkflowAssignment_invalidationMetadata(ctx, field)
-			case "decidedAt":
-				return ec.fieldContext_WorkflowAssignment_decidedAt(ctx, field)
-			case "actorUserID":
-				return ec.fieldContext_WorkflowAssignment_actorUserID(ctx, field)
-			case "actorGroupID":
-				return ec.fieldContext_WorkflowAssignment_actorGroupID(ctx, field)
-			case "notes":
-				return ec.fieldContext_WorkflowAssignment_notes(ctx, field)
-			case "dueAt":
-				return ec.fieldContext_WorkflowAssignment_dueAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowAssignment_owner(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_WorkflowAssignment_workflowInstance(ctx, field)
-			case "workflowAssignmentTargets":
-				return ec.fieldContext_WorkflowAssignment_workflowAssignmentTargets(ctx, field)
-			case "user":
-				return ec.fieldContext_WorkflowAssignment_user(ctx, field)
-			case "group":
-				return ec.fieldContext_WorkflowAssignment_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowAssignment", field.Name)
+			return ec.childFields_WorkflowAssignment(ctx, field)
 		},
 	}
 	return fc, nil
@@ -238,7 +129,7 @@ func (ec *executionContext) _WorkflowAssignmentApprovePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -277,7 +168,7 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

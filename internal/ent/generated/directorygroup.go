@@ -474,19 +474,19 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
-		case directorygroup.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field identity_holder_directory_groups", values[i])
-			} else if value.Valid {
-				_m.identity_holder_directory_groups = new(string)
-				*_m.identity_holder_directory_groups = value.String
-			}
 		case directorygroup.FieldDirectoryName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
 			} else if value.Valid {
 				_m.DirectoryName = new(string)
 				*_m.DirectoryName = value.String
+			}
+		case directorygroup.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_directory_groups", values[i])
+			} else if value.Valid {
+				_m.identity_holder_directory_groups = new(string)
+				*_m.identity_holder_directory_groups = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _SubscriberBulkCreatePayload_subscribers(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubscriberBulkCreatePayload_subscribers,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubscriberBulkCreatePayload_subscribers(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subscribers, nil
 		},
 		nil,
-		ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Subscriber) graphql.Marshaler {
+			return ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubscriberBulkCreatePayload",
@@ -51,41 +55,7 @@ func (ec *executionContext) fieldContext_SubscriberBulkCreatePayload_subscribers
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subscriber_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subscriber_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subscriber_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subscriber_ownerID(ctx, field)
-			case "email":
-				return ec.fieldContext_Subscriber_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Subscriber_phoneNumber(ctx, field)
-			case "verifiedEmail":
-				return ec.fieldContext_Subscriber_verifiedEmail(ctx, field)
-			case "verifiedPhone":
-				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
-			case "active":
-				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "unsubscribed":
-				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subscriber_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Subscriber_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subscriber", field.Name)
+			return ec.childFields_Subscriber(ctx, field)
 		},
 	}
 	return fc, nil
@@ -96,17 +66,20 @@ func (ec *executionContext) _SubscriberCreatePayload_subscriber(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubscriberCreatePayload_subscriber,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubscriberCreatePayload_subscriber(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subscriber, nil
 		},
 		nil,
-		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
+			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubscriberCreatePayload",
@@ -114,41 +87,7 @@ func (ec *executionContext) fieldContext_SubscriberCreatePayload_subscriber(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subscriber_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subscriber_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subscriber_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subscriber_ownerID(ctx, field)
-			case "email":
-				return ec.fieldContext_Subscriber_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Subscriber_phoneNumber(ctx, field)
-			case "verifiedEmail":
-				return ec.fieldContext_Subscriber_verifiedEmail(ctx, field)
-			case "verifiedPhone":
-				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
-			case "active":
-				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "unsubscribed":
-				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subscriber_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Subscriber_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subscriber", field.Name)
+			return ec.childFields_Subscriber(ctx, field)
 		},
 	}
 	return fc, nil
@@ -159,28 +98,22 @@ func (ec *executionContext) _SubscriberDeletePayload_email(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubscriberDeletePayload_email,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubscriberDeletePayload_email(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Email, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubscriberDeletePayload_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SubscriberDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SubscriberDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberUpdatePayload) (ret graphql.Marshaler) {
@@ -188,17 +121,20 @@ func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SubscriberUpdatePayload_subscriber,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubscriberUpdatePayload_subscriber(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subscriber, nil
 		},
 		nil,
-		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
+			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SubscriberUpdatePayload",
@@ -206,41 +142,7 @@ func (ec *executionContext) fieldContext_SubscriberUpdatePayload_subscriber(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Subscriber_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Subscriber_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Subscriber_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Subscriber_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Subscriber_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Subscriber_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Subscriber_ownerID(ctx, field)
-			case "email":
-				return ec.fieldContext_Subscriber_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Subscriber_phoneNumber(ctx, field)
-			case "verifiedEmail":
-				return ec.fieldContext_Subscriber_verifiedEmail(ctx, field)
-			case "verifiedPhone":
-				return ec.fieldContext_Subscriber_verifiedPhone(ctx, field)
-			case "active":
-				return ec.fieldContext_Subscriber_active(ctx, field)
-			case "unsubscribed":
-				return ec.fieldContext_Subscriber_unsubscribed(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_Subscriber_sendAttempts(ctx, field)
-			case "owner":
-				return ec.fieldContext_Subscriber_owner(ctx, field)
-			case "events":
-				return ec.fieldContext_Subscriber_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Subscriber", field.Name)
+			return ec.childFields_Subscriber(ctx, field)
 		},
 	}
 	return fc, nil
@@ -280,7 +182,7 @@ func (ec *executionContext) _SubscriberBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -319,7 +221,7 @@ func (ec *executionContext) _SubscriberCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -358,7 +260,7 @@ func (ec *executionContext) _SubscriberDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -397,7 +299,7 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

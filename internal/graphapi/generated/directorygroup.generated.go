@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DirectoryGroupBulkCreatePayload_directoryGroups(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryGroupBulkCreatePayload_directoryGroups,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryGroupBulkCreatePayload_directoryGroups(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryGroups, nil
 		},
 		nil,
-		ec.marshalODirectoryGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroupᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DirectoryGroup) graphql.Marshaler {
+			return ec.marshalODirectoryGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroupᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directoryGroups(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryGroupBulkCreatePayload",
@@ -51,97 +55,7 @@ func (ec *executionContext) fieldContext_DirectoryGroupBulkCreatePayload_directo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryGroup_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryGroup_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryGroup_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryGroup_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryGroup_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryGroup_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryGroup_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryGroup_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryGroup_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryGroup_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryGroup_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryGroup_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryGroup_externalID(ctx, field)
-			case "email":
-				return ec.fieldContext_DirectoryGroup_email(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryGroup_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_DirectoryGroup_description(ctx, field)
-			case "classification":
-				return ec.fieldContext_DirectoryGroup_classification(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryGroup_status(ctx, field)
-			case "externalSharingAllowed":
-				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
-			case "memberCount":
-				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryGroup_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryGroup_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryGroup_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "accounts":
-				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryGroup_workflowObjectRefs(ctx, field)
-			case "members":
-				return ec.fieldContext_DirectoryGroup_members(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryGroup", field.Name)
+			return ec.childFields_DirectoryGroup(ctx, field)
 		},
 	}
 	return fc, nil
@@ -152,17 +66,20 @@ func (ec *executionContext) _DirectoryGroupCreatePayload_directoryGroup(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryGroupCreatePayload_directoryGroup,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryGroupCreatePayload_directoryGroup(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryGroup, nil
 		},
 		nil,
-		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryGroup) graphql.Marshaler {
+			return ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGroup(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryGroupCreatePayload",
@@ -170,97 +87,7 @@ func (ec *executionContext) fieldContext_DirectoryGroupCreatePayload_directoryGr
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryGroup_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryGroup_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryGroup_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryGroup_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryGroup_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryGroup_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryGroup_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryGroup_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryGroup_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryGroup_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryGroup_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryGroup_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryGroup_externalID(ctx, field)
-			case "email":
-				return ec.fieldContext_DirectoryGroup_email(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryGroup_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_DirectoryGroup_description(ctx, field)
-			case "classification":
-				return ec.fieldContext_DirectoryGroup_classification(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryGroup_status(ctx, field)
-			case "externalSharingAllowed":
-				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
-			case "memberCount":
-				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryGroup_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryGroup_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryGroup_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "accounts":
-				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryGroup_workflowObjectRefs(ctx, field)
-			case "members":
-				return ec.fieldContext_DirectoryGroup_members(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryGroup", field.Name)
+			return ec.childFields_DirectoryGroup(ctx, field)
 		},
 	}
 	return fc, nil
@@ -271,28 +98,22 @@ func (ec *executionContext) _DirectoryGroupDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryGroupDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryGroupDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryGroupDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectoryGroupDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DirectoryGroupDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DirectoryGroupUpdatePayload_directoryGroup(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryGroupUpdatePayload) (ret graphql.Marshaler) {
@@ -300,17 +121,20 @@ func (ec *executionContext) _DirectoryGroupUpdatePayload_directoryGroup(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryGroupUpdatePayload_directoryGroup,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryGroupUpdatePayload_directoryGroup(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryGroup, nil
 		},
 		nil,
-		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryGroup) graphql.Marshaler {
+			return ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGroup(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryGroupUpdatePayload",
@@ -318,97 +142,7 @@ func (ec *executionContext) fieldContext_DirectoryGroupUpdatePayload_directoryGr
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryGroup_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryGroup_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryGroup_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryGroup_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryGroup_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryGroup_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryGroup_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryGroup_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryGroup_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryGroup_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryGroup_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryGroup_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryGroup_externalID(ctx, field)
-			case "email":
-				return ec.fieldContext_DirectoryGroup_email(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryGroup_displayName(ctx, field)
-			case "description":
-				return ec.fieldContext_DirectoryGroup_description(ctx, field)
-			case "classification":
-				return ec.fieldContext_DirectoryGroup_classification(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryGroup_status(ctx, field)
-			case "externalSharingAllowed":
-				return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
-			case "memberCount":
-				return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryGroup_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryGroup_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryGroup_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryGroup_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryGroup_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryGroup_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryGroup_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryGroup_platform(ctx, field)
-			case "accounts":
-				return ec.fieldContext_DirectoryGroup_accounts(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryGroup_workflowObjectRefs(ctx, field)
-			case "members":
-				return ec.fieldContext_DirectoryGroup_members(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryGroup", field.Name)
+			return ec.childFields_DirectoryGroup(ctx, field)
 		},
 	}
 	return fc, nil
@@ -448,7 +182,7 @@ func (ec *executionContext) _DirectoryGroupBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -487,7 +221,7 @@ func (ec *executionContext) _DirectoryGroupCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -526,7 +260,7 @@ func (ec *executionContext) _DirectoryGroupDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -565,7 +299,7 @@ func (ec *executionContext) _DirectoryGroupUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

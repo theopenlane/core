@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload_trustCenterSett
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSettingBulkCreatePayload_trustCenterSettings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingBulkCreatePayload_trustCenterSettings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSettings, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterSetting) graphql.Marshaler {
+			return ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_trustCenterSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSettingBulkCreatePayload",
@@ -51,77 +55,7 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSetting_updatedBy(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSetting_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
-			case "companyName":
-				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
-			case "companyDescription":
-				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
-			case "overview":
-				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
-			case "faviconRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
-			case "faviconLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
-			case "heroImageLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
-			case "themeMode":
-				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
-			case "primaryColor":
-				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterSetting_font(ctx, field)
-			case "foregroundColor":
-				return ec.fieldContext_TrustCenterSetting_foregroundColor(ctx, field)
-			case "backgroundColor":
-				return ec.fieldContext_TrustCenterSetting_backgroundColor(ctx, field)
-			case "accentColor":
-				return ec.fieldContext_TrustCenterSetting_accentColor(ctx, field)
-			case "secondaryBackgroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
-			case "secondaryForegroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "environment":
-				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
-			case "removeBranding":
-				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
-			case "companyDomain":
-				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
-			case "securityContact":
-				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
-			case "ndaApprovalRequired":
-				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
-			case "faviconFile":
-				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
-			case "heroImageFile":
-				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
+			return ec.childFields_TrustCenterSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -132,17 +66,20 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload_trustCenterSetting(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSettingCreatePayload_trustCenterSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingCreatePayload_trustCenterSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSetting, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
+			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCenterSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSettingCreatePayload",
@@ -150,77 +87,7 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSetting_updatedBy(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSetting_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
-			case "companyName":
-				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
-			case "companyDescription":
-				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
-			case "overview":
-				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
-			case "faviconRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
-			case "faviconLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
-			case "heroImageLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
-			case "themeMode":
-				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
-			case "primaryColor":
-				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterSetting_font(ctx, field)
-			case "foregroundColor":
-				return ec.fieldContext_TrustCenterSetting_foregroundColor(ctx, field)
-			case "backgroundColor":
-				return ec.fieldContext_TrustCenterSetting_backgroundColor(ctx, field)
-			case "accentColor":
-				return ec.fieldContext_TrustCenterSetting_accentColor(ctx, field)
-			case "secondaryBackgroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
-			case "secondaryForegroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "environment":
-				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
-			case "removeBranding":
-				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
-			case "companyDomain":
-				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
-			case "securityContact":
-				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
-			case "ndaApprovalRequired":
-				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
-			case "faviconFile":
-				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
-			case "heroImageFile":
-				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
+			return ec.childFields_TrustCenterSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -231,28 +98,22 @@ func (ec *executionContext) _TrustCenterSettingDeletePayload_deletedID(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSettingDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSettingDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TrustCenterSettingDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TrustCenterSettingDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterSettingUpdatePayload_trustCenterSetting(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterSettingUpdatePayload) (ret graphql.Marshaler) {
@@ -260,17 +121,20 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload_trustCenterSetting(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterSetting, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
+			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterSettingUpdatePayload",
@@ -278,77 +142,7 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_TrustCenterSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_TrustCenterSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_TrustCenterSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_TrustCenterSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_TrustCenterSetting_updatedBy(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_TrustCenterSetting_trustCenterID(ctx, field)
-			case "title":
-				return ec.fieldContext_TrustCenterSetting_title(ctx, field)
-			case "companyName":
-				return ec.fieldContext_TrustCenterSetting_companyName(ctx, field)
-			case "companyDescription":
-				return ec.fieldContext_TrustCenterSetting_companyDescription(ctx, field)
-			case "overview":
-				return ec.fieldContext_TrustCenterSetting_overview(ctx, field)
-			case "logoRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_logoLocalFileID(ctx, field)
-			case "faviconRemoteURL":
-				return ec.fieldContext_TrustCenterSetting_faviconRemoteURL(ctx, field)
-			case "faviconLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_faviconLocalFileID(ctx, field)
-			case "heroImageLocalFileID":
-				return ec.fieldContext_TrustCenterSetting_heroImageLocalFileID(ctx, field)
-			case "themeMode":
-				return ec.fieldContext_TrustCenterSetting_themeMode(ctx, field)
-			case "primaryColor":
-				return ec.fieldContext_TrustCenterSetting_primaryColor(ctx, field)
-			case "font":
-				return ec.fieldContext_TrustCenterSetting_font(ctx, field)
-			case "foregroundColor":
-				return ec.fieldContext_TrustCenterSetting_foregroundColor(ctx, field)
-			case "backgroundColor":
-				return ec.fieldContext_TrustCenterSetting_backgroundColor(ctx, field)
-			case "accentColor":
-				return ec.fieldContext_TrustCenterSetting_accentColor(ctx, field)
-			case "secondaryBackgroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
-			case "secondaryForegroundColor":
-				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "environment":
-				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
-			case "removeBranding":
-				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
-			case "companyDomain":
-				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
-			case "securityContact":
-				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
-			case "ndaApprovalRequired":
-				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
-			case "statusPageURL":
-				return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "logoFile":
-				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
-			case "faviconFile":
-				return ec.fieldContext_TrustCenterSetting_faviconFile(ctx, field)
-			case "heroImageFile":
-				return ec.fieldContext_TrustCenterSetting_heroImageFile(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSetting", field.Name)
+			return ec.childFields_TrustCenterSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -388,7 +182,7 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload(ctx context.Con
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -427,7 +221,7 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -466,7 +260,7 @@ func (ec *executionContext) _TrustCenterSettingDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -505,7 +299,7 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

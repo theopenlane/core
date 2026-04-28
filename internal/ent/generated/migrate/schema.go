@@ -1612,25 +1612,25 @@ var (
 			},
 			{
 				Symbol:     "directory_groups_identity_holders_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[31]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[32]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_groups_integrations_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[32]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[33]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_groups_organizations_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[33]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[34]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_groups_platforms_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[34]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[35]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1639,12 +1639,12 @@ var (
 			{
 				Name:    "directorygroup_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[33]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[34]},
 			},
 			{
 				Name:    "directorygroup_integration_id_external_id_directory_sync_run_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[10], DirectoryGroupsColumns[30]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[10], DirectoryGroupsColumns[31]},
 			},
 			{
 				Name:    "directorygroup_directory_instance_id_external_id",
@@ -1659,7 +1659,7 @@ var (
 			{
 				Name:    "directorygroup_platform_id_external_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[10]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[35], DirectoryGroupsColumns[10]},
 			},
 			{
 				Name:    "directorygroup_directory_sync_run_id_email",
@@ -1669,17 +1669,17 @@ var (
 			{
 				Name:    "directorygroup_integration_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_platform_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[35], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_owner_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[11]},
 			},
 		},
 	}

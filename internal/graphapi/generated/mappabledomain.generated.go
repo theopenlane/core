@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkCreatePayload_mappableDomains(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappableDomains, nil
 		},
 		nil,
-		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
+			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappableDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappableDomainBulkCreatePayload",
@@ -51,27 +55,7 @@ func (ec *executionContext) fieldContext_MappableDomainBulkCreatePayload_mappabl
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappableDomain_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappableDomain_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappableDomain_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappableDomain_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_MappableDomain_name(ctx, field)
-			case "zoneID":
-				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
+			return ec.childFields_MappableDomain(ctx, field)
 		},
 	}
 	return fc, nil
@@ -82,28 +66,22 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload_deletedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappableDomainBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappableDomainBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappableDomainBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkDeletePayload) (ret graphql.Marshaler) {
@@ -111,28 +89,22 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload_notDeletedIDs(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappableDomainBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappableDomainBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappableDomainBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkDeletePayload) (ret graphql.Marshaler) {
@@ -140,28 +112,22 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload_error(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappableDomainBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappableDomainBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _MappableDomainBulkUpdatePayload_mappableDomains(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -169,17 +135,20 @@ func (ec *executionContext) _MappableDomainBulkUpdatePayload_mappableDomains(ctx
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkUpdatePayload_mappableDomains,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkUpdatePayload_mappableDomains(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappableDomains, nil
 		},
 		nil,
-		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
+			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkUpdatePayload_mappableDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappableDomainBulkUpdatePayload",
@@ -187,27 +156,7 @@ func (ec *executionContext) fieldContext_MappableDomainBulkUpdatePayload_mappabl
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappableDomain_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappableDomain_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappableDomain_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappableDomain_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_MappableDomain_name(ctx, field)
-			case "zoneID":
-				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
+			return ec.childFields_MappableDomain(ctx, field)
 		},
 	}
 	return fc, nil
@@ -218,28 +167,22 @@ func (ec *executionContext) _MappableDomainBulkUpdatePayload_updatedIDs(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappableDomainBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappableDomainBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainCreatePayload) (ret graphql.Marshaler) {
@@ -247,17 +190,20 @@ func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainCreatePayload_mappableDomain,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainCreatePayload_mappableDomain(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappableDomain, nil
 		},
 		nil,
-		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
+			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappableDomainCreatePayload",
@@ -265,27 +211,7 @@ func (ec *executionContext) fieldContext_MappableDomainCreatePayload_mappableDom
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappableDomain_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappableDomain_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappableDomain_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappableDomain_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_MappableDomain_name(ctx, field)
-			case "zoneID":
-				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
+			return ec.childFields_MappableDomain(ctx, field)
 		},
 	}
 	return fc, nil
@@ -296,28 +222,22 @@ func (ec *executionContext) _MappableDomainDeletePayload_deletedID(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappableDomainDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappableDomainDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx context.Context, field graphql.CollectedField, obj *model.MappableDomainUpdatePayload) (ret graphql.Marshaler) {
@@ -325,17 +245,20 @@ func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappableDomainUpdatePayload_mappableDomain,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappableDomainUpdatePayload_mappableDomain(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappableDomain, nil
 		},
 		nil,
-		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
+			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappableDomainUpdatePayload_mappableDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappableDomainUpdatePayload",
@@ -343,27 +266,7 @@ func (ec *executionContext) fieldContext_MappableDomainUpdatePayload_mappableDom
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappableDomain_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappableDomain_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappableDomain_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappableDomain_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappableDomain_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappableDomain_tags(ctx, field)
-			case "name":
-				return ec.fieldContext_MappableDomain_name(ctx, field)
-			case "zoneID":
-				return ec.fieldContext_MappableDomain_zoneID(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_MappableDomain_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappableDomain", field.Name)
+			return ec.childFields_MappableDomain(ctx, field)
 		},
 	}
 	return fc, nil
@@ -403,7 +306,7 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -449,7 +352,7 @@ func (ec *executionContext) _MappableDomainBulkDeletePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -487,7 +390,7 @@ func (ec *executionContext) _MappableDomainBulkUpdatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -526,7 +429,7 @@ func (ec *executionContext) _MappableDomainCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -565,7 +468,7 @@ func (ec *executionContext) _MappableDomainDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -604,7 +507,7 @@ func (ec *executionContext) _MappableDomainUpdatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
