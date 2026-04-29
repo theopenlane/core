@@ -187,6 +187,8 @@ type ControlEdges struct {
 	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Standard holds the value of the standard edge.
 	Standard *Standard `json:"standard,omitempty"`
+	// CheckResults holds the value of the check_results edge.
+	CheckResults []*CheckResult `json:"check_results,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
 	// Platforms holds the value of the platforms edge.
@@ -217,9 +219,9 @@ type ControlEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [37]bool
+	loadedTypes [38]bool
 	// totalCount holds the count of the edges above.
-	totalCount [35]map[string]int
+	totalCount [36]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -236,6 +238,7 @@ type ControlEdges struct {
 	namedScans                  map[string][]*Scan
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
+	namedCheckResults           map[string][]*CheckResult
 	namedPrograms               map[string][]*Program
 	namedPlatforms              map[string][]*Platform
 	namedAssets                 map[string][]*Asset
@@ -475,10 +478,19 @@ func (e ControlEdges) StandardOrErr() (*Standard, error) {
 	return nil, &NotLoadedError{edge: "standard"}
 }
 
+// CheckResultsOrErr returns the CheckResults value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) CheckResultsOrErr() ([]*CheckResult, error) {
+	if e.loadedTypes[23] {
+		return e.CheckResults, nil
+	}
+	return nil, &NotLoadedError{edge: "check_results"}
+}
+
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -487,7 +499,7 @@ func (e ControlEdges) ProgramsOrErr() ([]*Program, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -496,7 +508,7 @@ func (e ControlEdges) PlatformsOrErr() ([]*Platform, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -505,7 +517,7 @@ func (e ControlEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -514,7 +526,7 @@ func (e ControlEdges) EntitiesOrErr() ([]*Entity, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -523,7 +535,7 @@ func (e ControlEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -532,7 +544,7 @@ func (e ControlEdges) CampaignsOrErr() ([]*Campaign, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -541,7 +553,7 @@ func (e ControlEdges) FindingsOrErr() ([]*Finding, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -550,7 +562,7 @@ func (e ControlEdges) ControlImplementationsOrErr() ([]*ControlImplementation, e
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -559,7 +571,7 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.ScheduledJobs, nil
 	}
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
@@ -568,7 +580,7 @@ func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[34] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -577,7 +589,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[35] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -586,7 +598,7 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[36] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -595,7 +607,7 @@ func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[37] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -1128,6 +1140,11 @@ func (_m *Control) QueryScope() *CustomTypeEnumQuery {
 // QueryStandard queries the "standard" edge of the Control entity.
 func (_m *Control) QueryStandard() *StandardQuery {
 	return NewControlClient(_m.config).QueryStandard(_m)
+}
+
+// QueryCheckResults queries the "check_results" edge of the Control entity.
+func (_m *Control) QueryCheckResults() *CheckResultQuery {
+	return NewControlClient(_m.config).QueryCheckResults(_m)
 }
 
 // QueryPrograms queries the "programs" edge of the Control entity.
@@ -1756,6 +1773,30 @@ func (_m *Control) appendNamedEditors(name string, edges ...*Group) {
 		_m.Edges.namedEditors[name] = []*Group{}
 	} else {
 		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedCheckResults returns the CheckResults named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedCheckResults(name string) ([]*CheckResult, error) {
+	if _m.Edges.namedCheckResults == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCheckResults[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedCheckResults(name string, edges ...*CheckResult) {
+	if _m.Edges.namedCheckResults == nil {
+		_m.Edges.namedCheckResults = make(map[string][]*CheckResult)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCheckResults[name] = []*CheckResult{}
+	} else {
+		_m.Edges.namedCheckResults[name] = append(_m.Edges.namedCheckResults[name], edges...)
 	}
 }
 

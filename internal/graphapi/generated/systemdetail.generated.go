@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _SystemDetailBulkCreatePayload_systemDetails(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkCreatePayload_systemDetails,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkCreatePayload_systemDetails(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SystemDetails, nil
 		},
 		nil,
-		ec.marshalOSystemDetail2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.SystemDetail) graphql.Marshaler {
+			return ec.marshalOSystemDetail2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkCreatePayload_systemDetails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SystemDetailBulkCreatePayload",
@@ -51,51 +55,7 @@ func (ec *executionContext) fieldContext_SystemDetailBulkCreatePayload_systemDet
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SystemDetail_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SystemDetail_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SystemDetail_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SystemDetail_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SystemDetail_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SystemDetail_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SystemDetail_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SystemDetail_ownerID(ctx, field)
-			case "programID":
-				return ec.fieldContext_SystemDetail_programID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_SystemDetail_platformID(ctx, field)
-			case "systemName":
-				return ec.fieldContext_SystemDetail_systemName(ctx, field)
-			case "version":
-				return ec.fieldContext_SystemDetail_version(ctx, field)
-			case "description":
-				return ec.fieldContext_SystemDetail_description(ctx, field)
-			case "authorizationBoundary":
-				return ec.fieldContext_SystemDetail_authorizationBoundary(ctx, field)
-			case "sensitivityLevel":
-				return ec.fieldContext_SystemDetail_sensitivityLevel(ctx, field)
-			case "lastReviewed":
-				return ec.fieldContext_SystemDetail_lastReviewed(ctx, field)
-			case "revisionHistory":
-				return ec.fieldContext_SystemDetail_revisionHistory(ctx, field)
-			case "oscalMetadataJSON":
-				return ec.fieldContext_SystemDetail_oscalMetadataJSON(ctx, field)
-			case "owner":
-				return ec.fieldContext_SystemDetail_owner(ctx, field)
-			case "program":
-				return ec.fieldContext_SystemDetail_program(ctx, field)
-			case "platform":
-				return ec.fieldContext_SystemDetail_platform(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SystemDetail", field.Name)
+			return ec.childFields_SystemDetail(ctx, field)
 		},
 	}
 	return fc, nil
@@ -106,28 +66,22 @@ func (ec *executionContext) _SystemDetailBulkDeletePayload_deletedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SystemDetailBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SystemDetailBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SystemDetailBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailBulkDeletePayload) (ret graphql.Marshaler) {
@@ -135,28 +89,22 @@ func (ec *executionContext) _SystemDetailBulkDeletePayload_notDeletedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SystemDetailBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SystemDetailBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SystemDetailBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailBulkDeletePayload) (ret graphql.Marshaler) {
@@ -164,28 +112,22 @@ func (ec *executionContext) _SystemDetailBulkDeletePayload_error(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SystemDetailBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SystemDetailBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _SystemDetailBulkUpdatePayload_systemDetails(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -193,17 +135,20 @@ func (ec *executionContext) _SystemDetailBulkUpdatePayload_systemDetails(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkUpdatePayload_systemDetails,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkUpdatePayload_systemDetails(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SystemDetails, nil
 		},
 		nil,
-		ec.marshalOSystemDetail2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.SystemDetail) graphql.Marshaler {
+			return ec.marshalOSystemDetail2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkUpdatePayload_systemDetails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SystemDetailBulkUpdatePayload",
@@ -211,51 +156,7 @@ func (ec *executionContext) fieldContext_SystemDetailBulkUpdatePayload_systemDet
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SystemDetail_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SystemDetail_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SystemDetail_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SystemDetail_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SystemDetail_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SystemDetail_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SystemDetail_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SystemDetail_ownerID(ctx, field)
-			case "programID":
-				return ec.fieldContext_SystemDetail_programID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_SystemDetail_platformID(ctx, field)
-			case "systemName":
-				return ec.fieldContext_SystemDetail_systemName(ctx, field)
-			case "version":
-				return ec.fieldContext_SystemDetail_version(ctx, field)
-			case "description":
-				return ec.fieldContext_SystemDetail_description(ctx, field)
-			case "authorizationBoundary":
-				return ec.fieldContext_SystemDetail_authorizationBoundary(ctx, field)
-			case "sensitivityLevel":
-				return ec.fieldContext_SystemDetail_sensitivityLevel(ctx, field)
-			case "lastReviewed":
-				return ec.fieldContext_SystemDetail_lastReviewed(ctx, field)
-			case "revisionHistory":
-				return ec.fieldContext_SystemDetail_revisionHistory(ctx, field)
-			case "oscalMetadataJSON":
-				return ec.fieldContext_SystemDetail_oscalMetadataJSON(ctx, field)
-			case "owner":
-				return ec.fieldContext_SystemDetail_owner(ctx, field)
-			case "program":
-				return ec.fieldContext_SystemDetail_program(ctx, field)
-			case "platform":
-				return ec.fieldContext_SystemDetail_platform(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SystemDetail", field.Name)
+			return ec.childFields_SystemDetail(ctx, field)
 		},
 	}
 	return fc, nil
@@ -266,28 +167,22 @@ func (ec *executionContext) _SystemDetailBulkUpdatePayload_updatedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SystemDetailBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SystemDetailBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SystemDetailCreatePayload_systemDetail(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailCreatePayload) (ret graphql.Marshaler) {
@@ -295,17 +190,20 @@ func (ec *executionContext) _SystemDetailCreatePayload_systemDetail(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailCreatePayload_systemDetail,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailCreatePayload_systemDetail(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SystemDetail, nil
 		},
 		nil,
-		ec.marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetail,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SystemDetail) graphql.Marshaler {
+			return ec.marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailCreatePayload_systemDetail(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SystemDetailCreatePayload",
@@ -313,51 +211,7 @@ func (ec *executionContext) fieldContext_SystemDetailCreatePayload_systemDetail(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SystemDetail_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SystemDetail_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SystemDetail_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SystemDetail_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SystemDetail_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SystemDetail_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SystemDetail_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SystemDetail_ownerID(ctx, field)
-			case "programID":
-				return ec.fieldContext_SystemDetail_programID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_SystemDetail_platformID(ctx, field)
-			case "systemName":
-				return ec.fieldContext_SystemDetail_systemName(ctx, field)
-			case "version":
-				return ec.fieldContext_SystemDetail_version(ctx, field)
-			case "description":
-				return ec.fieldContext_SystemDetail_description(ctx, field)
-			case "authorizationBoundary":
-				return ec.fieldContext_SystemDetail_authorizationBoundary(ctx, field)
-			case "sensitivityLevel":
-				return ec.fieldContext_SystemDetail_sensitivityLevel(ctx, field)
-			case "lastReviewed":
-				return ec.fieldContext_SystemDetail_lastReviewed(ctx, field)
-			case "revisionHistory":
-				return ec.fieldContext_SystemDetail_revisionHistory(ctx, field)
-			case "oscalMetadataJSON":
-				return ec.fieldContext_SystemDetail_oscalMetadataJSON(ctx, field)
-			case "owner":
-				return ec.fieldContext_SystemDetail_owner(ctx, field)
-			case "program":
-				return ec.fieldContext_SystemDetail_program(ctx, field)
-			case "platform":
-				return ec.fieldContext_SystemDetail_platform(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SystemDetail", field.Name)
+			return ec.childFields_SystemDetail(ctx, field)
 		},
 	}
 	return fc, nil
@@ -368,28 +222,22 @@ func (ec *executionContext) _SystemDetailDeletePayload_deletedID(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SystemDetailDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SystemDetailDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _SystemDetailUpdatePayload_systemDetail(ctx context.Context, field graphql.CollectedField, obj *model.SystemDetailUpdatePayload) (ret graphql.Marshaler) {
@@ -397,17 +245,20 @@ func (ec *executionContext) _SystemDetailUpdatePayload_systemDetail(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SystemDetailUpdatePayload_systemDetail,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetailUpdatePayload_systemDetail(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SystemDetail, nil
 		},
 		nil,
-		ec.marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetail,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SystemDetail) graphql.Marshaler {
+			return ec.marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SystemDetailUpdatePayload_systemDetail(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SystemDetailUpdatePayload",
@@ -415,51 +266,7 @@ func (ec *executionContext) fieldContext_SystemDetailUpdatePayload_systemDetail(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_SystemDetail_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_SystemDetail_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_SystemDetail_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_SystemDetail_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_SystemDetail_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_SystemDetail_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_SystemDetail_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_SystemDetail_ownerID(ctx, field)
-			case "programID":
-				return ec.fieldContext_SystemDetail_programID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_SystemDetail_platformID(ctx, field)
-			case "systemName":
-				return ec.fieldContext_SystemDetail_systemName(ctx, field)
-			case "version":
-				return ec.fieldContext_SystemDetail_version(ctx, field)
-			case "description":
-				return ec.fieldContext_SystemDetail_description(ctx, field)
-			case "authorizationBoundary":
-				return ec.fieldContext_SystemDetail_authorizationBoundary(ctx, field)
-			case "sensitivityLevel":
-				return ec.fieldContext_SystemDetail_sensitivityLevel(ctx, field)
-			case "lastReviewed":
-				return ec.fieldContext_SystemDetail_lastReviewed(ctx, field)
-			case "revisionHistory":
-				return ec.fieldContext_SystemDetail_revisionHistory(ctx, field)
-			case "oscalMetadataJSON":
-				return ec.fieldContext_SystemDetail_oscalMetadataJSON(ctx, field)
-			case "owner":
-				return ec.fieldContext_SystemDetail_owner(ctx, field)
-			case "program":
-				return ec.fieldContext_SystemDetail_program(ctx, field)
-			case "platform":
-				return ec.fieldContext_SystemDetail_platform(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SystemDetail", field.Name)
+			return ec.childFields_SystemDetail(ctx, field)
 		},
 	}
 	return fc, nil
@@ -499,7 +306,7 @@ func (ec *executionContext) _SystemDetailBulkCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -545,7 +352,7 @@ func (ec *executionContext) _SystemDetailBulkDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -583,7 +390,7 @@ func (ec *executionContext) _SystemDetailBulkUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -622,7 +429,7 @@ func (ec *executionContext) _SystemDetailCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -661,7 +468,7 @@ func (ec *executionContext) _SystemDetailDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -700,7 +507,7 @@ func (ec *executionContext) _SystemDetailUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -74,7 +74,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 
 // DeleteOrganization is the resolver for the deleteOrganization field.
 func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*model.OrganizationDeletePayload, error) {
-	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
+	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication && !auth.IsSystemAdminFromContext(ctx) {
 		logx.FromContext(ctx).Info().Msg("organization attempted to be deleted with non-JWT auth type")
 
 		return nil, common.ErrResourceNotAccessibleWithToken
@@ -84,12 +84,6 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to delete organization")
 
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "organization"})
-	}
-
-	if err := generated.OrganizationEdgeCleanup(ctx, id); err != nil {
-		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to cascade delete organization edges")
-
-		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrganizationDeletePayload{

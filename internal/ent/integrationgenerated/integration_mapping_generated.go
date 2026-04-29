@@ -57,6 +57,7 @@ type IntegrationIngestMetadata struct {
 
 const (
 	IntegrationMappingSchemaAsset               = "Asset"
+	IntegrationMappingSchemaCheckResult         = "CheckResult"
 	IntegrationMappingSchemaContact             = "Contact"
 	IntegrationMappingSchemaDirectoryAccount    = "DirectoryAccount"
 	IntegrationMappingSchemaDirectoryGroup      = "DirectoryGroup"
@@ -76,6 +77,17 @@ type IntegrationIngestAssetRequested struct {
 // IntegrationIngestAssetRequestedTopic is the typed Gala topic for Asset ingest requests
 var IntegrationIngestAssetRequestedTopic = gala.Topic[IntegrationIngestAssetRequested]{
 	Name: "integration.ingest.asset.requested",
+}
+
+// IntegrationIngestCheckResultRequested is the typed second-stage ingest contract for CheckResult records
+type IntegrationIngestCheckResultRequested struct {
+	Metadata IntegrationIngestMetadata        `json:"metadata"`
+	Input    generated.CreateCheckResultInput `json:"input"`
+}
+
+// IntegrationIngestCheckResultRequestedTopic is the typed Gala topic for CheckResult ingest requests
+var IntegrationIngestCheckResultRequestedTopic = gala.Topic[IntegrationIngestCheckResultRequested]{
+	Name: "integration.ingest.check_result.requested",
 }
 
 // IntegrationIngestContactRequested is the typed second-stage ingest contract for Contact records
@@ -210,6 +222,18 @@ const (
 	IntegrationMappingAssetWebsite                     = "website"
 )
 
+// Integration mapping keys for CheckResult.
+const (
+	IntegrationMappingCheckResultDetails          = "details"
+	IntegrationMappingCheckResultExternalURI      = "externalURI"
+	IntegrationMappingCheckResultIntegrationID    = "integrationID"
+	IntegrationMappingCheckResultLastObservedAt   = "lastObservedAt"
+	IntegrationMappingCheckResultParentExternalID = "parentExternalID"
+	IntegrationMappingCheckResultSource           = "source"
+	IntegrationMappingCheckResultStatus           = "status"
+	IntegrationMappingCheckResultTags             = "tags"
+)
+
 // Integration mapping keys for Contact.
 const (
 	IntegrationMappingContactAddress       = "address"
@@ -273,6 +297,7 @@ const (
 	IntegrationMappingDirectoryGroupAddedAt                = "addedAt"
 	IntegrationMappingDirectoryGroupClassification         = "classification"
 	IntegrationMappingDirectoryGroupDirectoryInstanceID    = "directoryInstanceID"
+	IntegrationMappingDirectoryGroupDirectoryName          = "directoryName"
 	IntegrationMappingDirectoryGroupDirectorySyncRunID     = "directorySyncRunID"
 	IntegrationMappingDirectoryGroupDisplayName            = "displayName"
 	IntegrationMappingDirectoryGroupEmail                  = "email"
@@ -303,6 +328,7 @@ const (
 	IntegrationMappingDirectoryMembershipDirectoryAccountID  = "directoryAccountID"
 	IntegrationMappingDirectoryMembershipDirectoryGroupID    = "directoryGroupID"
 	IntegrationMappingDirectoryMembershipDirectoryInstanceID = "directoryInstanceID"
+	IntegrationMappingDirectoryMembershipDirectoryName       = "directoryName"
 	IntegrationMappingDirectoryMembershipDirectorySyncRunID  = "directorySyncRunID"
 	IntegrationMappingDirectoryMembershipEnvironmentID       = "environmentID"
 	IntegrationMappingDirectoryMembershipEnvironmentName     = "environmentName"
@@ -483,6 +509,7 @@ const (
 	IntegrationMappingVulnerabilityExternalOwnerID         = "externalOwnerID"
 	IntegrationMappingVulnerabilityExternalURI             = "externalURI"
 	IntegrationMappingVulnerabilityFirstPatchedVersion     = "firstPatchedVersion"
+	IntegrationMappingVulnerabilityFixAvailable            = "fixAvailable"
 	IntegrationMappingVulnerabilityFixedAt                 = "fixedAt"
 	IntegrationMappingVulnerabilityImpact                  = "impact"
 	IntegrationMappingVulnerabilityImpacts                 = "impacts"
@@ -931,6 +958,102 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 		},
 		UpsertKeys: []string{
 			"sourceIdentifier",
+		},
+		StockPersist: true,
+	},
+	"CheckResult": {
+		Name: "CheckResult",
+		Fields: []IntegrationMappingField{
+			{
+				InputKey:  "details",
+				GoField:   "Details",
+				EntField:  "details",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "externalURI",
+				GoField:   "ExternalURI",
+				EntField:  "external_uri",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "integrationID",
+				GoField:   "IntegrationID",
+				EntField:  "integration_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "lastObservedAt",
+				GoField:   "LastObservedAt",
+				EntField:  "last_observed_at",
+				Type:      "time.Time",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "parentExternalID",
+				GoField:   "ParentExternalID",
+				EntField:  "parent_external_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: true,
+				LookupKey: true,
+			},
+			{
+				InputKey:  "source",
+				GoField:   "Source",
+				EntField:  "source",
+				Type:      "string",
+				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "status",
+				GoField:   "Status",
+				EntField:  "status",
+				Type:      "string",
+				Required:  true,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "tags",
+				GoField:   "Tags",
+				EntField:  "tags",
+				Type:      "json.RawMessage",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+		},
+		AllowedKeys: map[string]struct{}{
+			"details":          {},
+			"externalURI":      {},
+			"integrationID":    {},
+			"lastObservedAt":   {},
+			"parentExternalID": {},
+			"source":           {},
+			"status":           {},
+			"tags":             {},
+		},
+		RequiredKeys: []string{
+			"source",
+			"status",
+		},
+		UpsertKeys: []string{
+			"integrationID",
+			"parentExternalID",
 		},
 		StockPersist: true,
 	},
@@ -1502,6 +1625,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "directoryName",
+				GoField:   "DirectoryName",
+				EntField:  "directory_name",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "directorySyncRunID",
 				GoField:   "DirectorySyncRunID",
 				EntField:  "directory_sync_run_id",
@@ -1704,6 +1836,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"addedAt":                {},
 			"classification":         {},
 			"directoryInstanceID":    {},
+			"directoryName":          {},
 			"directorySyncRunID":     {},
 			"displayName":            {},
 			"email":                  {},
@@ -1776,6 +1909,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				InputKey:  "directoryInstanceID",
 				GoField:   "DirectoryInstanceID",
 				EntField:  "directory_instance_id",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
+				InputKey:  "directoryName",
+				GoField:   "DirectoryName",
+				EntField:  "directory_name",
 				Type:      "string",
 				Required:  false,
 				UpsertKey: false,
@@ -1922,6 +2064,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"directoryAccountID":  {},
 			"directoryGroupID":    {},
 			"directoryInstanceID": {},
+			"directoryName":       {},
 			"directorySyncRunID":  {},
 			"environmentID":       {},
 			"environmentName":     {},
@@ -3468,6 +3611,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "fixAvailable",
+				GoField:   "FixAvailable",
+				EntField:  "fix_available",
+				Type:      "bool",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "fixedAt",
 				GoField:   "FixedAt",
 				EntField:  "fixed_at",
@@ -3767,6 +3919,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"externalOwnerID":         {},
 			"externalURI":             {},
 			"firstPatchedVersion":     {},
+			"fixAvailable":            {},
 			"fixedAt":                 {},
 			"impact":                  {},
 			"impacts":                 {},
@@ -3820,6 +3973,18 @@ func PrepareAssetInput(input generated.CreateAssetInput, integration *generated.
 	}
 	if input.OwnerID == nil && integration.OwnerID != "" {
 		input.OwnerID = &integration.OwnerID
+	}
+	return input
+}
+
+// PrepareCheckResultInput stamps integration-scoped values onto a CreateCheckResultInput before persistence.
+// Fields are only overwritten when the input value is already zero/nil.
+func PrepareCheckResultInput(input generated.CreateCheckResultInput, integration *generated.Integration) generated.CreateCheckResultInput {
+	if integration == nil {
+		return input
+	}
+	if input.IntegrationID == nil && integration.ID != "" {
+		input.IntegrationID = &integration.ID
 	}
 	return input
 }

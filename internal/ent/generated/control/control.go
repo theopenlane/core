@@ -170,6 +170,8 @@ const (
 	EdgeScope = "scope"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
 	EdgeStandard = "standard"
+	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
+	EdgeCheckResults = "check_results"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
@@ -335,6 +337,11 @@ const (
 	StandardInverseTable = "standards"
 	// StandardColumn is the table column denoting the standard relation/edge.
 	StandardColumn = "standard_id"
+	// CheckResultsTable is the table that holds the check_results relation/edge. The primary key declared below.
+	CheckResultsTable = "check_result_controls"
+	// CheckResultsInverseTable is the table name for the CheckResult entity.
+	// It exists in this package in order to avoid circular dependency with the "checkresult" package.
+	CheckResultsInverseTable = "check_results"
 	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
 	ProgramsTable = "program_controls"
 	// ProgramsInverseTable is the table name for the Program entity.
@@ -518,6 +525,9 @@ var (
 	// EditorsPrimaryKey and EditorsColumn2 are the table columns denoting the
 	// primary key for the editors relation (M2M).
 	EditorsPrimaryKey = []string{"control_id", "group_id"}
+	// CheckResultsPrimaryKey and CheckResultsColumn2 are the table columns denoting the
+	// primary key for the check_results relation (M2M).
+	CheckResultsPrimaryKey = []string{"check_result_id", "control_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"program_id", "control_id"}
@@ -1130,6 +1140,20 @@ func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByCheckResultsCount orders the results by check_results count.
+func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCheckResultsStep(), opts...)
+	}
+}
+
+// ByCheckResults orders the results by check_results terms.
+func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCheckResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProgramsCount orders the results by programs count.
 func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1484,6 +1508,13 @@ func newStandardStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(StandardInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
+	)
+}
+func newCheckResultsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CheckResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CheckResultsTable, CheckResultsPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {

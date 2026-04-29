@@ -284,6 +284,40 @@ func (r *queryResolver) CampaignTargets(ctx context.Context, after *entgql.Curso
 	return res, err
 }
 
+// CheckResults is the resolver for the checkResults field.
+func (r *queryResolver) CheckResults(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CheckResultOrder, where *generated.CheckResultWhereInput) (*generated.CheckResultConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.CheckResultOrder{
+			{
+				Field:     generated.CheckResultOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).CheckResult.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "checkresult"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithCheckResultOrder(orderBy),
+		generated.WithCheckResultFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "checkresult"})
+	}
+
+	return res, err
+}
+
 // Contacts is the resolver for the contacts field.
 func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) (*generated.ContactConnection, error) {
 	// set page limit if nothing was set

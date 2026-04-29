@@ -13,12 +13,12 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "okta",
+				Family:      "Okta",
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta/overview",
-				Tags:        []string{"directory-sync"},
+				Tags:        []string{"directory"},
 				Active:      false,
 				Visible:     true,
 			},

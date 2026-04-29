@@ -3,6 +3,8 @@ package operations
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -11,6 +13,8 @@ import (
 func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, error) {
 	var updateInput Update
 	if err := jsonx.RoundTrip(createInput, &updateInput); err != nil {
+		log.Error().Err(err).Msg("integration: invalid ingest")
+
 		return updateInput, ErrIngestMappedDocumentInvalid
 	}
 

@@ -2115,8 +2115,6 @@ paths:
                             schema:
                                 type: string
                     description: ACME challenge response
-                default:
-                    description: ""
             security: []
             summary: AcmeSolver
             tags:
@@ -2133,8 +2131,6 @@ paths:
                             schema:
                                 type: object
                     description: JSON Web Key Set
-                default:
-                    description: ""
             security: []
             summary: JWKS
             tags:
@@ -2151,8 +2147,6 @@ paths:
                             schema:
                                 type: string
                     description: Static file content
-                default:
-                    description: ""
             security: []
             summary: SecurityTxt
             tags:
@@ -2169,8 +2163,6 @@ paths:
                             schema:
                                 type: string
                     description: Static file content
-                default:
-                    description: ""
             security: []
             summary: WebAuthnWellKnown
             tags:
@@ -2197,8 +2189,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SSOStatusReply'
                     description: Success
-                default:
-                    description: ""
             security: []
             summary: Webfinger
             tags:
@@ -2214,8 +2204,6 @@ paths:
                             schema:
                                 type: object
                     description: OpenAPI specification
-                default:
-                    description: ""
             security: []
             summary: APIDocs
             tags:
@@ -2246,8 +2234,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/WebauthnBeginLoginResponse'
                     description: Success
-                default:
-                    description: ""
             security: []
             summary: WebauthnAuthentication
             tags:
@@ -2289,8 +2275,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/WebauthnLoginResponse'
                     description: Success
-                default:
-                    description: ""
             security: []
             summary: WebauthnAuthenticationVerification
             tags:
@@ -2307,8 +2291,6 @@ paths:
                             schema:
                                 type: object
                     description: CSRF token
-                default:
-                    description: ""
             security: []
             summary: CSRF
             tags:
@@ -2324,8 +2306,6 @@ paths:
                             schema:
                                 type: string
                     description: CSV file content
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: ExampleCSV
@@ -2343,8 +2323,6 @@ paths:
                             schema:
                                 type: string
                     description: Static file content
-                default:
-                    description: ""
             security: []
             summary: Favicon
             tags:
@@ -2395,8 +2373,6 @@ paths:
                                         type: array
                                 type: object
                     description: Successful GraphQL response
-                default:
-                    description: ""
             summary: GraphQL History Endpoint
             tags:
                 - graphql
@@ -2413,8 +2389,6 @@ paths:
                             schema:
                                 type: object
                     description: Health check status
-                default:
-                    description: ""
             security: []
             summary: Livez
             tags:
@@ -2468,8 +2442,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Reply'
                     description: Invalid Input
-                default:
-                    description: ""
             security: []
             summary: OAuthRegister
             tags:
@@ -2486,8 +2458,6 @@ paths:
                             schema:
                                 type: object
                     description: User information
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: UserInfo
@@ -2540,8 +2510,6 @@ paths:
                                         type: array
                                 type: object
                     description: Successful GraphQL response
-                default:
-                    description: ""
             summary: GraphQL Endpoint
             tags:
                 - graphql
@@ -2559,8 +2527,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/GetQuestionnaireResponse'
                     description: Success
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -2584,8 +2550,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SubmitQuestionnaireResponse'
                     description: Success
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -2621,8 +2585,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ResendReply'
                     description: Success
-                default:
-                    description: ""
             security:
                 - basic: []
             summary: ResendQuestionnaireEmail
@@ -2639,8 +2601,6 @@ paths:
                             schema:
                                 type: object
                     description: Health check status
-                default:
-                    description: ""
             security: []
             summary: Ready
             tags:
@@ -2673,8 +2633,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/WebauthnBeginRegistrationResponse'
                     description: Success
-                default:
-                    description: ""
             security: []
             summary: WebauthnRegistration
             tags:
@@ -2722,8 +2680,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/WebauthnRegistrationResponse'
                     description: Success
-                default:
-                    description: ""
             security: []
             summary: WebauthnRegistrationVerification
             tags:
@@ -2740,8 +2696,6 @@ paths:
                             schema:
                                 type: string
                     description: Webhook acknowledgment
-                default:
-                    description: ""
             security: []
             summary: ResendWebhook
             tags:
@@ -2758,8 +2712,6 @@ paths:
                             schema:
                                 type: string
                     description: Static file content
-                default:
-                    description: ""
             security: []
             summary: Robots
             tags:
@@ -3214,8 +3166,6 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/CreateTrustCenterAnonymousJWTResponse'
                     description: Success
-                default:
-                    description: ""
             security:
                 - basic: []
             summary: TrustCenterAnonymousJWT
@@ -3254,8 +3204,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3298,8 +3246,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: AccountAccess
@@ -3330,8 +3276,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3372,8 +3316,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3417,8 +3359,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: AccountRoles
@@ -3449,8 +3389,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3491,8 +3429,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3531,8 +3467,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: File Download
@@ -3570,8 +3504,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: ForgotPassword
             tags:
@@ -3589,8 +3521,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: GitHubCallback
             tags:
@@ -3609,8 +3539,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: GitHubLogin
             tags:
@@ -3629,8 +3557,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: GoogleCallback
             tags:
@@ -3649,8 +3575,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: GoogleLogin
             tags:
@@ -3689,8 +3613,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: EndImpersonation
@@ -3733,8 +3655,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
             summary: StartImpersonation
@@ -3770,8 +3690,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -3818,8 +3736,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - basic: []
             summary: Login
@@ -3858,8 +3774,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: ResetPassword
             tags:
@@ -3924,8 +3838,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: ProductCatalog
             tags:
@@ -3966,8 +3878,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -4014,8 +3924,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: Register
             tags:
@@ -4052,8 +3960,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: ResendEmail
             tags:
@@ -4098,8 +4004,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: AgentNodeRegistration
             tags:
@@ -4150,8 +4054,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: SSOCallback
             tags:
@@ -4195,8 +4097,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: SSOLogin
             tags:
@@ -4244,8 +4144,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -4291,8 +4189,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: SSOTokenCallback
             tags:
@@ -4319,8 +4215,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: VerifySubscription
             tags:
@@ -4357,8 +4251,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security:
                 - bearer: []
                 - oauth2: []
@@ -4395,8 +4287,6 @@ paths:
                     description: Unauthorized
                 "500":
                     description: Internal Server Error
-                default:
-                    description: ""
             security: []
             summary: VerifyEmail
             tags:

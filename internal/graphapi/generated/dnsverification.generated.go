@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DNSVerifications, nil
 		},
 		nil,
-		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
+			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVerifications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DNSVerificationBulkCreatePayload",
@@ -51,45 +55,7 @@ func (ec *executionContext) fieldContext_DNSVerificationBulkCreatePayload_dnsVer
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DNSVerification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DNSVerification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DNSVerification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DNSVerification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DNSVerification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DNSVerification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DNSVerification_ownerID(ctx, field)
-			case "cloudflareHostnameID":
-				return ec.fieldContext_DNSVerification_cloudflareHostnameID(ctx, field)
-			case "dnsTxtRecord":
-				return ec.fieldContext_DNSVerification_dnsTxtRecord(ctx, field)
-			case "dnsTxtValue":
-				return ec.fieldContext_DNSVerification_dnsTxtValue(ctx, field)
-			case "dnsVerificationStatus":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
-			case "dnsVerificationStatusReason":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "acmeChallengePath":
-				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
-			case "expectedAcmeChallengeValue":
-				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
-			case "acmeChallengeStatus":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
-			case "acmeChallengeStatusReason":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
-			case "owner":
-				return ec.fieldContext_DNSVerification_owner(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_DNSVerification_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DNSVerification", field.Name)
+			return ec.childFields_DNSVerification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -100,28 +66,22 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_deletedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DNSVerificationBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkDeletePayload) (ret graphql.Marshaler) {
@@ -129,28 +89,22 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_notDeletedIDs(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DNSVerificationBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkDeletePayload) (ret graphql.Marshaler) {
@@ -158,28 +112,22 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload_error(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DNSVerificationBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _DNSVerificationBulkUpdatePayload_dnsVerifications(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -187,17 +135,20 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_dnsVerifications(c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DNSVerifications, nil
 		},
 		nil,
-		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
+			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DNSVerificationBulkUpdatePayload",
@@ -205,45 +156,7 @@ func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_dnsVer
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DNSVerification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DNSVerification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DNSVerification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DNSVerification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DNSVerification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DNSVerification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DNSVerification_ownerID(ctx, field)
-			case "cloudflareHostnameID":
-				return ec.fieldContext_DNSVerification_cloudflareHostnameID(ctx, field)
-			case "dnsTxtRecord":
-				return ec.fieldContext_DNSVerification_dnsTxtRecord(ctx, field)
-			case "dnsTxtValue":
-				return ec.fieldContext_DNSVerification_dnsTxtValue(ctx, field)
-			case "dnsVerificationStatus":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
-			case "dnsVerificationStatusReason":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "acmeChallengePath":
-				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
-			case "expectedAcmeChallengeValue":
-				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
-			case "acmeChallengeStatus":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
-			case "acmeChallengeStatusReason":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
-			case "owner":
-				return ec.fieldContext_DNSVerification_owner(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_DNSVerification_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DNSVerification", field.Name)
+			return ec.childFields_DNSVerification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -254,28 +167,22 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_updatedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DNSVerificationBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationCreatePayload) (ret graphql.Marshaler) {
@@ -283,17 +190,20 @@ func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationCreatePayload_dnsVerification,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationCreatePayload_dnsVerification(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DNSVerification, nil
 		},
 		nil,
-		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
+			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationCreatePayload_dnsVerification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DNSVerificationCreatePayload",
@@ -301,45 +211,7 @@ func (ec *executionContext) fieldContext_DNSVerificationCreatePayload_dnsVerific
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DNSVerification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DNSVerification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DNSVerification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DNSVerification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DNSVerification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DNSVerification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DNSVerification_ownerID(ctx, field)
-			case "cloudflareHostnameID":
-				return ec.fieldContext_DNSVerification_cloudflareHostnameID(ctx, field)
-			case "dnsTxtRecord":
-				return ec.fieldContext_DNSVerification_dnsTxtRecord(ctx, field)
-			case "dnsTxtValue":
-				return ec.fieldContext_DNSVerification_dnsTxtValue(ctx, field)
-			case "dnsVerificationStatus":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
-			case "dnsVerificationStatusReason":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "acmeChallengePath":
-				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
-			case "expectedAcmeChallengeValue":
-				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
-			case "acmeChallengeStatus":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
-			case "acmeChallengeStatusReason":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
-			case "owner":
-				return ec.fieldContext_DNSVerification_owner(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_DNSVerification_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DNSVerification", field.Name)
+			return ec.childFields_DNSVerification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -350,28 +222,22 @@ func (ec *executionContext) _DNSVerificationDeletePayload_deletedID(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DNSVerificationDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DNSVerificationDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx context.Context, field graphql.CollectedField, obj *model.DNSVerificationUpdatePayload) (ret graphql.Marshaler) {
@@ -379,17 +245,20 @@ func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DNSVerificationUpdatePayload_dnsVerification,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DNSVerificationUpdatePayload_dnsVerification(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DNSVerification, nil
 		},
 		nil,
-		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
+			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DNSVerificationUpdatePayload_dnsVerification(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DNSVerificationUpdatePayload",
@@ -397,45 +266,7 @@ func (ec *executionContext) fieldContext_DNSVerificationUpdatePayload_dnsVerific
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DNSVerification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DNSVerification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DNSVerification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DNSVerification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DNSVerification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_DNSVerification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DNSVerification_ownerID(ctx, field)
-			case "cloudflareHostnameID":
-				return ec.fieldContext_DNSVerification_cloudflareHostnameID(ctx, field)
-			case "dnsTxtRecord":
-				return ec.fieldContext_DNSVerification_dnsTxtRecord(ctx, field)
-			case "dnsTxtValue":
-				return ec.fieldContext_DNSVerification_dnsTxtValue(ctx, field)
-			case "dnsVerificationStatus":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatus(ctx, field)
-			case "dnsVerificationStatusReason":
-				return ec.fieldContext_DNSVerification_dnsVerificationStatusReason(ctx, field)
-			case "acmeChallengePath":
-				return ec.fieldContext_DNSVerification_acmeChallengePath(ctx, field)
-			case "expectedAcmeChallengeValue":
-				return ec.fieldContext_DNSVerification_expectedAcmeChallengeValue(ctx, field)
-			case "acmeChallengeStatus":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatus(ctx, field)
-			case "acmeChallengeStatusReason":
-				return ec.fieldContext_DNSVerification_acmeChallengeStatusReason(ctx, field)
-			case "owner":
-				return ec.fieldContext_DNSVerification_owner(ctx, field)
-			case "customDomains":
-				return ec.fieldContext_DNSVerification_customDomains(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DNSVerification", field.Name)
+			return ec.childFields_DNSVerification(ctx, field)
 		},
 	}
 	return fc, nil
@@ -475,7 +306,7 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -521,7 +352,7 @@ func (ec *executionContext) _DNSVerificationBulkDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -559,7 +390,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -598,7 +429,7 @@ func (ec *executionContext) _DNSVerificationCreatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -637,7 +468,7 @@ func (ec *executionContext) _DNSVerificationDeletePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -676,7 +507,7 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

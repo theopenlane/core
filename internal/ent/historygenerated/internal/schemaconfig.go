@@ -15,6 +15,7 @@ type SchemaConfig struct {
 	AssetHistory                      string // AssetHistory table.
 	CampaignHistory                   string // CampaignHistory table.
 	CampaignTargetHistory             string // CampaignTargetHistory table.
+	CheckResultHistory                string // CheckResultHistory table.
 	ContactHistory                    string // ContactHistory table.
 	ControlHistory                    string // ControlHistory table.
 	ControlImplementationHistory      string // ControlImplementationHistory table.

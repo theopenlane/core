@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ScanBulkCreatePayload_scans(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkCreatePayload_scans,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkCreatePayload_scans(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Scan) graphql.Marshaler {
+			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScanBulkCreatePayload",
@@ -51,115 +55,7 @@ func (ec *executionContext) fieldContext_ScanBulkCreatePayload_scans(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Scan_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Scan_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Scan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Scan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Scan_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Scan_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Scan_ownerID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Scan_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
-			case "assignedTo":
-				return ec.fieldContext_Scan_assignedTo(ctx, field)
-			case "assignedToUserID":
-				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
-			case "assignedToGroupID":
-				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Scan_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Scan_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Scan_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Scan_scopeID(ctx, field)
-			case "target":
-				return ec.fieldContext_Scan_target(ctx, field)
-			case "scanType":
-				return ec.fieldContext_Scan_scanType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Scan_metadata(ctx, field)
-			case "scanDate":
-				return ec.fieldContext_Scan_scanDate(ctx, field)
-			case "scanSchedule":
-				return ec.fieldContext_Scan_scanSchedule(ctx, field)
-			case "nextScanRunAt":
-				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
-			case "performedBy":
-				return ec.fieldContext_Scan_performedBy(ctx, field)
-			case "performedByUserID":
-				return ec.fieldContext_Scan_performedByUserID(ctx, field)
-			case "performedByGroupID":
-				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
-			case "generatedByPlatformID":
-				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
-			case "vulnerabilityIds":
-				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
-			case "status":
-				return ec.fieldContext_Scan_status(ctx, field)
-			case "owner":
-				return ec.fieldContext_Scan_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Scan_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Scan_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Scan_viewers(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
-			case "assignedToUser":
-				return ec.fieldContext_Scan_assignedToUser(ctx, field)
-			case "assignedToGroup":
-				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_Scan_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Scan_scope(ctx, field)
-			case "assets":
-				return ec.fieldContext_Scan_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Scan_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Scan_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Scan_files(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Scan_remediations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Scan_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Scan_tasks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Scan_platforms(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
-			case "controls":
-				return ec.fieldContext_Scan_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Scan_subcontrols(ctx, field)
-			case "generatedByPlatform":
-				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
-			case "performedByUser":
-				return ec.fieldContext_Scan_performedByUser(ctx, field)
-			case "performedByGroup":
-				return ec.fieldContext_Scan_performedByGroup(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
+			return ec.childFields_Scan(ctx, field)
 		},
 	}
 	return fc, nil
@@ -170,28 +66,22 @@ func (ec *executionContext) _ScanBulkDeletePayload_deletedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScanBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScanBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScanBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ScanBulkDeletePayload) (ret graphql.Marshaler) {
@@ -199,28 +89,22 @@ func (ec *executionContext) _ScanBulkDeletePayload_notDeletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScanBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScanBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScanBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ScanBulkDeletePayload) (ret graphql.Marshaler) {
@@ -228,28 +112,22 @@ func (ec *executionContext) _ScanBulkDeletePayload_error(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScanBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScanBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, field graphql.CollectedField, obj *model.ScanBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -257,17 +135,20 @@ func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkUpdatePayload_scans,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkUpdatePayload_scans(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Scan) graphql.Marshaler {
+			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScanBulkUpdatePayload",
@@ -275,115 +156,7 @@ func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_scans(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Scan_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Scan_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Scan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Scan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Scan_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Scan_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Scan_ownerID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Scan_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
-			case "assignedTo":
-				return ec.fieldContext_Scan_assignedTo(ctx, field)
-			case "assignedToUserID":
-				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
-			case "assignedToGroupID":
-				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Scan_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Scan_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Scan_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Scan_scopeID(ctx, field)
-			case "target":
-				return ec.fieldContext_Scan_target(ctx, field)
-			case "scanType":
-				return ec.fieldContext_Scan_scanType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Scan_metadata(ctx, field)
-			case "scanDate":
-				return ec.fieldContext_Scan_scanDate(ctx, field)
-			case "scanSchedule":
-				return ec.fieldContext_Scan_scanSchedule(ctx, field)
-			case "nextScanRunAt":
-				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
-			case "performedBy":
-				return ec.fieldContext_Scan_performedBy(ctx, field)
-			case "performedByUserID":
-				return ec.fieldContext_Scan_performedByUserID(ctx, field)
-			case "performedByGroupID":
-				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
-			case "generatedByPlatformID":
-				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
-			case "vulnerabilityIds":
-				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
-			case "status":
-				return ec.fieldContext_Scan_status(ctx, field)
-			case "owner":
-				return ec.fieldContext_Scan_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Scan_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Scan_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Scan_viewers(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
-			case "assignedToUser":
-				return ec.fieldContext_Scan_assignedToUser(ctx, field)
-			case "assignedToGroup":
-				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_Scan_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Scan_scope(ctx, field)
-			case "assets":
-				return ec.fieldContext_Scan_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Scan_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Scan_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Scan_files(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Scan_remediations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Scan_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Scan_tasks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Scan_platforms(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
-			case "controls":
-				return ec.fieldContext_Scan_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Scan_subcontrols(ctx, field)
-			case "generatedByPlatform":
-				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
-			case "performedByUser":
-				return ec.fieldContext_Scan_performedByUser(ctx, field)
-			case "performedByGroup":
-				return ec.fieldContext_Scan_performedByGroup(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
+			return ec.childFields_Scan(ctx, field)
 		},
 	}
 	return fc, nil
@@ -394,28 +167,22 @@ func (ec *executionContext) _ScanBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScanBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScanBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field graphql.CollectedField, obj *model.ScanCreatePayload) (ret graphql.Marshaler) {
@@ -423,17 +190,20 @@ func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanCreatePayload_scan,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanCreatePayload_scan(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Scan, nil
 		},
 		nil,
-		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
+			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanCreatePayload_scan(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScanCreatePayload",
@@ -441,115 +211,7 @@ func (ec *executionContext) fieldContext_ScanCreatePayload_scan(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Scan_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Scan_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Scan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Scan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Scan_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Scan_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Scan_ownerID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Scan_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
-			case "assignedTo":
-				return ec.fieldContext_Scan_assignedTo(ctx, field)
-			case "assignedToUserID":
-				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
-			case "assignedToGroupID":
-				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Scan_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Scan_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Scan_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Scan_scopeID(ctx, field)
-			case "target":
-				return ec.fieldContext_Scan_target(ctx, field)
-			case "scanType":
-				return ec.fieldContext_Scan_scanType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Scan_metadata(ctx, field)
-			case "scanDate":
-				return ec.fieldContext_Scan_scanDate(ctx, field)
-			case "scanSchedule":
-				return ec.fieldContext_Scan_scanSchedule(ctx, field)
-			case "nextScanRunAt":
-				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
-			case "performedBy":
-				return ec.fieldContext_Scan_performedBy(ctx, field)
-			case "performedByUserID":
-				return ec.fieldContext_Scan_performedByUserID(ctx, field)
-			case "performedByGroupID":
-				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
-			case "generatedByPlatformID":
-				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
-			case "vulnerabilityIds":
-				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
-			case "status":
-				return ec.fieldContext_Scan_status(ctx, field)
-			case "owner":
-				return ec.fieldContext_Scan_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Scan_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Scan_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Scan_viewers(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
-			case "assignedToUser":
-				return ec.fieldContext_Scan_assignedToUser(ctx, field)
-			case "assignedToGroup":
-				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_Scan_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Scan_scope(ctx, field)
-			case "assets":
-				return ec.fieldContext_Scan_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Scan_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Scan_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Scan_files(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Scan_remediations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Scan_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Scan_tasks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Scan_platforms(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
-			case "controls":
-				return ec.fieldContext_Scan_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Scan_subcontrols(ctx, field)
-			case "generatedByPlatform":
-				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
-			case "performedByUser":
-				return ec.fieldContext_Scan_performedByUser(ctx, field)
-			case "performedByGroup":
-				return ec.fieldContext_Scan_performedByGroup(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
+			return ec.childFields_Scan(ctx, field)
 		},
 	}
 	return fc, nil
@@ -560,28 +222,22 @@ func (ec *executionContext) _ScanDeletePayload_deletedID(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ScanDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ScanDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ScanUpdatePayload_scan(ctx context.Context, field graphql.CollectedField, obj *model.ScanUpdatePayload) (ret graphql.Marshaler) {
@@ -589,17 +245,20 @@ func (ec *executionContext) _ScanUpdatePayload_scan(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ScanUpdatePayload_scan,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ScanUpdatePayload_scan(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Scan, nil
 		},
 		nil,
-		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
+			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ScanUpdatePayload_scan(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ScanUpdatePayload",
@@ -607,115 +266,7 @@ func (ec *executionContext) fieldContext_ScanUpdatePayload_scan(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Scan_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Scan_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Scan_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Scan_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Scan_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Scan_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Scan_ownerID(ctx, field)
-			case "reviewedBy":
-				return ec.fieldContext_Scan_reviewedBy(ctx, field)
-			case "reviewedByUserID":
-				return ec.fieldContext_Scan_reviewedByUserID(ctx, field)
-			case "reviewedByGroupID":
-				return ec.fieldContext_Scan_reviewedByGroupID(ctx, field)
-			case "assignedTo":
-				return ec.fieldContext_Scan_assignedTo(ctx, field)
-			case "assignedToUserID":
-				return ec.fieldContext_Scan_assignedToUserID(ctx, field)
-			case "assignedToGroupID":
-				return ec.fieldContext_Scan_assignedToGroupID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Scan_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Scan_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Scan_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Scan_scopeID(ctx, field)
-			case "target":
-				return ec.fieldContext_Scan_target(ctx, field)
-			case "scanType":
-				return ec.fieldContext_Scan_scanType(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Scan_metadata(ctx, field)
-			case "scanDate":
-				return ec.fieldContext_Scan_scanDate(ctx, field)
-			case "scanSchedule":
-				return ec.fieldContext_Scan_scanSchedule(ctx, field)
-			case "nextScanRunAt":
-				return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
-			case "performedBy":
-				return ec.fieldContext_Scan_performedBy(ctx, field)
-			case "performedByUserID":
-				return ec.fieldContext_Scan_performedByUserID(ctx, field)
-			case "performedByGroupID":
-				return ec.fieldContext_Scan_performedByGroupID(ctx, field)
-			case "generatedByPlatformID":
-				return ec.fieldContext_Scan_generatedByPlatformID(ctx, field)
-			case "vulnerabilityIds":
-				return ec.fieldContext_Scan_vulnerabilityIds(ctx, field)
-			case "status":
-				return ec.fieldContext_Scan_status(ctx, field)
-			case "owner":
-				return ec.fieldContext_Scan_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_Scan_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_Scan_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_Scan_viewers(ctx, field)
-			case "reviewedByUser":
-				return ec.fieldContext_Scan_reviewedByUser(ctx, field)
-			case "reviewedByGroup":
-				return ec.fieldContext_Scan_reviewedByGroup(ctx, field)
-			case "assignedToUser":
-				return ec.fieldContext_Scan_assignedToUser(ctx, field)
-			case "assignedToGroup":
-				return ec.fieldContext_Scan_assignedToGroup(ctx, field)
-			case "environment":
-				return ec.fieldContext_Scan_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Scan_scope(ctx, field)
-			case "assets":
-				return ec.fieldContext_Scan_assets(ctx, field)
-			case "entities":
-				return ec.fieldContext_Scan_entities(ctx, field)
-			case "evidence":
-				return ec.fieldContext_Scan_evidence(ctx, field)
-			case "files":
-				return ec.fieldContext_Scan_files(ctx, field)
-			case "remediations":
-				return ec.fieldContext_Scan_remediations(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_Scan_actionPlans(ctx, field)
-			case "tasks":
-				return ec.fieldContext_Scan_tasks(ctx, field)
-			case "platforms":
-				return ec.fieldContext_Scan_platforms(ctx, field)
-			case "vulnerabilities":
-				return ec.fieldContext_Scan_vulnerabilities(ctx, field)
-			case "controls":
-				return ec.fieldContext_Scan_controls(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_Scan_subcontrols(ctx, field)
-			case "generatedByPlatform":
-				return ec.fieldContext_Scan_generatedByPlatform(ctx, field)
-			case "performedByUser":
-				return ec.fieldContext_Scan_performedByUser(ctx, field)
-			case "performedByGroup":
-				return ec.fieldContext_Scan_performedByGroup(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Scan", field.Name)
+			return ec.childFields_Scan(ctx, field)
 		},
 	}
 	return fc, nil
@@ -755,7 +306,7 @@ func (ec *executionContext) _ScanBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -801,7 +352,7 @@ func (ec *executionContext) _ScanBulkDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -839,7 +390,7 @@ func (ec *executionContext) _ScanBulkUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -878,7 +429,7 @@ func (ec *executionContext) _ScanCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -917,7 +468,7 @@ func (ec *executionContext) _ScanDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -956,7 +507,7 @@ func (ec *executionContext) _ScanUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _TemplateBulkCreatePayload_templates(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkCreatePayload_templates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkCreatePayload_templates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Templates, nil
 		},
 		nil,
-		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Template) graphql.Marshaler {
+			return ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TemplateBulkCreatePayload",
@@ -51,69 +55,7 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -124,28 +66,22 @@ func (ec *executionContext) _TemplateBulkDeletePayload_deletedIDs(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -153,28 +89,22 @@ func (ec *executionContext) _TemplateBulkDeletePayload_notDeletedIDs(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkDeletePayload) (ret graphql.Marshaler) {
@@ -182,28 +112,22 @@ func (ec *executionContext) _TemplateBulkDeletePayload_error(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateBulkUpdatePayload_templates(ctx context.Context, field graphql.CollectedField, obj *model.TemplateBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -211,17 +135,20 @@ func (ec *executionContext) _TemplateBulkUpdatePayload_templates(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkUpdatePayload_templates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkUpdatePayload_templates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Templates, nil
 		},
 		nil,
-		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Template) graphql.Marshaler {
+			return ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkUpdatePayload_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TemplateBulkUpdatePayload",
@@ -229,69 +156,7 @@ func (ec *executionContext) fieldContext_TemplateBulkUpdatePayload_templates(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -302,28 +167,22 @@ func (ec *executionContext) _TemplateBulkUpdatePayload_updatedIDs(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateCreatePayload) (ret graphql.Marshaler) {
@@ -331,17 +190,20 @@ func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateCreatePayload_template,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateCreatePayload_template(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TemplateCreatePayload",
@@ -349,69 +211,7 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -422,28 +222,22 @@ func (ec *executionContext) _TemplateDeletePayload_deletedID(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateUpdatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.TemplateUpdatePayload) (ret graphql.Marshaler) {
@@ -451,17 +245,20 @@ func (ec *executionContext) _TemplateUpdatePayload_template(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateUpdatePayload_template,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateUpdatePayload_template(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TemplateUpdatePayload",
@@ -469,69 +266,7 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Template_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Template_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Template_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Template_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Template_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Template_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Template_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Template_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Template_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Template_systemInternalID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_Template_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_Template_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_Template_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_Template_scopeID(ctx, field)
-			case "name":
-				return ec.fieldContext_Template_name(ctx, field)
-			case "templateType":
-				return ec.fieldContext_Template_templateType(ctx, field)
-			case "description":
-				return ec.fieldContext_Template_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Template_kind(ctx, field)
-			case "jsonconfig":
-				return ec.fieldContext_Template_jsonconfig(ctx, field)
-			case "uischema":
-				return ec.fieldContext_Template_uischema(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_Template_trustCenterID(ctx, field)
-			case "owner":
-				return ec.fieldContext_Template_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_Template_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_Template_scope(ctx, field)
-			case "documents":
-				return ec.fieldContext_Template_documents(ctx, field)
-			case "files":
-				return ec.fieldContext_Template_files(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_Template_trustCenter(ctx, field)
-			case "assessments":
-				return ec.fieldContext_Template_assessments(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Template_campaigns(ctx, field)
-			case "identityHolders":
-				return ec.fieldContext_Template_identityHolders(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
+			return ec.childFields_Template(ctx, field)
 		},
 	}
 	return fc, nil
@@ -571,7 +306,7 @@ func (ec *executionContext) _TemplateBulkCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -617,7 +352,7 @@ func (ec *executionContext) _TemplateBulkDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -655,7 +390,7 @@ func (ec *executionContext) _TemplateBulkUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -694,7 +429,7 @@ func (ec *executionContext) _TemplateCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -733,7 +468,7 @@ func (ec *executionContext) _TemplateDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -772,7 +507,7 @@ func (ec *executionContext) _TemplateUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

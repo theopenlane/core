@@ -2376,6 +2376,35 @@ func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Int
 	})
 }
 
+// HasCheckResults applies the HasEdge predicate on the "check_results" edge.
+func HasCheckResults() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CheckResultsTable, CheckResultsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResult
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCheckResultsWith applies the HasEdge predicate on the "check_results" edge with a given conditions (other predicates).
+func HasCheckResultsWith(preds ...predicate.CheckResult) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newCheckResultsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResult
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPlatform applies the HasEdge predicate on the "platform" edge.
 func HasPlatform() predicate.Integration {
 	return predicate.Integration(func(s *sql.Selector) {

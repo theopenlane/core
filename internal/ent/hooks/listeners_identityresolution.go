@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"net/mail"
 	"strings"
 
 	"entgo.io/ent"
@@ -240,6 +241,14 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 // conservative defaults, using primary source fields when available
 func createIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
 	canonicalEmail := *account.CanonicalEmail
+
+	// check if it is a valid email, otherwise skip creation; identity holders are required to have a valid email address
+	if _, err := mail.ParseAddress(canonicalEmail); err != nil {
+		logx.FromContext(ctx).Info().Str("email", canonicalEmail).Msg("identityholder: email is not a valid address, skipping identity holder creation for directory account")
+
+		return nil, nil
+	}
+
 	exists := resolveIsOpenlaneUser(ctx, client, canonicalEmail)
 
 	create := client.IdentityHolder.Create().

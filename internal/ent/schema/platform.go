@@ -252,7 +252,13 @@ func (s Platform) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(s, Scan{}),
 		defaultEdgeToWithPagination(s, Task{}),
 		defaultEdgeToWithPagination(s, IdentityHolder{}),
-		defaultEdgeToWithPagination(s, Integration{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: Integration{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(s, DirectorySyncRun{}),
 		defaultEdgeToWithPagination(s, DirectoryAccount{}),
 		defaultEdgeToWithPagination(s, DirectoryGroup{}),

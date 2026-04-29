@@ -483,6 +483,20 @@ func (_c *OrganizationSettingHistoryCreate) SetNillablePaymentMethodAdded(v *boo
 	return _c
 }
 
+// SetPendingDeletionAt sets the "pending_deletion_at" field.
+func (_c *OrganizationSettingHistoryCreate) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingHistoryCreate {
+	_c.mutation.SetPendingDeletionAt(v)
+	return _c
+}
+
+// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
+func (_c *OrganizationSettingHistoryCreate) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingHistoryCreate {
+	if v != nil {
+		_c.SetPendingDeletionAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrganizationSettingHistoryCreate) SetID(v string) *OrganizationSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -818,6 +832,10 @@ func (_c *OrganizationSettingHistoryCreate) createSpec() (*OrganizationSettingHi
 	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
 		_node.PaymentMethodAdded = value
+	}
+	if value, ok := _c.mutation.PendingDeletionAt(); ok {
+		_spec.SetField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime, value)
+		_node.PendingDeletionAt = &value
 	}
 	return _node, _spec
 }

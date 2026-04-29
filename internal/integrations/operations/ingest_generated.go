@@ -4,6 +4,7 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"strings"
 
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
@@ -11,6 +12,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -36,6 +38,7 @@ type schemaRegistration struct {
 // ingestSchemaOrder defines the registration order for ingest schema listeners
 var ingestSchemaOrder = []string{
 	integrationgenerated.IntegrationMappingSchemaAsset,
+	integrationgenerated.IntegrationMappingSchemaCheckResult,
 	integrationgenerated.IntegrationMappingSchemaContact,
 	integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 	integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
@@ -61,6 +64,20 @@ var schemaRegistrations = map[string]schemaRegistration{
 			return payload.Metadata.IntegrationID, payload.Input
 		},
 		persistAssetInput,
+	),
+	integrationgenerated.IntegrationMappingSchemaCheckResult: buildSchemaRegistration(
+		integrationgenerated.IntegrationIngestCheckResultRequestedTopic,
+		prepareCheckResultInput,
+		func(metadata integrationgenerated.IntegrationIngestMetadata, input ent.CreateCheckResultInput) integrationgenerated.IntegrationIngestCheckResultRequested {
+			return integrationgenerated.IntegrationIngestCheckResultRequested{
+				Metadata: metadata,
+				Input:    input,
+			}
+		},
+		func(payload integrationgenerated.IntegrationIngestCheckResultRequested) (string, ent.CreateCheckResultInput) {
+			return payload.Metadata.IntegrationID, payload.Input
+		},
+		persistCheckResultInput,
 	),
 	integrationgenerated.IntegrationMappingSchemaContact: buildSchemaRegistration(
 		integrationgenerated.IntegrationIngestContactRequestedTopic,
@@ -239,6 +256,8 @@ func emitTyped[TInput any, TEvent any](
 ) error {
 	var input TInput
 	if err := json.Unmarshal(payload, &input); err != nil {
+		logx.FromContext(ctx).Error().Str("topic", string(topic.Name)).Str("integration", integration.Family).Err(err).Msg("integrations: error emitting type")
+
 		return ErrIngestMappedDocumentInvalid
 	}
 
@@ -260,6 +279,8 @@ func persistTyped[TInput any](
 ) error {
 	var input TInput
 	if err := json.Unmarshal(payload, &input); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integrations: error persisting type")
+
 		return ErrIngestMappedDocumentInvalid
 	}
 
@@ -350,7 +371,7 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 
 // buildIngestHeaders assembles Gala message headers for one ingest record
 func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated.IntegrationIngestMetadata) gala.Headers {
-	tags := []string{record.Schema}
+	tags := []string{metadata.DefinitionID, "schema_" + strings.ToLower(record.Schema)}
 	if metadata.Source != "" {
 		tags = append(tags, string(metadata.Source))
 	}
@@ -379,6 +400,14 @@ func buildIngestHeaders(record mappedIngestRecord, metadata integrationgenerated
 func prepareAssetInput(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
 
 	input = integrationgenerated.PrepareAssetInput(input, integration)
+
+	return input
+}
+
+// prepareCheckResultInput applies integration-scoped defaults before emit or sync persistence.
+func prepareCheckResultInput(_ context.Context, input ent.CreateCheckResultInput, integration *ent.Integration) ent.CreateCheckResultInput {
+
+	input = integrationgenerated.PrepareCheckResultInput(input, integration)
 
 	return input
 }

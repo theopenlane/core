@@ -784,6 +784,13 @@ data:
         {{- else }}
         verifybilling: ""
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.billing }}
+        billing: {{ .Values.openlane.coreConfiguration.email.urls.billing | quote }}
+        {{- else if .Values.domain }}
+        billing: "https://console.{{ .Values.domain }}/organization-settings/billing"
+        {{- else }}
+        billing: ""
+        {{- end }}
         {{- if .Values.openlane.coreConfiguration.email.urls.questionnaire }}
         questionnaire: {{ .Values.openlane.coreConfiguration.email.urls.questionnaire | quote }}
         {{- else if .Values.domain }}
@@ -1115,6 +1122,12 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.oidclocal.redirecturl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
+      awssecurityhub:
+        {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}
+        arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
     {{- end }}

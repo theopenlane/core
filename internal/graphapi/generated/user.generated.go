@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _UserBulkCreatePayload_users(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserBulkCreatePayload_users,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserBulkCreatePayload_users(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Users, nil
 		},
 		nil,
-		ec.marshalOUser2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.User) graphql.Marshaler {
+			return ec.marshalOUser2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserBulkCreatePayload",
@@ -51,99 +55,7 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_User_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_User_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_User_tags(ctx, field)
-			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "firstName":
-				return ec.fieldContext_User_firstName(ctx, field)
-			case "lastName":
-				return ec.fieldContext_User_lastName(ctx, field)
-			case "displayName":
-				return ec.fieldContext_User_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
-			case "lastSeen":
-				return ec.fieldContext_User_lastSeen(ctx, field)
-			case "lastLoginProvider":
-				return ec.fieldContext_User_lastLoginProvider(ctx, field)
-			case "sub":
-				return ec.fieldContext_User_sub(ctx, field)
-			case "authProvider":
-				return ec.fieldContext_User_authProvider(ctx, field)
-			case "role":
-				return ec.fieldContext_User_role(ctx, field)
-			case "scimExternalID":
-				return ec.fieldContext_User_scimExternalID(ctx, field)
-			case "scimUsername":
-				return ec.fieldContext_User_scimUsername(ctx, field)
-			case "scimActive":
-				return ec.fieldContext_User_scimActive(ctx, field)
-			case "scimPreferredLanguage":
-				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
-			case "scimLocale":
-				return ec.fieldContext_User_scimLocale(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_User_personalAccessTokens(ctx, field)
-			case "tfaSettings":
-				return ec.fieldContext_User_tfaSettings(ctx, field)
-			case "setting":
-				return ec.fieldContext_User_setting(ctx, field)
-			case "groups":
-				return ec.fieldContext_User_groups(ctx, field)
-			case "organizations":
-				return ec.fieldContext_User_organizations(ctx, field)
-			case "webauthns":
-				return ec.fieldContext_User_webauthns(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_User_avatarFile(ctx, field)
-			case "events":
-				return ec.fieldContext_User_events(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_User_actionPlans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_User_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_User_campaignTargets(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_User_subcontrols(ctx, field)
-			case "assignerTasks":
-				return ec.fieldContext_User_assignerTasks(ctx, field)
-			case "assigneeTasks":
-				return ec.fieldContext_User_assigneeTasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_User_programs(ctx, field)
-			case "programsOwned":
-				return ec.fieldContext_User_programsOwned(ctx, field)
-			case "platformsOwned":
-				return ec.fieldContext_User_platformsOwned(ctx, field)
-			case "identityHolderProfiles":
-				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_User_groupMemberships(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_User_orgMemberships(ctx, field)
-			case "programMemberships":
-				return ec.fieldContext_User_programMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return ec.childFields_User(ctx, field)
 		},
 	}
 	return fc, nil
@@ -154,17 +66,20 @@ func (ec *executionContext) _UserCreatePayload_user(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserCreatePayload_user,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserCreatePayload_user(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.User, nil
 		},
 		nil,
-		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.User) graphql.Marshaler {
+			return ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserCreatePayload",
@@ -172,99 +87,7 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_User_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_User_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_User_tags(ctx, field)
-			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "firstName":
-				return ec.fieldContext_User_firstName(ctx, field)
-			case "lastName":
-				return ec.fieldContext_User_lastName(ctx, field)
-			case "displayName":
-				return ec.fieldContext_User_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
-			case "lastSeen":
-				return ec.fieldContext_User_lastSeen(ctx, field)
-			case "lastLoginProvider":
-				return ec.fieldContext_User_lastLoginProvider(ctx, field)
-			case "sub":
-				return ec.fieldContext_User_sub(ctx, field)
-			case "authProvider":
-				return ec.fieldContext_User_authProvider(ctx, field)
-			case "role":
-				return ec.fieldContext_User_role(ctx, field)
-			case "scimExternalID":
-				return ec.fieldContext_User_scimExternalID(ctx, field)
-			case "scimUsername":
-				return ec.fieldContext_User_scimUsername(ctx, field)
-			case "scimActive":
-				return ec.fieldContext_User_scimActive(ctx, field)
-			case "scimPreferredLanguage":
-				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
-			case "scimLocale":
-				return ec.fieldContext_User_scimLocale(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_User_personalAccessTokens(ctx, field)
-			case "tfaSettings":
-				return ec.fieldContext_User_tfaSettings(ctx, field)
-			case "setting":
-				return ec.fieldContext_User_setting(ctx, field)
-			case "groups":
-				return ec.fieldContext_User_groups(ctx, field)
-			case "organizations":
-				return ec.fieldContext_User_organizations(ctx, field)
-			case "webauthns":
-				return ec.fieldContext_User_webauthns(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_User_avatarFile(ctx, field)
-			case "events":
-				return ec.fieldContext_User_events(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_User_actionPlans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_User_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_User_campaignTargets(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_User_subcontrols(ctx, field)
-			case "assignerTasks":
-				return ec.fieldContext_User_assignerTasks(ctx, field)
-			case "assigneeTasks":
-				return ec.fieldContext_User_assigneeTasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_User_programs(ctx, field)
-			case "programsOwned":
-				return ec.fieldContext_User_programsOwned(ctx, field)
-			case "platformsOwned":
-				return ec.fieldContext_User_platformsOwned(ctx, field)
-			case "identityHolderProfiles":
-				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_User_groupMemberships(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_User_orgMemberships(ctx, field)
-			case "programMemberships":
-				return ec.fieldContext_User_programMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return ec.childFields_User(ctx, field)
 		},
 	}
 	return fc, nil
@@ -275,28 +98,22 @@ func (ec *executionContext) _UserDeletePayload_deletedID(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "UserDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("UserDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _UserUpdatePayload_user(ctx context.Context, field graphql.CollectedField, obj *model.UserUpdatePayload) (ret graphql.Marshaler) {
@@ -304,17 +121,20 @@ func (ec *executionContext) _UserUpdatePayload_user(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_UserUpdatePayload_user,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserUpdatePayload_user(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.User, nil
 		},
 		nil,
-		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.User) graphql.Marshaler {
+			return ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "UserUpdatePayload",
@@ -322,99 +142,7 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_User_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_User_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_User_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_User_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_User_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_User_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_User_tags(ctx, field)
-			case "email":
-				return ec.fieldContext_User_email(ctx, field)
-			case "firstName":
-				return ec.fieldContext_User_firstName(ctx, field)
-			case "lastName":
-				return ec.fieldContext_User_lastName(ctx, field)
-			case "displayName":
-				return ec.fieldContext_User_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_User_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_User_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_User_avatarUpdatedAt(ctx, field)
-			case "lastSeen":
-				return ec.fieldContext_User_lastSeen(ctx, field)
-			case "lastLoginProvider":
-				return ec.fieldContext_User_lastLoginProvider(ctx, field)
-			case "sub":
-				return ec.fieldContext_User_sub(ctx, field)
-			case "authProvider":
-				return ec.fieldContext_User_authProvider(ctx, field)
-			case "role":
-				return ec.fieldContext_User_role(ctx, field)
-			case "scimExternalID":
-				return ec.fieldContext_User_scimExternalID(ctx, field)
-			case "scimUsername":
-				return ec.fieldContext_User_scimUsername(ctx, field)
-			case "scimActive":
-				return ec.fieldContext_User_scimActive(ctx, field)
-			case "scimPreferredLanguage":
-				return ec.fieldContext_User_scimPreferredLanguage(ctx, field)
-			case "scimLocale":
-				return ec.fieldContext_User_scimLocale(ctx, field)
-			case "personalAccessTokens":
-				return ec.fieldContext_User_personalAccessTokens(ctx, field)
-			case "tfaSettings":
-				return ec.fieldContext_User_tfaSettings(ctx, field)
-			case "setting":
-				return ec.fieldContext_User_setting(ctx, field)
-			case "groups":
-				return ec.fieldContext_User_groups(ctx, field)
-			case "organizations":
-				return ec.fieldContext_User_organizations(ctx, field)
-			case "webauthns":
-				return ec.fieldContext_User_webauthns(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_User_avatarFile(ctx, field)
-			case "events":
-				return ec.fieldContext_User_events(ctx, field)
-			case "actionPlans":
-				return ec.fieldContext_User_actionPlans(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_User_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_User_campaignTargets(ctx, field)
-			case "subcontrols":
-				return ec.fieldContext_User_subcontrols(ctx, field)
-			case "assignerTasks":
-				return ec.fieldContext_User_assignerTasks(ctx, field)
-			case "assigneeTasks":
-				return ec.fieldContext_User_assigneeTasks(ctx, field)
-			case "programs":
-				return ec.fieldContext_User_programs(ctx, field)
-			case "programsOwned":
-				return ec.fieldContext_User_programsOwned(ctx, field)
-			case "platformsOwned":
-				return ec.fieldContext_User_platformsOwned(ctx, field)
-			case "identityHolderProfiles":
-				return ec.fieldContext_User_identityHolderProfiles(ctx, field)
-			case "groupMemberships":
-				return ec.fieldContext_User_groupMemberships(ctx, field)
-			case "orgMemberships":
-				return ec.fieldContext_User_orgMemberships(ctx, field)
-			case "programMemberships":
-				return ec.fieldContext_User_programMemberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return ec.childFields_User(ctx, field)
 		},
 	}
 	return fc, nil
@@ -454,7 +182,7 @@ func (ec *executionContext) _UserBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -493,7 +221,7 @@ func (ec *executionContext) _UserCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -532,7 +260,7 @@ func (ec *executionContext) _UserDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -571,7 +299,7 @@ func (ec *executionContext) _UserUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

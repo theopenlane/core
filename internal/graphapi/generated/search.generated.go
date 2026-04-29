@@ -5,11 +5,14 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +36,20 @@ func (ec *executionContext) _SearchResults_page(ctx context.Context, field graph
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_page,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_page(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Page, nil
 		},
 		nil,
-		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_page(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -51,17 +57,7 @@ func (ec *executionContext) fieldContext_SearchResults_page(_ context.Context, f
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+			return ec.childFields_PageInfo(ctx, field)
 		},
 	}
 	return fc, nil
@@ -72,28 +68,22 @@ func (ec *executionContext) _SearchResults_totalCount(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_totalCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_totalCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TotalCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("SearchResults", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _SearchResults_actionPlans(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
@@ -101,17 +91,20 @@ func (ec *executionContext) _SearchResults_actionPlans(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_actionPlans,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_actionPlans(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ActionPlans, nil
 		},
 		nil,
-		ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ActionPlanConnection) graphql.Marshaler {
+			return ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -119,15 +112,7 @@ func (ec *executionContext) fieldContext_SearchResults_actionPlans(_ context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ActionPlanConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ActionPlanConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ActionPlanConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ActionPlanConnection", field.Name)
+			return ec.childFields_ActionPlanConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -138,17 +123,20 @@ func (ec *executionContext) _SearchResults_assessments(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_assessments,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_assessments(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Assessments, nil
 		},
 		nil,
-		ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
+			return ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_assessments(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -156,15 +144,7 @@ func (ec *executionContext) fieldContext_SearchResults_assessments(_ context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_AssessmentConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_AssessmentConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_AssessmentConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentConnection", field.Name)
+			return ec.childFields_AssessmentConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -175,17 +155,20 @@ func (ec *executionContext) _SearchResults_assessmentResponses(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_assessmentResponses,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_assessmentResponses(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.AssessmentResponses, nil
 		},
 		nil,
-		ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentResponseConnection) graphql.Marshaler {
+			return ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_assessmentResponses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -193,15 +176,7 @@ func (ec *executionContext) fieldContext_SearchResults_assessmentResponses(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_AssessmentResponseConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_AssessmentResponseConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_AssessmentResponseConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseConnection", field.Name)
+			return ec.childFields_AssessmentResponseConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -212,17 +187,20 @@ func (ec *executionContext) _SearchResults_assets(ctx context.Context, field gra
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_assets,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_assets(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Assets, nil
 		},
 		nil,
-		ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssetConnection) graphql.Marshaler {
+			return ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -230,15 +208,7 @@ func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_AssetConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_AssetConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_AssetConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssetConnection", field.Name)
+			return ec.childFields_AssetConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -249,17 +219,20 @@ func (ec *executionContext) _SearchResults_campaigns(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_campaigns,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_campaigns(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Campaigns, nil
 		},
 		nil,
-		ec.marshalOCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignConnection) graphql.Marshaler {
+			return ec.marshalOCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_campaigns(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -267,15 +240,7 @@ func (ec *executionContext) fieldContext_SearchResults_campaigns(_ context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CampaignConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CampaignConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_CampaignConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CampaignConnection", field.Name)
+			return ec.childFields_CampaignConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -286,17 +251,20 @@ func (ec *executionContext) _SearchResults_campaignTargets(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_campaignTargets,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_campaignTargets(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CampaignTargets, nil
 		},
 		nil,
-		ec.marshalOCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignTargetConnection) graphql.Marshaler {
+			return ec.marshalOCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_campaignTargets(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -304,15 +272,7 @@ func (ec *executionContext) fieldContext_SearchResults_campaignTargets(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CampaignTargetConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CampaignTargetConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_CampaignTargetConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CampaignTargetConnection", field.Name)
+			return ec.childFields_CampaignTargetConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -323,17 +283,20 @@ func (ec *executionContext) _SearchResults_contacts(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_contacts,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_contacts(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ContactConnection) graphql.Marshaler {
+			return ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -341,15 +304,7 @@ func (ec *executionContext) fieldContext_SearchResults_contacts(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ContactConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ContactConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ContactConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ContactConnection", field.Name)
+			return ec.childFields_ContactConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -360,17 +315,20 @@ func (ec *executionContext) _SearchResults_controls(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_controls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_controls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
+			return ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -378,15 +336,7 @@ func (ec *executionContext) fieldContext_SearchResults_controls(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ControlConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ControlConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ControlConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlConnection", field.Name)
+			return ec.childFields_ControlConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -397,17 +347,20 @@ func (ec *executionContext) _SearchResults_controlObjectives(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_controlObjectives,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_controlObjectives(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ControlObjectives, nil
 		},
 		nil,
-		ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlObjectiveConnection) graphql.Marshaler {
+			return ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_controlObjectives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -415,15 +368,7 @@ func (ec *executionContext) fieldContext_SearchResults_controlObjectives(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ControlObjectiveConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ControlObjectiveConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ControlObjectiveConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveConnection", field.Name)
+			return ec.childFields_ControlObjectiveConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -434,17 +379,20 @@ func (ec *executionContext) _SearchResults_customTypeEnums(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_customTypeEnums,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_customTypeEnums(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CustomTypeEnums, nil
 		},
 		nil,
-		ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnumConnection) graphql.Marshaler {
+			return ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -452,15 +400,7 @@ func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CustomTypeEnumConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CustomTypeEnumConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_CustomTypeEnumConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnumConnection", field.Name)
+			return ec.childFields_CustomTypeEnumConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -471,17 +411,20 @@ func (ec *executionContext) _SearchResults_emailBrandings(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_emailBrandings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_emailBrandings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailBrandings, nil
 		},
 		nil,
-		ec.marshalOEmailBrandingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailBrandingConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailBrandingConnection) graphql.Marshaler {
+			return ec.marshalOEmailBrandingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailBrandingConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_emailBrandings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -489,15 +432,7 @@ func (ec *executionContext) fieldContext_SearchResults_emailBrandings(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_EmailBrandingConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_EmailBrandingConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_EmailBrandingConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailBrandingConnection", field.Name)
+			return ec.childFields_EmailBrandingConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -508,17 +443,20 @@ func (ec *executionContext) _SearchResults_emailTemplates(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_emailTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_emailTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.EmailTemplates, nil
 		},
 		nil,
-		ec.marshalOEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplateConnection) graphql.Marshaler {
+			return ec.marshalOEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_emailTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -526,15 +464,7 @@ func (ec *executionContext) fieldContext_SearchResults_emailTemplates(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_EmailTemplateConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_EmailTemplateConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_EmailTemplateConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplateConnection", field.Name)
+			return ec.childFields_EmailTemplateConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -545,17 +475,20 @@ func (ec *executionContext) _SearchResults_entities(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_entities,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_entities(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entities, nil
 		},
 		nil,
-		ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityConnection) graphql.Marshaler {
+			return ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_entities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -563,15 +496,7 @@ func (ec *executionContext) fieldContext_SearchResults_entities(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_EntityConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_EntityConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_EntityConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EntityConnection", field.Name)
+			return ec.childFields_EntityConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -582,17 +507,20 @@ func (ec *executionContext) _SearchResults_evidences(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_evidences,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_evidences(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Evidences, nil
 		},
 		nil,
-		ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.EvidenceConnection) graphql.Marshaler {
+			return ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_evidences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -600,15 +528,7 @@ func (ec *executionContext) fieldContext_SearchResults_evidences(_ context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_EvidenceConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_EvidenceConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_EvidenceConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EvidenceConnection", field.Name)
+			return ec.childFields_EvidenceConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -619,17 +539,20 @@ func (ec *executionContext) _SearchResults_findings(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_findings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_findings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Findings, nil
 		},
 		nil,
-		ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_findings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -637,15 +560,7 @@ func (ec *executionContext) fieldContext_SearchResults_findings(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_FindingConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_FindingConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_FindingConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type FindingConnection", field.Name)
+			return ec.childFields_FindingConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -656,17 +571,20 @@ func (ec *executionContext) _SearchResults_groups(ctx context.Context, field gra
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_groups,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_groups(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Groups, nil
 		},
 		nil,
-		ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_groups(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -674,15 +592,7 @@ func (ec *executionContext) fieldContext_SearchResults_groups(_ context.Context,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_GroupConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_GroupConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_GroupConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupConnection", field.Name)
+			return ec.childFields_GroupConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -693,17 +603,20 @@ func (ec *executionContext) _SearchResults_identityHolders(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_identityHolders,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_identityHolders(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.IdentityHolders, nil
 		},
 		nil,
-		ec.marshalOIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolderConnection) graphql.Marshaler {
+			return ec.marshalOIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_identityHolders(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -711,15 +624,7 @@ func (ec *executionContext) fieldContext_SearchResults_identityHolders(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_IdentityHolderConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_IdentityHolderConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_IdentityHolderConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IdentityHolderConnection", field.Name)
+			return ec.childFields_IdentityHolderConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -730,17 +635,20 @@ func (ec *executionContext) _SearchResults_integrations(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_integrations,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_integrations(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Integrations, nil
 		},
 		nil,
-		ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IntegrationConnection) graphql.Marshaler {
+			return ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_integrations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -748,15 +656,7 @@ func (ec *executionContext) fieldContext_SearchResults_integrations(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_IntegrationConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_IntegrationConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_IntegrationConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type IntegrationConnection", field.Name)
+			return ec.childFields_IntegrationConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -767,17 +667,20 @@ func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_internalPolicies,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_internalPolicies(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
+			return ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_internalPolicies(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -785,15 +688,7 @@ func (ec *executionContext) fieldContext_SearchResults_internalPolicies(_ contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_InternalPolicyConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_InternalPolicyConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_InternalPolicyConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InternalPolicyConnection", field.Name)
+			return ec.childFields_InternalPolicyConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -804,17 +699,20 @@ func (ec *executionContext) _SearchResults_invites(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_invites,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_invites(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Invites, nil
 		},
 		nil,
-		ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.InviteConnection) graphql.Marshaler {
+			return ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -822,15 +720,7 @@ func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_InviteConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_InviteConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_InviteConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type InviteConnection", field.Name)
+			return ec.childFields_InviteConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -841,17 +731,20 @@ func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_jobRunners,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_jobRunners(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.JobRunners, nil
 		},
 		nil,
-		ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobRunnerConnection) graphql.Marshaler {
+			return ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -859,15 +752,7 @@ func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_JobRunnerConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_JobRunnerConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_JobRunnerConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type JobRunnerConnection", field.Name)
+			return ec.childFields_JobRunnerConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -878,17 +763,20 @@ func (ec *executionContext) _SearchResults_jobTemplates(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_jobTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_jobTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.JobTemplates, nil
 		},
 		nil,
-		ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobTemplateConnection) graphql.Marshaler {
+			return ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -896,15 +784,7 @@ func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_JobTemplateConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_JobTemplateConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_JobTemplateConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type JobTemplateConnection", field.Name)
+			return ec.childFields_JobTemplateConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -915,17 +795,20 @@ func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_narratives,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_narratives(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Narratives, nil
 		},
 		nil,
-		ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NarrativeConnection) graphql.Marshaler {
+			return ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_narratives(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -933,15 +816,7 @@ func (ec *executionContext) fieldContext_SearchResults_narratives(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_NarrativeConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_NarrativeConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_NarrativeConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NarrativeConnection", field.Name)
+			return ec.childFields_NarrativeConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -952,17 +827,20 @@ func (ec *executionContext) _SearchResults_notificationTemplates(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_notificationTemplates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_notificationTemplates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotificationTemplates, nil
 		},
 		nil,
-		ec.marshalONotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationTemplateConnection) graphql.Marshaler {
+			return ec.marshalONotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_notificationTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -970,15 +848,7 @@ func (ec *executionContext) fieldContext_SearchResults_notificationTemplates(_ c
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_NotificationTemplateConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_NotificationTemplateConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_NotificationTemplateConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateConnection", field.Name)
+			return ec.childFields_NotificationTemplateConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -989,17 +859,20 @@ func (ec *executionContext) _SearchResults_organizations(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_organizations,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_organizations(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Organizations, nil
 		},
 		nil,
-		ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.OrganizationConnection) graphql.Marshaler {
+			return ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_organizations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1007,15 +880,7 @@ func (ec *executionContext) fieldContext_SearchResults_organizations(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_OrganizationConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_OrganizationConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_OrganizationConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type OrganizationConnection", field.Name)
+			return ec.childFields_OrganizationConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1026,17 +891,20 @@ func (ec *executionContext) _SearchResults_platforms(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_platforms,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_platforms(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Platforms, nil
 		},
 		nil,
-		ec.marshalOPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.PlatformConnection) graphql.Marshaler {
+			return ec.marshalOPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_platforms(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1044,15 +912,7 @@ func (ec *executionContext) fieldContext_SearchResults_platforms(_ context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_PlatformConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_PlatformConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_PlatformConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PlatformConnection", field.Name)
+			return ec.childFields_PlatformConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1063,17 +923,20 @@ func (ec *executionContext) _SearchResults_procedures(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_procedures,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_procedures(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProcedureConnection) graphql.Marshaler {
+			return ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_procedures(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1081,15 +944,7 @@ func (ec *executionContext) fieldContext_SearchResults_procedures(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ProcedureConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ProcedureConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ProcedureConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProcedureConnection", field.Name)
+			return ec.childFields_ProcedureConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1100,17 +955,20 @@ func (ec *executionContext) _SearchResults_programs(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_programs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_programs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Programs, nil
 		},
 		nil,
-		ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProgramConnection) graphql.Marshaler {
+			return ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_programs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1118,15 +976,7 @@ func (ec *executionContext) fieldContext_SearchResults_programs(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ProgramConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ProgramConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ProgramConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ProgramConnection", field.Name)
+			return ec.childFields_ProgramConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1137,17 +987,20 @@ func (ec *executionContext) _SearchResults_remediations(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_remediations,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_remediations(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Remediations, nil
 		},
 		nil,
-		ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
+			return ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_remediations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1155,15 +1008,7 @@ func (ec *executionContext) fieldContext_SearchResults_remediations(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_RemediationConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_RemediationConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_RemediationConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RemediationConnection", field.Name)
+			return ec.childFields_RemediationConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1174,17 +1019,20 @@ func (ec *executionContext) _SearchResults_reviews(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_reviews,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_reviews(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Reviews, nil
 		},
 		nil,
-		ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
+			return ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_reviews(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1192,15 +1040,7 @@ func (ec *executionContext) fieldContext_SearchResults_reviews(_ context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ReviewConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ReviewConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ReviewConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ReviewConnection", field.Name)
+			return ec.childFields_ReviewConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1211,17 +1051,20 @@ func (ec *executionContext) _SearchResults_risks(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_risks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_risks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RiskConnection) graphql.Marshaler {
+			return ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_risks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1229,15 +1072,7 @@ func (ec *executionContext) fieldContext_SearchResults_risks(_ context.Context, 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_RiskConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_RiskConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_RiskConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type RiskConnection", field.Name)
+			return ec.childFields_RiskConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1248,17 +1083,20 @@ func (ec *executionContext) _SearchResults_scans(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_scans,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_scans(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ScanConnection) graphql.Marshaler {
+			return ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_scans(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1266,15 +1104,7 @@ func (ec *executionContext) fieldContext_SearchResults_scans(_ context.Context, 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ScanConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ScanConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ScanConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ScanConnection", field.Name)
+			return ec.childFields_ScanConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1285,17 +1115,20 @@ func (ec *executionContext) _SearchResults_standards(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_standards,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_standards(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Standards, nil
 		},
 		nil,
-		ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.StandardConnection) graphql.Marshaler {
+			return ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_standards(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1303,15 +1136,7 @@ func (ec *executionContext) fieldContext_SearchResults_standards(_ context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_StandardConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_StandardConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_StandardConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type StandardConnection", field.Name)
+			return ec.childFields_StandardConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1322,17 +1147,20 @@ func (ec *executionContext) _SearchResults_subcontrols(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_subcontrols,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_subcontrols(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subcontrols, nil
 		},
 		nil,
-		ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
+			return ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_subcontrols(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1340,15 +1168,7 @@ func (ec *executionContext) fieldContext_SearchResults_subcontrols(_ context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_SubcontrolConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_SubcontrolConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_SubcontrolConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SubcontrolConnection", field.Name)
+			return ec.childFields_SubcontrolConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1359,17 +1179,20 @@ func (ec *executionContext) _SearchResults_subprocessors(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_subprocessors,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_subprocessors(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubprocessorConnection) graphql.Marshaler {
+			return ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_subprocessors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1377,15 +1200,7 @@ func (ec *executionContext) fieldContext_SearchResults_subprocessors(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_SubprocessorConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_SubprocessorConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_SubprocessorConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SubprocessorConnection", field.Name)
+			return ec.childFields_SubprocessorConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1396,17 +1211,20 @@ func (ec *executionContext) _SearchResults_subscribers(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_subscribers,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_subscribers(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Subscribers, nil
 		},
 		nil,
-		ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubscriberConnection) graphql.Marshaler {
+			return ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1414,15 +1232,7 @@ func (ec *executionContext) fieldContext_SearchResults_subscribers(_ context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_SubscriberConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_SubscriberConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_SubscriberConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SubscriberConnection", field.Name)
+			return ec.childFields_SubscriberConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1433,17 +1243,20 @@ func (ec *executionContext) _SearchResults_systemDetails(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_systemDetails,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_systemDetails(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SystemDetails, nil
 		},
 		nil,
-		ec.marshalOSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SystemDetailConnection) graphql.Marshaler {
+			return ec.marshalOSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_systemDetails(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1451,15 +1264,7 @@ func (ec *executionContext) fieldContext_SearchResults_systemDetails(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_SystemDetailConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_SystemDetailConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_SystemDetailConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SystemDetailConnection", field.Name)
+			return ec.childFields_SystemDetailConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1470,17 +1275,20 @@ func (ec *executionContext) _SearchResults_tagDefinitions(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_tagDefinitions,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_tagDefinitions(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TagDefinitions, nil
 		},
 		nil,
-		ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinitionConnection) graphql.Marshaler {
+			return ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_tagDefinitions(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1488,15 +1296,7 @@ func (ec *executionContext) fieldContext_SearchResults_tagDefinitions(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_TagDefinitionConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_TagDefinitionConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_TagDefinitionConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TagDefinitionConnection", field.Name)
+			return ec.childFields_TagDefinitionConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1507,17 +1307,20 @@ func (ec *executionContext) _SearchResults_tasks(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_tasks,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_tasks(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TaskConnection) graphql.Marshaler {
+			return ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_tasks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1525,15 +1328,7 @@ func (ec *executionContext) fieldContext_SearchResults_tasks(_ context.Context, 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_TaskConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_TaskConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_TaskConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TaskConnection", field.Name)
+			return ec.childFields_TaskConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1544,17 +1339,20 @@ func (ec *executionContext) _SearchResults_templates(ctx context.Context, field 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_templates,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_templates(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Templates, nil
 		},
 		nil,
-		ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TemplateConnection) graphql.Marshaler {
+			return ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1562,15 +1360,7 @@ func (ec *executionContext) fieldContext_SearchResults_templates(_ context.Conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_TemplateConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_TemplateConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_TemplateConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TemplateConnection", field.Name)
+			return ec.childFields_TemplateConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1581,17 +1371,20 @@ func (ec *executionContext) _SearchResults_trustCenterEntities(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_trustCenterEntities,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_trustCenterEntities(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterEntities, nil
 		},
 		nil,
-		ec.marshalOTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterEntityConnection) graphql.Marshaler {
+			return ec.marshalOTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_trustCenterEntities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1599,15 +1392,7 @@ func (ec *executionContext) fieldContext_SearchResults_trustCenterEntities(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_TrustCenterEntityConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_TrustCenterEntityConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_TrustCenterEntityConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityConnection", field.Name)
+			return ec.childFields_TrustCenterEntityConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1618,17 +1403,20 @@ func (ec *executionContext) _SearchResults_vulnerabilities(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_vulnerabilities,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_vulnerabilities(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Vulnerabilities, nil
 		},
 		nil,
-		ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_vulnerabilities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1636,15 +1424,7 @@ func (ec *executionContext) fieldContext_SearchResults_vulnerabilities(_ context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_VulnerabilityConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_VulnerabilityConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_VulnerabilityConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type VulnerabilityConnection", field.Name)
+			return ec.childFields_VulnerabilityConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1655,17 +1435,20 @@ func (ec *executionContext) _SearchResults_searchContext(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_SearchResults_searchContext,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_searchContext(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.SearchContext, nil
 		},
 		nil,
-		ec.marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchContextᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*models.SearchContext) graphql.Marshaler {
+			return ec.marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchContextᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_SearchResults_searchContext(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "SearchResults",
@@ -1673,17 +1456,7 @@ func (ec *executionContext) fieldContext_SearchResults_searchContext(_ context.C
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "entityID":
-				return ec.fieldContext_SearchContext_entityID(ctx, field)
-			case "entityType":
-				return ec.fieldContext_SearchContext_entityType(ctx, field)
-			case "matchedFields":
-				return ec.fieldContext_SearchContext_matchedFields(ctx, field)
-			case "snippets":
-				return ec.fieldContext_SearchContext_snippets(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SearchContext", field.Name)
+			return ec.childFields_SearchContext(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1817,7 +1590,7 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

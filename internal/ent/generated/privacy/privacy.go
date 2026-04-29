@@ -279,6 +279,30 @@ func (f CampaignTargetMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CampaignTargetMutation", m)
 }
 
+// The CheckResultQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type CheckResultQueryRuleFunc func(context.Context, *generated.CheckResultQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f CheckResultQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CheckResultQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.CheckResultQuery", q)
+}
+
+// The CheckResultMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type CheckResultMutationRuleFunc func(context.Context, *generated.CheckResultMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f CheckResultMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.CheckResultMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.CheckResultMutation", m)
+}
+
 // The ContactQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type ContactQueryRuleFunc func(context.Context, *generated.ContactQuery) error
@@ -2728,6 +2752,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.CampaignTargetQuery:
 		return q.Filter(), nil
+	case *generated.CheckResultQuery:
+		return q.Filter(), nil
 	case *generated.ContactQuery:
 		return q.Filter(), nil
 	case *generated.ControlQuery:
@@ -2948,6 +2974,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.CampaignMutation:
 		return m.Filter(), nil
 	case *generated.CampaignTargetMutation:
+		return m.Filter(), nil
+	case *generated.CheckResultMutation:
 		return m.Filter(), nil
 	case *generated.ContactMutation:
 		return m.Filter(), nil

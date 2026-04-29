@@ -90,6 +90,8 @@ const (
 	FieldComplianceWebhookToken = "compliance_webhook_token"
 	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
 	FieldPaymentMethodAdded = "payment_method_added"
+	// FieldPendingDeletionAt holds the string denoting the pending_deletion_at field in the database.
+	FieldPendingDeletionAt = "pending_deletion_at"
 	// Table holds the table name of the organizationsettinghistory in the database.
 	Table = "organization_setting_history"
 )
@@ -132,6 +134,7 @@ var Columns = []string{
 	FieldMultifactorAuthEnforced,
 	FieldComplianceWebhookToken,
 	FieldPaymentMethodAdded,
+	FieldPendingDeletionAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -376,6 +379,11 @@ func ByComplianceWebhookToken(opts ...sql.OrderTermOption) OrderOption {
 // ByPaymentMethodAdded orders the results by the payment_method_added field.
 func ByPaymentMethodAdded(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPaymentMethodAdded, opts...).ToFunc()
+}
+
+// ByPendingDeletionAt orders the results by the pending_deletion_at field.
+func ByPendingDeletionAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPendingDeletionAt, opts...).ToFunc()
 }
 
 var (

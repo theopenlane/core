@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
@@ -75,33 +76,33 @@ var directorySyncRunSchemas = map[string]struct{}{
 func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	if needsDirectorySyncRun(contracts) {
 		// directory sync runs must finalize in the same process that creates them
-		return ProcessPayloadSets(ctx, ic, contracts, payloadSets, options)
+		return ProcessPayloadSets(ctx, ic, operationName, contracts, payloadSets, options)
 	}
 
 	if ic.Runtime == nil {
 		return ErrGalaRequired
 	}
 
-	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
 	})
 }
 
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously
-func ProcessPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	return applyPayloadSets(ctx, ic, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
+	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
 	})
 }
 
 // applyPayloadSets is the shared core for both async emit and sync persist paths
-func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
+func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
 	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
 		return ErrIngestDefinitionNotFound
 	}
 
-	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Integration)
+	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Integration, definition, operationName)
 	if err != nil {
 		return ErrIngestInstallationFilterConfigInvalid
 	}
@@ -140,6 +141,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, contracts []types.I
 		for _, envelope := range payloadSet.Envelopes {
 			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("integration: error mapping ingest record")
 				return err
 			}
 
@@ -165,6 +167,7 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integration: ingest filter failed")
 		return mappedIngestRecord{}, false, ErrIngestFilterFailed
 	}
 	if !matched {
@@ -173,6 +176,8 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("integration: error transforming ingest")
+
 		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
 	}
 
@@ -183,8 +188,24 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 	}, true, nil
 }
 
-// resolveInstallationFilterExpr pulls the per-installation filter expression out of the config
-func resolveInstallationFilterExpr(installation *ent.Integration) (string, error) {
+// resolveInstallationFilterExpr pulls the filter expression for the current operation out of the
+// installation config. When the operation declares a ConfigResolver, it extracts the
+// operation-specific config section first (supporting nested UserInput structures like
+// directorySync.filterExpr); otherwise it falls back to a top-level filterExpr in ClientConfig
+func resolveInstallationFilterExpr(installation *ent.Integration, definition types.Definition, operationName string) (string, error) {
+	if operationName != "" {
+		if op, ok := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName }); ok && op.ConfigResolver != nil {
+			var cfg installationFilterConfig
+			if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err != nil {
+				return "", err
+			}
+
+			if cfg.FilterExpr != "" {
+				return cfg.FilterExpr, nil
+			}
+		}
+	}
+
 	var cfg installationFilterConfig
 	if err := jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &cfg); err != nil {
 		return "", err
@@ -254,7 +275,8 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 	return run.ID, nil
 }
 
-// finalizeDirectorySyncRun marks the directory sync run as completed or failed
+// finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
+// is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
 func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error) error {
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())

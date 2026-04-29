@@ -94,7 +94,9 @@ func TestCelEnv_IdentifierEscapeSyntax(t *testing.T) {
 	assert.NoError(t, err)
 
 	_, iss = env.Compile(expr)
-	assert.Error(t, iss.Err())
+	// this seems to always be true now for the Parser https://github.com/google/cel-go/pull/1295, so we no longer
+	// expect an error
+	assert.NoError(t, err)
 }
 
 // TestCelEnv_CrossTypeNumericComparisons verifies cross-type numeric comparisons config

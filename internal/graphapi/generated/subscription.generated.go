@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -35,17 +34,20 @@ func (ec *executionContext) _Subscription_notificationCreated(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Subscription_notificationCreated,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subscription_notificationCreated(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return ec.Resolvers.Subscription().NotificationCreated(ctx)
 		},
 		nil,
-		ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Subscription",
@@ -53,47 +55,7 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Notification_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Notification_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Notification_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Notification_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Notification_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Notification_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Notification_ownerID(ctx, field)
-			case "userID":
-				return ec.fieldContext_Notification_userID(ctx, field)
-			case "notificationType":
-				return ec.fieldContext_Notification_notificationType(ctx, field)
-			case "objectType":
-				return ec.fieldContext_Notification_objectType(ctx, field)
-			case "title":
-				return ec.fieldContext_Notification_title(ctx, field)
-			case "body":
-				return ec.fieldContext_Notification_body(ctx, field)
-			case "data":
-				return ec.fieldContext_Notification_data(ctx, field)
-			case "templateID":
-				return ec.fieldContext_Notification_templateID(ctx, field)
-			case "readAt":
-				return ec.fieldContext_Notification_readAt(ctx, field)
-			case "channels":
-				return ec.fieldContext_Notification_channels(ctx, field)
-			case "topic":
-				return ec.fieldContext_Notification_topic(ctx, field)
-			case "owner":
-				return ec.fieldContext_Notification_owner(ctx, field)
-			case "notificationTemplate":
-				return ec.fieldContext_Notification_notificationTemplate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
+			return ec.childFields_Notification(ctx, field)
 		},
 	}
 	return fc, nil

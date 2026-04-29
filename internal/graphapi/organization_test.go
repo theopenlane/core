@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
@@ -24,6 +25,21 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
+
+func waitForCondition(t *testing.T, condition func() bool, msg string) {
+	t.Helper()
+
+	deadline := time.Now().Add(5 * time.Second)
+	for time.Now().Before(deadline) {
+		if condition() {
+			return
+		}
+
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	t.Fatalf("timed out waiting for condition: %s", msg)
+}
 
 func TestQueryOrganization(t *testing.T) {
 	// create another user for this test
@@ -939,6 +955,8 @@ func TestMutationDeleteOrganization(t *testing.T) {
 }
 
 func TestMutationOrganizationCascadeDelete(t *testing.T) {
+	suite.enableGalaForTestSuite(t)
+
 	// create another user for this test
 	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
@@ -965,28 +983,22 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
-	_, err = suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
+	waitForCondition(t, func() bool {
+		_, err := suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
+		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
+	}, "child org should be deleted by async edge cleanup")
 
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	waitForCondition(t, func() bool {
+		_, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
+		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
+	}, "group should be deleted by async edge cleanup")
 
-	_, err = suite.client.api.GetGroupByID(reqCtx, group1.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
-
-	// allow after tuples have been deleted
+	// verify the parent org is soft-deleted (not hard-deleted) by querying the db directly
 	ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
-	o, err := suite.client.api.GetOrganizationByID(ctx, org.ID)
-
+	o, err := suite.client.db.Organization.Get(ctx, org.ID)
 	assert.NilError(t, err)
-	assert.Equal(t, o.Organization.ID, org.ID)
-
-	// allow after tuples have been deleted
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-	ctx = entx.SkipSoftDelete(ctx)
-
-	co, err := suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
-	assert.NilError(t, err)
-
-	assert.Equal(t, co.Organization.ID, childOrg.ID)
+	assert.Equal(t, o.ID, org.ID)
+	assert.Assert(t, !o.DeletedAt.IsZero())
 }

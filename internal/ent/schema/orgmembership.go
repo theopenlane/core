@@ -138,6 +138,9 @@ func (OrgMembership) Interceptors() []ent.Interceptor {
 // Policy of the OrgMembership
 func (OrgMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			rule.AllowQueryIfSystemAdmin(),
+		),
 		policy.WithOnMutationRules(
 			ent.OpDelete|ent.OpDeleteOne,
 			rule.AllowSelfOrgMembershipDelete(),

@@ -86,6 +86,13 @@
       "isSlice": false
     }
   ],
+  "CheckResult": [
+    {
+      "csvColumn": "ControlRefCodes",
+      "targetField": "ControlIDs",
+      "isSlice": true
+    }
+  ],
   "Control": [
     {
       "csvColumn": "ActionPlanNames",

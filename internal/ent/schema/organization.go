@@ -663,8 +663,10 @@ func (Organization) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),    // Allow sign-up tokens to query the org ID they are subscribing to
 			policy.CheckOrgReadAccess(),                                       // access based on query and auth context
+			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			rule.HasOrgMutationAccess(), // Requires edit for Update, and delete for Delete mutations
 			policy.AllowCreate(),        // Allow all other users (e.g. a user with a JWT should be able to create a new org)
 		),

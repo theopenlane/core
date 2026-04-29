@@ -12,6 +12,8 @@ var (
 	ExportTypeAsset ExportType = "ASSET"
 	// ExportTypeCampaign indicates the campaign.
 	ExportTypeCampaign ExportType = "CAMPAIGN"
+	// ExportTypeCheckResult indicates the checkresult.
+	ExportTypeCheckResult ExportType = "CHECK_RESULT"
 	// ExportTypeContact indicates the contact.
 	ExportTypeContact ExportType = "CONTACT"
 	// ExportTypeControl indicates the control.
@@ -62,6 +64,7 @@ var exportTypeValues = []ExportType{
 	ExportTypeAssessment,
 	ExportTypeAsset,
 	ExportTypeCampaign,
+	ExportTypeCheckResult,
 	ExportTypeContact,
 	ExportTypeControl,
 	ExportTypeDirectoryMembership,

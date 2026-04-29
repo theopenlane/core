@@ -2,9 +2,11 @@ package operations
 
 import (
 	"context"
+	"errors"
 
 	"github.com/riverqueue/river"
 
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -47,6 +49,16 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 			delta, execErr := handle(ctx.Context, envelope)
 
 			if execErr != nil {
+				if ent.IsNotFound(execErr) {
+					logx.FromContext(ctx.Context).Error().Err(execErr).Msg("integration not found, not queuing")
+					return river.JobCancel(execErr)
+				}
+
+				if errors.Is(execErr, ErrOperationDisabled) {
+					logx.FromContext(ctx.Context).Info().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Msg("operation disabled, stopping reconcile cycle")
+					return river.JobCancel(execErr)
+				}
+
 				logx.FromContext(ctx.Context).Warn().Err(execErr).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Int("error_streak", envelope.Schedule.ErrorStreak+1).Msg("reconcile cycle failed, scheduling retry with backoff")
 			}
 
@@ -59,6 +71,7 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 			}, gala.Headers{
 				ScheduledAt: &scheduledAt,
 				Properties:  envelope.Properties(),
+				Tags:        types.GetTagsForExecutionMetadata(envelope.ExecutionMetadata),
 			})
 
 			if execErr != nil {

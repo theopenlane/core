@@ -13,7 +13,7 @@ func Builder(cfg Config) registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "microsoft",
+				Family:      "Microsoft",
 				DisplayName: "Microsoft Teams",
 				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
 				Category:    "collaboration",

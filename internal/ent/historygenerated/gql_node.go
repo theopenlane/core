@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -126,6 +127,11 @@ var campaigntargethistoryImplementors = []string{"CampaignTargetHistory", "Node"
 
 // IsNode implements the Node interface check for GQLGen.
 func (*CampaignTargetHistory) IsNode() {}
+
+var checkresulthistoryImplementors = []string{"CheckResultHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*CheckResultHistory) IsNode() {}
 
 var contacthistoryImplementors = []string{"ContactHistory", "Node"}
 
@@ -600,6 +606,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(campaigntargethistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, campaigntargethistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case checkresulthistory.Table:
+		query := c.CheckResultHistory.Query().
+			Where(checkresulthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, checkresulthistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1418,6 +1433,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.CampaignTargetHistory.Query().
 			Where(campaigntargethistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, campaigntargethistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case checkresulthistory.Table:
+		query := c.CheckResultHistory.Query().
+			Where(checkresulthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, checkresulthistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

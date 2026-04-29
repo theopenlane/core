@@ -840,7 +840,6 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 }
 
 func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
-
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 

@@ -113,6 +113,7 @@ email:
     supportemail: ""
     templatespath: ""
     urls:
+        billing: ""
         docs: ""
         invite: ""
         product: ""
@@ -167,6 +168,10 @@ entconfig:
         maximumsentences: 10
         type: lexrank
 integrations:
+    awssecurityhub:
+        accessKeyId: ""
+        arn: ""
+        secretAccessKey: ""
     azureentraid:
         clientid: ""
         clientsecret: ""
@@ -434,7 +439,7 @@ workflows:
         crosstypenumericcomparisons: false
         evaloptimize: true
         extendedvalidations: true
-        identifierescapesyntax: false
+        identifierescapesyntax: true
         interruptcheckfrequency: 100
         macrocalltracking: false
         optionaltypes: false

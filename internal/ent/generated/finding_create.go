@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -1091,6 +1092,21 @@ func (_c *FindingCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Finding
 	return _c.AddWorkflowObjectRefIDs(ids...)
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_c *FindingCreate) AddCheckResultIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddCheckResultIDs(ids...)
+	return _c
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_c *FindingCreate) AddCheckResults(v ...*CheckResult) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultIDs(ids...)
+}
+
 // AddControlMappingIDs adds the "control_mappings" edge to the FindingControl entity by IDs.
 func (_c *FindingCreate) AddControlMappingIDs(ids ...string) *FindingCreate {
 	_c.mutation.AddControlMappingIDs(ids...)
@@ -1890,6 +1906,23 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.CheckResultsTable,
+			Columns: finding.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingCheckResults
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

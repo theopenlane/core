@@ -2688,6 +2688,251 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *CheckResultMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.CheckResultHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if lastObservedAt, exists := m.LastObservedAt(); exists {
+		create = create.SetNillableLastObservedAt(&lastObservedAt)
+	}
+
+	if externalURI, exists := m.ExternalURI(); exists {
+		create = create.SetExternalURI(externalURI)
+	}
+
+	if details, exists := m.Details(); exists {
+		create = create.SetNillableDetails(&details)
+	}
+
+	if parentExternalID, exists := m.ParentExternalID(); exists {
+		create = create.SetParentExternalID(parentExternalID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *CheckResultMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		checkresult, err := client.CheckResult.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.CheckResultHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(checkresult.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(checkresult.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(checkresult.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(checkresult.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(checkresult.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(checkresult.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(checkresult.Tags)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(checkresult.Status)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(checkresult.Source)
+		}
+
+		if lastObservedAt, exists := m.LastObservedAt(); exists {
+			create = create.SetNillableLastObservedAt(&lastObservedAt)
+		} else {
+			create = create.SetNillableLastObservedAt(checkresult.LastObservedAt)
+		}
+
+		if externalURI, exists := m.ExternalURI(); exists {
+			create = create.SetExternalURI(externalURI)
+		} else {
+			create = create.SetExternalURI(checkresult.ExternalURI)
+		}
+
+		if details, exists := m.Details(); exists {
+			create = create.SetNillableDetails(&details)
+		} else {
+			create = create.SetNillableDetails(checkresult.Details)
+		}
+
+		if parentExternalID, exists := m.ParentExternalID(); exists {
+			create = create.SetParentExternalID(parentExternalID)
+		} else {
+			create = create.SetParentExternalID(checkresult.ParentExternalID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(checkresult.IntegrationID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *CheckResultMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		checkresult, err := client.CheckResult.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.CheckResultHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(checkresult.CreatedAt).
+			SetUpdatedAt(checkresult.UpdatedAt).
+			SetCreatedBy(checkresult.CreatedBy).
+			SetUpdatedBy(checkresult.UpdatedBy).
+			SetDeletedAt(checkresult.DeletedAt).
+			SetDeletedBy(checkresult.DeletedBy).
+			SetTags(checkresult.Tags).
+			SetStatus(checkresult.Status).
+			SetSource(checkresult.Source).
+			SetNillableLastObservedAt(checkresult.LastObservedAt).
+			SetExternalURI(checkresult.ExternalURI).
+			SetNillableDetails(checkresult.Details).
+			SetParentExternalID(checkresult.ParentExternalID).
+			SetIntegrationID(checkresult.IntegrationID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -5552,6 +5797,10 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableSourceVersion(&sourceVersion)
 	}
 
+	if directoryName, exists := m.DirectoryName(); exists {
+		create = create.SetNillableDirectoryName(&directoryName)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5781,6 +6030,12 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableSourceVersion(directorygroup.SourceVersion)
 		}
 
+		if directoryName, exists := m.DirectoryName(); exists {
+			create = create.SetNillableDirectoryName(&directoryName)
+		} else {
+			create = create.SetNillableDirectoryName(directorygroup.DirectoryName)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5849,6 +6104,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetMetadata(directorygroup.Metadata).
 			SetNillableRawProfileFileID(directorygroup.RawProfileFileID).
 			SetNillableSourceVersion(directorygroup.SourceVersion).
+			SetNillableDirectoryName(directorygroup.DirectoryName).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -5944,6 +6200,10 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 	if source, exists := m.Source(); exists {
 		create = create.SetNillableSource(&source)
+	}
+
+	if directoryName, exists := m.DirectoryName(); exists {
+		create = create.SetNillableDirectoryName(&directoryName)
 	}
 
 	if firstSeenAt, exists := m.FirstSeenAt(); exists {
@@ -6113,6 +6373,12 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetNillableSource(directorymembership.Source)
 		}
 
+		if directoryName, exists := m.DirectoryName(); exists {
+			create = create.SetNillableDirectoryName(&directoryName)
+		} else {
+			create = create.SetNillableDirectoryName(directorymembership.DirectoryName)
+		}
+
 		if firstSeenAt, exists := m.FirstSeenAt(); exists {
 			create = create.SetNillableFirstSeenAt(&firstSeenAt)
 		} else {
@@ -6208,6 +6474,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
 			SetRole(directorymembership.Role).
 			SetNillableSource(directorymembership.Source).
+			SetNillableDirectoryName(directorymembership.DirectoryName).
 			SetNillableFirstSeenAt(directorymembership.FirstSeenAt).
 			SetNillableLastSeenAt(directorymembership.LastSeenAt).
 			SetNillableAddedAt(directorymembership.AddedAt).
@@ -15612,6 +15879,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetPaymentMethodAdded(paymentMethodAdded)
 	}
 
+	if pendingDeletionAt, exists := m.PendingDeletionAt(); exists {
+		create = create.SetNillablePendingDeletionAt(&pendingDeletionAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15835,6 +16106,12 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded)
 		}
 
+		if pendingDeletionAt, exists := m.PendingDeletionAt(); exists {
+			create = create.SetNillablePendingDeletionAt(&pendingDeletionAt)
+		} else {
+			create = create.SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15902,6 +16179,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
+			SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -26101,6 +26379,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetFirstPatchedVersion(firstPatchedVersion)
 	}
 
+	if fixAvailable, exists := m.FixAvailable(); exists {
+		create = create.SetFixAvailable(fixAvailable)
+	}
+
 	if packageName, exists := m.PackageName(); exists {
 		create = create.SetPackageName(packageName)
 	}
@@ -26456,6 +26738,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetFirstPatchedVersion(vulnerability.FirstPatchedVersion)
 		}
 
+		if fixAvailable, exists := m.FixAvailable(); exists {
+			create = create.SetFixAvailable(fixAvailable)
+		} else {
+			create = create.SetFixAvailable(vulnerability.FixAvailable)
+		}
+
 		if packageName, exists := m.PackageName(); exists {
 			create = create.SetPackageName(packageName)
 		} else {
@@ -26625,6 +26913,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetCweIds(vulnerability.CweIds).
 			SetVulnerableVersionRange(vulnerability.VulnerableVersionRange).
 			SetFirstPatchedVersion(vulnerability.FirstPatchedVersion).
+			SetFixAvailable(vulnerability.FixAvailable).
 			SetPackageName(vulnerability.PackageName).
 			SetPackageEcosystem(vulnerability.PackageEcosystem).
 			SetManifestPath(vulnerability.ManifestPath).

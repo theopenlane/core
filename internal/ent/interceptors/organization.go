@@ -20,6 +20,10 @@ import (
 // InterceptorOrganization is middleware to change the Organization query
 func InterceptorOrganization() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+		if auth.IsSystemAdminFromContext(ctx) {
+			return nil
+		}
+
 		// by pass checks on invite or pre-allowed request
 		if _, allow := privacy.DecisionFromContext(ctx); allow {
 			return nil

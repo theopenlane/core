@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _JobRunnerCreatePayload_jobRunner(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_JobRunnerCreatePayload_jobRunner,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_JobRunnerCreatePayload_jobRunner(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.JobRunner, nil
 		},
 		nil,
-		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobRunner) graphql.Marshaler {
+			return ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "JobRunnerCreatePayload",
@@ -51,47 +55,7 @@ func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_JobRunner_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_JobRunner_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_JobRunner_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_JobRunner_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_JobRunner_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_JobRunner_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_JobRunner_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_JobRunner_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_JobRunner_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_JobRunner_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_JobRunner_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_JobRunner_name(ctx, field)
-			case "status":
-				return ec.fieldContext_JobRunner_status(ctx, field)
-			case "ipAddress":
-				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
-			case "lastSeen":
-				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
-			case "version":
-				return ec.fieldContext_JobRunner_version(ctx, field)
-			case "os":
-				return ec.fieldContext_JobRunner_os(ctx, field)
-			case "owner":
-				return ec.fieldContext_JobRunner_owner(ctx, field)
-			case "jobRunnerTokens":
-				return ec.fieldContext_JobRunner_jobRunnerTokens(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type JobRunner", field.Name)
+			return ec.childFields_JobRunner(ctx, field)
 		},
 	}
 	return fc, nil
@@ -102,28 +66,22 @@ func (ec *executionContext) _JobRunnerDeletePayload_deletedID(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_JobRunnerDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_JobRunnerDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_JobRunnerDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "JobRunnerDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("JobRunnerDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _JobRunnerUpdatePayload_jobRunner(ctx context.Context, field graphql.CollectedField, obj *model.JobRunnerUpdatePayload) (ret graphql.Marshaler) {
@@ -131,17 +89,20 @@ func (ec *executionContext) _JobRunnerUpdatePayload_jobRunner(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_JobRunnerUpdatePayload_jobRunner,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_JobRunnerUpdatePayload_jobRunner(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.JobRunner, nil
 		},
 		nil,
-		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobRunner) graphql.Marshaler {
+			return ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "JobRunnerUpdatePayload",
@@ -149,47 +110,7 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_JobRunner_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_JobRunner_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_JobRunner_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_JobRunner_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_JobRunner_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_JobRunner_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_JobRunner_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_JobRunner_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_JobRunner_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_JobRunner_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_JobRunner_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_JobRunner_name(ctx, field)
-			case "status":
-				return ec.fieldContext_JobRunner_status(ctx, field)
-			case "ipAddress":
-				return ec.fieldContext_JobRunner_ipAddress(ctx, field)
-			case "lastSeen":
-				return ec.fieldContext_JobRunner_lastSeen(ctx, field)
-			case "version":
-				return ec.fieldContext_JobRunner_version(ctx, field)
-			case "os":
-				return ec.fieldContext_JobRunner_os(ctx, field)
-			case "owner":
-				return ec.fieldContext_JobRunner_owner(ctx, field)
-			case "jobRunnerTokens":
-				return ec.fieldContext_JobRunner_jobRunnerTokens(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type JobRunner", field.Name)
+			return ec.childFields_JobRunner(ctx, field)
 		},
 	}
 	return fc, nil
@@ -232,7 +153,7 @@ func (ec *executionContext) _JobRunnerCreatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -271,7 +192,7 @@ func (ec *executionContext) _JobRunnerDeletePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -310,7 +231,7 @@ func (ec *executionContext) _JobRunnerUpdatePayload(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

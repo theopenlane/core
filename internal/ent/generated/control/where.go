@@ -3715,6 +3715,35 @@ func HasStandardWith(preds ...predicate.Standard) predicate.Control {
 	})
 }
 
+// HasCheckResults applies the HasEdge predicate on the "check_results" edge.
+func HasCheckResults() predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, CheckResultsTable, CheckResultsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResultControls
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCheckResultsWith applies the HasEdge predicate on the "check_results" edge with a given conditions (other predicates).
+func HasCheckResultsWith(preds ...predicate.CheckResult) predicate.Control {
+	return predicate.Control(func(s *sql.Selector) {
+		step := newCheckResultsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResultControls
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPrograms applies the HasEdge predicate on the "programs" edge.
 func HasPrograms() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {

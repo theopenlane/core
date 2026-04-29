@@ -162,3 +162,18 @@ func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (
 
 	return raw, nil
 }
+
+// ValidateExpr parses and type-checks a CEL expression without evaluating it
+func ValidateExpr(expr string) error {
+	ev, err := getEvaluator()
+	if err != nil {
+		return err
+	}
+
+	_, issues := ev.Compile(expr)
+	if issues != nil && issues.Err() != nil {
+		return issues.Err()
+	}
+
+	return nil
+}

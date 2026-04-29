@@ -242,6 +242,7 @@ func (Entity) Fields() []ent.Field {
 			GoType(enums.VendorTier("")).
 			Default(enums.VendorTierStandard.String()).
 			Optional().
+			Default(enums.VendorRiskImpactLow.String()).
 			Annotations(
 				entgql.OrderField("tier"),
 			),
@@ -335,7 +336,13 @@ func (e Entity) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, Campaign{}),
 		defaultEdgeToWithPagination(e, AssessmentResponse{}),
 		defaultEdgeToWithPagination(e, VendorRiskScore{}),
-		defaultEdgeToWithPagination(e, Integration{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Integration{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, Subprocessor{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: e,

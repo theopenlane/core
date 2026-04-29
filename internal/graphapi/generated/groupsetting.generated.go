@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload_groupSettings(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkCreatePayload_groupSettings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkCreatePayload_groupSettings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.GroupSettings, nil
 		},
 		nil,
-		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.GroupSetting) graphql.Marshaler {
+			return ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupSettingBulkCreatePayload",
@@ -51,31 +55,7 @@ func (ec *executionContext) fieldContext_GroupSettingBulkCreatePayload_groupSett
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_GroupSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "visibility":
-				return ec.fieldContext_GroupSetting_visibility(ctx, field)
-			case "joinPolicy":
-				return ec.fieldContext_GroupSetting_joinPolicy(ctx, field)
-			case "syncToSlack":
-				return ec.fieldContext_GroupSetting_syncToSlack(ctx, field)
-			case "syncToGithub":
-				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
-			case "groupID":
-				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "group":
-				return ec.fieldContext_GroupSetting_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
+			return ec.childFields_GroupSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -86,28 +66,22 @@ func (ec *executionContext) _GroupSettingBulkDeletePayload_deletedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupSettingBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _GroupSettingBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkDeletePayload) (ret graphql.Marshaler) {
@@ -115,28 +89,22 @@ func (ec *executionContext) _GroupSettingBulkDeletePayload_notDeletedIDs(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupSettingBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _GroupSettingBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkDeletePayload) (ret graphql.Marshaler) {
@@ -144,28 +112,22 @@ func (ec *executionContext) _GroupSettingBulkDeletePayload_error(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupSettingBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _GroupSettingBulkUpdatePayload_groupSettings(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -173,17 +135,20 @@ func (ec *executionContext) _GroupSettingBulkUpdatePayload_groupSettings(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkUpdatePayload_groupSettings,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkUpdatePayload_groupSettings(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.GroupSettings, nil
 		},
 		nil,
-		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.GroupSetting) graphql.Marshaler {
+			return ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkUpdatePayload_groupSettings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupSettingBulkUpdatePayload",
@@ -191,31 +156,7 @@ func (ec *executionContext) fieldContext_GroupSettingBulkUpdatePayload_groupSett
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_GroupSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "visibility":
-				return ec.fieldContext_GroupSetting_visibility(ctx, field)
-			case "joinPolicy":
-				return ec.fieldContext_GroupSetting_joinPolicy(ctx, field)
-			case "syncToSlack":
-				return ec.fieldContext_GroupSetting_syncToSlack(ctx, field)
-			case "syncToGithub":
-				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
-			case "groupID":
-				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "group":
-				return ec.fieldContext_GroupSetting_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
+			return ec.childFields_GroupSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -226,28 +167,22 @@ func (ec *executionContext) _GroupSettingBulkUpdatePayload_updatedIDs(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupSettingBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingCreatePayload) (ret graphql.Marshaler) {
@@ -255,17 +190,20 @@ func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingCreatePayload_groupSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingCreatePayload_groupSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.GroupSetting, nil
 		},
 		nil,
-		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupSetting) graphql.Marshaler {
+			return ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupSettingCreatePayload",
@@ -273,31 +211,7 @@ func (ec *executionContext) fieldContext_GroupSettingCreatePayload_groupSetting(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_GroupSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "visibility":
-				return ec.fieldContext_GroupSetting_visibility(ctx, field)
-			case "joinPolicy":
-				return ec.fieldContext_GroupSetting_joinPolicy(ctx, field)
-			case "syncToSlack":
-				return ec.fieldContext_GroupSetting_syncToSlack(ctx, field)
-			case "syncToGithub":
-				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
-			case "groupID":
-				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "group":
-				return ec.fieldContext_GroupSetting_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
+			return ec.childFields_GroupSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -308,28 +222,22 @@ func (ec *executionContext) _GroupSettingDeletePayload_deletedID(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "GroupSettingDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("GroupSettingDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _GroupSettingUpdatePayload_groupSetting(ctx context.Context, field graphql.CollectedField, obj *model.GroupSettingUpdatePayload) (ret graphql.Marshaler) {
@@ -337,17 +245,20 @@ func (ec *executionContext) _GroupSettingUpdatePayload_groupSetting(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_GroupSettingUpdatePayload_groupSetting,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupSettingUpdatePayload_groupSetting(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.GroupSetting, nil
 		},
 		nil,
-		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupSetting) graphql.Marshaler {
+			return ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "GroupSettingUpdatePayload",
@@ -355,31 +266,7 @@ func (ec *executionContext) fieldContext_GroupSettingUpdatePayload_groupSetting(
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_GroupSetting_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_GroupSetting_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_GroupSetting_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_GroupSetting_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_GroupSetting_updatedBy(ctx, field)
-			case "visibility":
-				return ec.fieldContext_GroupSetting_visibility(ctx, field)
-			case "joinPolicy":
-				return ec.fieldContext_GroupSetting_joinPolicy(ctx, field)
-			case "syncToSlack":
-				return ec.fieldContext_GroupSetting_syncToSlack(ctx, field)
-			case "syncToGithub":
-				return ec.fieldContext_GroupSetting_syncToGithub(ctx, field)
-			case "groupID":
-				return ec.fieldContext_GroupSetting_groupID(ctx, field)
-			case "group":
-				return ec.fieldContext_GroupSetting_group(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type GroupSetting", field.Name)
+			return ec.childFields_GroupSetting(ctx, field)
 		},
 	}
 	return fc, nil
@@ -419,7 +306,7 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -465,7 +352,7 @@ func (ec *executionContext) _GroupSettingBulkDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -503,7 +390,7 @@ func (ec *executionContext) _GroupSettingBulkUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -542,7 +429,7 @@ func (ec *executionContext) _GroupSettingCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -581,7 +468,7 @@ func (ec *executionContext) _GroupSettingDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -620,7 +507,7 @@ func (ec *executionContext) _GroupSettingUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

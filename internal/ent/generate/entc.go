@@ -18,19 +18,6 @@ import (
 	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
-	"github.com/theopenlane/core/common/enums/exportenums"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/filecategorygen"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/internal/entitlements/genfeatures"
-	"github.com/theopenlane/core/internal/genhelpers"
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/shortlinks"
-	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -44,6 +31,20 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+
+	"github.com/theopenlane/core/common/enums/exportenums"
+	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/filecategorygen"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/internal/entitlements/genfeatures"
+	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/internal/graphapi/directives"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/shortlinks"
+	"github.com/theopenlane/core/pkg/summarizer"
 )
 
 var (
@@ -356,9 +357,11 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			integrationmapping.WithIngestPackageName("operations"),
 			integrationmapping.WithIntegrationGeneratedPackage("github.com/theopenlane/core/internal/ent/integrationgenerated"),
 			integrationmapping.WithContextxPackage("github.com/theopenlane/utils/contextx"),
+			integrationmapping.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
 			integrationmapping.WithDoPackage("github.com/samber/do/v2"),
 			integrationmapping.WithLoPackage("github.com/samber/lo"),
 			integrationmapping.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
+			integrationmapping.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
 		).Hook(),
 		accessMapExt.Hook(),
 		fileCategoryGen.Hook(),

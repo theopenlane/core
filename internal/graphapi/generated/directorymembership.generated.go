@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DirectoryMembershipBulkCreatePayload_directoryMembe
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryMembershipBulkCreatePayload_directoryMemberships,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryMembershipBulkCreatePayload_directoryMemberships(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryMemberships, nil
 		},
 		nil,
-		ec.marshalODirectoryMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DirectoryMembership) graphql.Marshaler {
+			return ec.marshalODirectoryMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_directoryMemberships(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryMembershipBulkCreatePayload",
@@ -51,81 +55,7 @@ func (ec *executionContext) fieldContext_DirectoryMembershipBulkCreatePayload_di
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryMembership_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryMembership_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryMembership_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryMembership_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryMembership_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryMembership_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
-			case "directoryAccountID":
-				return ec.fieldContext_DirectoryMembership_directoryAccountID(ctx, field)
-			case "directoryGroupID":
-				return ec.fieldContext_DirectoryMembership_directoryGroupID(ctx, field)
-			case "role":
-				return ec.fieldContext_DirectoryMembership_role(ctx, field)
-			case "source":
-				return ec.fieldContext_DirectoryMembership_source(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
-			case "lastConfirmedRunID":
-				return ec.fieldContext_DirectoryMembership_lastConfirmedRunID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryMembership_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryMembership_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryMembership_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryMembership_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
-			case "directoryAccount":
-				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
-			case "directoryGroup":
-				return ec.fieldContext_DirectoryMembership_directoryGroup(ctx, field)
-			case "events":
-				return ec.fieldContext_DirectoryMembership_events(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryMembership_workflowObjectRefs(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryMembership", field.Name)
+			return ec.childFields_DirectoryMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -136,17 +66,20 @@ func (ec *executionContext) _DirectoryMembershipCreatePayload_directoryMembershi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryMembershipCreatePayload_directoryMembership,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryMembershipCreatePayload_directoryMembership(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryMembership, nil
 		},
 		nil,
-		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryMembership) graphql.Marshaler {
+			return ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_directoryMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryMembershipCreatePayload",
@@ -154,81 +87,7 @@ func (ec *executionContext) fieldContext_DirectoryMembershipCreatePayload_direct
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryMembership_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryMembership_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryMembership_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryMembership_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryMembership_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryMembership_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
-			case "directoryAccountID":
-				return ec.fieldContext_DirectoryMembership_directoryAccountID(ctx, field)
-			case "directoryGroupID":
-				return ec.fieldContext_DirectoryMembership_directoryGroupID(ctx, field)
-			case "role":
-				return ec.fieldContext_DirectoryMembership_role(ctx, field)
-			case "source":
-				return ec.fieldContext_DirectoryMembership_source(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
-			case "lastConfirmedRunID":
-				return ec.fieldContext_DirectoryMembership_lastConfirmedRunID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryMembership_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryMembership_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryMembership_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryMembership_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
-			case "directoryAccount":
-				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
-			case "directoryGroup":
-				return ec.fieldContext_DirectoryMembership_directoryGroup(ctx, field)
-			case "events":
-				return ec.fieldContext_DirectoryMembership_events(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryMembership_workflowObjectRefs(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryMembership", field.Name)
+			return ec.childFields_DirectoryMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -239,28 +98,22 @@ func (ec *executionContext) _DirectoryMembershipDeletePayload_deletedID(ctx cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryMembershipDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryMembershipDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryMembershipDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectoryMembershipDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DirectoryMembershipDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DirectoryMembershipUpdatePayload_directoryMembership(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryMembershipUpdatePayload) (ret graphql.Marshaler) {
@@ -268,17 +121,20 @@ func (ec *executionContext) _DirectoryMembershipUpdatePayload_directoryMembershi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryMembershipUpdatePayload_directoryMembership,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryMembershipUpdatePayload_directoryMembership(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryMembership, nil
 		},
 		nil,
-		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryMembership) graphql.Marshaler {
+			return ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_directoryMembership(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryMembershipUpdatePayload",
@@ -286,81 +142,7 @@ func (ec *executionContext) fieldContext_DirectoryMembershipUpdatePayload_direct
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryMembership_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryMembership_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryMembership_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryMembership_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryMembership_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryMembership_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryMembership_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryMembership_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryMembership_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryMembership_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryMembership_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
-			case "directoryAccountID":
-				return ec.fieldContext_DirectoryMembership_directoryAccountID(ctx, field)
-			case "directoryGroupID":
-				return ec.fieldContext_DirectoryMembership_directoryGroupID(ctx, field)
-			case "role":
-				return ec.fieldContext_DirectoryMembership_role(ctx, field)
-			case "source":
-				return ec.fieldContext_DirectoryMembership_source(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
-			case "lastConfirmedRunID":
-				return ec.fieldContext_DirectoryMembership_lastConfirmedRunID(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryMembership_metadata(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryMembership_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryMembership_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryMembership_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryMembership_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryMembership_platform(ctx, field)
-			case "directoryAccount":
-				return ec.fieldContext_DirectoryMembership_directoryAccount(ctx, field)
-			case "directoryGroup":
-				return ec.fieldContext_DirectoryMembership_directoryGroup(ctx, field)
-			case "events":
-				return ec.fieldContext_DirectoryMembership_events(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryMembership_workflowObjectRefs(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryMembership", field.Name)
+			return ec.childFields_DirectoryMembership(ctx, field)
 		},
 	}
 	return fc, nil
@@ -400,7 +182,7 @@ func (ec *executionContext) _DirectoryMembershipBulkCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -439,7 +221,7 @@ func (ec *executionContext) _DirectoryMembershipCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -478,7 +260,7 @@ func (ec *executionContext) _DirectoryMembershipDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -517,7 +299,7 @@ func (ec *executionContext) _DirectoryMembershipUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

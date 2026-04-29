@@ -55,9 +55,10 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, payload.UserInput, types.NewCredentialSlotID(payload.CredentialRef), credential, nil); err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("payload", payload).Msg("reconcile failed")
+		// do not log payload, it can contain secrets
+		logx.FromContext(requestCtx).Error().Err(err).Msg("reconcile failed")
 
-		return h.BadRequest(ctx, ErrProcessingRequest, openapiCtx)
+		return h.BadRequest(ctx, err, openapiCtx)
 	}
 
 	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {

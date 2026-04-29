@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -361,6 +362,33 @@ func (f TraverseCampaignTarget) Traverse(ctx context.Context, q generated.Query)
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.CampaignTargetQuery", q)
+}
+
+// The CheckResultFunc type is an adapter to allow the use of ordinary function as a Querier.
+type CheckResultFunc func(context.Context, *generated.CheckResultQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f CheckResultFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.CheckResultQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.CheckResultQuery", q)
+}
+
+// The TraverseCheckResult type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseCheckResult func(context.Context, *generated.CheckResultQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseCheckResult) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseCheckResult) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.CheckResultQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.CheckResultQuery", q)
 }
 
 // The ContactFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3080,6 +3108,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.CampaignQuery, predicate.Campaign, campaign.OrderOption]{typ: generated.TypeCampaign, tq: q}, nil
 	case *generated.CampaignTargetQuery:
 		return &query[*generated.CampaignTargetQuery, predicate.CampaignTarget, campaigntarget.OrderOption]{typ: generated.TypeCampaignTarget, tq: q}, nil
+	case *generated.CheckResultQuery:
+		return &query[*generated.CheckResultQuery, predicate.CheckResult, checkresult.OrderOption]{typ: generated.TypeCheckResult, tq: q}, nil
 	case *generated.ContactQuery:
 		return &query[*generated.ContactQuery, predicate.Contact, contact.OrderOption]{typ: generated.TypeContact, tq: q}, nil
 	case *generated.ControlQuery:

@@ -3979,6 +3979,35 @@ func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.F
 	})
 }
 
+// HasCheckResults applies the HasEdge predicate on the "check_results" edge.
+func HasCheckResults() predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, CheckResultsTable, CheckResultsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.FindingCheckResults
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCheckResultsWith applies the HasEdge predicate on the "check_results" edge with a given conditions (other predicates).
+func HasCheckResultsWith(preds ...predicate.CheckResult) predicate.Finding {
+	return predicate.Finding(func(s *sql.Selector) {
+		step := newCheckResultsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.FindingCheckResults
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasControlMappings applies the HasEdge predicate on the "control_mappings" edge.
 func HasControlMappings() predicate.Finding {
 	return predicate.Finding(func(s *sql.Selector) {

@@ -1,0 +1,166 @@
+extend type Query {
+    """
+    Look up checkResult by ID
+    """
+     checkResult(
+        """
+        ID of the checkResult
+        """
+        id: ID!
+    ):  CheckResult!
+}
+
+extend type Mutation{
+    """
+    Create a new checkResult
+    """
+    createCheckResult(
+        """
+        values of the checkResult
+        """
+        input: CreateCheckResultInput!
+    ): CheckResultCreatePayload!
+    """
+    Create multiple new checkResults
+    """
+    createBulkCheckResult(
+        """
+        values of the checkResult
+        """
+        input: [CreateCheckResultInput!]
+    ): CheckResultBulkCreatePayload!
+    """
+    Create multiple new checkResults via file upload
+    """
+    createBulkCSVCheckResult(
+        """
+        csv file containing values of the checkResult
+        """
+        input: Upload!
+    ): CheckResultBulkCreatePayload!
+    """
+    Update multiple existing checkResults
+    """
+    updateBulkCheckResult(
+        """
+        IDs of the checkResults to update
+        """
+        ids: [ID!]!
+        """
+        values to update the checkResults with
+        """
+        input: UpdateCheckResultInput!
+    ): CheckResultBulkUpdatePayload!
+    """
+    Update multiple existing checkResults via file upload
+    """
+    updateBulkCSVCheckResult(
+        """
+        csv file containing values of the checkResult, must include ID column
+        """
+        input: Upload!
+    ): CheckResultBulkUpdatePayload!
+    """
+    Update an existing checkResult
+    """
+    updateCheckResult(
+        """
+        ID of the checkResult
+        """
+        id: ID!
+        """
+        New values for the checkResult
+        """
+        input: UpdateCheckResultInput!
+    ): CheckResultUpdatePayload!
+    """
+    Delete an existing checkResult
+    """
+    deleteCheckResult(
+        """
+        ID of the checkResult
+        """
+        id: ID!
+    ): CheckResultDeletePayload!
+    """
+    Delete multiple checkResults
+    """
+    deleteBulkCheckResult(
+        """
+        IDs of the checkResults to delete
+        """
+        ids: [ID!]!
+    ): CheckResultBulkDeletePayload!
+}
+
+"""
+Return response for createCheckResult mutation
+"""
+type CheckResultCreatePayload {
+    """
+    Created checkResult
+    """
+    checkResult: CheckResult!
+}
+
+"""
+Return response for updateCheckResult mutation
+"""
+type CheckResultUpdatePayload {
+    """
+    Updated checkResult
+    """
+    checkResult: CheckResult!
+}
+
+"""
+Return response for deleteCheckResult mutation
+"""
+type CheckResultDeletePayload {
+    """
+    Deleted checkResult ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCheckResult mutation
+"""
+type CheckResultBulkCreatePayload {
+    """
+    Created checkResults
+    """
+    checkResults: [CheckResult!]
+}
+
+"""
+Return response for updateBulkCheckResult mutation
+"""
+type CheckResultBulkUpdatePayload {
+    """
+    Updated checkResults
+    """
+    checkResults: [CheckResult!]
+    """
+    IDs of the updated checkResults
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkCheckResult mutation
+"""
+type CheckResultBulkDeletePayload {
+    """
+    Deleted checkResult IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of checkResults that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

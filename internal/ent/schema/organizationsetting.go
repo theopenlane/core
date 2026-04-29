@@ -9,16 +9,18 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/keygen"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
 )
 
 // OrganizationSetting holds the schema definition for the OrganizationSetting entity
@@ -151,12 +153,18 @@ func (OrganizationSetting) Fields() []ent.Field {
 			}),
 		field.Bool("payment_method_added").
 			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput |
-					entgql.SkipMutationUpdateInput |
-					entgql.SkipWhereInput | entgql.SkipOrderField),
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput | entgql.SkipOrderField),
 			).
 			Default(false).
 			Comment("whether or not a payment method has been added to the account"),
+		field.Time("pending_deletion_at").
+			Comment("when will this organization be deleted? usually this is after org has not added a payment method afte n period").
+			GoType(models.DateTime{}).
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput),
+			),
 	}
 }
 
@@ -208,8 +216,10 @@ func (OrganizationSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithQueryRules(
 			policy.CheckOrgReadAccess(), // access based on auth context
+			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(
+			rule.AllowMutationIfSystemAdmin(),
 			entfga.CheckEditAccess[*generated.OrganizationSettingMutation](),
 			policy.CheckOrgWriteAccess(), // access based on auth context
 		),

@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _DirectoryAccountBulkCreatePayload_directoryAccounts
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryAccountBulkCreatePayload_directoryAccounts,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryAccountBulkCreatePayload_directoryAccounts(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryAccounts, nil
 		},
 		nil,
-		ec.marshalODirectoryAccount2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccountᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DirectoryAccount) graphql.Marshaler {
+			return ec.marshalODirectoryAccount2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccountᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_directoryAccounts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryAccountBulkCreatePayload",
@@ -51,129 +55,7 @@ func (ec *executionContext) fieldContext_DirectoryAccountBulkCreatePayload_direc
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryAccount_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryAccount_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryAccount_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryAccount_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryAccount_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryAccount_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
-			case "secondaryKey":
-				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
-			case "canonicalEmail":
-				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
-			case "givenName":
-				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
-			case "familyName":
-				return ec.fieldContext_DirectoryAccount_familyName(ctx, field)
-			case "jobTitle":
-				return ec.fieldContext_DirectoryAccount_jobTitle(ctx, field)
-			case "department":
-				return ec.fieldContext_DirectoryAccount_department(ctx, field)
-			case "organizationUnit":
-				return ec.fieldContext_DirectoryAccount_organizationUnit(ctx, field)
-			case "accountType":
-				return ec.fieldContext_DirectoryAccount_accountType(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryAccount_status(ctx, field)
-			case "mfaState":
-				return ec.fieldContext_DirectoryAccount_mfaState(ctx, field)
-			case "lastSeenIP":
-				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
-			case "lastLoginAt":
-				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
-			case "primarySource":
-				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
-			case "groups":
-				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
-			case "findings":
-				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
-			case "memberships":
-				return ec.fieldContext_DirectoryAccount_memberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryAccount", field.Name)
+			return ec.childFields_DirectoryAccount(ctx, field)
 		},
 	}
 	return fc, nil
@@ -184,17 +66,20 @@ func (ec *executionContext) _DirectoryAccountCreatePayload_directoryAccount(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryAccountCreatePayload_directoryAccount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryAccountCreatePayload_directoryAccount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryAccount, nil
 		},
 		nil,
-		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryAccount) graphql.Marshaler {
+			return ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directoryAccount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryAccountCreatePayload",
@@ -202,129 +87,7 @@ func (ec *executionContext) fieldContext_DirectoryAccountCreatePayload_directory
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryAccount_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryAccount_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryAccount_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryAccount_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryAccount_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryAccount_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
-			case "secondaryKey":
-				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
-			case "canonicalEmail":
-				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
-			case "givenName":
-				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
-			case "familyName":
-				return ec.fieldContext_DirectoryAccount_familyName(ctx, field)
-			case "jobTitle":
-				return ec.fieldContext_DirectoryAccount_jobTitle(ctx, field)
-			case "department":
-				return ec.fieldContext_DirectoryAccount_department(ctx, field)
-			case "organizationUnit":
-				return ec.fieldContext_DirectoryAccount_organizationUnit(ctx, field)
-			case "accountType":
-				return ec.fieldContext_DirectoryAccount_accountType(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryAccount_status(ctx, field)
-			case "mfaState":
-				return ec.fieldContext_DirectoryAccount_mfaState(ctx, field)
-			case "lastSeenIP":
-				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
-			case "lastLoginAt":
-				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
-			case "primarySource":
-				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
-			case "groups":
-				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
-			case "findings":
-				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
-			case "memberships":
-				return ec.fieldContext_DirectoryAccount_memberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryAccount", field.Name)
+			return ec.childFields_DirectoryAccount(ctx, field)
 		},
 	}
 	return fc, nil
@@ -335,28 +98,22 @@ func (ec *executionContext) _DirectoryAccountDeletePayload_deletedID(ctx context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryAccountDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryAccountDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryAccountDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "DirectoryAccountDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("DirectoryAccountDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _DirectoryAccountUpdatePayload_directoryAccount(ctx context.Context, field graphql.CollectedField, obj *model.DirectoryAccountUpdatePayload) (ret graphql.Marshaler) {
@@ -364,17 +121,20 @@ func (ec *executionContext) _DirectoryAccountUpdatePayload_directoryAccount(ctx 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_DirectoryAccountUpdatePayload_directoryAccount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryAccountUpdatePayload_directoryAccount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DirectoryAccount, nil
 		},
 		nil,
-		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectoryAccount) graphql.Marshaler {
+			return ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directoryAccount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "DirectoryAccountUpdatePayload",
@@ -382,129 +142,7 @@ func (ec *executionContext) fieldContext_DirectoryAccountUpdatePayload_directory
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_DirectoryAccount_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_DirectoryAccount_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_DirectoryAccount_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_DirectoryAccount_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_DirectoryAccount_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_DirectoryAccount_displayID(ctx, field)
-			case "tags":
-				return ec.fieldContext_DirectoryAccount_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
-			case "environmentName":
-				return ec.fieldContext_DirectoryAccount_environmentName(ctx, field)
-			case "environmentID":
-				return ec.fieldContext_DirectoryAccount_environmentID(ctx, field)
-			case "scopeName":
-				return ec.fieldContext_DirectoryAccount_scopeName(ctx, field)
-			case "scopeID":
-				return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
-			case "directorySyncRunID":
-				return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
-			case "platformID":
-				return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
-			case "directoryInstanceID":
-				return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
-			case "identityHolderID":
-				return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
-			case "directoryName":
-				return ec.fieldContext_DirectoryAccount_directoryName(ctx, field)
-			case "externalID":
-				return ec.fieldContext_DirectoryAccount_externalID(ctx, field)
-			case "secondaryKey":
-				return ec.fieldContext_DirectoryAccount_secondaryKey(ctx, field)
-			case "canonicalEmail":
-				return ec.fieldContext_DirectoryAccount_canonicalEmail(ctx, field)
-			case "emailAliases":
-				return ec.fieldContext_DirectoryAccount_emailAliases(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_DirectoryAccount_phoneNumber(ctx, field)
-			case "displayName":
-				return ec.fieldContext_DirectoryAccount_displayName(ctx, field)
-			case "avatarRemoteURL":
-				return ec.fieldContext_DirectoryAccount_avatarRemoteURL(ctx, field)
-			case "avatarLocalFileID":
-				return ec.fieldContext_DirectoryAccount_avatarLocalFileID(ctx, field)
-			case "avatarUpdatedAt":
-				return ec.fieldContext_DirectoryAccount_avatarUpdatedAt(ctx, field)
-			case "givenName":
-				return ec.fieldContext_DirectoryAccount_givenName(ctx, field)
-			case "familyName":
-				return ec.fieldContext_DirectoryAccount_familyName(ctx, field)
-			case "jobTitle":
-				return ec.fieldContext_DirectoryAccount_jobTitle(ctx, field)
-			case "department":
-				return ec.fieldContext_DirectoryAccount_department(ctx, field)
-			case "organizationUnit":
-				return ec.fieldContext_DirectoryAccount_organizationUnit(ctx, field)
-			case "accountType":
-				return ec.fieldContext_DirectoryAccount_accountType(ctx, field)
-			case "status":
-				return ec.fieldContext_DirectoryAccount_status(ctx, field)
-			case "mfaState":
-				return ec.fieldContext_DirectoryAccount_mfaState(ctx, field)
-			case "lastSeenIP":
-				return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
-			case "lastLoginAt":
-				return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
-			case "firstSeenAt":
-				return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
-			case "lastSeenAt":
-				return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
-			case "addedAt":
-				return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
-			case "removedAt":
-				return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
-			case "profileHash":
-				return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
-			case "profile":
-				return ec.fieldContext_DirectoryAccount_profile(ctx, field)
-			case "metadata":
-				return ec.fieldContext_DirectoryAccount_metadata(ctx, field)
-			case "rawProfileFileID":
-				return ec.fieldContext_DirectoryAccount_rawProfileFileID(ctx, field)
-			case "sourceVersion":
-				return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
-			case "primarySource":
-				return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
-			case "owner":
-				return ec.fieldContext_DirectoryAccount_owner(ctx, field)
-			case "environment":
-				return ec.fieldContext_DirectoryAccount_environment(ctx, field)
-			case "scope":
-				return ec.fieldContext_DirectoryAccount_scope(ctx, field)
-			case "integration":
-				return ec.fieldContext_DirectoryAccount_integration(ctx, field)
-			case "directorySyncRun":
-				return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
-			case "platform":
-				return ec.fieldContext_DirectoryAccount_platform(ctx, field)
-			case "identityHolder":
-				return ec.fieldContext_DirectoryAccount_identityHolder(ctx, field)
-			case "avatarFile":
-				return ec.fieldContext_DirectoryAccount_avatarFile(ctx, field)
-			case "groups":
-				return ec.fieldContext_DirectoryAccount_groups(ctx, field)
-			case "findings":
-				return ec.fieldContext_DirectoryAccount_findings(ctx, field)
-			case "workflowObjectRefs":
-				return ec.fieldContext_DirectoryAccount_workflowObjectRefs(ctx, field)
-			case "memberships":
-				return ec.fieldContext_DirectoryAccount_memberships(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type DirectoryAccount", field.Name)
+			return ec.childFields_DirectoryAccount(ctx, field)
 		},
 	}
 	return fc, nil
@@ -544,7 +182,7 @@ func (ec *executionContext) _DirectoryAccountBulkCreatePayload(ctx context.Conte
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -583,7 +221,7 @@ func (ec *executionContext) _DirectoryAccountCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -622,7 +260,7 @@ func (ec *executionContext) _DirectoryAccountDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -661,7 +299,7 @@ func (ec *executionContext) _DirectoryAccountUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

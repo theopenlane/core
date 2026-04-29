@@ -721,6 +721,200 @@ func (r *mutationResolver) bulkCreateCampaignTarget(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateCheckResult uses the CreateBulk function to create multiple CheckResult entities
+func (r *mutationResolver) bulkCreateCheckResult(ctx context.Context, input []*generated.CreateCheckResultInput) (*model.CheckResultBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.CheckResultCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.CheckResult.Create().SetInput(*data)
+	}
+
+	res, err := c.CheckResult.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "checkresult"})
+	}
+
+	// return response
+	return &model.CheckResultBulkCreatePayload{
+		CheckResults: res,
+	}, nil
+}
+
+// bulkUpdateCheckResult updates multiple CheckResult entities
+func (r *mutationResolver) bulkUpdateCheckResult(ctx context.Context, ids []string, input generated.UpdateCheckResultInput) (*model.CheckResultBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	ids = r.filterAuthorizedIDs(ctx, ids, "check_result", fgax.CanEdit)
+	if len(ids) == 0 {
+		return &model.CheckResultBulkUpdatePayload{
+			CheckResults: []*generated.CheckResult{},
+			UpdatedIDs:   []string{},
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.CheckResult, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each checkresult individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for checkresult")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.CheckResult.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", id).Msg("failed to get checkresult in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", id).Msg("failed to update checkresult in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.CheckResultBulkUpdatePayload{
+		CheckResults: results,
+		UpdatedIDs:   updatedIDs,
+	}, nil
+}
+
+// bulkUpdateCSVCheckResult updates multiple CheckResult entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVCheckResult(ctx context.Context, inputs []*csvgenerated.CheckResultCSVUpdateInput) (*model.CheckResultBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.CheckResult, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each checkresult individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for checkresult")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.CheckResult.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", input.ID).Msg("failed to get checkresult in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("checkresult_id", input.ID).Msg("failed to update checkresult in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "checkresult"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.CheckResultBulkUpdatePayload{
+		CheckResults: results,
+		UpdatedIDs:   updatedIDs,
+	}, nil
+}
+
+// bulkDeleteCheckResult deletes multiple CheckResult entities by their IDs
+func (r *mutationResolver) bulkDeleteCheckResult(ctx context.Context, ids []string) (*model.CheckResultBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "check_result", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.CheckResultBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each checkresult individually to ensure proper cleanup
+			if err := r.db.CheckResult.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("checkresult_id", id).Msg("failed to delete checkresult in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.CheckResultEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("checkresult_id", id).Msg("failed to cleanup checkresult edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some checkresult deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.CheckResultBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
 // bulkCreateContact uses the CreateBulk function to create multiple Contact entities
 func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*generated.CreateContactInput) (*model.ContactBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

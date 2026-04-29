@@ -242,6 +242,20 @@ func (_c *DirectoryMembershipCreate) SetNillableSource(v *string) *DirectoryMemb
 	return _c
 }
 
+// SetDirectoryName sets the "directory_name" field.
+func (_c *DirectoryMembershipCreate) SetDirectoryName(v string) *DirectoryMembershipCreate {
+	_c.mutation.SetDirectoryName(v)
+	return _c
+}
+
+// SetNillableDirectoryName sets the "directory_name" field if the given value is not nil.
+func (_c *DirectoryMembershipCreate) SetNillableDirectoryName(v *string) *DirectoryMembershipCreate {
+	if v != nil {
+		_c.SetDirectoryName(*v)
+	}
+	return _c
+}
+
 // SetFirstSeenAt sets the "first_seen_at" field.
 func (_c *DirectoryMembershipCreate) SetFirstSeenAt(v time.Time) *DirectoryMembershipCreate {
 	_c.mutation.SetFirstSeenAt(v)
@@ -635,6 +649,10 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(directorymembership.FieldSource, field.TypeString, value)
 		_node.Source = &value
+	}
+	if value, ok := _c.mutation.DirectoryName(); ok {
+		_spec.SetField(directorymembership.FieldDirectoryName, field.TypeString, value)
+		_node.DirectoryName = &value
 	}
 	if value, ok := _c.mutation.FirstSeenAt(); ok {
 		_spec.SetField(directorymembership.FieldFirstSeenAt, field.TypeTime, value)

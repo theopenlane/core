@@ -323,6 +323,40 @@ var (
 			},
 		},
 	}
+	// CheckResultHistoryColumns holds the columns for the "check_result_history" table.
+	CheckResultHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PASS", "FAIL", "UNKNOWN"}, Default: "UNKNOWN"},
+		{Name: "source", Type: field.TypeString},
+		{Name: "last_observed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "parent_external_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+	}
+	// CheckResultHistoryTable holds the schema information for the "check_result_history" table.
+	CheckResultHistoryTable = &schema.Table{
+		Name:       "check_result_history",
+		Columns:    CheckResultHistoryColumns,
+		PrimaryKey: []*schema.Column{CheckResultHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "checkresulthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{CheckResultHistoryColumns[1]},
+			},
+		},
+	}
 	// ContactHistoryColumns holds the columns for the "contact_history" table.
 	ContactHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -691,6 +725,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "source_version", Type: field.TypeString, Nullable: true},
+		{Name: "directory_name", Type: field.TypeString, Nullable: true},
 	}
 	// DirectoryGroupHistoryTable holds the schema information for the "directory_group_history" table.
 	DirectoryGroupHistoryTable = &schema.Table{
@@ -729,6 +764,7 @@ var (
 		{Name: "directory_group_id", Type: field.TypeString},
 		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MANAGER", "OWNER"}, Default: "MEMBER"},
 		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "directory_name", Type: field.TypeString, Nullable: true},
 		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
 		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
 		{Name: "added_at", Type: field.TypeTime, Nullable: true},
@@ -964,7 +1000,7 @@ var (
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
 		{Name: "risk_score_coverage", Type: field.TypeInt, Nullable: true},
-		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "STANDARD"},
+		{Name: "tier", Type: field.TypeEnum, Nullable: true, Enums: []string{"CRITICAL", "HIGH", "STANDARD", "LOW"}, Default: "LOW"},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
@@ -1945,6 +1981,7 @@ var (
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "compliance_webhook_token", Type: field.TypeString, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
+		{Name: "pending_deletion_at", Type: field.TypeTime, Nullable: true},
 	}
 	// OrganizationSettingHistoryTable holds the schema information for the "organization_setting_history" table.
 	OrganizationSettingHistoryTable = &schema.Table{
@@ -3258,6 +3295,7 @@ var (
 		{Name: "cwe_ids", Type: field.TypeJSON, Nullable: true},
 		{Name: "vulnerable_version_range", Type: field.TypeString, Nullable: true},
 		{Name: "first_patched_version", Type: field.TypeString, Nullable: true},
+		{Name: "fix_available", Type: field.TypeBool, Nullable: true},
 		{Name: "package_name", Type: field.TypeString, Nullable: true},
 		{Name: "package_ecosystem", Type: field.TypeString, Nullable: true},
 		{Name: "manifest_path", Type: field.TypeString, Nullable: true},
@@ -3542,6 +3580,7 @@ var (
 		AssetHistoryTable,
 		CampaignHistoryTable,
 		CampaignTargetHistoryTable,
+		CheckResultHistoryTable,
 		ContactHistoryTable,
 		ControlHistoryTable,
 		ControlImplementationHistoryTable,
@@ -3636,6 +3675,9 @@ func init() {
 	}
 	CampaignTargetHistoryTable.Annotation = &entsql.Annotation{
 		Table: "campaign_target_history",
+	}
+	CheckResultHistoryTable.Annotation = &entsql.Annotation{
+		Table: "check_result_history",
 	}
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",

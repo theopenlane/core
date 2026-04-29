@@ -354,6 +354,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 	return transaction.FromContext(ctx).OrganizationSetting.Update().
 		Where(organizationsetting.OrganizationID(org.ID)).
 		SetPaymentMethodAdded(true).
+		ClearPendingDeletionAt().
 		Exec(ctx)
 }
 
@@ -489,6 +490,17 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 		changed = true
 
 		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Bool("active", orgSubscription.Active).Msg("active status changed")
+	}
+
+	if stripeOrgSubscription.Active {
+
+		err := transaction.FromContext(ctx).OrganizationSetting.Update().
+			Where(organizationsetting.OrganizationID(orgSubscription.OwnerID)).
+			ClearPendingDeletionAt().
+			Exec(ctx)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if changed {

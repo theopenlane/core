@@ -28,6 +28,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*CampaignTargetMutation]() {
 		c.CampaignTarget.Use(hook)
 	}
+	for _, hook := range history.Hooks[*CheckResultMutation]() {
+		c.CheckResult.Use(hook)
+	}
 	for _, hook := range history.Hooks[*ContactMutation]() {
 		c.Contact.Use(hook)
 	}

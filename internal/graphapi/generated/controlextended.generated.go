@@ -5,11 +5,13 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
+	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,28 +35,22 @@ func (ec *executionContext) _ControlCategory_name(ctx context.Context, field gra
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategory_name,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategory_name(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Name, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategory_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlCategory",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategory) (ret graphql.Marshaler) {
@@ -62,28 +58,22 @@ func (ec *executionContext) _ControlCategory_referenceFramework(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategory_referenceFramework,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategory_referenceFramework(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ReferenceFramework, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategory_referenceFramework(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlCategory",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlCategory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryConnection) (ret graphql.Marshaler) {
@@ -91,17 +81,20 @@ func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategoryConnection_edges,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategoryConnection_edges(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Edges, nil
 		},
 		nil,
-		ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
+			return ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlCategoryConnection",
@@ -109,11 +102,7 @@ func (ec *executionContext) fieldContext_ControlCategoryConnection_edges(_ conte
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "node":
-				return ec.fieldContext_ControlCategoryEdge_node(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlCategoryEdge", field.Name)
+			return ec.childFields_ControlCategoryEdge(ctx, field)
 		},
 	}
 	return fc, nil
@@ -124,17 +113,20 @@ func (ec *executionContext) _ControlCategoryConnection_pageInfo(ctx context.Cont
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategoryConnection_pageInfo,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategoryConnection_pageInfo(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PageInfo, nil
 		},
 		nil,
-		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlCategoryConnection",
@@ -142,17 +134,7 @@ func (ec *executionContext) fieldContext_ControlCategoryConnection_pageInfo(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+			return ec.childFields_PageInfo(ctx, field)
 		},
 	}
 	return fc, nil
@@ -163,28 +145,22 @@ func (ec *executionContext) _ControlCategoryConnection_totalCount(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategoryConnection_totalCount,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategoryConnection_totalCount(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.TotalCount, nil
 		},
 		nil,
-		ec.marshalNInt2int,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlCategoryConnection",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlCategoryConnection", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
 func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *model.ControlCategoryEdge) (ret graphql.Marshaler) {
@@ -192,17 +168,20 @@ func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlCategoryEdge_node,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlCategoryEdge_node(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Node, nil
 		},
 		nil,
-		ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
+			return ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlCategoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlCategoryEdge",
@@ -210,13 +189,7 @@ func (ec *executionContext) fieldContext_ControlCategoryEdge_node(_ context.Cont
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "name":
-				return ec.fieldContext_ControlCategory_name(ctx, field)
-			case "referenceFramework":
-				return ec.fieldContext_ControlCategory_referenceFramework(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlCategory", field.Name)
+			return ec.childFields_ControlCategory(ctx, field)
 		},
 	}
 	return fc, nil
@@ -227,28 +200,22 @@ func (ec *executionContext) _ControlChange_refCode(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlChange_refCode,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlChange_refCode(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.RefCode, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlChange_refCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlChange",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlChange", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlChange_title(ctx context.Context, field graphql.CollectedField, obj *model.ControlChange) (ret graphql.Marshaler) {
@@ -256,28 +223,22 @@ func (ec *executionContext) _ControlChange_title(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlChange_title,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlChange_title(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Title, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlChange_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlChange",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlChange", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlChange_diffs(ctx context.Context, field graphql.CollectedField, obj *model.ControlChange) (ret graphql.Marshaler) {
@@ -285,17 +246,20 @@ func (ec *executionContext) _ControlChange_diffs(ctx context.Context, field grap
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlChange_diffs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlChange_diffs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Diffs, nil
 		},
 		nil,
-		ec.marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlFieldDiff) graphql.Marshaler {
+			return ec.marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlChange_diffs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlChange",
@@ -303,17 +267,7 @@ func (ec *executionContext) fieldContext_ControlChange_diffs(_ context.Context, 
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "field":
-				return ec.fieldContext_ControlFieldDiff_field(ctx, field)
-			case "oldValue":
-				return ec.fieldContext_ControlFieldDiff_oldValue(ctx, field)
-			case "newValue":
-				return ec.fieldContext_ControlFieldDiff_newValue(ctx, field)
-			case "diff":
-				return ec.fieldContext_ControlFieldDiff_diff(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlFieldDiff", field.Name)
+			return ec.childFields_ControlFieldDiff(ctx, field)
 		},
 	}
 	return fc, nil
@@ -324,28 +278,22 @@ func (ec *executionContext) _ControlDiffPayload_standardID(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlDiffPayload_standardID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlDiffPayload_standardID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.StandardID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlDiffPayload_standardID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlDiffPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ControlDiffPayload_oldRevision(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -353,28 +301,22 @@ func (ec *executionContext) _ControlDiffPayload_oldRevision(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlDiffPayload_oldRevision,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlDiffPayload_oldRevision(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.OldRevision, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlDiffPayload_oldRevision(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlDiffPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlDiffPayload_newRevision(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -382,28 +324,22 @@ func (ec *executionContext) _ControlDiffPayload_newRevision(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlDiffPayload_newRevision,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlDiffPayload_newRevision(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NewRevision, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlDiffPayload_newRevision(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlDiffPayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlDiffPayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlDiffPayload_changes(ctx context.Context, field graphql.CollectedField, obj *model.ControlDiffPayload) (ret graphql.Marshaler) {
@@ -411,17 +347,20 @@ func (ec *executionContext) _ControlDiffPayload_changes(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlDiffPayload_changes,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlDiffPayload_changes(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Changes, nil
 		},
 		nil,
-		ec.marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlChange) graphql.Marshaler {
+			return ec.marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlDiffPayload_changes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlDiffPayload",
@@ -429,15 +368,7 @@ func (ec *executionContext) fieldContext_ControlDiffPayload_changes(_ context.Co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "refCode":
-				return ec.fieldContext_ControlChange_refCode(ctx, field)
-			case "title":
-				return ec.fieldContext_ControlChange_title(ctx, field)
-			case "diffs":
-				return ec.fieldContext_ControlChange_diffs(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlChange", field.Name)
+			return ec.childFields_ControlChange(ctx, field)
 		},
 	}
 	return fc, nil
@@ -448,28 +379,22 @@ func (ec *executionContext) _ControlFieldDiff_field(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlFieldDiff_field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlFieldDiff_field(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Field, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlFieldDiff_field(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlFieldDiff_oldValue(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -477,28 +402,22 @@ func (ec *executionContext) _ControlFieldDiff_oldValue(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlFieldDiff_oldValue,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlFieldDiff_oldValue(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.OldValue, nil
 		},
 		nil,
-		ec.marshalOAny2interface,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOAny2interface(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlFieldDiff_oldValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Any does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
 }
 
 func (ec *executionContext) _ControlFieldDiff_newValue(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -506,28 +425,22 @@ func (ec *executionContext) _ControlFieldDiff_newValue(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlFieldDiff_newValue,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlFieldDiff_newValue(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NewValue, nil
 		},
 		nil,
-		ec.marshalOAny2interface,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalOAny2interface(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlFieldDiff_newValue(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Any does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type Any does not have child fields"))
 }
 
 func (ec *executionContext) _ControlFieldDiff_diff(ctx context.Context, field graphql.CollectedField, obj *model.ControlFieldDiff) (ret graphql.Marshaler) {
@@ -535,28 +448,22 @@ func (ec *executionContext) _ControlFieldDiff_diff(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlFieldDiff_diff,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlFieldDiff_diff(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Diff, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlFieldDiff_diff(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlFieldDiff",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlFieldDiff", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlGroup_category(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
@@ -564,28 +471,22 @@ func (ec *executionContext) _ControlGroup_category(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlGroup_category,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroup_category(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Category, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlGroup_category(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ControlGroup",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ControlGroup", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field graphql.CollectedField, obj *model.ControlGroup) (ret graphql.Marshaler) {
@@ -593,17 +494,20 @@ func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlGroup_controls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroup_controls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
+			return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlGroup_controls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlGroup",
@@ -611,15 +515,7 @@ func (ec *executionContext) fieldContext_ControlGroup_controls(_ context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "edges":
-				return ec.fieldContext_ControlConnection_edges(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_ControlConnection_pageInfo(ctx, field)
-			case "totalCount":
-				return ec.fieldContext_ControlConnection_totalCount(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlConnection", field.Name)
+			return ec.childFields_ControlConnection(ctx, field)
 		},
 	}
 	return fc, nil
@@ -630,17 +526,20 @@ func (ec *executionContext) _ControlGroupConnection_edges(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlGroupConnection_edges,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupConnection_edges(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Edges, nil
 		},
 		nil,
-		ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlGroupEdge) graphql.Marshaler {
+			return ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlGroupConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlGroupConnection",
@@ -648,13 +547,7 @@ func (ec *executionContext) fieldContext_ControlGroupConnection_edges(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "pageInfo":
-				return ec.fieldContext_ControlGroupEdge_pageInfo(ctx, field)
-			case "node":
-				return ec.fieldContext_ControlGroupEdge_node(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlGroupEdge", field.Name)
+			return ec.childFields_ControlGroupEdge(ctx, field)
 		},
 	}
 	return fc, nil
@@ -665,17 +558,20 @@ func (ec *executionContext) _ControlGroupEdge_pageInfo(ctx context.Context, fiel
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlGroupEdge_pageInfo,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupEdge_pageInfo(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.PageInfo, nil
 		},
 		nil,
-		ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo,
+		func(ctx context.Context, selections ast.SelectionSet, v *entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlGroupEdge_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlGroupEdge",
@@ -683,17 +579,7 @@ func (ec *executionContext) fieldContext_ControlGroupEdge_pageInfo(_ context.Con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "hasNextPage":
-				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
-			case "hasPreviousPage":
-				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
-			case "startCursor":
-				return ec.fieldContext_PageInfo_startCursor(ctx, field)
-			case "endCursor":
-				return ec.fieldContext_PageInfo_endCursor(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+			return ec.childFields_PageInfo(ctx, field)
 		},
 	}
 	return fc, nil
@@ -704,17 +590,20 @@ func (ec *executionContext) _ControlGroupEdge_node(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ControlGroupEdge_node,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupEdge_node(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Node, nil
 		},
 		nil,
-		ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
+			return ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ControlGroupEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ControlGroupEdge",
@@ -722,13 +611,7 @@ func (ec *executionContext) fieldContext_ControlGroupEdge_node(_ context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "category":
-				return ec.fieldContext_ControlGroup_category(ctx, field)
-			case "controls":
-				return ec.fieldContext_ControlGroup_controls(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type ControlGroup", field.Name)
+			return ec.childFields_ControlGroup(ctx, field)
 		},
 	}
 	return fc, nil
@@ -1044,7 +927,7 @@ func (ec *executionContext) _ControlCategory(ctx context.Context, sel ast.Select
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1090,7 +973,7 @@ func (ec *executionContext) _ControlCategoryConnection(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1129,7 +1012,7 @@ func (ec *executionContext) _ControlCategoryEdge(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1178,7 +1061,7 @@ func (ec *executionContext) _ControlChange(ctx context.Context, sel ast.Selectio
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1232,7 +1115,7 @@ func (ec *executionContext) _ControlDiffPayload(ctx context.Context, sel ast.Sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1277,7 +1160,7 @@ func (ec *executionContext) _ControlFieldDiff(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1321,7 +1204,7 @@ func (ec *executionContext) _ControlGroup(ctx context.Context, sel ast.Selection
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1360,7 +1243,7 @@ func (ec *executionContext) _ControlGroupConnection(ctx context.Context, sel ast
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -1404,7 +1287,7 @@ func (ec *executionContext) _ControlGroupEdge(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

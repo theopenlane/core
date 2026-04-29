@@ -15,7 +15,6 @@ import (
 var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySource, Expr: `dyn("azure_security_center")`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
@@ -43,7 +42,6 @@ var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 var mapExprSubAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: integrationgenerated.IntegrationMappingVulnerabilitySource, Expr: `dyn("azure_security_center")`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
 	{Key: integrationgenerated.IntegrationMappingVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},

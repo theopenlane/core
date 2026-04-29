@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -66,6 +67,7 @@ type IntegrationQuery struct {
 	withDirectoryGroups            *DirectoryGroupQuery
 	withDirectoryMemberships       *DirectoryMembershipQuery
 	withDirectorySyncRuns          *DirectorySyncRunQuery
+	withCheckResults               *CheckResultQuery
 	withPlatform                   *PlatformQuery
 	withNotificationTemplates      *NotificationTemplateQuery
 	withEmailTemplates             *EmailTemplateQuery
@@ -89,6 +91,7 @@ type IntegrationQuery struct {
 	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
 	withNamedDirectorySyncRuns     map[string]*DirectorySyncRunQuery
+	withNamedCheckResults          map[string]*CheckResultQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
 	withNamedEmailTemplates        map[string]*EmailTemplateQuery
 	withNamedIntegrationWebhooks   map[string]*IntegrationWebhookQuery
@@ -555,6 +558,31 @@ func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return query
 }
 
+// QueryCheckResults chains the current query on the "check_results" edge.
+func (_q *IntegrationQuery) QueryCheckResults() *CheckResultQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.CheckResultsTable, integration.CheckResultsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CheckResult
+		step.Edge.Schema = schemaConfig.CheckResult
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatform chains the current query on the "platform" edge.
 func (_q *IntegrationQuery) QueryPlatform() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -914,6 +942,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withDirectoryGroups:       _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:  _q.withDirectoryMemberships.Clone(),
 		withDirectorySyncRuns:     _q.withDirectorySyncRuns.Clone(),
+		withCheckResults:          _q.withCheckResults.Clone(),
 		withPlatform:              _q.withPlatform.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
 		withEmailTemplates:        _q.withEmailTemplates.Clone(),
@@ -1114,6 +1143,17 @@ func (_q *IntegrationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRun
 	return _q
 }
 
+// WithCheckResults tells the query-builder to eager-load the nodes that are connected to
+// the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *IntegrationQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCheckResults = query
+	return _q
+}
+
 // WithPlatform tells the query-builder to eager-load the nodes that are connected to
 // the "platform" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IntegrationQuery) WithPlatform(opts ...func(*PlatformQuery)) *IntegrationQuery {
@@ -1265,7 +1305,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1283,6 +1323,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
+			_q.withCheckResults != nil,
 			_q.withPlatform != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withEmailTemplates != nil,
@@ -1439,6 +1480,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withCheckResults; query != nil {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Integration) { n.Edges.CheckResults = []*CheckResult{} },
+			func(n *Integration, e *CheckResult) { n.Edges.CheckResults = append(n.Edges.CheckResults, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatform; query != nil {
 		if err := _q.loadPlatform(ctx, query, nodes, nil,
 			func(n *Integration, e *Platform) { n.Edges.Platform = e }); err != nil {
@@ -1579,6 +1627,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedDirectorySyncRuns(name) },
 			func(n *Integration, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCheckResults {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedCheckResults(name) },
+			func(n *Integration, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2359,6 +2414,36 @@ func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *Di
 	}
 	return nil
 }
+func (_q *IntegrationQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *CheckResult)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(checkresult.FieldIntegrationID)
+	}
+	query.Where(predicate.CheckResult(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.CheckResultsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IntegrationQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Platform)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Integration)
@@ -2874,6 +2959,20 @@ func (_q *IntegrationQuery) WithNamedDirectorySyncRuns(name string, opts ...func
 		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
 	}
 	_q.withNamedDirectorySyncRuns[name] = query
+	return _q
+}
+
+// WithNamedCheckResults tells the query-builder to eager-load the nodes that are connected to the "check_results"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedCheckResults(name string, opts ...func(*CheckResultQuery)) *IntegrationQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCheckResults == nil {
+		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
+	}
+	_q.withNamedCheckResults[name] = query
 	return _q
 }
 

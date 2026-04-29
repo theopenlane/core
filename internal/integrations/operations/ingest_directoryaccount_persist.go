@@ -7,25 +7,42 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields
-func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryAccountInput) error {
+func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrationDef *ent.Integration, createInput ent.CreateDirectoryAccountInput) error {
 	if createInput.ExternalID == "" {
 		return ErrIngestUpsertKeyMissing
 	}
 
-	createInput.PrimarySource = &integration.PrimaryDirectory
+	createInput.PrimarySource = &integrationDef.PrimaryDirectory
+
+	if createInput.DirectoryName == nil && integrationDef.Name != "" {
+		createInput.DirectoryName = &integrationDef.Name
+	}
 
 	now := time.Now()
+
+	where := []predicate.DirectoryAccount{
+		directoryaccount.OwnerID(*createInput.OwnerID),
+		directoryaccount.ExternalID(createInput.ExternalID),
+	}
+
+	// prefer directory instance so recreating integrations does
+	// not create a new directory account record, fall back to integration id
+	if createInput.DirectoryInstanceID != nil && *createInput.DirectoryInstanceID != "" {
+		where = append(where, directoryaccount.DirectoryInstanceID(*createInput.DirectoryInstanceID))
+	} else {
+		where = append(where, directoryaccount.IntegrationID(*createInput.IntegrationID))
+	}
 
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,
 		func(ctx context.Context) (*ent.DirectoryAccount, error) {
 			return db.DirectoryAccount.Query().
-				Where(directoryaccount.IntegrationID(integration.ID)).
-				Where(directoryaccount.ExternalID(createInput.ExternalID)).
+				Where(where...).
 				Only(ctx)
 		},
 		func(ctx context.Context, input ent.CreateDirectoryAccountInput) error {

@@ -85,6 +85,9 @@ type organization
     define can_create_control_implementation: can_edit or control_creator or control_implementation_creator
     define control_objective_creator: [group#member]
     define can_create_control_objective: can_edit or control_creator or control_objective_creator
+    define check_result_creator: [group#member]
+    define can_create_check_result: can_edit or control_creator or check_result_creator
+
 
     # mapped controls are used to map controls from one standard to another
     # they can be created by any user with edit access to the organization
@@ -362,6 +365,18 @@ type control_implementation
     define viewer: [group#member] or can_view from parent
     define editor: [group#member, organization#owner] or can_edit from parent
     define blocked: [user, group#member]
+
+# check_results inherit access from the associated controls or from associated groups
+type check_result
+  relations
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, control]
+    define viewer: [group#member] or can_view from parent
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define blocked: [user, group#member]
 # mapped controls inherit access from the associated control or subcontrols in the mapping
 # the mapped_control author will be assigned as an admin of the mapped control
 type mapped_control
@@ -594,7 +609,7 @@ type directory_group
     define can_edit: [service]
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, organization, integration, directory_sync_run, platform]
+    define parent: [user, service, organization, integration, directory_sync_run, identity_holder, platform]
     define viewer: can_view from parent
     define blocked: [user, group#member]
 

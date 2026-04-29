@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkCreatePayload_hushes,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkCreatePayload_hushes(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Hushes, nil
 		},
 		nil,
-		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Hush) graphql.Marshaler {
+			return ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HushBulkCreatePayload",
@@ -51,51 +55,7 @@ func (ec *executionContext) fieldContext_HushBulkCreatePayload_hushes(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Hush_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Hush_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Hush_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Hush_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Hush_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Hush_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Hush_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Hush_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Hush_kind(ctx, field)
-			case "secretName":
-				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "credentialSet":
-				return ec.fieldContext_Hush_credentialSet(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Hush_metadata(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_Hush_expiresAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Hush_owner(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "files":
-				return ec.fieldContext_Hush_files(ctx, field)
-			case "events":
-				return ec.fieldContext_Hush_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Hush", field.Name)
+			return ec.childFields_Hush(ctx, field)
 		},
 	}
 	return fc, nil
@@ -106,28 +66,22 @@ func (ec *executionContext) _HushBulkDeletePayload_deletedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("HushBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _HushBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkDeletePayload) (ret graphql.Marshaler) {
@@ -135,28 +89,22 @@ func (ec *executionContext) _HushBulkDeletePayload_notDeletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("HushBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _HushBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkDeletePayload) (ret graphql.Marshaler) {
@@ -164,28 +112,22 @@ func (ec *executionContext) _HushBulkDeletePayload_error(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("HushBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _HushBulkUpdatePayload_hushes(ctx context.Context, field graphql.CollectedField, obj *model.HushBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -193,17 +135,20 @@ func (ec *executionContext) _HushBulkUpdatePayload_hushes(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkUpdatePayload_hushes,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkUpdatePayload_hushes(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Hushes, nil
 		},
 		nil,
-		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Hush) graphql.Marshaler {
+			return ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HushBulkUpdatePayload",
@@ -211,51 +156,7 @@ func (ec *executionContext) fieldContext_HushBulkUpdatePayload_hushes(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Hush_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Hush_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Hush_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Hush_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Hush_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Hush_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Hush_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Hush_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Hush_kind(ctx, field)
-			case "secretName":
-				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "credentialSet":
-				return ec.fieldContext_Hush_credentialSet(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Hush_metadata(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_Hush_expiresAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Hush_owner(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "files":
-				return ec.fieldContext_Hush_files(ctx, field)
-			case "events":
-				return ec.fieldContext_Hush_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Hush", field.Name)
+			return ec.childFields_Hush(ctx, field)
 		},
 	}
 	return fc, nil
@@ -266,28 +167,22 @@ func (ec *executionContext) _HushBulkUpdatePayload_updatedIDs(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("HushBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _HushCreatePayload_hush(ctx context.Context, field graphql.CollectedField, obj *model.HushCreatePayload) (ret graphql.Marshaler) {
@@ -295,17 +190,20 @@ func (ec *executionContext) _HushCreatePayload_hush(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushCreatePayload_hush,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushCreatePayload_hush(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Hush, nil
 		},
 		nil,
-		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Hush) graphql.Marshaler {
+			return ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HushCreatePayload",
@@ -313,51 +211,7 @@ func (ec *executionContext) fieldContext_HushCreatePayload_hush(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Hush_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Hush_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Hush_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Hush_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Hush_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Hush_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Hush_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Hush_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Hush_kind(ctx, field)
-			case "secretName":
-				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "credentialSet":
-				return ec.fieldContext_Hush_credentialSet(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Hush_metadata(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_Hush_expiresAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Hush_owner(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "files":
-				return ec.fieldContext_Hush_files(ctx, field)
-			case "events":
-				return ec.fieldContext_Hush_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Hush", field.Name)
+			return ec.childFields_Hush(ctx, field)
 		},
 	}
 	return fc, nil
@@ -368,28 +222,22 @@ func (ec *executionContext) _HushDeletePayload_deletedID(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "HushDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("HushDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _HushUpdatePayload_hush(ctx context.Context, field graphql.CollectedField, obj *model.HushUpdatePayload) (ret graphql.Marshaler) {
@@ -397,17 +245,20 @@ func (ec *executionContext) _HushUpdatePayload_hush(ctx context.Context, field g
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_HushUpdatePayload_hush,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_HushUpdatePayload_hush(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Hush, nil
 		},
 		nil,
-		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Hush) graphql.Marshaler {
+			return ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "HushUpdatePayload",
@@ -415,51 +266,7 @@ func (ec *executionContext) fieldContext_HushUpdatePayload_hush(_ context.Contex
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Hush_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Hush_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Hush_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Hush_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Hush_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Hush_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_Hush_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_Hush_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_Hush_systemInternalID(ctx, field)
-			case "name":
-				return ec.fieldContext_Hush_name(ctx, field)
-			case "description":
-				return ec.fieldContext_Hush_description(ctx, field)
-			case "kind":
-				return ec.fieldContext_Hush_kind(ctx, field)
-			case "secretName":
-				return ec.fieldContext_Hush_secretName(ctx, field)
-			case "credentialSet":
-				return ec.fieldContext_Hush_credentialSet(ctx, field)
-			case "metadata":
-				return ec.fieldContext_Hush_metadata(ctx, field)
-			case "lastUsedAt":
-				return ec.fieldContext_Hush_lastUsedAt(ctx, field)
-			case "expiresAt":
-				return ec.fieldContext_Hush_expiresAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Hush_owner(ctx, field)
-			case "integrations":
-				return ec.fieldContext_Hush_integrations(ctx, field)
-			case "files":
-				return ec.fieldContext_Hush_files(ctx, field)
-			case "events":
-				return ec.fieldContext_Hush_events(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Hush", field.Name)
+			return ec.childFields_Hush(ctx, field)
 		},
 	}
 	return fc, nil
@@ -499,7 +306,7 @@ func (ec *executionContext) _HushBulkCreatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -545,7 +352,7 @@ func (ec *executionContext) _HushBulkDeletePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -583,7 +390,7 @@ func (ec *executionContext) _HushBulkUpdatePayload(ctx context.Context, sel ast.
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -622,7 +429,7 @@ func (ec *executionContext) _HushCreatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -661,7 +468,7 @@ func (ec *executionContext) _HushDeletePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -700,7 +507,7 @@ func (ec *executionContext) _HushUpdatePayload(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

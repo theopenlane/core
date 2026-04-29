@@ -14,9 +14,9 @@ type Client struct{}
 
 // Build constructs the Cloudflare API client for one installation
 func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	cred, _, err := cloudflareCredential.Resolve(req.Credentials)
+	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
-		return nil, ErrCredentialInvalid
+		return nil, err
 	}
 
 	if cred.APIToken == "" {
@@ -24,4 +24,17 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	}
 
 	return cf.NewClient(option.WithAPIToken(cred.APIToken)), nil
+}
+
+func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {
+	cred, ok, err := cloudflareCredential.Resolve(bindings)
+	if err != nil {
+		return CredentialSchema{}, ErrCredentialInvalid
+	}
+
+	if !ok {
+		return CredentialSchema{}, ErrCredentialMetadataRequired
+	}
+
+	return cred, nil
 }

@@ -1,0 +1,136 @@
+{
+  "errors": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "code": 1000,
+      "message": "message",
+      "documentation_url": "documentation_url",
+      "source": {
+        "pointer": "pointer"
+      }
+    }
+  ],
+  "success": true,
+  "result": {
+    "id": "4536bcfad5faccb111b47003c79917fa",
+    "email": "user@example.com",
+    "policies": [
+      {
+        "id": "f267e341f3dd4697bd3b9f71dd96247f",
+        "access": "allow",
+        "permission_groups": [
+          {
+            "id": "c8fed203ed3043cba015a93ad1616f1f",
+            "meta": {
+              "key": "key",
+              "value": "value"
+            },
+            "name": "Zone Read"
+          },
+          {
+            "id": "82e64a83756745bbbb1c9c2701bf816b",
+            "meta": {
+              "key": "key",
+              "value": "value"
+            },
+            "name": "Magic Network Monitoring"
+          }
+        ],
+        "resource_groups": [
+          {
+            "id": "6d7f2f5f5b1d4a0e9081fdc98d432fd1",
+            "scope": [
+              {
+                "key": "com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4",
+                "objects": [
+                  {
+                    "key": "com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"
+                  }
+                ]
+              }
+            ],
+            "meta": {
+              "key": "key",
+              "value": "value"
+            },
+            "name": "com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"
+          }
+        ]
+      }
+    ],
+    "roles": [
+      {
+        "id": "3536bcfad5faccb999b47003c79917fb",
+        "description": "Administrative access to the entire Account",
+        "name": "Account Administrator",
+        "permissions": {
+          "analytics": {
+            "read": true,
+            "write": false
+          },
+          "billing": {
+            "read": true,
+            "write": false
+          },
+          "cache_purge": {
+            "read": true,
+            "write": false
+          },
+          "dns": {
+            "read": true,
+            "write": false
+          },
+          "dns_records": {
+            "read": true,
+            "write": false
+          },
+          "lb": {
+            "read": true,
+            "write": false
+          },
+          "logs": {
+            "read": true,
+            "write": false
+          },
+          "organization": {
+            "read": true,
+            "write": false
+          },
+          "ssl": {
+            "read": true,
+            "write": false
+          },
+          "waf": {
+            "read": true,
+            "write": false
+          },
+          "zone_settings": {
+            "read": true,
+            "write": false
+          },
+          "zones": {
+            "read": true,
+            "write": true
+          }
+        }
+      }
+    ],
+    "status": "accepted",
+    "user": {
+      "email": "user@example.com",
+      "id": "023e105f4ecef8ad9ca31a8372d0c353",
+      "first_name": "John",
+      "last_name": "Appleseed",
+      "two_factor_authentication_enabled": true
+    }
+  }
+}

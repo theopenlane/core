@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _MappedControlBulkCreatePayload_mappedControls(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkCreatePayload_mappedControls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkCreatePayload_mappedControls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappedControls, nil
 		},
 		nil,
-		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappedControl) graphql.Marshaler {
+			return ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappedControlBulkCreatePayload",
@@ -51,51 +55,7 @@ func (ec *executionContext) fieldContext_MappedControlBulkCreatePayload_mappedCo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappedControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappedControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappedControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappedControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_MappedControl_ownerID(ctx, field)
-			case "mappingType":
-				return ec.fieldContext_MappedControl_mappingType(ctx, field)
-			case "relation":
-				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "confidence":
-				return ec.fieldContext_MappedControl_confidence(ctx, field)
-			case "source":
-				return ec.fieldContext_MappedControl_source(ctx, field)
-			case "owner":
-				return ec.fieldContext_MappedControl_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_MappedControl_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_MappedControl_editors(ctx, field)
-			case "fromControls":
-				return ec.fieldContext_MappedControl_fromControls(ctx, field)
-			case "toControls":
-				return ec.fieldContext_MappedControl_toControls(ctx, field)
-			case "fromSubcontrols":
-				return ec.fieldContext_MappedControl_fromSubcontrols(ctx, field)
-			case "toSubcontrols":
-				return ec.fieldContext_MappedControl_toSubcontrols(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
+			return ec.childFields_MappedControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -106,28 +66,22 @@ func (ec *executionContext) _MappedControlBulkDeletePayload_deletedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappedControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappedControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappedControlBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -135,28 +89,22 @@ func (ec *executionContext) _MappedControlBulkDeletePayload_notDeletedIDs(ctx co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappedControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappedControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappedControlBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlBulkDeletePayload) (ret graphql.Marshaler) {
@@ -164,28 +112,22 @@ func (ec *executionContext) _MappedControlBulkDeletePayload_error(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappedControlBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappedControlBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _MappedControlBulkUpdatePayload_mappedControls(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -193,17 +135,20 @@ func (ec *executionContext) _MappedControlBulkUpdatePayload_mappedControls(ctx c
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkUpdatePayload_mappedControls,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkUpdatePayload_mappedControls(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappedControls, nil
 		},
 		nil,
-		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappedControl) graphql.Marshaler {
+			return ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkUpdatePayload_mappedControls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappedControlBulkUpdatePayload",
@@ -211,51 +156,7 @@ func (ec *executionContext) fieldContext_MappedControlBulkUpdatePayload_mappedCo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappedControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappedControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappedControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappedControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_MappedControl_ownerID(ctx, field)
-			case "mappingType":
-				return ec.fieldContext_MappedControl_mappingType(ctx, field)
-			case "relation":
-				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "confidence":
-				return ec.fieldContext_MappedControl_confidence(ctx, field)
-			case "source":
-				return ec.fieldContext_MappedControl_source(ctx, field)
-			case "owner":
-				return ec.fieldContext_MappedControl_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_MappedControl_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_MappedControl_editors(ctx, field)
-			case "fromControls":
-				return ec.fieldContext_MappedControl_fromControls(ctx, field)
-			case "toControls":
-				return ec.fieldContext_MappedControl_toControls(ctx, field)
-			case "fromSubcontrols":
-				return ec.fieldContext_MappedControl_fromSubcontrols(ctx, field)
-			case "toSubcontrols":
-				return ec.fieldContext_MappedControl_toSubcontrols(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
+			return ec.childFields_MappedControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -266,28 +167,22 @@ func (ec *executionContext) _MappedControlBulkUpdatePayload_updatedIDs(ctx conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappedControlBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappedControlBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlCreatePayload) (ret graphql.Marshaler) {
@@ -295,17 +190,20 @@ func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlCreatePayload_mappedControl,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlCreatePayload_mappedControl(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappedControl, nil
 		},
 		nil,
-		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappedControl) graphql.Marshaler {
+			return ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappedControlCreatePayload",
@@ -313,51 +211,7 @@ func (ec *executionContext) fieldContext_MappedControlCreatePayload_mappedContro
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappedControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappedControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappedControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappedControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_MappedControl_ownerID(ctx, field)
-			case "mappingType":
-				return ec.fieldContext_MappedControl_mappingType(ctx, field)
-			case "relation":
-				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "confidence":
-				return ec.fieldContext_MappedControl_confidence(ctx, field)
-			case "source":
-				return ec.fieldContext_MappedControl_source(ctx, field)
-			case "owner":
-				return ec.fieldContext_MappedControl_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_MappedControl_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_MappedControl_editors(ctx, field)
-			case "fromControls":
-				return ec.fieldContext_MappedControl_fromControls(ctx, field)
-			case "toControls":
-				return ec.fieldContext_MappedControl_toControls(ctx, field)
-			case "fromSubcontrols":
-				return ec.fieldContext_MappedControl_fromSubcontrols(ctx, field)
-			case "toSubcontrols":
-				return ec.fieldContext_MappedControl_toSubcontrols(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
+			return ec.childFields_MappedControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -368,28 +222,22 @@ func (ec *executionContext) _MappedControlDeletePayload_deletedID(ctx context.Co
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "MappedControlDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("MappedControlDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _MappedControlUpdatePayload_mappedControl(ctx context.Context, field graphql.CollectedField, obj *model.MappedControlUpdatePayload) (ret graphql.Marshaler) {
@@ -397,17 +245,20 @@ func (ec *executionContext) _MappedControlUpdatePayload_mappedControl(ctx contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_MappedControlUpdatePayload_mappedControl,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControlUpdatePayload_mappedControl(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.MappedControl, nil
 		},
 		nil,
-		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappedControl) graphql.Marshaler {
+			return ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedControl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MappedControlUpdatePayload",
@@ -415,51 +266,7 @@ func (ec *executionContext) fieldContext_MappedControlUpdatePayload_mappedContro
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_MappedControl_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_MappedControl_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_MappedControl_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_MappedControl_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_MappedControl_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_MappedControl_tags(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_MappedControl_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_MappedControl_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_MappedControl_systemInternalID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_MappedControl_ownerID(ctx, field)
-			case "mappingType":
-				return ec.fieldContext_MappedControl_mappingType(ctx, field)
-			case "relation":
-				return ec.fieldContext_MappedControl_relation(ctx, field)
-			case "confidence":
-				return ec.fieldContext_MappedControl_confidence(ctx, field)
-			case "source":
-				return ec.fieldContext_MappedControl_source(ctx, field)
-			case "owner":
-				return ec.fieldContext_MappedControl_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_MappedControl_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_MappedControl_editors(ctx, field)
-			case "fromControls":
-				return ec.fieldContext_MappedControl_fromControls(ctx, field)
-			case "toControls":
-				return ec.fieldContext_MappedControl_toControls(ctx, field)
-			case "fromSubcontrols":
-				return ec.fieldContext_MappedControl_fromSubcontrols(ctx, field)
-			case "toSubcontrols":
-				return ec.fieldContext_MappedControl_toSubcontrols(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type MappedControl", field.Name)
+			return ec.childFields_MappedControl(ctx, field)
 		},
 	}
 	return fc, nil
@@ -499,7 +306,7 @@ func (ec *executionContext) _MappedControlBulkCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -545,7 +352,7 @@ func (ec *executionContext) _MappedControlBulkDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -583,7 +390,7 @@ func (ec *executionContext) _MappedControlBulkUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -622,7 +429,7 @@ func (ec *executionContext) _MappedControlCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -661,7 +468,7 @@ func (ec *executionContext) _MappedControlDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -700,7 +507,7 @@ func (ec *executionContext) _MappedControlUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

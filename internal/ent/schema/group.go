@@ -179,7 +179,13 @@ func (g Group) Edges() []ent.Edge {
 			).
 			Through("members", GroupMembership.Type),
 		defaultEdgeToWithPagination(g, Event{}),
-		defaultEdgeToWithPagination(g, Integration{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: g,
+			edgeSchema: Integration{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
+		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: g,
 			name:       "avatar_file",

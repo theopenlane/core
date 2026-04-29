@@ -90,6 +90,8 @@ type DirectoryGroup struct {
 	RawProfileFileID *string `json:"raw_profile_file_id,omitempty"`
 	// cursor or ETag supplied by the source system for auditing
 	SourceVersion *string `json:"source_version,omitempty"`
+	// directory source label set by the integration (e.g. googleworkspace, github, slack)
+	DirectoryName *string `json:"directory_name,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the DirectoryGroupQuery when eager-loading is set.
 	Edges        DirectoryGroupEdges `json:"edges"`
@@ -231,7 +233,7 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygroup.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion:
+		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldDisplayID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldDirectoryInstanceID, directorygroup.FieldDirectorySyncRunID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldProfileHash, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldFirstSeenAt, directorygroup.FieldLastSeenAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -469,6 +471,13 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				_m.SourceVersion = new(string)
 				*_m.SourceVersion = value.String
 			}
+		case directorygroup.FieldDirectoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field directory_name", values[i])
+			} else if value.Valid {
+				_m.DirectoryName = new(string)
+				*_m.DirectoryName = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -664,6 +673,11 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	if v := _m.SourceVersion; v != nil {
 		builder.WriteString("source_version=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.DirectoryName; v != nil {
+		builder.WriteString("directory_name=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

@@ -1,6 +1,9 @@
 package enums
 
-import "io"
+import (
+	"io"
+	"strings"
+)
 
 type RiskImpact string
 
@@ -24,7 +27,14 @@ func (RiskImpact) Values() []string { return stringValues(riskImpactValues) }
 func (r RiskImpact) String() string { return string(r) }
 
 // ToRiskImpact returns the user status enum based on string input
-func ToRiskImpact(r string) *RiskImpact { return parse(r, riskImpactParseValues, &RiskImpactInvalid) }
+func ToRiskImpact(r string) *RiskImpact {
+	// edge case for integrations to normalize
+	if strings.EqualFold(r, "MEDIUM") {
+		return &RiskImpactModerate
+	}
+
+	return parse(r, riskImpactParseValues, &RiskImpactInvalid)
+}
 
 // MarshalGQL implement the Marshaler interface for gqlgen
 func (r RiskImpact) MarshalGQL(w io.Writer) { marshalGQL(r, w) }

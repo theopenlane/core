@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -186,6 +187,7 @@ func checkColumn(t, c string) error {
 			asset.Table:                      asset.ValidColumn,
 			campaign.Table:                   campaign.ValidColumn,
 			campaigntarget.Table:             campaigntarget.ValidColumn,
+			checkresult.Table:                checkresult.ValidColumn,
 			contact.Table:                    contact.ValidColumn,
 			control.Table:                    control.ValidColumn,
 			controlimplementation.Table:      controlimplementation.ValidColumn,

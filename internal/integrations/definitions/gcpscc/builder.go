@@ -13,13 +13,13 @@ func Builder() registry.Builder {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
-				Family:      "gcp",
+				Family:      "Google Cloud",
 				DisplayName: "GCP Security Command Center",
 				Description: "Collect Google Cloud Security Command Center findings for security posture reporting.",
 				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/gcp_scc/overview",
-				Tags:        []string{"vulnerabilities", "assets"},
-				Active:      false,
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/gcp-scc",
+				Tags:        []string{"vulnerabilities", "assets", "findings", "risks"},
+				Active:      true,
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
@@ -68,7 +68,7 @@ func Builder() registry.Builder {
 				},
 				{
 					Name:         findingsCollectOperation.Name(),
-					Description:  "Collect GCP Security Command Center findings for vulnerability ingestion",
+					Description:  "Collect GCP Security Command Center findings for vulnerabilities, findings, and risk ingestion",
 					Topic:        definitionID.OperationTopic(findingsCollectOperation.Name()),
 					ClientRef:    sccClient.ID(),
 					ConfigSchema: findingsCollectSchema,
@@ -77,8 +77,16 @@ func Builder() registry.Builder {
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
 						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaRisk,
+						},
 					},
-					IngestHandle: FindingsCollect{}.IngestHandle(),
+					IngestHandle:        FindingsCollect{}.IngestHandle(),
+					RequiredPermissions: []string{"https://www.googleapis.com/auth/cloud-platform"},
+					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) FindingsSyncConfig { return u.FindingsSync }),
 				},
 			},
 			Mappings: gcpsccMappings(),

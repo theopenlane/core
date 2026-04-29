@@ -1,0 +1,107 @@
+{
+  "mute": "UNDEFINED",
+  "name": "organizations/521113912301/sources/12112115738342921188/locations/global/findings/09b4bdb2ba6a4d7d910814c87e5def42",
+  "state": "ACTIVE",
+  "access": {
+    "caller_ip": "10.128.0.28",
+    "user_agent": "kcc/1.128.0 (+https://github.com/GoogleCloudPlatform/k8s-config-connector) kcc/controller-manager/1.128.0,gzip(gfe),gzip(gfe)",
+    "method_name": "google.cloud.certificatemanager.v1.CertificateManager.UpdateCertificateMapEntry",
+    "service_name": "certificatemanager.googleapis.com",
+    "caller_ip_geo": {},
+    "principal_email": "service-74090171112@gcp-sa-yakima.iam.gserviceaccount.com",
+    "principal_subject": "serviceAccount:service-74090171112@gcp-sa-yakima.iam.gserviceaccount.com"
+  },
+  "parent": "organizations/521113912301/sources/12112115738342921188/locations/global",
+  "category": "Persistence: New API Method",
+  "severity": "LOW",
+  "mute_info": {
+    "static_mute": {
+      "state": "UNDEFINED",
+      "apply_time": "1970-01-01T00:00:00Z"
+    }
+  },
+  "event_time": "2025-06-22T03:11:21.867Z",
+  "create_time": "2025-06-22T03:11:22.561Z",
+  "log_entries": [
+    {
+      "cloud_logging_entry": {
+        "log_id": "cloudaudit.googleapis.com/activity",
+        "insert_id": "1fmxofue3h5zz",
+        "timestamp": "2025-06-22T03:11:15.353089456Z",
+        "resource_container": "projects/prod-project"
+      }
+    }
+  ],
+  "mitre_attack": {
+    "primary_tactic": "PERSISTENCE"
+  },
+  "finding_class": "THREAT",
+  "resource_name": "//cloudresourcemanager.googleapis.com/projects/323616316362",
+  "canonical_name": "projects/323616316362/sources/12176115738402969097/locations/global/findings/09b4bdb2ba6a4d7d910814c87e5def42",
+  "security_marks": {
+    "name": "organizations/521113912301/sources/12176115738402969097/locations/global/findings/09b4bdb2ba6a4d7d910814c87e5def42/securityMarks"
+  },
+  "mute_update_time": "1970-01-01T00:00:00Z",
+  "source_properties": {
+    "evidence": [
+      {
+        "sourceLogId": {
+          "logId": "cloudaudit.googleapis.com/activity",
+          "insertId": "1fmxofue3h5zz",
+          "projectId": "prod-project",
+          "timestamp": {
+            "nanos": 353089456,
+            "seconds": "1750561875"
+          },
+          "resourceContainer": "projects/prod-project"
+        }
+      }
+    ],
+    "sourceId": {
+      "projectNumber": "323616316362",
+      "customerOrganizationNumber": "521113912301"
+    },
+    "findingId": "09b4bdb2ba6a4d7d910814c87e5def42",
+    "properties": {
+      "newApiMethod": {
+        "callerIp": "10.128.0.28",
+        "newApiMethod": {
+          "methodName": "google.cloud.certificatemanager.v1.CertificateManager.UpdateCertificateMapEntry",
+          "serviceName": "certificatemanager.googleapis.com"
+        },
+        "principalEmail": "service-74090171112@gcp-sa-yakima.iam.gserviceaccount.com",
+        "callerUserAgent": "kcc/1.128.0 (+https://github.com/GoogleCloudPlatform/k8s-config-connector) kcc/controller-manager/1.128.0,gzip(gfe),gzip(gfe)",
+        "resourceContainer": "projects/323616316362"
+      }
+    },
+    "contextUris": {
+      "mitreUri": {
+        "url": "https://attack.mitre.org/tactics/TA0003/",
+        "displayName": "MITRE Link"
+      },
+      "relatedFindingUri": {},
+      "cloudLoggingQueryUri": [
+        {
+          "url": "https://console.cloud.google.com/logs/query;query=timestamp%3D%222025-06-22T03:11:15.353089456Z%22%0AinsertId%3D%221fmxofue3h5zz%22?project=prod-project",
+          "displayName": "Cloud Logging Query Link"
+        }
+      ]
+    },
+    "affectedResources": [
+      {
+        "gcpResourceName": "//certificatemanager.googleapis.com/projects/prod-project/locations/global/certificateMaps/prod-project-cert-map/certificateMapEntries/apiprodacmecorp"
+      },
+      {
+        "gcpResourceName": "//cloudresourcemanager.googleapis.com/projects/323616316362"
+      }
+    ],
+    "detectionCategory": {
+      "ruleName": "anomalous_behavior",
+      "indicator": "audit_log",
+      "technique": "persistence",
+      "subRuleName": "new_api_method"
+    },
+    "detectionPriority": "LOW"
+  },
+  "parent_display_name": "Event Threat Detection"
+}

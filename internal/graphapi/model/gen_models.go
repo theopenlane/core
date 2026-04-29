@@ -274,6 +274,48 @@ type CampaignUpdatePayload struct {
 	Campaign *generated.Campaign `json:"campaign"`
 }
 
+// Return response for createBulkCheckResult mutation
+type CheckResultBulkCreatePayload struct {
+	// Created checkResults
+	CheckResults []*generated.CheckResult `json:"checkResults,omitempty"`
+}
+
+// Return response for deleteBulkCheckResult mutation
+type CheckResultBulkDeletePayload struct {
+	// Deleted checkResult IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of checkResults that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkCheckResult mutation
+type CheckResultBulkUpdatePayload struct {
+	// Updated checkResults
+	CheckResults []*generated.CheckResult `json:"checkResults,omitempty"`
+	// IDs of the updated checkResults
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createCheckResult mutation
+type CheckResultCreatePayload struct {
+	// Created checkResult
+	CheckResult *generated.CheckResult `json:"checkResult"`
+}
+
+// Return response for deleteCheckResult mutation
+type CheckResultDeletePayload struct {
+	// Deleted checkResult ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateCheckResult mutation
+type CheckResultUpdatePayload struct {
+	// Updated checkResult
+	CheckResult *generated.CheckResult `json:"checkResult"`
+}
+
 // CloneControlInput is used to clone controls and their subcontrols
 // under an organization (ownerID)
 type CloneControlInput struct {

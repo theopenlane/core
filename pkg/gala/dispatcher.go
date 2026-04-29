@@ -8,6 +8,7 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Provider resolves the gala instance used by River workers
@@ -129,12 +130,14 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 		Properties: envelope.Headers.Properties,
 	})
 	if err != nil {
+		logx.FromContext(ctx).Err(err).Msg("gala: error marshaling envelope")
 		return ErrRiverEnvelopeEncodeFailed
 	}
 
 	insertOpts.Metadata = meta
 
 	if _, err = d.jobClient.Insert(ctx, args, insertOpts); err != nil {
+		logx.FromContext(ctx).Err(err).Msg("gala: error inserting dispatch job")
 		return ErrRiverDispatchInsertFailed
 	}
 

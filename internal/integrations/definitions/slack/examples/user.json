@@ -1,0 +1,82 @@
+{
+    "user": {
+        "id": "U123ABC456",
+        "team_id": "T123ABC456",
+        "name": "sherlock",
+        "deleted": false,
+        "color": "99a949",
+        "real_name": "Sherlock Holmes",
+        "tz": "Europe/London",
+        "tz_label": "Greenwich Mean Time",
+        "tz_offset": 0,
+        "profile": {
+            "title": "Senior Detective",
+            "phone": "(000) 000-0000",
+            "skype": "",
+            "real_name": "Sherlock Holmes",
+            "real_name_normalized": "Sherlock Holmes",
+            "display_name": "sherlock",
+            "display_name_normalized": "sherlock",
+            "fields": {
+                "Xf111AAA111": {
+                    "value": "1 dog: Sherlock Bones",
+                    "alt": ""
+                },
+                "Xf222BBB222": {
+                    "value": "no tree nuts!",
+                    "alt": ""
+                }
+            },
+            "status_text": "elementary, my dear watson ",
+            "status_emoji": ":thinking-face:",
+            "status_emoji_display_info": [
+                {
+                    "emoji_name": "thinking-face",
+                    "display_url": "https://emoji.slack-edge.com/T123ABC456/thinking-face/123...abc.png"
+                }
+            ],
+            "status_expiration": 0,
+            "avatar_hash": "b187f5128ba4",
+            "start_date": "2015-12-25",
+            "image_original": "https://avatars.slack-edge.com/2021-10-21/..._...__original.jpg",
+            "is_custom_image": true,
+            "email": "sholmes@example.com",
+            "pronouns": "they/them",
+            "huddle_state": "default_unset",
+            "huddle_state_expiration_ts": 0,
+            "first_name": "Sherlock",
+            "last_name": "Holmes",
+            "image_24": "https://avatars.slack-edge.com/2021-10-21/..._...__24.jpg",
+            "image_32": "https://avatars.slack-edge.com/2021-10-21/..._...__32.jpg",
+            "image_48": "https://avatars.slack-edge.com/2021-10-21/..._...__48.jpg",
+            "image_72": "https://avatars.slack-edge.com/2021-10-21/..._...__72.jpg",
+            "image_192": "https://avatars.slack-edge.com/2021-10-21/..._...__192.jpg",
+            "image_512": "https://avatars.slack-edge.com/2021-10-21/..._...__512.jpg",
+            "image_1024": "https://avatars.slack-edge.com/2021-10-21/..._...__1024.jpg",
+            "status_text_canonical": "",
+            "team": "T0123ABC456"
+        },
+        "is_admin": false,
+        "is_owner": false,
+        "is_primary_owner": false,
+        "is_restricted": false,
+        "is_ultra_restricted": false,
+        "is_bot": false,
+        "is_app_user": false,
+        "updated": 1675264590,
+        "is_email_confirmed": true,
+        "who_can_share_contact_card": "EVERYONE",
+        "enterprise_user": {
+            "id": "U123ABC456",
+            "enterprise_id": "E123ABC456",
+            "enterprise_name": "Sherlock Holmes Detective Agency",
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "teams": [
+                "T123ABC456",
+                "T789DEF000"
+            ]
+        }
+    }
+}

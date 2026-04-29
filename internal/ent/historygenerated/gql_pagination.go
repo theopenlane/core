@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -3463,6 +3464,405 @@ func (_m *CampaignTargetHistory) ToEdge(order *CampaignTargetHistoryOrder) *Camp
 	}
 }
 
+// CheckResultHistoryEdge is the edge representation of CheckResultHistory.
+type CheckResultHistoryEdge struct {
+	Node   *CheckResultHistory `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// CheckResultHistoryConnection is the connection containing edges to CheckResultHistory.
+type CheckResultHistoryConnection struct {
+	Edges      []*CheckResultHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *CheckResultHistoryConnection) build(nodes []*CheckResultHistory, pager *checkresulthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CheckResultHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CheckResultHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CheckResultHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CheckResultHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CheckResultHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CheckResultHistoryPaginateOption enables pagination customization.
+type CheckResultHistoryPaginateOption func(*checkresulthistoryPager) error
+
+// WithCheckResultHistoryOrder configures pagination ordering.
+func WithCheckResultHistoryOrder(order *CheckResultHistoryOrder) CheckResultHistoryPaginateOption {
+	if order == nil {
+		order = DefaultCheckResultHistoryOrder
+	}
+	o := *order
+	return func(pager *checkresulthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultCheckResultHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithCheckResultHistoryFilter configures pagination filter.
+func WithCheckResultHistoryFilter(filter func(*CheckResultHistoryQuery) (*CheckResultHistoryQuery, error)) CheckResultHistoryPaginateOption {
+	return func(pager *checkresulthistoryPager) error {
+		if filter == nil {
+			return errors.New("CheckResultHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type checkresulthistoryPager struct {
+	reverse bool
+	order   *CheckResultHistoryOrder
+	filter  func(*CheckResultHistoryQuery) (*CheckResultHistoryQuery, error)
+}
+
+func newCheckResultHistoryPager(opts []CheckResultHistoryPaginateOption, reverse bool) (*checkresulthistoryPager, error) {
+	pager := &checkresulthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultCheckResultHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *checkresulthistoryPager) applyFilter(query *CheckResultHistoryQuery) (*CheckResultHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *checkresulthistoryPager) toCursor(_m *CheckResultHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *checkresulthistoryPager) applyCursors(query *CheckResultHistoryQuery, after, before *Cursor) (*CheckResultHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultCheckResultHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *checkresulthistoryPager) applyOrder(query *CheckResultHistoryQuery) *CheckResultHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultCheckResultHistoryOrder.Field {
+		query = query.Order(DefaultCheckResultHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *checkresulthistoryPager) orderExpr(query *CheckResultHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultCheckResultHistoryOrder.Field {
+			b.Comma().Ident(DefaultCheckResultHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CheckResultHistory.
+func (_m *CheckResultHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CheckResultHistoryPaginateOption,
+) (*CheckResultHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCheckResultHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CheckResultHistoryConnection{Edges: []*CheckResultHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CheckResultHistoryOrderFieldHistoryTime orders CheckResultHistory by history_time.
+	CheckResultHistoryOrderFieldHistoryTime = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: checkresulthistory.FieldHistoryTime,
+		toTerm: checkresulthistory.ByHistoryTime,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// CheckResultHistoryOrderFieldCreatedAt orders CheckResultHistory by created_at.
+	CheckResultHistoryOrderFieldCreatedAt = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: checkresulthistory.FieldCreatedAt,
+		toTerm: checkresulthistory.ByCreatedAt,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CheckResultHistoryOrderFieldUpdatedAt orders CheckResultHistory by updated_at.
+	CheckResultHistoryOrderFieldUpdatedAt = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: checkresulthistory.FieldUpdatedAt,
+		toTerm: checkresulthistory.ByUpdatedAt,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CheckResultHistoryOrderFieldStatus orders CheckResultHistory by status.
+	CheckResultHistoryOrderFieldStatus = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: checkresulthistory.FieldStatus,
+		toTerm: checkresulthistory.ByStatus,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// CheckResultHistoryOrderFieldSource orders CheckResultHistory by source.
+	CheckResultHistoryOrderFieldSource = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.Source, nil
+		},
+		column: checkresulthistory.FieldSource,
+		toTerm: checkresulthistory.BySource,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Source,
+			}
+		},
+	}
+	// CheckResultHistoryOrderFieldLastObservedAt orders CheckResultHistory by last_observed_at.
+	CheckResultHistoryOrderFieldLastObservedAt = &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastObservedAt == nil {
+				return nil, nil
+			}
+			return _m.LastObservedAt, nil
+		},
+		column: checkresulthistory.FieldLastObservedAt,
+		toTerm: func(opts ...sql.OrderTermOption) checkresulthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return checkresulthistory.ByLastObservedAt(opts...)
+		},
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			if _m.LastObservedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastObservedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CheckResultHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case CheckResultHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case CheckResultHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CheckResultHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CheckResultHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case CheckResultHistoryOrderFieldSource.column:
+		str = "source"
+	case CheckResultHistoryOrderFieldLastObservedAt.column:
+		str = "observed_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CheckResultHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CheckResultHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CheckResultHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *CheckResultHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *CheckResultHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CheckResultHistoryOrderFieldUpdatedAt
+	case "STATUS":
+		*f = *CheckResultHistoryOrderFieldStatus
+	case "source":
+		*f = *CheckResultHistoryOrderFieldSource
+	case "observed_at":
+		*f = *CheckResultHistoryOrderFieldLastObservedAt
+	default:
+		return fmt.Errorf("%s is not a valid CheckResultHistoryOrderField", str)
+	}
+	return nil
+}
+
+// CheckResultHistoryOrderField defines the ordering field of CheckResultHistory.
+type CheckResultHistoryOrderField struct {
+	// Value extracts the ordering value from the given CheckResultHistory.
+	Value    func(*CheckResultHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) checkresulthistory.OrderOption
+	toCursor func(*CheckResultHistory) Cursor
+}
+
+// CheckResultHistoryOrder defines the ordering of CheckResultHistory.
+type CheckResultHistoryOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *CheckResultHistoryOrderField `json:"field"`
+}
+
+// DefaultCheckResultHistoryOrder is the default ordering of CheckResultHistory.
+var DefaultCheckResultHistoryOrder = &CheckResultHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CheckResultHistoryOrderField{
+		Value: func(_m *CheckResultHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: checkresulthistory.FieldID,
+		toTerm: checkresulthistory.ByID,
+		toCursor: func(_m *CheckResultHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts CheckResultHistory into CheckResultHistoryEdge.
+func (_m *CheckResultHistory) ToEdge(order *CheckResultHistoryOrder) *CheckResultHistoryEdge {
+	if order == nil {
+		order = DefaultCheckResultHistoryOrder
+	}
+	return &CheckResultHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ContactHistoryEdge is the edge representation of ContactHistory.
 type ContactHistoryEdge struct {
 	Node   *ContactHistory `json:"node"`
@@ -6743,6 +7143,33 @@ var (
 			}
 		},
 	}
+	// DirectoryGroupHistoryOrderFieldDirectoryName orders DirectoryGroupHistory by directory_name.
+	DirectoryGroupHistoryOrderFieldDirectoryName = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directorygrouphistory.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directorygrouphistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygrouphistory.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -6763,6 +7190,8 @@ func (f DirectoryGroupHistoryOrderField) String() string {
 		str = "email"
 	case DirectoryGroupHistoryOrderFieldDisplayName.column:
 		str = "display_name"
+	case DirectoryGroupHistoryOrderFieldDirectoryName.column:
+		str = "directory_name"
 	}
 	return str
 }
@@ -6793,6 +7222,8 @@ func (f *DirectoryGroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryGroupHistoryOrderFieldEmail
 	case "display_name":
 		*f = *DirectoryGroupHistoryOrderFieldDisplayName
+	case "directory_name":
+		*f = *DirectoryGroupHistoryOrderFieldDirectoryName
 	default:
 		return fmt.Errorf("%s is not a valid DirectoryGroupHistoryOrderField", str)
 	}
@@ -7091,6 +7522,33 @@ var (
 			}
 		},
 	}
+	// DirectoryMembershipHistoryOrderFieldDirectoryName orders DirectoryMembershipHistory by directory_name.
+	DirectoryMembershipHistoryOrderFieldDirectoryName = &DirectoryMembershipHistoryOrderField{
+		Value: func(_m *DirectoryMembershipHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DirectoryName == nil {
+				return nil, nil
+			}
+			return _m.DirectoryName, nil
+		},
+		column: directorymembershiphistory.FieldDirectoryName,
+		toTerm: func(opts ...sql.OrderTermOption) directorymembershiphistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorymembershiphistory.ByDirectoryName(opts...)
+		},
+		toCursor: func(_m *DirectoryMembershipHistory) Cursor {
+			if _m.DirectoryName == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DirectoryName,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -7103,6 +7561,8 @@ func (f DirectoryMembershipHistoryOrderField) String() string {
 		str = "created_at"
 	case DirectoryMembershipHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case DirectoryMembershipHistoryOrderFieldDirectoryName.column:
+		str = "directory_name"
 	}
 	return str
 }
@@ -7125,6 +7585,8 @@ func (f *DirectoryMembershipHistoryOrderField) UnmarshalGQL(v interface{}) error
 		*f = *DirectoryMembershipHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryMembershipHistoryOrderFieldUpdatedAt
+	case "directory_name":
+		*f = *DirectoryMembershipHistoryOrderFieldDirectoryName
 	default:
 		return fmt.Errorf("%s is not a valid DirectoryMembershipHistoryOrderField", str)
 	}
@@ -11439,6 +11901,60 @@ var (
 			}
 		},
 	}
+	// FindingHistoryOrderFieldEventTime orders FindingHistory by event_time.
+	FindingHistoryOrderFieldEventTime = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.EventTime == nil {
+				return nil, nil
+			}
+			return _m.EventTime, nil
+		},
+		column: findinghistory.FieldEventTime,
+		toTerm: func(opts ...sql.OrderTermOption) findinghistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return findinghistory.ByEventTime(opts...)
+		},
+		toCursor: func(_m *FindingHistory) Cursor {
+			if _m.EventTime == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EventTime,
+			}
+		},
+	}
+	// FindingHistoryOrderFieldReportedAt orders FindingHistory by reported_at.
+	FindingHistoryOrderFieldReportedAt = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ReportedAt == nil {
+				return nil, nil
+			}
+			return _m.ReportedAt, nil
+		},
+		column: findinghistory.FieldReportedAt,
+		toTerm: func(opts ...sql.OrderTermOption) findinghistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return findinghistory.ByReportedAt(opts...)
+		},
+		toCursor: func(_m *FindingHistory) Cursor {
+			if _m.ReportedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReportedAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -11461,6 +11977,10 @@ func (f FindingHistoryOrderField) String() string {
 		str = "category"
 	case FindingHistoryOrderFieldSeverity.column:
 		str = "severity"
+	case FindingHistoryOrderFieldEventTime.column:
+		str = "event_time"
+	case FindingHistoryOrderFieldReportedAt.column:
+		str = "reported_at"
 	}
 	return str
 }
@@ -11493,6 +12013,10 @@ func (f *FindingHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingHistoryOrderFieldCategory
 	case "severity":
 		*f = *FindingHistoryOrderFieldSeverity
+	case "event_time":
+		*f = *FindingHistoryOrderFieldEventTime
+	case "reported_at":
+		*f = *FindingHistoryOrderFieldReportedAt
 	default:
 		return fmt.Errorf("%s is not a valid FindingHistoryOrderField", str)
 	}

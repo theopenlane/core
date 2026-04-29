@@ -496,7 +496,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	require.Len(t, vulns, 1, "expected exactly one vulnerability record")
 
 	vuln := vulns[0]
-	assert.Equal(t, "github", vuln.Source)
+	assert.Equal(t, "GitHub App", vuln.Source)
 	assert.Equal(t, "dependabot", vuln.Category)
 	assert.Equal(t, "high", vuln.Severity)
 	assert.Equal(t, "Prototype Pollution in lodash", vuln.Summary)

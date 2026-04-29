@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -33,17 +34,20 @@ func (ec *executionContext) _ContactBulkCreatePayload_contacts(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkCreatePayload_contacts,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkCreatePayload_contacts(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Contact) graphql.Marshaler {
+			return ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ContactBulkCreatePayload",
@@ -51,53 +55,7 @@ func (ec *executionContext) fieldContext_ContactBulkCreatePayload_contacts(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contact_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Contact_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Contact_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Contact_ownerID(ctx, field)
-			case "fullName":
-				return ec.fieldContext_Contact_fullName(ctx, field)
-			case "title":
-				return ec.fieldContext_Contact_title(ctx, field)
-			case "company":
-				return ec.fieldContext_Contact_company(ctx, field)
-			case "email":
-				return ec.fieldContext_Contact_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Contact_phoneNumber(ctx, field)
-			case "address":
-				return ec.fieldContext_Contact_address(ctx, field)
-			case "status":
-				return ec.fieldContext_Contact_status(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Contact_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Contact_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Contact_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Contact_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_Contact_entities(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Contact_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Contact_campaignTargets(ctx, field)
-			case "files":
-				return ec.fieldContext_Contact_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+			return ec.childFields_Contact(ctx, field)
 		},
 	}
 	return fc, nil
@@ -108,28 +66,22 @@ func (ec *executionContext) _ContactBulkDeletePayload_deletedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkDeletePayload_deletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkDeletePayload_deletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ContactBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ContactBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ContactBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkDeletePayload) (ret graphql.Marshaler) {
@@ -137,28 +89,22 @@ func (ec *executionContext) _ContactBulkDeletePayload_notDeletedIDs(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkDeletePayload_notDeletedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.NotDeletedIDs, nil
 		},
 		nil,
-		ec.marshalNID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ContactBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ContactBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ContactBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkDeletePayload) (ret graphql.Marshaler) {
@@ -166,28 +112,22 @@ func (ec *executionContext) _ContactBulkDeletePayload_error(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkDeletePayload_error,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkDeletePayload_error(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Error, nil
 		},
 		nil,
-		ec.marshalOString2ᚖstring,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ContactBulkDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ContactBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Context, field graphql.CollectedField, obj *model.ContactBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -195,17 +135,20 @@ func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Conte
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkUpdatePayload_contacts,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkUpdatePayload_contacts(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Contact) graphql.Marshaler {
+			return ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ContactBulkUpdatePayload",
@@ -213,53 +156,7 @@ func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_contacts(_ con
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contact_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Contact_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Contact_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Contact_ownerID(ctx, field)
-			case "fullName":
-				return ec.fieldContext_Contact_fullName(ctx, field)
-			case "title":
-				return ec.fieldContext_Contact_title(ctx, field)
-			case "company":
-				return ec.fieldContext_Contact_company(ctx, field)
-			case "email":
-				return ec.fieldContext_Contact_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Contact_phoneNumber(ctx, field)
-			case "address":
-				return ec.fieldContext_Contact_address(ctx, field)
-			case "status":
-				return ec.fieldContext_Contact_status(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Contact_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Contact_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Contact_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Contact_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_Contact_entities(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Contact_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Contact_campaignTargets(ctx, field)
-			case "files":
-				return ec.fieldContext_Contact_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+			return ec.childFields_Contact(ctx, field)
 		},
 	}
 	return fc, nil
@@ -270,28 +167,22 @@ func (ec *executionContext) _ContactBulkUpdatePayload_updatedIDs(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactBulkUpdatePayload_updatedIDs(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.UpdatedIDs, nil
 		},
 		nil,
-		ec.marshalOID2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		false,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ContactBulkUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ContactBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, field graphql.CollectedField, obj *model.ContactCreatePayload) (ret graphql.Marshaler) {
@@ -299,17 +190,20 @@ func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactCreatePayload_contact,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactCreatePayload_contact(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Contact, nil
 		},
 		nil,
-		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Contact) graphql.Marshaler {
+			return ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ContactCreatePayload",
@@ -317,53 +211,7 @@ func (ec *executionContext) fieldContext_ContactCreatePayload_contact(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contact_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Contact_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Contact_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Contact_ownerID(ctx, field)
-			case "fullName":
-				return ec.fieldContext_Contact_fullName(ctx, field)
-			case "title":
-				return ec.fieldContext_Contact_title(ctx, field)
-			case "company":
-				return ec.fieldContext_Contact_company(ctx, field)
-			case "email":
-				return ec.fieldContext_Contact_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Contact_phoneNumber(ctx, field)
-			case "address":
-				return ec.fieldContext_Contact_address(ctx, field)
-			case "status":
-				return ec.fieldContext_Contact_status(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Contact_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Contact_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Contact_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Contact_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_Contact_entities(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Contact_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Contact_campaignTargets(ctx, field)
-			case "files":
-				return ec.fieldContext_Contact_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+			return ec.childFields_Contact(ctx, field)
 		},
 	}
 	return fc, nil
@@ -374,28 +222,22 @@ func (ec *executionContext) _ContactDeletePayload_deletedID(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactDeletePayload_deletedID,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactDeletePayload_deletedID(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
 		nil,
-		ec.marshalNID2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ContactDeletePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("ContactDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _ContactUpdatePayload_contact(ctx context.Context, field graphql.CollectedField, obj *model.ContactUpdatePayload) (ret graphql.Marshaler) {
@@ -403,17 +245,20 @@ func (ec *executionContext) _ContactUpdatePayload_contact(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_ContactUpdatePayload_contact,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ContactUpdatePayload_contact(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Contact, nil
 		},
 		nil,
-		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Contact) graphql.Marshaler {
+			return ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "ContactUpdatePayload",
@@ -421,53 +266,7 @@ func (ec *executionContext) fieldContext_ContactUpdatePayload_contact(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Contact_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Contact_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_Contact_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_Contact_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_Contact_ownerID(ctx, field)
-			case "fullName":
-				return ec.fieldContext_Contact_fullName(ctx, field)
-			case "title":
-				return ec.fieldContext_Contact_title(ctx, field)
-			case "company":
-				return ec.fieldContext_Contact_company(ctx, field)
-			case "email":
-				return ec.fieldContext_Contact_email(ctx, field)
-			case "phoneNumber":
-				return ec.fieldContext_Contact_phoneNumber(ctx, field)
-			case "address":
-				return ec.fieldContext_Contact_address(ctx, field)
-			case "status":
-				return ec.fieldContext_Contact_status(ctx, field)
-			case "externalID":
-				return ec.fieldContext_Contact_externalID(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_Contact_integrationID(ctx, field)
-			case "observedAt":
-				return ec.fieldContext_Contact_observedAt(ctx, field)
-			case "owner":
-				return ec.fieldContext_Contact_owner(ctx, field)
-			case "entities":
-				return ec.fieldContext_Contact_entities(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_Contact_campaigns(ctx, field)
-			case "campaignTargets":
-				return ec.fieldContext_Contact_campaignTargets(ctx, field)
-			case "files":
-				return ec.fieldContext_Contact_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+			return ec.childFields_Contact(ctx, field)
 		},
 	}
 	return fc, nil
@@ -507,7 +306,7 @@ func (ec *executionContext) _ContactBulkCreatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -553,7 +352,7 @@ func (ec *executionContext) _ContactBulkDeletePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -591,7 +390,7 @@ func (ec *executionContext) _ContactBulkUpdatePayload(ctx context.Context, sel a
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -630,7 +429,7 @@ func (ec *executionContext) _ContactCreatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -669,7 +468,7 @@ func (ec *executionContext) _ContactDeletePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -708,7 +507,7 @@ func (ec *executionContext) _ContactUpdatePayload(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

@@ -9,6 +9,8 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
@@ -19,8 +21,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // RegisterGalaEntitlementListeners registers entitlement mutation listeners on Gala.
@@ -76,6 +76,13 @@ func handleOrganizationDeleteGala(ctx gala.HandlerContext, payload eventqueue.Mu
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
 		return nil
+	}
+
+	cleanupContext := entgen.NewContext(inv.Context(), inv.client)
+	if err := entgen.OrganizationEdgeCleanup(cleanupContext, inv.orgID); err != nil {
+		inv.Logger().Error().Err(err).Str("organization_id", inv.orgID).
+			Msg("failed to cascade delete organization edges")
+		return err
 	}
 
 	org, err := inv.client.Organization.Query().Where(

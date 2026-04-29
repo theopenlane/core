@@ -4,11 +4,12 @@ package gqlgenerated
 
 import (
 	"context"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,17 +33,20 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload_customDomain(ctx con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterDomainCreatePayload_customDomain,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterDomainCreatePayload_customDomain(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.CustomDomain, nil
 		},
 		nil,
-		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterDomainCreatePayload",
@@ -50,45 +54,7 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_CustomDomain_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_CustomDomain_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_CustomDomain_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_CustomDomain_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_CustomDomain_updatedBy(ctx, field)
-			case "tags":
-				return ec.fieldContext_CustomDomain_tags(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_CustomDomain_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_CustomDomain_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_CustomDomain_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_CustomDomain_systemInternalID(ctx, field)
-			case "cnameRecord":
-				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
-			case "mappableDomainID":
-				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
-			case "dnsVerificationID":
-				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
-			case "trustCenterID":
-				return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
-			case "domainType":
-				return ec.fieldContext_CustomDomain_domainType(ctx, field)
-			case "owner":
-				return ec.fieldContext_CustomDomain_owner(ctx, field)
-			case "mappableDomain":
-				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
-			case "dnsVerification":
-				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
+			return ec.childFields_CustomDomain(ctx, field)
 		},
 	}
 	return fc, nil
@@ -168,7 +134,7 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

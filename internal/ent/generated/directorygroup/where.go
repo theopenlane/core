@@ -208,6 +208,11 @@ func SourceVersion(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceVersion, v))
 }
 
+// DirectoryName applies equality check predicate on the "directory_name" field. It's identical to DirectoryNameEQ.
+func DirectoryName(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectoryName, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldCreatedAt, v))
@@ -2081,6 +2086,81 @@ func SourceVersionEqualFold(v string) predicate.DirectoryGroup {
 // SourceVersionContainsFold applies the ContainsFold predicate on the "source_version" field.
 func SourceVersionContainsFold(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldSourceVersion, v))
+}
+
+// DirectoryNameEQ applies the EQ predicate on the "directory_name" field.
+func DirectoryNameEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameNEQ applies the NEQ predicate on the "directory_name" field.
+func DirectoryNameNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldDirectoryName, v))
+}
+
+// DirectoryNameIn applies the In predicate on the "directory_name" field.
+func DirectoryNameIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameNotIn applies the NotIn predicate on the "directory_name" field.
+func DirectoryNameNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldDirectoryName, vs...))
+}
+
+// DirectoryNameGT applies the GT predicate on the "directory_name" field.
+func DirectoryNameGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldDirectoryName, v))
+}
+
+// DirectoryNameGTE applies the GTE predicate on the "directory_name" field.
+func DirectoryNameGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameLT applies the LT predicate on the "directory_name" field.
+func DirectoryNameLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldDirectoryName, v))
+}
+
+// DirectoryNameLTE applies the LTE predicate on the "directory_name" field.
+func DirectoryNameLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldDirectoryName, v))
+}
+
+// DirectoryNameContains applies the Contains predicate on the "directory_name" field.
+func DirectoryNameContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasPrefix applies the HasPrefix predicate on the "directory_name" field.
+func DirectoryNameHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldDirectoryName, v))
+}
+
+// DirectoryNameHasSuffix applies the HasSuffix predicate on the "directory_name" field.
+func DirectoryNameHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldDirectoryName, v))
+}
+
+// DirectoryNameIsNil applies the IsNil predicate on the "directory_name" field.
+func DirectoryNameIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldDirectoryName))
+}
+
+// DirectoryNameNotNil applies the NotNil predicate on the "directory_name" field.
+func DirectoryNameNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldDirectoryName))
+}
+
+// DirectoryNameEqualFold applies the EqualFold predicate on the "directory_name" field.
+func DirectoryNameEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldDirectoryName, v))
+}
+
+// DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
+func DirectoryNameContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

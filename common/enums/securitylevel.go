@@ -1,6 +1,9 @@
 package enums
 
-import "io"
+import (
+	"io"
+	"strings"
+)
 
 // SecurityLevel is a custom type representing the various states of SecurityLevel.
 type SecurityLevel string
@@ -35,7 +38,14 @@ func (SecurityLevel) Values() []string { return stringValues(securityLevelValues
 func (r SecurityLevel) String() string { return string(r) }
 
 // ToSecurityLevel converts a string to its corresponding SecurityLevel enum value.
-func ToSecurityLevel(r string) *SecurityLevel { return parse(r, securityLevelValues, &SecurityLevelInvalid) }
+func ToSecurityLevel(r string) *SecurityLevel {
+	// edge case to convert MODERATE -> Medium
+	if strings.EqualFold(r, "MODERATE") {
+		return &SecurityLevelMedium
+	}
+
+	return parse(r, securityLevelValues, &SecurityLevelInvalid)
+}
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r SecurityLevel) MarshalGQL(w io.Writer) { marshalGQL(r, w) }

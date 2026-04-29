@@ -997,6 +997,19 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"CheckResult": {
+		SchemaName: "CheckResult",
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ControlRefCodes",
+				TargetField:     "ControlIDs",
+				TargetEntity:    "Control",
+				MatchField:      "ref_code",
+				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+		},
+	},
 	"Contact": {
 		SchemaName: "Contact",
 		Rules:      []CSVReferenceRule{},
@@ -2068,6 +2081,26 @@ type CampaignTargetCSVUpdateInput struct {
 
 // CSVInputWrapper marks CampaignTargetCSVUpdateInput for CSV header preprocessing.
 func (CampaignTargetCSVUpdateInput) CSVInputWrapper() {}
+
+// CheckResultCSVInput wraps CreateCheckResultInput with CSV reference columns.
+type CheckResultCSVInput struct {
+	Input           generated.CreateCheckResultInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
+}
+
+// CSVInputWrapper marks CheckResultCSVInput for CSV header preprocessing.
+func (CheckResultCSVInput) CSVInputWrapper() {}
+
+// CheckResultCSVUpdateInput wraps UpdateCheckResultInput with CSV reference columns for bulk updates.
+type CheckResultCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID              string `csv:"ID"`
+	Input           generated.UpdateCheckResultInput
+	ControlRefCodes []string `csv:"ControlRefCodes"`
+}
+
+// CSVInputWrapper marks CheckResultCSVUpdateInput for CSV header preprocessing.
+func (CheckResultCSVUpdateInput) CSVInputWrapper() {}
 
 // ContactCSVInput wraps CreateContactInput with CSV reference columns.
 type ContactCSVInput struct {

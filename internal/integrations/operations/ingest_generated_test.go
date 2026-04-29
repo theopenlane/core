@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"slices"
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
@@ -182,8 +183,8 @@ func TestBuildIngestHeaders(t *testing.T) {
 		if _, ok := headers.Properties["delivery_id"]; ok {
 			t.Fatal("expected delivery_id to be omitted when empty")
 		}
-		if len(headers.Tags) != 2 {
-			t.Fatalf("expected 2 tags, got %d", len(headers.Tags))
+		if len(headers.Tags) != 3 {
+			t.Fatalf("expected 3 tags, got %d", len(headers.Tags))
 		}
 	})
 
@@ -195,10 +196,10 @@ func TestBuildIngestHeaders(t *testing.T) {
 
 		headers := buildIngestHeaders(record, metadata)
 
-		if len(headers.Tags) != 1 {
-			t.Fatalf("expected 1 tag, got %d: %v", len(headers.Tags), headers.Tags)
+		if len(headers.Tags) != 2 {
+			t.Fatalf("expected 2 tag, got %d: %v", len(headers.Tags), headers.Tags)
 		}
-		if headers.Tags[0] != "asset" {
+		if !slices.Contains(headers.Tags, "schema_asset") {
 			t.Fatalf("expected tag %q, got %q", "asset", headers.Tags[0])
 		}
 	})

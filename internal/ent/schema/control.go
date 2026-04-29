@@ -101,6 +101,7 @@ func (c Control) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Organization{}.Name()),
 			},
 		}),
+		defaultEdgeFromWithPagination(c, CheckResult{}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeFromWithPagination(c, Platform{}),
 		defaultEdgeToWithPagination(c, Asset{}),
@@ -269,6 +270,14 @@ func (Control) Modules() []models.OrgModule {
 // Annotations of the Control
 func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.CascadeThroughAnnotationField(
+			[]entx.ThroughCleanup{
+				{
+					Field:   "Control",
+					Through: "FindingControl",
+				},
+			},
+		),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(
 			entx.WithOrgOwned(),
