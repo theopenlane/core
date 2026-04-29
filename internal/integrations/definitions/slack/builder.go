@@ -147,6 +147,7 @@ func Builder(cfg Config) registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: scopes,
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 				},
 			},
 			Mappings: slackMappings(),

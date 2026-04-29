@@ -34,6 +34,11 @@ const (
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// FindingsSync includes the configuration for the findings collection operation
+	FindingsSync FindingsSyncConfig `json:"findingsSync,omitempty" jsonschema:"title=Findings Sync"`
+}
+
+type FindingsSyncConfig struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.category != \"GKE_SECURITY_BULLETIN\""`
 }

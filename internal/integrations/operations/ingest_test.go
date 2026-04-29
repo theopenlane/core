@@ -6,6 +6,8 @@ import (
 	"errors"
 	"testing"
 
+	"gotest.tools/v3/assert"
+
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
@@ -80,12 +82,10 @@ func TestFindMapping(t *testing.T) {
 			}
 
 			got, found := findMapping(input, tc.schema, tc.variant)
-			if found != tc.wantFound {
-				t.Fatalf("findMapping found=%v, want %v", found, tc.wantFound)
-			}
+			assert.Equal(t, found, tc.wantFound)
 
-			if found && got.MapExpr != tc.wantExpr {
-				t.Fatalf("findMapping MapExpr=%q, want %q", got.MapExpr, tc.wantExpr)
+			if found {
+				assert.Equal(t, got.MapExpr, tc.wantExpr)
 			}
 		})
 	}
@@ -116,9 +116,7 @@ func TestContractIncludesSchema(t *testing.T) {
 			t.Parallel()
 
 			got := contractIncludesSchema(contracts, tc.schema)
-			if got != tc.want {
-				t.Fatalf("contractIncludesSchema(%q)=%v, want %v", tc.schema, got, tc.want)
-			}
+			assert.Equal(t, got, tc.want)
 		})
 	}
 }
@@ -126,9 +124,7 @@ func TestContractIncludesSchema(t *testing.T) {
 func TestContractIncludesSchema_EmptyContracts(t *testing.T) {
 	t.Parallel()
 
-	if contractIncludesSchema(nil, "asset") {
-		t.Fatal("expected false for nil contracts")
-	}
+	assert.Equal(t, contractIncludesSchema(nil, "asset"), false)
 }
 
 func TestNeedsDirectorySyncRun(t *testing.T) {
@@ -181,9 +177,7 @@ func TestNeedsDirectorySyncRun(t *testing.T) {
 			t.Parallel()
 
 			got := needsDirectorySyncRun(tc.contracts)
-			if got != tc.want {
-				t.Fatalf("needsDirectorySyncRun()=%v, want %v", got, tc.want)
-			}
+			assert.Equal(t, got, tc.want)
 		})
 	}
 }
@@ -191,11 +185,24 @@ func TestNeedsDirectorySyncRun(t *testing.T) {
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 
+	// configResolverFor returns a ConfigResolver that extracts the named top-level key as raw JSON
+	configResolverFor := func(key string) func(json.RawMessage) json.RawMessage {
+		return func(userInput json.RawMessage) json.RawMessage {
+			var top map[string]json.RawMessage
+			if err := json.Unmarshal(userInput, &top); err != nil {
+				return nil
+			}
+			return top[key]
+		}
+	}
+
 	tests := []struct {
-		name     string
-		config   json.RawMessage
-		wantExpr string
-		wantErr  bool
+		name          string
+		config        json.RawMessage
+		definition    types.Definition
+		operationName string
+		wantExpr      string
+		wantErr       bool
 	}{
 		{
 			name:     "nil config returns empty",
@@ -208,7 +215,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			wantExpr: "",
 		},
 		{
-			name:     "config with filter expression",
+			name:     "flat top-level filterExpr",
 			config:   json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
 			wantExpr: `resource == "users"`,
 		},
@@ -216,6 +223,90 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:    "invalid JSON config",
 			config:  json.RawMessage(`{not json`),
 			wantErr: true,
+		},
+		{
+			name:   "nested filterExpr resolved via ConfigResolver",
+			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.is_external == false"}}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{
+						Name:           "directory-sync",
+						ConfigResolver: configResolverFor("directorySync"),
+					},
+				},
+			},
+			operationName: "directory-sync",
+			wantExpr:      "payload.is_external == false",
+		},
+		{
+			// when ConfigResolver extracts a section that has no filterExpr, the flat top-level key is used as fallback
+			name:   "ConfigResolver section has no filterExpr falls back to flat",
+			config: json.RawMessage(`{"directorySync":{},"filterExpr":"resource == \"users\""}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{
+						Name:           "directory-sync",
+						ConfigResolver: configResolverFor("directorySync"),
+					},
+				},
+			},
+			operationName: "directory-sync",
+			wantExpr:      `resource == "users"`,
+		},
+		{
+			// when ConfigResolver returns nil (e.g. key not present), fall back to flat
+			name:   "ConfigResolver returns nil falls back to flat",
+			config: json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{
+						Name:           "directory-sync",
+						ConfigResolver: func(json.RawMessage) json.RawMessage { return nil },
+					},
+				},
+			},
+			operationName: "directory-sync",
+			wantExpr:      `resource == "users"`,
+		},
+		{
+			// when the operationName doesn't match any registered operation, fall back to flat
+			name:   "unknown operationName falls back to flat",
+			config: json.RawMessage(`{"filterExpr":"resource == \"groups\""}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{Name: "other-op"},
+				},
+			},
+			operationName: "unknown-op",
+			wantExpr:      `resource == "groups"`,
+		},
+		{
+			// when the matching operation has no ConfigResolver, fall back to flat
+			name:   "operation without ConfigResolver falls back to flat",
+			config: json.RawMessage(`{"filterExpr":"resource == \"assets\""}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{Name: "asset-sync"},
+				},
+			},
+			operationName: "asset-sync",
+			wantExpr:      `resource == "assets"`,
+		},
+		{
+			// ConfigResolver for one operation does not affect a different operation
+			name:   "ConfigResolver not used when operationName does not match",
+			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.type == \"user\""},"filterExpr":"resource == \"assets\""}`),
+			definition: types.Definition{
+				Operations: []types.OperationRegistration{
+					{
+						Name:           "directory-sync",
+						ConfigResolver: configResolverFor("directorySync"),
+					},
+					{Name: "asset-sync"},
+				},
+			},
+			operationName: "asset-sync",
+			wantExpr:      `resource == "assets"`,
 		},
 	}
 
@@ -227,16 +318,13 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 				Config: openapi.IntegrationConfig{ClientConfig: tc.config},
 			}
 
-			expr, err := resolveInstallationFilterExpr(installation)
-			if tc.wantErr && err == nil {
-				t.Fatal("expected error, got nil")
+			expr, err := resolveInstallationFilterExpr(installation, tc.definition, tc.operationName)
+			if tc.wantErr {
+				assert.Assert(t, err != nil, "expected error")
+				return
 			}
-			if !tc.wantErr && err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if expr != tc.wantExpr {
-				t.Fatalf("expr=%q, want %q", expr, tc.wantExpr)
-			}
+			assert.NilError(t, err)
+			assert.Equal(t, expr, tc.wantExpr)
 		})
 	}
 }
@@ -259,34 +347,28 @@ func TestEnvelopeIncludedByFilters(t *testing.T) {
 		wantErr                bool
 	}{
 		{
-			name:                   "both empty passes",
-			installationFilterExpr: "",
-			mappingFilterExpr:      "",
-			wantMatch:              true,
+			name:      "both empty passes",
+			wantMatch: true,
 		},
 		{
 			name:                   "installation filter matches",
 			installationFilterExpr: `resource == "users"`,
-			mappingFilterExpr:      "",
 			wantMatch:              true,
 		},
 		{
 			name:                   "installation filter rejects",
 			installationFilterExpr: `resource == "groups"`,
-			mappingFilterExpr:      "",
 			wantMatch:              false,
 		},
 		{
-			name:                   "mapping filter matches",
-			installationFilterExpr: "",
-			mappingFilterExpr:      `action == "create"`,
-			wantMatch:              true,
+			name:              "mapping filter matches",
+			mappingFilterExpr: `action == "create"`,
+			wantMatch:         true,
 		},
 		{
-			name:                   "mapping filter rejects",
-			installationFilterExpr: "",
-			mappingFilterExpr:      `action == "delete"`,
-			wantMatch:              false,
+			name:              "mapping filter rejects",
+			mappingFilterExpr: `action == "delete"`,
+			wantMatch:         false,
 		},
 		{
 			name:                   "both filters match",
@@ -307,15 +389,12 @@ func TestEnvelopeIncludedByFilters(t *testing.T) {
 			t.Parallel()
 
 			matched, err := envelopeIncludedByFilters(context.Background(), tc.installationFilterExpr, tc.mappingFilterExpr, envelope)
-			if tc.wantErr && err == nil {
-				t.Fatal("expected error, got nil")
+			if tc.wantErr {
+				assert.Assert(t, err != nil, "expected error")
+				return
 			}
-			if !tc.wantErr && err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if matched != tc.wantMatch {
-				t.Fatalf("matched=%v, want %v", matched, tc.wantMatch)
-			}
+			assert.NilError(t, err)
+			assert.Equal(t, matched, tc.wantMatch)
 		})
 	}
 }
@@ -385,21 +464,14 @@ func TestMapIngestRecord(t *testing.T) {
 			t.Parallel()
 
 			record, include, err := mapIngestRecord(context.Background(), definition, tc.schema, tc.envelope, "")
-			switch {
-			case tc.wantErr != nil && !errors.Is(err, tc.wantErr):
-				t.Fatalf("expected error %v, got %v", tc.wantErr, err)
-			case tc.wantErr != nil:
+			if tc.wantErr != nil {
+				assert.ErrorIs(t, err, tc.wantErr)
 				return
-			case err != nil:
-				t.Fatalf("unexpected error: %v", err)
 			}
-
-			if include != tc.wantInclude {
-				t.Fatalf("include=%v, want %v", include, tc.wantInclude)
-			}
-
-			if include && record.Schema != tc.schema {
-				t.Fatalf("record.Schema=%q, want %q", record.Schema, tc.schema)
+			assert.NilError(t, err)
+			assert.Equal(t, include, tc.wantInclude)
+			if include {
+				assert.Equal(t, record.Schema, tc.schema)
 			}
 		})
 	}
@@ -446,12 +518,11 @@ func TestWrapIngestPersistError(t *testing.T) {
 			t.Parallel()
 
 			got := wrapIngestPersistError(tc.err)
-			if tc.wantNil && got != nil {
-				t.Fatalf("expected nil, got %v", got)
+			if tc.wantNil {
+				assert.Assert(t, got == nil)
+				return
 			}
-			if tc.wantErr != nil && !errors.Is(got, tc.wantErr) {
-				t.Fatalf("expected error %v, got %v", tc.wantErr, got)
-			}
+			assert.ErrorIs(t, got, tc.wantErr)
 		})
 	}
 }
@@ -495,13 +566,11 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	if !errors.Is(err, ErrIngestDefinitionNotFound) {
-		t.Fatalf("expected ErrIngestDefinitionNotFound, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrIngestDefinitionNotFound)
 }
 
 func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
@@ -522,13 +591,11 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		{Schema: integrationgenerated.IntegrationMappingSchemaAsset, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	if !errors.Is(err, ErrIngestSchemaNotDeclared) {
-		t.Fatalf("expected ErrIngestSchemaNotDeclared, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrIngestSchemaNotDeclared)
 }
 
 func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
@@ -546,13 +613,11 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 		{Schema: "totally_bogus_schema", Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	if !errors.Is(err, ErrIngestSchemaNotFound) {
-		t.Fatalf("expected ErrIngestSchemaNotFound, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrIngestSchemaNotFound)
 }
 
 func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
@@ -576,13 +641,11 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	if !errors.Is(err, ErrIngestMappingNotFound) {
-		t.Fatalf("expected ErrIngestMappingNotFound, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrIngestMappingNotFound)
 }
 
 func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
@@ -598,13 +661,11 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 		},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	if !errors.Is(err, ErrIngestInstallationFilterConfigInvalid) {
-		t.Fatalf("expected ErrIngestInstallationFilterConfigInvalid, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrIngestInstallationFilterConfigInvalid)
 }
 
 func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
@@ -635,20 +696,14 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	var handled []mappedIngestRecord
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
 		handled = append(handled, record)
 		return nil
 	})
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if len(handled) != 1 {
-		t.Fatalf("expected 1 handled record, got %d", len(handled))
-	}
-	if handled[0].Schema != integrationgenerated.IntegrationMappingSchemaAsset {
-		t.Fatalf("schema=%q, want %q", handled[0].Schema, integrationgenerated.IntegrationMappingSchemaAsset)
-	}
+	assert.NilError(t, err)
+	assert.Equal(t, len(handled), 1)
+	assert.Equal(t, handled[0].Schema, integrationgenerated.IntegrationMappingSchemaAsset)
 }
 
 func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
@@ -661,14 +716,12 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		t.Fatal("handler should not be called for empty payload sets")
 		return nil
 	})
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
+	assert.NilError(t, err)
 }
 
 func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
@@ -703,17 +756,13 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	var handled int
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		return nil
 	})
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if handled != 1 {
-		t.Fatalf("expected 1 handled record (1 filtered), got %d", handled)
-	}
+	assert.NilError(t, err)
+	assert.Equal(t, handled, 1)
 }
 
 func TestProcessPayloadSets_HandleError(t *testing.T) {
@@ -744,13 +793,185 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 
 	handleErr := errors.New("persist failed")
 
-	err := applyPayloadSets(context.Background(), ic, contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return handleErr
 	})
 
-	if !errors.Is(err, handleErr) {
-		t.Fatalf("expected handleErr, got %v", err)
+	assert.ErrorIs(t, err, handleErr)
+}
+
+// TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a
+// per-operation config section (e.g. repoSync.filterExpr) is applied when the operation's
+// ConfigResolver is wired — this is the scenario that was previously broken for Slack and others
+func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
+	t.Parallel()
+
+	type repoSyncCfg struct {
+		FilterExpr string `json:"filterExpr,omitempty"`
 	}
+	type userInput struct {
+		RepoSync repoSyncCfg `json:"repoSync,omitempty"`
+	}
+
+	def := types.Definition{
+		DefinitionSpec: types.DefinitionSpec{
+			ID:     "test-def",
+			Active: true,
+		},
+		Operations: []types.OperationRegistration{
+			{
+				Name: "repo-sync",
+				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+					return nil, nil
+				},
+				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
+					var u userInput
+					if err := json.Unmarshal(raw, &u); err != nil {
+						return nil
+					}
+					out, _ := json.Marshal(u.RepoSync)
+					return out
+				},
+			},
+		},
+		Mappings: []types.MappingRegistration{
+			{
+				Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+				Variant: "",
+				Spec:    types.MappingOverride{MapExpr: `payload`},
+			},
+		},
+	}
+
+	reg := registry.New()
+	assert.NilError(t, reg.Register(def))
+
+	ic := IngestContext{
+		Registry: reg,
+		Integration: &ent.Integration{
+			DefinitionID: "test-def",
+			Config: openapi.IntegrationConfig{
+				ClientConfig: json.RawMessage(`{"repoSync":{"filterExpr":"payload.is_private == true"}}`),
+			},
+		},
+	}
+
+	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	payloadSets := []types.IngestPayloadSet{
+		{
+			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Envelopes: []types.MappingEnvelope{
+				{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
+				{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
+				{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
+			},
+		},
+	}
+
+	var handled int
+	err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+		handled++
+		return nil
+	})
+
+	assert.NilError(t, err)
+	assert.Equal(t, handled, 2) // private repos pass; public-repo is filtered
+}
+
+// TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations verifies that a nested filterExpr
+// stored under operation A's config section is not applied when processing under operation B
+func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T) {
+	t.Parallel()
+
+	type findingSyncCfg struct {
+		FilterExpr string `json:"filterExpr,omitempty"`
+	}
+	type assetSyncCfg struct {
+		FilterExpr string `json:"filterExpr,omitempty"`
+	}
+	type userInput struct {
+		FindingSync findingSyncCfg `json:"findingSync,omitempty"`
+		DirectorySync assetSyncCfg `json:"directorySync,omitempty"`
+	}
+
+	def := types.Definition{
+		DefinitionSpec: types.DefinitionSpec{
+			ID:     "test-def",
+			Active: true,
+		},
+		Operations: []types.OperationRegistration{
+			{
+				Name: "finding-sync",
+				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+					return nil, nil
+				},
+				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
+					var u userInput
+					if err := json.Unmarshal(raw, &u); err != nil {
+						return nil
+					}
+					out, _ := json.Marshal(u.FindingSync)
+					return out
+				},
+			},
+			{
+				Name: "asset-sync",
+				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+					return nil, nil
+				},
+				ConfigResolver: func(raw json.RawMessage) json.RawMessage {
+					var u userInput
+					if err := json.Unmarshal(raw, &u); err != nil {
+						return nil
+					}
+					out, _ := json.Marshal(u.DirectorySync)
+					return out
+				},
+			},
+		},
+		Mappings: []types.MappingRegistration{
+			{
+				Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+				Variant: "",
+				Spec:    types.MappingOverride{MapExpr: `payload`},
+			},
+		},
+	}
+
+	reg := registry.New()
+	assert.NilError(t, reg.Register(def))
+
+	// findingSync has a restrictive filter; asset-sync has none
+	ic := IngestContext{
+		Registry: reg,
+		Integration: &ent.Integration{
+			DefinitionID: "test-def",
+			Config: openapi.IntegrationConfig{
+				ClientConfig: json.RawMessage(`{"findingSync":{"filterExpr":"payload.severity == \"CRITICAL\""},"directorySync":{}}`),
+			},
+		},
+	}
+
+	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	payloadSets := []types.IngestPayloadSet{
+		{
+			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Envelopes: []types.MappingEnvelope{
+				{Payload: json.RawMessage(`{"name":"asset-001"}`)},
+				{Payload: json.RawMessage(`{"name":"asset-002"}`)},
+			},
+		},
+	}
+
+	var handled int
+	// running as asset-sync: the findingSync filterExpr must NOT apply
+	err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+		handled++
+		return nil
+	})
+
+	assert.NilError(t, err)
+	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
 }
 
 func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
@@ -779,7 +1000,5 @@ func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
 	}
 
 	err := EmitPayloadSets(context.Background(), ic, "sync", contracts, payloadSets, IngestOptions{})
-	if !errors.Is(err, ErrGalaRequired) {
-		t.Fatalf("expected ErrGalaRequired, got %v", err)
-	}
+	assert.ErrorIs(t, err, ErrGalaRequired)
 }

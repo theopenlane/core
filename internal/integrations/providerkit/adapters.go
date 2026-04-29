@@ -75,3 +75,22 @@ func DisabledWhen[T any](check func(T) bool) func(json.RawMessage) bool {
 		return check(input)
 	}
 }
+
+// ConfigFrom returns an OperationRegistration.ConfigResolver that unmarshals the installation's
+// stored UserInput JSON into U, extracts the operation-specific config C via fn, and re-encodes
+// it as JSON so the ingest pipeline can resolve per-operation filter expressions from it
+func ConfigFrom[U any, C any](fn func(U) C) func(json.RawMessage) json.RawMessage {
+	return func(userInput json.RawMessage) json.RawMessage {
+		var input U
+		if err := json.Unmarshal(userInput, &input); err != nil {
+			return nil
+		}
+
+		out, err := json.Marshal(fn(input))
+		if err != nil {
+			return nil
+		}
+
+		return out
+	}
+}
