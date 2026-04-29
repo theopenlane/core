@@ -84,7 +84,6 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 		return types.AuthCompleteResult{}, ErrAuthStateMismatch
 	}
 
-	logx.FromContext(ctx).Debug().Interface("query", input.Query).Interface("input", input).Msg("MEOWWW")
 	raw := input.First("installation_id")
 	if raw == "" {
 		return types.AuthCompleteResult{}, ErrInstallationIDMissing
@@ -127,7 +126,6 @@ func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) 
 	}
 
 	if ok && cred.InstallationID != 0 {
-		logx.FromContext(ctx).Info().Interface("creds", cred).Msg("HERE")
 		return cred.InstallationID, cred.OrganizationName, nil
 	}
 
