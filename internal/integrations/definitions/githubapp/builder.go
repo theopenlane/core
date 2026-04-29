@@ -64,24 +64,29 @@ func Builder(cfg Config) registry.Builder {
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
 						Description:   "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
-						Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
-							integrationID, err := disconnectInstallationID(req)
+						Disconnect: func(ctx context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
+							integrationID, name, err := disconnectInstallationID(ctx, req)
 							if err != nil {
 								return types.DisconnectResult{}, err
 							}
 
 							details, err := jsonx.ToRawMessage(disconnectDetails{
-								InstallationID: strconv.FormatInt(integrationID, 10),
+								InstallationID:   strconv.FormatInt(integrationID, 10),
+								OrganizationName: name,
 							})
 							if err != nil {
 								return types.DisconnectResult{}, ErrInstallationMetadataEncode
 							}
 
+							url := fmt.Sprintf("https://github.com/settings/installations/%d", integrationID)
+							if name != "" {
+								url = fmt.Sprintf("https://github.com/organizations/%s/settings/installations/%d", name, integrationID)
+							}
+
 							return types.DisconnectResult{
-								RedirectURL:      fmt.Sprintf("https://github.com/settings/installations/%d", integrationID),
-								Message:          "Uninstall the Openlane GitHub App in GitHub to finish disconnecting this integration.",
-								Details:          details,
-								SkipLocalCleanup: true,
+								RedirectURL: url,
+								Message:     "Uninstall the Openlane GitHub App in GitHub to finish disconnecting this integration.",
+								Details:     details,
 							}, nil
 						},
 					},

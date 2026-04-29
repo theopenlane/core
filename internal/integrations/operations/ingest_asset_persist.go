@@ -19,6 +19,10 @@ func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Int
 		createInput.SourceType = &enums.SourceTypeImported
 	}
 
+	if createInput.IntegrationID == nil {
+		createInput.IntegrationID = &integration.ID
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,

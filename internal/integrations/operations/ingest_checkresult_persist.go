@@ -19,6 +19,10 @@ func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *e
 		createInput.Source = integration.Name
 	}
 
+	if createInput.IntegrationID == nil {
+		createInput.IntegrationID = &integration.ID
+	}
+
 	where := []predicate.CheckResult{
 		checkresult.ParentExternalID(*createInput.ParentExternalID),
 		checkresult.IntegrationID(*createInput.IntegrationID),

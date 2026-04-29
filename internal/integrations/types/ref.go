@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -142,6 +143,8 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 	if err := json.Unmarshal(cred.Data, &out); err != nil {
 		return out, true, err
 	}
+
+	log.Debug().Interface("bindings", bindings).Interface("out", out).Msg("HERE NOW")
 
 	return out, true, nil
 }
