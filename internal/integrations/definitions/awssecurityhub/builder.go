@@ -111,7 +111,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    securityHubClient.ID(),
 					ConfigSchema: findingsCollectSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingSync.Disable }),
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingSync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingSyncConfig { return u.FindingSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
@@ -130,7 +131,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    iamClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
@@ -153,7 +155,8 @@ func Builder(cfg Config) registry.Builder {
 					ConfigSchema: checkSyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					//  updated when DisabledForAll is removed
-					Disabled: providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
+					Disabled:       providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) CheckSync { return u.CheckSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaCheckResult,
@@ -177,7 +180,8 @@ func Builder(cfg Config) registry.Builder {
 					ConfigSchema: assetSyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					//  updated when DisabledForAll is removed
-					Disabled: providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
+					Disabled:       providerkit.DisabledWhen(func(_ UserInput) bool { return true }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,

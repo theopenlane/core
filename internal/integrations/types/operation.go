@@ -83,4 +83,8 @@ type OperationRegistration struct {
 	// Disabled reports whether this operation is disabled for a given installation's user input JSON;
 	// when set, reconcile cycles are skipped entirely instead of running and returning empty results
 	Disabled func(userInput json.RawMessage) bool `json:"-"`
+	// ConfigResolver extracts the operation-specific config JSON from the installation's user input JSON;
+	// when set, the resolved config is used as the operation config for reconcile runs and as the
+	// source for per-operation filter expressions in the ingest pipeline
+	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
 }

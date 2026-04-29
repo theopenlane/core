@@ -86,6 +86,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"https://www.googleapis.com/auth/cloud-platform"},
+					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) FindingsSyncConfig { return u.FindingsSync }),
 				},
 			},
 			Mappings: gcpsccMappings(),

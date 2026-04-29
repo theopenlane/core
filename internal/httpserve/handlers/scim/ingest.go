@@ -35,6 +35,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 			Runtime:     rt.Gala(),
 			Integration: integration,
 		},
+		"",
 		contracts,
 		payloadSets,
 		integrationops.IngestOptions{

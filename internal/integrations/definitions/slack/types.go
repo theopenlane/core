@@ -53,7 +53,6 @@ type UserInput struct {
 type DirectorySync struct {
 	// Disable is used to disable the directory sync operation from GitHub
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users from Slack"`
-	// DisableGroupSync will just sync users and no groups or group memberships
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.is_external == false'"`
 }

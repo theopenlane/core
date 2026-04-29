@@ -112,7 +112,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: repositorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.RepositorySync.Disable }),
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.RepositorySync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) RepositorySync { return u.RepositorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
@@ -127,7 +128,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: vulnerabilityCollectSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.VulnerabilitySync.Disable }),
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.VulnerabilitySync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) VulnerabilitySyncConfig { return u.VulnerabilitySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
@@ -142,7 +144,8 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    gitHubClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
-					Disabled:     providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
