@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/theopenlane/newman"
@@ -28,14 +27,19 @@ const (
 	sendRateInterval = 50 * time.Millisecond
 )
 
-// SendBrandedCampaignRequest is the operation config for dispatching a branded email campaign
-type SendBrandedCampaignRequest struct {
+// CampaignDispatchInput holds the shared dispatch parameters for campaign operations
+type CampaignDispatchInput struct {
 	// CampaignID is the identifier of the campaign to dispatch
 	CampaignID string `json:"campaignId" jsonschema:"required,description=Campaign identifier"`
 	// Resend allows previously sent, incomplete targets to receive another message
 	Resend bool `json:"resend,omitempty" jsonschema:"description=Whether to include previously sent targets"`
 	// IncludeOverdue includes overdue targets when dispatching incomplete recipients
 	IncludeOverdue bool `json:"includeOverdue,omitempty" jsonschema:"description=Whether overdue targets should be included"`
+}
+
+// SendBrandedCampaignRequest is the operation config for dispatching a branded email campaign
+type SendBrandedCampaignRequest struct {
+	CampaignDispatchInput
 }
 
 // SendBrandedCampaign dispatches templated branded emails to all pending campaign targets
@@ -46,9 +50,9 @@ func (s SendBrandedCampaign) Handle() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(emailClientRef, SendBrandedCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
-// Run loads the campaign and pending targets, creates assessment responses for
-// tracking, renders all messages, then sends via batch API or rate-limited
-// individual sends depending on whether attachments are present
+// Run loads the campaign and pending targets, renders all messages, then sends
+// via batch API or rate-limited individual sends depending on whether
+// attachments are present. Returns a marshaled CampaignDispatchResult with counts
 func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, err := req.DB.Campaign.Query().
 		Where(campaign.IDEQ(cfg.CampaignID)).
@@ -73,7 +77,7 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 
 	template := camp.Edges.EmailTemplate
 	if template == nil {
-		return nil, nil
+		return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
 	}
 
 	dispatcher, ok := DispatcherByKey(template.Key)
@@ -90,7 +94,7 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		return nil, err
 	}
 
-	targets = filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
+	dispatchable, skippedCount := filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
 
 	overlay := CampaignContext{
 		CampaignID:          camp.ID,
@@ -99,13 +103,22 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 		CampaignDueDate:     formatCampaignDueDate(camp.DueDate),
 	}
 
-	messages, targetIDs := renderCampaignMessages(ctx, client, dispatcher, template.Defaults, camp.Metadata, overlay, targets)
+	messages, targetIDs, renderFailed := renderCampaignMessages(ctx, client, dispatcher, template.Defaults, camp.Metadata, overlay, dispatchable)
 	attachments := staticAttachmentsFromFiles(ctx, template.Edges.Files)
 
-	return nil, sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
+	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
+
+	result := CampaignDispatchResult{
+		SentCount:    sentCount,
+		SkippedCount: skippedCount,
+		FailedCount:  renderFailed + sendFailed,
+	}
+
+	return json.Marshal(result)
 }
 
-func filterCampaignTargets(targets []*generated.CampaignTarget, resend bool, includeOverdue bool) []*generated.CampaignTarget {
+// filterCampaignTargets returns the subset of targets that are dispatchable based on
+func filterCampaignTargets(targets []*generated.CampaignTarget, resend bool, includeOverdue bool) ([]*generated.CampaignTarget, int) {
 	filtered := make([]*generated.CampaignTarget, 0, len(targets))
 
 	for _, target := range targets {
@@ -114,13 +127,14 @@ func filterCampaignTargets(targets []*generated.CampaignTarget, resend bool, inc
 		}
 	}
 
-	return filtered
+	return filtered, len(targets) - len(filtered)
 }
 
 // renderCampaignMessages renders all pending targets into newman messages
-func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher EmailDispatcher, defaults map[string]any, campaignData map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string) {
+func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher EmailDispatcher, defaults map[string]any, campaignData map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
 	messages := make([]*newman.EmailMessage, 0, len(targets))
 	targetIDs := make([]string, 0, len(targets))
+	failed := 0
 
 	for _, target := range targets {
 		first, last := splitFullName(target.FullName)
@@ -132,6 +146,8 @@ func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher
 		)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("target_id", target.ID).Msg("failed building campaign payload")
+			failed++
+
 			continue
 		}
 
@@ -140,6 +156,8 @@ func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher
 		)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("target_id", target.ID).Msg("failed rendering campaign message")
+			failed++
+
 			continue
 		}
 
@@ -147,15 +165,18 @@ func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher
 		targetIDs = append(targetIDs, target.ID)
 	}
 
-	return messages, targetIDs
+	return messages, targetIDs, failed
 }
 
 // sendCampaignMessages sends rendered messages via batch API when no attachments
-// are present, falling back to rate-limited individual sends otherwise
-func sendCampaignMessages(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) error {
+// are present, falling back to rate-limited individual sends otherwise.
+// Returns (sent, failed) counts
+func sendCampaignMessages(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
 	if len(attachments) > 0 {
 		return sendCampaignIndividual(ctx, db, client, messages, targetIDs, attachments)
 	}
+
+	sent := 0
 
 	for start := 0; start < len(messages); start += batchSize {
 		end := min(start+batchSize, len(messages))
@@ -168,7 +189,9 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Ema
 				return sendCampaignIndividual(ctx, db, client, messages, targetIDs, nil)
 			}
 
-			return fmt.Errorf("%w: %w", ErrSendFailed, err)
+			logx.FromContext(ctx).Error().Err(err).Msg("batch send failed")
+
+			return sent, len(messages) - sent
 		}
 
 		for _, id := range batchIDs {
@@ -176,15 +199,19 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Ema
 				logx.FromContext(ctx).Error().Err(err).Str("target_id", id).Msg("failed marking target sent")
 			}
 		}
+
+		sent += len(batchMsgs)
 	}
 
-	return nil
+	return sent, 0
 }
 
 // sendCampaignIndividual sends messages one at a time with rate limiting
-func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) error {
+func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
 	ticker := time.NewTicker(sendRateInterval)
 	defer ticker.Stop()
+
+	sent, failed := 0, 0
 
 	for i, msg := range messages {
 		if i > 0 {
@@ -197,27 +224,19 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *E
 
 		if err := client.Sender.SendEmailWithContext(ctx, msg); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("target_id", targetIDs[i]).Msg("failed sending campaign email")
+			failed++
+
 			continue
 		}
+
+		sent++
 
 		if err := markCampaignTargetSent(ctx, db, targetIDs[i]); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("target_id", targetIDs[i]).Msg("failed marking target sent")
 		}
 	}
 
-	return nil
-}
-
-// splitFullName splits a full name string into first and last components on the first space
-func splitFullName(fullName string) (string, string) {
-	name := strings.TrimSpace(fullName)
-	if name == "" {
-		return "", ""
-	}
-
-	first, last, _ := strings.Cut(name, " ")
-
-	return first, strings.TrimSpace(last)
+	return sent, failed
 }
 
 // formatCampaignDueDate formats a campaign due date for display in email templates

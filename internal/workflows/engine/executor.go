@@ -385,14 +385,14 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 	}
 
 	if title == "" {
-		title, err = renderTemplateText(ctx, e.celEvaluator, defaultTitle, vars)
+		title, err = renderTemplateText(defaultTitle, vars)
 		if err != nil {
 			return err
 		}
 	}
 
 	if body == "" {
-		body, err = renderTemplateText(ctx, e.celEvaluator, defaultBody, vars)
+		body, err = renderTemplateText(defaultBody, vars)
 		if err != nil {
 			return err
 		}

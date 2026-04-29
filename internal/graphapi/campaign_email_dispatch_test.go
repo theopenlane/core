@@ -99,7 +99,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -252,7 +252,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -327,7 +327,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -387,7 +387,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 		},
 	}
 
-	cfg := email.SendBrandedCampaignRequest{CampaignID: campaignObj.ID}
+	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
 	req := types.OperationRequest{
 		Client: emailClient,
 		DB:     suite.client.db,
@@ -455,8 +455,8 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 
 	recipient := "test-recipient@test.example"
 	cfg := email.SendQuestionnaireCampaignRequest{
-		CampaignID: campaignObj.ID,
-		TestEmail:  recipient,
+		CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID},
+		TestEmail:             recipient,
 	}
 	req := types.OperationRequest{
 		Client: emailClient,

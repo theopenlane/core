@@ -21,11 +21,9 @@ type renderedNotificationTemplate struct {
 	Subject string
 	// Body holds the rendered body text
 	Body string
-	// Blocks holds rendered structured blocks
-	Blocks []map[string]any
 	// Data holds the merged template data payload
 	Data map[string]any
-	// Vars holds the CEL variable map used for rendering
+	// Vars holds the variable map used for rendering
 	Vars map[string]any
 }
 
@@ -56,27 +54,17 @@ func (e *WorkflowEngine) renderNotificationTemplate(ctx context.Context, instanc
 		return nil, err
 	}
 
-	var blocks []map[string]any
-	if template.Blocks != nil {
-		renderedBlocks, err := renderTemplateValue(ctx, e.celEvaluator, template.Blocks, vars)
-		if err != nil {
-			return nil, err
-		}
-		blocks, err = decodeRenderedNotificationBlocks(renderedBlocks)
-		if err != nil {
-			return nil, err
-		}
+	title, err := renderTemplateText(template.TitleTemplate, vars)
+	if err != nil {
+		return nil, err
 	}
 
-	title, err := renderTemplateText(ctx, e.celEvaluator, template.TitleTemplate, vars)
+	body, err := renderTemplateText(template.BodyTemplate, vars)
 	if err != nil {
 		return nil, err
 	}
-	body, err := renderTemplateText(ctx, e.celEvaluator, template.BodyTemplate, vars)
-	if err != nil {
-		return nil, err
-	}
-	subject, err := renderTemplateText(ctx, e.celEvaluator, template.SubjectTemplate, vars)
+
+	subject, err := renderTemplateText(template.SubjectTemplate, vars)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +74,6 @@ func (e *WorkflowEngine) renderNotificationTemplate(ctx context.Context, instanc
 		Title:    title,
 		Subject:  subject,
 		Body:     body,
-		Blocks:   blocks,
 		Data:     data,
 		Vars:     vars,
 	}, nil
@@ -103,17 +90,8 @@ func (e *WorkflowEngine) buildNotificationTemplateVars(ctx context.Context, inst
 	vars = mapx.DeepCloneMapAny(vars)
 	maps.Copy(vars, baseData)
 
-	data := map[string]any{}
-	if paramsData != nil {
-		rendered, err := renderTemplateValue(ctx, e.celEvaluator, paramsData, vars)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if renderedMap, ok := rendered.(map[string]any); ok {
-			data = renderedMap
-		}
-	}
+	data := make(map[string]any, len(paramsData))
+	maps.Copy(data, paramsData)
 
 	maps.Copy(data, baseData)
 	vars["data"] = data
@@ -218,9 +196,6 @@ func buildRenderedTemplateConfig(rendered *renderedNotificationTemplate) map[str
 	if rendered.Body != "" {
 		config["body"] = rendered.Body
 	}
-	if len(rendered.Blocks) > 0 {
-		config["blocks"] = rendered.Blocks
-	}
 	if len(rendered.Data) > 0 {
 		config["data"] = rendered.Data
 	}
@@ -237,16 +212,3 @@ func buildRenderedTemplateConfig(rendered *renderedNotificationTemplate) map[str
 	return config
 }
 
-// decodeRenderedNotificationBlocks converts rendered template blocks into a structured block list
-func decodeRenderedNotificationBlocks(value any) ([]map[string]any, error) {
-	if value == nil {
-		return nil, nil
-	}
-
-	var blocks []map[string]any
-	if err := jsonx.RoundTrip(value, &blocks); err != nil {
-		return nil, ErrNotificationTemplateBlocksInvalid
-	}
-
-	return blocks, nil
-}

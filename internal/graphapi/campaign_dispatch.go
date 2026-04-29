@@ -120,30 +120,34 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return ErrCampaignDispatchInactive
 	}
 
+	switch campaignObj.CampaignType {
+	case enums.CampaignTypeQuestionnaire:
+		if campaignObj.AssessmentID == "" {
+			return ErrCampaignMissingAssessmentID
+		}
+	default:
+		if campaignObj.EmailTemplateID == "" {
+			return ErrCampaignMissingEmailTemplate
+		}
+	}
+
 	return nil
 }
 
-// processDispatchTargets counts dispatchable targets and, for immediate dispatch,
-// delegates to the appropriate email operation via the integration runtime
+// processDispatchTargets counts total targets and, for immediate dispatch,
+// delegates to the appropriate email operation via the integration runtime.
+// Actual sent/skipped/failed counts are determined by the async operation
 func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *campaignDispatchState) error {
-	targets, err := withTransactionalMutation(ctx).CampaignTarget.Query().
+	totalCount, err := withTransactionalMutation(ctx).CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(state.campaignObj.ID)).
-		All(ctx)
+		Count(ctx)
 	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaigntarget"})
 	}
 
-	for _, target := range targets {
-		if !emaildef.TargetDispatchable(target.Status, target.SentAt, state.resend, state.includeOverdue) {
-			state.skippedCount++
-			continue
-		}
+	state.queuedCount = totalCount
 
-		state.queuedCount++
-	}
-
-	// for scheduled dispatch, targets are counted only — the job worker dispatches later
-	if state.shouldSchedule || state.queuedCount == 0 {
+	if state.shouldSchedule || totalCount == 0 {
 		return nil
 	}
 
@@ -181,22 +185,25 @@ func (r *mutationResolver) updateCampaignAfterDispatch(ctx context.Context, stat
 	return r.updateCampaignForImmediateDispatch(ctx, state)
 }
 
-// updateCampaignForScheduledDispatch enqueues the job and sets scheduled status.
+// updateCampaignForScheduledDispatch enqueues the job and persists schedule
+// metadata for both initial launches and scheduled resends
 func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Context, state *campaignDispatchState) error {
 	if err := r.enqueueCampaignDispatchJob(ctx, state); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaign"})
 	}
 
-	if state.opts.Action != campaignDispatchActionLaunch {
-		return nil
-	}
-
-	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID).
-		SetStatus(enums.CampaignStatusScheduled).
-		SetIsActive(false)
+	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID)
 
 	if state.scheduleAt != nil {
 		update.SetScheduledAt(models.DateTime(*state.scheduleAt))
+	}
+
+	switch state.opts.Action {
+	case campaignDispatchActionLaunch:
+		update.SetStatus(enums.CampaignStatusScheduled).
+			SetIsActive(false)
+	case campaignDispatchActionResend, campaignDispatchActionResendIncomplete:
+		update.AddResendCount(1)
 	}
 
 	if err := update.Exec(ctx); err != nil {
@@ -291,17 +298,21 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 
 	operation := emaildef.SendBrandedCampaignOp.Name()
 	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
-		CampaignID:     campaignObj.ID,
-		Resend:         resend,
-		IncludeOverdue: includeOverdue,
+		CampaignDispatchInput: emaildef.CampaignDispatchInput{
+			CampaignID:     campaignObj.ID,
+			Resend:         resend,
+			IncludeOverdue: includeOverdue,
+		},
 	})
 	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire {
 		operation = emaildef.SendQuestionnaireCampaignOp.Name()
 		config, err = json.Marshal(emaildef.SendQuestionnaireCampaignRequest{
-			CampaignID:     campaignObj.ID,
-			Resend:         resend,
-			IncludeOverdue: includeOverdue,
-			TestEmail:      testEmail,
+			CampaignDispatchInput: emaildef.CampaignDispatchInput{
+				CampaignID:     campaignObj.ID,
+				Resend:         resend,
+				IncludeOverdue: includeOverdue,
+			},
+			TestEmail: testEmail,
 		})
 	}
 	if err != nil {

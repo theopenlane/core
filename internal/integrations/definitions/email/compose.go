@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/theopenlane/newman"
@@ -17,6 +18,16 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+// CampaignDispatchResult is the structured result returned by campaign operations
+type CampaignDispatchResult struct {
+	// SentCount is the number of messages successfully sent
+	SentCount int `json:"sentCount"`
+	// SkippedCount is the number of targets skipped (already sent, completed, filtered)
+	SkippedCount int `json:"skippedCount"`
+	// FailedCount is the number of targets that failed to render or send
+	FailedCount int `json:"failedCount"`
+}
 
 // loadEmailTemplate resolves an active email template by ID for the given owner, eager-loading
 // the Files edge so static attachments can be included in the dispatched message
@@ -155,4 +166,16 @@ func TargetDispatchable(status enums.AssessmentResponseStatus, sentAt *models.Da
 	default:
 		return true
 	}
+}
+
+// splitFullName splits a full name string into first and last components on the first space
+func splitFullName(fullName string) (string, string) {
+	name := strings.TrimSpace(fullName)
+	if name == "" {
+		return "", ""
+	}
+
+	first, last, _ := strings.Cut(name, " ")
+
+	return first, strings.TrimSpace(last)
 }

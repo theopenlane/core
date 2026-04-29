@@ -57,19 +57,3 @@ func TestTemplateVariables_NoDuplicates(t *testing.T) {
 		seen[v.Name] = struct{}{}
 	}
 }
-
-func TestReservedFieldNames_ContainsAllVariables(t *testing.T) {
-	reserved := ReservedFieldNames()
-
-	for _, v := range TemplateVariables() {
-		assert.Contains(t, reserved, v.Name, "template variable %s should be reserved", v.Name)
-	}
-}
-
-func TestReservedFieldNames_ContainsSystemKeys(t *testing.T) {
-	reserved := ReservedFieldNames()
-
-	for _, key := range []string{"branding", "apiKey", "provider", "questionnaireEmail"} {
-		assert.Contains(t, reserved, key, "system key %s should be reserved", key)
-	}
-}

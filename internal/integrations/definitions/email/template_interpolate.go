@@ -68,7 +68,7 @@ func buildTemplateVars(cfg RuntimeEmailConfig, payloadVars map[string]any) (map[
 func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
 	switch typed := value.(type) {
 	case string:
-		return executeTemplateString(typed, vars)
+		return render.ExecuteTextTemplate("payload-value", typed, vars)
 	case []any:
 		out := make([]any, 0, len(typed))
 		for _, item := range typed {
@@ -96,12 +96,3 @@ func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
 	}
 }
 
-// executeTemplateString executes the template expressions in the input string against the variable map
-func executeTemplateString(text string, vars map[string]any) (string, error) {
-	result, err := render.ExecuteTextTemplate("payload-value", text, vars)
-	if err != nil {
-		return "", err
-	}
-
-	return result, nil
-}
