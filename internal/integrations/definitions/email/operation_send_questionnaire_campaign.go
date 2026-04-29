@@ -11,11 +11,9 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/urlx"
 	"github.com/theopenlane/iam/tokens"
@@ -41,17 +39,9 @@ func (s SendQuestionnaireCampaign) Handle() types.OperationHandler {
 // responses, generates anonymous JWT access tokens, and sends questionnaire access emails.
 // Returns a marshaled CampaignDispatchResult with counts
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
-	camp, err := req.DB.Campaign.Query().
-		Where(campaign.IDEQ(cfg.CampaignID)).
-		Only(ctx)
+	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil, ErrCampaignNotFound
-		}
-
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign for questionnaire dispatch")
-
-		return nil, ErrCampaignNotFound
+		return nil, err
 	}
 
 	if camp.AssessmentID == "" {
@@ -69,10 +59,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 	}
 
 	if cfg.TestEmail != "" {
-		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, questionnaireRecipient{
-			Email:  cfg.TestEmail,
-			IsTest: true,
-		}); err != nil {
+		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, cfg.TestEmail, "", true); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire test email")
 
 			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, cfg.TestEmail)
@@ -81,52 +68,21 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return json.Marshal(CampaignDispatchResult{SentCount: 1})
 	}
 
-	targets, err := req.DB.CampaignTarget.Query().
-		Where(campaigntarget.CampaignIDEQ(cfg.CampaignID)).
-		All(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign targets")
-
-		return nil, err
-	}
-
-	dispatchable, skippedCount := filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
-
-	result := CampaignDispatchResult{SkippedCount: skippedCount}
-
-	for _, target := range dispatchable {
-		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, questionnaireRecipient{
-			Email:            target.Email,
-			CampaignTargetID: target.ID,
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("target_id", target.ID).Msg("failed dispatching questionnaire email to target")
-			result.FailedCount++
-
-			continue
-		}
-
-		result.SentCount++
-	}
-
-	return json.Marshal(result)
-}
-
-type questionnaireRecipient struct {
-	Email            string
-	CampaignTargetID string
-	IsTest           bool
+	return dispatchCampaignTargets(ctx, dispatchable, skipped, func(ctx context.Context, target *generated.CampaignTarget) error {
+		return sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, target.Email, target.ID, false)
+	})
 }
 
 // sendQuestionnaireToRecipient creates an assessment response, generates an anonymous access
 // token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
 // operation, and marks campaign targets as sent for non-test dispatches
-func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, recipient questionnaireRecipient) error {
-	response, err := createAssessmentResponseForRecipient(ctx, db, camp, camp.AssessmentID, recipient.Email, recipient.IsTest)
+func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, email string, campaignTargetID string, isTest bool) error {
+	response, err := createAssessmentResponseForRecipient(ctx, db, camp, camp.AssessmentID, email, isTest)
 	if err != nil {
 		return err
 	}
 
-	authURL, err := questionnaireAuthURL(ctx, db, client, camp, recipient.Email)
+	authURL, err := questionnaireAuthURL(ctx, db, client, camp, email)
 	if err != nil {
 		return err
 	}
@@ -134,17 +90,17 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	tags := make([]newman.Tag, 0, 3)
 	tags = append(tags, newman.Tag{Name: TagAssessmentResponseID, Value: response.ID})
 
-	if recipient.CampaignTargetID != "" {
-		tags = append(tags, newman.Tag{Name: TagCampaignTargetID, Value: recipient.CampaignTargetID})
+	if campaignTargetID != "" {
+		tags = append(tags, newman.Tag{Name: TagCampaignTargetID, Value: campaignTargetID})
 	}
 
-	if recipient.IsTest {
+	if isTest {
 		tags = append(tags, newman.Tag{Name: TagIsTest, Value: "true"})
 	}
 
 	input := QuestionnaireAuthEmail{
 		RecipientInfo: RecipientInfo{
-			Email: recipient.Email,
+			Email: email,
 			Tags:  tags,
 		},
 		AssessmentName: assessmentName,
@@ -155,11 +111,11 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	if recipient.CampaignTargetID == "" {
+	if campaignTargetID == "" {
 		return nil
 	}
 
-	return markCampaignTargetSent(ctx, db, recipient.CampaignTargetID)
+	return markCampaignTargetSent(ctx, db, campaignTargetID)
 }
 
 // questionnaireAuthURL generates an anonymous access token URL for the campaign's assessment questionnaire

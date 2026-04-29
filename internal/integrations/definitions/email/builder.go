@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -53,7 +54,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				},
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: emailUserInputSchema,
+				Schema: providerkit.SchemaFrom[EmailUserInput](),
 			},
 			Operations: append(AllEmailOperations(),
 				types.OperationRegistration{
@@ -75,9 +76,9 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 					Handle:       SendEmail{}.Handle(),
 				},
 				types.OperationRegistration{
-					Name:         SendBrandedCampaignOp.Name(),
-					Description:  "Dispatch a branded email campaign to all pending targets",
-					Topic:        DefinitionID.OperationTopic(SendBrandedCampaignOp.Name()),
+					Name:         SendCampaignOp.Name(),
+					Description:  "Dispatch an email campaign",
+					Topic:        DefinitionID.OperationTopic(SendCampaignOp.Name()),
 					ClientRef:    emailClientRef.ID(),
 					ConfigSchema: sendBrandedCampaignSchema,
 					Policy:       types.ExecutionPolicy{SkipRunRecord: true},
@@ -85,7 +86,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				},
 				types.OperationRegistration{
 					Name:         SendQuestionnaireCampaignOp.Name(),
-					Description:  "Dispatch a questionnaire campaign with anonymous access tokens to targets or a test recipient",
+					Description:  "Dispatch a questionnaire campaign",
 					Topic:        DefinitionID.OperationTopic(SendQuestionnaireCampaignOp.Name()),
 					ClientRef:    emailClientRef.ID(),
 					ConfigSchema: sendQuestionnaireCampaignSchema,

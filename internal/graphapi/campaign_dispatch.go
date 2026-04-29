@@ -296,7 +296,7 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		return operations.DispatchRequest{}, emaildef.ErrCampaignNotFound
 	}
 
-	operation := emaildef.SendBrandedCampaignOp.Name()
+	operation := emaildef.SendCampaignOp.Name()
 	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
 		CampaignDispatchInput: emaildef.CampaignDispatchInput{
 			CampaignID:     campaignObj.ID,
@@ -326,15 +326,12 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		ScheduledAt: scheduledAt,
 	}
 
-	integrationID := emaildef.ResolveCampaignEmailIntegration(ctx, withTransactionalMutation(ctx), campaignObj.OwnerID, campaignObj.IntegrationID)
-	if integrationID != "" {
-		req.IntegrationID = integrationID
-		return req, nil
+	integrationID, err := emaildef.ResolveCampaignEmailIntegration(ctx, withTransactionalMutation(ctx), campaignObj.OwnerID)
+	if err != nil {
+		return req, err
 	}
 
-	req.DefinitionID = emaildef.DefinitionID.ID()
-	req.OwnerID = campaignObj.OwnerID
-	req.Runtime = true
+	req.IntegrationID = integrationID
 
 	return req, nil
 }
@@ -367,7 +364,6 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 
 	return nil
 }
-
 
 // ensureCampaignEditAccess verifies the caller can edit the campaign.
 func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaignID string) error {

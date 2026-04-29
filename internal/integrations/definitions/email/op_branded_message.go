@@ -40,7 +40,7 @@ var (
 )
 
 // brandedMessageEmail is the customer-selectable catalog entry for flexible branded messages
-var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
+var brandedMessageEmail = RegisterEmailOperation(EmailOperation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
 	Schema:             brandedMessageSchema,
 	Theme:              baseTheme,
@@ -75,4 +75,4 @@ var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
 
 		return cfg
 	},
-}
+})

@@ -59,7 +59,8 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 	require.True(t, first.CampaignEmail)
 	require.False(t, second.CampaignEmail)
 
-	resolved := emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID, "")
+	resolved, err := emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID)
+	require.NoError(t, err)
 	require.Equal(t, first.ID, resolved)
 
 	first, err = suite.client.Integration.UpdateOneID(first.ID).
@@ -67,7 +68,8 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 		Save(ctx)
 	require.NoError(t, err)
 
-	resolved = emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID, first.ID)
+	resolved, err = emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID)
+	require.NoError(t, err)
 	require.Equal(t, second.ID, resolved)
 	require.True(t, first.CampaignEmail)
 }

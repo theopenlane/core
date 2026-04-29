@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// HasRecipient is implemented by all email operation input types to provide recipient information
-type HasRecipient interface {
+// Recipient is implemented by all email operation input types to provide recipient information
+type Recipient interface {
 	// GetRecipient returns the RecipientInfo
 	GetRecipient() RecipientInfo
 }
@@ -47,7 +47,7 @@ type RecipientInfo struct {
 	Tags []newman.Tag `json:"tags,omitempty" jsonschema:"description=Delivery tracking tags"`
 }
 
-// GetRecipient returns the recipient info, satisfying the HasRecipient interface
+// GetRecipient returns the recipient info, satisfying the Recipient interface
 func (r RecipientInfo) GetRecipient() RecipientInfo {
 	return r
 }
@@ -66,9 +66,22 @@ type CampaignContext struct {
 	CampaignDueDate string `json:"campaignDueDate,omitempty" jsonschema:"description=Campaign response due date"`
 }
 
+var (
+	dispatchers    []EmailDispatcher
+	dispatcherIndex = map[string]EmailDispatcher{}
+)
+
+// RegisterEmailOperation constructs an EmailOperation[T] and adds it to the dispatcher registry
+func RegisterEmailOperation[T Recipient](op EmailOperation[T]) EmailOperation[T] {
+	dispatchers = append(dispatchers, op)
+	dispatcherIndex[op.Name()] = op
+
+	return op
+}
+
 // EmailOperation is a generic helper which defines a single system email type as a registered integration operation
 // this allows us to do AllEmailOperations() in the builder rather than manually wiring each
-type EmailOperation[T HasRecipient] struct {
+type EmailOperation[T Recipient] struct {
 	// Op is the typed operation ref with name derived from the schema definition key
 	Op types.OperationRef[T]
 	// Schema is the reflected JSON schema for the input type
@@ -77,23 +90,17 @@ type EmailOperation[T HasRecipient] struct {
 	Description string
 	// CustomerSelectable gates whether the entry is exposed via the customer-facing catalog query
 	CustomerSelectable bool
-	// UISchema is optional UI layout hints for the input form; nil when absent
-	UISchema json.RawMessage
 	// Subject returns the rendered subject line for the email
 	Subject func(cfg RuntimeEmailConfig, input T) string
 	// Theme is the newman render theme applied to this email
 	Theme *render.Theme
-	// Build returns the structured body content for newman rendering; the dispatcher
-	// fills in Request/Config/Style slots around it at send time
+	// Build returns the structured body content for newman rendering
 	Build func(cfg RuntimeEmailConfig, input T) render.ContentBody
-	// Config is an optional per-op override for the installation config. When nil,
-	// dispatch passes the client's RuntimeEmailConfig through verbatim. Set this when
-	// the op accepts config overrides (e.g. customer-supplied LogoURL)
+	// Config is an optional per-op override for the installation config
 	Config func(cfg RuntimeEmailConfig, input T) RuntimeEmailConfig
 	// MessageOptions returns additional newman message options for per-operation customization such as attachment
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
-	// When set, the handler uses WithClientRequestConfig to pass the full OperationRequest through
 	PreHook func(ctx context.Context, req types.OperationRequest, client *EmailClient, input *T) error
 }
 
@@ -103,7 +110,7 @@ func (e EmailOperation[T]) Name() string {
 }
 
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
-func decodePayload[T HasRecipient](client *EmailClient, payload json.RawMessage) (T, error) {
+func decodePayload[T Recipient](client *EmailClient, payload json.RawMessage) (T, error) {
 	var input T
 	if len(payload) == 0 {
 		return input, nil
@@ -192,7 +199,7 @@ func (e EmailOperation[T]) renderToMessage(client *EmailClient, input T, extraOp
 }
 
 // Registration returns the types.OperationRegistration for wiring into the definition builder.
-// Catalog-facing fields (Description, UISchema, CustomerSelectable) travel on the registration
+// Catalog-facing fields (Description, CustomerSelectable) travel on the registration
 // so downstream filters (e.g. customer-facing catalog query) can operate on AllEmailOperations directly
 func (e EmailOperation[T]) Registration() types.OperationRegistration {
 	return types.OperationRegistration{
@@ -201,7 +208,6 @@ func (e EmailOperation[T]) Registration() types.OperationRegistration {
 		Topic:              DefinitionID.OperationTopic(e.Op.Name()),
 		ClientRef:          emailClientRef.ID(),
 		ConfigSchema:       e.Schema,
-		UISchema:           e.UISchema,
 		CustomerSelectable: e.CustomerSelectable,
 		Handle:             e.handler(),
 	}

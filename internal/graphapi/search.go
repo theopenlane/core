@@ -343,7 +343,6 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				campaign.NameContainsFold(query),                 // search by Name
 				campaign.DescriptionContainsFold(query),          // search by Description
 				campaign.RecurrenceTimezoneContainsFold(query),   // search by RecurrenceTimezone
-				campaign.TemplateIDContainsFold(query),           // search by TemplateID
 				campaign.EntityIDContainsFold(query),             // search by EntityID
 				campaign.AssessmentIDContainsFold(query),         // search by AssessmentID
 				func(s *sql.Selector) {
