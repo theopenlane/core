@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -62,7 +61,6 @@ type IdentityHolderQuery struct {
 	withAssets                   *AssetQuery
 	withEntities                 *EntityQuery
 	withDirectoryAccounts        *DirectoryAccountQuery
-	withDirectoryGroups          *DirectoryGroupQuery
 	withControls                 *ControlQuery
 	withSubcontrols              *SubcontrolQuery
 	withPlatforms                *PlatformQuery
@@ -85,7 +83,6 @@ type IdentityHolderQuery struct {
 	withNamedAssets              map[string]*AssetQuery
 	withNamedEntities            map[string]*EntityQuery
 	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
-	withNamedDirectoryGroups     map[string]*DirectoryGroupQuery
 	withNamedControls            map[string]*ControlQuery
 	withNamedSubcontrols         map[string]*SubcontrolQuery
 	withNamedPlatforms           map[string]*PlatformQuery
@@ -501,31 +498,6 @@ func (_q *IdentityHolderQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.DirectoryAccount
 		step.Edge.Schema = schemaConfig.DirectoryAccount
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryDirectoryGroups chains the current query on the "directory_groups" edge.
-func (_q *IdentityHolderQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
-	query := (&DirectoryGroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
-			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryGroupsTable, identityholder.DirectoryGroupsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1014,7 +986,6 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withAssets:              _q.withAssets.Clone(),
 		withEntities:            _q.withEntities.Clone(),
 		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
-		withDirectoryGroups:     _q.withDirectoryGroups.Clone(),
 		withControls:            _q.withControls.Clone(),
 		withSubcontrols:         _q.withSubcontrols.Clone(),
 		withPlatforms:           _q.withPlatforms.Clone(),
@@ -1195,17 +1166,6 @@ func (_q *IdentityHolderQuery) WithDirectoryAccounts(opts ...func(*DirectoryAcco
 		opt(query)
 	}
 	_q.withDirectoryAccounts = query
-	return _q
-}
-
-// WithDirectoryGroups tells the query-builder to eager-load the nodes that are connected to
-// the "directory_groups" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IdentityHolderQuery) WithDirectoryGroups(opts ...func(*DirectoryGroupQuery)) *IdentityHolderQuery {
-	query := (&DirectoryGroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDirectoryGroups = query
 	return _q
 }
 
@@ -1414,7 +1374,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1430,7 +1390,6 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withAssets != nil,
 			_q.withEntities != nil,
 			_q.withDirectoryAccounts != nil,
-			_q.withDirectoryGroups != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
 			_q.withPlatforms != nil,
@@ -1566,15 +1525,6 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *IdentityHolder) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
 			func(n *IdentityHolder, e *DirectoryAccount) {
 				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withDirectoryGroups; query != nil {
-		if err := _q.loadDirectoryGroups(ctx, query, nodes,
-			func(n *IdentityHolder) { n.Edges.DirectoryGroups = []*DirectoryGroup{} },
-			func(n *IdentityHolder, e *DirectoryGroup) {
-				n.Edges.DirectoryGroups = append(n.Edges.DirectoryGroups, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -1719,13 +1669,6 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedDirectoryAccounts(name) },
 			func(n *IdentityHolder, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedDirectoryGroups {
-		if err := _q.loadDirectoryGroups(ctx, query, nodes,
-			func(n *IdentityHolder) { n.appendNamedDirectoryGroups(name) },
-			func(n *IdentityHolder, e *DirectoryGroup) { n.appendNamedDirectoryGroups(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2380,37 +2323,6 @@ func (_q *IdentityHolderQuery) loadDirectoryAccounts(ctx context.Context, query 
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *IdentityHolderQuery) loadDirectoryGroups(ctx context.Context, query *DirectoryGroupQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *DirectoryGroup)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*IdentityHolder)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(identityholder.DirectoryGroupsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.identity_holder_directory_groups
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "identity_holder_directory_groups" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_directory_groups" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -3246,20 +3158,6 @@ func (_q *IdentityHolderQuery) WithNamedDirectoryAccounts(name string, opts ...f
 		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
 	}
 	_q.withNamedDirectoryAccounts[name] = query
-	return _q
-}
-
-// WithNamedDirectoryGroups tells the query-builder to eager-load the nodes that are connected to the "directory_groups"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *IdentityHolderQuery) WithNamedDirectoryGroups(name string, opts ...func(*DirectoryGroupQuery)) *IdentityHolderQuery {
-	query := (&DirectoryGroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedDirectoryGroups == nil {
-		_q.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery)
-	}
-	_q.withNamedDirectoryGroups[name] = query
 	return _q
 }
 

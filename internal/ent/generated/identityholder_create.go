@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -717,21 +716,6 @@ func (_c *IdentityHolderCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *Id
 		ids[i] = v[i].ID
 	}
 	return _c.AddDirectoryAccountIDs(ids...)
-}
-
-// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
-func (_c *IdentityHolderCreate) AddDirectoryGroupIDs(ids ...string) *IdentityHolderCreate {
-	_c.mutation.AddDirectoryGroupIDs(ids...)
-	return _c
-}
-
-// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
-func (_c *IdentityHolderCreate) AddDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectoryGroupIDs(ids...)
 }
 
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
@@ -1464,23 +1448,6 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 			},
 		}
 		edge.Schema = _c.schemaConfig.DirectoryAccount
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

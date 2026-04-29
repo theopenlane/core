@@ -4277,7 +4277,6 @@ func (_q *PlatformQuery) loadDirectoryGroups(ctx context.Context, query *Directo
 			init(nodes[i])
 		}
 	}
-	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(directorygroup.FieldPlatformID)
 	}

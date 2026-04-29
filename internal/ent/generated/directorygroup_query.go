@@ -44,7 +44,6 @@ type DirectoryGroupQuery struct {
 	withAccounts                *DirectoryAccountQuery
 	withWorkflowObjectRefs      *WorkflowObjectRefQuery
 	withMembers                 *DirectoryMembershipQuery
-	withFKs                     bool
 	loadTotal                   []func(context.Context, []*DirectoryGroup) error
 	modifiers                   []func(*sql.Selector)
 	withNamedAccounts           map[string]*DirectoryAccountQuery
@@ -701,7 +700,6 @@ func (_q *DirectoryGroupQuery) prepareQuery(ctx context.Context) error {
 func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*DirectoryGroup, error) {
 	var (
 		nodes       = []*DirectoryGroup{}
-		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [9]bool{
 			_q.withOwner != nil,
@@ -715,9 +713,6 @@ func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withMembers != nil,
 		}
 	)
-	if withFKs {
-		_spec.Node.Columns = append(_spec.Node.Columns, directorygroup.ForeignKeys...)
-	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*DirectoryGroup).scanValues(nil, columns)
 	}

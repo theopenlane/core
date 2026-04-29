@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -857,21 +856,6 @@ func (_u *IdentityHolderUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *Id
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
-// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
-func (_u *IdentityHolderUpdate) AddDirectoryGroupIDs(ids ...string) *IdentityHolderUpdate {
-	_u.mutation.AddDirectoryGroupIDs(ids...)
-	return _u
-}
-
-// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
-func (_u *IdentityHolderUpdate) AddDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddDirectoryGroupIDs(ids...)
-}
-
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *IdentityHolderUpdate) AddControlIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -1249,27 +1233,6 @@ func (_u *IdentityHolderUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryAccountIDs(ids...)
-}
-
-// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
-func (_u *IdentityHolderUpdate) ClearDirectoryGroups() *IdentityHolderUpdate {
-	_u.mutation.ClearDirectoryGroups()
-	return _u
-}
-
-// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
-func (_u *IdentityHolderUpdate) RemoveDirectoryGroupIDs(ids ...string) *IdentityHolderUpdate {
-	_u.mutation.RemoveDirectoryGroupIDs(ids...)
-	return _u
-}
-
-// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
-func (_u *IdentityHolderUpdate) RemoveDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveDirectoryGroupIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -2344,54 +2307,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.DirectoryGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3736,21 +3651,6 @@ func (_u *IdentityHolderUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) 
 	return _u.AddDirectoryAccountIDs(ids...)
 }
 
-// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
-func (_u *IdentityHolderUpdateOne) AddDirectoryGroupIDs(ids ...string) *IdentityHolderUpdateOne {
-	_u.mutation.AddDirectoryGroupIDs(ids...)
-	return _u
-}
-
-// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
-func (_u *IdentityHolderUpdateOne) AddDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddDirectoryGroupIDs(ids...)
-}
-
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddControlIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -4128,27 +4028,6 @@ func (_u *IdentityHolderUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccoun
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryAccountIDs(ids...)
-}
-
-// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
-func (_u *IdentityHolderUpdateOne) ClearDirectoryGroups() *IdentityHolderUpdateOne {
-	_u.mutation.ClearDirectoryGroups()
-	return _u
-}
-
-// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
-func (_u *IdentityHolderUpdateOne) RemoveDirectoryGroupIDs(ids ...string) *IdentityHolderUpdateOne {
-	_u.mutation.RemoveDirectoryGroupIDs(ids...)
-	return _u
-}
-
-// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
-func (_u *IdentityHolderUpdateOne) RemoveDirectoryGroups(v ...*DirectoryGroup) *IdentityHolderUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveDirectoryGroupIDs(ids...)
 }
 
 // ClearControls clears all "controls" edges to the Control entity.
@@ -5253,54 +5132,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectoryAccount
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.DirectoryGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   identityholder.DirectoryGroupsTable,
-			Columns: []string{identityholder.DirectoryGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

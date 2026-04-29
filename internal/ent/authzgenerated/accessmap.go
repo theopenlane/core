@@ -1784,10 +1784,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_account",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
-}, "directory_groups": {
-	ObjectType:      "directory_group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
 }, "controls": {
 	ObjectType:      "control",
 	SkipEditCheck:   false,
