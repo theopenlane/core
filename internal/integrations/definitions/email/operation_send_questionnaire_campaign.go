@@ -23,12 +23,7 @@ import (
 
 // SendQuestionnaireCampaignRequest is the operation config for dispatching a questionnaire campaign
 type SendQuestionnaireCampaignRequest struct {
-	// CampaignID is the identifier of the campaign to dispatch
-	CampaignID string `json:"campaignId" jsonschema:"required,description=Campaign identifier"`
-	// Resend allows previously sent, incomplete targets to receive another questionnaire link
-	Resend bool `json:"resend,omitempty" jsonschema:"description=Whether to include previously sent targets"`
-	// IncludeOverdue includes overdue targets when dispatching incomplete recipients
-	IncludeOverdue bool `json:"includeOverdue,omitempty" jsonschema:"description=Whether overdue targets should be included"`
+	CampaignDispatchInput
 	// TestEmail dispatches a single test questionnaire email without adding a campaign target
 	TestEmail string `json:"testEmail,omitempty" jsonschema:"description=Recipient email for a test questionnaire send"`
 }
@@ -44,7 +39,7 @@ func (s SendQuestionnaireCampaign) Handle() types.OperationHandler {
 
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment
 // responses, generates anonymous JWT access tokens, and sends questionnaire access emails.
-// Failed targets are logged and processing continues so a single failure does not abort the dispatch
+// Returns a marshaled CampaignDispatchResult with counts
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
 	camp, err := req.DB.Campaign.Query().
 		Where(campaign.IDEQ(cfg.CampaignID)).
@@ -83,7 +78,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, cfg.TestEmail)
 		}
 
-		return nil, nil
+		return json.Marshal(CampaignDispatchResult{SentCount: 1})
 	}
 
 	targets, err := req.DB.CampaignTarget.Query().
@@ -95,20 +90,25 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 		return nil, err
 	}
 
-	targets = filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
+	dispatchable, skippedCount := filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
 
-	for _, target := range targets {
+	result := CampaignDispatchResult{SkippedCount: skippedCount}
+
+	for _, target := range dispatchable {
 		if err := sendQuestionnaireToRecipient(ctx, req, req.DB, client, camp, assessmentObj.Name, questionnaireRecipient{
 			Email:            target.Email,
 			CampaignTargetID: target.ID,
 		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed dispatching questionnaire email to target")
+			logx.FromContext(ctx).Error().Err(err).Str("target_id", target.ID).Msg("failed dispatching questionnaire email to target")
+			result.FailedCount++
 
-			return nil, fmt.Errorf("%w: %s", ErrQuestionnaireDispatchFailed, target.Email)
+			continue
 		}
+
+		result.SentCount++
 	}
 
-	return nil, nil
+	return json.Marshal(result)
 }
 
 type questionnaireRecipient struct {
@@ -131,15 +131,15 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	tags := make([]newman.Tag, 0, 2)
+	tags := make([]newman.Tag, 0, 3)
+	tags = append(tags, newman.Tag{Name: TagAssessmentResponseID, Value: response.ID})
+
 	if recipient.CampaignTargetID != "" {
 		tags = append(tags, newman.Tag{Name: TagCampaignTargetID, Value: recipient.CampaignTargetID})
 	}
+
 	if recipient.IsTest {
-		tags = append(tags,
-			newman.Tag{Name: TagIsTest, Value: "true"},
-			newman.Tag{Name: TagAssessmentResponseID, Value: response.ID},
-		)
+		tags = append(tags, newman.Tag{Name: TagIsTest, Value: "true"})
 	}
 
 	input := QuestionnaireAuthEmail{

@@ -12,14 +12,13 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
 
-// mustMarshalSendEmailParams encodes SendEmailActionParams or fails the suite.
+// mustMarshalSendEmailParams encodes SendEmailActionParams or fails the suite
 func (s *WorkflowEngineTestSuite) mustMarshalSendEmailParams(params workflows.SendEmailActionParams) []byte {
 	b, err := json.Marshal(params)
 	s.Require().NoError(err)
@@ -35,9 +34,8 @@ func (s *WorkflowEngineTestSuite) clearEmailState() {
 	s.mockEmailSender().Reset()
 }
 
-// createLinkedEmailTemplates creates an EmailTemplate and NotificationTemplate (email channel)
-// linked together, owned by orgID. Returns the notification template key.
-func (s *WorkflowEngineTestSuite) createLinkedEmailTemplates(userID, orgID, key, subject, body string) {
+// createTestEmailTemplate creates an EmailTemplate owned by orgID and returns its ID
+func (s *WorkflowEngineTestSuite) createTestEmailTemplate(userID, orgID, key, subject, body string) string {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	emailRecord, err := s.client.EmailTemplate.Create().
@@ -56,45 +54,28 @@ func (s *WorkflowEngineTestSuite) createLinkedEmailTemplates(userID, orgID, key,
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	_, err = s.client.NotificationTemplate.Create().
-		SetOwnerID(orgID).
-		SetKey(key).
-		SetName("Notification: " + key).
-		SetChannel(enums.ChannelEmail).
-		SetFormat(enums.NotificationTemplateFormatHTML).
-		SetTopicPattern("workflow.email").
-		SetTemplateContext(enums.TemplateContextWorkflowAction).
-		SetEmailTemplateID(emailRecord.ID).
-		SetActive(true).
-		Save(seedCtx)
-	s.Require().NoError(err)
+	return emailRecord.ID
 }
 
-// cleanupEmailTemplates removes the email and notification templates created for a test key.
-func (s *WorkflowEngineTestSuite) cleanupEmailTemplates(userID, orgID, key string) {
+// cleanupTestEmailTemplate removes the email template created for a test key
+func (s *WorkflowEngineTestSuite) cleanupTestEmailTemplate(userID, orgID, key string) {
 	seedCtx := s.SeedContext(userID, orgID)
 
-	_, err := s.client.NotificationTemplate.Delete().
-		Where(notificationtemplate.KeyEQ(key)).
-		Exec(seedCtx)
-	s.Require().NoError(err)
-
-	_, err = s.client.EmailTemplate.Delete().
+	_, err := s.client.EmailTemplate.Delete().
 		Where(emailtemplate.NameEQ("Email: " + key)).
 		Exec(seedCtx)
 	s.Require().NoError(err)
 }
 
 // TestExecuteSendEmail_ByKey verifies that a send_email action composes and queues a message
-// when referencing a notification template by key, and confirms the queued job carries the
-// correct recipient and rendered subject.
+// when referencing an email template by key
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-bykey-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Hello Workflow", "Body text")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "Hello Workflow", "Body text")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
 
@@ -113,9 +94,9 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	})
 
 	params := workflows.SendEmailActionParams{
-		TemplateKey: templateKey,
-		To:          []string{"recipient@example.com"},
-		From:        "sender@example.com",
+		EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+		To:               []string{"recipient@example.com"},
+		From:             "sender@example.com",
 	}
 
 	action := models.WorkflowAction{
@@ -135,23 +116,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	s.Equal("sender@example.com", msgs[0].From)
 }
 
-// TestExecuteSendEmail_ByID verifies that a send_email action resolves a notification template
-// by ID and queues a correctly addressed message.
+// TestExecuteSendEmail_ByID verifies that a send_email action resolves an email template
+// by ID and queues a correctly addressed message
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-byid-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Resolved by ID", "Content by ID")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	emailTemplateID := s.createTestEmailTemplate(userID, orgID, templateKey, "Resolved by ID", "Content by ID")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
-
-	seedCtx := s.SeedContext(userID, orgID)
-	notifRecord, err := s.client.NotificationTemplate.Query().
-		Where(notificationtemplate.KeyEQ(templateKey)).
-		Only(seedCtx)
-	s.Require().NoError(err)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -168,9 +143,9 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 	})
 
 	params := workflows.SendEmailActionParams{
-		TemplateID: notifRecord.ID,
-		To:         []string{"byid@example.com"},
-		From:       "sender@example.com",
+		EmailTemplateID: emailTemplateID,
+		To:              []string{"byid@example.com"},
+		From:            "sender@example.com",
 	}
 
 	action := models.WorkflowAction{
@@ -190,18 +165,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 }
 
 // TestExecuteSendEmail_WithTargetUser verifies that recipients are resolved from Targets when
-// To is omitted. The resolved user email is asserted in the queued job.
+// To is omitted
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-target-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Target User Email", "Body for target")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "Target User Email", "Body for target")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
 
-	// Load the test user's email to assert it appears in the queued job
 	seedCtx := s.SeedContext(userID, orgID)
 	testUser, err := s.client.User.Get(seedCtx, userID)
 	s.Require().NoError(err)
@@ -221,8 +195,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 	})
 
 	params := workflows.SendEmailActionParams{
-		TemplateKey: templateKey,
-		From:        "sender@example.com",
+		EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+		From:             "sender@example.com",
 		TargetedActionParams: workflows.TargetedActionParams{
 			Targets: []workflows.TargetConfig{
 				{Type: enums.WorkflowTargetTypeUser, ID: userID},
@@ -248,14 +222,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 
 // TestExecuteSendEmail_WorkflowDefinitionWithSendEmail verifies end-to-end that a workflow
 // definition containing a send_email action processes successfully after trigger emission
-// and sends a correctly composed email through the runtime integration.
+// and sends a correctly composed email through the runtime integration
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSendEmail() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-e2e-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "E2E Subject", "E2E body text")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "E2E Subject", "E2E body text")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
 
@@ -263,9 +237,9 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 		Key:  "notify_via_email",
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: templateKey,
-			To:          []string{"e2e@example.com"},
-			From:        "noreply@example.com",
+			EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+			To:               []string{"e2e@example.com"},
+			From:             "noreply@example.com",
 		}),
 	}
 
@@ -317,7 +291,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 }
 
 // TestExecuteSendEmail_NoTemplateReference verifies that a send_email action with no template
-// reference returns ErrSendEmailTemplateRequired.
+// reference returns ErrSendEmailTemplateRequired
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoTemplateReference() {
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
@@ -350,8 +324,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoTemplateReference() {
 	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateRequired))
 }
 
-// TestExecuteSendEmail_BothTemplateAndKeyConflict verifies that providing both template_id and
-// template_key returns ErrSendEmailTemplateReferenceConflict.
+// TestExecuteSendEmail_BothTemplateAndKeyConflict verifies that providing both emailTemplateId
+// and emailTemplateKey returns ErrSendEmailTemplateReferenceConflict
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflict() {
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
@@ -374,10 +348,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflic
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Key:  "template_conflict",
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateID:  "some-id",
-			TemplateKey: "some-key",
-			To:          []string{"recipient@example.com"},
-			From:        "sender@example.com",
+			EmailTemplateID:  "some-id",
+			EmailTemplateKey: "some-key",
+			To:               []string{"recipient@example.com"},
+			From:             "sender@example.com",
 		}),
 	}
 
@@ -387,14 +361,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflic
 }
 
 // TestExecuteSendEmail_NoRecipients verifies that a send_email action with a valid template
-// but no resolved recipients returns ErrSendEmailNoRecipients.
+// but no resolved recipients returns ErrSendEmailNoRecipients
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-norecip-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "No Recip Subject", "body")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "No Recip Subject", "body")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -410,13 +384,12 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
 		ChangedFields: []string{"status"},
 	})
 
-	// No To or Targets
 	action := models.WorkflowAction{
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Key:  "no_recipients",
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: templateKey,
-			From:        "sender@example.com",
+			EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+			From:             "sender@example.com",
 		}),
 	}
 
@@ -426,7 +399,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
 }
 
 // TestExecuteSendEmail_TemplateNotFound verifies that a send_email action with a non-existent
-// template key returns an error wrapping ErrSendEmailTemplateComposeFailed.
+// template key returns ErrSendEmailTemplateNotFound
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_TemplateNotFound() {
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
@@ -449,26 +422,26 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_TemplateNotFound() {
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Key:  "missing_template",
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: "nonexistent_key_" + ulid.Make().String(),
-			To:          []string{"recipient@example.com"},
-			From:        "sender@example.com",
+			EmailTemplateKey: "nonexistent_key_" + ulid.Make().String(),
+			To:               []string{"recipient@example.com"},
+			From:             "sender@example.com",
 		}),
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateComposeFailed))
+	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateNotFound))
 }
 
 // TestExecuteSendEmail_DefaultSender verifies that a send_email action without a
-// From override uses the email integration's configured sender.
+// From override uses the email integration's configured sender
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-nosender-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Subject", "body")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "Subject", "body")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
 
@@ -490,8 +463,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Key:  "default_sender",
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: templateKey,
-			To:          []string{"recipient@example.com"},
+			EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+			To:               []string{"recipient@example.com"},
 		}),
 	}
 
@@ -505,16 +478,15 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 }
 
 // TestExecuteSendEmail_FullAsyncPath verifies the complete end-to-end path:
-// Control mutation → Gala mutation event → TriggerWorkflow → TopicWorkflowTriggered →
-// ProcessAction → executeSendEmail → River job inserted with correct email payload.
-// This exercises every layer of the workflow event dispatch stack, not just Execute directly.
+// Control mutation -> Gala mutation event -> TriggerWorkflow -> TopicWorkflowTriggered ->
+// ProcessAction -> executeSendEmail -> River job inserted with correct email payload
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	templateKey := "wf-send-email-async-" + ulid.Make().String()
-	s.createLinkedEmailTemplates(userID, orgID, templateKey, "Async Subject", "Async body text")
-	defer s.cleanupEmailTemplates(userID, orgID, templateKey)
+	s.createTestEmailTemplate(userID, orgID, templateKey, "Async Subject", "Async body text")
+	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
 
 	s.clearEmailState()
 
@@ -522,13 +494,12 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 		Key:  "send_email_async",
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: templateKey,
-			To:          []string{"async@example.com"},
-			From:        "noreply@example.com",
+			EmailTemplateKey: emaildef.BrandedMessageOp.Name(),
+			To:               []string{"async@example.com"},
+			From:             "noreply@example.com",
 		}),
 	}
 
-	// Trigger on any Control UPDATE (empty Fields = match all).
 	doc := models.WorkflowDefinitionDocument{
 		Triggers: []models.WorkflowTrigger{
 			{Operation: "UPDATE", Fields: []string{}},
@@ -561,17 +532,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Mutate the control — this fires the Gala mutation hook which dispatches the workflow.
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID("ref-after-" + ulid.Make().String()).
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Block until gala workers finish: mutation event → TriggerWorkflow → ProcessAction.
 	s.WaitForEvents()
 	s.WaitForEvents()
 
-	// Verify a workflow instance was created and completed for the control.
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
 			workflowinstance.WorkflowDefinitionIDEQ(def.ID),
@@ -584,7 +552,6 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	s.Require().NotNil(instance)
 	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
 
-	// Verify the email was sent with the correct composed message.
 	msgs := s.mockEmailSender().Messages()
 	s.Require().Len(msgs, 1)
 	s.Equal([]string{"async@example.com"}, msgs[0].To)
@@ -594,15 +561,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 }
 
 // TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate verifies that org-owned workflow definitions
-// cannot reference system-owned notification templates; only owner-scoped templates are accessible
-// from org-owned workflow definitions.
+// cannot reference system-owned email templates
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate() {
 	_, orgID, userCtx := s.SetupTestUser()
 	_, _, adminCtx := s.SetupSystemAdmin()
 	wfEngine := s.Engine()
-
-	// Create a system-owned email notification template (no owner_id, system_owned=true via hook)
-	systemTemplateKey := "wf-send-email-system-" + ulid.Make().String()
 
 	systemEmailTemplate, err := s.client.EmailTemplate.Create().
 		SetKey(emaildef.BrandedMessageOp.Name()).
@@ -616,17 +579,6 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTe
 			"intros":  []any{"System email."},
 		}).
 		SetActive(true).
-		Save(adminCtx)
-	s.Require().NoError(err)
-
-	_, err = s.client.NotificationTemplate.Create().
-		SetKey(systemTemplateKey).
-		SetName("System Email Template").
-		SetChannel(enums.ChannelEmail).
-		SetActive(true).
-		SetTopicPattern("workflow.email").
-		SetTemplateContext(enums.TemplateContextWorkflowAction).
-		SetEmailTemplateID(systemEmailTemplate.ID).
 		Save(adminCtx)
 	s.Require().NoError(err)
 
@@ -644,18 +596,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTe
 		ChangedFields: []string{"status"},
 	})
 
-	// The system template has no owner_id; OwnerOnly enforcement must exclude it.
 	action := models.WorkflowAction{
 		Type: enums.WorkflowActionTypeSendEmail.String(),
 		Key:  "send_system_template",
 		Params: s.mustMarshalSendEmailParams(workflows.SendEmailActionParams{
-			TemplateKey: systemTemplateKey,
-			To:          []string{"recipient@example.com"},
-			From:        "sender@example.com",
+			EmailTemplateID: systemEmailTemplate.ID,
+			To:              []string{"recipient@example.com"},
+			From:            "sender@example.com",
 		}),
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
 	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateComposeFailed))
+	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateNotFound))
 }

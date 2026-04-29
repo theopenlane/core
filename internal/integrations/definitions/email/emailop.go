@@ -102,38 +102,40 @@ func (e EmailOperation[T]) Name() string {
 	return e.Op.Name()
 }
 
-// SendByKey decodes the payload into T and dispatches through the shared render pipeline.
-// Callers are responsible for populating all typed fields (recipient, campaign context, etc.) in payload
-// before invocation; the dispatcher does not merge external defaults
-func (e EmailOperation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
+// decodePayload interpolates template expressions in the raw JSON and unmarshals into T
+func decodePayload[T HasRecipient](client *EmailClient, payload json.RawMessage) (T, error) {
 	var input T
-	if len(payload) > 0 {
-		resolved, err := interpolatePayload(client, payload)
-		if err != nil {
-			return err
-		}
+	if len(payload) == 0 {
+		return input, nil
+	}
 
-		if err := json.Unmarshal(resolved, &input); err != nil {
-			return fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
-		}
+	resolved, err := interpolatePayload(client, payload)
+	if err != nil {
+		return input, err
+	}
+
+	if err := json.Unmarshal(resolved, &input); err != nil {
+		return input, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
+	}
+
+	return input, nil
+}
+
+// SendByKey decodes the payload into T and dispatches through the shared render pipeline
+func (e EmailOperation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
+	input, err := decodePayload[T](client, payload)
+	if err != nil {
+		return err
 	}
 
 	return e.dispatch(ctx, req, client, input, extraOpts...)
 }
 
-// RenderMessage decodes the payload and renders the email into a newman message
-// without sending it
+// RenderMessage decodes the payload and renders the email into a newman message without sending it
 func (e EmailOperation[T]) RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
-	var input T
-	if len(payload) > 0 {
-		resolved, err := interpolatePayload(client, payload)
-		if err != nil {
-			return nil, err
-		}
-
-		if err := json.Unmarshal(resolved, &input); err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrTemplateRenderFailed, err)
-		}
+	input, err := decodePayload[T](client, payload)
+	if err != nil {
+		return nil, err
 	}
 
 	return e.renderToMessage(client, input, extraOpts...)

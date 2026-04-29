@@ -103,7 +103,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 		SetChannel(enums.ChannelSlack).
 		SetTopicPattern("workflow.notification").
 		SetIntegrationID(integrationRecord.ID).
-		SetBodyTemplate("Hello {{review_url}}").
+		SetBodyTemplate("Hello {{.review_url}}").
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -193,7 +193,7 @@ func (s *WorkflowEngineTestSuite) TestNotificationTemplateIntegrationFromMutatio
 		SetChannel(enums.ChannelSlack).
 		SetTopicPattern("workflow.notification").
 		SetIntegrationID(integrationRecord.ID).
-		SetBodyTemplate("Created {{ref_code}}").
+		SetBodyTemplate("Created {{.ref_code}}").
 		Save(seedCtx)
 	s.Require().NoError(err)
 
@@ -306,7 +306,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateDestination
 		SetTopicPattern("workflow.notification").
 		SetIntegrationID(integrationRecord.ID).
 		SetDestinations([]string{"C11111", "C22222"}).
-		SetBodyTemplate("Hello {{review_url}}").
+		SetBodyTemplate("Hello {{.review_url}}").
 		Save(seedCtx)
 	s.Require().NoError(err)
 

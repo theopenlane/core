@@ -8,7 +8,7 @@ import (
 
 // BrandedMessageRequest is a customer-selectable catalog entry providing a flexible,
 // brand-themed email shape. Customers supply the subject, headline, body paragraphs,
-// and optional call-to-action; the modern-message theme handles layout, branding,
+// and optional call-to-action; the base theme handles layout, branding,
 // and footer chrome
 type BrandedMessageRequest struct {
 	RecipientInfo
@@ -43,7 +43,7 @@ var (
 var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
 	Schema:             brandedMessageSchema,
-	Theme:              modernMessageTheme,
+	Theme:              baseTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
 	CustomerSelectable: true,
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {
@@ -52,7 +52,7 @@ var brandedMessageEmail = EmailOperation[BrandedMessageRequest]{
 	Build: func(cfg RuntimeEmailConfig, req BrandedMessageRequest) render.ContentBody {
 		body := render.ContentBody{
 			Preheader: req.Preheader,
-			Header:    render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}},
+			Header:    defaultHeader(cfg),
 			Name:      req.FirstName,
 			Title:     req.Title,
 			Intros:    render.IntrosBlock{Paragraphs: req.Intros},

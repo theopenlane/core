@@ -12,9 +12,15 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
+// maxCampaignTargets is the upper bound on recipients per campaign creation
+const maxCampaignTargets = 500
+
 // createCampaignWithTargets creates a campaign and its targets in a single transaction.
 func (r *mutationResolver) createCampaignWithTargets(ctx context.Context, campaignInput *generated.CreateCampaignInput, targets []*generated.CreateCampaignTargetInput) (*model.CampaignCreateWithTargetsPayload, error) {
-	if err := validateCampaignWithTargetsInput(ctx, campaignInput, targets); err != nil {
+	var err error
+
+	ctx, err = validateCampaignWithTargetsInput(ctx, campaignInput, targets)
+	if err != nil {
 		return nil, err
 	}
 
@@ -42,10 +48,11 @@ func (r *mutationResolver) createCampaignWithTargets(ctx context.Context, campai
 	}, nil
 }
 
-// validateCampaignWithTargetsInput validates the campaign input and targets.
-func validateCampaignWithTargetsInput(ctx context.Context, campaignInput *generated.CreateCampaignInput, targets []*generated.CreateCampaignTargetInput) error {
+// validateCampaignWithTargetsInput validates the campaign input and targets,
+// returning the enriched context with the organization set in the auth context
+func validateCampaignWithTargetsInput(ctx context.Context, campaignInput *generated.CreateCampaignInput, targets []*generated.CreateCampaignTargetInput) (context.Context, error) {
 	if campaignInput == nil {
-		return rout.NewMissingRequiredFieldError("campaign")
+		return ctx, rout.NewMissingRequiredFieldError("campaign")
 	}
 
 	ctx, err := common.SetOrganizationInAuthContext(ctx, campaignInput.OwnerID)
@@ -53,17 +60,23 @@ func validateCampaignWithTargetsInput(ctx context.Context, campaignInput *genera
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		if lo.FromPtrOr(campaignInput.OwnerID, "") == "" {
-			return rout.NewMissingRequiredFieldError("owner_id")
+			return ctx, rout.NewMissingRequiredFieldError("owner_id")
 		}
 
-		return rout.ErrPermissionDenied
+		return ctx, rout.ErrPermissionDenied
 	}
 
-	if len(lo.Compact(targets)) == 0 {
-		return rout.NewMissingRequiredFieldError("targets")
+	compacted := lo.Compact(targets)
+
+	if len(compacted) == 0 {
+		return ctx, rout.NewMissingRequiredFieldError("targets")
 	}
 
-	return nil
+	if len(compacted) > maxCampaignTargets {
+		return ctx, ErrCampaignTargetLimitExceeded
+	}
+
+	return ctx, nil
 }
 
 // setRecipientCountIfNeeded sets the recipient count if not already set.

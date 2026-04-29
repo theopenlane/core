@@ -18,4 +18,8 @@ var (
 	ErrCampaignDispatchScheduleRequired = errors.New("schedule time is required")
 	// ErrCampaignDispatchRuntimeRequired is returned when integration runtime dispatch is unavailable.
 	ErrCampaignDispatchRuntimeRequired = errors.New("campaign dispatch requires integration runtime")
+	// ErrCampaignTargetLimitExceeded is returned when a campaign exceeds the maximum allowed targets.
+	ErrCampaignTargetLimitExceeded = errors.New("campaign cannot exceed 500 targets")
+	// ErrCampaignMissingEmailTemplate is returned when a branded campaign has no linked email template.
+	ErrCampaignMissingEmailTemplate = errors.New("campaign requires a linked email template for dispatch")
 )

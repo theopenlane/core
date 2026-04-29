@@ -130,9 +130,7 @@ func extractTemplateVarNames(templates ...string) map[string]string {
 }
 
 // mergeTemplateVarsIntoSchema adds discovered variable names as typed properties
-// into a JSON Schema map. Existing properties are preserved; only absent keys are added.
-// Variables whose names match system-reserved fields (injected at render time by the
-// email client config) are excluded so that jsonconfig only describes user-supplied inputs
+// into a JSON Schema map. Existing properties are preserved; only absent keys are added
 func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) map[string]any {
 	if schema == nil {
 		schema = map[string]any{}
@@ -147,13 +145,7 @@ func mergeTemplateVarsIntoSchema(schema map[string]any, vars map[string]string) 
 		props = map[string]any{}
 	}
 
-	reserved := emaildef.ReservedFieldNames()
-
 	for name, typ := range vars {
-		if _, isReserved := reserved[name]; isReserved {
-			continue
-		}
-
 		if _, exists := props[name]; !exists {
 			props[name] = map[string]any{"type": typ}
 		}

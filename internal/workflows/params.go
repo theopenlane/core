@@ -52,20 +52,16 @@ type NotificationActionParams struct {
 type SendEmailActionParams struct {
 	// TargetedActionParams identifies users, groups, roles, or resolvers to email
 	TargetedActionParams
-	// TemplateID references a notification template by ID
-	TemplateID string `json:"template_id,omitempty"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"template_key,omitempty"`
-	// To contains explicit recipient email addresses (supports template expressions)
+	// EmailTemplateID references an email template by database ID
+	EmailTemplateID string `json:"emailTemplateId,omitempty"`
+	// EmailTemplateKey references an email template by catalog key
+	EmailTemplateKey string `json:"emailTemplateKey,omitempty"`
+	// To contains explicit recipient email addresses
 	To []string `json:"to,omitempty"`
 	// From overrides the default sender email address
 	From string `json:"from,omitempty"`
 	// ReplyTo sets an optional reply-to email address
-	ReplyTo string `json:"reply_to,omitempty"`
-	// Data is an optional payload merged into the template render data
-	Data map[string]any `json:"data,omitempty"`
-	// Headers contains optional email headers
-	Headers map[string]string `json:"headers,omitempty"`
+	ReplyTo string `json:"replyTo,omitempty"`
 }
 
 // WebhookActionParams defines params for WEBHOOK actions
