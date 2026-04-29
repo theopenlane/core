@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -139,23 +138,6 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("recurrence_interval"),
 			),
-		field.String("recurrence_cron").
-			GoType(models.Cron("")).
-			Comment("cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *").
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-			).
-			Validate(func(s string) error {
-				if s == "" {
-					return nil
-				}
-
-				c := models.Cron(s)
-
-				return c.Validate()
-			}).
-			Optional().
-			Nillable(),
 		field.String("recurrence_timezone").
 			Comment("timezone used for the recurrence schedule").
 			Optional().
@@ -219,12 +201,6 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("last_resent_at"),
 			),
-		field.String("template_id").
-			Comment("the template associated with the campaign").
-			Optional().
-			Annotations(
-				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
-			),
 		field.String("entity_id").
 			Comment("the entity associated with the campaign").
 			Optional().
@@ -237,14 +213,8 @@ func (Campaign) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the campaign").
 			Optional(),
-		field.String("email_branding_id").
-			Comment("the email branding or theme reference the campaign may use to override the email templates theme").
-			Optional(),
 		field.String("email_template_id").
 			Comment("the email template associated with the campaign").
-			Optional(),
-		field.String("integration_id").
-			Comment("the email integration used for campaign dispatch").
 			Optional(),
 	}
 }
@@ -274,14 +244,6 @@ func (c Campaign) Edges() []ent.Edge {
 			field:      "assessment_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
-			},
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: c,
-			edgeSchema: Template{},
-			field:      "template_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Template{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -347,13 +309,6 @@ func (Campaign) Annotations() []schema.Annotation {
 		entx.NewExportable(
 			entx.WithOrgOwned(),
 		),
-	}
-}
-
-// Hooks of the Campaign
-func (Campaign) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookCampaignResolveEmailIntegration(),
 	}
 }
 

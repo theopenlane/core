@@ -7,8 +7,6 @@ import (
 )
 
 var (
-	// emailUserInputSchema is the JSON schema for customer-provided email branding configuration
-	emailUserInputSchema = providerkit.SchemaFrom[EmailUserInput]()
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
@@ -22,7 +20,7 @@ var (
 	// sendEmailSchema is the operation schema for the generic send-email operation
 	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
 	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
-	sendBrandedCampaignSchema, SendBrandedCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]()
+	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]()
 	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
 	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]()
 )

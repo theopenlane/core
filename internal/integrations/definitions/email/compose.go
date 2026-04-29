@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -149,8 +151,7 @@ func staticAttachmentsFromFiles(ctx context.Context, files []*generated.File) []
 	return attachments
 }
 
-// TargetDispatchable reports whether a campaign target should be included in a
-// dispatch attempt for the requested action semantics
+// TargetDispatchable reports whether a campaign target should be included in a dispatch attempt for the requested action semantics
 func TargetDispatchable(status enums.AssessmentResponseStatus, sentAt *models.DateTime, resend bool, includeOverdue bool) bool {
 	if sentAt != nil && !sentAt.IsZero() && !resend {
 		return false
@@ -178,4 +179,61 @@ func splitFullName(fullName string) (string, string) {
 	first, last, _ := strings.Cut(name, " ")
 
 	return first, strings.TrimSpace(last)
+}
+
+// TargetSendFunc is the per-target callback invoked by dispatchCampaignTargets for each
+// dispatchable target. Implementations handle the target-specific send logic
+type TargetSendFunc func(ctx context.Context, target *generated.CampaignTarget) error
+
+// loadCampaignWithTargets loads a campaign by ID, queries its targets, and filters them
+// by dispatch eligibility. The optional queryOpts are applied to the campaign query for
+// edge-loading (e.g. email template + files)
+func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input CampaignDispatchInput, queryOpts ...func(*generated.CampaignQuery)) (*generated.Campaign, []*generated.CampaignTarget, int, error) {
+	q := db.Campaign.Query().Where(campaign.IDEQ(input.CampaignID))
+	for _, opt := range queryOpts {
+		opt(q)
+	}
+
+	camp, err := q.Only(ctx)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return nil, nil, 0, ErrCampaignNotFound
+		}
+
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed loading campaign")
+
+		return nil, nil, 0, ErrCampaignNotFound
+	}
+
+	targets, err := db.CampaignTarget.Query().
+		Where(campaigntarget.CampaignIDEQ(input.CampaignID)).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed loading campaign targets")
+
+		return nil, nil, 0, err
+	}
+
+	dispatchable, skipped := filterCampaignTargets(targets, input.Resend, input.IncludeOverdue)
+
+	return camp, dispatchable, skipped, nil
+}
+
+// dispatchCampaignTargets iterates dispatchable targets, calling sendFn for each, and
+// returns a marshaled CampaignDispatchResult
+func dispatchCampaignTargets(ctx context.Context, targets []*generated.CampaignTarget, skippedCount int, sendFn TargetSendFunc) (json.RawMessage, error) {
+	result := CampaignDispatchResult{SkippedCount: skippedCount}
+
+	for _, target := range targets {
+		if err := sendFn(ctx, target); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("target_id", target.ID).Msg("failed dispatching to target")
+			result.FailedCount++
+
+			continue
+		}
+
+		result.SentCount++
+	}
+
+	return json.Marshal(result)
 }

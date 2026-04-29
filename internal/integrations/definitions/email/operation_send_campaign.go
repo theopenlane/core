@@ -3,7 +3,6 @@ package email
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 
@@ -11,8 +10,6 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -47,32 +44,26 @@ type SendBrandedCampaign struct{}
 
 // Handle returns the typed operation handler for builder registration
 func (s SendBrandedCampaign) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, SendBrandedCampaignOp, ErrTemplateRenderFailed, s.Run)
+	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
 // Run loads the campaign and pending targets, renders all messages, then sends
 // via batch API or rate-limited individual sends depending on whether
 // attachments are present. Returns a marshaled CampaignDispatchResult with counts
 func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
-	camp, err := req.DB.Campaign.Query().
-		Where(campaign.IDEQ(cfg.CampaignID)).
-		WithEmailTemplate(func(q *generated.EmailTemplateQuery) {
-			q.WithFiles(func(fq *generated.FileQuery) {
+	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, func(q *generated.CampaignQuery) {
+		q.WithEmailTemplate(func(tq *generated.EmailTemplateQuery) {
+			tq.WithFiles(func(fq *generated.FileQuery) {
 				fq.Select(
 					file.FieldProvidedFileName,
 					file.FieldProvidedFileExtension,
 					file.FieldDetectedMimeType,
 					file.FieldFileContents)
 			})
-		}).Only(ctx)
+		})
+	})
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil, ErrCampaignNotFound
-		}
-
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign for email dispatch")
-
-		return nil, ErrCampaignNotFound
+		return nil, err
 	}
 
 	template := camp.Edges.EmailTemplate
@@ -84,17 +75,6 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	if !ok {
 		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
 	}
-
-	targets, err := req.DB.CampaignTarget.Query().
-		Where(campaigntarget.CampaignIDEQ(cfg.CampaignID)).
-		All(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", cfg.CampaignID).Msg("failed loading campaign targets")
-
-		return nil, err
-	}
-
-	dispatchable, skippedCount := filterCampaignTargets(targets, cfg.Resend, cfg.IncludeOverdue)
 
 	overlay := CampaignContext{
 		CampaignID:          camp.ID,
@@ -110,14 +90,14 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 
 	result := CampaignDispatchResult{
 		SentCount:    sentCount,
-		SkippedCount: skippedCount,
+		SkippedCount: skipped,
 		FailedCount:  renderFailed + sendFailed,
 	}
 
 	return json.Marshal(result)
 }
 
-// filterCampaignTargets returns the subset of targets that are dispatchable based on
+// filterCampaignTargets returns the subset of targets that are dispatchable based on status, sent history, and resend/overdue flags
 func filterCampaignTargets(targets []*generated.CampaignTarget, resend bool, includeOverdue bool) ([]*generated.CampaignTarget, int) {
 	filtered := make([]*generated.CampaignTarget, 0, len(targets))
 
@@ -184,7 +164,7 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Ema
 		batchIDs := targetIDs[start:end]
 
 		if err := client.Sender.SendBatchEmailWithContext(ctx, batchMsgs); err != nil {
-			if errors.Is(err, newman.ErrBatchNotImplemented) {
+			if err == newman.ErrBatchNotImplemented {
 				logx.FromContext(ctx).Info().Msg("batch send not supported, falling back to individual sends")
 				return sendCampaignIndividual(ctx, db, client, messages, targetIDs, nil)
 			}

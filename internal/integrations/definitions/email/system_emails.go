@@ -193,7 +193,7 @@ var (
 
 // --- Email operation definitions ---
 
-var verifyEmail = EmailOperation[VerifyEmailRequest]{
+var verifyEmail = RegisterEmailOperation(EmailOperation[VerifyEmailRequest]{
 	Op: VerifyEmailOp, Schema: verifyEmailSchema, Theme: baseTheme,
 	Description: "System email prompting a new user to verify their email address",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) string {
@@ -223,9 +223,9 @@ var verifyEmail = EmailOperation[VerifyEmailRequest]{
 			},
 		}
 	},
-}
+})
 
-var welcomeEmail = EmailOperation[WelcomeRequest]{
+var welcomeEmail = RegisterEmailOperation(EmailOperation[WelcomeRequest]{
 	Op: WelcomeOp, Schema: welcomeSchema, Theme: baseTheme,
 	Description: "System welcome email delivered after account signup",
 	Subject: func(cfg RuntimeEmailConfig, _ WelcomeRequest) string {
@@ -256,9 +256,9 @@ var welcomeEmail = EmailOperation[WelcomeRequest]{
 			}},
 		}
 	},
-}
+})
 
-var inviteEmail = EmailOperation[InviteRequest]{
+var inviteEmail = RegisterEmailOperation(EmailOperation[InviteRequest]{
 	Op: InviteOp, Schema: inviteSchema, Theme: baseTheme,
 	Description: "System email inviting a user to join an organization",
 	Subject: func(cfg RuntimeEmailConfig, req InviteRequest) string {
@@ -295,9 +295,9 @@ var inviteEmail = EmailOperation[InviteRequest]{
 			},
 		}
 	},
-}
+})
 
-var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
+var inviteJoinedEmail = RegisterEmailOperation(EmailOperation[InviteJoinedRequest]{
 	Op: InviteJoinedOp, Schema: inviteJoinedSchema, Theme: baseTheme,
 	Description: "System notification confirming an invited user has joined an organization",
 	Subject: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) string {
@@ -335,9 +335,9 @@ var inviteJoinedEmail = EmailOperation[InviteJoinedRequest]{
 			}},
 		}
 	},
-}
+})
 
-var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
+var resetRequestEmail = RegisterEmailOperation(EmailOperation[PasswordResetEmailRequest]{
 	Op: ResetRequestOp, Schema: resetRequestSchema, Theme: baseTheme,
 	Description: "System email delivering a password reset link to a user",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) string {
@@ -368,9 +368,9 @@ var resetRequestEmail = EmailOperation[PasswordResetEmailRequest]{
 			},
 		}
 	},
-}
+})
 
-var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
+var resetSuccessEmail = RegisterEmailOperation(EmailOperation[PasswordResetSuccessRequest]{
 	Op: ResetSuccessOp, Schema: resetSuccessSchema, Theme: baseTheme,
 	Description: "System email confirming a successful password reset",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetSuccessRequest) string {
@@ -390,9 +390,9 @@ var resetSuccessEmail = EmailOperation[PasswordResetSuccessRequest]{
 			},
 		}
 	},
-}
+})
 
-var subscribeEmail = EmailOperation[SubscribeRequest]{
+var subscribeEmail = RegisterEmailOperation(EmailOperation[SubscribeRequest]{
 	Op: SubscribeOp, Schema: subscribeSchema, Theme: baseTheme,
 	Description: "System email confirming a subscriber's early access signup",
 	Subject: func(cfg RuntimeEmailConfig, _ SubscribeRequest) string {
@@ -431,9 +431,9 @@ var subscribeEmail = EmailOperation[SubscribeRequest]{
 			},
 		}
 	},
-}
+})
 
-var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
+var verifyBillingEmail = RegisterEmailOperation(EmailOperation[VerifyBillingRequest]{
 	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: baseTheme,
 	Description: "System email prompting verification of the billing email on file",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyBillingRequest) string {
@@ -463,9 +463,9 @@ var verifyBillingEmail = EmailOperation[VerifyBillingRequest]{
 			},
 		}
 	},
-}
+})
 
-var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
+var tcNDARequestEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDARequestEmail]{
 	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: baseTheme,
 	Description: "System email requesting an NDA signature before granting trust center access",
 	PreHook:     resolveTrustCenterNDARequestFields,
@@ -486,9 +486,9 @@ var tcNDARequestEmail = EmailOperation[TrustCenterNDARequestEmail]{
 			}},
 		}
 	},
-}
+})
 
-var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
+var tcNDASignedEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDASignedEmail]{
 	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: baseTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
@@ -517,9 +517,9 @@ var tcNDASignedEmail = EmailOperation[TrustCenterNDASignedEmail]{
 			newman.WithAttachment(newman.NewAttachment(req.AttachmentFilename, req.AttachmentData)),
 		}
 	},
-}
+})
 
-var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
+var tcAuthEmail = RegisterEmailOperation(EmailOperation[TrustCenterAuthEmail]{
 	Op: TCAuthOp, Schema: tcAuthSchema, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a trust center",
 	PreHook:     resolveTrustCenterAuthFields,
@@ -545,9 +545,9 @@ var tcAuthEmail = EmailOperation[TrustCenterAuthEmail]{
 			},
 		}
 	},
-}
+})
 
-var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
+var questionnaireAuthEmail = RegisterEmailOperation(EmailOperation[QuestionnaireAuthEmail]{
 	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	Subject: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
@@ -581,9 +581,9 @@ var questionnaireAuthEmail = EmailOperation[QuestionnaireAuthEmail]{
 			newman.WithFrom(cfg.QuestionnaireEmail),
 		}
 	},
-}
+})
 
-var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
+var billingChangedEmail = RegisterEmailOperation(EmailOperation[BillingEmailChangedEmail]{
 	Op: BillingEmailChangedOp, Schema: billingEmailChangedSchema, Theme: baseTheme,
 	Description: "System notification confirming a change to the billing email on file",
 	Subject: func(_ RuntimeEmailConfig, req BillingEmailChangedEmail) string {
@@ -614,27 +614,6 @@ var billingChangedEmail = EmailOperation[BillingEmailChangedEmail]{
 			},
 		}
 	},
-}
-
-var dispatchers = []EmailDispatcher{
-	verifyEmail,
-	welcomeEmail,
-	inviteEmail,
-	inviteJoinedEmail,
-	resetRequestEmail,
-	resetSuccessEmail,
-	subscribeEmail,
-	verifyBillingEmail,
-	tcNDARequestEmail,
-	tcNDASignedEmail,
-	tcAuthEmail,
-	questionnaireAuthEmail,
-	billingChangedEmail,
-	brandedMessageEmail,
-}
-
-var dispatcherIndex = lo.SliceToMap(dispatchers, func(d EmailDispatcher) (string, EmailDispatcher) {
-	return d.Name(), d
 })
 
 // AllEmailOperations returns all system email operation registrations for wiring into the builder
