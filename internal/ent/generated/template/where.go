@@ -1378,6 +1378,16 @@ func TrustCenterIDContainsFold(v string) predicate.Template {
 	return predicate.Template(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
+// ProjectionConfigIsNil applies the IsNil predicate on the "projection_config" field.
+func ProjectionConfigIsNil() predicate.Template {
+	return predicate.Template(sql.FieldIsNull(FieldProjectionConfig))
+}
+
+// ProjectionConfigNotNil applies the NotNil predicate on the "projection_config" field.
+func ProjectionConfigNotNil() predicate.Template {
+	return predicate.Template(sql.FieldNotNull(FieldProjectionConfig))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Template {
 	return predicate.Template(func(s *sql.Selector) {

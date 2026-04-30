@@ -25760,6 +25760,7 @@ type CreateTemplateInput struct {
 	Kind              *enums.TemplateKind
 	Jsonconfig        map[string]interface{}
 	Uischema          map[string]interface{}
+	ProjectionConfig  *models.TemplateProjectionConfig
 	OwnerID           *string
 	EnvironmentID     *string
 	ScopeID           *string
@@ -25803,6 +25804,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if v := i.ProjectionConfig; v != nil {
+		m.SetProjectionConfig(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25861,6 +25865,8 @@ type UpdateTemplateInput struct {
 	Jsonconfig              map[string]interface{}
 	ClearUischema           bool
 	Uischema                map[string]interface{}
+	ClearProjectionConfig   bool
+	ProjectionConfig        *models.TemplateProjectionConfig
 	ClearEnvironment        bool
 	EnvironmentID           *string
 	ClearScope              bool
@@ -25945,6 +25951,12 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if i.ClearProjectionConfig {
+		m.ClearProjectionConfig()
+	}
+	if v := i.ProjectionConfig; v != nil {
+		m.SetProjectionConfig(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

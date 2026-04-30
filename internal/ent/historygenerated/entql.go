@@ -2608,6 +2608,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldJsonconfig:       {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
 			templatehistory.FieldUischema:         {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
 			templatehistory.FieldTrustCenterID:    {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
+			templatehistory.FieldProjectionConfig: {Type: field.TypeJSON, Column: templatehistory.FieldProjectionConfig},
 		},
 	}
 	graph.Nodes[60] = &sqlgraph.Node{
@@ -14418,6 +14419,11 @@ func (f *TemplateHistoryFilter) WhereUischema(p entql.BytesP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TemplateHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(templatehistory.FieldTrustCenterID))
+}
+
+// WhereProjectionConfig applies the entql json.RawMessage predicate on the projection_config field.
+func (f *TemplateHistoryFilter) WhereProjectionConfig(p entql.BytesP) {
+	f.Where(p.Field(templatehistory.FieldProjectionConfig))
 }
 
 // addPredicate implements the predicateAdder interface.

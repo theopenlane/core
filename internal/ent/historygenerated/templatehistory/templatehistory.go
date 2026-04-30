@@ -70,6 +70,8 @@ const (
 	FieldUischema = "uischema"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldProjectionConfig holds the string denoting the projection_config field in the database.
+	FieldProjectionConfig = "projection_config"
 	// Table holds the table name of the templatehistory in the database.
 	Table = "template_history"
 )
@@ -102,6 +104,7 @@ var Columns = []string{
 	FieldJsonconfig,
 	FieldUischema,
 	FieldTrustCenterID,
+	FieldProjectionConfig,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

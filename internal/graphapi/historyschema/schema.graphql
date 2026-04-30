@@ -35023,6 +35023,10 @@ type TemplateHistory implements Node {
 	the id of the trust center this template is associated with
 	"""
 	trustCenterID: String
+	"""
+	configuration for converting a submitted assesment into records for the Organization
+	"""
+	projectionConfig: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -35422,6 +35426,10 @@ input TemplateHistoryWhereInput {
 	trustCenterIDEqualFold: String
 	trustCenterIDContainsFold: String
 }
+"""
+TemplateProjectionConfig describes how submitted template document data is projected into typed records.
+"""
+scalar TemplateProjectionConfig
 """
 The TestingProcedures scalar type that represents steps to take to test a control; they can come directly from the control source or pulled from external sources
 """

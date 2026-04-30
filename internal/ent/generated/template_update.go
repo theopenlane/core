@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -353,6 +354,26 @@ func (_u *TemplateUpdate) SetNillableTrustCenterID(v *string) *TemplateUpdate {
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
 func (_u *TemplateUpdate) ClearTrustCenterID() *TemplateUpdate {
 	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetProjectionConfig sets the "projection_config" field.
+func (_u *TemplateUpdate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateUpdate {
+	_u.mutation.SetProjectionConfig(v)
+	return _u
+}
+
+// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateUpdate {
+	if v != nil {
+		_u.SetProjectionConfig(*v)
+	}
+	return _u
+}
+
+// ClearProjectionConfig clears the value of the "projection_config" field.
+func (_u *TemplateUpdate) ClearProjectionConfig() *TemplateUpdate {
+	_u.mutation.ClearProjectionConfig()
 	return _u
 }
 
@@ -748,6 +769,12 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProjectionConfig(); ok {
+		_spec.SetField(template.FieldProjectionConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ProjectionConfigCleared() {
+		_spec.ClearField(template.FieldProjectionConfig, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1422,6 +1449,26 @@ func (_u *TemplateUpdateOne) ClearTrustCenterID() *TemplateUpdateOne {
 	return _u
 }
 
+// SetProjectionConfig sets the "projection_config" field.
+func (_u *TemplateUpdateOne) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateUpdateOne {
+	_u.mutation.SetProjectionConfig(v)
+	return _u
+}
+
+// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetProjectionConfig(*v)
+	}
+	return _u
+}
+
+// ClearProjectionConfig clears the value of the "projection_config" field.
+func (_u *TemplateUpdateOne) ClearProjectionConfig() *TemplateUpdateOne {
+	_u.mutation.ClearProjectionConfig()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *TemplateUpdateOne) SetEnvironment(v *CustomTypeEnum) *TemplateUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -1844,6 +1891,12 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProjectionConfig(); ok {
+		_spec.SetField(template.FieldProjectionConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ProjectionConfigCleared() {
+		_spec.ClearField(template.FieldProjectionConfig, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

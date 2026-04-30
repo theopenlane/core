@@ -12,6 +12,7 @@ mutation CreateBulkCSVTemplate ($input: Upload!) {
 			kind
 			name
 			ownerID
+			projectionConfig
 			scopeID
 			scopeName
 			systemInternalID
@@ -39,6 +40,7 @@ mutation CreateBulkTemplate ($input: [CreateTemplateInput!]) {
 			kind
 			name
 			ownerID
+			projectionConfig
 			scopeID
 			scopeName
 			systemInternalID

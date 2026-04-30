@@ -7328,6 +7328,7 @@ var (
 		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA", "VENDOR_INTAKE"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "projection_config", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
@@ -7341,25 +7342,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[19]},
+				Columns:    []*schema.Column{TemplatesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "templates_custom_type_enums_environment",
-				Columns:    []*schema.Column{TemplatesColumns[20]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "templates_custom_type_enums_scope",
 				Columns:    []*schema.Column{TemplatesColumns[21]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_trust_centers_templates",
+				Symbol:     "templates_custom_type_enums_scope",
 				Columns:    []*schema.Column{TemplatesColumns[22]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_trust_centers_templates",
+				Columns:    []*schema.Column{TemplatesColumns[23]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7368,7 +7369,7 @@ var (
 			{
 				Name:    "template_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TemplatesColumns[19]},
+				Columns: []*schema.Column{TemplatesColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7376,7 +7377,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[13], TemplatesColumns[19], TemplatesColumns[14]},
+				Columns: []*schema.Column{TemplatesColumns[13], TemplatesColumns[20], TemplatesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7384,7 +7385,7 @@ var (
 			{
 				Name:    "template_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[22]},
+				Columns: []*schema.Column{TemplatesColumns[23]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and kind = 'TRUSTCENTER_NDA'",
 				},

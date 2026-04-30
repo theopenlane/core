@@ -34912,6 +34912,10 @@ type TemplateHistory implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: String
+  """
+  configuration for converting a submitted assesment into records for the Organization
+  """
+  projectionConfig: TemplateProjectionConfig
 }
 """
 A connection to a list of items.

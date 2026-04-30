@@ -3192,6 +3192,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldJsonconfig:       {Type: field.TypeJSON, Column: template.FieldJsonconfig},
 			template.FieldUischema:         {Type: field.TypeJSON, Column: template.FieldUischema},
 			template.FieldTrustCenterID:    {Type: field.TypeString, Column: template.FieldTrustCenterID},
+			template.FieldProjectionConfig: {Type: field.TypeJSON, Column: template.FieldProjectionConfig},
 		},
 	}
 	graph.Nodes[86] = &sqlgraph.Node{
@@ -44302,6 +44303,11 @@ func (f *TemplateFilter) WhereUischema(p entql.BytesP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TemplateFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(template.FieldTrustCenterID))
+}
+
+// WhereProjectionConfig applies the entql json.RawMessage predicate on the projection_config field.
+func (f *TemplateFilter) WhereProjectionConfig(p entql.BytesP) {
+	f.Where(p.Field(template.FieldProjectionConfig))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

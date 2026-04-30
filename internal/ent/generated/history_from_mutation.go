@@ -22366,6 +22366,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if projectionConfig, exists := m.ProjectionConfig(); exists {
+		create = create.SetProjectionConfig(projectionConfig)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -22529,6 +22533,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTrustCenterID(template.TrustCenterID)
 		}
 
+		if projectionConfig, exists := m.ProjectionConfig(); exists {
+			create = create.SetProjectionConfig(projectionConfig)
+		} else {
+			create = create.SetProjectionConfig(template.ProjectionConfig)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -22586,6 +22596,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
 			SetTrustCenterID(template.TrustCenterID).
+			SetProjectionConfig(template.ProjectionConfig).
 			Save(ctx)
 		if err != nil {
 			return err

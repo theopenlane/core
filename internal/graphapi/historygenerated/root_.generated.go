@@ -2624,6 +2624,7 @@ type ComplexityRoot struct {
 		Name             func(childComplexity int) int
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
+		ProjectionConfig func(childComplexity int) int
 		Ref              func(childComplexity int) int
 		ScopeID          func(childComplexity int) int
 		ScopeName        func(childComplexity int) int
@@ -18151,6 +18152,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TemplateHistory.OwnerID(childComplexity), true
 
+	case "TemplateHistory.projectionConfig":
+		if e.ComplexityRoot.TemplateHistory.ProjectionConfig == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.ProjectionConfig(childComplexity), true
+
 	case "TemplateHistory.ref":
 		if e.ComplexityRoot.TemplateHistory.Ref == nil {
 			break
@@ -22417,6 +22425,10 @@ scalar Channel
 ExportMetadata contains metadata for an export record
 """
 scalar ExportMetadata
+"""
+TemplateProjectionConfig describes how submitted template document data is projected into typed records.
+"""
+scalar TemplateProjectionConfig
 """
 Any is a generic fallback type
 """
@@ -57344,6 +57356,10 @@ type TemplateHistory implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: String
+  """
+  configuration for converting a submitted assesment into records for the Organization
+  """
+  projectionConfig: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -71710,6 +71726,8 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_uischema(ctx, field)
 	case "trustCenterID":
 		return ec.fieldContext_TemplateHistory_trustCenterID(ctx, field)
+	case "projectionConfig":
+		return ec.fieldContext_TemplateHistory_projectionConfig(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TemplateHistory", field.Name)
 }

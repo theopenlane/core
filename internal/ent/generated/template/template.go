@@ -62,6 +62,8 @@ const (
 	FieldUischema = "uischema"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldProjectionConfig holds the string denoting the projection_config field in the database.
+	FieldProjectionConfig = "projection_config"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -168,6 +170,7 @@ var Columns = []string{
 	FieldJsonconfig,
 	FieldUischema,
 	FieldTrustCenterID,
+	FieldProjectionConfig,
 }
 
 var (

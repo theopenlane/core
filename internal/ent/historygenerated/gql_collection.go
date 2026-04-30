@@ -13173,6 +13173,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, templatehistory.FieldTrustCenterID)
 				fieldSeen[templatehistory.FieldTrustCenterID] = struct{}{}
 			}
+		case "projectionConfig":
+			if _, ok := fieldSeen[templatehistory.FieldProjectionConfig]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldProjectionConfig)
+				fieldSeen[templatehistory.FieldProjectionConfig] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

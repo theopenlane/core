@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 
@@ -351,6 +352,26 @@ func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
 	return _u
 }
 
+// SetProjectionConfig sets the "projection_config" field.
+func (_u *TemplateHistoryUpdate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+	_u.mutation.SetProjectionConfig(v)
+	return _u
+}
+
+// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetProjectionConfig(*v)
+	}
+	return _u
+}
+
+// ClearProjectionConfig clears the value of the "projection_config" field.
+func (_u *TemplateHistoryUpdate) ClearProjectionConfig() *TemplateHistoryUpdate {
+	_u.mutation.ClearProjectionConfig()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -549,6 +570,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProjectionConfig(); ok {
+		_spec.SetField(templatehistory.FieldProjectionConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ProjectionConfigCleared() {
+		_spec.ClearField(templatehistory.FieldProjectionConfig, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -890,6 +917,26 @@ func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateO
 	return _u
 }
 
+// SetProjectionConfig sets the "projection_config" field.
+func (_u *TemplateHistoryUpdateOne) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+	_u.mutation.SetProjectionConfig(v)
+	return _u
+}
+
+// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetProjectionConfig(*v)
+	}
+	return _u
+}
+
+// ClearProjectionConfig clears the value of the "projection_config" field.
+func (_u *TemplateHistoryUpdateOne) ClearProjectionConfig() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearProjectionConfig()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -1118,6 +1165,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProjectionConfig(); ok {
+		_spec.SetField(templatehistory.FieldProjectionConfig, field.TypeJSON, value)
+	}
+	if _u.mutation.ProjectionConfigCleared() {
+		_spec.ClearField(templatehistory.FieldProjectionConfig, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
