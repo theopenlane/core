@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 var directorySyncRunIDKey = contextx.NewKey[string]()
@@ -359,11 +361,11 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 	}
 
 	if options.WorkflowMeta != nil {
-		metadata.WorkflowInstanceID = options.WorkflowMeta.InstanceID
-		metadata.WorkflowActionKey = options.WorkflowMeta.ActionKey
+		metadata.WorkflowInstanceID  = options.WorkflowMeta.InstanceID
+		metadata.WorkflowActionKey   = options.WorkflowMeta.ActionKey
 		metadata.WorkflowActionIndex = options.WorkflowMeta.ActionIndex
-		metadata.WorkflowObjectID = options.WorkflowMeta.ObjectID
-		metadata.WorkflowObjectType = string(options.WorkflowMeta.ObjectType)
+		metadata.WorkflowObjectID    = options.WorkflowMeta.ObjectID
+		metadata.WorkflowObjectType  = string(options.WorkflowMeta.ObjectType)
 	}
 
 	return metadata

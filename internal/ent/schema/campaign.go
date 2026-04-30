@@ -153,6 +153,23 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("recurrence_timezone"),
 			),
+		field.String("recurrence_cron").
+			GoType(models.Cron("")).
+			Comment("cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *").
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+			).
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				c := models.Cron(s)
+
+				return c.Validate()
+			}).
+			Optional().
+			Nillable(),
 		field.Time("last_run_at").
 			Comment("when the campaign was last executed").
 			GoType(models.DateTime{}).
@@ -207,6 +224,12 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entx.CSVRef().FromColumn("CampaignEntityName").MatchOn("name"),
 			),
+		field.String("template_id").
+			Comment("the template associated with the campaign").
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
+			),
 		field.String("assessment_id").
 			Comment("the assessment associated with the campaign").
 			Optional(),
@@ -215,6 +238,12 @@ func (Campaign) Fields() []ent.Field {
 			Optional(),
 		field.String("email_template_id").
 			Comment("the email template associated with the campaign").
+			Optional(),
+		field.String("integration_id").
+			Comment("the email integration used for campaign dispatch").
+			Optional(),
+		field.String("email_branding_id").
+			Comment("the email branding associated with the campaign").
 			Optional(),
 	}
 }
@@ -244,6 +273,14 @@ func (c Campaign) Edges() []ent.Edge {
 			field:      "assessment_id",
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Template{},
+			field:      "template_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Template{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
