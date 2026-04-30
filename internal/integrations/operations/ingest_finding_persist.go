@@ -3,6 +3,7 @@ package operations
 
 import (
 	"context"
+	"slices"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	finding "github.com/theopenlane/core/internal/ent/generated/finding"
@@ -22,6 +23,10 @@ func persistFindingInput(ctx context.Context, db *ent.Client, integration *ent.I
 	if createInput.Description != nil && *createInput.Description != "" {
 		normalized := normalizeDescription(*createInput.Description)
 		createInput.Description = &normalized
+	}
+
+	if !slices.Contains(createInput.IntegrationIDs, integration.ID) {
+		createInput.IntegrationIDs = append(createInput.IntegrationIDs, integration.ID)
 	}
 
 	return persistRoundTripUpsert(

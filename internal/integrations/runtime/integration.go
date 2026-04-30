@@ -92,7 +92,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		entity.OwnerID(ownerID),
 	).IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Info().Err(err).Msg("error looking for existing vendor, skipping creation")
+		logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error looking for existing vendor, skipping creation")
 		return
 	}
 
@@ -101,8 +101,12 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := r.DB().Entity.Update().Where(entity.IDIn(vendorIDs...)).AddIntegrationIDs(
 			integrationID).Exec(ctxAllow); err != nil {
-			logx.FromContext(ctx).Info().Err(err).Msg("error update vendor edges to integration")
+			logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error update vendor edges to integration")
 		}
+
+		logx.FromContext(ctx).Debug().Str("vendor", def.Family).Str("org_id", ownerID).Msg("successfully updated vendor from integration setup")
+
+		return
 	}
 
 	vendorInput := ent.CreateEntityInput{
@@ -126,7 +130,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		).
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Info().Err(err).Msg("error looking up vendor entity type, skipping creation")
+		logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error looking up vendor entity type, skipping creation")
 		return
 	}
 
@@ -135,5 +139,5 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		return
 	}
 
-	logx.FromContext(ctx).Debug().Str("vendor", def.Family).Msg("successfully created vendor from integration setup")
+	logx.FromContext(ctx).Debug().Str("vendor", def.Family).Str("org_id", ownerID).Msg("successfully created vendor from integration setup")
 }

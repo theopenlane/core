@@ -14,9 +14,9 @@ import (
 // slackUserPayload is the normalized payload for a Slack workspace user
 type slackUserPayload struct {
 	// ID is the Slack user identifier
-	ID string `json:"id,omitempty"`
+	ID string `json:"id"`
 	// TeamID is the Slack team/workspace identifier
-	TeamID string `json:"team_id,omitempty"`
+	TeamID string `json:"team_id"`
 	// Name is the Slack username (handle)
 	Name string `json:"name,omitempty"`
 	// RealName is the user's full display name
@@ -34,21 +34,21 @@ type slackUserPayload struct {
 	// AvatarURL is the user's avatar image URL
 	AvatarURL string `json:"avatar_url,omitempty"`
 	// Deleted reports whether the user account has been deactivated
-	Deleted bool `json:"deleted,omitempty"`
+	Deleted bool `json:"deleted"`
 	// IsBot reports whether this user is a bot account
-	IsBot bool `json:"is_bot,omitempty"`
+	IsBot bool `json:"is_bot"`
 	// IsAdmin reports whether the user is a workspace admin
-	IsAdmin bool `json:"is_admin,omitempty"`
+	IsAdmin bool `json:"is_admin"`
 	// Has2FA reports whether 2FA is enabled for the user
-	Has2FA bool `json:"has_2fa,omitempty"`
+	Has2FA bool `json:"has_2fa"`
 	// IsRestricted reports whether this user is a restricted user (e.g. multi channel guest)
-	IsRestricted bool `json:"is_restricted,omitempty"`
+	IsRestricted bool `json:"is_restricted"`
 	// IsUltraRestricted reports whether this user is a restricted user (e.g. single channel guest)
-	IsUltraRestricted bool `json:"is_ultra_restricted,omitempty"`
+	IsUltraRestricted bool `json:"is_ultra_restricted"`
 	// IsStranger reports whether this user is a external user (e.g. slack-connect)
-	IsStranger bool `json:"is_stranger,omitempty"`
+	IsStranger bool `json:"is_stranger"`
 	// IsExternal reports whether this user is a external user (e.g. slack-connect)
-	IsExternal bool `json:"is_external,omitempty"`
+	IsExternal bool `json:"is_external"`
 }
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary

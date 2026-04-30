@@ -14,6 +14,10 @@ func persistRiskInput(ctx context.Context, db *ent.Client, integration *ent.Inte
 		return ErrIngestUpsertKeyMissing
 	}
 
+	if createInput.IntegrationID == nil {
+		createInput.IntegrationID = &integration.ID
+	}
+
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,
