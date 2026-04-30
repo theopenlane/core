@@ -2,47 +2,6 @@ package models
 
 import "io"
 
-// TemplateProjectionTarget is the destination object type for projected document data.
-type TemplateProjectionTarget string
-
-const (
-	// TemplateProjectionTargetEntity projects document data into an entity record.
-	TemplateProjectionTargetEntity TemplateProjectionTarget = "Entity"
-	// TemplateProjectionTargetAsset projects document data into an asset record.
-	TemplateProjectionTargetAsset TemplateProjectionTarget = "Asset"
-)
-
-// TemplateProjectionOperation is the persistence operation used by a projection.
-type TemplateProjectionOperation string
-
-const (
-	// TemplateProjectionOperationCreate creates a new target record.
-	TemplateProjectionOperationCreate TemplateProjectionOperation = "create"
-	// TemplateProjectionOperationUpdate updates an existing target record.
-	TemplateProjectionOperationUpdate TemplateProjectionOperation = "update"
-	// TemplateProjectionOperationUpsert creates or updates the target record.
-	TemplateProjectionOperationUpsert TemplateProjectionOperation = "upsert"
-)
-
-// TemplateProjectionTrigger is the event that runs a projection.
-type TemplateProjectionTrigger string
-
-const (
-	// TemplateProjectionTriggerCompleted runs the projection after the questionnaire is completed.
-	TemplateProjectionTriggerCompleted TemplateProjectionTrigger = "completed"
-)
-
-// TemplateProjectionTransform converts a source value before it is assigned.
-type TemplateProjectionTransform string
-
-const (
-	// TemplateProjectionTransformSlugify converts text to a URL-safe slug.
-	TemplateProjectionTransformSlugify TemplateProjectionTransform = "slugify"
-	// TemplateProjectionTransformDate converts input into the target date/time representation.
-	TemplateProjectionTransformDate TemplateProjectionTransform = "date"
-	// TemplateProjectionTransformString normalizes input into a string.
-	TemplateProjectionTransformString TemplateProjectionTransform = "string"
-)
 
 // TemplateProjectionResolver resolves a source value to another record or field.
 type TemplateProjectionResolver string
