@@ -163,7 +163,7 @@ func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state 
 		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	req, err := r.buildCampaignEmailDispatchRequest(ctx, state.campaignObj, state.resend, state.includeOverdue, "", nil)
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, rt, state.campaignObj, state.resend, state.includeOverdue, "", nil)
 	if err != nil {
 		return err
 	}
@@ -291,7 +291,8 @@ func resolveCampaignScheduleAt(now time.Time, campaignObj *generated.Campaign, a
 	return nil, nil
 }
 
-func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (operations.DispatchRequest, error) {
+// buildCampaignEmailDispatchRequest constructs the integration dispatch request for the campaign email operation
+func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (operations.DispatchRequest, error) {
 	if campaignObj == nil {
 		return operations.DispatchRequest{}, emaildef.ErrCampaignNotFound
 	}
@@ -319,21 +320,23 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		return operations.DispatchRequest{}, err
 	}
 
-	req := operations.DispatchRequest{
-		Operation:   operation,
-		Config:      config,
-		RunType:     enums.IntegrationRunTypeEvent,
-		ScheduledAt: scheduledAt,
-	}
-
-	integrationID, err := emaildef.ResolveCampaignEmailIntegration(ctx, withTransactionalMutation(ctx), campaignObj.OwnerID)
+	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *generated.Integration) bool {
+		return inst.CampaignEmail
+	})
 	if err != nil {
-		return req, err
+		return operations.DispatchRequest{}, err
 	}
 
-	req.IntegrationID = integrationID
-
-	return req, nil
+	return operations.DispatchRequest{
+		IntegrationID: integrationID,
+		DefinitionID:  emaildef.DefinitionID.ID(),
+		OwnerID:       campaignObj.OwnerID,
+		Operation:     operation,
+		Config:        config,
+		RunType:       enums.IntegrationRunTypeEvent,
+		ScheduledAt:   scheduledAt,
+		Runtime:       integrationID == "",
+	}, nil
 }
 
 // enqueueCampaignDispatchJob schedules a campaign dispatch through the integration
@@ -349,7 +352,7 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	req, err := r.buildCampaignEmailDispatchRequest(ctx, state.campaignObj, state.resend, state.includeOverdue, "", state.scheduleAt)
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, rt, state.campaignObj, state.resend, state.includeOverdue, "", state.scheduleAt)
 	if err != nil {
 		return err
 	}

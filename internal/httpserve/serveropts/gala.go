@@ -91,6 +91,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaSlackListeners},
 		{galaApp, hooks.RegisterGalaVendorScoringListeners},
 		{galaApp, hooks.RegisterGalaIdentityResolutionListeners},
+		{galaApp, hooks.RegisterGalaCampaignRecurringListeners},
 		{notificationGala, hooks.RegisterGalaNotificationListeners},
 	}
 

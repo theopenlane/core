@@ -3,12 +3,9 @@ package operations
 import (
 	"context"
 
-	"github.com/riverqueue/river"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ReconcileEnvelope is the durable payload for a scheduled reconciliation cycle
@@ -34,40 +31,23 @@ type ReconcileHandler func(context.Context, ReconcileEnvelope) (int, error)
 
 // RegisterReconcileListener registers the Gala listener for integration reconciliation
 func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, schedule gala.Schedule) error {
-	if runtime == nil {
-		return ErrGalaRequired
-	}
-
-	topic := gala.Topic[ReconcileEnvelope]{Name: ReconcileTopic}
-
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[ReconcileEnvelope]{
-		Topic: topic,
-		Name:  reconcileListenerName,
-		Handle: func(ctx gala.HandlerContext, envelope ReconcileEnvelope) error {
-			delta, execErr := handle(ctx.Context, envelope)
-
-			if execErr != nil {
-				logx.FromContext(ctx.Context).Warn().Err(execErr).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Int("error_streak", envelope.Schedule.ErrorStreak+1).Msg("reconcile cycle failed, scheduling retry with backoff")
+	return RegisterScheduledListener(ScheduledListenerConfig[ReconcileEnvelope]{
+		Runtime:  runtime,
+		Topic:    ReconcileTopic,
+		Name:     reconcileListenerName,
+		Schedule: schedule,
+		Handle:   handle,
+		State:    func(e ReconcileEnvelope) gala.ScheduleState { return e.Schedule },
+		Wrap: func(e ReconcileEnvelope, s gala.ScheduleState) ReconcileEnvelope {
+			return ReconcileEnvelope{
+				ExecutionMetadata: e.ExecutionMetadata,
+				Schedule:          s,
 			}
-
-			next := schedule.Next(envelope.Schedule, delta, execErr)
-			scheduledAt := next.NextScheduledAt()
-			emitCtx := types.WithExecutionMetadata(ctx.Context, envelope.ExecutionMetadata)
-			receipt := runtime.EmitWithHeaders(emitCtx, ReconcileTopic, ReconcileEnvelope{
-				ExecutionMetadata: envelope.ExecutionMetadata,
-				Schedule:          next,
-			}, gala.Headers{
-				ScheduledAt: &scheduledAt,
-				Properties:  envelope.Properties(),
-			})
-
-			if execErr != nil {
-				return river.JobCancel(execErr)
+		},
+		PrepareEmit: func(ctx context.Context, e ReconcileEnvelope) (context.Context, gala.Headers) {
+			return types.WithExecutionMetadata(ctx, e.ExecutionMetadata), gala.Headers{
+				Properties: e.Properties(),
 			}
-
-			return receipt.Err
 		},
 	})
-
-	return err
 }

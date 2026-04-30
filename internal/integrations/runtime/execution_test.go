@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -56,6 +57,9 @@ func TestBootstrapHandlerContextRuntimeRehydratesProcessDependencies(t *testing.
 	}
 	if ent.FromContext(gotCtx) != db {
 		t.Fatal("expected ent client to be reattached to handler context")
+	}
+	if _, allowed := privacy.DecisionFromContext(gotCtx); !allowed {
+		t.Fatal("expected runtime handler context to carry an internal privacy decision")
 	}
 
 	gotCaller, ok := auth.CallerFromContext(gotCtx)

@@ -3,12 +3,18 @@
 package hooks_test
 
 import (
+	"context"
+
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -59,7 +65,25 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 	require.True(t, first.CampaignEmail)
 	require.False(t, second.CampaignEmail)
 
-	resolved, err := emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID)
+	galaRuntime, err := gala.NewGala(context.Background(), gala.Config{
+		DispatchMode: gala.DispatchModeInMemory,
+		Enabled:      true,
+		WorkerCount:  1,
+	})
+	require.NoError(t, err)
+	defer galaRuntime.Close()
+
+	rt, err := intruntime.New(intruntime.Config{
+		DB:       suite.client,
+		Gala:     galaRuntime,
+		Registry: registry.New(),
+		Keystore: &keystore.Store{},
+	})
+	require.NoError(t, err)
+
+	resolved, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
+		return inst.CampaignEmail
+	})
 	require.NoError(t, err)
 	require.Equal(t, first.ID, resolved)
 
@@ -68,7 +92,9 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 		Save(ctx)
 	require.NoError(t, err)
 
-	resolved, err = emaildef.ResolveCampaignEmailIntegration(ctx, suite.client, orgID)
+	resolved, err = rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
+		return inst.CampaignEmail
+	})
 	require.NoError(t, err)
 	require.Equal(t, second.ID, resolved)
 	require.True(t, first.CampaignEmail)

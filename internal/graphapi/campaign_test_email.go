@@ -103,7 +103,7 @@ func (r *mutationResolver) processTestEmail(ctx context.Context, state *testEmai
 		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	req, err := r.buildCampaignEmailDispatchRequest(ctx, state.campaignObj, false, false, trimmed, nil)
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, rt, state.campaignObj, false, false, trimmed, nil)
 	if err != nil {
 		return err
 	}
