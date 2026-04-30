@@ -553,6 +553,7 @@ github.com/oklog/ulid/v2 v2.1.1 h1:suPZ4ARWLOJLegGFiZZ1dFAkqzhMjL3J1TzI+5wHz8s=
 github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNsTT1QQ=
 github.com/okta/okta-sdk-golang/v5 v5.0.6 h1:p7ptDMB1KxQ/7xSh+6FhMSybwl+ubTV4f1oL4N0Bu6U=
 github.com/okta/okta-sdk-golang/v5 v5.0.6/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
+github.com/okta/okta-sdk-golang/v6 v6.1.6/go.mod h1:hLXAo1HqjsWlMdbop9yLVJ9MWIek9qRsNbkhZQAiXsw=
 github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 h1:zrbMGy9YXpIeTnGj4EljqMiZsIcE09mmF8XsD5AYOJc=
 github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6/go.mod h1:rEKTHC9roVVicUIfZK7DYrdIoM0EOr8mK1Hj5s3JjH0=
 github.com/olekukonko/errors v1.1.0 h1:RNuGIh15QdDenh+hNvKrJkmxxjV4hcS50Db478Ou5sM=
