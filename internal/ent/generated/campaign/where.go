@@ -174,14 +174,14 @@ func RecurrenceInterval(v int) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceInterval, v))
 }
 
-// RecurrenceCron applies equality check predicate on the "recurrence_cron" field. It's identical to RecurrenceCronEQ.
-func RecurrenceCron(v models.Cron) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceCron, v))
-}
-
 // RecurrenceTimezone applies equality check predicate on the "recurrence_timezone" field. It's identical to RecurrenceTimezoneEQ.
 func RecurrenceTimezone(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceCron applies equality check predicate on the "recurrence_cron" field. It's identical to RecurrenceCronEQ.
+func RecurrenceCron(v models.Cron) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceCron, v))
 }
 
 // LastRunAt applies equality check predicate on the "last_run_at" field. It's identical to LastRunAtEQ.
@@ -214,24 +214,19 @@ func LastResentAt(v models.DateTime) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldLastResentAt, v))
 }
 
-// TemplateID applies equality check predicate on the "template_id" field. It's identical to TemplateIDEQ.
-func TemplateID(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldTemplateID, v))
-}
-
 // EntityID applies equality check predicate on the "entity_id" field. It's identical to EntityIDEQ.
 func EntityID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldEntityID, v))
 }
 
+// TemplateID applies equality check predicate on the "template_id" field. It's identical to TemplateIDEQ.
+func TemplateID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldTemplateID, v))
+}
+
 // AssessmentID applies equality check predicate on the "assessment_id" field. It's identical to AssessmentIDEQ.
 func AssessmentID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldAssessmentID, v))
-}
-
-// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
-func EmailBrandingID(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
 }
 
 // EmailTemplateID applies equality check predicate on the "email_template_id" field. It's identical to EmailTemplateIDEQ.
@@ -242,6 +237,11 @@ func EmailTemplateID(v string) predicate.Campaign {
 // IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
 func IntegrationID(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldIntegrationID, v))
+}
+
+// EmailBrandingID applies equality check predicate on the "email_branding_id" field. It's identical to EmailBrandingIDEQ.
+func EmailBrandingID(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1524,6 +1524,81 @@ func RecurrenceIntervalNotNil() predicate.Campaign {
 	return predicate.Campaign(sql.FieldNotNull(FieldRecurrenceInterval))
 }
 
+// RecurrenceTimezoneEQ applies the EQ predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneNEQ applies the NEQ predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneIn applies the In predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldRecurrenceTimezone, vs...))
+}
+
+// RecurrenceTimezoneNotIn applies the NotIn predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldRecurrenceTimezone, vs...))
+}
+
+// RecurrenceTimezoneGT applies the GT predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneGTE applies the GTE predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneLT applies the LT predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneLTE applies the LTE predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneContains applies the Contains predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneHasPrefix applies the HasPrefix predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneHasSuffix applies the HasSuffix predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneIsNil applies the IsNil predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldRecurrenceTimezone))
+}
+
+// RecurrenceTimezoneNotNil applies the NotNil predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldRecurrenceTimezone))
+}
+
+// RecurrenceTimezoneEqualFold applies the EqualFold predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldRecurrenceTimezone, v))
+}
+
+// RecurrenceTimezoneContainsFold applies the ContainsFold predicate on the "recurrence_timezone" field.
+func RecurrenceTimezoneContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldRecurrenceTimezone, v))
+}
+
 // RecurrenceCronEQ applies the EQ predicate on the "recurrence_cron" field.
 func RecurrenceCronEQ(v models.Cron) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceCron, v))
@@ -1602,81 +1677,6 @@ func RecurrenceCronEqualFold(v models.Cron) predicate.Campaign {
 func RecurrenceCronContainsFold(v models.Cron) predicate.Campaign {
 	vc := string(v)
 	return predicate.Campaign(sql.FieldContainsFold(FieldRecurrenceCron, vc))
-}
-
-// RecurrenceTimezoneEQ applies the EQ predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneNEQ applies the NEQ predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneNEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNEQ(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneIn applies the In predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldIn(FieldRecurrenceTimezone, vs...))
-}
-
-// RecurrenceTimezoneNotIn applies the NotIn predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneNotIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotIn(FieldRecurrenceTimezone, vs...))
-}
-
-// RecurrenceTimezoneGT applies the GT predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneGT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGT(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneGTE applies the GTE predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneGTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGTE(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneLT applies the LT predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneLT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLT(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneLTE applies the LTE predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneLTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLTE(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneContains applies the Contains predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneContains(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContains(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneHasPrefix applies the HasPrefix predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneHasPrefix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasPrefix(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneHasSuffix applies the HasSuffix predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneHasSuffix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasSuffix(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneIsNil applies the IsNil predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneIsNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldIsNull(FieldRecurrenceTimezone))
-}
-
-// RecurrenceTimezoneNotNil applies the NotNil predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneNotNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotNull(FieldRecurrenceTimezone))
-}
-
-// RecurrenceTimezoneEqualFold applies the EqualFold predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneEqualFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEqualFold(FieldRecurrenceTimezone, v))
-}
-
-// RecurrenceTimezoneContainsFold applies the ContainsFold predicate on the "recurrence_timezone" field.
-func RecurrenceTimezoneContainsFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContainsFold(FieldRecurrenceTimezone, v))
 }
 
 // LastRunAtEQ applies the EQ predicate on the "last_run_at" field.
@@ -1979,81 +1979,6 @@ func LastResentAtNotNil() predicate.Campaign {
 	return predicate.Campaign(sql.FieldNotNull(FieldLastResentAt))
 }
 
-// TemplateIDEQ applies the EQ predicate on the "template_id" field.
-func TemplateIDEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldTemplateID, v))
-}
-
-// TemplateIDNEQ applies the NEQ predicate on the "template_id" field.
-func TemplateIDNEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNEQ(FieldTemplateID, v))
-}
-
-// TemplateIDIn applies the In predicate on the "template_id" field.
-func TemplateIDIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldIn(FieldTemplateID, vs...))
-}
-
-// TemplateIDNotIn applies the NotIn predicate on the "template_id" field.
-func TemplateIDNotIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotIn(FieldTemplateID, vs...))
-}
-
-// TemplateIDGT applies the GT predicate on the "template_id" field.
-func TemplateIDGT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGT(FieldTemplateID, v))
-}
-
-// TemplateIDGTE applies the GTE predicate on the "template_id" field.
-func TemplateIDGTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGTE(FieldTemplateID, v))
-}
-
-// TemplateIDLT applies the LT predicate on the "template_id" field.
-func TemplateIDLT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLT(FieldTemplateID, v))
-}
-
-// TemplateIDLTE applies the LTE predicate on the "template_id" field.
-func TemplateIDLTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLTE(FieldTemplateID, v))
-}
-
-// TemplateIDContains applies the Contains predicate on the "template_id" field.
-func TemplateIDContains(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContains(FieldTemplateID, v))
-}
-
-// TemplateIDHasPrefix applies the HasPrefix predicate on the "template_id" field.
-func TemplateIDHasPrefix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasPrefix(FieldTemplateID, v))
-}
-
-// TemplateIDHasSuffix applies the HasSuffix predicate on the "template_id" field.
-func TemplateIDHasSuffix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasSuffix(FieldTemplateID, v))
-}
-
-// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
-func TemplateIDIsNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldIsNull(FieldTemplateID))
-}
-
-// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
-func TemplateIDNotNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotNull(FieldTemplateID))
-}
-
-// TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
-func TemplateIDEqualFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEqualFold(FieldTemplateID, v))
-}
-
-// TemplateIDContainsFold applies the ContainsFold predicate on the "template_id" field.
-func TemplateIDContainsFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContainsFold(FieldTemplateID, v))
-}
-
 // EntityIDEQ applies the EQ predicate on the "entity_id" field.
 func EntityIDEQ(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldEQ(FieldEntityID, v))
@@ -2127,6 +2052,81 @@ func EntityIDEqualFold(v string) predicate.Campaign {
 // EntityIDContainsFold applies the ContainsFold predicate on the "entity_id" field.
 func EntityIDContainsFold(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldContainsFold(FieldEntityID, v))
+}
+
+// TemplateIDEQ applies the EQ predicate on the "template_id" field.
+func TemplateIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldTemplateID, v))
+}
+
+// TemplateIDNEQ applies the NEQ predicate on the "template_id" field.
+func TemplateIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldTemplateID, v))
+}
+
+// TemplateIDIn applies the In predicate on the "template_id" field.
+func TemplateIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldTemplateID, vs...))
+}
+
+// TemplateIDNotIn applies the NotIn predicate on the "template_id" field.
+func TemplateIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldTemplateID, vs...))
+}
+
+// TemplateIDGT applies the GT predicate on the "template_id" field.
+func TemplateIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldTemplateID, v))
+}
+
+// TemplateIDGTE applies the GTE predicate on the "template_id" field.
+func TemplateIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldTemplateID, v))
+}
+
+// TemplateIDLT applies the LT predicate on the "template_id" field.
+func TemplateIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldTemplateID, v))
+}
+
+// TemplateIDLTE applies the LTE predicate on the "template_id" field.
+func TemplateIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldTemplateID, v))
+}
+
+// TemplateIDContains applies the Contains predicate on the "template_id" field.
+func TemplateIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldTemplateID, v))
+}
+
+// TemplateIDHasPrefix applies the HasPrefix predicate on the "template_id" field.
+func TemplateIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldTemplateID, v))
+}
+
+// TemplateIDHasSuffix applies the HasSuffix predicate on the "template_id" field.
+func TemplateIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldTemplateID, v))
+}
+
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldTemplateID))
+}
+
+// TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
+func TemplateIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldTemplateID, v))
+}
+
+// TemplateIDContainsFold applies the ContainsFold predicate on the "template_id" field.
+func TemplateIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldTemplateID, v))
 }
 
 // AssessmentIDEQ applies the EQ predicate on the "assessment_id" field.
@@ -2212,81 +2212,6 @@ func MetadataIsNil() predicate.Campaign {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.Campaign {
 	return predicate.Campaign(sql.FieldNotNull(FieldMetadata))
-}
-
-// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
-func EmailBrandingIDEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
-func EmailBrandingIDNEQ(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNEQ(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
-func EmailBrandingIDIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
-func EmailBrandingIDNotIn(vs ...string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotIn(FieldEmailBrandingID, vs...))
-}
-
-// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
-func EmailBrandingIDGT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
-func EmailBrandingIDGTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldGTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
-func EmailBrandingIDLT(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLT(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
-func EmailBrandingIDLTE(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldLTE(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
-func EmailBrandingIDContains(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContains(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasPrefix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasPrefix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
-func EmailBrandingIDHasSuffix(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldHasSuffix(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
-func EmailBrandingIDIsNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldIsNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
-func EmailBrandingIDNotNil() predicate.Campaign {
-	return predicate.Campaign(sql.FieldNotNull(FieldEmailBrandingID))
-}
-
-// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
-func EmailBrandingIDEqualFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldEqualFold(FieldEmailBrandingID, v))
-}
-
-// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
-func EmailBrandingIDContainsFold(v string) predicate.Campaign {
-	return predicate.Campaign(sql.FieldContainsFold(FieldEmailBrandingID, v))
 }
 
 // EmailTemplateIDEQ applies the EQ predicate on the "email_template_id" field.
@@ -2437,6 +2362,81 @@ func IntegrationIDEqualFold(v string) predicate.Campaign {
 // IntegrationIDContainsFold applies the ContainsFold predicate on the "integration_id" field.
 func IntegrationIDContainsFold(v string) predicate.Campaign {
 	return predicate.Campaign(sql.FieldContainsFold(FieldIntegrationID, v))
+}
+
+// EmailBrandingIDEQ applies the EQ predicate on the "email_branding_id" field.
+func EmailBrandingIDEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDNEQ applies the NEQ predicate on the "email_branding_id" field.
+func EmailBrandingIDNEQ(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNEQ(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIn applies the In predicate on the "email_branding_id" field.
+func EmailBrandingIDIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDNotIn applies the NotIn predicate on the "email_branding_id" field.
+func EmailBrandingIDNotIn(vs ...string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotIn(FieldEmailBrandingID, vs...))
+}
+
+// EmailBrandingIDGT applies the GT predicate on the "email_branding_id" field.
+func EmailBrandingIDGT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDGTE applies the GTE predicate on the "email_branding_id" field.
+func EmailBrandingIDGTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldGTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLT applies the LT predicate on the "email_branding_id" field.
+func EmailBrandingIDLT(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLT(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDLTE applies the LTE predicate on the "email_branding_id" field.
+func EmailBrandingIDLTE(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldLTE(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContains applies the Contains predicate on the "email_branding_id" field.
+func EmailBrandingIDContains(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContains(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasPrefix applies the HasPrefix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasPrefix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasPrefix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDHasSuffix applies the HasSuffix predicate on the "email_branding_id" field.
+func EmailBrandingIDHasSuffix(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldHasSuffix(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDIsNil applies the IsNil predicate on the "email_branding_id" field.
+func EmailBrandingIDIsNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldIsNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDNotNil applies the NotNil predicate on the "email_branding_id" field.
+func EmailBrandingIDNotNil() predicate.Campaign {
+	return predicate.Campaign(sql.FieldNotNull(FieldEmailBrandingID))
+}
+
+// EmailBrandingIDEqualFold applies the EqualFold predicate on the "email_branding_id" field.
+func EmailBrandingIDEqualFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldEqualFold(FieldEmailBrandingID, v))
+}
+
+// EmailBrandingIDContainsFold applies the ContainsFold predicate on the "email_branding_id" field.
+func EmailBrandingIDContainsFold(v string) predicate.Campaign {
+	return predicate.Campaign(sql.FieldContainsFold(FieldEmailBrandingID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -6167,15 +6167,15 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, campaign.FieldRecurrenceInterval)
 				fieldSeen[campaign.FieldRecurrenceInterval] = struct{}{}
 			}
-		case "recurrenceCron":
-			if _, ok := fieldSeen[campaign.FieldRecurrenceCron]; !ok {
-				selectedFields = append(selectedFields, campaign.FieldRecurrenceCron)
-				fieldSeen[campaign.FieldRecurrenceCron] = struct{}{}
-			}
 		case "recurrenceTimezone":
 			if _, ok := fieldSeen[campaign.FieldRecurrenceTimezone]; !ok {
 				selectedFields = append(selectedFields, campaign.FieldRecurrenceTimezone)
 				fieldSeen[campaign.FieldRecurrenceTimezone] = struct{}{}
+			}
+		case "recurrenceCron":
+			if _, ok := fieldSeen[campaign.FieldRecurrenceCron]; !ok {
+				selectedFields = append(selectedFields, campaign.FieldRecurrenceCron)
+				fieldSeen[campaign.FieldRecurrenceCron] = struct{}{}
 			}
 		case "lastRunAt":
 			if _, ok := fieldSeen[campaign.FieldLastRunAt]; !ok {
@@ -6207,15 +6207,15 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, campaign.FieldLastResentAt)
 				fieldSeen[campaign.FieldLastResentAt] = struct{}{}
 			}
-		case "templateID":
-			if _, ok := fieldSeen[campaign.FieldTemplateID]; !ok {
-				selectedFields = append(selectedFields, campaign.FieldTemplateID)
-				fieldSeen[campaign.FieldTemplateID] = struct{}{}
-			}
 		case "entityID":
 			if _, ok := fieldSeen[campaign.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, campaign.FieldEntityID)
 				fieldSeen[campaign.FieldEntityID] = struct{}{}
+			}
+		case "templateID":
+			if _, ok := fieldSeen[campaign.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, campaign.FieldTemplateID)
+				fieldSeen[campaign.FieldTemplateID] = struct{}{}
 			}
 		case "assessmentID":
 			if _, ok := fieldSeen[campaign.FieldAssessmentID]; !ok {
@@ -6227,11 +6227,6 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, campaign.FieldMetadata)
 				fieldSeen[campaign.FieldMetadata] = struct{}{}
 			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[campaign.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, campaign.FieldEmailBrandingID)
-				fieldSeen[campaign.FieldEmailBrandingID] = struct{}{}
-			}
 		case "emailTemplateID":
 			if _, ok := fieldSeen[campaign.FieldEmailTemplateID]; !ok {
 				selectedFields = append(selectedFields, campaign.FieldEmailTemplateID)
@@ -6241,6 +6236,11 @@ func (_q *CampaignQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[campaign.FieldIntegrationID]; !ok {
 				selectedFields = append(selectedFields, campaign.FieldIntegrationID)
 				fieldSeen[campaign.FieldIntegrationID] = struct{}{}
+			}
+		case "emailBrandingID":
+			if _, ok := fieldSeen[campaign.FieldEmailBrandingID]; !ok {
+				selectedFields = append(selectedFields, campaign.FieldEmailBrandingID)
+				fieldSeen[campaign.FieldEmailBrandingID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -36972,10 +36972,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -36983,10 +36983,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Campaigns)
-							if nodes[i].Edges.totalCount[20] == nil {
-								nodes[i].Edges.totalCount[20] = make(map[string]int)
+							if nodes[i].Edges.totalCount[21] == nil {
+								nodes[i].Edges.totalCount[21] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[20][alias] = n
+							nodes[i].Edges.totalCount[21][alias] = n
 						}
 						return nil
 					})
@@ -37065,10 +37065,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})
@@ -37076,10 +37076,10 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Entities)
-							if nodes[i].Edges.totalCount[21] == nil {
-								nodes[i].Edges.totalCount[21] = make(map[string]int)
+							if nodes[i].Edges.totalCount[22] == nil {
+								nodes[i].Edges.totalCount[22] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[21][alias] = n
+							nodes[i].Edges.totalCount[22][alias] = n
 						}
 						return nil
 					})

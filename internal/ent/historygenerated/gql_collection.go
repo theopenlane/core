@@ -1272,15 +1272,15 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceInterval)
 				fieldSeen[campaignhistory.FieldRecurrenceInterval] = struct{}{}
 			}
-		case "recurrenceCron":
-			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceCron]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceCron)
-				fieldSeen[campaignhistory.FieldRecurrenceCron] = struct{}{}
-			}
 		case "recurrenceTimezone":
 			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceTimezone]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceTimezone)
 				fieldSeen[campaignhistory.FieldRecurrenceTimezone] = struct{}{}
+			}
+		case "recurrenceCron":
+			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceCron]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceCron)
+				fieldSeen[campaignhistory.FieldRecurrenceCron] = struct{}{}
 			}
 		case "lastRunAt":
 			if _, ok := fieldSeen[campaignhistory.FieldLastRunAt]; !ok {
@@ -1312,15 +1312,15 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldLastResentAt)
 				fieldSeen[campaignhistory.FieldLastResentAt] = struct{}{}
 			}
-		case "templateID":
-			if _, ok := fieldSeen[campaignhistory.FieldTemplateID]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldTemplateID)
-				fieldSeen[campaignhistory.FieldTemplateID] = struct{}{}
-			}
 		case "entityID":
 			if _, ok := fieldSeen[campaignhistory.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldEntityID)
 				fieldSeen[campaignhistory.FieldEntityID] = struct{}{}
+			}
+		case "templateID":
+			if _, ok := fieldSeen[campaignhistory.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldTemplateID)
+				fieldSeen[campaignhistory.FieldTemplateID] = struct{}{}
 			}
 		case "assessmentID":
 			if _, ok := fieldSeen[campaignhistory.FieldAssessmentID]; !ok {
@@ -1332,11 +1332,6 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldMetadata)
 				fieldSeen[campaignhistory.FieldMetadata] = struct{}{}
 			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[campaignhistory.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldEmailBrandingID)
-				fieldSeen[campaignhistory.FieldEmailBrandingID] = struct{}{}
-			}
 		case "emailTemplateID":
 			if _, ok := fieldSeen[campaignhistory.FieldEmailTemplateID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldEmailTemplateID)
@@ -1346,6 +1341,11 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[campaignhistory.FieldIntegrationID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldIntegrationID)
 				fieldSeen[campaignhistory.FieldIntegrationID] = struct{}{}
+			}
+		case "emailBrandingID":
+			if _, ok := fieldSeen[campaignhistory.FieldEmailBrandingID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldEmailBrandingID)
+				fieldSeen[campaignhistory.FieldEmailBrandingID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

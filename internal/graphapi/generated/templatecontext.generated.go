@@ -5,11 +5,12 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -40,28 +41,22 @@ func (ec *executionContext) _TemplateContextEntry_context(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_context,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_context(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Context, nil
 		},
 		nil,
-		ec.marshalNEmailTemplateTemplateContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTemplateContext,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.TemplateContext) graphql.Marshaler {
+			return ec.marshalNEmailTemplateTemplateContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTemplateContext(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_context(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateContextEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type EmailTemplateTemplateContext does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateContextEntry", field, false, false, errors.New("field of type EmailTemplateTemplateContext does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateContextEntry_label(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
@@ -69,28 +64,22 @@ func (ec *executionContext) _TemplateContextEntry_label(ctx context.Context, fie
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_label,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_label(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Label, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateContextEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateContextEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateContextEntry_description(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
@@ -98,28 +87,22 @@ func (ec *executionContext) _TemplateContextEntry_description(ctx context.Contex
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_description,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_description(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Description, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateContextEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateContextEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateContextEntry_schema(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
@@ -127,28 +110,22 @@ func (ec *executionContext) _TemplateContextEntry_schema(ctx context.Context, fi
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_schema,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_schema(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return ec.Resolvers.TemplateContextEntry().Schema(ctx, obj)
 		},
 		nil,
-		ec.marshalNMap2map,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalNMap2map(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_schema(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateContextEntry",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Map does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateContextEntry", field, true, true, errors.New("field of type Map does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateContextEntry_reservedFields(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
@@ -156,28 +133,22 @@ func (ec *executionContext) _TemplateContextEntry_reservedFields(ctx context.Con
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_reservedFields,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_reservedFields(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ReservedFields, nil
 		},
 		nil,
-		ec.marshalNString2ᚕstringᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNString2ᚕstringᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_reservedFields(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateContextEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateContextEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateContextEntry_variables(ctx context.Context, field graphql.CollectedField, obj *models.TemplateContextEntry) (ret graphql.Marshaler) {
@@ -185,17 +156,20 @@ func (ec *executionContext) _TemplateContextEntry_variables(ctx context.Context,
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateContextEntry_variables,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateContextEntry_variables(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return ec.Resolvers.TemplateContextEntry().Variables(ctx, obj)
 		},
 		nil,
-		ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
+			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateContextEntry_variables(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TemplateContextEntry",
@@ -203,13 +177,7 @@ func (ec *executionContext) fieldContext_TemplateContextEntry_variables(_ contex
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "name":
-				return ec.fieldContext_TemplateVariable_name(ctx, field)
-			case "description":
-				return ec.fieldContext_TemplateVariable_description(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TemplateVariable", field.Name)
+			return ec.childFields_TemplateVariable(ctx, field)
 		},
 	}
 	return fc, nil
@@ -220,28 +188,22 @@ func (ec *executionContext) _TemplateVariable_name(ctx context.Context, field gr
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateVariable_name,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateVariable_name(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Name, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateVariable_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateVariable",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateVariable", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _TemplateVariable_description(ctx context.Context, field graphql.CollectedField, obj *model.TemplateVariable) (ret graphql.Marshaler) {
@@ -249,28 +211,22 @@ func (ec *executionContext) _TemplateVariable_description(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TemplateVariable_description,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TemplateVariable_description(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Description, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_TemplateVariable_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TemplateVariable",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("TemplateVariable", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -397,7 +353,7 @@ func (ec *executionContext) _TemplateContextEntry(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -441,7 +397,7 @@ func (ec *executionContext) _TemplateVariable(ctx context.Context, sel ast.Selec
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

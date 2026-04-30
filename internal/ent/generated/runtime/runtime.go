@@ -680,7 +680,6 @@ func init() {
 	campaignMixinHooks5 := campaignMixin[5].Hooks()
 	campaignMixinHooks6 := campaignMixin[6].Hooks()
 	campaignMixinHooks8 := campaignMixin[8].Hooks()
-	campaignHooks := schema.Campaign{}.Hooks()
 
 	campaign.Hooks[1] = campaignMixinHooks0[0]
 
@@ -701,8 +700,6 @@ func init() {
 	campaign.Hooks[9] = campaignMixinHooks6[2]
 
 	campaign.Hooks[10] = campaignMixinHooks8[0]
-
-	campaign.Hooks[11] = campaignHooks[0]
 	campaignMixinInters1 := campaignMixin[1].Interceptors()
 	campaignMixinInters5 := campaignMixin[5].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters1[0]
@@ -762,14 +759,14 @@ func init() {
 	campaignDescRecurrenceInterval := campaignFields[11].Descriptor()
 	// campaign.DefaultRecurrenceInterval holds the default value on creation for the recurrence_interval field.
 	campaign.DefaultRecurrenceInterval = campaignDescRecurrenceInterval.Default.(int)
-	// campaignDescRecurrenceCron is the schema descriptor for recurrence_cron field.
-	campaignDescRecurrenceCron := campaignFields[12].Descriptor()
-	// campaign.RecurrenceCronValidator is a validator for the "recurrence_cron" field. It is called by the builders before save.
-	campaign.RecurrenceCronValidator = campaignDescRecurrenceCron.Validators[0].(func(string) error)
 	// campaignDescRecurrenceTimezone is the schema descriptor for recurrence_timezone field.
-	campaignDescRecurrenceTimezone := campaignFields[13].Descriptor()
+	campaignDescRecurrenceTimezone := campaignFields[12].Descriptor()
 	// campaign.RecurrenceTimezoneValidator is a validator for the "recurrence_timezone" field. It is called by the builders before save.
 	campaign.RecurrenceTimezoneValidator = campaignDescRecurrenceTimezone.Validators[0].(func(string) error)
+	// campaignDescRecurrenceCron is the schema descriptor for recurrence_cron field.
+	campaignDescRecurrenceCron := campaignFields[13].Descriptor()
+	// campaign.RecurrenceCronValidator is a validator for the "recurrence_cron" field. It is called by the builders before save.
+	campaign.RecurrenceCronValidator = campaignDescRecurrenceCron.Validators[0].(func(string) error)
 	// campaignDescRecipientCount is the schema descriptor for recipient_count field.
 	campaignDescRecipientCount := campaignFields[17].Descriptor()
 	// campaign.DefaultRecipientCount holds the default value on creation for the recipient_count field.

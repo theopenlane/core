@@ -385,20 +385,6 @@ func (_c *CampaignHistoryCreate) SetNillableRecurrenceInterval(v *int) *Campaign
 	return _c
 }
 
-// SetRecurrenceCron sets the "recurrence_cron" field.
-func (_c *CampaignHistoryCreate) SetRecurrenceCron(v models.Cron) *CampaignHistoryCreate {
-	_c.mutation.SetRecurrenceCron(v)
-	return _c
-}
-
-// SetNillableRecurrenceCron sets the "recurrence_cron" field if the given value is not nil.
-func (_c *CampaignHistoryCreate) SetNillableRecurrenceCron(v *models.Cron) *CampaignHistoryCreate {
-	if v != nil {
-		_c.SetRecurrenceCron(*v)
-	}
-	return _c
-}
-
 // SetRecurrenceTimezone sets the "recurrence_timezone" field.
 func (_c *CampaignHistoryCreate) SetRecurrenceTimezone(v string) *CampaignHistoryCreate {
 	_c.mutation.SetRecurrenceTimezone(v)
@@ -409,6 +395,20 @@ func (_c *CampaignHistoryCreate) SetRecurrenceTimezone(v string) *CampaignHistor
 func (_c *CampaignHistoryCreate) SetNillableRecurrenceTimezone(v *string) *CampaignHistoryCreate {
 	if v != nil {
 		_c.SetRecurrenceTimezone(*v)
+	}
+	return _c
+}
+
+// SetRecurrenceCron sets the "recurrence_cron" field.
+func (_c *CampaignHistoryCreate) SetRecurrenceCron(v models.Cron) *CampaignHistoryCreate {
+	_c.mutation.SetRecurrenceCron(v)
+	return _c
+}
+
+// SetNillableRecurrenceCron sets the "recurrence_cron" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableRecurrenceCron(v *models.Cron) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetRecurrenceCron(*v)
 	}
 	return _c
 }
@@ -497,20 +497,6 @@ func (_c *CampaignHistoryCreate) SetNillableLastResentAt(v *models.DateTime) *Ca
 	return _c
 }
 
-// SetTemplateID sets the "template_id" field.
-func (_c *CampaignHistoryCreate) SetTemplateID(v string) *CampaignHistoryCreate {
-	_c.mutation.SetTemplateID(v)
-	return _c
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_c *CampaignHistoryCreate) SetNillableTemplateID(v *string) *CampaignHistoryCreate {
-	if v != nil {
-		_c.SetTemplateID(*v)
-	}
-	return _c
-}
-
 // SetEntityID sets the "entity_id" field.
 func (_c *CampaignHistoryCreate) SetEntityID(v string) *CampaignHistoryCreate {
 	_c.mutation.SetEntityID(v)
@@ -521,6 +507,20 @@ func (_c *CampaignHistoryCreate) SetEntityID(v string) *CampaignHistoryCreate {
 func (_c *CampaignHistoryCreate) SetNillableEntityID(v *string) *CampaignHistoryCreate {
 	if v != nil {
 		_c.SetEntityID(*v)
+	}
+	return _c
+}
+
+// SetTemplateID sets the "template_id" field.
+func (_c *CampaignHistoryCreate) SetTemplateID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetTemplateID(v)
+	return _c
+}
+
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableTemplateID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
 	}
 	return _c
 }
@@ -542,20 +542,6 @@ func (_c *CampaignHistoryCreate) SetNillableAssessmentID(v *string) *CampaignHis
 // SetMetadata sets the "metadata" field.
 func (_c *CampaignHistoryCreate) SetMetadata(v map[string]interface{}) *CampaignHistoryCreate {
 	_c.mutation.SetMetadata(v)
-	return _c
-}
-
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_c *CampaignHistoryCreate) SetEmailBrandingID(v string) *CampaignHistoryCreate {
-	_c.mutation.SetEmailBrandingID(v)
-	return _c
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_c *CampaignHistoryCreate) SetNillableEmailBrandingID(v *string) *CampaignHistoryCreate {
-	if v != nil {
-		_c.SetEmailBrandingID(*v)
-	}
 	return _c
 }
 
@@ -583,6 +569,20 @@ func (_c *CampaignHistoryCreate) SetIntegrationID(v string) *CampaignHistoryCrea
 func (_c *CampaignHistoryCreate) SetNillableIntegrationID(v *string) *CampaignHistoryCreate {
 	if v != nil {
 		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_c *CampaignHistoryCreate) SetEmailBrandingID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetEmailBrandingID(v)
+	return _c
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableEmailBrandingID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetEmailBrandingID(*v)
 	}
 	return _c
 }
@@ -908,13 +908,13 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 		_spec.SetField(campaignhistory.FieldRecurrenceInterval, field.TypeInt, value)
 		_node.RecurrenceInterval = value
 	}
-	if value, ok := _c.mutation.RecurrenceCron(); ok {
-		_spec.SetField(campaignhistory.FieldRecurrenceCron, field.TypeString, value)
-		_node.RecurrenceCron = &value
-	}
 	if value, ok := _c.mutation.RecurrenceTimezone(); ok {
 		_spec.SetField(campaignhistory.FieldRecurrenceTimezone, field.TypeString, value)
 		_node.RecurrenceTimezone = value
+	}
+	if value, ok := _c.mutation.RecurrenceCron(); ok {
+		_spec.SetField(campaignhistory.FieldRecurrenceCron, field.TypeString, value)
+		_node.RecurrenceCron = &value
 	}
 	if value, ok := _c.mutation.LastRunAt(); ok {
 		_spec.SetField(campaignhistory.FieldLastRunAt, field.TypeTime, value)
@@ -940,13 +940,13 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 		_spec.SetField(campaignhistory.FieldLastResentAt, field.TypeTime, value)
 		_node.LastResentAt = &value
 	}
-	if value, ok := _c.mutation.TemplateID(); ok {
-		_spec.SetField(campaignhistory.FieldTemplateID, field.TypeString, value)
-		_node.TemplateID = value
-	}
 	if value, ok := _c.mutation.EntityID(); ok {
 		_spec.SetField(campaignhistory.FieldEntityID, field.TypeString, value)
 		_node.EntityID = value
+	}
+	if value, ok := _c.mutation.TemplateID(); ok {
+		_spec.SetField(campaignhistory.FieldTemplateID, field.TypeString, value)
+		_node.TemplateID = value
 	}
 	if value, ok := _c.mutation.AssessmentID(); ok {
 		_spec.SetField(campaignhistory.FieldAssessmentID, field.TypeString, value)
@@ -956,10 +956,6 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 		_spec.SetField(campaignhistory.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
-	if value, ok := _c.mutation.EmailBrandingID(); ok {
-		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
-		_node.EmailBrandingID = value
-	}
 	if value, ok := _c.mutation.EmailTemplateID(); ok {
 		_spec.SetField(campaignhistory.FieldEmailTemplateID, field.TypeString, value)
 		_node.EmailTemplateID = value
@@ -967,6 +963,10 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(campaignhistory.FieldIntegrationID, field.TypeString, value)
 		_node.IntegrationID = value
+	}
+	if value, ok := _c.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaignhistory.FieldEmailBrandingID, field.TypeString, value)
+		_node.EmailBrandingID = value
 	}
 	return _node, _spec
 }

@@ -1345,7 +1345,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [25]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1370,6 +1370,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withCampaigns != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
+			_q.withEntities != nil,
 		}
 	)
 	if withFKs {

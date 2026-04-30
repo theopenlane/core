@@ -1,6 +1,7 @@
 package catalog
 
 import (
+	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
@@ -13,6 +14,8 @@ import (
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
 // this is here purely to drive the konaf output config constructs we use as a standard in this repo
 type Config struct {
+	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
+	AWSSecurityHub awssecurityhub.Config `json:"awsSecurityHub" koanf:"awsSecurityHub"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition

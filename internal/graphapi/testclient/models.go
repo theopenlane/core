@@ -2598,10 +2598,10 @@ type Campaign struct {
 	RecurrenceFrequency *enums.Frequency `json:"recurrenceFrequency,omitempty"`
 	// the recurrence interval for the campaign, combined with the recurrence frequency
 	RecurrenceInterval *int64 `json:"recurrenceInterval,omitempty"`
-	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-	RecurrenceCron *string `json:"recurrenceCron,omitempty"`
 	// timezone used for the recurrence schedule
 	RecurrenceTimezone *string `json:"recurrenceTimezone,omitempty"`
+	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+	RecurrenceCron *string `json:"recurrenceCron,omitempty"`
 	// when the campaign was last executed
 	LastRunAt *models.DateTime `json:"lastRunAt,omitempty"`
 	// when the campaign is scheduled to run next
@@ -2614,20 +2614,20 @@ type Campaign struct {
 	ResendCount *int64 `json:"resendCount,omitempty"`
 	// when campaign notifications were last resent
 	LastResentAt *models.DateTime `json:"lastResentAt,omitempty"`
-	// the template associated with the campaign
-	TemplateID *string `json:"templateID,omitempty"`
 	// the entity associated with the campaign
 	EntityID *string `json:"entityID,omitempty"`
+	// the template associated with the campaign
+	TemplateID *string `json:"templateID,omitempty"`
 	// the assessment associated with the campaign
 	AssessmentID *string `json:"assessmentID,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]any `json:"metadata,omitempty"`
-	// the email branding or theme reference the campaign may use to override the email templates theme
-	EmailBrandingID *string `json:"emailBrandingID,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID *string `json:"emailTemplateID,omitempty"`
 	// the email integration used for campaign dispatch
-	IntegrationID       *string                       `json:"integrationID,omitempty"`
+	IntegrationID *string `json:"integrationID,omitempty"`
+	// the email branding associated with the campaign
+	EmailBrandingID     *string                       `json:"emailBrandingID,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -3410,22 +3410,6 @@ type CampaignWhereInput struct {
 	LastResentAtLte    *models.DateTime   `json:"lastResentAtLTE,omitempty"`
 	LastResentAtIsNil  *bool              `json:"lastResentAtIsNil,omitempty"`
 	LastResentAtNotNil *bool              `json:"lastResentAtNotNil,omitempty"`
-	// template_id field predicates
-	TemplateID             *string  `json:"templateID,omitempty"`
-	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
-	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
-	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
-	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
-	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
-	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
-	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
-	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
-	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
-	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
-	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
-	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
-	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
-	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// entity_id field predicates
 	EntityID             *string  `json:"entityID,omitempty"`
 	EntityIdneq          *string  `json:"entityIDNEQ,omitempty"`
@@ -3442,6 +3426,22 @@ type CampaignWhereInput struct {
 	EntityIDNotNil       *bool    `json:"entityIDNotNil,omitempty"`
 	EntityIDEqualFold    *string  `json:"entityIDEqualFold,omitempty"`
 	EntityIDContainsFold *string  `json:"entityIDContainsFold,omitempty"`
+	// template_id field predicates
+	TemplateID             *string  `json:"templateID,omitempty"`
+	TemplateIdneq          *string  `json:"templateIDNEQ,omitempty"`
+	TemplateIDIn           []string `json:"templateIDIn,omitempty"`
+	TemplateIDNotIn        []string `json:"templateIDNotIn,omitempty"`
+	TemplateIdgt           *string  `json:"templateIDGT,omitempty"`
+	TemplateIdgte          *string  `json:"templateIDGTE,omitempty"`
+	TemplateIdlt           *string  `json:"templateIDLT,omitempty"`
+	TemplateIdlte          *string  `json:"templateIDLTE,omitempty"`
+	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
+	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
+	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
+	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
+	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// assessment_id field predicates
 	AssessmentID             *string  `json:"assessmentID,omitempty"`
 	AssessmentIdneq          *string  `json:"assessmentIDNEQ,omitempty"`
@@ -3458,22 +3458,6 @@ type CampaignWhereInput struct {
 	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
 	AssessmentIDEqualFold    *string  `json:"assessmentIDEqualFold,omitempty"`
 	AssessmentIDContainsFold *string  `json:"assessmentIDContainsFold,omitempty"`
-	// email_branding_id field predicates
-	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
-	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
-	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
-	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
-	EmailBrandingIdgt           *string  `json:"emailBrandingIDGT,omitempty"`
-	EmailBrandingIdgte          *string  `json:"emailBrandingIDGTE,omitempty"`
-	EmailBrandingIdlt           *string  `json:"emailBrandingIDLT,omitempty"`
-	EmailBrandingIdlte          *string  `json:"emailBrandingIDLTE,omitempty"`
-	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
-	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
-	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
-	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
-	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
-	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
-	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
 	// email_template_id field predicates
 	EmailTemplateID             *string  `json:"emailTemplateID,omitempty"`
 	EmailTemplateIdneq          *string  `json:"emailTemplateIDNEQ,omitempty"`
@@ -3506,6 +3490,22 @@ type CampaignWhereInput struct {
 	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
 	IntegrationIDEqualFold    *string  `json:"integrationIDEqualFold,omitempty"`
 	IntegrationIDContainsFold *string  `json:"integrationIDContainsFold,omitempty"`
+	// email_branding_id field predicates
+	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
+	EmailBrandingIdneq          *string  `json:"emailBrandingIDNEQ,omitempty"`
+	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
+	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
+	EmailBrandingIdgt           *string  `json:"emailBrandingIDGT,omitempty"`
+	EmailBrandingIdgte          *string  `json:"emailBrandingIDGTE,omitempty"`
+	EmailBrandingIdlt           *string  `json:"emailBrandingIDLT,omitempty"`
+	EmailBrandingIdlte          *string  `json:"emailBrandingIDLTE,omitempty"`
+	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
+	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
+	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
+	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
+	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
+	EmailBrandingIDEqualFold    *string  `json:"emailBrandingIDEqualFold,omitempty"`
+	EmailBrandingIDContainsFold *string  `json:"emailBrandingIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -6247,10 +6247,10 @@ type CreateCampaignInput struct {
 	RecurrenceFrequency *enums.Frequency `json:"recurrenceFrequency,omitempty"`
 	// the recurrence interval for the campaign, combined with the recurrence frequency
 	RecurrenceInterval *int64 `json:"recurrenceInterval,omitempty"`
-	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-	RecurrenceCron *string `json:"recurrenceCron,omitempty"`
 	// timezone used for the recurrence schedule
 	RecurrenceTimezone *string `json:"recurrenceTimezone,omitempty"`
+	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+	RecurrenceCron *string `json:"recurrenceCron,omitempty"`
 	// when the campaign was last executed
 	LastRunAt *models.DateTime `json:"lastRunAt,omitempty"`
 	// when the campaign is scheduled to run next
@@ -6265,7 +6265,7 @@ type CreateCampaignInput struct {
 	LastResentAt *models.DateTime `json:"lastResentAt,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]any `json:"metadata,omitempty"`
-	// the email branding or theme reference the campaign may use to override the email templates theme
+	// the email branding associated with the campaign
 	EmailBrandingID       *string  `json:"emailBrandingID,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
@@ -39328,12 +39328,12 @@ type UpdateCampaignInput struct {
 	// the recurrence interval for the campaign, combined with the recurrence frequency
 	RecurrenceInterval      *int64 `json:"recurrenceInterval,omitempty"`
 	ClearRecurrenceInterval *bool  `json:"clearRecurrenceInterval,omitempty"`
-	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-	RecurrenceCron      *string `json:"recurrenceCron,omitempty"`
-	ClearRecurrenceCron *bool   `json:"clearRecurrenceCron,omitempty"`
 	// timezone used for the recurrence schedule
 	RecurrenceTimezone      *string `json:"recurrenceTimezone,omitempty"`
 	ClearRecurrenceTimezone *bool   `json:"clearRecurrenceTimezone,omitempty"`
+	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+	RecurrenceCron      *string `json:"recurrenceCron,omitempty"`
+	ClearRecurrenceCron *bool   `json:"clearRecurrenceCron,omitempty"`
 	// when the campaign was last executed
 	LastRunAt      *models.DateTime `json:"lastRunAt,omitempty"`
 	ClearLastRunAt *bool            `json:"clearLastRunAt,omitempty"`
@@ -39355,7 +39355,7 @@ type UpdateCampaignInput struct {
 	// additional metadata about the campaign
 	Metadata      map[string]any `json:"metadata,omitempty"`
 	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
-	// the email branding or theme reference the campaign may use to override the email templates theme
+	// the email branding associated with the campaign
 	EmailBrandingID             *string  `json:"emailBrandingID,omitempty"`
 	ClearEmailBrandingID        *bool    `json:"clearEmailBrandingID,omitempty"`
 	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`

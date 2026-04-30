@@ -67,7 +67,7 @@ type CampaignContext struct {
 }
 
 var (
-	dispatchers    []EmailDispatcher
+	dispatchers     []EmailDispatcher
 	dispatcherIndex = map[string]EmailDispatcher{}
 )
 

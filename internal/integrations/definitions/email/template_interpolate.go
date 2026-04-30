@@ -95,4 +95,3 @@ func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
 		return value, nil
 	}
 }
-

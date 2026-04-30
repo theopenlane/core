@@ -211,4 +211,3 @@ func buildRenderedTemplateConfig(rendered *renderedNotificationTemplate) map[str
 
 	return config
 }
-

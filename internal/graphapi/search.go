@@ -344,6 +344,7 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				campaign.DescriptionContainsFold(query),          // search by Description
 				campaign.RecurrenceTimezoneContainsFold(query),   // search by RecurrenceTimezone
 				campaign.EntityIDContainsFold(query),             // search by EntityID
+				campaign.TemplateIDContainsFold(query),           // search by TemplateID
 				campaign.AssessmentIDContainsFold(query),         // search by AssessmentID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
@@ -351,6 +352,7 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				},
 				campaign.EmailTemplateIDContainsFold(query), // search by EmailTemplateID
 				campaign.IntegrationIDContainsFold(query),   // search by IntegrationID
+				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
 			),
 		)
 

@@ -4340,13 +4340,13 @@ type Campaign implements Node {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -4372,13 +4372,13 @@ type Campaign implements Node {
   """
   lastResentAt: DateTime
   """
-  the template associated with the campaign
-  """
-  templateID: ID
-  """
   the entity associated with the campaign
   """
   entityID: ID
+  """
+  the template associated with the campaign
+  """
+  templateID: ID
   """
   the assessment associated with the campaign
   """
@@ -4388,10 +4388,6 @@ type Campaign implements Node {
   """
   metadata: Map
   """
-  the email branding or theme reference the campaign may use to override the email templates theme
-  """
-  emailBrandingID: String
-  """
   the email template associated with the campaign
   """
   emailTemplateID: ID
@@ -4399,6 +4395,10 @@ type Campaign implements Node {
   the email integration used for campaign dispatch
   """
   integrationID: ID
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
   owner: Organization
   blockedGroups(
     """
@@ -5687,24 +5687,6 @@ input CampaignWhereInput {
   lastResentAtIsNil: Boolean
   lastResentAtNotNil: Boolean
   """
-  template_id field predicates
-  """
-  templateID: ID
-  templateIDNEQ: ID
-  templateIDIn: [ID!]
-  templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
-  templateIDContains: ID
-  templateIDHasPrefix: ID
-  templateIDHasSuffix: ID
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: ID
-  templateIDContainsFold: ID
-  """
   entity_id field predicates
   """
   entityID: ID
@@ -5723,6 +5705,24 @@ input CampaignWhereInput {
   entityIDEqualFold: ID
   entityIDContainsFold: ID
   """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
+  """
   assessment_id field predicates
   """
   assessmentID: ID
@@ -5740,24 +5740,6 @@ input CampaignWhereInput {
   assessmentIDNotNil: Boolean
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   email_template_id field predicates
   """
@@ -5794,6 +5776,24 @@ input CampaignWhereInput {
   integrationIDNotNil: Boolean
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
   """
   owner edge predicates
   """
@@ -10838,13 +10838,13 @@ input CreateCampaignInput {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -10874,7 +10874,7 @@ input CreateCampaignInput {
   """
   metadata: Map
   """
-  the email branding or theme reference the campaign may use to override the email templates theme
+  the email branding associated with the campaign
   """
   emailBrandingID: String
   ownerID: ID
@@ -72072,15 +72072,15 @@ input UpdateCampaignInput {
   recurrenceInterval: Int
   clearRecurrenceInterval: Boolean
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  clearRecurrenceCron: Boolean
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
   clearRecurrenceTimezone: Boolean
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  clearRecurrenceCron: Boolean
   """
   when the campaign was last executed
   """
@@ -72117,7 +72117,7 @@ input UpdateCampaignInput {
   metadata: Map
   clearMetadata: Boolean
   """
-  the email branding or theme reference the campaign may use to override the email templates theme
+  the email branding associated with the campaign
   """
   emailBrandingID: String
   clearEmailBrandingID: Boolean

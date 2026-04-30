@@ -376,21 +376,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaign.FieldIsRecurring:            {Type: field.TypeBool, Column: campaign.FieldIsRecurring},
 			campaign.FieldRecurrenceFrequency:    {Type: field.TypeEnum, Column: campaign.FieldRecurrenceFrequency},
 			campaign.FieldRecurrenceInterval:     {Type: field.TypeInt, Column: campaign.FieldRecurrenceInterval},
-			campaign.FieldRecurrenceCron:         {Type: field.TypeString, Column: campaign.FieldRecurrenceCron},
 			campaign.FieldRecurrenceTimezone:     {Type: field.TypeString, Column: campaign.FieldRecurrenceTimezone},
+			campaign.FieldRecurrenceCron:         {Type: field.TypeString, Column: campaign.FieldRecurrenceCron},
 			campaign.FieldLastRunAt:              {Type: field.TypeTime, Column: campaign.FieldLastRunAt},
 			campaign.FieldNextRunAt:              {Type: field.TypeTime, Column: campaign.FieldNextRunAt},
 			campaign.FieldRecurrenceEndAt:        {Type: field.TypeTime, Column: campaign.FieldRecurrenceEndAt},
 			campaign.FieldRecipientCount:         {Type: field.TypeInt, Column: campaign.FieldRecipientCount},
 			campaign.FieldResendCount:            {Type: field.TypeInt, Column: campaign.FieldResendCount},
 			campaign.FieldLastResentAt:           {Type: field.TypeTime, Column: campaign.FieldLastResentAt},
-			campaign.FieldTemplateID:             {Type: field.TypeString, Column: campaign.FieldTemplateID},
 			campaign.FieldEntityID:               {Type: field.TypeString, Column: campaign.FieldEntityID},
+			campaign.FieldTemplateID:             {Type: field.TypeString, Column: campaign.FieldTemplateID},
 			campaign.FieldAssessmentID:           {Type: field.TypeString, Column: campaign.FieldAssessmentID},
 			campaign.FieldMetadata:               {Type: field.TypeJSON, Column: campaign.FieldMetadata},
-			campaign.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaign.FieldEmailBrandingID},
 			campaign.FieldEmailTemplateID:        {Type: field.TypeString, Column: campaign.FieldEmailTemplateID},
 			campaign.FieldIntegrationID:          {Type: field.TypeString, Column: campaign.FieldIntegrationID},
+			campaign.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaign.FieldEmailBrandingID},
 		},
 	}
 	graph.Nodes[6] = &sqlgraph.Node{
@@ -19541,14 +19541,14 @@ func (f *CampaignFilter) WhereRecurrenceInterval(p entql.IntP) {
 	f.Where(p.Field(campaign.FieldRecurrenceInterval))
 }
 
-// WhereRecurrenceCron applies the entql string predicate on the recurrence_cron field.
-func (f *CampaignFilter) WhereRecurrenceCron(p entql.StringP) {
-	f.Where(p.Field(campaign.FieldRecurrenceCron))
-}
-
 // WhereRecurrenceTimezone applies the entql string predicate on the recurrence_timezone field.
 func (f *CampaignFilter) WhereRecurrenceTimezone(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldRecurrenceTimezone))
+}
+
+// WhereRecurrenceCron applies the entql string predicate on the recurrence_cron field.
+func (f *CampaignFilter) WhereRecurrenceCron(p entql.StringP) {
+	f.Where(p.Field(campaign.FieldRecurrenceCron))
 }
 
 // WhereLastRunAt applies the entql time.Time predicate on the last_run_at field.
@@ -19581,14 +19581,14 @@ func (f *CampaignFilter) WhereLastResentAt(p entql.TimeP) {
 	f.Where(p.Field(campaign.FieldLastResentAt))
 }
 
-// WhereTemplateID applies the entql string predicate on the template_id field.
-func (f *CampaignFilter) WhereTemplateID(p entql.StringP) {
-	f.Where(p.Field(campaign.FieldTemplateID))
-}
-
 // WhereEntityID applies the entql string predicate on the entity_id field.
 func (f *CampaignFilter) WhereEntityID(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldEntityID))
+}
+
+// WhereTemplateID applies the entql string predicate on the template_id field.
+func (f *CampaignFilter) WhereTemplateID(p entql.StringP) {
+	f.Where(p.Field(campaign.FieldTemplateID))
 }
 
 // WhereAssessmentID applies the entql string predicate on the assessment_id field.
@@ -19601,11 +19601,6 @@ func (f *CampaignFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(campaign.FieldMetadata))
 }
 
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *CampaignFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(campaign.FieldEmailBrandingID))
-}
-
 // WhereEmailTemplateID applies the entql string predicate on the email_template_id field.
 func (f *CampaignFilter) WhereEmailTemplateID(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldEmailTemplateID))
@@ -19614,6 +19609,11 @@ func (f *CampaignFilter) WhereEmailTemplateID(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *CampaignFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldIntegrationID))
+}
+
+// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
+func (f *CampaignFilter) WhereEmailBrandingID(p entql.StringP) {
+	f.Where(p.Field(campaign.FieldEmailBrandingID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

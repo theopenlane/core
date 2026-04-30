@@ -120,8 +120,6 @@ var (
 	ErrMissingTrustCenterID = errors.New("trust center id is required")
 	// ErrMissingFileID is returned when a file id is required but not provided
 	ErrMissingFileID = errors.New("missing file id")
-	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
-	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
 	// ErrCannotSetFileOnCreate is returned when trying to set a file id on create mutations
 	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
 	// ErrCacheRefreshFailed is returned when the cache refresh request fails
@@ -193,8 +191,18 @@ var (
 	ErrMissingIDForTrustCenterNDARequest = errors.New("missing ID for trust center NDA request mutation")
 	// ErrVendorScoringQuestionNotFound is returned when a question key cannot be resolved in the scoring config
 	ErrVendorScoringQuestionNotFound = errors.New("vendor scoring question not found in config")
-	// ErrEmailDispatchFailed is returned when a transactional email gala event could not be emitted
-	ErrEmailDispatchFailed = errors.New("email dispatch failed")
+	// ErrStartDateLaterThanEndDate is returned when a program mutation has a start date that is later than the end date
+	ErrStartDateLaterThanEndDate = errors.New("mutation's start date cannot be later than end date")
+	// ErrFailedToGetOldEndDate is returned when a program mutation's old end date cannot be retrieved, which is necessary to validate that the start date is not later than the old end date
+	ErrFailedToGetOldEndDate = errors.New("could not get old end date for mutation")
+	// ErrFailedToGetStartDate is returned when a program mutation's start date cannot be retrieved, which is necessary to validate that the old start date is not later than the end date
+	ErrFailedToGetOldStartDate = errors.New("could not get old start date for mutation")
+	// ErrFailedToGetProgramByID is returned when a program cannot be retrieved by ID when updating
+	ErrFailedToGetProgramByID = errors.New("could not get program by id when updating")
+	// ErrFailedToGetIdsForProgramUpdate is returned when a program mutation's ids cannot be retrieved, which is necessary to validate bulk updates
+	ErrFailedToGetIDsForProgramUpdate = errors.New("could not get ids for mutation program update")
+	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
+	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

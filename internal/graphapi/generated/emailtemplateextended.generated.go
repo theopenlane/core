@@ -5,7 +5,7 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
+	"math"
 	"strconv"
 	"sync/atomic"
 
@@ -33,17 +33,20 @@ func (ec *executionContext) _EmailTemplateCatalog_entries(ctx context.Context, f
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCatalog_entries,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalog_entries(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Entries, nil
 		},
 		nil,
-		ec.marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.EmailTemplateCatalogEntry) graphql.Marshaler {
+			return ec.marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCatalog_entries(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "EmailTemplateCatalog",
@@ -51,17 +54,7 @@ func (ec *executionContext) fieldContext_EmailTemplateCatalog_entries(_ context.
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "key":
-				return ec.fieldContext_EmailTemplateCatalogEntry_key(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplateCatalogEntry_description(ctx, field)
-			case "configSchema":
-				return ec.fieldContext_EmailTemplateCatalogEntry_configSchema(ctx, field)
-			case "htmlPreview":
-				return ec.fieldContext_EmailTemplateCatalogEntry_htmlPreview(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplateCatalogEntry", field.Name)
+			return ec.childFields_EmailTemplateCatalogEntry(ctx, field)
 		},
 	}
 	return fc, nil
@@ -72,28 +65,22 @@ func (ec *executionContext) _EmailTemplateCatalogEntry_key(ctx context.Context, 
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCatalogEntry_key,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_key(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Key, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateCatalogEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateCatalogEntry_description(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
@@ -101,28 +88,22 @@ func (ec *executionContext) _EmailTemplateCatalogEntry_description(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCatalogEntry_description,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_description(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.Description, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_description(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateCatalogEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateCatalogEntry_configSchema(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
@@ -130,28 +111,22 @@ func (ec *executionContext) _EmailTemplateCatalogEntry_configSchema(ctx context.
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCatalogEntry_configSchema,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_configSchema(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.ConfigSchema, nil
 		},
 		nil,
-		ec.marshalNMap2map,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalNMap2map(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_configSchema(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateCatalogEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Map does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
 func (ec *executionContext) _EmailTemplateCatalogEntry_htmlPreview(ctx context.Context, field graphql.CollectedField, obj *model.EmailTemplateCatalogEntry) (ret graphql.Marshaler) {
@@ -159,28 +134,22 @@ func (ec *executionContext) _EmailTemplateCatalogEntry_htmlPreview(ctx context.C
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_EmailTemplateCatalogEntry_htmlPreview,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplateCatalogEntry_htmlPreview(ctx, field)
+		},
 		func(ctx context.Context) (any, error) {
 			return obj.HTMLPreview, nil
 		},
 		nil,
-		ec.marshalNString2string,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
 		true,
 		true,
 	)
 }
-
 func (ec *executionContext) fieldContext_EmailTemplateCatalogEntry_htmlPreview(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "EmailTemplateCatalogEntry",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
+	return graphql.NewScalarFieldContext("EmailTemplateCatalogEntry", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -220,7 +189,7 @@ func (ec *executionContext) _EmailTemplateCatalog(ctx context.Context, sel ast.S
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{
@@ -274,7 +243,7 @@ func (ec *executionContext) _EmailTemplateCatalogEntry(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(len(deferred)))
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferred), math.MaxInt32)))
 
 	for label, dfs := range deferred {
 		ec.ProcessDeferredGroup(graphql.DeferredGroup{

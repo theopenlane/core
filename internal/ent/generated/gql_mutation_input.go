@@ -1918,8 +1918,8 @@ type CreateCampaignInput struct {
 	IsRecurring            *bool
 	RecurrenceFrequency    *enums.Frequency
 	RecurrenceInterval     *int
-	RecurrenceCron         *models.Cron
 	RecurrenceTimezone     *string
+	RecurrenceCron         *models.Cron
 	LastRunAt              *models.DateTime
 	NextRunAt              *models.DateTime
 	RecurrenceEndAt        *models.DateTime
@@ -1994,11 +1994,11 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.RecurrenceInterval; v != nil {
 		m.SetRecurrenceInterval(*v)
 	}
-	if v := i.RecurrenceCron; v != nil {
-		m.SetRecurrenceCron(*v)
-	}
 	if v := i.RecurrenceTimezone; v != nil {
 		m.SetRecurrenceTimezone(*v)
+	}
+	if v := i.RecurrenceCron; v != nil {
+		m.SetRecurrenceCron(*v)
 	}
 	if v := i.LastRunAt; v != nil {
 		m.SetLastRunAt(*v)
@@ -2117,10 +2117,10 @@ type UpdateCampaignInput struct {
 	RecurrenceFrequency         *enums.Frequency
 	ClearRecurrenceInterval     bool
 	RecurrenceInterval          *int
-	ClearRecurrenceCron         bool
-	RecurrenceCron              *models.Cron
 	ClearRecurrenceTimezone     bool
 	RecurrenceTimezone          *string
+	ClearRecurrenceCron         bool
+	RecurrenceCron              *models.Cron
 	ClearLastRunAt              bool
 	LastRunAt                   *models.DateTime
 	ClearNextRunAt              bool
@@ -2266,17 +2266,17 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.RecurrenceInterval; v != nil {
 		m.SetRecurrenceInterval(*v)
 	}
-	if i.ClearRecurrenceCron {
-		m.ClearRecurrenceCron()
-	}
-	if v := i.RecurrenceCron; v != nil {
-		m.SetRecurrenceCron(*v)
-	}
 	if i.ClearRecurrenceTimezone {
 		m.ClearRecurrenceTimezone()
 	}
 	if v := i.RecurrenceTimezone; v != nil {
 		m.SetRecurrenceTimezone(*v)
+	}
+	if i.ClearRecurrenceCron {
+		m.ClearRecurrenceCron()
+	}
+	if v := i.RecurrenceCron; v != nil {
+		m.SetRecurrenceCron(*v)
 	}
 	if i.ClearLastRunAt {
 		m.ClearLastRunAt()

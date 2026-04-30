@@ -332,21 +332,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaignhistory.FieldIsRecurring:            {Type: field.TypeBool, Column: campaignhistory.FieldIsRecurring},
 			campaignhistory.FieldRecurrenceFrequency:    {Type: field.TypeEnum, Column: campaignhistory.FieldRecurrenceFrequency},
 			campaignhistory.FieldRecurrenceInterval:     {Type: field.TypeInt, Column: campaignhistory.FieldRecurrenceInterval},
-			campaignhistory.FieldRecurrenceCron:         {Type: field.TypeString, Column: campaignhistory.FieldRecurrenceCron},
 			campaignhistory.FieldRecurrenceTimezone:     {Type: field.TypeString, Column: campaignhistory.FieldRecurrenceTimezone},
+			campaignhistory.FieldRecurrenceCron:         {Type: field.TypeString, Column: campaignhistory.FieldRecurrenceCron},
 			campaignhistory.FieldLastRunAt:              {Type: field.TypeTime, Column: campaignhistory.FieldLastRunAt},
 			campaignhistory.FieldNextRunAt:              {Type: field.TypeTime, Column: campaignhistory.FieldNextRunAt},
 			campaignhistory.FieldRecurrenceEndAt:        {Type: field.TypeTime, Column: campaignhistory.FieldRecurrenceEndAt},
 			campaignhistory.FieldRecipientCount:         {Type: field.TypeInt, Column: campaignhistory.FieldRecipientCount},
 			campaignhistory.FieldResendCount:            {Type: field.TypeInt, Column: campaignhistory.FieldResendCount},
 			campaignhistory.FieldLastResentAt:           {Type: field.TypeTime, Column: campaignhistory.FieldLastResentAt},
-			campaignhistory.FieldTemplateID:             {Type: field.TypeString, Column: campaignhistory.FieldTemplateID},
 			campaignhistory.FieldEntityID:               {Type: field.TypeString, Column: campaignhistory.FieldEntityID},
+			campaignhistory.FieldTemplateID:             {Type: field.TypeString, Column: campaignhistory.FieldTemplateID},
 			campaignhistory.FieldAssessmentID:           {Type: field.TypeString, Column: campaignhistory.FieldAssessmentID},
 			campaignhistory.FieldMetadata:               {Type: field.TypeJSON, Column: campaignhistory.FieldMetadata},
-			campaignhistory.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailBrandingID},
 			campaignhistory.FieldEmailTemplateID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailTemplateID},
 			campaignhistory.FieldIntegrationID:          {Type: field.TypeString, Column: campaignhistory.FieldIntegrationID},
+			campaignhistory.FieldEmailBrandingID:        {Type: field.TypeString, Column: campaignhistory.FieldEmailBrandingID},
 		},
 	}
 	graph.Nodes[5] = &sqlgraph.Node{
@@ -4385,14 +4385,14 @@ func (f *CampaignHistoryFilter) WhereRecurrenceInterval(p entql.IntP) {
 	f.Where(p.Field(campaignhistory.FieldRecurrenceInterval))
 }
 
-// WhereRecurrenceCron applies the entql string predicate on the recurrence_cron field.
-func (f *CampaignHistoryFilter) WhereRecurrenceCron(p entql.StringP) {
-	f.Where(p.Field(campaignhistory.FieldRecurrenceCron))
-}
-
 // WhereRecurrenceTimezone applies the entql string predicate on the recurrence_timezone field.
 func (f *CampaignHistoryFilter) WhereRecurrenceTimezone(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldRecurrenceTimezone))
+}
+
+// WhereRecurrenceCron applies the entql string predicate on the recurrence_cron field.
+func (f *CampaignHistoryFilter) WhereRecurrenceCron(p entql.StringP) {
+	f.Where(p.Field(campaignhistory.FieldRecurrenceCron))
 }
 
 // WhereLastRunAt applies the entql time.Time predicate on the last_run_at field.
@@ -4425,14 +4425,14 @@ func (f *CampaignHistoryFilter) WhereLastResentAt(p entql.TimeP) {
 	f.Where(p.Field(campaignhistory.FieldLastResentAt))
 }
 
-// WhereTemplateID applies the entql string predicate on the template_id field.
-func (f *CampaignHistoryFilter) WhereTemplateID(p entql.StringP) {
-	f.Where(p.Field(campaignhistory.FieldTemplateID))
-}
-
 // WhereEntityID applies the entql string predicate on the entity_id field.
 func (f *CampaignHistoryFilter) WhereEntityID(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldEntityID))
+}
+
+// WhereTemplateID applies the entql string predicate on the template_id field.
+func (f *CampaignHistoryFilter) WhereTemplateID(p entql.StringP) {
+	f.Where(p.Field(campaignhistory.FieldTemplateID))
 }
 
 // WhereAssessmentID applies the entql string predicate on the assessment_id field.
@@ -4445,11 +4445,6 @@ func (f *CampaignHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(campaignhistory.FieldMetadata))
 }
 
-// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
-func (f *CampaignHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
-	f.Where(p.Field(campaignhistory.FieldEmailBrandingID))
-}
-
 // WhereEmailTemplateID applies the entql string predicate on the email_template_id field.
 func (f *CampaignHistoryFilter) WhereEmailTemplateID(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldEmailTemplateID))
@@ -4458,6 +4453,11 @@ func (f *CampaignHistoryFilter) WhereEmailTemplateID(p entql.StringP) {
 // WhereIntegrationID applies the entql string predicate on the integration_id field.
 func (f *CampaignHistoryFilter) WhereIntegrationID(p entql.StringP) {
 	f.Where(p.Field(campaignhistory.FieldIntegrationID))
+}
+
+// WhereEmailBrandingID applies the entql string predicate on the email_branding_id field.
+func (f *CampaignHistoryFilter) WhereEmailBrandingID(p entql.StringP) {
+	f.Where(p.Field(campaignhistory.FieldEmailBrandingID))
 }
 
 // addPredicate implements the predicateAdder interface.

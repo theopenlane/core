@@ -1995,12 +1995,12 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRecurrenceInterval(recurrenceInterval)
 	}
 
-	if recurrenceCron, exists := m.RecurrenceCron(); exists {
-		create = create.SetNillableRecurrenceCron(&recurrenceCron)
-	}
-
 	if recurrenceTimezone, exists := m.RecurrenceTimezone(); exists {
 		create = create.SetRecurrenceTimezone(recurrenceTimezone)
+	}
+
+	if recurrenceCron, exists := m.RecurrenceCron(); exists {
+		create = create.SetNillableRecurrenceCron(&recurrenceCron)
 	}
 
 	if lastRunAt, exists := m.LastRunAt(); exists {
@@ -2027,12 +2027,12 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableLastResentAt(&lastResentAt)
 	}
 
-	if templateID, exists := m.TemplateID(); exists {
-		create = create.SetTemplateID(templateID)
-	}
-
 	if entityID, exists := m.EntityID(); exists {
 		create = create.SetEntityID(entityID)
+	}
+
+	if templateID, exists := m.TemplateID(); exists {
+		create = create.SetTemplateID(templateID)
 	}
 
 	if assessmentID, exists := m.AssessmentID(); exists {
@@ -2043,16 +2043,16 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMetadata(metadata)
 	}
 
-	if emailBrandingID, exists := m.EmailBrandingID(); exists {
-		create = create.SetEmailBrandingID(emailBrandingID)
-	}
-
 	if emailTemplateID, exists := m.EmailTemplateID(); exists {
 		create = create.SetEmailTemplateID(emailTemplateID)
 	}
 
 	if integrationID, exists := m.IntegrationID(); exists {
 		create = create.SetIntegrationID(integrationID)
+	}
+
+	if emailBrandingID, exists := m.EmailBrandingID(); exists {
+		create = create.SetEmailBrandingID(emailBrandingID)
 	}
 
 	_, err := create.Save(ctx)
@@ -2236,16 +2236,16 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRecurrenceInterval(campaign.RecurrenceInterval)
 		}
 
-		if recurrenceCron, exists := m.RecurrenceCron(); exists {
-			create = create.SetNillableRecurrenceCron(&recurrenceCron)
-		} else {
-			create = create.SetNillableRecurrenceCron(campaign.RecurrenceCron)
-		}
-
 		if recurrenceTimezone, exists := m.RecurrenceTimezone(); exists {
 			create = create.SetRecurrenceTimezone(recurrenceTimezone)
 		} else {
 			create = create.SetRecurrenceTimezone(campaign.RecurrenceTimezone)
+		}
+
+		if recurrenceCron, exists := m.RecurrenceCron(); exists {
+			create = create.SetNillableRecurrenceCron(&recurrenceCron)
+		} else {
+			create = create.SetNillableRecurrenceCron(campaign.RecurrenceCron)
 		}
 
 		if lastRunAt, exists := m.LastRunAt(); exists {
@@ -2284,16 +2284,16 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableLastResentAt(campaign.LastResentAt)
 		}
 
-		if templateID, exists := m.TemplateID(); exists {
-			create = create.SetTemplateID(templateID)
-		} else {
-			create = create.SetTemplateID(campaign.TemplateID)
-		}
-
 		if entityID, exists := m.EntityID(); exists {
 			create = create.SetEntityID(entityID)
 		} else {
 			create = create.SetEntityID(campaign.EntityID)
+		}
+
+		if templateID, exists := m.TemplateID(); exists {
+			create = create.SetTemplateID(templateID)
+		} else {
+			create = create.SetTemplateID(campaign.TemplateID)
 		}
 
 		if assessmentID, exists := m.AssessmentID(); exists {
@@ -2308,12 +2308,6 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(campaign.Metadata)
 		}
 
-		if emailBrandingID, exists := m.EmailBrandingID(); exists {
-			create = create.SetEmailBrandingID(emailBrandingID)
-		} else {
-			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
-		}
-
 		if emailTemplateID, exists := m.EmailTemplateID(); exists {
 			create = create.SetEmailTemplateID(emailTemplateID)
 		} else {
@@ -2324,6 +2318,12 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationID(integrationID)
 		} else {
 			create = create.SetIntegrationID(campaign.IntegrationID)
+		}
+
+		if emailBrandingID, exists := m.EmailBrandingID(); exists {
+			create = create.SetEmailBrandingID(emailBrandingID)
+		} else {
+			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -2386,21 +2386,21 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsRecurring(campaign.IsRecurring).
 			SetRecurrenceFrequency(campaign.RecurrenceFrequency).
 			SetRecurrenceInterval(campaign.RecurrenceInterval).
-			SetNillableRecurrenceCron(campaign.RecurrenceCron).
 			SetRecurrenceTimezone(campaign.RecurrenceTimezone).
+			SetNillableRecurrenceCron(campaign.RecurrenceCron).
 			SetNillableLastRunAt(campaign.LastRunAt).
 			SetNillableNextRunAt(campaign.NextRunAt).
 			SetNillableRecurrenceEndAt(campaign.RecurrenceEndAt).
 			SetRecipientCount(campaign.RecipientCount).
 			SetResendCount(campaign.ResendCount).
 			SetNillableLastResentAt(campaign.LastResentAt).
-			SetTemplateID(campaign.TemplateID).
 			SetEntityID(campaign.EntityID).
+			SetTemplateID(campaign.TemplateID).
 			SetAssessmentID(campaign.AssessmentID).
 			SetMetadata(campaign.Metadata).
-			SetEmailBrandingID(campaign.EmailBrandingID).
 			SetEmailTemplateID(campaign.EmailTemplateID).
 			SetIntegrationID(campaign.IntegrationID).
+			SetEmailBrandingID(campaign.EmailBrandingID).
 			Save(ctx)
 		if err != nil {
 			return err

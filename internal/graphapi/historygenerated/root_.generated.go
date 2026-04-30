@@ -24912,13 +24912,13 @@ type CampaignHistory implements Node {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -24944,13 +24944,13 @@ type CampaignHistory implements Node {
   """
   lastResentAt: DateTime
   """
-  the template associated with the campaign
-  """
-  templateID: String
-  """
   the entity associated with the campaign
   """
   entityID: String
+  """
+  the template associated with the campaign
+  """
+  templateID: String
   """
   the assessment associated with the campaign
   """
@@ -24960,10 +24960,6 @@ type CampaignHistory implements Node {
   """
   metadata: Map
   """
-  the email branding or theme reference the campaign may use to override the email templates theme
-  """
-  emailBrandingID: String
-  """
   the email template associated with the campaign
   """
   emailTemplateID: String
@@ -24971,6 +24967,10 @@ type CampaignHistory implements Node {
   the email integration used for campaign dispatch
   """
   integrationID: String
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -25523,24 +25523,6 @@ input CampaignHistoryWhereInput {
   lastResentAtIsNil: Boolean
   lastResentAtNotNil: Boolean
   """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDGT: String
-  templateIDGTE: String
-  templateIDLT: String
-  templateIDLTE: String
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
-  """
   entity_id field predicates
   """
   entityID: String
@@ -25559,6 +25541,24 @@ input CampaignHistoryWhereInput {
   entityIDEqualFold: String
   entityIDContainsFold: String
   """
+  template_id field predicates
+  """
+  templateID: String
+  templateIDNEQ: String
+  templateIDIn: [String!]
+  templateIDNotIn: [String!]
+  templateIDGT: String
+  templateIDGTE: String
+  templateIDLT: String
+  templateIDLTE: String
+  templateIDContains: String
+  templateIDHasPrefix: String
+  templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: String
+  templateIDContainsFold: String
+  """
   assessment_id field predicates
   """
   assessmentID: String
@@ -25576,24 +25576,6 @@ input CampaignHistoryWhereInput {
   assessmentIDNotNil: Boolean
   assessmentIDEqualFold: String
   assessmentIDContainsFold: String
-  """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
   """
   email_template_id field predicates
   """
@@ -25630,6 +25612,24 @@ input CampaignHistoryWhereInput {
   integrationIDNotNil: Boolean
   integrationIDEqualFold: String
   integrationIDContainsFold: String
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!
@@ -66367,10 +66367,10 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_recurrenceFrequency(ctx, field)
 	case "recurrenceInterval":
 		return ec.fieldContext_CampaignHistory_recurrenceInterval(ctx, field)
-	case "recurrenceCron":
-		return ec.fieldContext_CampaignHistory_recurrenceCron(ctx, field)
 	case "recurrenceTimezone":
 		return ec.fieldContext_CampaignHistory_recurrenceTimezone(ctx, field)
+	case "recurrenceCron":
+		return ec.fieldContext_CampaignHistory_recurrenceCron(ctx, field)
 	case "lastRunAt":
 		return ec.fieldContext_CampaignHistory_lastRunAt(ctx, field)
 	case "nextRunAt":
@@ -66383,18 +66383,20 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_resendCount(ctx, field)
 	case "lastResentAt":
 		return ec.fieldContext_CampaignHistory_lastResentAt(ctx, field)
-	case "templateID":
-		return ec.fieldContext_CampaignHistory_templateID(ctx, field)
 	case "entityID":
 		return ec.fieldContext_CampaignHistory_entityID(ctx, field)
+	case "templateID":
+		return ec.fieldContext_CampaignHistory_templateID(ctx, field)
 	case "assessmentID":
 		return ec.fieldContext_CampaignHistory_assessmentID(ctx, field)
 	case "metadata":
 		return ec.fieldContext_CampaignHistory_metadata(ctx, field)
-	case "emailBrandingID":
-		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
 	case "emailTemplateID":
 		return ec.fieldContext_CampaignHistory_emailTemplateID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_CampaignHistory_integrationID(ctx, field)
+	case "emailBrandingID":
+		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CampaignHistory", field.Name)
 }
@@ -68557,6 +68559,8 @@ func (ec *executionContext) childFields_IntegrationHistory(ctx context.Context, 
 		return ec.fieldContext_IntegrationHistory_providerMetadataSnapshot(ctx, field)
 	case "primaryDirectory":
 		return ec.fieldContext_IntegrationHistory_primaryDirectory(ctx, field)
+	case "campaignEmail":
+		return ec.fieldContext_IntegrationHistory_campaignEmail(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type IntegrationHistory", field.Name)
 }

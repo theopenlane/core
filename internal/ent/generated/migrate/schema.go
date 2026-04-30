@@ -588,8 +588,8 @@ var (
 		{Name: "is_recurring", Type: field.TypeBool, Default: false},
 		{Name: "recurrence_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE"}, Default: "NONE"},
 		{Name: "recurrence_interval", Type: field.TypeInt, Nullable: true, Default: 1},
-		{Name: "recurrence_cron", Type: field.TypeString, Nullable: true},
 		{Name: "recurrence_timezone", Type: field.TypeString, Nullable: true},
+		{Name: "recurrence_cron", Type: field.TypeString, Nullable: true},
 		{Name: "last_run_at", Type: field.TypeTime, Nullable: true},
 		{Name: "next_run_at", Type: field.TypeTime, Nullable: true},
 		{Name: "recurrence_end_at", Type: field.TypeTime, Nullable: true},
@@ -1606,25 +1606,25 @@ var (
 			},
 			{
 				Symbol:     "directory_groups_directory_sync_runs_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[28]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[31]},
 				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_groups_integrations_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[29]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[32]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "directory_groups_organizations_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[30]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[33]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "directory_groups_platforms_directory_groups",
-				Columns:    []*schema.Column{DirectoryGroupsColumns[31]},
+				Columns:    []*schema.Column{DirectoryGroupsColumns[34]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1633,12 +1633,12 @@ var (
 			{
 				Name:    "directorygroup_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[30]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[33]},
 			},
 			{
 				Name:    "directorygroup_integration_id_external_id_directory_sync_run_id",
 				Unique:  true,
-				Columns: []*schema.Column{DirectoryGroupsColumns[29], DirectoryGroupsColumns[10], DirectoryGroupsColumns[28]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[10], DirectoryGroupsColumns[31]},
 			},
 			{
 				Name:    "directorygroup_directory_instance_id_external_id",
@@ -1653,27 +1653,27 @@ var (
 			{
 				Name:    "directorygroup_platform_id_external_id",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[31], DirectoryGroupsColumns[10]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[10]},
 			},
 			{
 				Name:    "directorygroup_directory_sync_run_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[28], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[31], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_integration_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[29], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[32], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_platform_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[31], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[34], DirectoryGroupsColumns[11]},
 			},
 			{
 				Name:    "directorygroup_owner_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupsColumns[30], DirectoryGroupsColumns[11]},
+				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11]},
 			},
 		},
 	}

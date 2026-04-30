@@ -37,7 +37,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				operation
 				ownerID
 				recipientCount
-
+				recurrenceCron
 				recurrenceEndAt
 				recurrenceFrequency
 				recurrenceInterval
@@ -94,7 +94,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				operation
 				ownerID
 				recipientCount
-
+				recurrenceCron
 				recurrenceEndAt
 				recurrenceFrequency
 				recurrenceInterval

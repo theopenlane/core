@@ -151,9 +151,9 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [23]map[string]int
 
 	namedSecrets               map[string][]*Hush
 	namedFiles                 map[string][]*File
@@ -378,7 +378,7 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -387,7 +387,7 @@ func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -396,7 +396,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -405,7 +405,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}

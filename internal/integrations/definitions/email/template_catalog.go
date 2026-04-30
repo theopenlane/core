@@ -45,4 +45,3 @@ func TemplateVariables() []models.TemplateVariable {
 
 	return append(configVars, payloadVariables...)
 }
-

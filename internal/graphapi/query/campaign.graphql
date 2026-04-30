@@ -27,6 +27,7 @@ mutation CreateBulkCampaign($input: [CreateCampaignInput!]) {
       nextRunAt
       ownerID
       recipientCount
+      recurrenceCron
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -35,6 +36,7 @@ mutation CreateBulkCampaign($input: [CreateCampaignInput!]) {
       scheduledAt
       status
       tags
+      templateID
       updatedAt
       updatedBy
       workflowEligibleMarker
@@ -71,6 +73,7 @@ mutation CreateBulkCSVCampaign($input: Upload!) {
       nextRunAt
       ownerID
       recipientCount
+      recurrenceCron
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -79,6 +82,7 @@ mutation CreateBulkCSVCampaign($input: Upload!) {
       scheduledAt
       status
       tags
+      templateID
       updatedAt
       updatedBy
       workflowEligibleMarker
@@ -115,6 +119,7 @@ mutation CreateCampaign($input: CreateCampaignInput!) {
       nextRunAt
       ownerID
       recipientCount
+      recurrenceCron
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -123,6 +128,7 @@ mutation CreateCampaign($input: CreateCampaignInput!) {
       scheduledAt
       status
       tags
+      templateID
       updatedAt
       updatedBy
       workflowEligibleMarker
@@ -179,6 +185,7 @@ query GetAllCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         nextRunAt
         ownerID
         recipientCount
+        recurrenceCron
         recurrenceEndAt
         recurrenceFrequency
         recurrenceInterval
@@ -187,6 +194,7 @@ query GetAllCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, 
         scheduledAt
         status
         tags
+        templateID
         updatedAt
         updatedBy
         workflowEligibleMarker
@@ -309,6 +317,7 @@ query GetCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
         nextRunAt
         ownerID
         recipientCount
+        recurrenceCron
         recurrenceEndAt
         recurrenceFrequency
         recurrenceInterval
@@ -317,6 +326,7 @@ query GetCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
         scheduledAt
         status
         tags
+        templateID
         updatedAt
         updatedBy
         workflowEligibleMarker
@@ -367,6 +377,7 @@ mutation UpdateCampaign($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
       nextRunAt
       ownerID
       recipientCount
+      recurrenceCron
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -375,6 +386,7 @@ mutation UpdateCampaign($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
       scheduledAt
       status
       tags
+      templateID
       updatedAt
       updatedBy
       workflowEligibleMarker

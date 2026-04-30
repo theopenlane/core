@@ -5,7 +5,6 @@ package gqlgenerated
 import (
 	"context"
 	"errors"
-	"fmt"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -56,75 +55,7 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkCreatePayload_emailTem
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -225,75 +156,7 @@ func (ec *executionContext) fieldContext_EmailTemplateBulkUpdatePayload_emailTem
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -348,75 +211,7 @@ func (ec *executionContext) fieldContext_EmailTemplateCreatePayload_emailTemplat
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil
@@ -471,75 +266,7 @@ func (ec *executionContext) fieldContext_EmailTemplateUpdatePayload_emailTemplat
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_EmailTemplate_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_EmailTemplate_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_EmailTemplate_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_EmailTemplate_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_EmailTemplate_updatedBy(ctx, field)
-			case "revision":
-				return ec.fieldContext_EmailTemplate_revision(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_EmailTemplate_ownerID(ctx, field)
-			case "systemOwned":
-				return ec.fieldContext_EmailTemplate_systemOwned(ctx, field)
-			case "internalNotes":
-				return ec.fieldContext_EmailTemplate_internalNotes(ctx, field)
-			case "systemInternalID":
-				return ec.fieldContext_EmailTemplate_systemInternalID(ctx, field)
-			case "key":
-				return ec.fieldContext_EmailTemplate_key(ctx, field)
-			case "name":
-				return ec.fieldContext_EmailTemplate_name(ctx, field)
-			case "description":
-				return ec.fieldContext_EmailTemplate_description(ctx, field)
-			case "format":
-				return ec.fieldContext_EmailTemplate_format(ctx, field)
-			case "locale":
-				return ec.fieldContext_EmailTemplate_locale(ctx, field)
-			case "metadata":
-				return ec.fieldContext_EmailTemplate_metadata(ctx, field)
-			case "active":
-				return ec.fieldContext_EmailTemplate_active(ctx, field)
-			case "version":
-				return ec.fieldContext_EmailTemplate_version(ctx, field)
-			case "templateContext":
-				return ec.fieldContext_EmailTemplate_templateContext(ctx, field)
-			case "defaults":
-				return ec.fieldContext_EmailTemplate_defaults(ctx, field)
-			case "integrationID":
-				return ec.fieldContext_EmailTemplate_integrationID(ctx, field)
-			case "workflowDefinitionID":
-				return ec.fieldContext_EmailTemplate_workflowDefinitionID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_EmailTemplate_workflowInstanceID(ctx, field)
-			case "owner":
-				return ec.fieldContext_EmailTemplate_owner(ctx, field)
-			case "blockedGroups":
-				return ec.fieldContext_EmailTemplate_blockedGroups(ctx, field)
-			case "editors":
-				return ec.fieldContext_EmailTemplate_editors(ctx, field)
-			case "viewers":
-				return ec.fieldContext_EmailTemplate_viewers(ctx, field)
-			case "integration":
-				return ec.fieldContext_EmailTemplate_integration(ctx, field)
-			case "workflowDefinition":
-				return ec.fieldContext_EmailTemplate_workflowDefinition(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_EmailTemplate_workflowInstance(ctx, field)
-			case "campaigns":
-				return ec.fieldContext_EmailTemplate_campaigns(ctx, field)
-			case "notificationTemplates":
-				return ec.fieldContext_EmailTemplate_notificationTemplates(ctx, field)
-			case "files":
-				return ec.fieldContext_EmailTemplate_files(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type EmailTemplate", field.Name)
+			return ec.childFields_EmailTemplate(ctx, field)
 		},
 	}
 	return fc, nil

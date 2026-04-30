@@ -79,10 +79,10 @@ type CampaignHistory struct {
 	RecurrenceFrequency enums.Frequency `json:"recurrence_frequency,omitempty"`
 	// the recurrence interval for the campaign, combined with the recurrence frequency
 	RecurrenceInterval int `json:"recurrence_interval,omitempty"`
-	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-	RecurrenceCron *models.Cron `json:"recurrence_cron,omitempty"`
 	// timezone used for the recurrence schedule
 	RecurrenceTimezone string `json:"recurrence_timezone,omitempty"`
+	// cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+	RecurrenceCron *models.Cron `json:"recurrence_cron,omitempty"`
 	// when the campaign was last executed
 	LastRunAt *models.DateTime `json:"last_run_at,omitempty"`
 	// when the campaign is scheduled to run next
@@ -95,21 +95,21 @@ type CampaignHistory struct {
 	ResendCount int `json:"resend_count,omitempty"`
 	// when campaign notifications were last resent
 	LastResentAt *models.DateTime `json:"last_resent_at,omitempty"`
-	// the template associated with the campaign
-	TemplateID string `json:"template_id,omitempty"`
 	// the entity associated with the campaign
 	EntityID string `json:"entity_id,omitempty"`
+	// the template associated with the campaign
+	TemplateID string `json:"template_id,omitempty"`
 	// the assessment associated with the campaign
 	AssessmentID string `json:"assessment_id,omitempty"`
 	// additional metadata about the campaign
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// the email branding or theme reference the campaign may use to override the email templates theme
-	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the email template associated with the campaign
 	EmailTemplateID string `json:"email_template_id,omitempty"`
 	// the email integration used for campaign dispatch
 	IntegrationID string `json:"integration_id,omitempty"`
-	selectValues  sql.SelectValues
+	// the email branding associated with the campaign
+	EmailBrandingID string `json:"email_branding_id,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -129,7 +129,7 @@ func (*CampaignHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaignhistory.FieldRecurrenceInterval, campaignhistory.FieldRecipientCount, campaignhistory.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldTemplateID, campaignhistory.FieldEntityID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID:
+		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID:
 			values[i] = new(sql.NullString)
 		case campaignhistory.FieldHistoryTime, campaignhistory.FieldCreatedAt, campaignhistory.FieldUpdatedAt, campaignhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -328,18 +328,18 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.RecurrenceInterval = int(value.Int64)
 			}
+		case campaignhistory.FieldRecurrenceTimezone:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field recurrence_timezone", values[i])
+			} else if value.Valid {
+				_m.RecurrenceTimezone = value.String
+			}
 		case campaignhistory.FieldRecurrenceCron:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field recurrence_cron", values[i])
 			} else if value.Valid {
 				_m.RecurrenceCron = new(models.Cron)
 				*_m.RecurrenceCron = *value.S.(*models.Cron)
-			}
-		case campaignhistory.FieldRecurrenceTimezone:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field recurrence_timezone", values[i])
-			} else if value.Valid {
-				_m.RecurrenceTimezone = value.String
 			}
 		case campaignhistory.FieldLastRunAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -381,17 +381,17 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 				_m.LastResentAt = new(models.DateTime)
 				*_m.LastResentAt = *value.S.(*models.DateTime)
 			}
-		case campaignhistory.FieldTemplateID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field template_id", values[i])
-			} else if value.Valid {
-				_m.TemplateID = value.String
-			}
 		case campaignhistory.FieldEntityID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_id", values[i])
 			} else if value.Valid {
 				_m.EntityID = value.String
+			}
+		case campaignhistory.FieldTemplateID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_id", values[i])
+			} else if value.Valid {
+				_m.TemplateID = value.String
 			}
 		case campaignhistory.FieldAssessmentID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -407,12 +407,6 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
-		case campaignhistory.FieldEmailBrandingID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
-			} else if value.Valid {
-				_m.EmailBrandingID = value.String
-			}
 		case campaignhistory.FieldEmailTemplateID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email_template_id", values[i])
@@ -424,6 +418,12 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationID = value.String
+			}
+		case campaignhistory.FieldEmailBrandingID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_branding_id", values[i])
+			} else if value.Valid {
+				_m.EmailBrandingID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -553,13 +553,13 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString("recurrence_interval=")
 	builder.WriteString(fmt.Sprintf("%v", _m.RecurrenceInterval))
 	builder.WriteString(", ")
+	builder.WriteString("recurrence_timezone=")
+	builder.WriteString(_m.RecurrenceTimezone)
+	builder.WriteString(", ")
 	if v := _m.RecurrenceCron; v != nil {
 		builder.WriteString("recurrence_cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
-	builder.WriteString(", ")
-	builder.WriteString("recurrence_timezone=")
-	builder.WriteString(_m.RecurrenceTimezone)
 	builder.WriteString(", ")
 	if v := _m.LastRunAt; v != nil {
 		builder.WriteString("last_run_at=")
@@ -587,11 +587,11 @@ func (_m *CampaignHistory) String() string {
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
-	builder.WriteString("template_id=")
-	builder.WriteString(_m.TemplateID)
-	builder.WriteString(", ")
 	builder.WriteString("entity_id=")
 	builder.WriteString(_m.EntityID)
+	builder.WriteString(", ")
+	builder.WriteString("template_id=")
+	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
@@ -599,14 +599,14 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
-	builder.WriteString("email_branding_id=")
-	builder.WriteString(_m.EmailBrandingID)
-	builder.WriteString(", ")
 	builder.WriteString("email_template_id=")
 	builder.WriteString(_m.EmailTemplateID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("email_branding_id=")
+	builder.WriteString(_m.EmailBrandingID)
 	builder.WriteByte(')')
 	return builder.String()
 }
