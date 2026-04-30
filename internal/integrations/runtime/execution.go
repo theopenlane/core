@@ -25,7 +25,9 @@ import (
 // and the client is resolved from the registry at execution time
 func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) (context.Context, *ent.Integration, types.ExecutionMetadata, error) {
 	if metadata.Runtime {
-		return r.withHandlerContext(ctx, metadata), nil, metadata, nil
+		systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+		return r.withHandlerContext(systemCtx, metadata), nil, metadata, nil
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)

@@ -11,7 +11,7 @@ import (
 )
 
 // RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
-func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule) error {
+func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, recurringCampaignHandle RecurringCampaignHandler, recurringCampaignSchedule gala.Schedule) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -57,6 +57,10 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 	}
 
 	if err := RegisterReconcileListener(runtime, reg, reconcileHandle, reconcileSchedule); err != nil {
+		return err
+	}
+
+	if err := RegisterRecurringCampaignListener(runtime, recurringCampaignHandle, recurringCampaignSchedule); err != nil {
 		return err
 	}
 

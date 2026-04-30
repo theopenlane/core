@@ -27,6 +27,4 @@ var (
 	ErrAssessmentNotFound = errors.New("email: assessment not found")
 	// ErrQuestionnaireDispatchFailed indicates failure during dispatch of a questionnaire access email to a campaign target
 	ErrQuestionnaireDispatchFailed = errors.New("email: questionnaire dispatch failed")
-	// ErrIntegrationNotFound indicates no connected email integration could be resolved for the owner
-	ErrIntegrationNotFound = errors.New("email: no connected email integration found")
 )

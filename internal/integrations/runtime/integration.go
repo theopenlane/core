@@ -49,6 +49,36 @@ func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLook
 	return record, nil
 }
 
+// ResolveOwnerIntegration finds a connected integration for the given definition
+// and owner. When multiple connected integrations exist, the optional prefer
+// function selects among them. Returns empty string with no error when no
+// integration is found, allowing the caller to fall through to runtime dispatch
+func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
+	integrations, err := r.DB().Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(definitionID),
+			integration.StatusEQ(enums.IntegrationStatusConnected),
+		).All(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	if len(prefer) > 0 {
+		for _, inst := range integrations {
+			if prefer[0](inst) {
+				return inst.ID, nil
+			}
+		}
+	}
+
+	if len(integrations) == 1 {
+		return integrations[0].ID, nil
+	}
+
+	return "", nil
+}
+
 // EnsureInstallation returns an existing installation when integrationID is provided, or creates a new one
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID string, def types.Definition) (*ent.Integration, bool, error) {
 	if integrationID != "" {
