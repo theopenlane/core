@@ -349,7 +349,6 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(metadata)::text LIKE $14", likeQuery)) // search by Metadata
 				},
-				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
 				campaign.EmailTemplateIDContainsFold(query), // search by EmailTemplateID
 				campaign.IntegrationIDContainsFold(query),   // search by IntegrationID
 			),

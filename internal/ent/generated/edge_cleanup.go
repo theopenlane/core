@@ -679,26 +679,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	}
 
 	{
-		ids, err := FromContext(ctx).EmailBranding.Query().Where(emailbranding.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying emailbranding ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := EmailBrandingEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up emailbranding edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).EmailBranding.Query().Where((emailbranding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if emailbrandingCount, err := FromContext(ctx).EmailBranding.Delete().Where(emailbranding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", emailbrandingCount).Msg("error deleting emailbranding")
-			return err
-		}
-	}
-
-	{
 		ids, err := FromContext(ctx).EmailTemplate.Query().Where(emailtemplate.HasOwnerWith(organization.ID(id))).IDs(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying emailtemplate ids for cleanup")

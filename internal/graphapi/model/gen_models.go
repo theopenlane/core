@@ -986,48 +986,6 @@ type DocumentDataUpdatePayload struct {
 	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
-// Return response for createBulkEmailBranding mutation
-type EmailBrandingBulkCreatePayload struct {
-	// Created emailBrandings
-	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
-}
-
-// Return response for deleteBulkEmailBranding mutation
-type EmailBrandingBulkDeletePayload struct {
-	// Deleted emailBranding IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkEmailBranding mutation
-type EmailBrandingBulkUpdatePayload struct {
-	// Updated emailBrandings
-	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
-	// IDs of the updated emailBrandings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-}
-
-// Return response for createEmailBranding mutation
-type EmailBrandingCreatePayload struct {
-	// Created emailBranding
-	EmailBranding *generated.EmailBranding `json:"emailBranding"`
-}
-
-// Return response for deleteEmailBranding mutation
-type EmailBrandingDeletePayload struct {
-	// Deleted emailBranding ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateEmailBranding mutation
-type EmailBrandingUpdatePayload struct {
-	// Updated emailBranding
-	EmailBranding *generated.EmailBranding `json:"emailBranding"`
-}
-
 // Return response for createBulkEmailTemplate mutation
 type EmailTemplateBulkCreatePayload struct {
 	// Created emailTemplates

@@ -1370,7 +1370,6 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withCampaigns != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
-			_q.withEntities != nil,
 		}
 	)
 	if withFKs {

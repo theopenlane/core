@@ -28,7 +28,7 @@ var directoryScopes = []string{
 var scopes = append(chatScopes, directoryScopes...)
 
 // Builder returns the Slack definition builder with the supplied operator config applied
-func Builder(cfg Config) registry.Builder {
+func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -147,7 +147,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigSchema: healthCheckSchema,
 					Handle:       HealthCheck{}.Handle(),
 				},
-				{
+				types.OperationRegistration{
 					Name:                messageSendOperation.Name(),
 					Description:         "Send a Slack message via chat.postMessage",
 					Topic:               definitionID.OperationTopic(messageSendOperation.Name()),

@@ -2001,15 +2001,6 @@ type EmailTemplateBuilder struct {
 	TemplateContext *enums.TemplateContext
 }
 
-// EmailBrandingBuilder is used to create email branding
-type EmailBrandingBuilder struct {
-	client *client
-
-	// Fields
-	Name         string
-	PrimaryColor string
-}
-
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
 	// Add the database client to context so the authz client is available for feature checks

@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	slackgo "github.com/slack-go/slack"
+
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"

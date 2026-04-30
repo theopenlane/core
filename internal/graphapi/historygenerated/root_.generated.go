@@ -67457,78 +67457,6 @@ func (ec *executionContext) childFields_DocumentDataHistoryEdge(ctx context.Cont
 	return nil, fmt.Errorf("no field named %q was found under type DocumentDataHistoryEdge", field.Name)
 }
 
-func (ec *executionContext) childFields_EmailBrandingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_EmailBrandingHistory_id(ctx, field)
-	case "historyTime":
-		return ec.fieldContext_EmailBrandingHistory_historyTime(ctx, field)
-	case "ref":
-		return ec.fieldContext_EmailBrandingHistory_ref(ctx, field)
-	case "operation":
-		return ec.fieldContext_EmailBrandingHistory_operation(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_EmailBrandingHistory_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_EmailBrandingHistory_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_EmailBrandingHistory_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_EmailBrandingHistory_updatedBy(ctx, field)
-	case "tags":
-		return ec.fieldContext_EmailBrandingHistory_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_EmailBrandingHistory_ownerID(ctx, field)
-	case "name":
-		return ec.fieldContext_EmailBrandingHistory_name(ctx, field)
-	case "brandName":
-		return ec.fieldContext_EmailBrandingHistory_brandName(ctx, field)
-	case "logoRemoteURL":
-		return ec.fieldContext_EmailBrandingHistory_logoRemoteURL(ctx, field)
-	case "primaryColor":
-		return ec.fieldContext_EmailBrandingHistory_primaryColor(ctx, field)
-	case "secondaryColor":
-		return ec.fieldContext_EmailBrandingHistory_secondaryColor(ctx, field)
-	case "backgroundColor":
-		return ec.fieldContext_EmailBrandingHistory_backgroundColor(ctx, field)
-	case "textColor":
-		return ec.fieldContext_EmailBrandingHistory_textColor(ctx, field)
-	case "buttonColor":
-		return ec.fieldContext_EmailBrandingHistory_buttonColor(ctx, field)
-	case "buttonTextColor":
-		return ec.fieldContext_EmailBrandingHistory_buttonTextColor(ctx, field)
-	case "linkColor":
-		return ec.fieldContext_EmailBrandingHistory_linkColor(ctx, field)
-	case "fontFamily":
-		return ec.fieldContext_EmailBrandingHistory_fontFamily(ctx, field)
-	case "isDefault":
-		return ec.fieldContext_EmailBrandingHistory_isDefault(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistory", field.Name)
-}
-
-func (ec *executionContext) childFields_EmailBrandingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_EmailBrandingHistoryConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_EmailBrandingHistoryConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_EmailBrandingHistoryConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_EmailBrandingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_EmailBrandingHistoryEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_EmailBrandingHistoryEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryEdge", field.Name)
-}
-
 func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -67567,18 +67495,6 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_format(ctx, field)
 	case "locale":
 		return ec.fieldContext_EmailTemplateHistory_locale(ctx, field)
-	case "subjectTemplate":
-		return ec.fieldContext_EmailTemplateHistory_subjectTemplate(ctx, field)
-	case "preheaderTemplate":
-		return ec.fieldContext_EmailTemplateHistory_preheaderTemplate(ctx, field)
-	case "bodyTemplate":
-		return ec.fieldContext_EmailTemplateHistory_bodyTemplate(ctx, field)
-	case "textTemplate":
-		return ec.fieldContext_EmailTemplateHistory_textTemplate(ctx, field)
-	case "jsonconfig":
-		return ec.fieldContext_EmailTemplateHistory_jsonconfig(ctx, field)
-	case "uischema":
-		return ec.fieldContext_EmailTemplateHistory_uischema(ctx, field)
 	case "metadata":
 		return ec.fieldContext_EmailTemplateHistory_metadata(ctx, field)
 	case "active":
