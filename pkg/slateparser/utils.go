@@ -2,7 +2,6 @@ package slateparser
 
 import (
 	"encoding/json"
-	"fmt"
 	"maps"
 )
 
@@ -51,7 +50,6 @@ func OnlyCommentsAdded(oldText []any, newText []any) bool {
 	newChildren := getChildrenFromSlateTextJSON(newText)
 
 	if len(oldChildren) != len(newChildren) {
-		fmt.Printf("old and new children have different lengths, old: %d, new: %d\n", len(oldChildren), len(newChildren))
 		return false
 	}
 
