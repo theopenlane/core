@@ -85,26 +85,6 @@ func (_u *DirectoryAccountHistoryUpdate) ClearTags() *DirectoryAccountHistoryUpd
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *DirectoryAccountHistoryUpdate) SetOwnerID(v string) *DirectoryAccountHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DirectoryAccountHistoryUpdate) SetNillableOwnerID(v *string) *DirectoryAccountHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DirectoryAccountHistoryUpdate) ClearOwnerID() *DirectoryAccountHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *DirectoryAccountHistoryUpdate) SetEnvironmentName(v string) *DirectoryAccountHistoryUpdate {
 	_u.mutation.SetEnvironmentName(v)
@@ -880,9 +860,6 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(directoryaccounthistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldOwnerID, field.TypeString)
 	}
@@ -1169,26 +1146,6 @@ func (_u *DirectoryAccountHistoryUpdateOne) AppendTags(v []string) *DirectoryAcc
 // ClearTags clears the value of the "tags" field.
 func (_u *DirectoryAccountHistoryUpdateOne) ClearTags() *DirectoryAccountHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *DirectoryAccountHistoryUpdateOne) SetOwnerID(v string) *DirectoryAccountHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DirectoryAccountHistoryUpdateOne) SetNillableOwnerID(v *string) *DirectoryAccountHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DirectoryAccountHistoryUpdateOne) ClearOwnerID() *DirectoryAccountHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -1996,9 +1953,6 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(directoryaccounthistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldOwnerID, field.TypeString)

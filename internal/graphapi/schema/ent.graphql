@@ -17835,7 +17835,7 @@ type DirectoryAccount implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -73813,8 +73813,6 @@ input UpdateDirectoryAccountInput {
   indicates this directory account originates from the installation designated as the primary directory source for its owner organization
   """
   primarySource: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID

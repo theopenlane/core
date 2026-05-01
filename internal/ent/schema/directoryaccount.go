@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -275,7 +276,10 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		prefix:            "DAC",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(d),
+			newObjectOwnedMixin[generated.DirectoryAccount](d,
+				withParents(IdentityHolder{}, Organization{}, Platform{}, Integration{}, DirectorySyncRun{}),
+				withOrganizationOwner(true),
+			),
 			newCustomEnumMixin(d, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(d, withEnumFieldName("scope"), withGlobalEnum()),
 		},

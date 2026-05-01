@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -88,26 +87,6 @@ func (_u *DirectoryAccountUpdate) AppendTags(v []string) *DirectoryAccountUpdate
 // ClearTags clears the value of the "tags" field.
 func (_u *DirectoryAccountUpdate) ClearTags() *DirectoryAccountUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *DirectoryAccountUpdate) SetOwnerID(v string) *DirectoryAccountUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableOwnerID(v *string) *DirectoryAccountUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DirectoryAccountUpdate) ClearOwnerID() *DirectoryAccountUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -769,11 +748,6 @@ func (_u *DirectoryAccountUpdate) SetNillablePrimarySource(v *bool) *DirectoryAc
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *DirectoryAccountUpdate) SetOwner(v *Organization) *DirectoryAccountUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdate) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -871,12 +845,6 @@ func (_u *DirectoryAccountUpdate) AddMemberships(v ...*DirectoryMembership) *Dir
 // Mutation returns the DirectoryAccountMutation object of the builder.
 func (_u *DirectoryAccountUpdate) Mutation() *DirectoryAccountMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *DirectoryAccountUpdate) ClearOwner() *DirectoryAccountUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -1031,11 +999,6 @@ func (_u *DirectoryAccountUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *DirectoryAccountUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := directoryaccount.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.EmailAliases(); ok {
 		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
 			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
@@ -1294,37 +1257,6 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if value, ok := _u.mutation.PrimarySource(); ok {
 		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directoryaccount.OwnerTable,
-			Columns: []string{directoryaccount.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directoryaccount.OwnerTable,
-			Columns: []string{directoryaccount.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1734,26 +1666,6 @@ func (_u *DirectoryAccountUpdateOne) AppendTags(v []string) *DirectoryAccountUpd
 // ClearTags clears the value of the "tags" field.
 func (_u *DirectoryAccountUpdateOne) ClearTags() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *DirectoryAccountUpdateOne) SetOwnerID(v string) *DirectoryAccountUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableOwnerID(v *string) *DirectoryAccountUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DirectoryAccountUpdateOne) ClearOwnerID() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -2415,11 +2327,6 @@ func (_u *DirectoryAccountUpdateOne) SetNillablePrimarySource(v *bool) *Director
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *DirectoryAccountUpdateOne) SetOwner(v *Organization) *DirectoryAccountUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdateOne) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2517,12 +2424,6 @@ func (_u *DirectoryAccountUpdateOne) AddMemberships(v ...*DirectoryMembership) *
 // Mutation returns the DirectoryAccountMutation object of the builder.
 func (_u *DirectoryAccountUpdateOne) Mutation() *DirectoryAccountMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *DirectoryAccountUpdateOne) ClearOwner() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -2690,11 +2591,6 @@ func (_u *DirectoryAccountUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *DirectoryAccountUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := directoryaccount.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.EmailAliases(); ok {
 		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
 			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
@@ -2970,37 +2866,6 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if value, ok := _u.mutation.PrimarySource(); ok {
 		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directoryaccount.OwnerTable,
-			Columns: []string{directoryaccount.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directoryaccount.OwnerTable,
-			Columns: []string{directoryaccount.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

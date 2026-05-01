@@ -599,6 +599,7 @@ type directory_account
     define can_delete: [service]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, integration, directory_sync_run, identity_holder, platform]
+    define editor: [organization#owner] or can_edit from parent
     define viewer: can_view from parent
     define blocked: [user, group#member]
 

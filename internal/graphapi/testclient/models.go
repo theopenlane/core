@@ -10706,7 +10706,7 @@ type DirectoryAccount struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the environment of the directory_account
 	EnvironmentName *string `json:"environmentName,omitempty"`
@@ -40441,8 +40441,6 @@ type UpdateDirectoryAccountInput struct {
 	ClearSourceVersion *bool   `json:"clearSourceVersion,omitempty"`
 	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
 	PrimarySource              *bool    `json:"primarySource,omitempty"`
-	OwnerID                    *string  `json:"ownerID,omitempty"`
-	ClearOwner                 *bool    `json:"clearOwner,omitempty"`
 	EnvironmentID              *string  `json:"environmentID,omitempty"`
 	ClearEnvironment           *bool    `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string  `json:"scopeID,omitempty"`
