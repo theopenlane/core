@@ -78,15 +78,12 @@ func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 
 	revisionBump, ok := models.VersionBumpFromRequestContext(ctx)
 	if !ok {
-		logx.FromContext(ctx).Error().Msg("HERE")
 		// derive based on if there were meaningful updates to the details of the document
 		revisionBump = &models.Patch
 		if detailsUpdated(ctx, mut) {
 			revisionBump = &models.Minor
 		}
 	}
-
-	logx.FromContext(ctx).Error().Str("bump", revisionBump.String()).Msg("HERE 2")
 
 	var newVersion string
 
