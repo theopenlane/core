@@ -135,11 +135,7 @@ func detailsUpdated(ctx context.Context, m MutationWithRevision) bool {
 		oldDetailsTyped, _ := oldDetailsJSON.([]any)
 		newDetailsTyped, _ := newDetailsJSON.([]any)
 
-		if slateparser.OnlyCommentsAdded(oldDetailsTyped, newDetailsTyped) {
-			return false
-		}
-
-		return true
+		return slateparser.OnlyCommentsAdded(oldDetailsTyped, newDetailsTyped)
 	}
 
 	// if details json is not set, fallback to check details
