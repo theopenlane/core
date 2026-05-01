@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/core v1.16.8
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.25.1
+	github.com/theopenlane/entx v0.26.0
 	github.com/theopenlane/utils v0.7.0
 	github.com/zitadel/oidc/v3 v3.46.0
 	golang.org/x/oauth2 v0.36.0
