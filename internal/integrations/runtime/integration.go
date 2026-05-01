@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/metrics"
 )
 
 // IntegrationLookup holds the query constraints for resolving an integration
@@ -73,6 +74,9 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 	if err != nil {
 		return nil, false, err
 	}
+
+	// record new installed integration
+	metrics.RecordIntegrationInstalled(def.ID)
 
 	// attempt to create vendor record
 	r.createVendor(ctx, ownerID, def, record.ID)

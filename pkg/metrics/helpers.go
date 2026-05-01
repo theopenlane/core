@@ -289,3 +289,13 @@ func RecordWorkflowOperation(operation, origin, trigger string, duration time.Du
 func RecordWorkflowEmitError(topic, origin string) {
 	WorkflowEmitErrorsTotal.WithLabelValues(topic, origin).Inc()
 }
+
+// RecordIntegrationInstalled records an installation operation for an integration provider
+func RecordIntegrationInstalled(definitionID string) {
+	IntegrationProviderInstalls.WithLabelValues(definitionID).Inc()
+}
+
+// RecordIntegrationDisconnected records a disconnect operation for an integration provider
+func RecordIntegrationDisconnected(definitionID string) {
+	IntegrationProviderDisconnects.WithLabelValues(definitionID).Inc()
+}
