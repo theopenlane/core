@@ -147,7 +147,7 @@ entconfig:
         maximumsentences: 10
         type: lexrank
 integrations:
-    awssecurityhub:
+    awsSecurityHub:
         accessKeyId: ""
         arn: ""
         secretAccessKey: ""

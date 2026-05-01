@@ -131,6 +131,9 @@
     },
     "catalog.Config": {
       "properties": {
+        "awsSecurityHub": {
+          "$ref": "#/$defs/awssecurityhub.Config"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },

@@ -124,6 +124,7 @@ Config contains the configuration for the core server
     "keywatcher": {},
     "slack": {},
     "integrations": {
+        "awsSecurityHub": {},
         "githubapp": {},
         "slack": {},
         "slackRuntime": {},
@@ -1540,6 +1541,7 @@ Slack contains settings for Slack notifications
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**awsSecurityHub**](#integrationsawssecurityhub)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
 |[**slackRuntime**](#integrationsslackruntime)|`object`|||
@@ -1554,6 +1556,7 @@ Slack contains settings for Slack notifications
 
 ```json
 {
+    "awsSecurityHub": {},
     "githubapp": {},
     "slack": {},
     "slackRuntime": {},
@@ -1565,6 +1568,18 @@ Slack contains settings for Slack notifications
 }
 ```
 
+<a name="integrationsawssecurityhub"></a>
+### integrations\.awsSecurityHub: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**arn**|`string`|||
+
+**Additional Properties:** not allowed  
 <a name="integrationsgithubapp"></a>
 ### integrations\.githubapp: object
 

@@ -511,6 +511,8 @@ coreConfiguration:
     newusermessagefile: ""  # @schema type:string
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
+    awsSecurityHub:
+      arn: ""  # @schema type:string
     githubapp:
       appslug: ""  # @schema type:string
     slack:
@@ -914,6 +916,22 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
+    # -- core-integrations-awssecurityhub-accesskeyid secret configuration
+    core-integrations-awssecurityhub-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.awsSecurityHub.accessKeyId
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
+    # -- core-integrations-awssecurityhub-secretaccesskey secret configuration
+    core-integrations-awssecurityhub-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.awsSecurityHub.secretAccessKey
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret
@@ -978,22 +996,6 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
-    # -- core-integrations-awssecurityhub-accesskeyid secret configuration
-    core-integrations-awssecurityhub-accesskeyid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awssecurityhub.accessKeyId
-      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
-    # -- core-integrations-awssecurityhub-secretaccesskey secret configuration
-    core-integrations-awssecurityhub-secretaccesskey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awssecurityhub.secretAccessKey
-      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret

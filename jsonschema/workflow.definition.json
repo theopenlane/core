@@ -281,10 +281,10 @@
           },
           "type": "array"
         },
-        "template_id": {
+        "emailTemplateId": {
           "type": "string"
         },
-        "template_key": {
+        "emailTemplateKey": {
           "type": "string"
         },
         "to": {
@@ -296,17 +296,8 @@
         "from": {
           "type": "string"
         },
-        "reply_to": {
+        "replyTo": {
           "type": "string"
-        },
-        "data": {
-          "type": "object"
-        },
-        "headers": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "type": "object"
         }
       },
       "additionalProperties": false,

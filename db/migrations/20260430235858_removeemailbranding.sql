@@ -6,6 +6,8 @@ CREATE INDEX "campaigntarget_campaign_id_email" ON "campaign_targets" ("campaign
 DROP INDEX "emailtemplate_key";
 -- Drop index "emailtemplate_owner_id_key" from table: "email_templates"
 DROP INDEX "emailtemplate_owner_id_key";
+-- Modify "email_templates" table
+ALTER TABLE "email_templates" ALTER COLUMN "format" DROP NOT NULL, ALTER COLUMN "template_context" DROP NOT NULL;
 -- Create index "emailtemplate_owner_id_key" to table: "email_templates"
 CREATE INDEX "emailtemplate_owner_id_key" ON "email_templates" ("owner_id", "key") WHERE (deleted_at IS NULL);
 -- Modify "groups" table

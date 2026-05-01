@@ -952,6 +952,12 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrations }}
     integrations:
+      {{- if .Values.openlane.coreConfiguration.integrations.awsSecurityHub }}
+      awsSecurityHub:
+        {{- if .Values.openlane.coreConfiguration.integrations.awsSecurityHub.arn }}
+        arn: {{ .Values.openlane.coreConfiguration.integrations.awsSecurityHub.arn | quote }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:
         {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}
@@ -1087,12 +1093,6 @@ data:
         {{- if gt (len $sliceValue) 0 }}
         social:
         {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
-      awssecurityhub:
-        {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}
-        arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
     {{- end }}

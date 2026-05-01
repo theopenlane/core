@@ -1,4 +1,4 @@
-h1:tw2M1n/oOmzuO8XIBK/lrcOB/jC+1gxzWkje07fW0+E=
+h1:B4ttU88utgzPcAzTVHnmn08ZtEaxYiF8lpOOpbNbVEc=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -124,3 +124,5 @@ h1:tw2M1n/oOmzuO8XIBK/lrcOB/jC+1gxzWkje07fW0+E=
 20260428175156_check_results.sql h1:fVouTpJ/GiDG6akVD2qnVO2Fex2/YJxfdBqzClmTIf4=
 20260428175159_check_results_history.sql h1:EgarioS1a6agyRnfepqS+pIAi065ICTsLSi0+NAlRcQ=
 20260428234637_dir_groups_edge.sql h1:c2GXe3T20LoE+fSY09IaT+WZ1rbLCH9/DA9YRG8rCdo=
+20260430235858_removeemailbranding.sql h1:9TiV+AurHAoVuR49zZZhv08BdjWjKKPlt5nWLzZBEMY=
+20260430235901_removeemailbranding_history.sql h1:DvYD69AWfki3tWx+v4GLl6olKKnNoVR4zsKWsp7vyzI=
