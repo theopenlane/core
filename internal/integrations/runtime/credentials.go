@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/pkg/metrics"
 )
 
 // BeginAuth starts one definition auth flow through the runtime-managed keymaker service
@@ -91,6 +92,8 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	if err := r.cleanupInstallation(ctx, installation.ID); err != nil {
 		return types.DisconnectResult{}, err
 	}
+
+	metrics.RecordIntegrationDisconnected(installation.DefinitionID)
 
 	return result, nil
 }
