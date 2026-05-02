@@ -85,7 +85,7 @@ type OrganizationSetting struct {
 	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"payment_method_added,omitempty"`
-	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt *models.DateTime `json:"pending_deletion_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrganizationSettingQuery when eager-loading is set.

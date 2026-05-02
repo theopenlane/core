@@ -45189,7 +45189,7 @@ type OrganizationSettingHistory implements Node {
   """
   paymentMethodAdded: Boolean!
   """
-  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  when will this organization be deleted? usually this is after org has not added a payment method after n period
   """
   pendingDeletionAt: DateTime
 }

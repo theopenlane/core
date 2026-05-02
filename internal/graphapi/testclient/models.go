@@ -25852,7 +25852,7 @@ type OrganizationSetting struct {
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"paymentMethodAdded"`
-	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt *models.DateTime `json:"pendingDeletionAt,omitempty"`
 	Organization      *Organization    `json:"organization,omitempty"`
 	Files             *FileConnection  `json:"files"`
@@ -43006,7 +43006,7 @@ type UpdateOrganizationSettingInput struct {
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken      *string `json:"complianceWebhookToken,omitempty"`
 	ClearComplianceWebhookToken *bool   `json:"clearComplianceWebhookToken,omitempty"`
-	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt      *models.DateTime `json:"pendingDeletionAt,omitempty"`
 	ClearPendingDeletionAt *bool            `json:"clearPendingDeletionAt,omitempty"`
 	OrganizationID         *string          `json:"organizationID,omitempty"`
