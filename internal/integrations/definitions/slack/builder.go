@@ -93,7 +93,7 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: slackCredential.ID(),
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
 						Disconnect: func(ctx context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
-							teamID, err := disconnectInstallationID(ctx, req)
+							teamID, err := disconnectTeamID(req)
 							if err != nil {
 								return types.DisconnectResult{}, err
 							}

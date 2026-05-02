@@ -1,15 +1,14 @@
 package slack
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// disconnectInstallationID extracts the team ID from the credential or installation metadata
-func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) (string, error) {
+// disconnectTeamID extracts the team ID from the installation metadata
+func disconnectTeamID(req types.DisconnectRequest) (string, error) {
 	var metadata InstallationMetadata
 	if err := jsonx.UnmarshalIfPresent(req.Integration.InstallationMetadata.Attributes, &metadata); err != nil {
 		return "", ErrInstallationMetadataDecode
