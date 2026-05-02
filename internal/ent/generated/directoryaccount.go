@@ -38,7 +38,7 @@ type DirectoryAccount struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the environment of the directory_account
 	EnvironmentName string `json:"environment_name,omitempty"`

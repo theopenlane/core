@@ -5517,8 +5517,6 @@ type UpdateDirectoryAccountInput struct {
 	ClearSourceVersion         bool
 	SourceVersion              *string
 	PrimarySource              *bool
-	ClearOwner                 bool
-	OwnerID                    *string
 	ClearEnvironment           bool
 	EnvironmentID              *string
 	ClearScope                 bool
@@ -5719,12 +5717,6 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.PrimarySource; v != nil {
 		m.SetPrimarySource(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

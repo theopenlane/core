@@ -12,8 +12,8 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/utils/contextx"
 )
 
 var directorySyncRunIDKey = contextx.NewKey[string]()
@@ -359,11 +359,11 @@ func buildIngestMetadata(integration *ent.Integration, operationName string, rec
 	}
 
 	if options.WorkflowMeta != nil {
-		metadata.WorkflowInstanceID  = options.WorkflowMeta.InstanceID
-		metadata.WorkflowActionKey   = options.WorkflowMeta.ActionKey
+		metadata.WorkflowInstanceID = options.WorkflowMeta.InstanceID
+		metadata.WorkflowActionKey = options.WorkflowMeta.ActionKey
 		metadata.WorkflowActionIndex = options.WorkflowMeta.ActionIndex
-		metadata.WorkflowObjectID    = options.WorkflowMeta.ObjectID
-		metadata.WorkflowObjectType  = string(options.WorkflowMeta.ObjectType)
+		metadata.WorkflowObjectID = options.WorkflowMeta.ObjectID
+		metadata.WorkflowObjectType = string(options.WorkflowMeta.ObjectType)
 	}
 
 	return metadata
@@ -428,10 +428,6 @@ func prepareContactInput(_ context.Context, input ent.CreateContactInput, integr
 func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectoryAccountInput, integration *ent.Integration) ent.CreateDirectoryAccountInput {
 
 	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
-
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
 
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
 
