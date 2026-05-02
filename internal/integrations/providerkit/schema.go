@@ -41,6 +41,56 @@ func SchemaID(schema json.RawMessage) string {
 	return path.Base(doc.Ref)
 }
 
+// InjectDefaults returns the schema document as raw JSON with stored values injected
+// as "default" at every level of nesting, following $ref pointers into $defs recursively.
+// Using jsonschema.Schema preserves the original property ordering on serialization
+func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMessage, error) {
+	var doc jsonschema.Schema
+	if err := json.Unmarshal(schema, &doc); err != nil {
+		return schema, err
+	}
+
+	typeName := SchemaID(schema)
+	if typeName == "" {
+		return schema, nil
+	}
+
+	typeDef, ok := doc.Definitions[typeName]
+	if !ok || typeDef.Properties == nil {
+		return schema, nil
+	}
+
+	injectSchemaDefaults(typeDef, doc.Definitions, defaults)
+
+	out, err := json.Marshal(&doc)
+	if err != nil || out == nil {
+		// fall back to original schema
+		return schema, nil
+	}
+
+	return out, nil
+}
+
+// injectSchemaDefaults recursively injects stored values as "default" on each property,
+// following $ref pointers into defs so per-field defaults are available at every level
+func injectSchemaDefaults(typeDef *jsonschema.Schema, defs jsonschema.Definitions, stored map[string]any) {
+	for pair := typeDef.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		k, prop := pair.Key, pair.Value
+
+		if storedVal, ok := stored[k]; ok {
+			prop.Default = storedVal
+
+			if prop.Ref != "" {
+				if storedSubMap, ok := storedVal.(map[string]any); ok {
+					if nestedDef, ok := defs[path.Base(prop.Ref)]; ok && nestedDef.Properties != nil {
+						injectSchemaDefaults(nestedDef, defs, storedSubMap)
+					}
+				}
+			}
+		}
+	}
+}
+
 // CredentialSchema reflects a credential schema type and returns both the JSON schema
 // and a typed credential ref whose slot identity is derived from the schema definition key
 func CredentialSchema[T any]() (json.RawMessage, types.CredentialRef[T]) {

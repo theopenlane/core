@@ -1081,6 +1081,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.slack.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.slack.redirecturl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.slack.appid }}
+        appid: {{ .Values.openlane.coreConfiguration.integrations.slack.appid | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
       googleworkspace:

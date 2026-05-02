@@ -4,6 +4,7 @@ package testclient
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
@@ -20439,6 +20440,8 @@ type Integration struct {
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 	Entities              *EntityConnection               `json:"entities"`
 	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
+	Credentials           json.RawMessage                 `json:"credentials,omitempty"`
+	Config                json.RawMessage                 `json:"config,omitempty"`
 }
 
 func (Integration) IsNode() {}

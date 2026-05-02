@@ -1317,6 +1317,9 @@
         },
         "redirecturl": {
           "type": "string"
+        },
+        "appid": {
+          "type": "string"
         }
       },
       "additionalProperties": false,

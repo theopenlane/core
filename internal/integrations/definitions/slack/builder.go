@@ -90,6 +90,31 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: slackCredential.ID(),
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
 					},
+					// Disconnect: &types.DisconnectRegistration{
+					// 	CredentialRef: slackCredential.ID(),
+					// 	Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
+					// 	Disconnect: func(ctx context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
+					// 		teamID, err := disconnectInstallationID(ctx, req)
+					// 		if err != nil {
+					// 			return types.DisconnectResult{}, err
+					// 		}
+
+					// 		details, err := jsonx.ToRawMessage(disconnectDetails{
+					// 			TeamID: teamID,
+					// 		})
+					// 		if err != nil {
+					// 			return types.DisconnectResult{}, ErrInstallationMetadataEncode
+					// 		}
+
+					// 		url := getManageURL(teamID, cfg.AppID)
+
+					// 		return types.DisconnectResult{
+					// 			RedirectURL: url,
+					// 			Message:     "Uninstall the Openlane Slack App in Slack to finish disconnecting this integration.",
+					// 			Details:     details,
+					// 		}, nil
+					// 	},
+					// },
 				},
 				{
 					CredentialRef:       slackBotTokenCredential.ID(),

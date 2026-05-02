@@ -1,3 +1,5 @@
 extend type Integration {
     webhookURLs: Map
+    credentials: JSON
+    config: JSON
 }
