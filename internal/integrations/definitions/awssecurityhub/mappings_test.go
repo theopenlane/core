@@ -1,6 +1,7 @@
 package awssecurityhub
 
 import (
+	"encoding/json"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -27,6 +28,56 @@ func TestMappingExpressionsValid(t *testing.T) {
 			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
 		})
 	}
+}
+
+// TestNullArrayPayloads guards against CEL "no such overload: size" errors that occur
+// when array fields like Resources, Types, or Vulnerabilities are present in the payload
+// but carry an explicit null value rather than being absent.
+func TestNullArrayPayloads(t *testing.T) {
+	mappings := awsSecurityHubMappings()
+	findingSpec := mappingtest.MappingSpec(t, mappings, "Finding")
+	vulnSpec := mappingtest.MappingSpec(t, mappings, "Vulnerability")
+
+	t.Run("finding_null_arrays", func(t *testing.T) {
+		payload, err := json.Marshal(map[string]any{
+			"Id":           "test-finding-id",
+			"AwsAccountId": "123456789012",
+			"Types":        nil,
+			"Resources":    nil,
+		})
+		assert.NilError(t, err)
+
+		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
+		mapped := mappingtest.EvalMap(t, findingSpec, envelope)
+
+		assert.Equal(t, "", mapped["category"])
+		assert.Equal(t, "", mapped["resourceName"])
+		assert.DeepEqual(t, []any{}, mapped["targets"])
+		assert.DeepEqual(t, map[string]any{}, mapped["targetDetails"])
+		assert.Equal(t, "123456789012", mapped["externalOwnerID"])
+	})
+
+	t.Run("vulnerability_null_arrays", func(t *testing.T) {
+		payload, err := json.Marshal(map[string]any{
+			"Id":              "test-vuln-id",
+			"AwsAccountId":    "123456789012",
+			"Types":           nil,
+			"Resources":       nil,
+			"Vulnerabilities": nil,
+		})
+		assert.NilError(t, err)
+
+		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
+		mapped := mappingtest.EvalMap(t, vulnSpec, envelope)
+
+		assert.Equal(t, "", mapped["category"])
+		assert.Equal(t, "123456789012", mapped["externalOwnerID"])
+		assert.Equal(t, "", mapped["cveID"])
+		assert.Equal(t, false, mapped["fixAvailable"])
+		assert.Equal(t, "", mapped["firstPatchedVersion"])
+		assert.DeepEqual(t, []any{}, mapped["references"])
+		assert.Equal(t, float64(0), mapped["score"])
+	})
 }
 
 func TestExamplePayloads(t *testing.T) {
