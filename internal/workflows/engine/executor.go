@@ -414,7 +414,7 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, obj 
 				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
-			if err := builder.Exec(ctx); err != nil {
+			if err := builder.Exec(wfworkflows.AllowContext(ctx)); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}
