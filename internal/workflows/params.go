@@ -28,16 +28,10 @@ type ApprovalActionParams struct {
 	Fields []string `json:"fields,omitempty"`
 }
 
-// NotificationActionParams defines params for NOTIFICATION actions
+// NotificationActionParams defines params for in-app NOTIFICATION actions
 type NotificationActionParams struct {
 	// TargetedActionParams identifies notification message targets
 	TargetedActionParams
-	// TemplateID references a notification template by ID
-	TemplateID string `json:"template_id,omitempty"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"template_key,omitempty"`
-	// OperationName identifies the integration operation to invoke when the template has an integration_id
-	OperationName string `json:"operation_name,omitempty"`
 	// Topic sets an optional notification topic
 	Topic string `json:"topic"`
 	// Title is the notification title

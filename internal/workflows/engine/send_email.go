@@ -88,8 +88,6 @@ func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.Wor
 
 // loadSendEmailTemplate resolves an active email template by ID or key for the given owner
 func (e *WorkflowEngine) loadSendEmailTemplate(ctx context.Context, ownerID, templateID, templateKey string) (*generated.EmailTemplate, error) {
-	allowCtx := wfworkflows.AllowContext(ctx)
-
 	query := e.client.EmailTemplate.Query().Where(
 		emailtemplate.ActiveEQ(true),
 		emailtemplate.OwnerIDEQ(ownerID),
@@ -102,7 +100,7 @@ func (e *WorkflowEngine) loadSendEmailTemplate(ctx context.Context, ownerID, tem
 		query = query.Where(emailtemplate.KeyEQ(templateKey))
 	}
 
-	tpl, err := query.Only(allowCtx)
+	tpl, err := query.Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil, ErrSendEmailTemplateNotFound
@@ -139,7 +137,7 @@ func (e *WorkflowEngine) resolveSendEmailRecipients(ctx context.Context, obj *wf
 	}
 
 	if len(targetUserIDs) > 0 {
-		userEmails, err := e.resolveTargetUserEmails(wfworkflows.AllowContext(ctx), lo.Uniq(targetUserIDs))
+		userEmails, err := e.resolveTargetUserEmails(ctx, lo.Uniq(targetUserIDs))
 		if err != nil {
 			return nil, err
 		}
@@ -176,7 +174,15 @@ func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *genera
 		return fmt.Errorf("%w: %w", ErrMarshalPayload, err)
 	}
 
-	if emailTpl.IntegrationID != "" {
+	linkedID := emailTpl.IntegrationID
+	resolvedID, resolveErr := e.integrationRuntime.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), ownerID, func(inst *generated.Integration) bool {
+		return linkedID != "" && inst.ID == linkedID
+	})
+	if resolveErr != nil {
+		return resolveErr
+	}
+
+	if resolvedID != "" {
 		meta := &types.WorkflowMeta{
 			InstanceID:  instance.ID,
 			ActionKey:   action.Key,
@@ -190,7 +196,7 @@ func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *genera
 
 		_, err := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
 			OrgID:          ownerID,
-			InstallationID: emailTpl.IntegrationID,
+			InstallationID: resolvedID,
 			Operation:      emaildef.SendEmailOp.Name(),
 			Config:         configBytes,
 			RunType:        enums.IntegrationRunTypeEvent,

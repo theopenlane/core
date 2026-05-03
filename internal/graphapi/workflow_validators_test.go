@@ -452,11 +452,6 @@ func TestValidateNotificationActionParams(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name:    "template id and key conflict",
-			params:  json.RawMessage(`{"template_id":"tpl_1","template_key":"security.alert"}`),
-			wantErr: ErrNotificationTemplateBothIDAndKey,
-		},
-		{
 			name:    "valid user target",
 			params:  json.RawMessage(`{"targets":[{"type":"USER","id":"user123"}]}`),
 			wantErr: nil,

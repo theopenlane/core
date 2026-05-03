@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	// definitionID is the stable identifier for the Slack integration definition
-	definitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
+	// DefinitionID is the stable identifier for the Slack integration definition
+	DefinitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the OAuth connection
@@ -28,7 +28,7 @@ var (
 	// directorySyncSchema is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// messageSendSchema is the operation ref for the Slack message send operation
-	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
+	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]()
 )
 
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.
@@ -72,6 +72,8 @@ type slackBotTokenCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// DefaultMessaging marks this installation as the preferred Slack workspace for workflow messaging operations
+	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
 	// DirectorySync includes the configuration for identity accounts from Slack members
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
 }

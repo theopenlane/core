@@ -79,6 +79,7 @@ func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, own
 	return "", nil
 }
 
+
 // EnsureInstallation returns an existing installation when integrationID is provided, or creates a new one
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID string, def types.Definition) (*ent.Integration, bool, error) {
 	if integrationID != "" {

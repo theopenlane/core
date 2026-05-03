@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -58,36 +57,6 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 	}
 
 	return record, nil
-}
-
-// buildDispatchPayload overlays the supplied struct values onto template defaults as a JSON object
-// and returns the raw payload consumed by Dispatcher.SendByKey. Each overlay is marshaled
-// through its JSON tags, so the overlay struct types (RecipientInfo, CampaignContext, etc.) remain
-// the single source of truth for per-invocation field names; overlays apply in order, so later
-// overlays win on key conflicts
-func buildDispatchPayload(defaults map[string]any, overlays ...any) (json.RawMessage, error) {
-	base, err := jsonx.ToRawMessage(defaults)
-	if err != nil {
-		return nil, fmt.Errorf("%w: defaults: %w", ErrTemplateRenderFailed, err)
-	}
-
-	if len(base) == 0 {
-		base = json.RawMessage(`{}`)
-	}
-
-	for _, overlay := range overlays {
-		patch, err := jsonx.ToRawMap(overlay)
-		if err != nil {
-			return nil, fmt.Errorf("%w: overlay: %w", ErrTemplateRenderFailed, err)
-		}
-
-		base, _, err = jsonx.MergeObjectMap(base, patch)
-		if err != nil {
-			return nil, fmt.Errorf("%w: merge: %w", ErrTemplateRenderFailed, err)
-		}
-	}
-
-	return base, nil
 }
 
 // markCampaignTargetSent records the current time as the sent_at timestamp on a campaign target

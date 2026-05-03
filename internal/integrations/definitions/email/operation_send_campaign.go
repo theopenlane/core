@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/templatekit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -120,7 +121,7 @@ func renderCampaignMessages(ctx context.Context, client *Client, dispatcher Disp
 	for _, target := range targets {
 		first, last := splitFullName(target.FullName)
 
-		payload, err := buildDispatchPayload(defaults,
+		payload, err := templatekit.BuildDispatchPayload(defaults,
 			campaignData,
 			RecipientInfo{Email: target.Email, FirstName: first, LastName: last},
 			overlay,

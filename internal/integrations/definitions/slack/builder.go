@@ -32,7 +32,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
+				ID:          DefinitionID.ID(),
 				Family:      "Slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
@@ -141,16 +141,16 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 				types.OperationRegistration{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
 					Handle:       HealthCheck{}.Handle(),
 				},
 				types.OperationRegistration{
-					Name:                messageSendOperation.Name(),
+					Name:                MessageSendOp.Name(),
 					Description:         "Send a Slack message via chat.postMessage",
-					Topic:               definitionID.OperationTopic(messageSendOperation.Name()),
+					Topic:               DefinitionID.OperationTopic(MessageSendOp.Name()),
 					ClientRef:           slackClient.ID(),
 					ConfigSchema:        messageSendSchema,
 					Handle:              MessageSend{}.Handle(),
@@ -159,7 +159,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 				types.OperationRegistration{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect workspace users as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},

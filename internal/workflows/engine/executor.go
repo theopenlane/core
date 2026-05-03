@@ -330,7 +330,7 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	})
 }
 
-// executeNotification sends notifications to targets
+// executeNotification sends in-app notifications to targets
 func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
 	var params wfworkflows.NotificationActionParams
 
@@ -349,88 +349,38 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return err
 	}
 
-	var rendered *renderedNotificationTemplate
-	if params.TemplateID != "" || params.TemplateKey != "" {
-		rendered, err = e.renderNotificationTemplate(ctx, instance, obj, action.Key, params, ownerID)
-		if err != nil {
-			return err
-		}
+	if len(params.Targets) == 0 {
+		return nil
 	}
 
-	hasIntegration := rendered != nil && rendered.Template != nil && rendered.Template.IntegrationID != ""
-	if len(params.Targets) == 0 && !hasIntegration {
-		return nil
+	vars, data, err := e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
+	if err != nil {
+		return err
 	}
 
 	defaultTitle := lo.CoalesceOrEmpty(params.Title, fmt.Sprintf("Workflow notification (%s)", action.Key))
 	defaultBody := lo.CoalesceOrEmpty(params.Body, fmt.Sprintf("Workflow instance %s emitted a notification action (%s).", instance.ID, action.Key))
 
-	var (
-		title string
-		body  string
-		data  map[string]any
-		vars  map[string]any
-	)
-
-	if rendered != nil {
-		title = rendered.Title
-		body = rendered.Body
-		data = rendered.Data
-		vars = rendered.Vars
-	} else {
-		vars, data, err = e.buildNotificationTemplateVars(ctx, instance, obj, action.Key, params.Data)
-		if err != nil {
-			return err
-		}
+	title, err := renderTemplateText(defaultTitle, vars)
+	if err != nil {
+		return err
 	}
 
-	if title == "" {
-		title, err = renderTemplateText(defaultTitle, vars)
-		if err != nil {
-			return err
-		}
+	body, err := renderTemplateText(defaultBody, vars)
+	if err != nil {
+		return err
 	}
 
-	if body == "" {
-		body, err = renderTemplateText(defaultBody, vars)
-		if err != nil {
-			return err
-		}
-	}
-
-	templateID := ""
-	if rendered != nil && rendered.Template != nil {
-		templateID = rendered.Template.ID
-	}
-
-	if len(params.Targets) > 0 {
-		_, err = e.dispatchWorkflowNotifications(ctx, wfworkflows.AllowContext(ctx), obj, params.Targets, params.Topic, title, body, data, ownerID, action.Type, action.Key, templateID)
-		if err != nil {
-			return err
-		}
-	}
-
-	if hasIntegration {
-		integrationRendered := rendered
-		if integrationRendered == nil {
-			integrationRendered = &renderedNotificationTemplate{
-				Title: title,
-				Body:  body,
-				Data:  data,
-				Vars:  vars,
-			}
-		}
-
-		if err := e.dispatchTemplateIntegration(ctx, ownerID, integrationRendered, params.OperationName); err != nil {
-			return err
-		}
+	_, err = e.dispatchWorkflowNotifications(ctx, obj, params.Targets, params.Topic, title, body, data, ownerID, action.Type, action.Key)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
 // dispatchWorkflowNotifications creates in-app notification records for resolved user targets
-func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allowCtx context.Context, obj *wfworkflows.Object, targets []wfworkflows.TargetConfig, topic string, title, body string, data map[string]any, ownerID string, actionType string, actionKey string, templateID string) ([]string, error) {
+func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, obj *wfworkflows.Object, targets []wfworkflows.TargetConfig, topic string, title, body string, data map[string]any, ownerID string, actionType string, actionKey string) ([]string, error) {
 	seenUsers := make(map[string]struct{})
 	resolvedUserIDs := make([]string, 0)
 
@@ -460,15 +410,11 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, allo
 				SetData(notificationData).
 				SetUserID(userID)
 
-			if templateID != "" {
-				builder.SetTemplateID(templateID)
-			}
-
 			if topic != "" {
 				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
-			if err := builder.Exec(allowCtx); err != nil {
+			if err := builder.Exec(ctx); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}

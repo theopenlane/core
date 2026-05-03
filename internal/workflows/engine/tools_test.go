@@ -44,6 +44,7 @@ import (
 	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
@@ -81,6 +82,7 @@ type WorkflowEngineTestSuite struct {
 	ofgaTF            *fgatest.OpenFGATestFixture
 	galaRuntime       *gala.Gala
 	integrationsRT    *intruntime.Runtime
+	slackMock         *slackdef.MockSlackRuntime
 }
 
 // TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
@@ -211,9 +213,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.client = db
 	s.galaRuntime = runtime
 
-	// wire integration runtime with mock email provider
+	// wire integration runtime with mock email and slack providers
 	credStore, err := keystore.NewStore(db)
 	s.Require().NoError(err)
+
+	s.slackMock = slackdef.NewMockSlackRuntime()
 
 	rt, err := intruntime.New(intruntime.Config{
 		DB:       db,
@@ -221,12 +225,10 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig()),
+			s.slackMock.Builder(),
 		},
 	})
 	s.Require().NoError(err)
-
-	s.Require().NoError(rt.Registry().Register(notificationTestDefinition()))
-	registerNotificationTestTopics(runtime.Registry())
 
 	db.IntegrationsRuntime = rt
 	s.integrationsRT = rt
@@ -239,6 +241,12 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	}))
 
 	s.requireWorkflowSetup(workflowCfg, runtime)
+}
+
+// mockSlackRecorder returns the mock Slack message recorder
+func (s *WorkflowEngineTestSuite) mockSlackRecorder() *slackdef.SlackMessageRecorder {
+	s.Require().NotNil(s.slackMock, "slack mock not initialized")
+	return s.slackMock.Recorder
 }
 
 // mockEmailSender returns the mock email sender from the integration runtime
@@ -254,6 +262,10 @@ func (s *WorkflowEngineTestSuite) mockEmailSender() *mockprovider.EmailSender {
 
 // TearDownSuite cleans up test dependencies
 func (s *WorkflowEngineTestSuite) TearDownSuite() {
+	if s.slackMock != nil {
+		s.slackMock.Close()
+	}
+
 	if s.galaRuntime != nil {
 		_ = s.galaRuntime.StopWorkers(context.Background())
 		_ = s.galaRuntime.Close()

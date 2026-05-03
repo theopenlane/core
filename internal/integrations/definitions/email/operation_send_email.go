@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/newman"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/templatekit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -50,7 +51,7 @@ func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *Cl
 		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
 	}
 
-	payload, err := buildDispatchPayload(template.Defaults, RecipientInfo{Email: cfg.To, Tags: cfg.Tags})
+	payload, err := templatekit.BuildDispatchPayload(template.Defaults, RecipientInfo{Email: cfg.To, Tags: cfg.Tags})
 	if err != nil {
 		return nil, err
 	}

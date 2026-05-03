@@ -86,7 +86,7 @@ func systemMessageRegistration[T any](op types.OperationRef[T], schema json.RawM
 	return types.OperationRegistration{
 		Name:         op.Name(),
 		Description:  description,
-		Topic:        definitionID.OperationTopic(op.Name()),
+		Topic:        DefinitionID.OperationTopic(op.Name()),
 		ClientRef:    slackClient.ID(),
 		ConfigSchema: schema,
 		Policy:       types.ExecutionPolicy{SkipRunRecord: true},

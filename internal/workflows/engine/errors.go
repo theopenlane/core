@@ -59,10 +59,6 @@ var (
 	ErrAssignmentCreationFailed = errors.New("failed to create workflow assignment")
 	// ErrNotificationCreationFailed is returned when notification creation fails
 	ErrNotificationCreationFailed = errors.New("failed to create notification")
-	// ErrNotificationTemplateNotFound is returned when a notification template cannot be found
-	ErrNotificationTemplateNotFound = errors.New("notification template not found")
-	// ErrNotificationTemplateReferenceConflict is returned when both template_id and template_key are provided
-	ErrNotificationTemplateReferenceConflict = errors.New("notification template reference conflict")
 	// ErrSendEmailTemplateRequired is returned when send_email action has no template reference
 	ErrSendEmailTemplateRequired = errors.New("send_email action requires emailTemplateId or emailTemplateKey")
 	// ErrSendEmailTemplateNotFound is returned when the referenced email template cannot be found
@@ -75,8 +71,6 @@ var (
 	ErrSendEmailUserLookupFailed = errors.New("send_email user lookup failed")
 	// ErrSendEmailRecipientInvalid is returned when a recipient address is not a valid email
 	ErrSendEmailRecipientInvalid = errors.New("send_email recipient address invalid")
-	// ErrNotificationTemplateDataInvalid is returned when template data fails schema validation
-	ErrNotificationTemplateDataInvalid = errors.New("notification template data invalid")
 	// ErrWebhookURLRequired is returned when webhook action is missing URL
 	ErrWebhookURLRequired = errors.New("webhook action requires url")
 	// ErrAssignmentUpdateFailed is returned when assignment update fails

@@ -1034,7 +1034,8 @@ func runWebhookTemplateDemo(ctx context.Context, config openlane.Config, apiClie
 				},
 			},
 		},
-		TemplateKey: template.Key,
+		Title: "Control status changed",
+		Body:  "A control you own has been updated.",
 		Data: map[string]any{
 			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
 		},
@@ -1364,7 +1365,8 @@ func runSlackTemplateDemo(ctx context.Context, config openlane.Config, apiClient
 				},
 			},
 		},
-		TemplateKey: template.Key,
+		Title: "Control status changed",
+		Body:  "A control you own has been updated.",
 		Data: map[string]any{
 			"control_url": "https://console.theopenlane.io/controls/{{object.id}}",
 		},
