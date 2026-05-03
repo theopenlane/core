@@ -196,6 +196,7 @@ integrations:
         enabled: false
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
     slack:
+        appid: ""
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback

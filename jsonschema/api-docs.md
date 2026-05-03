@@ -1635,6 +1635,7 @@ Slack contains settings for Slack notifications
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**appid**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="integrationsgoogleworkspace"></a>

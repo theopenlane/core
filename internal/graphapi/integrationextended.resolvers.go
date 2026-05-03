@@ -7,8 +7,13 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/echox/middleware/echocontext"
 )
 
@@ -34,4 +39,69 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 	}
 
 	return webhookURLs, nil
+}
+
+// Credentials is the resolver for the credentials field.
+func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.Integration) (json.RawMessage, error) {
+	if r.integrationsRuntime == nil {
+		return nil, nil
+	}
+
+	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	if !ok {
+		return nil, nil
+	}
+
+	var credentialType *types.CredentialRegistration
+	for _, credType := range def.CredentialRegistrations {
+		if credType.Ref.String() == obj.InstallationMetadata.Display.CredentialRef {
+			credentialType = &credType
+		}
+	}
+
+	if credentialType == nil {
+		if len(def.CredentialRegistrations) > 0 {
+			credentialType = &def.CredentialRegistrations[0]
+		} else {
+			return nil, nil
+		}
+	}
+
+	currentCreds, err := jsonx.ToMap(obj.InstallationMetadata.Attributes)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		return credentialType.Schema, nil
+	}
+
+	out, err := providerkit.InjectDefaults(credentialType.Schema, currentCreds)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		return credentialType.Schema, nil
+	}
+
+	return out, nil
+}
+
+// Config is the resolver for the config field.
+func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integration) (json.RawMessage, error) {
+	if r.integrationsRuntime == nil {
+		return nil, nil
+	}
+
+	def, ok := r.integrationsRuntime.Definition(obj.DefinitionID)
+	if !ok {
+		return nil, nil
+	}
+
+	if def.UserInput == nil {
+		return nil, nil
+	}
+
+	currentConfig, err := jsonx.ToMap(obj.Config.ClientConfig)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting current config, returning full schema")
+		return def.UserInput.Schema, nil
+	}
+
+	return providerkit.InjectDefaults(def.UserInput.Schema, currentConfig)
 }

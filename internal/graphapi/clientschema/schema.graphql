@@ -38347,6 +38347,8 @@ type Integration implements Node {
 		where: EntityWhereInput
 	): EntityConnection!
 	webhookURLs: Map
+	credentials: JSON
+	config: JSON
 }
 """
 A connection to a list of items.
