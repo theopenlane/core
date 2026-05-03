@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -31,7 +33,9 @@ func (r *Runtime) SeedRecurringCampaigns(ctx context.Context) error {
 func (r *Runtime) HandleRecurringCampaigns(ctx context.Context, _ operations.RecurringCampaignEnvelope) (int, error) {
 	db := r.DB()
 	now := time.Now()
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
+		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	})
 
 	campaigns, err := db.Campaign.Query().
 		Where(dueCampaignPredicates(now)...).

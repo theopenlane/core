@@ -118,6 +118,8 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 			}
 
 			// verify email was sent through the mock sender
+			suite.WaitForEvents()
+
 			msgs := suite.mockEmailSender().Messages()
 			if tc.emailExpected {
 				require.Len(t, msgs, 1)

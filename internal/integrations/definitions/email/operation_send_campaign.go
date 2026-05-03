@@ -3,6 +3,7 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -50,7 +51,7 @@ func (s SendBrandedCampaign) Handle() types.OperationHandler {
 // Run loads the campaign and pending targets, renders all messages, then sends
 // via batch API or rate-limited individual sends depending on whether
 // attachments are present. Returns a marshaled CampaignDispatchResult with counts
-func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
+func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, func(q *generated.CampaignQuery) {
 		q.WithEmailTemplate(func(tq *generated.EmailTemplateQuery) {
 			tq.WithFiles(func(fq *generated.FileQuery) {
@@ -111,7 +112,7 @@ func filterCampaignTargets(targets []*generated.CampaignTarget, resend bool, inc
 }
 
 // renderCampaignMessages renders all pending targets into newman messages
-func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher EmailDispatcher, defaults map[string]any, campaignData map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
+func renderCampaignMessages(ctx context.Context, client *Client, dispatcher Dispatcher, defaults map[string]any, campaignData map[string]any, overlay CampaignContext, targets []*generated.CampaignTarget) ([]*newman.EmailMessage, []string, int) {
 	messages := make([]*newman.EmailMessage, 0, len(targets))
 	targetIDs := make([]string, 0, len(targets))
 	failed := 0
@@ -151,7 +152,7 @@ func renderCampaignMessages(ctx context.Context, client *EmailClient, dispatcher
 // sendCampaignMessages sends rendered messages via batch API when no attachments
 // are present, falling back to rate-limited individual sends otherwise.
 // Returns (sent, failed) counts
-func sendCampaignMessages(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
+func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Client, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
 	if len(attachments) > 0 {
 		return sendCampaignIndividual(ctx, db, client, messages, targetIDs, attachments)
 	}
@@ -164,7 +165,7 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Ema
 		batchIDs := targetIDs[start:end]
 
 		if err := client.Sender.SendBatchEmailWithContext(ctx, batchMsgs); err != nil {
-			if err == newman.ErrBatchNotImplemented {
+			if errors.Is(err, newman.ErrBatchNotImplemented) {
 				logx.FromContext(ctx).Info().Msg("batch send not supported, falling back to individual sends")
 				return sendCampaignIndividual(ctx, db, client, messages, targetIDs, nil)
 			}
@@ -187,7 +188,7 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Ema
 }
 
 // sendCampaignIndividual sends messages one at a time with rate limiting
-func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *EmailClient, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
+func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *Client, messages []*newman.EmailMessage, targetIDs []string, attachments []*newman.Attachment) (int, int) {
 	ticker := time.NewTicker(sendRateInterval)
 	defer ticker.Stop()
 
@@ -198,9 +199,7 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *E
 			<-ticker.C
 		}
 
-		for _, a := range attachments {
-			msg.Attachments = append(msg.Attachments, a)
-		}
+		msg.Attachments = append(msg.Attachments, attachments...)
 
 		if err := client.Sender.SendEmailWithContext(ctx, msg); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("target_id", targetIDs[i]).Msg("failed sending campaign email")

@@ -11,9 +11,9 @@ import (
 	"github.com/theopenlane/newman/scrubber"
 )
 
-// EmailClient wraps a newman.EmailSender with the RuntimeEmailConfig
+// Client wraps a newman.EmailSender with the RuntimeEmailConfig
 // needed for template rendering and branding
-type EmailClient struct {
+type Client struct {
 	// Sender is the configured email provider client
 	Sender newman.EmailSender
 	// Config holds branding and URL configuration for template rendering
@@ -27,7 +27,7 @@ var EmailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
 // EmailScrubber returns the shared HTML scrubber instance used for email
 // content sanitization. This is the canonical sanitization policy for both
 // storage-time and render-time email HTML processing
-func EmailScrubber() scrubber.Scrubber {
+func EmailScrubber() scrubber.Scrubber { //nolint:revive
 	return EmailHTMLScrubber
 }
 

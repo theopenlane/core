@@ -20,7 +20,7 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 		return nil, ErrEmailClientNotAvailable
 	}
 
-	emailClient, ok := client.(*email.EmailClient)
+	emailClient, ok := client.(*email.Client)
 	if !ok {
 		return nil, ErrEmailClientNotAvailable
 	}

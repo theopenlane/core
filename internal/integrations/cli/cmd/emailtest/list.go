@@ -10,7 +10,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "list all registered email template dispatchers",
-	RunE: func(c *cobra.Command, _ []string) error {
+	RunE: func(_ *cobra.Command, _ []string) error {
 		return list()
 	},
 }

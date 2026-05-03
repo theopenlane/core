@@ -18,7 +18,11 @@ import (
 
 // defaultHeader returns the standard header block used by all system emails
 func defaultHeader(cfg RuntimeEmailConfig) render.HeaderBlock {
-	return render.HeaderBlock{Logo: &render.ContentIcon{Src: iconMarkURL, Alt: cfg.CompanyName}}
+	if cfg.HeaderLogoURL == "" {
+		return render.HeaderBlock{}
+	}
+
+	return render.HeaderBlock{Logo: &render.ContentIcon{Src: cfg.HeaderLogoURL, Alt: cfg.CompanyName}}
 }
 
 // baseTheme is the shared theme used by all email operations
@@ -32,7 +36,6 @@ const (
 	iconUserPlusURL  = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/a177b189-bf03-466a-e43a-542585eb1800/public"
 	iconUserCheckURL = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/22704d4a-a811-44c0-8618-8309b03dfa00/public"
 	iconBellURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/23690f00-2ddb-4d22-e9a5-af470c93c100/public"
-	iconMarkURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/13c70376-9501-4abd-a577-41a2b843a000/public"
 )
 
 // Trust center / questionnaire button colors matching the original teal theme
@@ -176,24 +179,24 @@ type BillingEmailChangedEmail struct {
 // --- Schema + operation ref vars ---
 
 var (
-	verifyEmailSchema, VerifyEmailOp                 = providerkit.OperationSchema[VerifyEmailRequest]()
-	welcomeSchema, WelcomeOp                         = providerkit.OperationSchema[WelcomeRequest]()
-	inviteSchema, InviteOp                           = providerkit.OperationSchema[InviteRequest]()
-	inviteJoinedSchema, InviteJoinedOp               = providerkit.OperationSchema[InviteJoinedRequest]()
-	resetRequestSchema, ResetRequestOp               = providerkit.OperationSchema[PasswordResetEmailRequest]()
-	resetSuccessSchema, ResetSuccessOp               = providerkit.OperationSchema[PasswordResetSuccessRequest]()
-	subscribeSchema, SubscribeOp                     = providerkit.OperationSchema[SubscribeRequest]()
-	verifyBillingSchema, VerifyBillingOp             = providerkit.OperationSchema[VerifyBillingRequest]()
-	tcNDARequestSchema, TCNDARequestOp               = providerkit.OperationSchema[TrustCenterNDARequestEmail]()
-	tcNDASignedSchema, TCNDASignedOp                 = providerkit.OperationSchema[TrustCenterNDASignedEmail]()
-	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()
-	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()
-	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()
+	verifyEmailSchema, VerifyEmailOp                 = providerkit.OperationSchema[VerifyEmailRequest]()          //nolint:revive
+	welcomeSchema, WelcomeOp                         = providerkit.OperationSchema[WelcomeRequest]()              //nolint:revive
+	inviteSchema, InviteOp                           = providerkit.OperationSchema[InviteRequest]()               //nolint:revive
+	inviteJoinedSchema, InviteJoinedOp               = providerkit.OperationSchema[InviteJoinedRequest]()         //nolint:revive
+	resetRequestSchema, ResetRequestOp               = providerkit.OperationSchema[PasswordResetEmailRequest]()   //nolint:revive
+	resetSuccessSchema, ResetSuccessOp               = providerkit.OperationSchema[PasswordResetSuccessRequest]() //nolint:revive
+	subscribeSchema, SubscribeOp                     = providerkit.OperationSchema[SubscribeRequest]()            //nolint:revive
+	verifyBillingSchema, VerifyBillingOp             = providerkit.OperationSchema[VerifyBillingRequest]()        //nolint:revive
+	tcNDARequestSchema, TCNDARequestOp               = providerkit.OperationSchema[TrustCenterNDARequestEmail]()  //nolint:revive
+	tcNDASignedSchema, TCNDASignedOp                 = providerkit.OperationSchema[TrustCenterNDASignedEmail]()   //nolint:revive
+	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()        //nolint:revive
+	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()      //nolint:revive
+	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()    //nolint:revive
 )
 
 // --- Email operation definitions ---
 
-var verifyEmail = RegisterEmailOperation(EmailOperation[VerifyEmailRequest]{
+var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
 	Op: VerifyEmailOp, Schema: verifyEmailSchema, Theme: baseTheme,
 	Description: "System email prompting a new user to verify their email address",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) string {
@@ -225,7 +228,7 @@ var verifyEmail = RegisterEmailOperation(EmailOperation[VerifyEmailRequest]{
 	},
 })
 
-var welcomeEmail = RegisterEmailOperation(EmailOperation[WelcomeRequest]{
+var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 	Op: WelcomeOp, Schema: welcomeSchema, Theme: baseTheme,
 	Description: "System welcome email delivered after account signup",
 	Subject: func(cfg RuntimeEmailConfig, _ WelcomeRequest) string {
@@ -258,7 +261,7 @@ var welcomeEmail = RegisterEmailOperation(EmailOperation[WelcomeRequest]{
 	},
 })
 
-var inviteEmail = RegisterEmailOperation(EmailOperation[InviteRequest]{
+var _ = RegisterEmailOperation(Operation[InviteRequest]{
 	Op: InviteOp, Schema: inviteSchema, Theme: baseTheme,
 	Description: "System email inviting a user to join an organization",
 	Subject: func(cfg RuntimeEmailConfig, req InviteRequest) string {
@@ -266,10 +269,10 @@ var inviteEmail = RegisterEmailOperation(EmailOperation[InviteRequest]{
 	},
 	Build: func(cfg RuntimeEmailConfig, req InviteRequest) render.ContentBody {
 		inviteURL := tokenURL(cfg.ProductURL, "/invite", req.Token)
-		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") +
+		inviteIntro := template.HTML("You're in - let's build trust without the busywork. "+html.EscapeString(req.InviterName)+" has invited you to collaborate in "+html.EscapeString(cfg.CompanyName)+", as part of the ") + //nolint:gosec // all user input is escaped via html.EscapeString
 			render.Bold(req.OrgName) + " organization"
 		if req.Role != "" {
-			inviteIntro += template.HTML(" with the role of " + html.EscapeString(strings.ToUpper(req.Role)))
+			inviteIntro += template.HTML(" with the role of " + html.EscapeString(strings.ToUpper(req.Role))) //nolint:gosec // role is escaped
 		}
 		inviteIntro += "."
 
@@ -297,7 +300,7 @@ var inviteEmail = RegisterEmailOperation(EmailOperation[InviteRequest]{
 	},
 })
 
-var inviteJoinedEmail = RegisterEmailOperation(EmailOperation[InviteJoinedRequest]{
+var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 	Op: InviteJoinedOp, Schema: inviteJoinedSchema, Theme: baseTheme,
 	Description: "System notification confirming an invited user has joined an organization",
 	Subject: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) string {
@@ -337,7 +340,7 @@ var inviteJoinedEmail = RegisterEmailOperation(EmailOperation[InviteJoinedReques
 	},
 })
 
-var resetRequestEmail = RegisterEmailOperation(EmailOperation[PasswordResetEmailRequest]{
+var _ = RegisterEmailOperation(Operation[PasswordResetEmailRequest]{
 	Op: ResetRequestOp, Schema: resetRequestSchema, Theme: baseTheme,
 	Description: "System email delivering a password reset link to a user",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) string {
@@ -370,7 +373,7 @@ var resetRequestEmail = RegisterEmailOperation(EmailOperation[PasswordResetEmail
 	},
 })
 
-var resetSuccessEmail = RegisterEmailOperation(EmailOperation[PasswordResetSuccessRequest]{
+var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 	Op: ResetSuccessOp, Schema: resetSuccessSchema, Theme: baseTheme,
 	Description: "System email confirming a successful password reset",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetSuccessRequest) string {
@@ -392,7 +395,7 @@ var resetSuccessEmail = RegisterEmailOperation(EmailOperation[PasswordResetSucce
 	},
 })
 
-var subscribeEmail = RegisterEmailOperation(EmailOperation[SubscribeRequest]{
+var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 	Op: SubscribeOp, Schema: subscribeSchema, Theme: baseTheme,
 	Description: "System email confirming a subscriber's early access signup",
 	Subject: func(cfg RuntimeEmailConfig, _ SubscribeRequest) string {
@@ -433,7 +436,7 @@ var subscribeEmail = RegisterEmailOperation(EmailOperation[SubscribeRequest]{
 	},
 })
 
-var verifyBillingEmail = RegisterEmailOperation(EmailOperation[VerifyBillingRequest]{
+var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: baseTheme,
 	Description: "System email prompting verification of the billing email on file",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyBillingRequest) string {
@@ -465,7 +468,7 @@ var verifyBillingEmail = RegisterEmailOperation(EmailOperation[VerifyBillingRequ
 	},
 })
 
-var tcNDARequestEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDARequestEmail]{
+var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
 	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: baseTheme,
 	Description: "System email requesting an NDA signature before granting trust center access",
 	PreHook:     resolveTrustCenterNDARequestFields,
@@ -474,8 +477,9 @@ var tcNDARequestEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDARequ
 	},
 	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDARequestEmail) render.ContentBody {
 		return render.ContentBody{
-			Header: defaultHeader(cfg),
-			Title:  "You requested access to " + req.OrgName + "'s Trust Center",
+			Preheader: "Review and sign the NDA to access " + req.OrgName + "'s Trust Center",
+			Header:    defaultHeader(cfg),
+			Title:     "You requested access to " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"To continue, please review and sign the Non-Disclosure Agreement (NDA). Once signed, you'll be granted access to protected Trust Center documents.",
@@ -488,7 +492,7 @@ var tcNDARequestEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDARequ
 	},
 })
 
-var tcNDASignedEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDASignedEmail]{
+var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: baseTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
@@ -496,8 +500,9 @@ var tcNDASignedEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDASigne
 	},
 	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDASignedEmail) render.ContentBody {
 		return render.ContentBody{
-			Header: defaultHeader(cfg),
-			Title:  "Your NDA with " + req.OrgName + " has been signed",
+			Preheader: "Your NDA with " + req.OrgName + " is complete — access granted",
+			Header:    defaultHeader(cfg),
+			Title:     "Your NDA with " + req.OrgName + " has been signed",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"Thank you for signing the Non-Disclosure Agreement (NDA). You now have access to " + req.OrgName + "'s protected Trust Center documents.",
@@ -519,7 +524,7 @@ var tcNDASignedEmail = RegisterEmailOperation(EmailOperation[TrustCenterNDASigne
 	},
 })
 
-var tcAuthEmail = RegisterEmailOperation(EmailOperation[TrustCenterAuthEmail]{
+var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 	Op: TCAuthOp, Schema: tcAuthSchema, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a trust center",
 	PreHook:     resolveTrustCenterAuthFields,
@@ -528,8 +533,9 @@ var tcAuthEmail = RegisterEmailOperation(EmailOperation[TrustCenterAuthEmail]{
 	},
 	Build: func(cfg RuntimeEmailConfig, req TrustCenterAuthEmail) render.ContentBody {
 		return render.ContentBody{
-			Header: defaultHeader(cfg),
-			Title:  "Access " + req.OrgName + "'s Trust Center",
+			Preheader: "Your secure link to " + req.OrgName + "'s Trust Center",
+			Header:    defaultHeader(cfg),
+			Title:     "Access " + req.OrgName + "'s Trust Center",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					"You've been granted access to " + req.OrgName + "'s Trust Center. Click the button below to authenticate and view the available resources.",
@@ -547,7 +553,7 @@ var tcAuthEmail = RegisterEmailOperation(EmailOperation[TrustCenterAuthEmail]{
 	},
 })
 
-var questionnaireAuthEmail = RegisterEmailOperation(EmailOperation[QuestionnaireAuthEmail]{
+var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
 	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	Subject: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
@@ -555,8 +561,9 @@ var questionnaireAuthEmail = RegisterEmailOperation(EmailOperation[Questionnaire
 	},
 	Build: func(cfg RuntimeEmailConfig, req QuestionnaireAuthEmail) render.ContentBody {
 		return render.ContentBody{
-			Header: defaultHeader(cfg),
-			Title:  cfg.CompanyName + " sent you an assessment to complete",
+			Preheader: req.AssessmentName + " — complete your questionnaire from " + cfg.CompanyName,
+			Header:    defaultHeader(cfg),
+			Title:     cfg.CompanyName + " sent you an assessment to complete",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
 					cfg.CompanyName + " has shared a form (" + req.AssessmentName + ") for you to complete. Click the button below to access it.",
@@ -583,7 +590,7 @@ var questionnaireAuthEmail = RegisterEmailOperation(EmailOperation[Questionnaire
 	},
 })
 
-var billingChangedEmail = RegisterEmailOperation(EmailOperation[BillingEmailChangedEmail]{
+var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 	Op: BillingEmailChangedOp, Schema: billingEmailChangedSchema, Theme: baseTheme,
 	Description: "System notification confirming a change to the billing email on file",
 	Subject: func(_ RuntimeEmailConfig, req BillingEmailChangedEmail) string {
@@ -609,7 +616,7 @@ var billingChangedEmail = RegisterEmailOperation(EmailOperation[BillingEmailChan
 			Outros: render.OutrosBlock{
 				Unsafe: []template.HTML{
 					"If you made this change, no further action is required.",
-					template.HTML(`If you did not make this change, please contact our support team immediately at <a href="mailto:` + cfg.SupportEmail + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">` + cfg.SupportEmail + `</a>.`),
+					template.HTML(`If you did not make this change, please contact our support team immediately at <a href="mailto:` + cfg.SupportEmail + `" style="color:rgb(63,118,255);text-decoration-line:none" target="_blank">` + cfg.SupportEmail + `</a>.`), //nolint:gosec // SupportEmail is a system config value, not user input
 				},
 			},
 		}
@@ -618,20 +625,20 @@ var billingChangedEmail = RegisterEmailOperation(EmailOperation[BillingEmailChan
 
 // AllEmailOperations returns all system email operation registrations for wiring into the builder
 func AllEmailOperations() []types.OperationRegistration {
-	return lo.Map(dispatchers, func(d EmailDispatcher, _ int) types.OperationRegistration {
+	return lo.Map(dispatchers, func(d Dispatcher, _ int) types.OperationRegistration {
 		return d.Registration()
 	})
 }
 
 // CustomerSelectableDispatchers returns the dispatchers marked as customer-selectable
-func CustomerSelectableDispatchers() []EmailDispatcher {
-	return lo.Filter(dispatchers, func(d EmailDispatcher, _ int) bool {
+func CustomerSelectableDispatchers() []Dispatcher {
+	return lo.Filter(dispatchers, func(d Dispatcher, _ int) bool {
 		return d.Registration().CustomerSelectable
 	})
 }
 
 // DispatcherByKey resolves a registered email dispatcher by its catalog key
-func DispatcherByKey(key string) (EmailDispatcher, bool) {
+func DispatcherByKey(key string) (Dispatcher, bool) {
 	d, ok := dispatcherIndex[key]
 	return d, ok
 }

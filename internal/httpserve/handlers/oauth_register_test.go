@@ -85,6 +85,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
 		assert.Equal(t, "Bearer", out.TokenType)
 
+		suite.WaitForEvents()
+
 		msgs := suite.mockEmailSender().Messages()
 		require.NotEmpty(t, msgs)
 		assert.Contains(t, msgs[0].Subject, "Welcome to")
@@ -117,6 +119,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		recorder, out = send(t, registerJSON)
 		assert.Equal(t, http.StatusOK, recorder.Code)
 		assert.True(t, out.Success)
+
+		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
 		assert.Empty(t, msgs)

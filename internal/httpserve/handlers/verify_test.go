@@ -45,6 +45,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 		tokenSet        bool
 		expectedMessage string
 		expectedStatus  int
+		expectedSubject string
 	}{
 		{
 			name:            "happy path, unconfirmed user",
@@ -53,6 +54,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			tokenSet:        true,
 			expectedMessage: "success",
 			expectedStatus:  http.StatusOK,
+			expectedSubject: "Welcome to",
 		},
 		{
 			name:            "happy path, already confirmed user",
@@ -78,6 +80,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			ttl:             expiredTTL,
 			expectedMessage: "Token expired, a new token has been issued. Please check your email and try again.",
 			expectedStatus:  http.StatusCreated,
+			expectedSubject: "verify your email",
 		},
 	}
 
@@ -173,9 +176,11 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 					assert.NotEmpty(t, claims["org"])
 				} else {
+					suite.WaitForEvents()
+
 					msgs := suite.mockEmailSender().Messages()
 					require.NotEmpty(t, msgs)
-					assert.Contains(t, msgs[0].Subject, "Welcome to")
+					assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
 					assert.Equal(t, []string{tc.email}, msgs[0].To)
 				}
 			} else {

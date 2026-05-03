@@ -85,7 +85,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		metadata.RunID = runRecord.ID
 	}
 
-	inheritWebhookContext(&metadata, ctx)
+	inheritWebhookContext(ctx, &metadata)
 
 	tags := types.GetTagsForExecutionMetadata(metadata)
 
@@ -124,7 +124,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 // inheritWebhookContext propagates webhook/event context from a parent execution
 // so the envelope carries the triggering event identity
-func inheritWebhookContext(metadata *types.ExecutionMetadata, ctx context.Context) {
+func inheritWebhookContext(ctx context.Context, metadata *types.ExecutionMetadata) {
 	existing, ok := types.ExecutionMetadataFromContext(ctx)
 	if !ok {
 		return

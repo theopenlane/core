@@ -47,8 +47,8 @@ func TestRuntimeEmailConfig_Provisioned(t *testing.T) {
 	}
 }
 
-func TestEmailUserInput_ToRuntimeConfig(t *testing.T) {
-	input := EmailUserInput{
+func TestUserInput_ToRuntimeConfig(t *testing.T) {
+	input := UserInput{
 		FromEmail:      "from@example.com",
 		CompanyName:    "Acme Corp",
 		CompanyAddress: "123 Main St",

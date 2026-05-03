@@ -161,13 +161,15 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			assert.True(t, foundMember, "expected user to be a member of the group")
 
 			// verify the invite and acceptance emails were sent through the mock sender
+			suite.WaitForEvents()
+
 			msgs := suite.mockEmailSender().Messages()
 			require.Len(t, msgs, 2)
 
 			// check that both expected subject snippets appear across the sent messages
 			expectedSnippets := []string{
-				"Join your team",
-				"You've been added to an organization",
+				"Join Your Teammate",
+				"You've been added to an Organization",
 			}
 
 			found := make(map[string]bool)

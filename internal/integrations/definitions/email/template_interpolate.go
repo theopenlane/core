@@ -12,7 +12,7 @@ import (
 )
 
 // interpolatePayload executes Go template expressions in the raw JSON payload against a variable map
-func interpolatePayload(client *EmailClient, payload json.RawMessage) (json.RawMessage, error) {
+func interpolatePayload(client *Client, payload json.RawMessage) (json.RawMessage, error) {
 	if len(payload) == 0 {
 		return payload, nil
 	}

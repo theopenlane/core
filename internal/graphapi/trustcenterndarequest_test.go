@@ -232,6 +232,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			}
 
 			// Verify the email was or was not sent based on expectation
+			suite.WaitForEvents()
+
 			if tc.expectEmailSent != "" {
 				msgs := suite.mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
@@ -267,6 +269,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				if tc.setStatus == &enums.TrustCenterNDARequestStatusSigned {
 					assert.Check(t, resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.SignedAt != nil, "signed_at should be set when status is signed")
 				}
+
+				suite.WaitForEvents()
 
 				if tc.expectedSecondaryEmail != "" {
 					msgs := suite.mockEmailSender().Messages()
@@ -554,6 +558,8 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			}
 
 			// Verify the email was or was not sent based on expectation
+			suite.WaitForEvents()
+
 			if tc.expectEmailSent {
 				msgs := suite.mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
@@ -670,6 +676,8 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 			// Verify the email was or was not sent based on expectation
+			suite.WaitForEvents()
+
 			if tc.expectEmailSent {
 				msgs := suite.mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
@@ -1018,6 +1026,8 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 			assert.Check(t, resp.RequestNewTrustCenterToken.Success == true)
 
 			// Verify the email was or was not sent based on expectation
+			suite.WaitForEvents()
+
 			if tc.expectEmailSent != "" {
 				msgs := suite.mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))

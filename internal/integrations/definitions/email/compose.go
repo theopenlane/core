@@ -61,7 +61,7 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 }
 
 // buildDispatchPayload overlays the supplied struct values onto template defaults as a JSON object
-// and returns the raw payload consumed by EmailDispatcher.SendByKey. Each overlay is marshaled
+// and returns the raw payload consumed by Dispatcher.SendByKey. Each overlay is marshaled
 // through its JSON tags, so the overlay struct types (RecipientInfo, CampaignContext, etc.) remain
 // the single source of truth for per-invocation field names; overlays apply in order, so later
 // overlays win on key conflicts

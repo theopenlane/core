@@ -18,6 +18,9 @@ import (
 // targetCommentPrefix identifies comment lines in a targets file
 const targetCommentPrefix = "#"
 
+// targetCSVColumns is the number of columns in a targets CSV line (email, optional full name)
+const targetCSVColumns = 2
+
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create a new campaign with one or more targets",
@@ -148,7 +151,7 @@ func parseTargetsFile(path string) ([]*graphclient.CreateCampaignTargetInput, er
 			continue
 		}
 
-		parts := strings.SplitN(line, ",", 2)
+		parts := strings.SplitN(line, ",", targetCSVColumns)
 
 		email := strings.TrimSpace(parts[0])
 		if email == "" {

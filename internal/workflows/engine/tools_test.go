@@ -225,8 +225,18 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	})
 	s.Require().NoError(err)
 
+	s.Require().NoError(rt.Registry().Register(notificationTestDefinition()))
+	registerNotificationTestTopics(runtime.Registry())
+
 	db.IntegrationsRuntime = rt
 	s.integrationsRT = rt
+
+	wfEngine, ok = db.WorkflowEngine.(*engine.WorkflowEngine)
+	s.Require().True(ok)
+
+	s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
+		Runtime: rt,
+	}))
 
 	s.requireWorkflowSetup(workflowCfg, runtime)
 }

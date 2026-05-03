@@ -66,10 +66,10 @@ type DemoRequestMessage struct {
 
 // System message operation schemas and refs
 var (
-	newSubscriberSchema, NewSubscriberOp         = providerkit.OperationSchema[NewSubscriberMessage]()
-	newUserSchema, NewUserOp                     = providerkit.OperationSchema[NewUserMessage]()
-	githubAppInstalledSchema, GitHubAppInstallOp = providerkit.OperationSchema[GitHubAppInstalledMessage]()
-	demoRequestSchema, DemoRequestOp             = providerkit.OperationSchema[DemoRequestMessage]()
+	newSubscriberSchema, NewSubscriberOp         = providerkit.OperationSchema[NewSubscriberMessage]()      //nolint:revive
+	newUserSchema, NewUserOp                     = providerkit.OperationSchema[NewUserMessage]()            //nolint:revive
+	githubAppInstalledSchema, GitHubAppInstallOp = providerkit.OperationSchema[GitHubAppInstalledMessage]() //nolint:revive
+	demoRequestSchema, DemoRequestOp             = providerkit.OperationSchema[DemoRequestMessage]()        //nolint:revive
 )
 
 // Parsed system message templates; exposed at package scope for unit-test reuse

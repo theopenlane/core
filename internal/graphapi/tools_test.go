@@ -64,6 +64,7 @@ import (
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
@@ -95,6 +96,7 @@ type GraphTestSuite struct {
 	stripeMockBackend  *mocks.MockStripeBackend
 	cacheRefreshServer *httptest.Server
 	galaRuntime        *gala.Gala
+	integrationsRT     *intruntime.Runtime
 }
 
 // client contains all the clients the test need to interact with
@@ -285,6 +287,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 	requireNoError(t, err)
 
+	do.ProvideValue(galaInstance.Injector(), c.db)
+
+	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance.Registry())
+	requireNoError(t, err)
+
 	requireNoError(t, galaInstance.StartWorkers(ctx))
 
 	suite.galaRuntime = galaInstance
@@ -340,6 +347,26 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	if suite.cacheRefreshServer != nil {
 		suite.cacheRefreshServer.Close()
 	}
+}
+
+// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+func (suite *GraphTestSuite) WaitForEvents() {
+	suite.galaRuntime.WaitIdle()
+}
+
+// mockEmailSender extracts the mock email sender from the integration runtime
+func (suite *GraphTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	if !ok {
+		panic("email runtime client not found")
+	}
+
+	ms := emaildef.MockSenderFromClient(rc)
+	if ms == nil {
+		panic("mock sender not found")
+	}
+
+	return ms
 }
 
 func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {

@@ -156,6 +156,8 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			if tc.expectedStatus != http.StatusOK {
 				assert.Contains(t, out.Error, tc.expectedResp)
 			} else {
+				suite.WaitForEvents()
+
 				msgs := suite.mockEmailSender().Messages()
 				require.NotEmpty(t, msgs)
 				assert.Contains(t, msgs[len(msgs)-1].Subject, "Password Reset")

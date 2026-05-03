@@ -9,12 +9,36 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// testDispatcher looks up a registered email dispatcher by key and returns the concrete Operation[T]
+func testDispatcher[T Recipient](t *testing.T, key string) Operation[T] {
+	t.Helper()
+
+	d, ok := DispatcherByKey(key)
+	require.True(t, ok, "dispatcher %q not registered", key)
+
+	return d.(Operation[T])
+}
+
 // TestSystemEmailSubjects verifies subject line generation for all system email operations
 func TestSystemEmailSubjects(t *testing.T) {
 	cfg := RuntimeEmailConfig{
 		CompanyName: "Acme",
 		ProductURL:  "https://app.acme.com",
 	}
+
+	verify := testDispatcher[VerifyEmailRequest](t, "VerifyEmailRequest")
+	welcome := testDispatcher[WelcomeRequest](t, "WelcomeRequest")
+	invite := testDispatcher[InviteRequest](t, "InviteRequest")
+	inviteJoined := testDispatcher[InviteJoinedRequest](t, "InviteJoinedRequest")
+	resetRequest := testDispatcher[PasswordResetEmailRequest](t, "PasswordResetEmailRequest")
+	resetSuccess := testDispatcher[PasswordResetSuccessRequest](t, "PasswordResetSuccessRequest")
+	subscribe := testDispatcher[SubscribeRequest](t, "SubscribeRequest")
+	verifyBilling := testDispatcher[VerifyBillingRequest](t, "VerifyBillingRequest")
+	tcNDARequest := testDispatcher[TrustCenterNDARequestEmail](t, "TrustCenterNDARequestEmail")
+	tcNDASigned := testDispatcher[TrustCenterNDASignedEmail](t, "TrustCenterNDASignedEmail")
+	tcAuth := testDispatcher[TrustCenterAuthEmail](t, "TrustCenterAuthEmail")
+	questionnaireAuth := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
+	billingChanged := testDispatcher[BillingEmailChangedEmail](t, "BillingEmailChangedEmail")
 
 	tests := []struct {
 		name     string
@@ -23,7 +47,7 @@ func TestSystemEmailSubjects(t *testing.T) {
 	}{
 		{
 			name: "verify email",
-			subject: verifyEmail.Subject(cfg, VerifyEmailRequest{
+			subject: verify.Subject(cfg, VerifyEmailRequest{
 				RecipientInfo: RecipientInfo{Email: "a@b.com"},
 				Token:         "tok123",
 			}),
@@ -31,12 +55,12 @@ func TestSystemEmailSubjects(t *testing.T) {
 		},
 		{
 			name:     "welcome",
-			subject:  welcomeEmail.Subject(cfg, WelcomeRequest{}),
+			subject:  welcome.Subject(cfg, WelcomeRequest{}),
 			contains: []string{"Welcome", "Acme"},
 		},
 		{
 			name: "invite",
-			subject: inviteEmail.Subject(cfg, InviteRequest{
+			subject: invite.Subject(cfg, InviteRequest{
 				InviterName: "Bob",
 				Token:       "tok",
 			}),
@@ -44,26 +68,26 @@ func TestSystemEmailSubjects(t *testing.T) {
 		},
 		{
 			name: "invite joined",
-			subject: inviteJoinedEmail.Subject(cfg, InviteJoinedRequest{
+			subject: inviteJoined.Subject(cfg, InviteJoinedRequest{
 				OrgName: "OrgX",
 			}),
 			contains: []string{"Acme"},
 		},
 		{
 			name: "password reset request",
-			subject: resetRequestEmail.Subject(cfg, PasswordResetEmailRequest{
+			subject: resetRequest.Subject(cfg, PasswordResetEmailRequest{
 				Token: "tok",
 			}),
 			contains: []string{"Acme", "Password Reset"},
 		},
 		{
 			name:     "password reset success",
-			subject:  resetSuccessEmail.Subject(cfg, PasswordResetSuccessRequest{}),
+			subject:  resetSuccess.Subject(cfg, PasswordResetSuccessRequest{}),
 			contains: []string{"Acme", "Password Reset", "Confirmation"},
 		},
 		{
 			name: "subscribe",
-			subject: subscribeEmail.Subject(cfg, SubscribeRequest{
+			subject: subscribe.Subject(cfg, SubscribeRequest{
 				Token:   "tok",
 				OrgName: "OrgY",
 			}),
@@ -71,42 +95,42 @@ func TestSystemEmailSubjects(t *testing.T) {
 		},
 		{
 			name: "verify billing",
-			subject: verifyBillingEmail.Subject(cfg, VerifyBillingRequest{
+			subject: verifyBilling.Subject(cfg, VerifyBillingRequest{
 				Token: "tok",
 			}),
 			contains: []string{"verify", "billing", "Acme"},
 		},
 		{
 			name: "tc nda request",
-			subject: tcNDARequestEmail.Subject(cfg, TrustCenterNDARequestEmail{
+			subject: tcNDARequest.Subject(cfg, TrustCenterNDARequestEmail{
 				OrgName: "SecureCorp",
 			}),
 			contains: []string{"SecureCorp", "NDA"},
 		},
 		{
 			name: "tc nda signed",
-			subject: tcNDASignedEmail.Subject(cfg, TrustCenterNDASignedEmail{
+			subject: tcNDASigned.Subject(cfg, TrustCenterNDASignedEmail{
 				OrgName: "SecureCorp",
 			}),
 			contains: []string{"SecureCorp", "NDA", "Signed"},
 		},
 		{
 			name: "tc auth",
-			subject: tcAuthEmail.Subject(cfg, TrustCenterAuthEmail{
+			subject: tcAuth.Subject(cfg, TrustCenterAuthEmail{
 				OrgName: "SecureCorp",
 			}),
 			contains: []string{"SecureCorp", "Trust Center"},
 		},
 		{
 			name: "questionnaire auth",
-			subject: questionnaireAuthEmail.Subject(cfg, QuestionnaireAuthEmail{
+			subject: questionnaireAuth.Subject(cfg, QuestionnaireAuthEmail{
 				AssessmentName: "SOC2 Review",
 			}),
 			contains: []string{"SOC2 Review", "Acme"},
 		},
 		{
 			name: "billing changed",
-			subject: billingChangedEmail.Subject(cfg, BillingEmailChangedEmail{
+			subject: billingChanged.Subject(cfg, BillingEmailChangedEmail{
 				OrgName: "BillOrg",
 			}),
 			contains: []string{"Billing", "BillOrg"},
@@ -135,7 +159,7 @@ func TestVerifyEmailURLConstruction(t *testing.T) {
 		Token:         "abc123",
 	}
 
-	body := verifyEmail.Build(cfg, req)
+	body := testDispatcher[VerifyEmailRequest](t, "VerifyEmailRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/verify?token=abc123", body.Actions[0].Button.Link)
@@ -158,7 +182,7 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 		Token:         "inv-tok-456",
 	}
 
-	body := inviteEmail.Build(cfg, req)
+	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456", body.Actions[0].Button.Link)
@@ -179,10 +203,11 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 		Token:       "tok",
 	}
 
-	body := inviteEmail.Build(cfg, req)
+	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
 	require.NotEmpty(t, body.Intros.Unsafe)
 	found := false
+
 	for _, intro := range body.Intros.Unsafe {
 		if strings.Contains(string(intro), "ADMIN") {
 			found = true
@@ -193,7 +218,7 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 }
 
 func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
-	body := inviteEmail.Build(RuntimeEmailConfig{
+	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(RuntimeEmailConfig{
 		CompanyName: "TestCo <script>",
 		ProductURL:  "https://app.testco.com",
 	}, InviteRequest{
@@ -228,7 +253,7 @@ func TestInviteEmailNoRole(t *testing.T) {
 		Token:       "tok",
 	}
 
-	body := inviteEmail.Build(cfg, req)
+	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
 	require.NotEmpty(t, body.Intros.Unsafe)
 	for _, intro := range body.Intros.Unsafe {
@@ -248,7 +273,7 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 		Token:         "reset-xyz",
 	}
 
-	body := resetRequestEmail.Build(cfg, req)
+	body := testDispatcher[PasswordResetEmailRequest](t, "PasswordResetEmailRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link)
@@ -267,7 +292,7 @@ func TestSubscribeVerifyURLConstruction(t *testing.T) {
 		Token:         "sub-tok",
 	}
 
-	body := subscribeEmail.Build(cfg, req)
+	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
@@ -284,7 +309,7 @@ func TestVerifyBillingURLConstruction(t *testing.T) {
 		Token: "bill-tok",
 	}
 
-	body := verifyBillingEmail.Build(cfg, req)
+	body := testDispatcher[VerifyBillingRequest](t, "VerifyBillingRequest").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://app.testco.com/billing/verify?token=bill-tok", body.Actions[0].Button.Link)
@@ -292,7 +317,9 @@ func TestVerifyBillingURLConstruction(t *testing.T) {
 
 // TestTrustCenterNDARequestButtonColor verifies the NDA request uses trust center theme colors
 func TestTrustCenterNDARequestButtonColor(t *testing.T) {
-	body := tcNDARequestEmail.Build(RuntimeEmailConfig{}, TrustCenterNDARequestEmail{
+	op := testDispatcher[TrustCenterNDARequestEmail](t, "TrustCenterNDARequestEmail")
+
+	body := op.Build(RuntimeEmailConfig{}, TrustCenterNDARequestEmail{
 		OrgName: "SecureCorp",
 		NDAURL:  "https://trust.securecorp.com/sign",
 	})
@@ -305,7 +332,9 @@ func TestTrustCenterNDARequestButtonColor(t *testing.T) {
 
 // TestTrustCenterNDASignedContent verifies the NDA signed confirmation content
 func TestTrustCenterNDASignedContent(t *testing.T) {
-	body := tcNDASignedEmail.Build(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{
+	op := testDispatcher[TrustCenterNDASignedEmail](t, "TrustCenterNDASignedEmail")
+
+	body := op.Build(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{
 		OrgName:        "SecureCorp",
 		TrustCenterURL: "https://trust.securecorp.com",
 	})
@@ -318,19 +347,21 @@ func TestTrustCenterNDASignedContent(t *testing.T) {
 
 // TestTrustCenterNDASignedAttachment verifies attachment options are returned when data is present
 func TestTrustCenterNDASignedAttachment(t *testing.T) {
-	req := TrustCenterNDASignedEmail{
+	op := testDispatcher[TrustCenterNDASignedEmail](t, "TrustCenterNDASignedEmail")
+
+	opts := op.MessageOptions(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{
 		AttachmentFilename: "nda-signed.pdf",
 		AttachmentData:     []byte("pdf-content"),
-	}
-
-	opts := tcNDASignedEmail.MessageOptions(RuntimeEmailConfig{}, req)
+	})
 
 	require.Len(t, opts, 1)
 }
 
 // TestTrustCenterNDASignedNoAttachment verifies nil options when no attachment
 func TestTrustCenterNDASignedNoAttachment(t *testing.T) {
-	opts := tcNDASignedEmail.MessageOptions(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{})
+	op := testDispatcher[TrustCenterNDASignedEmail](t, "TrustCenterNDASignedEmail")
+
+	opts := op.MessageOptions(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{})
 
 	assert.Nil(t, opts)
 }
@@ -346,7 +377,7 @@ func TestQuestionnaireAuthContent(t *testing.T) {
 		AuthURL:        "https://q.auditco.com/auth?tok=abc",
 	}
 
-	body := questionnaireAuthEmail.Build(cfg, req)
+	body := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail").Build(cfg, req)
 
 	require.Len(t, body.Actions, 1)
 	assert.Equal(t, "https://q.auditco.com/auth?tok=abc", body.Actions[0].Button.Link)
@@ -360,14 +391,16 @@ func TestQuestionnaireFromOverride(t *testing.T) {
 		QuestionnaireEmail: "questionnaire@acme.com",
 	}
 
-	opts := questionnaireAuthEmail.MessageOptions(cfg, QuestionnaireAuthEmail{})
+	op := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
+	opts := op.MessageOptions(cfg, QuestionnaireAuthEmail{})
 
 	require.Len(t, opts, 1)
 }
 
 // TestQuestionnaireNoFromOverride verifies nil when no questionnaire email configured
 func TestQuestionnaireNoFromOverride(t *testing.T) {
-	opts := questionnaireAuthEmail.MessageOptions(RuntimeEmailConfig{}, QuestionnaireAuthEmail{})
+	op := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
+	opts := op.MessageOptions(RuntimeEmailConfig{}, QuestionnaireAuthEmail{})
 
 	assert.Nil(t, opts)
 }
@@ -386,7 +419,7 @@ func TestBillingChangedContent(t *testing.T) {
 		ChangedAt:       time.Date(2025, 6, 15, 14, 30, 0, 0, time.UTC),
 	}
 
-	body := billingChangedEmail.Build(cfg, req)
+	body := testDispatcher[BillingEmailChangedEmail](t, "BillingEmailChangedEmail").Build(cfg, req)
 
 	assert.Equal(t, "Billing Email Changed", body.Title)
 	assert.Contains(t, body.Intros.Paragraphs[0], "BillOrg")

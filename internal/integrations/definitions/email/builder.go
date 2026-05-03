@@ -54,7 +54,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				},
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[EmailUserInput](),
+				Schema: providerkit.SchemaFrom[UserInput](),
 			},
 			Operations: append(AllEmailOperations(),
 				types.OperationRegistration{
@@ -116,7 +116,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 	})
 }
 
-// buildRuntimeClient constructs an EmailClient from marshaled RuntimeEmailConfig
+// buildRuntimeClient constructs an Client from marshaled RuntimeEmailConfig
 func buildRuntimeClient(_ context.Context, config json.RawMessage) (any, error) {
 	var cfg RuntimeEmailConfig
 	if err := json.Unmarshal(config, &cfg); err != nil {
@@ -128,13 +128,13 @@ func buildRuntimeClient(_ context.Context, config json.RawMessage) (any, error) 
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 	}
 
-	return &EmailClient{
+	return &Client{
 		Sender: sender,
 		Config: cfg,
 	}, nil
 }
 
-// buildCustomerClient constructs an EmailClient from resolved credentials and user input
+// buildCustomerClient constructs an Client from resolved credentials and user input
 func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
 	cred, _, err := emailCredentialRef.Resolve(req.Credentials)
 	if err != nil {
@@ -146,14 +146,14 @@ func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (any, 
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, senderErr)
 	}
 
-	var userInput EmailUserInput
+	var userInput UserInput
 	if req.Integration != nil {
 		if err := jsonx.UnmarshalIfPresent(req.Integration.Config.ClientConfig, &userInput); err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
 	}
 
-	return &EmailClient{
+	return &Client{
 		Sender: sender,
 		Config: userInput.ToRuntimeConfig(),
 	}, nil

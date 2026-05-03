@@ -39,7 +39,7 @@ func (s SendEmail) Handle() types.OperationHandler {
 
 // Run resolves the email template, looks up the catalog dispatcher by Key, builds a typed
 // payload from the template defaults + per-invocation recipient, and sends through the dispatcher
-func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendEmailRequest) (json.RawMessage, error) {
+func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendEmailRequest) (json.RawMessage, error) {
 	template, err := loadEmailTemplate(ctx, req.DB, cfg.OwnerID, cfg.TemplateID)
 	if err != nil {
 		return nil, err

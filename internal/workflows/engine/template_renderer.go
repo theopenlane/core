@@ -23,5 +23,5 @@ func renderTemplateText(input string, vars map[string]any) (string, error) {
 		return "", err
 	}
 
-	return buf.String(), nil
+	return strings.ReplaceAll(buf.String(), "<no value>", ""), nil
 }

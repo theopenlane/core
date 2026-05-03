@@ -57,7 +57,7 @@ type trustCenterResolveResult struct {
 }
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
-func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, client *EmailClient, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
+func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, client *Client, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
 	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
@@ -94,7 +94,7 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 }
 
 // resolveTrustCenterNDARequestFields populates NDAURL and OrgName on the input when empty
-func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, client *EmailClient, input *TrustCenterNDARequestEmail) error {
+func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, client *Client, input *TrustCenterNDARequestEmail) error {
 	if input.NDAURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
 		return nil
 	}
@@ -113,7 +113,7 @@ func resolveTrustCenterNDARequestFields(ctx context.Context, req types.Operation
 }
 
 // resolveTrustCenterAuthFields populates AuthURL and OrgName on the input when empty
-func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, client *EmailClient, input *TrustCenterAuthEmail) error {
+func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, client *Client, input *TrustCenterAuthEmail) error {
 	if input.AuthURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
 		return nil
 	}

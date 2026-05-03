@@ -18,7 +18,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 }
 
 // Run validates the email client is configured with a working sender
-func (HealthCheck) Run(_ context.Context, client *EmailClient) (json.RawMessage, error) {
+func (HealthCheck) Run(_ context.Context, client *Client) (json.RawMessage, error) {
 	if client.Sender == nil {
 		return nil, ErrSenderNotConfigured
 	}

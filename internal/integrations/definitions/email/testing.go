@@ -19,16 +19,17 @@ func MockRuntimeConfig() *RuntimeEmailConfig {
 		Corporation:    "MITB Corp",
 		SupportEmail:   "support@example.com",
 		LogoURL:        "https://example.com/logo.png",
+		HeaderLogoURL:  "https://example.com/icon.png",
 		RootURL:        "https://example.com",
 		ProductURL:     "https://app.example.com",
 		DocsURL:        "https://docs.example.com",
 	}
 }
 
-// MockSenderFromClient extracts the *mock.EmailSender from an EmailClient.
+// MockSenderFromClient extracts the *mock.EmailSender from an Client.
 // Returns nil if the sender is not a mock
 func MockSenderFromClient(client any) *mock.EmailSender {
-	ec, ok := client.(*EmailClient)
+	ec, ok := client.(*Client)
 	if !ok {
 		return nil
 	}

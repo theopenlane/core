@@ -9,7 +9,7 @@ var (
 	ErrClientBuildFailed = errors.New("email: client build failed")
 	// ErrDispatcherNotFound indicates no registered email dispatcher matches the template key
 	ErrDispatcherNotFound = errors.New("email: dispatcher not found for template key")
-	// ErrInvalidOperationClient indicates the operation request client is not the expected *EmailClient type
+	// ErrInvalidOperationClient indicates the operation request client is not the expected *Client type
 	ErrInvalidOperationClient = errors.New("email: invalid operation client type")
 	// ErrTemplateRenderFailed indicates template rendering failed
 	ErrTemplateRenderFailed = errors.New("email: template render failed")

@@ -12,7 +12,7 @@ import (
 )
 
 func TestHealthCheck_NilSender(t *testing.T) {
-	client := &EmailClient{
+	client := &Client{
 		Sender: nil,
 		Config: RuntimeEmailConfig{},
 	}
@@ -26,7 +26,7 @@ func TestHealthCheck_ConfiguredSender(t *testing.T) {
 	mockSender, err := mock.New("")
 	require.NoError(t, err)
 
-	client := &EmailClient{
+	client := &Client{
 		Sender: mockSender,
 		Config: RuntimeEmailConfig{
 			Provider:  "mock",

@@ -19,10 +19,10 @@ type Recipient interface {
 	GetRecipient() RecipientInfo
 }
 
-// EmailDispatcher describes a catalog-addressable email operation that can be invoked by key.
+// Dispatcher describes a catalog-addressable email operation that can be invoked by key.
 // The implementation owns typed decoding of the payload and projection into render.EmailContent;
 // callers supply a raw JSON payload whose shape matches the registered input type
-type EmailDispatcher interface {
+type Dispatcher interface {
 	// Name returns the catalog key identifying the dispatcher
 	Name() string
 	// Registration returns the integration operation registration for this entry
@@ -30,9 +30,9 @@ type EmailDispatcher interface {
 	// SendByKey decodes the payload into the entry's typed input, runs any registered PreHook,
 	// and dispatches through the shared render/send pipeline. Additional newman options are
 	// appended after the operation's own MessageOptions
-	SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error
+	SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error
 	// RenderMessage decodes the payload and renders the email into a newman message without sending it, for use in batch send paths
-	RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
+	RenderMessage(ctx context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
 }
 
 // RecipientInfo holds recipient addressing fields embedded in every email operation input
@@ -67,21 +67,21 @@ type CampaignContext struct {
 }
 
 var (
-	dispatchers     []EmailDispatcher
-	dispatcherIndex = map[string]EmailDispatcher{}
+	dispatchers     []Dispatcher
+	dispatcherIndex = map[string]Dispatcher{}
 )
 
-// RegisterEmailOperation constructs an EmailOperation[T] and adds it to the dispatcher registry
-func RegisterEmailOperation[T Recipient](op EmailOperation[T]) EmailOperation[T] {
+// RegisterEmailOperation constructs an Operation[T] and adds it to the dispatcher registry
+func RegisterEmailOperation[T Recipient](op Operation[T]) Operation[T] {
 	dispatchers = append(dispatchers, op)
 	dispatcherIndex[op.Name()] = op
 
 	return op
 }
 
-// EmailOperation is a generic helper which defines a single system email type as a registered integration operation
+// Operation is a generic helper which defines a single system email type as a registered integration operation
 // this allows us to do AllEmailOperations() in the builder rather than manually wiring each
-type EmailOperation[T Recipient] struct {
+type Operation[T Recipient] struct {
 	// Op is the typed operation ref with name derived from the schema definition key
 	Op types.OperationRef[T]
 	// Schema is the reflected JSON schema for the input type
@@ -101,16 +101,16 @@ type EmailOperation[T Recipient] struct {
 	// MessageOptions returns additional newman message options for per-operation customization such as attachment
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
-	PreHook func(ctx context.Context, req types.OperationRequest, client *EmailClient, input *T) error
+	PreHook func(ctx context.Context, req types.OperationRequest, client *Client, input *T) error
 }
 
-// Name returns the catalog key for the operation, satisfying the EmailDispatcher interface
-func (e EmailOperation[T]) Name() string {
+// Name returns the catalog key for the operation, satisfying the Dispatcher interface
+func (e Operation[T]) Name() string {
 	return e.Op.Name()
 }
 
 // decodePayload interpolates template expressions in the raw JSON and unmarshals into T
-func decodePayload[T Recipient](client *EmailClient, payload json.RawMessage) (T, error) {
+func decodePayload[T Recipient](client *Client, payload json.RawMessage) (T, error) {
 	var input T
 	if len(payload) == 0 {
 		return input, nil
@@ -129,7 +129,7 @@ func decodePayload[T Recipient](client *EmailClient, payload json.RawMessage) (T
 }
 
 // SendByKey decodes the payload into T and dispatches through the shared render pipeline
-func (e EmailOperation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
+func (e Operation[T]) SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error {
 	input, err := decodePayload[T](client, payload)
 	if err != nil {
 		return err
@@ -139,7 +139,7 @@ func (e EmailOperation[T]) SendByKey(ctx context.Context, req types.OperationReq
 }
 
 // RenderMessage decodes the payload and renders the email into a newman message without sending it
-func (e EmailOperation[T]) RenderMessage(ctx context.Context, client *EmailClient, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
+func (e Operation[T]) RenderMessage(_ context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	input, err := decodePayload[T](client, payload)
 	if err != nil {
 		return nil, err
@@ -151,7 +151,7 @@ func (e EmailOperation[T]) RenderMessage(ctx context.Context, client *EmailClien
 // dispatch runs PreHook, assembles the per-op newman options, and invokes renderAndSend.
 // It is the shared tail of both the operation-framework handler and the catalog-dispatcher
 // SendByKey entry points, so the two invocation paths render identically
-func (e EmailOperation[T]) dispatch(ctx context.Context, req types.OperationRequest, client *EmailClient, input T, extraOpts ...newman.MessageOption) error {
+func (e Operation[T]) dispatch(ctx context.Context, req types.OperationRequest, client *Client, input T, extraOpts ...newman.MessageOption) error {
 	if e.PreHook != nil {
 		if err := e.PreHook(ctx, req, client, &input); err != nil {
 			return err
@@ -173,7 +173,7 @@ func (e EmailOperation[T]) dispatch(ctx context.Context, req types.OperationRequ
 }
 
 // renderToMessage renders the email content and returns a newman message without sending it
-func (e EmailOperation[T]) renderToMessage(client *EmailClient, input T, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
+func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	var opts []newman.MessageOption
 	if e.MessageOptions != nil {
 		opts = e.MessageOptions(client.Config, input)
@@ -201,7 +201,7 @@ func (e EmailOperation[T]) renderToMessage(client *EmailClient, input T, extraOp
 // Registration returns the types.OperationRegistration for wiring into the definition builder.
 // Catalog-facing fields (Description, CustomerSelectable) travel on the registration
 // so downstream filters (e.g. customer-facing catalog query) can operate on AllEmailOperations directly
-func (e EmailOperation[T]) Registration() types.OperationRegistration {
+func (e Operation[T]) Registration() types.OperationRegistration {
 	return types.OperationRegistration{
 		Name:               e.Op.Name(),
 		Description:        e.Description,
@@ -214,16 +214,16 @@ func (e EmailOperation[T]) Registration() types.OperationRegistration {
 }
 
 // handler returns the typed operation handler that renders and sends the email
-func (e EmailOperation[T]) handler() types.OperationHandler {
+func (e Operation[T]) handler() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
-		func(ctx context.Context, req types.OperationRequest, client *EmailClient, input T) (json.RawMessage, error) {
+		func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
 			return nil, e.dispatch(ctx, req, client, input)
 		},
 	)
 }
 
 // renderMessage renders an email into a newman message without sending it
-func renderMessage(client *EmailClient, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
+func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo, subject string, content render.EmailContent, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error) {
 	r := render.NewRenderer(render.WithTheme(theme))
 
 	htmlBody, err := r.GenerateHTML(content)

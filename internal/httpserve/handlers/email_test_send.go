@@ -71,7 +71,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context, openapi *OpenAPIContext
 		return h.InternalServerError(ctx, ErrEmailClientNotAvailable, openapi)
 	}
 
-	emailClient, ok := client.(*email.EmailClient)
+	emailClient, ok := client.(*email.Client)
 	if !ok {
 		return h.InternalServerError(ctx, ErrEmailClientNotAvailable, openapi)
 	}

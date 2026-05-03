@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
@@ -293,6 +294,14 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		SetOwnerID(testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	require.NoError(t, err)
+
+	suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: testEmail},
+		AssessmentName: "Test Assessment Already Completed",
+		AuthURL:        "https://questionnaire.example.com/auth?token=test",
+	})
+
+	suite.WaitForEvents()
 
 	msgs := suite.mockEmailSender().Messages()
 	require.Len(t, msgs, 1)
@@ -741,6 +750,14 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		SetOwnerID(testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	require.NoError(t, err)
+
+	suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: testEmail},
+		AssessmentName: "Test Assessment Already Completed",
+		AuthURL:        "https://questionnaire.example.com/auth?token=test",
+	})
+
+	suite.WaitForEvents()
 
 	msgs := suite.mockEmailSender().Messages()
 	require.Len(t, msgs, 1)

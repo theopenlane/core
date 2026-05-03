@@ -87,6 +87,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateIntegration
 	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt})
 	s.Require().NoError(err)
 
+	defer func() {
+		s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: s.integrationsRT}))
+	}()
+
 	seedCtx := s.SeedContext(userID, orgID)
 
 	integrationRecord, err := s.client.Integration.Create().
@@ -288,6 +292,10 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotificationWithTemplateDestination
 
 	err := wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt})
 	s.Require().NoError(err)
+
+	defer func() {
+		s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: s.integrationsRT}))
+	}()
 
 	seedCtx := s.SeedContext(userID, orgID)
 

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
@@ -86,6 +87,14 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
+		suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+			RecipientInfo:  emaildef.RecipientInfo{Email: testEmail},
+			AssessmentName: "Resend Test Assessment",
+			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+		})
+
+		suite.WaitForEvents()
+
 		msgs := suite.mockEmailSender().Messages()
 		require.Len(t, msgs, 1)
 
@@ -96,6 +105,8 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		assert.Equal(t, http.StatusOK, recorder.Code)
 		assert.Equal(t, true, out["success"])
 		assert.NotEmpty(t, out["message"])
+
+		suite.WaitForEvents()
 
 		msgs = suite.mockEmailSender().Messages()
 		require.Len(t, msgs, 1)
@@ -141,6 +152,14 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
+		suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+			RecipientInfo:  emaildef.RecipientInfo{Email: completedEmail},
+			AssessmentName: "Resend Test Assessment",
+			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+		})
+
+		suite.WaitForEvents()
+
 		msgs := suite.mockEmailSender().Messages()
 		require.Len(t, msgs, 1)
 
@@ -174,6 +193,14 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			Save(questionnaireCtx)
 		require.NoError(t, err)
 
+		suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+			RecipientInfo:  emaildef.RecipientInfo{Email: overdueEmail},
+			AssessmentName: "Resend Test Assessment",
+			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+		})
+
+		suite.WaitForEvents()
+
 		msgs := suite.mockEmailSender().Messages()
 		require.Len(t, msgs, 1)
 
@@ -205,6 +232,14 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			SetSendAttempts(5).
 			Save(questionnaireCtx)
 		require.NoError(t, err)
+
+		suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+			RecipientInfo:  emaildef.RecipientInfo{Email: maxEmail},
+			AssessmentName: "Resend Test Assessment",
+			AuthURL:        "https://questionnaire.example.com/auth?token=test",
+		})
+
+		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
 		require.Len(t, msgs, 1)

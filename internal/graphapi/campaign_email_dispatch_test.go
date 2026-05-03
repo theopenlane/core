@@ -85,7 +85,7 @@ func TestCampaignEmailDispatch(t *testing.T) {
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
 
-	emailClient := &email.EmailClient{
+	emailClient := &email.Client{
 		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:      "test@mail.example.com",
@@ -243,7 +243,7 @@ func TestCampaignEmailDispatchSkipsSentTargets(t *testing.T) {
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
 
-	emailClient := &email.EmailClient{
+	emailClient := &email.Client{
 		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "test@mail.example.com",
@@ -318,7 +318,7 @@ func TestCampaignEmailDispatchNoBranding(t *testing.T) {
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
 
-	emailClient := &email.EmailClient{
+	emailClient := &email.Client{
 		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "noreply@test.example",
@@ -378,7 +378,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
 
-	emailClient := &email.EmailClient{
+	emailClient := &email.Client{
 		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "noreply@test.example",
@@ -398,7 +398,7 @@ func TestCampaignEmailDispatchNoTemplate(t *testing.T) {
 	req.Config = configBytes
 
 	_, err = email.SendBrandedCampaign{}.Run(ctx, req, emailClient, cfg)
-	assert.NilError(t, err)
+	assert.ErrorIs(t, err, email.ErrDispatcherNotFound)
 
 	messages := mockSender.Messages()
 	assert.Assert(t, is.Len(messages, 0))
@@ -444,7 +444,7 @@ func TestQuestionnaireTestEmailDispatch(t *testing.T) {
 	mockSender, err := mock.New("")
 	assert.NilError(t, err)
 
-	emailClient := &email.EmailClient{
+	emailClient := &email.Client{
 		Sender: mockSender,
 		Config: email.RuntimeEmailConfig{
 			FromEmail:   "questionnaire@test.example",

@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/iam/tokens"
 )
 
+// maxQuestionnaireTags is the pre-allocation capacity for per-message newman tags
+const maxQuestionnaireTags = 3
+
 // SendQuestionnaireCampaignRequest is the operation config for dispatching a questionnaire campaign
 type SendQuestionnaireCampaignRequest struct {
 	CampaignDispatchInput
@@ -38,7 +41,7 @@ func (s SendQuestionnaireCampaign) Handle() types.OperationHandler {
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment
 // responses, generates anonymous JWT access tokens, and sends questionnaire access emails.
 // Returns a marshaled CampaignDispatchResult with counts
-func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *EmailClient, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
+func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
 	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput)
 	if err != nil {
 		return nil, err
@@ -76,7 +79,7 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 // sendQuestionnaireToRecipient creates an assessment response, generates an anonymous access
 // token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
 // operation, and marks campaign targets as sent for non-test dispatches
-func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *EmailClient, camp *generated.Campaign, assessmentName string, email string, campaignTargetID string, isTest bool) error {
+func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *Client, camp *generated.Campaign, assessmentName string, email string, campaignTargetID string, isTest bool) error {
 	response, err := createAssessmentResponseForRecipient(ctx, db, camp, camp.AssessmentID, email, isTest)
 	if err != nil {
 		return err
@@ -87,7 +90,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	tags := make([]newman.Tag, 0, 3)
+	tags := make([]newman.Tag, 0, maxQuestionnaireTags)
 	tags = append(tags, newman.Tag{Name: TagAssessmentResponseID, Value: response.ID})
 
 	if campaignTargetID != "" {
@@ -119,7 +122,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 }
 
 // questionnaireAuthURL generates an anonymous access token URL for the campaign's assessment questionnaire
-func questionnaireAuthURL(ctx context.Context, db *generated.Client, client *EmailClient, camp *generated.Campaign, recipientEmail string) (string, error) {
+func questionnaireAuthURL(ctx context.Context, db *generated.Client, client *Client, camp *generated.Campaign, recipientEmail string) (string, error) {
 	baseURL, err := url.Parse(client.Config.ProductURL + "/questionnaire")
 	if err != nil {
 		return "", fmt.Errorf("parse questionnaire URL: %w", err)

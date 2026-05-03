@@ -101,6 +101,9 @@ func HookExtractNotificationTemplateVariables() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
+// expectedRegexpGroups is the minimum submatch count for templateVarPattern (full match + 1 capture group)
+const expectedRegexpGroups = 2
+
 // templateVarPattern matches dot-prefixed Go template variable references, e.g. {{ .Foo }} or {{ .User.Name }}.
 var templateVarPattern = regexp.MustCompile(`{{\s*\.([A-Za-z][A-Za-z0-9_.]*)\s*}}`)
 
@@ -113,7 +116,7 @@ func extractTemplateVarNames(templates ...string) map[string]string {
 
 	for _, tmpl := range templates {
 		for _, match := range templateVarPattern.FindAllStringSubmatch(tmpl, -1) {
-			if len(match) < 2 {
+			if len(match) < expectedRegexpGroups {
 				continue
 			}
 

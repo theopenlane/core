@@ -45,7 +45,7 @@ func (c RuntimeSlackConfig) Provisioned() bool {
 
 // SlackClient is the unified Slack client used by every Slack operation. The runtime (system)
 // path populates only WebhookURL; customer installations populate API and optionally DefaultChannel
-type SlackClient struct {
+type SlackClient struct { //nolint:revive
 	// API is the Slack Web API client used by customer-installed operations
 	API *slackgo.Client
 	// WebhookURL is the Slack incoming webhook used by the runtime system-notification path

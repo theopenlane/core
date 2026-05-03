@@ -12,17 +12,17 @@ var (
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
 	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
 	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
-	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[EmailCredential]()
+	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition
-	emailClientRef = types.NewClientRef[*EmailClient]()
+	emailClientRef = types.NewClientRef[*Client]()
 	// healthCheckSchema is the operation schema for the health check operation
 	healthCheckSchema, healthCheckOp = providerkit.OperationSchema[HealthCheck]()
 	// sendEmailSchema is the operation schema for the generic send-email operation
-	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]()
+	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]() //nolint:revive
 	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
-	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]()
+	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]() //nolint:revive
 	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
-	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]()
+	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]() //nolint:revive
 )
 
 // Tag key constants for email delivery tracking via provider webhooks
@@ -52,8 +52,10 @@ type RuntimeEmailConfig struct {
 	Corporation string `json:"corporation" koanf:"corporation" jsonschema:"description=Legal corporation name" default:"theopenlane, Inc."`
 	// SupportEmail is the support contact email address
 	SupportEmail string `json:"supportEmail" koanf:"supportEmail" jsonschema:"description=Support contact email address" default:"support@theopenlane.io"`
-	// LogoURL is the company logo image URL
-	LogoURL string `json:"logoURL" koanf:"logoURL" jsonschema:"description=Company logo URL" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
+	// LogoURL is the hero logo image URL displayed prominently in the email body
+	LogoURL string `json:"logoURL,omitempty" koanf:"logoURL" jsonschema:"description=Hero logo URL displayed in the email body"`
+	// HeaderLogoURL is the small logo/icon displayed in the top header bar
+	HeaderLogoURL string `json:"headerLogoURL,omitempty" koanf:"headerLogoURL" jsonschema:"description=Small logo or icon displayed in the top header bar" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
 	// RootURL is the root application URL used to construct email action links
 	RootURL string `json:"rootURL" koanf:"rootURL" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
@@ -78,6 +80,22 @@ type RuntimeEmailConfig struct {
 	HeaderText string `json:"headerText,omitempty" koanf:"headerText" jsonschema:"description=Text displayed in the upper-right corner of the modern theme header"`
 	// CardStyle controls the card visual style; elevated adds rounded corners and a drop shadow
 	CardStyle string `json:"cardStyle,omitempty" koanf:"cardStyle" jsonschema:"enum=flat,enum=elevated,description=Card visual style" default:"elevated"`
+	// BodyBackgroundColor is the outer page background color
+	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" koanf:"bodyBackgroundColor" jsonschema:"description=Outer page background color" default:"#f3f4f6"`
+	// CardBackgroundColor is the card container background color
+	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" koanf:"cardBackgroundColor" jsonschema:"description=Card container background color" default:"#ffffff"`
+	// HeroBackgroundColor is the hero banner section background color
+	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" koanf:"heroBackgroundColor" jsonschema:"description=Hero banner section background color" default:"#f3f4f6"`
+	// ButtonColor is the call-to-action button background color
+	ButtonColor string `json:"buttonColor,omitempty" koanf:"buttonColor" jsonschema:"description=Call-to-action button background color" default:"#14171e"`
+	// ButtonTextColor is the call-to-action button text color
+	ButtonTextColor string `json:"buttonTextColor,omitempty" koanf:"buttonTextColor" jsonschema:"description=Call-to-action button text color" default:"#ffffff"`
+	// HeadingColor is the heading and title text color
+	HeadingColor string `json:"headingColor,omitempty" koanf:"headingColor" jsonschema:"description=Heading and title text color" default:"#14171e"`
+	// TextColor is the body paragraph text color
+	TextColor string `json:"textColor,omitempty" koanf:"textColor" jsonschema:"description=Body paragraph text color" default:"#43454b"`
+	// FooterTextColor is the muted text color for headers, footers, and secondary content
+	FooterTextColor string `json:"footerTextColor,omitempty" koanf:"footerTextColor" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#7b7d81"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" koanf:"tagline" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
@@ -100,18 +118,18 @@ func (c RuntimeEmailConfig) Provisioned() bool {
 	return c.APIKey != "" && c.Provider != "" && c.FromEmail != ""
 }
 
-// EmailCredential is the credential schema for customer-provisioned email
-type EmailCredential struct {
+// Credential is the credential schema for customer-provisioned email
+type Credential struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"apiKey" jsonschema:"required,description=Email provider API key"`
 	// Provider is the email service provider name
 	Provider string `json:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider"`
 }
 
-// EmailUserInput is the installation-scoped configuration that customers provide
+// UserInput is the installation-scoped configuration that customers provide
 // when setting up their own email integration. These fields supply the branding
-// and sender identity that the EmailClient carries for all customer-initiated sends
-type EmailUserInput struct {
+// and sender identity that the Client carries for all customer-initiated sends
+type UserInput struct {
 	// FromEmail is the default sender email address
 	FromEmail string `json:"fromEmail" jsonschema:"required,description=Default sender email address"`
 	// CompanyName is the display name used in email templates
@@ -122,8 +140,10 @@ type EmailUserInput struct {
 	Corporation string `json:"corporation,omitempty" jsonschema:"description=Legal corporation name"`
 	// SupportEmail is the support contact email address
 	SupportEmail string `json:"supportEmail,omitempty" jsonschema:"description=Support contact email address"`
-	// LogoURL is the company logo URL for email templates
-	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Internet-accessible company logo URL for email templates"`
+	// LogoURL is the hero logo URL displayed prominently in the email body
+	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Hero logo URL displayed in the email body"`
+	// HeaderLogoURL is the small logo/icon displayed in the top header bar
+	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"description=Small logo or icon displayed in the top header bar"`
 	// RootURL is the root application URL used to construct email action links
 	RootURL string `json:"rootURL,omitempty" jsonschema:"description=Root application URL"`
 	// ProductURL is the product home URL
@@ -140,10 +160,28 @@ type EmailUserInput struct {
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
 	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
+	// CardStyle controls the card visual style; elevated adds rounded corners and a drop shadow
+	CardStyle string `json:"cardStyle,omitempty" jsonschema:"enum=flat,enum=elevated,description=Card visual style"`
+	// BodyBackgroundColor is the outer page background color
+	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" jsonschema:"description=Outer page background color"`
+	// CardBackgroundColor is the card container background color
+	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" jsonschema:"description=Card container background color"`
+	// HeroBackgroundColor is the hero banner section background color
+	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" jsonschema:"description=Hero banner section background color"`
+	// ButtonColor is the call-to-action button background color
+	ButtonColor string `json:"buttonColor,omitempty" jsonschema:"description=Call-to-action button background color"`
+	// ButtonTextColor is the call-to-action button text color
+	ButtonTextColor string `json:"buttonTextColor,omitempty" jsonschema:"description=Call-to-action button text color"`
+	// HeadingColor is the heading and title text color
+	HeadingColor string `json:"headingColor,omitempty" jsonschema:"description=Heading and title text color"`
+	// TextColor is the body paragraph text color
+	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color"`
+	// FooterTextColor is the muted text color for headers, footers, and secondary content
+	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content"`
 }
 
 // ToRuntimeConfig converts customer user input to a RuntimeEmailConfig
-func (u EmailUserInput) ToRuntimeConfig() RuntimeEmailConfig {
+func (u UserInput) ToRuntimeConfig() RuntimeEmailConfig {
 	var cfg RuntimeEmailConfig
 
 	_ = jsonx.RoundTrip(u, &cfg)

@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -43,6 +44,7 @@ import (
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -504,6 +506,25 @@ var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
+}
+
+// dispatchSystemEmail sends an email through the integrations runtime, mirroring
+// the sendSystemEmail path used by ent hooks and handler.sendEmail
+func (suite *HandlerTestSuite) dispatchSystemEmail(ctx context.Context, operationName string, input any) {
+	t := suite.T()
+	t.Helper()
+
+	config, err := json.Marshal(input)
+	require.NoError(t, err)
+
+	_, err = suite.sharedIntegrationsRT.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: emaildef.DefinitionID.ID(),
+		Operation:    operationName,
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	})
+	require.NoError(t, err)
 }
 
 // mockEmailSender returns the mock email sender from the shared integration runtime

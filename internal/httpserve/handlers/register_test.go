@@ -319,6 +319,8 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 			}
 
 			// verify emails sent through mock sender
+			suite.WaitForEvents()
+
 			msgs := suite.mockEmailSender().Messages()
 			if tc.emailExpected {
 				switch {

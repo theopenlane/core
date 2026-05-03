@@ -111,7 +111,7 @@ func sendTestEmail(ctx context.Context, toEmail, name string) error {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("server returned %d: %s", resp.StatusCode, string(respBody))
+		return fmt.Errorf("%w: %d %s", ErrServerError, resp.StatusCode, string(respBody))
 	}
 
 	var result emailTestSendResponse

@@ -97,6 +97,8 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 
 			// verify email was sent through the mock sender
 			if tc.emailExpected {
+				suite.WaitForEvents()
+
 				msgs := suite.mockEmailSender().Messages()
 				require.NotEmpty(t, msgs)
 				assert.Contains(t, msgs[0].Subject, "subscribed")

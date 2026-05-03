@@ -33,15 +33,25 @@ const recipientFullName = "Flynne Fisher"
 //go:embed defaults.example.json
 var defaultsJSON []byte
 
+// cloudflareDefaultsJSON seeds a Cloudflare-branded campaign demonstrating
+// per-template color and branding overrides
+//
+//go:embed cloudflare.example.json
+var cloudflareDefaultsJSON []byte
+
 var command = &cobra.Command{
 	Use:   "quickstart",
-	Short: "end-to-end Openlane Campaigns smoke test: branded + questionnaire campaigns",
-	Long: `Provisions two Openlane Campaigns pipelines end-to-end:
+	Short: "end-to-end Openlane Campaigns smoke test: branded, themed, and questionnaire campaigns",
+	Long: `Provisions three Openlane Campaigns pipelines end-to-end:
 
-1. Branded campaign: creates a template from defaults.example.json, a CUSTOM
-   campaign targeting the recipient, and launches it through the email provider.
+1. Branded campaign: creates a template from defaults.example.json, a
+   POLICY_ATTESTATION campaign targeting the recipient, and launches it.
 
-2. Questionnaire campaign: creates an assessment, a QUESTIONNAIRE campaign
+2. Cloudflare-branded campaign: creates a template from cloudflare.example.json
+   with per-template color theming overrides (orange buttons, warm hero
+   background) to demonstrate third-party branding.
+
+3. Questionnaire campaign: creates an assessment, a QUESTIONNAIRE campaign
    linked to the assessment, and launches the questionnaire dispatch flow.
 
 All resources are tagged "cli-quickstart" for easy discovery and cleanup.
@@ -75,6 +85,11 @@ func run(ctx context.Context) error {
 		return err
 	}
 
+	cloudflareResult, err := runCloudflareBrandedCampaign(ctx, client, recipient)
+	if err != nil {
+		return err
+	}
+
 	questionnaireResult, err := runQuestionnaireCampaign(ctx, client, recipient)
 	if err != nil {
 		return err
@@ -88,6 +103,13 @@ func run(ctx context.Context) error {
 			recipient,
 			strconv.FormatInt(brandedResult.queued, 10),
 			strconv.FormatInt(brandedResult.skipped, 10),
+		},
+		{
+			"branded-cloudflare",
+			cloudflareResult.campaignID,
+			recipient,
+			strconv.FormatInt(cloudflareResult.queued, 10),
+			strconv.FormatInt(cloudflareResult.skipped, 10),
 		},
 		{
 			"questionnaire",
@@ -112,13 +134,18 @@ type launchResult struct {
 func runBrandedCampaign(ctx context.Context, client *openlaneclient.Client, recipient string) (*launchResult, error) {
 	templateKey := email.BrandedMessageOp.Name()
 
-	templateID, err := createBrandedTemplate(ctx, client, templateKey)
+	defaults, err := loadDefaults(defaultsJSON)
+	if err != nil {
+		return nil, err
+	}
+
+	templateID, err := createBrandedTemplate(ctx, client, templateKey, "Quickstart branded template", defaults)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create branded email template")
 		return nil, fmt.Errorf("create branded template: %w", err)
 	}
 
-	campaignID, err := createBrandedCampaign(ctx, client, templateID, recipient)
+	campaignID, err := createBrandedCampaign(ctx, client, templateID, recipient, "Openlane Campaigns", "Branded campaign end-to-end smoke test")
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create branded campaign")
 		return nil, fmt.Errorf("create branded campaign: %w", err)
@@ -131,6 +158,43 @@ func runBrandedCampaign(ctx context.Context, client *openlaneclient.Client, reci
 	}
 
 	logx.FromContext(ctx).Info().Str("campaign_id", campaignID).Msg("branded campaign launched")
+
+	return &launchResult{
+		campaignID: campaignID,
+		queued:     launch.LaunchCampaign.QueuedCount,
+		skipped:    launch.LaunchCampaign.SkippedCount,
+	}, nil
+}
+
+// runCloudflareBrandedCampaign creates a Cloudflare-branded template and campaign to
+// demonstrate per-template color theming overrides
+func runCloudflareBrandedCampaign(ctx context.Context, client *openlaneclient.Client, recipient string) (*launchResult, error) {
+	templateKey := email.BrandedMessageOp.Name()
+
+	defaults, err := loadDefaults(cloudflareDefaultsJSON)
+	if err != nil {
+		return nil, err
+	}
+
+	templateID, err := createBrandedTemplate(ctx, client, templateKey, "Cloudflare branded template", defaults)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create cloudflare email template")
+		return nil, fmt.Errorf("create cloudflare template: %w", err)
+	}
+
+	campaignID, err := createBrandedCampaign(ctx, client, templateID, recipient, "Cloudflare Security Review", "Cloudflare-branded campaign demonstrating per-template theming")
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create cloudflare campaign")
+		return nil, fmt.Errorf("create cloudflare campaign: %w", err)
+	}
+
+	launch, err := client.LaunchCampaign(ctx, graphclient.LaunchCampaignInput{CampaignID: campaignID})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to launch cloudflare campaign")
+		return nil, fmt.Errorf("launch cloudflare campaign: %w", err)
+	}
+
+	logx.FromContext(ctx).Info().Str("campaign_id", campaignID).Msg("cloudflare branded campaign launched")
 
 	return &launchResult{
 		campaignID: campaignID,
@@ -181,11 +245,11 @@ func resolveRecipient() (string, error) {
 	return "", ErrRecipientResolution
 }
 
-// loadDefaults unmarshals the embedded defaults.example.json into the map shape
-// expected by graphclient.CreateEmailTemplateInput.Defaults
-func loadDefaults() (map[string]any, error) {
+// loadDefaults unmarshals embedded JSON into the map shape expected by
+// graphclient.CreateEmailTemplateInput.Defaults
+func loadDefaults(data []byte) (map[string]any, error) {
 	out := map[string]any{}
-	if err := json.Unmarshal(defaultsJSON, &out); err != nil {
+	if err := json.Unmarshal(data, &out); err != nil {
 		return nil, fmt.Errorf("parse quickstart defaults: %w", err)
 	}
 
@@ -193,15 +257,10 @@ func loadDefaults() (map[string]any, error) {
 }
 
 // createBrandedTemplate creates a CAMPAIGN_RECIPIENT template bound to the branded-message catalog entry
-func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, key string) (string, error) {
-	defaults, err := loadDefaults()
-	if err != nil {
-		return "", err
-	}
-
+func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, key, name string, defaults map[string]any) (string, error) {
 	input := graphclient.CreateEmailTemplateInput{
 		Key:             key,
-		Name:            "Quickstart branded template",
+		Name:            name,
 		TemplateContext: lo.ToPtr(enums.TemplateContextCampaignRecipient),
 		Defaults:        defaults,
 		Active:          lo.ToPtr(true),
@@ -219,13 +278,13 @@ func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, k
 	return id, nil
 }
 
-// createBrandedCampaign creates a POLICY_ATTESTATION campaign targeting the recipient with an email template
-func createBrandedCampaign(ctx context.Context, client *openlaneclient.Client, templateID, recipient string) (string, error) {
+// createBrandedCampaign creates a campaign targeting the recipient with an email template
+func createBrandedCampaign(ctx context.Context, client *openlaneclient.Client, templateID, recipient, campaignName, campaignDesc string) (string, error) {
 	dueDate := models.DateTime(time.Now().Add(7 * 24 * time.Hour))
 
 	campaign := &graphclient.CreateCampaignInput{
-		Name:            "Openlane Campaigns",
-		Description:     lo.ToPtr("Branded campaign end-to-end smoke test"),
+		Name:            campaignName,
+		Description:     lo.ToPtr(campaignDesc),
 		CampaignType:    lo.ToPtr(enums.CampaignTypePolicyAttestation),
 		EmailTemplateID: &templateID,
 		DueDate:         &dueDate,
