@@ -260,6 +260,13 @@ tasks:
     cmds:
       - golangci-lint run --config=.golangci.yaml --verbose --concurrency 8 --verbose
 
+  go:lint:local:
+    desc: runs all the ci linter tasks in parallel for local linting equivalent to ci
+    deps:
+      - go:lint:ci:graphapi
+      - go:lint:ci:handlers
+      - go:lint:ci:no-api
+
   go:lint:ci:graphapi:
     silent: true
     desc: runs golangci-lint only on the graphapi package for CI, excluding generated code

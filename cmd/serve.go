@@ -232,7 +232,8 @@ func serve(ctx context.Context) error {
 		})
 	}
 
-	go func() {
+	go func() { //nolint:gosec
+		// context.Background() is intentional: ctx is already cancelled when this runs
 		<-ctx.Done()
 
 		log.Ctx(ctx).Info().Msg("waiting for in-flight uploads to complete")

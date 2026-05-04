@@ -246,7 +246,7 @@ func applyDomain(v reflect.Value, domain string) {
 	}
 
 	switch v.Kind() {
-	case reflect.Ptr:
+	case reflect.Pointer:
 		// If it's a pointer, dereference and recurse
 		if !v.IsNil() {
 			applyDomain(v.Elem(), domain)

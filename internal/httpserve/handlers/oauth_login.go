@@ -156,7 +156,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		// remove cookie
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
-		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound)
+		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
 
 	return http.HandlerFunc(fn)
@@ -236,7 +236,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
 		// redirect with context set
-		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound)
+		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
 
 	return http.HandlerFunc(fn)

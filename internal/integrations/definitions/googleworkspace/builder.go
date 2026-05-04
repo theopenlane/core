@@ -55,7 +55,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://accounts.google.com/o/oauth2/v2/auth",

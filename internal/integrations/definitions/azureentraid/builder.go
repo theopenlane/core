@@ -48,7 +48,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[entraIDCred]{
 						CredentialRef: entraTenantCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
