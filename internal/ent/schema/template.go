@@ -89,8 +89,8 @@ func (Template) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("the id of the trust center this template is associated with").
 			Optional(),
-		field.JSON("projection_config", models.TemplateProjectionConfig{}).
-			Comment("configuration for converting a submitted assesment into records for the Organization").
+		field.JSON("transform_configuration", models.TemplateProjectionConfig{}).
+			Comment("configuration for converting a submitted assesment into records for the organization").
 			Optional(),
 	}
 }

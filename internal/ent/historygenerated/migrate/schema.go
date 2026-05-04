@@ -2752,7 +2752,7 @@ var (
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
-		{Name: "projection_config", Type: field.TypeJSON, Nullable: true},
+		{Name: "transform_configuration", Type: field.TypeJSON, Nullable: true},
 	}
 	// TemplateHistoryTable holds the schema information for the "template_history" table.
 	TemplateHistoryTable = &schema.Table{

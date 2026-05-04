@@ -352,23 +352,23 @@ func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
 	return _u
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_u *TemplateHistoryUpdate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateHistoryUpdate {
-	_u.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateHistoryUpdate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+	_u.mutation.SetTransformConfiguration(v)
 	return _u
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdate {
 	if v != nil {
-		_u.SetProjectionConfig(*v)
+		_u.SetTransformConfiguration(*v)
 	}
 	return _u
 }
 
-// ClearProjectionConfig clears the value of the "projection_config" field.
-func (_u *TemplateHistoryUpdate) ClearProjectionConfig() *TemplateHistoryUpdate {
-	_u.mutation.ClearProjectionConfig()
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateHistoryUpdate) ClearTransformConfiguration() *TemplateHistoryUpdate {
+	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -571,11 +571,11 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProjectionConfig(); ok {
-		_spec.SetField(templatehistory.FieldProjectionConfig, field.TypeJSON, value)
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
 	}
-	if _u.mutation.ProjectionConfigCleared() {
-		_spec.ClearField(templatehistory.FieldProjectionConfig, field.TypeJSON)
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -917,23 +917,23 @@ func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateO
 	return _u
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_u *TemplateHistoryUpdateOne) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
-	_u.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateHistoryUpdateOne) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTransformConfiguration(v)
 	return _u
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
 	if v != nil {
-		_u.SetProjectionConfig(*v)
+		_u.SetTransformConfiguration(*v)
 	}
 	return _u
 }
 
-// ClearProjectionConfig clears the value of the "projection_config" field.
-func (_u *TemplateHistoryUpdateOne) ClearProjectionConfig() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearProjectionConfig()
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateHistoryUpdateOne) ClearTransformConfiguration() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -1166,11 +1166,11 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProjectionConfig(); ok {
-		_spec.SetField(templatehistory.FieldProjectionConfig, field.TypeJSON, value)
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
 	}
-	if _u.mutation.ProjectionConfigCleared() {
-		_spec.ClearField(templatehistory.FieldProjectionConfig, field.TypeJSON)
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

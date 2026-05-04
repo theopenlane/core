@@ -335,16 +335,16 @@ func (_c *TemplateHistoryCreate) SetNillableTrustCenterID(v *string) *TemplateHi
 	return _c
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_c *TemplateHistoryCreate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateHistoryCreate {
-	_c.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_c *TemplateHistoryCreate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryCreate {
+	_c.mutation.SetTransformConfiguration(v)
 	return _c
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_c *TemplateHistoryCreate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateHistoryCreate {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryCreate {
 	if v != nil {
-		_c.SetProjectionConfig(*v)
+		_c.SetTransformConfiguration(*v)
 	}
 	return _c
 }
@@ -615,9 +615,9 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
 	}
-	if value, ok := _c.mutation.ProjectionConfig(); ok {
-		_spec.SetField(templatehistory.FieldProjectionConfig, field.TypeJSON, value)
-		_node.ProjectionConfig = value
+	if value, ok := _c.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
+		_node.TransformConfiguration = value
 	}
 	return _node, _spec
 }

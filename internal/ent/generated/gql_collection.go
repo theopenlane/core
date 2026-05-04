@@ -76817,10 +76817,10 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, template.FieldTrustCenterID)
 				fieldSeen[template.FieldTrustCenterID] = struct{}{}
 			}
-		case "projectionConfig":
-			if _, ok := fieldSeen[template.FieldProjectionConfig]; !ok {
-				selectedFields = append(selectedFields, template.FieldProjectionConfig)
-				fieldSeen[template.FieldProjectionConfig] = struct{}{}
+		case "transformConfiguration":
+			if _, ok := fieldSeen[template.FieldTransformConfiguration]; !ok {
+				selectedFields = append(selectedFields, template.FieldTransformConfiguration)
+				fieldSeen[template.FieldTransformConfiguration] = struct{}{}
 			}
 		case "id":
 		case "__typename":

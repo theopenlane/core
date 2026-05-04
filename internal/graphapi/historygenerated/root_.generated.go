@@ -2611,31 +2611,31 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Jsonconfig       func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		ProjectionConfig func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TemplateType     func(childComplexity int) int
-		TrustCenterID    func(childComplexity int) int
-		Uischema         func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
+		Jsonconfig             func(childComplexity int) int
+		Kind                   func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TemplateType           func(childComplexity int) int
+		TransformConfiguration func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		Uischema               func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -18152,13 +18152,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TemplateHistory.OwnerID(childComplexity), true
 
-	case "TemplateHistory.projectionConfig":
-		if e.ComplexityRoot.TemplateHistory.ProjectionConfig == nil {
-			break
-		}
-
-		return e.ComplexityRoot.TemplateHistory.ProjectionConfig(childComplexity), true
-
 	case "TemplateHistory.ref":
 		if e.ComplexityRoot.TemplateHistory.Ref == nil {
 			break
@@ -18207,6 +18200,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.TemplateType(childComplexity), true
+
+	case "TemplateHistory.transformConfiguration":
+		if e.ComplexityRoot.TemplateHistory.TransformConfiguration == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.TransformConfiguration(childComplexity), true
 
 	case "TemplateHistory.trustCenterID":
 		if e.ComplexityRoot.TemplateHistory.TrustCenterID == nil {
@@ -57357,9 +57357,9 @@ type TemplateHistory implements Node {
   """
   trustCenterID: String
   """
-  configuration for converting a submitted assesment into records for the Organization
+  configuration for converting a submitted assesment into records for the organization
   """
-  projectionConfig: TemplateProjectionConfig
+  transformConfiguration: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -71726,8 +71726,8 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_uischema(ctx, field)
 	case "trustCenterID":
 		return ec.fieldContext_TemplateHistory_trustCenterID(ctx, field)
-	case "projectionConfig":
-		return ec.fieldContext_TemplateHistory_projectionConfig(ctx, field)
+	case "transformConfiguration":
+		return ec.fieldContext_TemplateHistory_transformConfiguration(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TemplateHistory", field.Name)
 }

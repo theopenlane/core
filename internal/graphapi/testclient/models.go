@@ -9165,17 +9165,17 @@ type CreateTemplateInput struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the Organization
-	ProjectionConfig  *models.TemplateProjectionConfig `json:"projectionConfig,omitempty"`
-	OwnerID           *string                          `json:"ownerID,omitempty"`
-	EnvironmentID     *string                          `json:"environmentID,omitempty"`
-	ScopeID           *string                          `json:"scopeID,omitempty"`
-	DocumentIDs       []string                         `json:"documentIDs,omitempty"`
-	FileIDs           []string                         `json:"fileIDs,omitempty"`
-	TrustCenterID     *string                          `json:"trustCenterID,omitempty"`
-	AssessmentIDs     []string                         `json:"assessmentIDs,omitempty"`
-	CampaignIDs       []string                         `json:"campaignIDs,omitempty"`
-	IdentityHolderIDs []string                         `json:"identityHolderIDs,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	OwnerID                *string                          `json:"ownerID,omitempty"`
+	EnvironmentID          *string                          `json:"environmentID,omitempty"`
+	ScopeID                *string                          `json:"scopeID,omitempty"`
+	DocumentIDs            []string                         `json:"documentIDs,omitempty"`
+	FileIDs                []string                         `json:"fileIDs,omitempty"`
+	TrustCenterID          *string                          `json:"trustCenterID,omitempty"`
+	AssessmentIDs          []string                         `json:"assessmentIDs,omitempty"`
+	CampaignIDs            []string                         `json:"campaignIDs,omitempty"`
+	IdentityHolderIDs      []string                         `json:"identityHolderIDs,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -36033,17 +36033,17 @@ type Template struct {
 	Uischema map[string]any `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
-	// configuration for converting a submitted assesment into records for the Organization
-	ProjectionConfig *models.TemplateProjectionConfig `json:"projectionConfig,omitempty"`
-	Owner            *Organization                    `json:"owner,omitempty"`
-	Environment      *CustomTypeEnum                  `json:"environment,omitempty"`
-	Scope            *CustomTypeEnum                  `json:"scope,omitempty"`
-	Documents        *DocumentDataConnection          `json:"documents"`
-	Files            *FileConnection                  `json:"files"`
-	TrustCenter      *TrustCenter                     `json:"trustCenter,omitempty"`
-	Assessments      *AssessmentConnection            `json:"assessments"`
-	Campaigns        *CampaignConnection              `json:"campaigns"`
-	IdentityHolders  *IdentityHolderConnection        `json:"identityHolders"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
+	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
+	Documents              *DocumentDataConnection          `json:"documents"`
+	Files                  *FileConnection                  `json:"files"`
+	TrustCenter            *TrustCenter                     `json:"trustCenter,omitempty"`
+	Assessments            *AssessmentConnection            `json:"assessments"`
+	Campaigns              *CampaignConnection              `json:"campaigns"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
 }
 
 func (Template) IsNode() {}
@@ -44639,30 +44639,30 @@ type UpdateTemplateInput struct {
 	// the uischema for the template to render in the UI
 	Uischema      map[string]any `json:"uischema,omitempty"`
 	ClearUischema *bool          `json:"clearUischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the Organization
-	ProjectionConfig        *models.TemplateProjectionConfig `json:"projectionConfig,omitempty"`
-	ClearProjectionConfig   *bool                            `json:"clearProjectionConfig,omitempty"`
-	EnvironmentID           *string                          `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool                            `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string                          `json:"scopeID,omitempty"`
-	ClearScope              *bool                            `json:"clearScope,omitempty"`
-	AddDocumentIDs          []string                         `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs       []string                         `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments          *bool                            `json:"clearDocuments,omitempty"`
-	AddFileIDs              []string                         `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string                         `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool                            `json:"clearFiles,omitempty"`
-	TrustCenterID           *string                          `json:"trustCenterID,omitempty"`
-	ClearTrustCenter        *bool                            `json:"clearTrustCenter,omitempty"`
-	AddAssessmentIDs        []string                         `json:"addAssessmentIDs,omitempty"`
-	RemoveAssessmentIDs     []string                         `json:"removeAssessmentIDs,omitempty"`
-	ClearAssessments        *bool                            `json:"clearAssessments,omitempty"`
-	AddCampaignIDs          []string                         `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs       []string                         `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns          *bool                            `json:"clearCampaigns,omitempty"`
-	AddIdentityHolderIDs    []string                         `json:"addIdentityHolderIDs,omitempty"`
-	RemoveIdentityHolderIDs []string                         `json:"removeIdentityHolderIDs,omitempty"`
-	ClearIdentityHolders    *bool                            `json:"clearIdentityHolders,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration      *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	ClearTransformConfiguration *bool                            `json:"clearTransformConfiguration,omitempty"`
+	EnvironmentID               *string                          `json:"environmentID,omitempty"`
+	ClearEnvironment            *bool                            `json:"clearEnvironment,omitempty"`
+	ScopeID                     *string                          `json:"scopeID,omitempty"`
+	ClearScope                  *bool                            `json:"clearScope,omitempty"`
+	AddDocumentIDs              []string                         `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs           []string                         `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments              *bool                            `json:"clearDocuments,omitempty"`
+	AddFileIDs                  []string                         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string                         `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool                            `json:"clearFiles,omitempty"`
+	TrustCenterID               *string                          `json:"trustCenterID,omitempty"`
+	ClearTrustCenter            *bool                            `json:"clearTrustCenter,omitempty"`
+	AddAssessmentIDs            []string                         `json:"addAssessmentIDs,omitempty"`
+	RemoveAssessmentIDs         []string                         `json:"removeAssessmentIDs,omitempty"`
+	ClearAssessments            *bool                            `json:"clearAssessments,omitempty"`
+	AddCampaignIDs              []string                         `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs           []string                         `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns              *bool                            `json:"clearCampaigns,omitempty"`
+	AddIdentityHolderIDs        []string                         `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs     []string                         `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders        *bool                            `json:"clearIdentityHolders,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

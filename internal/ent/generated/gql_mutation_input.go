@@ -25741,27 +25741,27 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	EnvironmentName   *string
-	ScopeName         *string
-	Name              string
-	TemplateType      *enums.DocumentType
-	Description       *string
-	Kind              *enums.TemplateKind
-	Jsonconfig        map[string]interface{}
-	Uischema          map[string]interface{}
-	ProjectionConfig  *models.TemplateProjectionConfig
-	OwnerID           *string
-	EnvironmentID     *string
-	ScopeID           *string
-	DocumentIDs       []string
-	FileIDs           []string
-	TrustCenterID     *string
-	AssessmentIDs     []string
-	CampaignIDs       []string
-	IdentityHolderIDs []string
+	Tags                   []string
+	InternalNotes          *string
+	SystemInternalID       *string
+	EnvironmentName        *string
+	ScopeName              *string
+	Name                   string
+	TemplateType           *enums.DocumentType
+	Description            *string
+	Kind                   *enums.TemplateKind
+	Jsonconfig             map[string]interface{}
+	Uischema               map[string]interface{}
+	TransformConfiguration *models.TemplateProjectionConfig
+	OwnerID                *string
+	EnvironmentID          *string
+	ScopeID                *string
+	DocumentIDs            []string
+	FileIDs                []string
+	TrustCenterID          *string
+	AssessmentIDs          []string
+	CampaignIDs            []string
+	IdentityHolderIDs      []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -25797,8 +25797,8 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
 	}
-	if v := i.ProjectionConfig; v != nil {
-		m.SetProjectionConfig(*v)
+	if v := i.TransformConfiguration; v != nil {
+		m.SetTransformConfiguration(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25837,49 +25837,49 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags               bool
-	Tags                    []string
-	AppendTags              []string
-	ClearInternalNotes      bool
-	InternalNotes           *string
-	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	ClearEnvironmentName    bool
-	EnvironmentName         *string
-	ClearScopeName          bool
-	ScopeName               *string
-	Name                    *string
-	TemplateType            *enums.DocumentType
-	ClearDescription        bool
-	Description             *string
-	ClearKind               bool
-	Kind                    *enums.TemplateKind
-	Jsonconfig              map[string]interface{}
-	ClearUischema           bool
-	Uischema                map[string]interface{}
-	ClearProjectionConfig   bool
-	ProjectionConfig        *models.TemplateProjectionConfig
-	ClearEnvironment        bool
-	EnvironmentID           *string
-	ClearScope              bool
-	ScopeID                 *string
-	ClearDocuments          bool
-	AddDocumentIDs          []string
-	RemoveDocumentIDs       []string
-	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
-	ClearTrustCenter        bool
-	TrustCenterID           *string
-	ClearAssessments        bool
-	AddAssessmentIDs        []string
-	RemoveAssessmentIDs     []string
-	ClearCampaigns          bool
-	AddCampaignIDs          []string
-	RemoveCampaignIDs       []string
-	ClearIdentityHolders    bool
-	AddIdentityHolderIDs    []string
-	RemoveIdentityHolderIDs []string
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	ClearInternalNotes          bool
+	InternalNotes               *string
+	ClearSystemInternalID       bool
+	SystemInternalID            *string
+	ClearEnvironmentName        bool
+	EnvironmentName             *string
+	ClearScopeName              bool
+	ScopeName                   *string
+	Name                        *string
+	TemplateType                *enums.DocumentType
+	ClearDescription            bool
+	Description                 *string
+	ClearKind                   bool
+	Kind                        *enums.TemplateKind
+	Jsonconfig                  map[string]interface{}
+	ClearUischema               bool
+	Uischema                    map[string]interface{}
+	ClearTransformConfiguration bool
+	TransformConfiguration      *models.TemplateProjectionConfig
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearDocuments              bool
+	AddDocumentIDs              []string
+	RemoveDocumentIDs           []string
+	ClearFiles                  bool
+	AddFileIDs                  []string
+	RemoveFileIDs               []string
+	ClearTrustCenter            bool
+	TrustCenterID               *string
+	ClearAssessments            bool
+	AddAssessmentIDs            []string
+	RemoveAssessmentIDs         []string
+	ClearCampaigns              bool
+	AddCampaignIDs              []string
+	RemoveCampaignIDs           []string
+	ClearIdentityHolders        bool
+	AddIdentityHolderIDs        []string
+	RemoveIdentityHolderIDs     []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -25944,11 +25944,11 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
 	}
-	if i.ClearProjectionConfig {
-		m.ClearProjectionConfig()
+	if i.ClearTransformConfiguration {
+		m.ClearTransformConfiguration()
 	}
-	if v := i.ProjectionConfig; v != nil {
-		m.SetProjectionConfig(*v)
+	if v := i.TransformConfiguration; v != nil {
+		m.SetTransformConfiguration(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

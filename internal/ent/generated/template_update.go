@@ -357,23 +357,23 @@ func (_u *TemplateUpdate) ClearTrustCenterID() *TemplateUpdate {
 	return _u
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_u *TemplateUpdate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateUpdate {
-	_u.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateUpdate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateUpdate {
+	_u.mutation.SetTransformConfiguration(v)
 	return _u
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_u *TemplateUpdate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateUpdate {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateUpdate {
 	if v != nil {
-		_u.SetProjectionConfig(*v)
+		_u.SetTransformConfiguration(*v)
 	}
 	return _u
 }
 
-// ClearProjectionConfig clears the value of the "projection_config" field.
-func (_u *TemplateUpdate) ClearProjectionConfig() *TemplateUpdate {
-	_u.mutation.ClearProjectionConfig()
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateUpdate) ClearTransformConfiguration() *TemplateUpdate {
+	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -770,11 +770,11 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ProjectionConfig(); ok {
-		_spec.SetField(template.FieldProjectionConfig, field.TypeJSON, value)
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
 	}
-	if _u.mutation.ProjectionConfigCleared() {
-		_spec.ClearField(template.FieldProjectionConfig, field.TypeJSON)
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(template.FieldTransformConfiguration, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1449,23 +1449,23 @@ func (_u *TemplateUpdateOne) ClearTrustCenterID() *TemplateUpdateOne {
 	return _u
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_u *TemplateUpdateOne) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateUpdateOne {
-	_u.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateUpdateOne) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateUpdateOne {
+	_u.mutation.SetTransformConfiguration(v)
 	return _u
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_u *TemplateUpdateOne) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateUpdateOne {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateUpdateOne {
 	if v != nil {
-		_u.SetProjectionConfig(*v)
+		_u.SetTransformConfiguration(*v)
 	}
 	return _u
 }
 
-// ClearProjectionConfig clears the value of the "projection_config" field.
-func (_u *TemplateUpdateOne) ClearProjectionConfig() *TemplateUpdateOne {
-	_u.mutation.ClearProjectionConfig()
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateUpdateOne) ClearTransformConfiguration() *TemplateUpdateOne {
+	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -1892,11 +1892,11 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ProjectionConfig(); ok {
-		_spec.SetField(template.FieldProjectionConfig, field.TypeJSON, value)
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
 	}
-	if _u.mutation.ProjectionConfigCleared() {
-		_spec.ClearField(template.FieldProjectionConfig, field.TypeJSON)
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(template.FieldTransformConfiguration, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

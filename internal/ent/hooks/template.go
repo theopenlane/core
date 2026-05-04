@@ -31,11 +31,20 @@ func HookTemplate() ent.Hook {
 
 			}
 
+			kind, ok := m.Kind()
+			if !ok || kind != enums.TemplateKindVendorIntake {
+				return next.Mutate(ctx, m)
+			}
+
+			if !auth.IsSystemAdminFromContext(ctx) {
+				return nil, fmt.Errorf("%w: only system admins can create or update a vendor intake template", ErrInvalidInput)
+			}
+
 			return next.Mutate(ctx, m)
 		})
 	},
 		hook.And(
-			hook.HasFields(template.FieldTemplateType),
+			hook.HasFields(template.FieldTemplateType, template.FieldKind),
 			hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
 		),
 	)

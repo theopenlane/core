@@ -306,16 +306,16 @@ func (_c *TemplateCreate) SetNillableTrustCenterID(v *string) *TemplateCreate {
 	return _c
 }
 
-// SetProjectionConfig sets the "projection_config" field.
-func (_c *TemplateCreate) SetProjectionConfig(v models.TemplateProjectionConfig) *TemplateCreate {
-	_c.mutation.SetProjectionConfig(v)
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_c *TemplateCreate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateCreate {
+	_c.mutation.SetTransformConfiguration(v)
 	return _c
 }
 
-// SetNillableProjectionConfig sets the "projection_config" field if the given value is not nil.
-func (_c *TemplateCreate) SetNillableProjectionConfig(v *models.TemplateProjectionConfig) *TemplateCreate {
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateCreate {
 	if v != nil {
-		_c.SetProjectionConfig(*v)
+		_c.SetTransformConfiguration(*v)
 	}
 	return _c
 }
@@ -645,9 +645,9 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 		_spec.SetField(template.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
 	}
-	if value, ok := _c.mutation.ProjectionConfig(); ok {
-		_spec.SetField(template.FieldProjectionConfig, field.TypeJSON, value)
-		_node.ProjectionConfig = value
+	if value, ok := _c.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
+		_node.TransformConfiguration = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

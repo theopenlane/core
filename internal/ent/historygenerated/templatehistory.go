@@ -73,9 +73,9 @@ type TemplateHistory struct {
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID string `json:"trust_center_id,omitempty"`
-	// configuration for converting a submitted assesment into records for the Organization
-	ProjectionConfig models.TemplateProjectionConfig `json:"projection_config,omitempty"`
-	selectValues     sql.SelectValues
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
+	selectValues           sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -83,7 +83,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case templatehistory.FieldTags, templatehistory.FieldJsonconfig, templatehistory.FieldUischema, templatehistory.FieldProjectionConfig:
+		case templatehistory.FieldTags, templatehistory.FieldJsonconfig, templatehistory.FieldUischema, templatehistory.FieldTransformConfiguration:
 			values[i] = new([]byte)
 		case templatehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -272,12 +272,12 @@ func (_m *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
 			}
-		case templatehistory.FieldProjectionConfig:
+		case templatehistory.FieldTransformConfiguration:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field projection_config", values[i])
+				return fmt.Errorf("unexpected type %T for field transform_configuration", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProjectionConfig); err != nil {
-					return fmt.Errorf("unmarshal field projection_config: %w", err)
+				if err := json.Unmarshal(*value, &_m.TransformConfiguration); err != nil {
+					return fmt.Errorf("unmarshal field transform_configuration: %w", err)
 				}
 			}
 		default:
@@ -395,8 +395,8 @@ func (_m *TemplateHistory) String() string {
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
-	builder.WriteString("projection_config=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProjectionConfig))
+	builder.WriteString("transform_configuration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TransformConfiguration))
 	builder.WriteByte(')')
 	return builder.String()
 }

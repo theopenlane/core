@@ -48,7 +48,8 @@ func HookQuestionnaireAssessment() ent.Hook {
 				return nil, err
 			}
 
-			if template.Kind != enums.TemplateKindQuestionnaire {
+			// longterm we want to use the transformconfig check on template instead
+			if template.Kind != enums.TemplateKindVendorIntake && template.Kind != enums.TemplateKindQuestionnaire {
 				logx.FromContext(ctx).
 					Err(errors.New("template is not of type questionnaire")). //nolint:err113
 					Str("template_id", id).Str("kind", template.Kind.String()).

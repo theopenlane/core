@@ -35024,9 +35024,9 @@ type TemplateHistory implements Node {
 	"""
 	trustCenterID: String
 	"""
-	configuration for converting a submitted assesment into records for the Organization
+	configuration for converting a submitted assesment into records for the organization
 	"""
-	projectionConfig: TemplateProjectionConfig
+	transformConfiguration: TemplateProjectionConfig
 }
 """
 A connection to a list of items.

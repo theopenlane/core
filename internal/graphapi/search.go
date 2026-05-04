@@ -2331,7 +2331,7 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(projection_config)::text LIKE $15", likeQuery)) // search by ProjectionConfig
+					s.Where(sql.ExprP("(transform_configuration)::text LIKE $15", likeQuery)) // search by TransformConfiguration
 				},
 			),
 		)
