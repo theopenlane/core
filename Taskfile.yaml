@@ -472,8 +472,8 @@ tasks:
     cmds:
       - task: go:tidy
       - task: go:fmt
-      - task: go:lint
-      - task: go:test
+      - task: go:lint:local
+      - task: go:testsum:local
 
   # dev tasks
   run-dev:
