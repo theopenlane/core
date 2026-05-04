@@ -1,7 +1,10 @@
 package models
 
-import "io"
+import (
+	"io"
 
+	"github.com/theopenlane/core/common/enums"
+)
 
 // TemplateProjectionResolver resolves a source value to another record or field.
 type TemplateProjectionResolver string
@@ -24,11 +27,11 @@ type TemplateProjectionConfig struct {
 	// Enabled controls whether projection should run for this template.
 	Enabled bool `json:"enabled,omitempty"`
 	// Target is the destination object type, e.g. Entity or Asset.
-	Target TemplateProjectionTarget `json:"target,omitempty"`
+	Target enums.TemplateProjectionTarget `json:"target,omitempty"`
 	// Operation is the persistence behavior for the projection.
-	Operation TemplateProjectionOperation `json:"operation,omitempty"`
+	Operation enums.TemplateProjectionOperation `json:"operation,omitempty"`
 	// Trigger is the questionnaire/document event that runs the projection.
-	Trigger TemplateProjectionTrigger `json:"trigger,omitempty"`
+	Trigger enums.TemplateProjectionTrigger `json:"trigger,omitempty"`
 	// FieldMappings maps document data fields to target schema fields.
 	FieldMappings []TemplateProjectionFieldMapping `json:"fieldMappings,omitempty"`
 }
@@ -40,7 +43,7 @@ type TemplateProjectionFieldMapping struct {
 	// To is the target schema field name.
 	To string `json:"to,omitempty"`
 	// Transform converts the source value before assignment.
-	Transform TemplateProjectionTransform `json:"transform,omitempty"`
+	Transform enums.TemplateProjectionTransform `json:"transform,omitempty"`
 	// Resolver resolves a source value to one or more target fields.
 	Resolver TemplateProjectionResolver `json:"resolver,omitempty"`
 	// Rule computes a value from projection context instead of directly copying From.

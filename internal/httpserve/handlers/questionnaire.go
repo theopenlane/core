@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/documentprojection"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -179,6 +180,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
+		WithTemplate().
 		WithAssessmentResponses().
 		Only(allowCtx)
 	if err != nil {
@@ -259,6 +261,27 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	if err != nil {
 		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	}
+
+	if !req.IsDraft && assessment.Edges.Template != nil {
+		err = documentprojection.New(h.DBClient).Project(allowCtx, documentprojection.Request{
+			OrganizationID:       assessment.OwnerID,
+			TemplateID:           assessment.TemplateID,
+			AssessmentID:         assessment.ID,
+			AssessmentResponseID: freshResponse.ID,
+			DocumentDataID:       documentDataID,
+			Data:                 req.Data,
+			Config:               assessment.Edges.Template.ProjectionConfig,
+		})
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not project questionnaire document data")
+
+			if documentprojection.IsValidationError(err) {
+				return h.BadRequest(ctx, err, openapi)
+			}
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 	}
 
 	response := models.SubmitQuestionnaireResponse{
