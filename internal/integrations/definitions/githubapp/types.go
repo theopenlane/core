@@ -61,6 +61,8 @@ type githubAppCredential struct {
 	AccessToken string `json:"accessToken"`
 	// Expiry is the token expiry timestamp when available
 	Expiry *time.Time `json:"expiry,omitempty"`
+	// OrganizationName is the organization this was installed in, needed for disconnect when installed in an organization
+	OrganizationName string `json:"organizationName,omitempty"`
 }
 
 // UserInput holds installation-specific configuration collected from the user
@@ -93,18 +95,21 @@ type RepositorySync struct {
 	// Disable is used to disable the directory sync operation from GitHub
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.IsPrivate == 'true'"`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes
 type InstallationMetadata struct {
 	// InstallationID is the GitHub App installation identifier
 	InstallationID string `json:"installationId,omitempty" jsonschema:"title=installation ID"`
+	// OrganizationName is the Organization the Github App was installed into, if empty it is installed in a personal org
+	OrganizationName string `json:"organizationName,omitempty"  jsonschema:"title=organization"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalID: m.InstallationID,
+		ExternalID:   m.InstallationID,
+		ExternalName: m.OrganizationName,
 	}
 }

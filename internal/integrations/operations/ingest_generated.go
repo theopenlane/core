@@ -429,10 +429,6 @@ func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectory
 
 	input = integrationgenerated.PrepareDirectoryAccountInput(input, integration)
 
-	if input.OwnerID == nil && integration.OwnerID != "" {
-		input.OwnerID = &integration.OwnerID
-	}
-
 	dirSyncRunID := directorySyncRunIDFromContext(ctx)
 
 	if input.DirectorySyncRunID == nil && dirSyncRunID != "" {

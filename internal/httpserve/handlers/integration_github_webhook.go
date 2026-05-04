@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -56,6 +57,11 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 
 	installation, err := h.resolveGitHubAppWebhookInstallation(webhookCtx, payload)
 	if err != nil {
+		if ent.IsNotFound(err) {
+			// installation already cleaned up — return 200 so GitHub does not retry
+			return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+		}
+
 		logx.FromContext(webhookCtx).Error().Err(err).Interface("payload", string(payload)).Msg("failed to resolve github app webhook installation")
 
 		return h.BadRequest(ctx, err, openapiCtx)

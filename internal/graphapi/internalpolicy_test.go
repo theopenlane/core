@@ -511,12 +511,13 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
-		name        string
-		policyID    string
-		request     testclient.UpdateInternalPolicyInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name             string
+		policyID         string
+		request          testclient.UpdateInternalPolicyInput
+		client           *testclient.TestClient
+		ctx              context.Context
+		expectedErr      string
+		expectedRevision string
 	}{
 		{
 			name:     "happy path, update details field",
@@ -524,8 +525,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			expectedRevision: "v0.1.0", // details updated, should be a minor update
 		},
 		{
 			name:     "happy path, update details field on policy created by another user",
@@ -533,8 +535,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx, // org owner should always be able to update the policy
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx, // org owner should always be able to update the policy
+			expectedRevision: "v0.1.0",          // details updated, should be a minor update (different policy than test 1)
 		},
 		{
 			name:     "happy path, update name field",
@@ -543,8 +546,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				Name:         lo.ToPtr("Updated InternalPolicy Name"),
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for subsequent tests
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			expectedRevision: "v0.1.1", // no details updated, should be a patch update
 		},
 		{
 			name:     "happy path, update multiple fields",
@@ -557,8 +561,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				AddSubcontrolIDs: []string{subcontrol.ID},
 				AddTaskIDs:       []string{task.ID},
 			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			client:           suite.client.apiWithPAT,
+			ctx:              context.Background(),
+			expectedRevision: "v1.0.0", // details updated, but revision bump set to major
 		},
 		{
 			name:     "member allowed to add comment",
@@ -568,8 +573,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 					Text: "This is a comment from a member user",
 				},
 			},
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			client:           suite.client.api,
+			ctx:              viewOnlyUser.UserCtx,
+			expectedRevision: "v1.0.1", // only comment added, should be a patch update
 		},
 		{
 			name:     "member not allowed to update details",
@@ -600,8 +606,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			client:           suite.client.api,
+			ctx:              adminUser.UserCtx,
+			expectedRevision: "v1.0.2", // no details updated, should be a patch update
 		},
 		{
 			name:     "member update allowed, user in editor group",
@@ -609,8 +616,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client: suite.client.api,
-			ctx:    anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
+			client:           suite.client.api,
+			ctx:              anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
+			expectedRevision: "v1.0.3",                  // no details updated, should be a patch update
 		},
 		{
 			name:     "member update allowed, user in editor group as admin",
@@ -618,8 +626,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again by Group Admin"),
 			},
-			client: suite.client.api,
-			ctx:    anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
+			client:           suite.client.api,
+			ctx:              anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
+			expectedRevision: "v1.0.4",                            // no details updated, should be a patch update
 		},
 		{
 			name:     "happy path, block the group from editing",
@@ -627,8 +636,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			expectedRevision: "v1.0.5", // no details updated, should be a patch update
 		},
 		{
 			name:     "member update no longer allowed, user in blocked group",
@@ -646,8 +656,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				RemoveEditorIDs: []string{testUser1.GroupID}, // remove the group from the editor groups
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:           suite.client.api,
+			ctx:              testUser1.UserCtx,
+			expectedRevision: "v1.0.6", // no details updated, should be a patch update
 		},
 		{
 			name:     "update not allowed, editor group was removed",
@@ -696,9 +707,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status))
 			}
 
-			if tc.request.Revision != nil {
-				assert.Check(t, is.Equal(*tc.request.Revision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
-			}
+			assert.Check(t, is.Equal(*&tc.expectedRevision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
 
 			if tc.request.RevisionBump == &models.Major {
 				assert.Check(t, is.Equal("v1.0.0", *resp.UpdateInternalPolicy.InternalPolicy.Revision))

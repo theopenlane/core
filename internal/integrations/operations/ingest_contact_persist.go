@@ -20,6 +20,10 @@ func persistContactInput(ctx context.Context, db *ent.Client, integration *ent.I
 		return ErrIngestUpsertKeyMissing
 	}
 
+	if createInput.IntegrationID == nil {
+		createInput.IntegrationID = &integration.ID
+	}
+
 	q := db.Contact.Query().Where(contact.OwnerID(integration.OwnerID))
 
 	switch {

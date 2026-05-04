@@ -20,6 +20,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -37,6 +38,8 @@ const (
 type disconnectDetails struct {
 	// InstallationID is the GitHub App installation ID being disconnected
 	InstallationID string `json:"installationId,omitempty"`
+	// OrganizationName is the organization the Github App was installed into
+	OrganizationName string `json:"organizationName,omitempty"`
 }
 
 // statePayload is the opaque state token round-tripped through the auth flow
@@ -91,13 +94,19 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 		return types.AuthCompleteResult{}, ErrInstallationIDMissing
 	}
 
-	cred, err := mintCredential(ctx, cfg, integrationID)
+	orgName, err := fetchInstallationAccount(ctx, cfg, integrationID)
+	if err != nil {
+		return types.AuthCompleteResult{}, err
+	}
+
+	cred, err := mintCredential(ctx, cfg, integrationID, orgName)
 	if err != nil {
 		return types.AuthCompleteResult{}, err
 	}
 
 	installInput, err := jsonx.ToRawMessage(InstallationMetadata{
-		InstallationID: strconv.FormatInt(integrationID, 10),
+		InstallationID:   strconv.FormatInt(integrationID, 10),
+		OrganizationName: orgName,
 	})
 	if err != nil {
 		return types.AuthCompleteResult{}, ErrInstallationMetadataEncode
@@ -110,35 +119,59 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 }
 
 // disconnectInstallationID extracts the installation ID from the credential or installation metadata
-func disconnectInstallationID(req types.DisconnectRequest) (int64, error) {
+func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) (int64, string, error) {
 	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)
 	if err != nil {
-		return 0, ErrCredentialDecode
+		return 0, "", ErrCredentialDecode
 	}
 
 	if ok && cred.InstallationID != 0 {
-		return cred.InstallationID, nil
+		return cred.InstallationID, cred.OrganizationName, nil
 	}
 
 	var metadata InstallationMetadata
 	if err := jsonx.UnmarshalIfPresent(req.Integration.InstallationMetadata.Attributes, &metadata); err != nil {
-		return 0, ErrInstallationMetadataDecode
+		return 0, "", ErrInstallationMetadataDecode
 	}
 
 	if metadata.InstallationID == "" {
-		return 0, ErrInstallationIDMissing
+		return 0, "", ErrInstallationIDMissing
 	}
 
 	integrationID, err := strconv.ParseInt(metadata.InstallationID, 10, 64)
 	if err != nil || integrationID == 0 {
-		return 0, ErrInstallationIDMissing
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("githubapp: error getting installation id")
+		}
+		return 0, "", ErrInstallationIDMissing
 	}
 
-	return integrationID, nil
+	return integrationID, metadata.OrganizationName, nil
+}
+
+// fetchInstallationAccount fetches the organization name for the given installation ID
+// returns empty string for personal (User-type) account installations
+func fetchInstallationAccount(ctx context.Context, cfg Config, integrationID int64) (string, error) {
+	jwtToken, err := appJWT(cfg)
+	if err != nil {
+		return "", err
+	}
+
+	client := installationTokenClient(ctx, cfg, jwtToken)
+	install, _, err := client.Apps.GetInstallation(ctx, integrationID)
+	if err != nil {
+		return "", ErrInstallationTokenRequestFailed
+	}
+
+	if install.GetAccount().GetType() == "Organization" {
+		return install.GetAccount().GetLogin(), nil
+	}
+
+	return "", nil
 }
 
 // mintCredential mints an installation token and marshals it into a CredentialSet
-func mintCredential(ctx context.Context, cfg Config, integrationID int64) (types.CredentialSet, error) {
+func mintCredential(ctx context.Context, cfg Config, integrationID int64, orgName string) (types.CredentialSet, error) {
 	if cfg.AppID == "" {
 		return types.CredentialSet{}, ErrAppIDMissing
 	}
@@ -159,9 +192,10 @@ func mintCredential(ctx context.Context, cfg Config, integrationID int64) (types
 	}
 
 	cred := githubAppCredential{
-		AppID:          appIDInt,
-		InstallationID: integrationID,
-		AccessToken:    token.AccessToken,
+		AppID:            appIDInt,
+		InstallationID:   integrationID,
+		AccessToken:      token.AccessToken,
+		OrganizationName: orgName,
 	}
 
 	if !token.Expiry.IsZero() {

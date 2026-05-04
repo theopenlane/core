@@ -158,7 +158,7 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Default(false).
 			Comment("whether or not a payment method has been added to the account"),
 		field.Time("pending_deletion_at").
-			Comment("when will this organization be deleted? usually this is after org has not added a payment method afte n period").
+			Comment("when will this organization be deleted? usually this is after org has not added a payment method after n period").
 			GoType(models.DateTime{}).
 			Optional().
 			Nillable().

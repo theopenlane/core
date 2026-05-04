@@ -23,7 +23,6 @@ query GetAllTrustCenterFAQHistories ($first: Int, $last: Int, $after: Cursor, $b
 				trustCenterID
 				updatedAt
 				updatedBy
-				tags
 			}
 		}
 	}
@@ -53,7 +52,6 @@ query GetTrustCenterFAQHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				trustCenterID
 				updatedAt
 				updatedBy
-				tags
 			}
 		}
 	}

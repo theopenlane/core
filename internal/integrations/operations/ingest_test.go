@@ -890,8 +890,8 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		FilterExpr string `json:"filterExpr,omitempty"`
 	}
 	type userInput struct {
-		FindingSync findingSyncCfg `json:"findingSync,omitempty"`
-		DirectorySync assetSyncCfg `json:"directorySync,omitempty"`
+		FindingSync   findingSyncCfg `json:"findingSync,omitempty"`
+		DirectorySync assetSyncCfg   `json:"directorySync,omitempty"`
 	}
 
 	def := types.Definition{

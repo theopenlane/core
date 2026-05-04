@@ -100,7 +100,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.7
-	github.com/theopenlane/entx v0.25.1
+	github.com/theopenlane/entx v0.26.0
 	github.com/theopenlane/go-client v0.9.5
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0

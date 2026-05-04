@@ -141,7 +141,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		for _, envelope := range payloadSet.Envelopes {
 			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("integration: error mapping ingest record")
+				logx.FromContext(ctx).Error().Err(err).Str("integration", definition.Family).Str("integration_id", definition.ID).Str("schema", payloadSet.Schema).Msg("integration: error mapping ingest record")
 				return err
 			}
 

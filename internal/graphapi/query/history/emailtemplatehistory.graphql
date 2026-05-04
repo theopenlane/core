@@ -41,7 +41,6 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				version
 				workflowDefinitionID
 				workflowInstanceID
-				emailBrandingID
 			}
 		}
 	}
@@ -89,7 +88,6 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				version
 				workflowDefinitionID
 				workflowInstanceID
-				emailBrandingID
 			}
 		}
 	}

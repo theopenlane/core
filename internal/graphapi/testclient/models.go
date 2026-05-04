@@ -4,6 +4,7 @@ package testclient
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
@@ -10708,7 +10709,7 @@ type DirectoryAccount struct {
 	DisplayID string `json:"displayID"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the environment of the directory_account
 	EnvironmentName *string `json:"environmentName,omitempty"`
@@ -20441,6 +20442,8 @@ type Integration struct {
 	EmailTemplates        *EmailTemplateConnection        `json:"emailTemplates"`
 	Entities              *EntityConnection               `json:"entities"`
 	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
+	Credentials           json.RawMessage                 `json:"credentials,omitempty"`
+	Config                json.RawMessage                 `json:"config,omitempty"`
 }
 
 func (Integration) IsNode() {}
@@ -25854,7 +25857,7 @@ type OrganizationSetting struct {
 	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"paymentMethodAdded"`
-	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt *models.DateTime `json:"pendingDeletionAt,omitempty"`
 	Organization      *Organization    `json:"organization,omitempty"`
 	Files             *FileConnection  `json:"files"`
@@ -40445,8 +40448,6 @@ type UpdateDirectoryAccountInput struct {
 	ClearSourceVersion *bool   `json:"clearSourceVersion,omitempty"`
 	// indicates this directory account originates from the installation designated as the primary directory source for its owner organization
 	PrimarySource              *bool    `json:"primarySource,omitempty"`
-	OwnerID                    *string  `json:"ownerID,omitempty"`
-	ClearOwner                 *bool    `json:"clearOwner,omitempty"`
 	EnvironmentID              *string  `json:"environmentID,omitempty"`
 	ClearEnvironment           *bool    `json:"clearEnvironment,omitempty"`
 	ScopeID                    *string  `json:"scopeID,omitempty"`
@@ -43012,7 +43013,7 @@ type UpdateOrganizationSettingInput struct {
 	// unique token used to receive compliance webhook events
 	ComplianceWebhookToken      *string `json:"complianceWebhookToken,omitempty"`
 	ClearComplianceWebhookToken *bool   `json:"clearComplianceWebhookToken,omitempty"`
-	// when will this organization be deleted? usually this is after org has not added a payment method afte n period
+	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt      *models.DateTime `json:"pendingDeletionAt,omitempty"`
 	ClearPendingDeletionAt *bool            `json:"clearPendingDeletionAt,omitempty"`
 	OrganizationID         *string          `json:"organizationID,omitempty"`

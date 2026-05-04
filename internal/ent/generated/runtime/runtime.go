@@ -1622,13 +1622,16 @@ func init() {
 
 	directoryaccount.Hooks[4] = directoryaccountMixinHooks4[0]
 
-	directoryaccount.Hooks[5] = directoryaccountMixinHooks5[0]
+	directoryaccount.Hooks[5] = directoryaccountMixinHooks4[1]
 
-	directoryaccount.Hooks[6] = directoryaccountMixinHooks6[0]
+	directoryaccount.Hooks[6] = directoryaccountMixinHooks5[0]
 
-	directoryaccount.Hooks[7] = directoryaccountHooks[0]
+	directoryaccount.Hooks[7] = directoryaccountMixinHooks6[0]
+
+	directoryaccount.Hooks[8] = directoryaccountHooks[0]
 	directoryaccountMixinInters4 := directoryaccountMixin[4].Interceptors()
 	directoryaccount.Interceptors[0] = directoryaccountMixinInters4[0]
+	directoryaccount.Interceptors[1] = directoryaccountMixinInters4[1]
 	directoryaccountMixinFields0 := directoryaccountMixin[0].Fields()
 	_ = directoryaccountMixinFields0
 	directoryaccountMixinFields1 := directoryaccountMixin[1].Fields()

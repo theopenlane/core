@@ -217,16 +217,30 @@ var (
 		Help: "The total number of workflow operations by origin, trigger, and success",
 	}, []string{"operation", "origin", "trigger", "success"})
 
+	// WorkflowOperationDuration tracks how long a workflow took in seconds
 	WorkflowOperationDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
 		Name:    "openlane_workflow_operation_duration_seconds",
 		Help:    "The duration of workflow operations in seconds",
 		Buckets: prometheus.DefBuckets,
 	}, []string{"operation", "origin", "trigger"})
 
+	// WorkflowEmitErrorsTotal tracks the errors by topic for a workflow
 	WorkflowEmitErrorsTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "openlane_workflow_emit_errors_total",
 		Help: "The total number of workflow emit errors by topic and origin",
 	}, []string{"topic", "origin"})
+
+	// IntegrationProviderInstalls tracks the number of install operations per integration provider
+	IntegrationProviderInstalls = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_integration_provider_installs_total",
+		Help: "Total number of installs per integration provider",
+	}, []string{"provider"})
+
+	// IntegrationProviderDisconnects tracks the number of disconnect operations per integration provider
+	IntegrationProviderDisconnects = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_integration_provider_disconnect_total",
+		Help: "Total number of disconnect per integration provider",
+	}, []string{"provider"})
 
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
@@ -257,6 +271,8 @@ var (
 		WorkflowOperationsTotal,
 		WorkflowOperationDuration,
 		WorkflowEmitErrorsTotal,
+		IntegrationProviderInstalls,
+		IntegrationProviderDisconnects,
 	}
 
 	// SubscriptionMetrics is the list of all metrics specific to graph subscriptions and websocket connections

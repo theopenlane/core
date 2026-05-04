@@ -17839,7 +17839,7 @@ type DirectoryAccount implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -46518,7 +46518,7 @@ type OrganizationSetting implements Node {
   """
   paymentMethodAdded: Boolean!
   """
-  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  when will this organization be deleted? usually this is after org has not added a payment method after n period
   """
   pendingDeletionAt: DateTime
   organization: Organization
@@ -73822,8 +73822,6 @@ input UpdateDirectoryAccountInput {
   indicates this directory account originates from the installation designated as the primary directory source for its owner organization
   """
   primarySource: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -77216,7 +77214,7 @@ input UpdateOrganizationSettingInput {
   complianceWebhookToken: String
   clearComplianceWebhookToken: Boolean
   """
-  when will this organization be deleted? usually this is after org has not added a payment method afte n period
+  when will this organization be deleted? usually this is after org has not added a payment method after n period
   """
   pendingDeletionAt: DateTime
   clearPendingDeletionAt: Boolean
