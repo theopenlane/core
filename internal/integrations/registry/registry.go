@@ -207,10 +207,6 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 	}
 
 	if def.RuntimeIntegration != nil {
-		if def.OperatorConfig != nil {
-			return ErrRuntimeMutualExclusivity
-		}
-
 		if def.RuntimeIntegration.Build == nil {
 			return ErrRuntimeBuildRequired
 		}

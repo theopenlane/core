@@ -166,16 +166,6 @@
           "type": "array",
           "description": "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications"
         },
-        "template_id": {
-          "type": "string"
-        },
-        "template_key": {
-          "type": "string"
-        },
-        "operation_name": {
-          "type": "string",
-          "description": "Integration operation to invoke when the template has an integration_id"
-        },
         "topic": {
           "type": "string",
           "description": "Optional notification topic for categorization"

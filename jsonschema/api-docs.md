@@ -22,7 +22,6 @@ Config contains the configuration for the core server
 |[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
-|[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
@@ -122,7 +121,6 @@ Config contains the configuration for the core server
         "stripewebhooksecrets": {}
     },
     "keywatcher": {},
-    "slack": {},
     "integrations": {
         "awsSecurityHub": {},
         "githubapp": {},
@@ -1519,21 +1517,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
 
 **Additional Properties:** not allowed  
-<a name="slack"></a>
-## slack: object
-
-Slack contains settings for Slack notifications
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**webhookurl**|`string`|WebhookURL is the Slack webhook to post messages to<br/>||
-|**newsubscribermessagefile**|`string`|NewSubscriberMessageFile is the path to the template used for new subscriber notifications<br/>||
-|**newusermessagefile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
-
-**Additional Properties:** not allowed  
 <a name="integrations"></a>
 ## integrations: object
 
@@ -1613,7 +1596,9 @@ Slack contains settings for Slack notifications
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**webhookURL**|`string`|Slack incoming webhook URL used for system notifications<br/>||
+|**webhookURL**|`string`|Slack incoming webhook URL for fire-and-forget system notifications<br/>||
+|**botToken**|`string`|Bot User OAuth Token for full Web API access to the platform workspace<br/>||
+|**defaultChannel**|`string`|Default channel id for system messages when no explicit channel is provided<br/>||
 
 **Additional Properties:** not allowed  
 <a name="integrationsgoogleworkspace"></a>
@@ -1676,24 +1661,32 @@ Slack contains settings for Slack notifications
 |**apiKey**|`string`|Email provider API key<br/>|yes|
 |**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"sendgrid"`, `"postmark"`<br/>|yes|
 |**fromEmail**|`string`|Sender email address<br/>|yes|
-|**companyName**|`string`|Company display name<br/>|no|
-|**companyAddress**|`string`|Company mailing address<br/>|no|
-|**corporation**|`string`|Legal corporation name<br/>|no|
 |**supportEmail**|`string`|Support contact email address<br/>|no|
-|**logoURL**|`string`|Company logo URL<br/>|no|
+|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
 |**rootURL**|`string`|Root application URL used to construct email action links<br/>|no|
 |**productURL**|`string`|Product home URL<br/>|no|
 |**docsURL**|`string`|Documentation URL<br/>|no|
-|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
-|**copyright**|`string`|Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year<br/>|no|
-|**troubleText**|`string`|Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time<br/>|no|
-|**termsURL**|`string`|Terms of service link for email footers<br/>|no|
-|**privacyURL**|`string`|Privacy policy link for email footers<br/>|no|
-|**unsubscribeURL**|`string`|Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email<br/>|no|
-|**trustCenterDomain**|`string`|Default domain for trust center URLs when no custom domain is configured<br/>|no|
-|**headerText**|`string`|Text displayed in the upper-right corner of the modern theme header<br/>|no|
-|**cardStyle**|`string`|Card visual style<br/>Enum: `"flat"`, `"elevated"`<br/>|no|
-|**tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
+|**CompanyName**|`string`|Company display name<br/>|no|
+|**CompanyAddress**|`string`|Company mailing address<br/>|no|
+|**Corporation**|`string`|Legal corporation name<br/>|no|
+|**LogoURL**|`string`|Hero logo URL displayed in the email body<br/>|no|
+|**HeaderLogoURL**|`string`|Small logo or icon displayed in the top header bar<br/>|no|
+|**Copyright**|`string`|Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year<br/>|no|
+|**TroubleText**|`string`|Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time<br/>|no|
+|**TermsURL**|`string`|Terms of service link for email footers<br/>|no|
+|**PrivacyURL**|`string`|Privacy policy link for email footers<br/>|no|
+|**UnsubscribeURL**|`string`|Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email<br/>|no|
+|**HeaderText**|`string`|Text displayed in the upper-right corner of the modern theme header<br/>|no|
+|**CardStyle**|`string`|Card visual style<br/>Enum: `"flat"`, `"elevated"`<br/>|no|
+|**BodyBackgroundColor**|`string`|Outer page background color<br/>|no|
+|**CardBackgroundColor**|`string`|Card container background color<br/>|no|
+|**HeroBackgroundColor**|`string`|Hero banner section background color<br/>|no|
+|**ButtonColor**|`string`|Call-to-action button background color<br/>|no|
+|**ButtonTextColor**|`string`|Call-to-action button text color<br/>|no|
+|**HeadingColor**|`string`|Heading and title text color<br/>|no|
+|**TextColor**|`string`|Body paragraph text color<br/>|no|
+|**FooterTextColor**|`string`|Muted text color for headers footers and secondary content<br/>|no|
+|**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

@@ -1290,8 +1290,8 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	}
 }
 
-// TestRuntimeMutualExclusivityWithOperatorConfig verifies runtime integration rejects coexistence with operator config
-func TestRuntimeMutualExclusivityWithOperatorConfig(t *testing.T) {
+// TestRuntimeCoexistsWithOperatorConfig verifies a definition can declare both a runtime integration and operator config
+func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
@@ -1308,9 +1308,8 @@ func TestRuntimeMutualExclusivityWithOperatorConfig(t *testing.T) {
 		},
 	}
 
-	err := reg.Register(def)
-	if !errors.Is(err, ErrRuntimeMutualExclusivity) {
-		t.Fatalf("expected ErrRuntimeMutualExclusivity, got %v", err)
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("expected registration to succeed, got %v", err)
 	}
 }
 

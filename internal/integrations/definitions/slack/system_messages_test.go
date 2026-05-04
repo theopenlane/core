@@ -52,7 +52,7 @@ func TestDemoRequestTemplateRender(t *testing.T) {
 		CompanyName:    "Acme",
 		Email:          "buyer@example.com",
 		Domains:        []string{"acme.com", "acme.io"},
-		CompanyDetails: map[string]string{"size": "500"},
+		CompanyDetails: map[string]any{"size": "500"},
 		DemoRequested:  true,
 	}
 
@@ -166,7 +166,7 @@ func TestAllSlackSystemMessagesWiredToMessageClient(t *testing.T) {
 	}
 }
 
-func TestBuildRuntimeMessageClientBuildsClient(t *testing.T) {
+func TestBuildRuntimeMessageClientWebhookOnly(t *testing.T) {
 	t.Parallel()
 
 	cfg := RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/T/B/X"}
@@ -179,6 +179,48 @@ func TestBuildRuntimeMessageClientBuildsClient(t *testing.T) {
 	client, ok := built.(*SlackClient)
 	require.True(t, ok)
 	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
+	require.Nil(t, client.API)
+}
+
+func TestBuildRuntimeMessageClientBotToken(t *testing.T) {
+	t.Parallel()
+
+	cfg := RuntimeSlackConfig{
+		BotToken:       "xoxb-platform-token",
+		DefaultChannel: "C_PLATFORM",
+	}
+	raw, err := json.Marshal(cfg)
+	require.NoError(t, err)
+
+	built, err := buildRuntimeSlackClient(context.Background(), raw)
+	require.NoError(t, err)
+
+	client, ok := built.(*SlackClient)
+	require.True(t, ok)
+	require.NotNil(t, client.API)
+	require.Equal(t, "C_PLATFORM", client.DefaultChannel)
+	require.Empty(t, client.WebhookURL)
+}
+
+func TestBuildRuntimeMessageClientBotTokenWithWebhookFallback(t *testing.T) {
+	t.Parallel()
+
+	cfg := RuntimeSlackConfig{
+		BotToken:       "xoxb-platform-token",
+		WebhookURL:     "https://hooks.slack.com/services/T/B/X",
+		DefaultChannel: "C_PLATFORM",
+	}
+	raw, err := json.Marshal(cfg)
+	require.NoError(t, err)
+
+	built, err := buildRuntimeSlackClient(context.Background(), raw)
+	require.NoError(t, err)
+
+	client, ok := built.(*SlackClient)
+	require.True(t, ok)
+	require.NotNil(t, client.API)
+	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
+	require.Equal(t, "C_PLATFORM", client.DefaultChannel)
 }
 
 func TestBuildRuntimeMessageClientUnprovisioned(t *testing.T) {
@@ -189,6 +231,25 @@ func TestBuildRuntimeMessageClientUnprovisioned(t *testing.T) {
 
 	_, err = buildRuntimeSlackClient(context.Background(), raw)
 	require.True(t, errors.Is(err, ErrRuntimeConfigInvalid))
+}
+
+func TestSlackClientSendTextAPIPreferredOverWebhook(t *testing.T) {
+	t.Parallel()
+
+	recorder := newSystemMessageRecorder(t)
+	server := httptest.NewServer(recorder.handler())
+	defer server.Close()
+
+	client := &SlackClient{
+		API:            slackgo.New("xoxb-test", slackgo.OptionAPIURL(server.URL+"/")),
+		WebhookURL:     "https://hooks.slack.com/should-not-be-called",
+		DefaultChannel: "C_RUNTIME",
+	}
+
+	err := client.sendText(context.Background(), "bot token wins", "")
+	require.NoError(t, err)
+	require.Equal(t, []string{"C_RUNTIME"}, recorder.channels())
+	require.Equal(t, []string{"bot token wins"}, recorder.texts())
 }
 
 // systemMessageRecorder captures chat.postMessage requests for the system-message client tests

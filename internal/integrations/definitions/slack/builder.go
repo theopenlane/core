@@ -2,6 +2,7 @@ package slack
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
@@ -11,34 +12,19 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-var chatScopes = []string{
-	"channels:read",
-	"chat:write",
-	"chat:write.public",
-	"chat:write.customize",
-}
-var directoryScopes = []string{
-	"groups:read",
-	"team:read",
-	"users:read",
-	"users:read.email",
-	"users.profile:read",
-}
-
-var scopes = append(chatScopes, directoryScopes...)
-
-// Builder returns the Slack definition builder with the supplied operator config applied
+// Builder returns the Slack definition builder with the supplied operator and runtime config applied
+// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send
 func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
-				Family:      "Slack",
+				Family:      "slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
 				Category:    "collaboration",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/slack/overview",
-				Tags:        []string{"messaging", "directory"},
+				Tags:        []string{"messaging", "directory-sync"},
 				Active:      true,
 				Visible:     true,
 			},
@@ -196,4 +182,16 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 
 		return def, nil
 	})
+}
+
+var scopes = []string{
+	"chat:write",
+	"chat:write.public",
+	"chat:write.customize",
+	"channels:read",
+	"groups:read",
+	"team:read",
+	"users:read",
+	"users:read.email",
+	"users.profile:read",
 }

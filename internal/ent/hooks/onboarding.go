@@ -8,11 +8,14 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/utils/keygen"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -56,6 +59,28 @@ func HookOnboarding() ent.Hook {
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
+				return nil, err
+			}
+
+			var callerEmail string
+			if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil {
+				callerEmail = caller.SubjectEmail
+			}
+
+			companyDetails, _ := m.CompanyDetails()
+			userDetails, _ := m.UserDetails()
+			compliance, _ := m.Compliance()
+			demoRequested, _ := m.DemoRequested()
+
+			if err := sendSystemSlack(ctx, m.Client(), slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{
+				CompanyName:    companyName,
+				Email:          callerEmail,
+				Domains:        domains,
+				CompanyDetails: companyDetails,
+				UserDetails:    userDetails,
+				Compliance:     compliance,
+				DemoRequested:  demoRequested,
+			}); err != nil {
 				return nil, err
 			}
 

@@ -36,7 +36,9 @@ const (
 )
 
 // RuntimeEmailConfig is the complete config for runtime-provisioned email.
-// Sourced from koanf/environment at startup
+// Operational fields (API key, provider, URLs) are sourced from koanf/environment
+// at startup. Branding and presentation fields carry struct-tag defaults only and
+// are overridable per-send via UserInput or per-operation Config functions
 type RuntimeEmailConfig struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"apiKey" koanf:"apiKey" jsonschema:"required,description=Email provider API key"`
@@ -44,62 +46,60 @@ type RuntimeEmailConfig struct {
 	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
 	FromEmail string `json:"fromEmail" koanf:"fromEmail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
-	// CompanyName is the display name of the sending company
-	CompanyName string `json:"companyName" koanf:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
-	// CompanyAddress is the mailing address of the company
-	CompanyAddress string `json:"companyAddress" koanf:"companyAddress" jsonschema:"description=Company mailing address" default:"5150 Broadway St San Antonio, TX 78209"`
-	// Corporation is the legal corporation name
-	Corporation string `json:"corporation" koanf:"corporation" jsonschema:"description=Legal corporation name" default:"theopenlane, Inc."`
 	// SupportEmail is the support contact email address
 	SupportEmail string `json:"supportEmail" koanf:"supportEmail" jsonschema:"description=Support contact email address" default:"support@theopenlane.io"`
-	// LogoURL is the hero logo image URL displayed prominently in the email body
-	LogoURL string `json:"logoURL,omitempty" koanf:"logoURL" jsonschema:"description=Hero logo URL displayed in the email body"`
-	// HeaderLogoURL is the small logo/icon displayed in the top header bar
-	HeaderLogoURL string `json:"headerLogoURL,omitempty" koanf:"headerLogoURL" jsonschema:"description=Small logo or icon displayed in the top header bar" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
+	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
+	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
 	// RootURL is the root application URL used to construct email action links
 	RootURL string `json:"rootURL" koanf:"rootURL" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
 	ProductURL string `json:"productURL" koanf:"productURL" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsURL" koanf:"docsURL" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
-	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
-	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireEmail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
+	// CompanyName is the display name of the sending company
+	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
+	// CompanyAddress is the mailing address of the company
+	CompanyAddress string `json:"companyAddress" jsonschema:"description=Company mailing address" default:"5150 Broadway St San Antonio, TX 78209"`
+	// Corporation is the legal corporation name
+	Corporation string `json:"corporation" jsonschema:"description=Legal corporation name" default:"theopenlane, Inc."`
+	// LogoURL is the hero logo image URL displayed prominently in the email body
+	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Hero logo URL displayed in the email body"`
+	// HeaderLogoURL is the small logo/icon displayed in the top header bar
+	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"description=Small logo or icon displayed in the top header bar" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
 	// Copyright is an optional copyright override for email footers; when empty the template renders © {year} {corporation}
-	Copyright string `json:"copyright,omitempty" koanf:"copyright" jsonschema:"description=Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"`
+	Copyright string `json:"copyright,omitempty" jsonschema:"description=Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"`
 	// TroubleText is the fallback help text shown below action buttons; {ACTION} is replaced with button text at render time
-	TroubleText string `json:"troubleText,omitempty" koanf:"troubleText" jsonschema:"description=Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
+	TroubleText string `json:"troubleText,omitempty" jsonschema:"description=Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time" default:"If you're having trouble with the button '{ACTION}', copy and paste the URL below into your web browser"`
 	// TermsURL is the terms of service link for email footers
-	TermsURL string `json:"termsURL,omitempty" koanf:"termsURL" jsonschema:"description=Terms of service link for email footers" default:"https://www.theopenlane.io/legal/terms-of-service"`
+	TermsURL string `json:"termsURL,omitempty" jsonschema:"description=Terms of service link for email footers" default:"https://www.theopenlane.io/legal/terms-of-service"`
 	// PrivacyURL is the privacy policy link for email footers
-	PrivacyURL string `json:"privacyURL,omitempty" koanf:"privacyURL" jsonschema:"description=Privacy policy link for email footers" default:"https://www.theopenlane.io/legal/privacy"`
+	PrivacyURL string `json:"privacyURL,omitempty" jsonschema:"description=Privacy policy link for email footers" default:"https://www.theopenlane.io/legal/privacy"`
 	// UnsubscribeURL is an optional unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email
-	UnsubscribeURL string `json:"unsubscribeURL,omitempty" koanf:"unsubscribeURL" jsonschema:"description=Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email"`
-	// TrustCenterDomain is the default domain for trust center URLs when no custom domain is configured
-	TrustCenterDomain string `json:"trustCenterDomain,omitempty" koanf:"trustCenterDomain" jsonschema:"description=Default domain for trust center URLs when no custom domain is configured" default:"trustcenter.theopenlane.io"`
+	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email"`
 	// HeaderText is the optional text displayed in the upper-right corner of the modern theme header row
-	HeaderText string `json:"headerText,omitempty" koanf:"headerText" jsonschema:"description=Text displayed in the upper-right corner of the modern theme header"`
+	HeaderText string `json:"headerText,omitempty" jsonschema:"description=Text displayed in the upper-right corner of the modern theme header"`
 	// CardStyle controls the card visual style; elevated adds rounded corners and a drop shadow
-	CardStyle string `json:"cardStyle,omitempty" koanf:"cardStyle" jsonschema:"enum=flat,enum=elevated,description=Card visual style" default:"elevated"`
+	CardStyle string `json:"cardStyle,omitempty" jsonschema:"enum=flat,enum=elevated,description=Card visual style" default:"elevated"`
 	// BodyBackgroundColor is the outer page background color
-	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" koanf:"bodyBackgroundColor" jsonschema:"description=Outer page background color" default:"#f3f4f6"`
+	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" jsonschema:"description=Outer page background color" default:"#e8eaed"`
 	// CardBackgroundColor is the card container background color
-	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" koanf:"cardBackgroundColor" jsonschema:"description=Card container background color" default:"#ffffff"`
+	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" jsonschema:"description=Card container background color" default:"#ffffff"`
 	// HeroBackgroundColor is the hero banner section background color
-	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" koanf:"heroBackgroundColor" jsonschema:"description=Hero banner section background color" default:"#f3f4f6"`
+	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" jsonschema:"description=Hero banner section background color" default:"#f3f4f6"`
 	// ButtonColor is the call-to-action button background color
-	ButtonColor string `json:"buttonColor,omitempty" koanf:"buttonColor" jsonschema:"description=Call-to-action button background color" default:"#14171e"`
+	ButtonColor string `json:"buttonColor,omitempty" jsonschema:"description=Call-to-action button background color" default:"#14171e"`
 	// ButtonTextColor is the call-to-action button text color
-	ButtonTextColor string `json:"buttonTextColor,omitempty" koanf:"buttonTextColor" jsonschema:"description=Call-to-action button text color" default:"#ffffff"`
+	ButtonTextColor string `json:"buttonTextColor,omitempty" jsonschema:"description=Call-to-action button text color" default:"#ffffff"`
 	// HeadingColor is the heading and title text color
-	HeadingColor string `json:"headingColor,omitempty" koanf:"headingColor" jsonschema:"description=Heading and title text color" default:"#14171e"`
+	HeadingColor string `json:"headingColor,omitempty" jsonschema:"description=Heading and title text color" default:"#14171e"`
 	// TextColor is the body paragraph text color
-	TextColor string `json:"textColor,omitempty" koanf:"textColor" jsonschema:"description=Body paragraph text color" default:"#43454b"`
+	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color" default:"#43454b"`
 	// FooterTextColor is the muted text color for headers, footers, and secondary content
-	FooterTextColor string `json:"footerTextColor,omitempty" koanf:"footerTextColor" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#7b7d81"`
+	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#7b7d81"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
-	Tagline string `json:"tagline,omitempty" koanf:"tagline" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
+	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
-	Social []SocialLink `json:"social,omitempty" koanf:"social" jsonschema:"-"`
+	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
 }
 
 // SocialLink is a single social media footer entry: platform label, icon image URL, and destination URL

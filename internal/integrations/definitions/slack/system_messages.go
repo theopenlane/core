@@ -3,21 +3,23 @@ package slack
 import (
 	"bytes"
 	"context"
-	"embed"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"text/template"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-//go:embed templates/*.tmpl
-var systemMessageTemplatesFS embed.FS
+// joinStrings is a template helper that joins a string slice with the given separator
+var templateFuncs = template.FuncMap{
+	"joinStrings": strings.Join,
+}
 
-// parseSystemTemplate parses a Slack system message template from the embedded FS by file name
-func parseSystemTemplate(name string) *template.Template {
-	return template.Must(template.ParseFS(systemMessageTemplatesFS, "templates/"+name))
+// newSystemTemplate parses an inline text/template with the shared helper funcs
+func newSystemTemplate(name, src string) *template.Template {
+	return template.Must(template.New(name).Funcs(templateFuncs).Parse(src))
 }
 
 // NewSubscriberMessage is the input for the new subscriber Slack notification
@@ -55,11 +57,11 @@ type DemoRequestMessage struct {
 	// Domains lists any additional domains associated with the request
 	Domains []string `json:"domains,omitempty" jsonschema:"description=Additional domains associated with the request"`
 	// CompanyDetails is a map of company attributes surfaced in the notification
-	CompanyDetails map[string]string `json:"companyDetails,omitempty" jsonschema:"description=Company attributes surfaced in the notification"`
+	CompanyDetails map[string]any `json:"companyDetails,omitempty" jsonschema:"description=Company attributes surfaced in the notification"`
 	// UserDetails is a map of user attributes surfaced in the notification
-	UserDetails map[string]string `json:"userDetails,omitempty" jsonschema:"description=User attributes surfaced in the notification"`
+	UserDetails map[string]any `json:"userDetails,omitempty" jsonschema:"description=User attributes surfaced in the notification"`
 	// Compliance is a map of compliance interests surfaced in the notification
-	Compliance map[string]string `json:"compliance,omitempty" jsonschema:"description=Compliance interests surfaced in the notification"`
+	Compliance map[string]any `json:"compliance,omitempty" jsonschema:"description=Compliance interests surfaced in the notification"`
 	// DemoRequested marks whether the requester asked for a personalized demo
 	DemoRequested bool `json:"demoRequested,omitempty" jsonschema:"description=Requester asked for a personalized demo"`
 }
@@ -72,12 +74,49 @@ var (
 	demoRequestSchema, DemoRequestOp             = providerkit.OperationSchema[DemoRequestMessage]()        //nolint:revive
 )
 
-// Parsed system message templates; exposed at package scope for unit-test reuse
+// Inline system message templates
 var (
-	newSubscriberTemplate      = parseSystemTemplate("new_subscriber.tmpl")
-	newUserTemplate            = parseSystemTemplate("new_user.tmpl")
-	githubAppInstalledTemplate = parseSystemTemplate("github_app_installation.tmpl")
-	demoRequestTemplate        = parseSystemTemplate("demo_request.tmpl")
+	newSubscriberTemplate = newSystemTemplate("new_subscriber",
+		`New waitlist subscriber: {{ .Email }}`)
+
+	newUserTemplate = newSystemTemplate("new_user",
+		`New user registered: {{ .Email }}
+
+This message was sent using the integrations runtime framework.`)
+
+	githubAppInstalledTemplate = newSystemTemplate("github_app_installed",
+		`Openlane GitHub App installation completed
+GitHub organization: {{ .GitHubOrganization }}
+{{- if .GitHubAccountType }}
+GitHub account type: {{ .GitHubAccountType }}
+{{- end }}
+Openlane organization: {{ .OpenlaneOrganization }}{{ if .ShowOpenlaneOrganizationID }} ({{ .OpenlaneOrganizationID }}){{ end }}`)
+
+	demoRequestTemplate = newSystemTemplate("demo_request",
+		`New Company: {{ .CompanyName }}
+Email: {{ .Email }}
+{{- if .Domains }}
+Domains: {{ joinStrings .Domains ", " }}
+{{- end }}
+{{- if .CompanyDetails }}
+Company Details:
+{{ range $k, $v := .CompanyDetails }}- {{ $k }}: {{ $v }}
+{{ end }}
+{{- end }}
+{{- if .UserDetails }}
+User Details:
+{{ range $k, $v := .UserDetails }}- {{ $k }}: {{ $v }}
+{{ end }}
+{{- end }}
+{{- if .Compliance }}
+Compliance:
+{{ range $k, $v := .Compliance }}- {{ $k }}: {{ $v }}
+{{ end }}
+{{- end }}
+{{- if .DemoRequested }}
+
+*Demo requested - user would like a personalized demo. Reach out to them at {{ .Email }}*
+{{- end }}`)
 )
 
 // systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system

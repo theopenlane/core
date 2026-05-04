@@ -16,6 +16,14 @@ import (
 	"github.com/theopenlane/core/pkg/urlx"
 )
 
+// defaultTrustCenterDomain is the fallback domain for trust center URLs when no custom domain is configured
+var defaultTrustCenterDomain string
+
+// SetDefaultTrustCenterDomain sets the fallback domain for trust center URLs
+func SetDefaultTrustCenterDomain(domain string) {
+	defaultTrustCenterDomain = domain
+}
+
 // trustCenterBaseURL builds the base URL for a trust center using its custom
 // domain when available, falling back to the configured default domain
 func trustCenterBaseURL(tc *generated.TrustCenter, defaultDomain string) url.URL {
@@ -57,7 +65,7 @@ type trustCenterResolveResult struct {
 }
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
-func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, client *Client, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
+func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
 	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
@@ -74,7 +82,7 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 	}
 
 	duration := req.DB.TokenManager.Config().TrustCenterNDARequestAccessDuration
-	baseURL := buildURL(tc, client.Config.TrustCenterDomain)
+	baseURL := buildURL(tc, defaultTrustCenterDomain)
 
 	result, err := urlx.GenerateAnonTokenURL(ctx, req.DB.TokenManager, req.DB.Shortlinks, baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonTrustCenterJWTPrefix,
@@ -94,12 +102,12 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 }
 
 // resolveTrustCenterNDARequestFields populates NDAURL and OrgName on the input when empty
-func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, client *Client, input *TrustCenterNDARequestEmail) error {
+func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, input *TrustCenterNDARequestEmail) error {
 	if input.NDAURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
 		return nil
 	}
 
-	result, err := resolveTrustCenterAnonURL(ctx, req, client, input.RequestID, input.TrustCenterID, input.Email, trustCenterNDAURL)
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterNDAURL)
 	if err != nil {
 		return err
 	}
@@ -113,12 +121,12 @@ func resolveTrustCenterNDARequestFields(ctx context.Context, req types.Operation
 }
 
 // resolveTrustCenterAuthFields populates AuthURL and OrgName on the input when empty
-func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, client *Client, input *TrustCenterAuthEmail) error {
+func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, input *TrustCenterAuthEmail) error {
 	if input.AuthURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
 		return nil
 	}
 
-	result, err := resolveTrustCenterAnonURL(ctx, req, client, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
 	if err != nil {
 		return err
 	}

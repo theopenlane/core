@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -89,6 +90,12 @@ func HookSubscriberCreate() ent.Hook {
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				OrgName:       orgName,
 				Token:         tokenValue,
+			}); err != nil {
+				return nil, err
+			}
+
+			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewSubscriberOp.Name(), slackdef.NewSubscriberMessage{
+				Email: emailAddress,
 			}); err != nil {
 				return nil, err
 			}

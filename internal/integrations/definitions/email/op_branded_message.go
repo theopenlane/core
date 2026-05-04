@@ -85,8 +85,8 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 		// Zero display/branding fields so customer campaigns render a blank
 		// canvas rather than inheriting system defaults. Functional fields
 		// (FromEmail, SupportEmail, QuestionnaireEmail, APIKey, Provider,
-		// RootURL, ProductURL, DocsURL, TrustCenterDomain, TroubleText) are
-		// preserved — they come from the customer's own integration config.
+		// RootURL, ProductURL, DocsURL, TroubleText) are preserved — they
+		// come from the customer's own integration config.
 		cfg.CompanyName = ""
 		cfg.CompanyAddress = ""
 		cfg.Corporation = ""

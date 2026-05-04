@@ -49,7 +49,7 @@
       }
     </style>
   </head>
-  <body style="background-color:{{ or .Config.BodyBackgroundColor "#f3f4f6" }};margin:0">
+  <body style="background-color:{{ or .Config.BodyBackgroundColor "#e8eaed" }};margin:0">
     <!--$--><!--html--><!--head--><!--body-->
     <table
       border="0"
@@ -61,7 +61,7 @@
       <tbody>
         <tr>
           <td
-            style="background-color:{{ or .Config.BodyBackgroundColor "#f3f4f6" }};margin:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+            style="background-color:{{ or .Config.BodyBackgroundColor "#e8eaed" }};margin:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
             <div
               style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0"
               data-skip-in-text="true">
@@ -100,7 +100,7 @@
                               cellspacing="0"
                               role="presentation"
                               class="mobile_px-2"
-                              style="background-color:{{ or .Config.CardBackgroundColor "#ffffff" }};padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem{{ if eq .Config.CardStyle "elevated" }};border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.05){{ end }}">
+                              style="background-color:{{ or .Config.CardBackgroundColor "#ffffff" }};padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem{{ if eq .Config.CardStyle "elevated" }};border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.10),0 12px 40px rgba(0,0,0,0.06){{ end }}">
                               <tbody>
                                 <tr>
                                   <td>

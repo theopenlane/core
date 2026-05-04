@@ -1,8 +1,6 @@
 package serveropts
 
 import (
-	"context"
-
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -49,10 +47,6 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 
 		// set the runtime on the ent client so hooks/mutations can access it
 		dbClient.IntegrationsRuntime = rt
-
-		if err := rt.SeedRecurringCampaigns(context.Background()); err != nil {
-			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
-		}
 
 		if wf == nil {
 			return

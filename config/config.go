@@ -77,8 +77,6 @@ type Config struct {
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
-	// Slack contains settings for Slack notifications
-	Slack Slack `json:"slack" koanf:"slack"`
 	// Integrations contains operator-level credentials for all v2 integration definitions
 	Integrations catalog.Config `json:"integrations" koanf:"integrations"`
 	// Workflows contains the configuration for the workflows engine
@@ -138,7 +136,7 @@ type Server struct {
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:""`
+	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:"trust.theopenlane.net"`
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
@@ -187,16 +185,6 @@ type TLS struct {
 type PoolConfig struct {
 	// MaxWorkers is the maximum number of workers in the pool
 	MaxWorkers int `json:"maxworkers" koanf:"maxworkers" default:"100"`
-}
-
-// Slack contains settings for Slack notifications
-type Slack struct {
-	// WebhookURL is the Slack webhook to post messages to
-	WebhookURL string `json:"webhookurl" koanf:"webhookurl" sensitive:"true"`
-	// NewSubscriberMessageFile is the path to the template used for new subscriber notifications
-	NewSubscriberMessageFile string `json:"newsubscribermessagefile" koanf:"newsubscribermessagefile"`
-	// NewUserMessageFile is the path to the template used for new user notifications
-	NewUserMessageFile string `json:"newusermessagefile" koanf:"newusermessagefile"`
 }
 
 var (

@@ -18,12 +18,12 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -76,12 +76,6 @@ func serve(ctx context.Context) error {
 	)
 
 	so := serveropts.NewServerOptions(serverOpts, k.String("config"))
-
-	slacknotify.SetConfig(slacknotify.SlackConfig{
-		WebhookURL:               so.Config.Settings.Slack.WebhookURL,
-		NewSubscriberMessageFile: so.Config.Settings.Slack.NewSubscriberMessageFile,
-		NewUserMessageFile:       so.Config.Settings.Slack.NewUserMessageFile,
-	})
 
 	// Create keys for development when no external keys are supplied
 	if so.Config.Settings.Auth.Token.GenerateKeys && len(so.Config.Settings.Auth.Token.Keys) == 0 {
@@ -144,12 +138,14 @@ func serve(ctx context.Context) error {
 	// add email verifier
 	verifier := so.Config.Settings.EntConfig.EmailValidation.NewVerifier()
 
-	// Set trust center config for hooks
+	// Set trust center config for hooks and email integration
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
 		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
 	})
+
+	email.SetDefaultTrustCenterDomain(so.Config.Settings.Server.DefaultTrustCenterDomain)
 
 	// create history client
 	histOpts := []historygenerated.Option{
@@ -308,6 +304,12 @@ func serve(ctx context.Context) error {
 		serveropts.WithGraphRoute(srv, dbClient),
 		serveropts.WithHistoryGraphRoute(srv, historyClient),
 	)
+
+	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
+		if err := rt.SeedRecurringCampaigns(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
+		}
+	}
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
@@ -148,6 +149,12 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
 
+				return nil, err
+			}
+
+			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
+				Email: user.Email,
+			}); err != nil {
 				return nil, err
 			}
 

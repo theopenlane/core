@@ -101,7 +101,7 @@ type Operation[T Recipient] struct {
 	// MessageOptions returns additional newman message options for per-operation customization such as attachment
 	MessageOptions func(cfg RuntimeEmailConfig, input T) []newman.MessageOption
 	// PreHook is an optional hook invoked before rendering to resolve dynamic fields
-	PreHook func(ctx context.Context, req types.OperationRequest, client *Client, input *T) error
+	PreHook func(ctx context.Context, req types.OperationRequest, input *T) error
 }
 
 // Name returns the catalog key for the operation, satisfying the Dispatcher interface
@@ -153,7 +153,7 @@ func (e Operation[T]) RenderMessage(_ context.Context, client *Client, payload j
 // SendByKey entry points, so the two invocation paths render identically
 func (e Operation[T]) dispatch(ctx context.Context, req types.OperationRequest, client *Client, input T, extraOpts ...newman.MessageOption) error {
 	if e.PreHook != nil {
-		if err := e.PreHook(ctx, req, client, &input); err != nil {
+		if err := e.PreHook(ctx, req, &input); err != nil {
 			return err
 		}
 	}

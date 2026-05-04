@@ -44,6 +44,7 @@ import (
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
@@ -119,9 +120,10 @@ type HandlerTestSuite struct {
 	sharedSessionManager sessions.Store[map[string]any]
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
-	sharedPool           *gala.Pool
-	galaRuntime          *gala.Gala
-	registeredRoutes     map[string]struct{}
+	sharedPool               *gala.Pool
+	galaRuntime              *gala.Gala
+	sharedSlackRecorder      *slackWebhookRecorder
+	registeredRoutes         map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
 	// OpenAPI operations for reuse in tests
@@ -251,12 +253,15 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	credStore, err := keystore.NewStore(suite.galaDB)
 	require.NoError(suite.T(), err)
 
+	suite.sharedSlackRecorder = newSlackWebhookRecorder(suite.T())
+
 	rt, err := runtime.New(runtime.Config{
 		DB:       suite.galaDB,
 		Gala:     suite.galaRuntime,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig()),
+			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: suite.sharedSlackRecorder.URL()}),
 			registry.Builder(buildTestOAuthDefinition),
 			githubapp.Builder(defaultGitHubAppSpec()),
 			configTestDefinitionBuilder(configTestProviderID, false),
@@ -455,6 +460,8 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 	if suite.galaDB != nil {
 		_ = suite.galaDB.CloseAll()
 	}
+
+	suite.sharedSlackRecorder.Close()
 
 	testutils.TeardownFixture(suite.tf)
 

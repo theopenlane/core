@@ -32,25 +32,33 @@ var (
 )
 
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.
-// Sourced from koanf/environment at startup; populated for the platform-owned workspace
+// Sourced from koanf/environment at startup; populated for the platform-owned workspace.
+// Two modes are supported: webhook-only (fire-and-forget via incoming webhook URL) and
+// bot-token mode (full Web API access with channel targeting and Block Kit support)
 type RuntimeSlackConfig struct {
 	// WebhookURL is the Slack incoming webhook URL used to deliver system notifications
-	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL used for system notifications"`
+	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL for fire-and-forget system notifications"`
+	// BotToken is a Slack Bot User OAuth Token (xoxb-...) for the platform-owned workspace
+	BotToken string `json:"botToken,omitempty" koanf:"botToken" jsonschema:"description=Bot User OAuth Token for full Web API access to the platform workspace"`
+	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
+	DefaultChannel string `json:"defaultChannel,omitempty" koanf:"defaultChannel" jsonschema:"description=Default channel id for system messages when no explicit channel is provided"`
 }
 
 // Provisioned reports whether the runtime config has the minimum required fields to deliver system messages
 func (c RuntimeSlackConfig) Provisioned() bool {
-	return c.WebhookURL != ""
+	return c.WebhookURL != "" || c.BotToken != ""
 }
 
-// SlackClient is the unified Slack client used by every Slack operation. The runtime (system)
-// path populates only WebhookURL; customer installations populate API and optionally DefaultChannel
+// SlackClient is the unified Slack client used by every Slack operation. Both runtime and
+// customer paths produce a SlackClient; the active transport depends on which fields are populated:
+// API (bot token or OAuth) enables chat.postMessage with channel targeting; WebhookURL provides
+// fire-and-forget delivery when no API client is available
 type SlackClient struct { //nolint:revive
-	// API is the Slack Web API client used by customer-installed operations
+	// API is the Slack Web API client (present for bot-token runtime and customer installations)
 	API *slackgo.Client
-	// WebhookURL is the Slack incoming webhook used by the runtime system-notification path
+	// WebhookURL is the Slack incoming webhook used as a fallback when no API client is configured
 	WebhookURL string
-	// DefaultChannel is the channel id customer installations use when a system-message op supplies no explicit recipient
+	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
 	DefaultChannel string
 }
 
