@@ -72,7 +72,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://slack.com/oauth/v2/authorize",

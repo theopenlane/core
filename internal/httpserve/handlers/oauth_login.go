@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"golang.org/x/oauth2"
@@ -155,7 +156,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		// remove cookie
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
-		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound)
+		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
 
 	return http.HandlerFunc(fn)
@@ -235,7 +236,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		sessions.RemoveCookie(w, "redirect_to", *h.SessionConfig.CookieConfig)
 
 		// redirect with context set
-		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound)
+		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
 
 	return http.HandlerFunc(fn)
@@ -266,7 +267,36 @@ func (h *Handler) getRedirectURI(req *http.Request) (string, error) {
 		redirectURI = h.OauthProvider.RedirectURL
 	}
 
+	if err := h.validateRedirectURI(redirectURI); err != nil {
+		return "", err
+	}
+
 	return redirectURI, nil
+}
+
+// validateRedirectURI ensures the redirect URI is either a relative path or matches
+// the host of the configured RedirectURL, preventing open redirect attacks
+func (h *Handler) validateRedirectURI(redirectURI string) error {
+	parsed, err := url.Parse(redirectURI)
+	if err != nil {
+		return ErrInvalidRedirectURI
+	}
+
+	// relative paths are always safe
+	if !parsed.IsAbs() {
+		return nil
+	}
+
+	allowed, err := url.Parse(h.OauthProvider.RedirectURL)
+	if err != nil || allowed.Host == "" {
+		return ErrInvalidRedirectURI
+	}
+
+	if parsed.Host != allowed.Host {
+		return ErrInvalidRedirectURI
+	}
+
+	return nil
 }
 
 // oauthLoginErrorWrapper is a helper to wrap oauth login errors and record the failed login attempt

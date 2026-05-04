@@ -258,7 +258,7 @@ func registerPathParameters[T any](example T, op *openapi3.Operation) {
 	t := reflect.TypeOf(example)
 
 	// Handle pointer types
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 
@@ -371,7 +371,7 @@ func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *
 		typ := reflect.TypeOf(requestExample)
 
 		// Handle pointer types
-		if typ.Kind() == reflect.Ptr {
+		if typ.Kind() == reflect.Pointer {
 			typ = typ.Elem()
 		}
 
