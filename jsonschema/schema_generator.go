@@ -1420,7 +1420,7 @@ func lookupComment(commentMap map[string]string, parentType reflect.Type, fieldN
 	}
 
 	t := parentType
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 

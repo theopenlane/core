@@ -182,6 +182,8 @@ var (
 	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
 	// ErrProviderHealthCheckFailed indicates the provider health check failed
 	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
+	// ErrInvalidRedirectURI is returned when the redirect URI does not match the configured allowed host
+	ErrInvalidRedirectURI = errors.New("invalid redirect URI")
 )
 
 var (
