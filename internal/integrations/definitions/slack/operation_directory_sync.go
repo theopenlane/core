@@ -54,8 +54,8 @@ type slackUserPayload struct {
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, request types.OperationRequest, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client, request.LastRunAt)
+	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, request types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
+		return d.Run(ctx, client.API, request.LastRunAt)
 	})
 }
 
