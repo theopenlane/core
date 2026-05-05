@@ -59,13 +59,13 @@ type RuntimeEmailConfig struct {
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
-	CompanyAddress string `json:"companyAddress" jsonschema:"description=Company mailing address" default:"5150 Broadway St San Antonio, TX 78209"`
+	CompanyAddress string `json:"companyAddress" jsonschema:"description=Company mailing address" default:""`
 	// Corporation is the legal corporation name
 	Corporation string `json:"corporation" jsonschema:"description=Legal corporation name" default:"theopenlane, Inc."`
 	// LogoURL is the hero logo image URL displayed prominently in the email body
 	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Hero logo URL displayed in the email body"`
 	// HeaderLogoURL is the small logo/icon displayed in the top header bar
-	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"description=Small logo or icon displayed in the top header bar" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public"`
+	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"description=Small logo or icon displayed in the top header bar" default:"https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/w=240,fit=contain"`
 	// Copyright is an optional copyright override for email footers; when empty the template renders © {year} {corporation}
 	Copyright string `json:"copyright,omitempty" jsonschema:"description=Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"`
 	// TroubleText is the fallback help text shown below action buttons; {ACTION} is replaced with button text at render time
@@ -100,6 +100,14 @@ type RuntimeEmailConfig struct {
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
 	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
+}
+
+// DefaultSocial is the default set of social footer links applied to runtime email configs
+// when no explicit social links are provided
+var DefaultSocial = []SocialLink{
+	{Platform: "Openlane", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/b8653f6d-71ed-4f90-937c-361192079100/w=36", URL: "https://www.theopenlane.io"},
+	{Platform: "GitHub", IconURL: "https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-gh-black.png", URL: "https://github.com/theopenlane"},
+	{Platform: "LinkedIn", IconURL: "https://react-email-demo-fsxo0305n-resend.vercel.app/static/shared/social-in-black.png", URL: "https://linkedin.com/company/theopenlane"},
 }
 
 // SocialLink is a single social media footer entry: platform label, icon image URL, and destination URL

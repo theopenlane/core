@@ -20,9 +20,17 @@ func MockRuntimeConfig() *RuntimeEmailConfig {
 		SupportEmail:   "support@example.com",
 		LogoURL:        "https://example.com/logo.png",
 		HeaderLogoURL:  "https://example.com/icon.png",
+		HeaderText:     "MITB Portal",
 		RootURL:        "https://example.com",
 		ProductURL:     "https://app.example.com",
 		DocsURL:        "https://docs.example.com",
+		TermsURL:       "https://example.com/terms",
+		PrivacyURL:     "https://example.com/privacy",
+		Tagline:        "Compliance without the busywork",
+		Social: []SocialLink{
+			{Platform: "GitHub", IconURL: "https://example.com/github.png", URL: "https://github.com/example"},
+			{Platform: "LinkedIn", IconURL: "https://example.com/linkedin.png", URL: "https://linkedin.com/company/example"},
+		},
 	}
 }
 

@@ -28,21 +28,50 @@ func defaultHeader(cfg RuntimeEmailConfig) render.HeaderBlock {
 // baseTheme is the shared theme used by all email operations
 var baseTheme = themes.Base
 
-// Image URLs hosted on the Openlane CDN. The logo URLs use CF Images flexible-variant
-// size tags (w=NN,fit=contain) so they render cleanly at the template's slot widths
-// without crushing the banner-shaped source image
-const (
-	iconRocketURL    = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/b5d07352-e391-4ac6-41f8-e1ee9185e000/public"
-	iconUserPlusURL  = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/a177b189-bf03-466a-e43a-542585eb1800/public"
-	iconUserCheckURL = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/22704d4a-a811-44c0-8618-8309b03dfa00/public"
-	iconBellURL      = "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/23690f00-2ddb-4d22-e9a5-af470c93c100/public"
-)
-
 // Trust center / questionnaire button colors matching the original teal theme
 const (
 	tcButtonColor     = "#3fc2b4"
 	tcButtonTextColor = "#ffffff"
 )
+
+// Brand palette colors sourced from the Openlane web design system (global.css)
+const (
+	brandDarkGreen = "#0f3d3a" // lightened from --color-brand-950 (#092a2a)
+	brandTeal      = "#3fc2b4" // --color-brand-400
+	brandLight100  = "#d1f6ee" // --color-brand-100
+)
+
+// applySystemBranding applies the default Openlane system email color treatment:
+// dark green hero with light text and teal call-to-action buttons.
+// Used by system emails that do NOT have a callout section
+func applySystemBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
+	cfg.HeroBackgroundColor = brandDarkGreen
+	cfg.HeadingColor = "#ffffff"
+	cfg.TextColor = brandLight100
+	cfg.FooterTextColor = "#14171e"
+	cfg.ButtonColor = brandTeal
+	cfg.ButtonTextColor = brandDarkGreen
+	return cfg
+}
+
+// applyCalloutBranding applies the Openlane system email treatment for emails
+// with a callout section: default hero colors with a teal button, paired with
+// a dark green callout box (styled via Callout.Style in the Build function)
+func applyCalloutBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
+	cfg.ButtonColor = brandTeal
+	cfg.ButtonTextColor = brandDarkGreen
+	return cfg
+}
+
+// calloutStyle returns a render.Style that brands the callout box with the
+// dark green background and white text
+func calloutStyle() render.Style {
+	return render.Style{
+		BackgroundColor: brandDarkGreen,
+		PrimaryColor:    "#ffffff",
+		TextColor:       "#ffffff",
+	}
+}
 
 // tokenURL constructs a product URL with a query-encoded token parameter
 func tokenURL(base, path, token string) string {
@@ -226,6 +255,9 @@ var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
 			},
 		}
 	},
+	Config: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
 })
 
 var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
@@ -236,28 +268,31 @@ var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 	},
 	Build: func(cfg RuntimeEmailConfig, req WelcomeRequest) render.ContentBody {
 		return render.ContentBody{
-			Preheader: "Welcome to " + cfg.CompanyName + "!",
+			Preheader: "We're thrilled to have you here!",
 			Header:    defaultHeader(cfg),
-			Icon:      &render.ContentIcon{Src: iconRocketURL, Alt: "Rocket"},
 			Name:      req.FirstName,
-			Title:     "Welcome to " + cfg.CompanyName + "!",
+			Title:     "Ready to get started?",
 			Intros: render.IntrosBlock{
 				Paragraphs: []string{
-					"We're thrilled to have you here. At " + cfg.CompanyName + ", we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
+					"At " + cfg.CompanyName + ", we're working to develop a cutting-edge cybersecurity and compliance automation solution to help organizations of all sizes and industries secure their systems, navigate the increasingly complex web of privacy laws and regulations, ensure continuous compliance, manage risks, and get ahead of evolving cyber threats.",
 				},
 			},
 			Callout: &render.Callout{
 				Title: "Here's how to get started:",
+				Style: calloutStyle(),
 				Items: []template.HTML{
 					"Go through our onboarding process to get a personalized experience",
 					"Setup a test program to see all the features our platform has to offer",
-					"Checkout our " + render.Link(cfg.DocsURL+"/docs/platform/quickstartguide", "quickstart guide") + " for helpful resources",
+					"Checkout our " + render.LinkWithColor(cfg.DocsURL+"/docs/platform/quickstartguide", "quickstart guide", brandLight100) + " for helpful resources",
 				},
 			},
 			Actions: []render.Action{{
 				Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
 			}},
 		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ WelcomeRequest) RuntimeEmailConfig {
+		return applyCalloutBranding(cfg)
 	},
 })
 
@@ -279,7 +314,6 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 		return render.ContentBody{
 			Preheader: "You've been invited to join " + cfg.CompanyName,
 			Header:    defaultHeader(cfg),
-			Icon:      &render.ContentIcon{Src: iconUserPlusURL, Alt: "User-Plus"},
 			Name:      req.FirstName,
 			Title:     "You've been invited to join " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
@@ -298,6 +332,9 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 			},
 		}
 	},
+	Config: func(cfg RuntimeEmailConfig, _ InviteRequest) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
 })
 
 var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
@@ -310,7 +347,6 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 		return render.ContentBody{
 			Preheader: "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
 			Header:    defaultHeader(cfg),
-			Icon:      &render.ContentIcon{Src: iconUserCheckURL, Alt: "User-Check"},
 			Name:      req.FirstName,
 			Title:     "You're in - welcome to " + req.OrgName + " on " + cfg.CompanyName + "!",
 			Intros: render.IntrosBlock{
@@ -322,10 +358,11 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 			Callout: &render.Callout{
 				Title:   "Here's how to get started:",
 				Ordered: true,
+				Style:   calloutStyle(),
 				Items: []template.HTML{
 					"Complete the onboarding flow to tailor your experience",
-					"Explore any active " + render.Link(cfg.ProductURL+"/programs", "programs") + " your team is running",
-					"Checkout our " + render.Link(cfg.DocsURL, "quickstart guide") + " for helpful resources",
+					"Explore any active " + render.LinkWithColor(cfg.ProductURL+"/programs", "programs", brandLight100) + " your team is running",
+					"Checkout our " + render.LinkWithColor(cfg.DocsURL, "quickstart guide", brandLight100) + " for helpful resources",
 				},
 			},
 			Outros: render.OutrosBlock{
@@ -337,6 +374,9 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 				Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
 			}},
 		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) RuntimeEmailConfig {
+		return applyCalloutBranding(cfg)
 	},
 })
 
@@ -371,6 +411,9 @@ var _ = RegisterEmailOperation(Operation[PasswordResetEmailRequest]{
 			},
 		}
 	},
+	Config: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
 })
 
 var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
@@ -393,6 +436,9 @@ var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 			},
 		}
 	},
+	Config: func(cfg RuntimeEmailConfig, _ PasswordResetSuccessRequest) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
 })
 
 var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
@@ -407,7 +453,6 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 		return render.ContentBody{
 			Preheader: "You're In - Early Access Secured! Thanks for your interest in our beta program.",
 			Header:    defaultHeader(cfg),
-			Icon:      &render.ContentIcon{Src: iconBellURL, Alt: "Notification Bell"},
 			Name:      req.FirstName,
 			Title:     "You're In - Early Access Secured!",
 			Intros: render.IntrosBlock{
@@ -421,6 +466,7 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 			}},
 			Callout: &render.Callout{
 				Title: "What to Expect Next:",
+				Style: calloutStyle(),
 				Items: []template.HTML{
 					"You'll hear from us soon - We'll email you as soon as your spot is ready.",
 					"Early access to beta features - Get a first look at everything we're building.",
@@ -433,6 +479,9 @@ var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
 				},
 			},
 		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ SubscribeRequest) RuntimeEmailConfig {
+		return applyCalloutBranding(cfg)
 	},
 })
 
@@ -465,6 +514,9 @@ var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 				},
 			},
 		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ VerifyBillingRequest) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
 	},
 })
 
@@ -621,6 +673,9 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 			},
 		}
 	},
+	Config: func(cfg RuntimeEmailConfig, _ BillingEmailChangedEmail) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
 })
 
 // AllEmailOperations returns all system email operation registrations for wiring into the builder
@@ -640,5 +695,6 @@ func CustomerSelectableDispatchers() []Dispatcher {
 // DispatcherByKey resolves a registered email dispatcher by its catalog key
 func DispatcherByKey(key string) (Dispatcher, bool) {
 	d, ok := dispatcherIndex[key]
+
 	return d, ok
 }

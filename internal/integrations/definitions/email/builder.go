@@ -96,7 +96,11 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 			),
 		}
 
-		if cfg.Provisioned() {
+		if len(cfg.Social) == 0 {
+		cfg.Social = DefaultSocial
+	}
+
+	if cfg.Provisioned() {
 			runtimeEmailRef.SetConfig(cfg)
 
 			marshaledConfig, err := runtimeEmailRef.MarshalConfig()
