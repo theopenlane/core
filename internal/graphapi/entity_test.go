@@ -371,6 +371,15 @@ func TestMutationUpdateEntity(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "conflicting status and approved for use, approved should take precedence",
+			request: testclient.UpdateEntityInput{
+				Status:         &enums.EntityStatusActive,
+				ApprovedForUse: lo.ToPtr(false),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "not allowed to update",
 			request: testclient.UpdateEntityInput{
 				Description: lo.ToPtr("pine trees of the west"),
@@ -436,11 +445,11 @@ func TestMutationUpdateEntity(t *testing.T) {
 				assert.Check(t, is.Equal(tc.request.Note.Text, resp.UpdateEntity.Entity.Notes.Edges[0].Node.Text))
 			}
 
+			// if approed for use is set, it should always respect that over status
 			if tc.request.ApprovedForUse != nil {
 				assert.Check(t, is.Equal(*tc.request.ApprovedForUse, *resp.UpdateEntity.Entity.ApprovedForUse))
-			}
-
-			if tc.request.Status != nil {
+			} else if tc.request.Status != nil {
+				// else its done based on status, where active and approved are approved
 				status := *tc.request.Status
 				if slices.Contains([]enums.EntityStatus{enums.EntityStatusApproved, enums.EntityStatusActive}, status) {
 					assert.Check(t, *resp.UpdateEntity.Entity.ApprovedForUse)
