@@ -457,7 +457,6 @@ func validateWorkflowDefinitionConflicts(ctx context.Context, client *generated.
 	return checkDomainConflicts(definitions, domainKeys)
 }
 
-
 // extractDomainKeys extracts all domain keys from a workflow definition document
 func extractDomainKeys(doc *models.WorkflowDefinitionDocument, objectType enums.WorkflowObjectType) (map[string]struct{}, error) {
 	domains, err := workflows.ApprovalDomains(*doc)

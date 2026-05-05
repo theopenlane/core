@@ -33,15 +33,15 @@ var integrationScopeVariableNames = []string{
 
 // integrationProviderExtensions captures workflow metadata for one provider
 type integrationProviderExtensions struct {
-	Provider          string                              `json:"provider"`
-	DisplayName       string                              `json:"display_name"`
-	Category          string                              `json:"category"`
-	Available         bool                                `json:"available"`
-	HasAuth           bool                                `json:"has_auth,omitempty"`
-	Installations     []integrationInstallationEntry      `json:"installations,omitempty"`
-	CredentialSchemas []integrationCredentialEntry        `json:"credential_schemas,omitempty"`
-	UserInputSchema   json.RawMessage                     `json:"user_input_schema,omitempty"`
-	Operations        []integrationOperationEntry         `json:"operations"`
+	Provider          string                         `json:"provider"`
+	DisplayName       string                         `json:"display_name"`
+	Category          string                         `json:"category"`
+	Available         bool                           `json:"available"`
+	HasAuth           bool                           `json:"has_auth,omitempty"`
+	Installations     []integrationInstallationEntry `json:"installations,omitempty"`
+	CredentialSchemas []integrationCredentialEntry   `json:"credential_schemas,omitempty"`
+	UserInputSchema   json.RawMessage                `json:"user_input_schema,omitempty"`
+	Operations        []integrationOperationEntry    `json:"operations"`
 }
 
 // integrationInstallationEntry describes one connected integration installation
@@ -60,10 +60,10 @@ type integrationCredentialEntry struct {
 
 // integrationOperationEntry captures workflow metadata for one operation
 type integrationOperationEntry struct {
-	Name         string                       `json:"name"`
-	Description  string                       `json:"description,omitempty"`
-	ConfigSchema json.RawMessage              `json:"config_schema,omitempty"`
-	Templates    []integrationTemplateEntry   `json:"templates,omitempty"`
+	Name         string                     `json:"name"`
+	Description  string                     `json:"description,omitempty"`
+	ConfigSchema json.RawMessage            `json:"config_schema,omitempty"`
+	Templates    []integrationTemplateEntry `json:"templates,omitempty"`
 }
 
 // integrationTemplateEntry describes one notification template available for workflow composition

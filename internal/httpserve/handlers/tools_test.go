@@ -120,10 +120,10 @@ type HandlerTestSuite struct {
 	sharedSessionManager sessions.Store[map[string]any]
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
-	sharedPool               *gala.Pool
-	galaRuntime              *gala.Gala
-	sharedSlackRecorder      *slackWebhookRecorder
-	registeredRoutes         map[string]struct{}
+	sharedPool           *gala.Pool
+	galaRuntime          *gala.Gala
+	sharedSlackRecorder  *slackWebhookRecorder
+	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
 	// OpenAPI operations for reuse in tests

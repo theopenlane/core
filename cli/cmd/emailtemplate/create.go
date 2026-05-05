@@ -49,11 +49,6 @@ func createValidation() (input graphclient.CreateEmailTemplateInput, err error) 
 
 	input.Name = name
 
-	if templateContext := cmd.Config.String("template-context"); templateContext != "" {
-		tc := enums.TemplateContext(templateContext)
-		input.TemplateContext = &tc
-	}
-
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description

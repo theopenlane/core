@@ -28,7 +28,7 @@ var (
 	// directorySyncSchema is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// messageSendSchema is the operation ref for the Slack message send operation
-	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]()
+	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
 )
 
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.

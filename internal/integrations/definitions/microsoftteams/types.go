@@ -21,7 +21,7 @@ var (
 	// healthDefaultOperation is the operation ref for the Microsoft Teams health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
-	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]()
+	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation

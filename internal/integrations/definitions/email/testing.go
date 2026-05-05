@@ -10,7 +10,7 @@ import (
 // MockRuntimeConfig returns a RuntimeEmailConfig backed by the mock provider
 // for use in integration test suites
 func MockRuntimeConfig() *RuntimeEmailConfig {
-	return &RuntimeEmailConfig{
+	return &RuntimeEmailConfig{ //nolint:gosec // test-only mock credentials
 		APIKey:         "mock-api-key",
 		Provider:       ProviderMock,
 		FromEmail:      "test@example.com",
