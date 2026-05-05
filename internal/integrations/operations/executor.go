@@ -57,7 +57,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 		}
 	}
 
-	if err := RegisterReconcileListener(runtime, reconcileHandle, reconcileSchedule); err != nil {
+	if err := RegisterReconcileListener(runtime, reg, reconcileHandle, reconcileSchedule); err != nil {
 		return err
 	}
 

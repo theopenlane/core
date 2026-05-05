@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // Builder returns the Cloudflare definition builder
@@ -86,6 +87,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: cloudflareMappings(),

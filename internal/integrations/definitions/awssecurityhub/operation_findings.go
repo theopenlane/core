@@ -3,6 +3,7 @@ package awssecurityhub
 import (
 	"context"
 	"slices"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/securityhub"
@@ -35,12 +36,12 @@ type FindingsCollect struct{}
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v FindingsCollect) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(securityHubClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingSync) ([]types.IngestPayloadSet, error) {
-		return v.Run(ctx, client, request.Credentials, cfg)
+		return v.Run(ctx, client, request.Credentials, cfg, request.LastRunAt)
 	})
 }
 
 // Run collects Security Hub findings
-func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, cfg FindingSync) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, cfg FindingSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	pageSize := defaultPageSize
 
 	if cfg.MaxFindings > 0 && int32(cfg.MaxFindings) < maxPageSize { //nolint:gosec // bounded by maxPageSize
@@ -59,7 +60,7 @@ func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentia
 		vulnerabilityEnvelopes = make([]types.MappingEnvelope, 0, cfg.MaxFindings)
 	}
 
-	filters, err := buildFilters(ctx, credentials)
+	filters, err := buildFilters(ctx, credentials, lastRunAt)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +126,7 @@ collectLoop:
 	}, nil
 }
 
-func buildFilters(ctx context.Context, creds types.CredentialBindings) (*securityhubtypes.AwsSecurityFindingFilters, error) {
+func buildFilters(ctx context.Context, creds types.CredentialBindings, lastRunAt *time.Time) (*securityhubtypes.AwsSecurityFindingFilters, error) {
 	filters := &securityhubtypes.AwsSecurityFindingFilters{}
 	meta, err := resolveAssumeRoleCredential(creds)
 	if err != nil {
@@ -167,6 +168,12 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings) (*securit
 		}
 
 		filters.Region = regionFilters
+	}
+
+	if lastRunAt != nil {
+		filters.UpdatedAt = []securityhubtypes.DateFilter{
+			{Start: aws.String(lastRunAt.UTC().Format(time.RFC3339))},
+		}
 	}
 
 	return filters, nil

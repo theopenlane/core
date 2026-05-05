@@ -4,15 +4,22 @@ import "time"
 
 const (
 	// DefaultMinInterval is the shortest allowed scheduling interval
-	DefaultMinInterval = 5 * time.Minute
+	DefaultMinInterval = 20 * time.Minute
 	// DefaultMaxInterval is the longest allowed scheduling interval
 	DefaultMaxInterval = 24 * time.Hour
 	// DefaultBackoffFactor is the multiplier applied on idle or error ticks
 	DefaultBackoffFactor = 2.0
 	// DefaultHighDriftThreshold is the delta above which the interval snaps to minimum
-	DefaultHighDriftThreshold = 100
+	DefaultHighDriftThreshold = 200
 	// intervalHalving is the divisor used to halve the interval on positive drift
 	intervalHalving = 2
+
+	// FullFetchMinInterval is the minimum interval for operations that always fetch all records
+	FullFetchMinInterval = time.Hour
+	// FullFetchMaxInterval is the maximum interval for operations that always fetch all records
+	FullFetchMaxInterval = 48 * time.Hour
+	// FullHighDriftThreshold is the delta above which the interval snaps to minimum
+	FullHighDriftThreshold = 1000
 )
 
 // ScheduleOption configures a Schedule
@@ -58,6 +65,18 @@ type ScheduleState struct {
 	IdleStreak int `json:"idle_streak"`
 	// ErrorStreak is the number of consecutive runs that returned an error
 	ErrorStreak int `json:"error_streak"`
+}
+
+// NewFullFetchSchedule creates a Schedule suited for operations that always fetch all records
+// and cannot do incremental syncs, using FullFetchMinInterval as the minimum
+func NewFullFetchSchedule(opts ...ScheduleOption) *Schedule {
+	s := NewSchedule(append(
+		[]ScheduleOption{
+			WithMinInterval(FullFetchMinInterval),
+			WithMaxInterval(FullFetchMaxInterval),
+			WithHighDriftThreshold(FullHighDriftThreshold),
+		}, opts...)...)
+	return &s
 }
 
 // NewSchedule creates a Schedule with defaults and applies any provided options

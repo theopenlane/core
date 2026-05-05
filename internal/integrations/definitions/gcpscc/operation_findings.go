@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"strings"
+	"time"
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
@@ -40,12 +41,12 @@ type FindingsCollect struct{}
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
-		return f.Run(ctx, request.Credentials, client, cfg)
+		return f.Run(ctx, request.Credentials, client, cfg, request.LastRunAt)
 	})
 }
 
 // Run collects GCP SCC findings from configured sources
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -77,10 +78,16 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	collected := 0
 
+	var timeFilter string
+	if lastRunAt != nil {
+		timeFilter = fmt.Sprintf(`event_time >= "%s"`, lastRunAt.UTC().Format(time.RFC3339))
+	}
+
 collectLoop:
 	for _, sourceName := range sources {
 		req := &securitycenterpb.ListFindingsRequest{
 			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
+			Filter:   timeFilter,
 		}
 
 		if sourceName != "" {

@@ -8,6 +8,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -35,7 +36,7 @@ var (
 type ReconcileHandler func(context.Context, ReconcileEnvelope) (int, error)
 
 // RegisterReconcileListener registers the Gala listener for integration reconciliation
-func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, schedule gala.Schedule) error {
+func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handle ReconcileHandler, schedule gala.Schedule) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -62,7 +63,14 @@ func RegisterReconcileListener(runtime *gala.Gala, handle ReconcileHandler, sche
 				logx.FromContext(ctx.Context).Warn().Err(execErr).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Int("error_streak", envelope.Schedule.ErrorStreak+1).Msg("reconcile cycle failed, scheduling retry with backoff")
 			}
 
-			next := schedule.Next(envelope.Schedule, delta, execErr)
+			effectiveSchedule := schedule
+			if reg != nil {
+				if op, err := reg.Operation(envelope.DefinitionID, envelope.Operation); err == nil && op.ReconcileSchedule != nil {
+					effectiveSchedule = *op.ReconcileSchedule
+				}
+			}
+
+			next := effectiveSchedule.Next(envelope.Schedule, delta, execErr)
 			scheduledAt := next.NextScheduledAt()
 			emitCtx := types.WithExecutionMetadata(ctx.Context, envelope.ExecutionMetadata)
 			receipt := runtime.EmitWithHeaders(emitCtx, ReconcileTopic, ReconcileEnvelope{

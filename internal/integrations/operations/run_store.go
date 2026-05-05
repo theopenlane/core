@@ -4,8 +4,11 @@ import (
 	"context"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -75,4 +78,28 @@ func CompleteRun(ctx context.Context, db *ent.Client, runID string, startedAt ti
 		SetDurationMs(int(duration.Milliseconds())).
 		SetFinishedAt(time.Now()).
 		Exec(ctx)
+}
+
+// LastSuccessfulRunAt returns the finish time of the most recent successful run for the given
+// integration and operation, or nil if no successful run exists yet
+func LastSuccessfulRunAt(ctx context.Context, db *ent.Client, integrationID, operationName string) (*time.Time, error) {
+	run, err := db.IntegrationRun.Query().
+		Where(
+			integrationrun.IntegrationIDEQ(integrationID),
+			integrationrun.OperationNameEQ(operationName),
+			integrationrun.StatusEQ(enums.IntegrationRunStatusSuccess),
+			integrationrun.FinishedAtNotNil(),
+		).
+		Order(integrationrun.ByFinishedAt(sql.OrderDesc())).
+		Select(integrationrun.FieldFinishedAt).
+		First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return run.FinishedAt, nil
 }

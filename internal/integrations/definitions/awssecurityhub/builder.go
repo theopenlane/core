@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // Builder returns the AWS Security Hub definition builder with the supplied operator config applied
@@ -146,6 +147,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: []string{"iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags"},
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 				{
 					Name:         checkSyncOperation.Name(),

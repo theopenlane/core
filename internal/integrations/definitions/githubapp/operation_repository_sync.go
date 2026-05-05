@@ -2,6 +2,7 @@ package githubapp
 
 import (
 	"context"
+	"time"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -13,12 +14,14 @@ const repositoryAssetVariant = "repository"
 
 // IngestHandle adapts repository sync to the ingest operation registration boundary
 func (r RepositorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClient(gitHubClient, r.Run)
+	return providerkit.WithClientRequest(gitHubClient, func(ctx context.Context, request types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {
+		return r.Run(ctx, client, request.LastRunAt)
+	})
 }
 
 // Run enumerates repositories accessible to the installation and emits Asset ingest payloads
-func (RepositorySync) Run(ctx context.Context, client GraphQLClient) ([]types.IngestPayloadSet, error) {
-	repositories, err := queryRepositories(ctx, client, defaultPageSize)
+func (RepositorySync) Run(ctx context.Context, client GraphQLClient, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+	repositories, err := queryRepositories(ctx, client, defaultPageSize, lastRunAt)
 	if err != nil {
 		return nil, err
 	}

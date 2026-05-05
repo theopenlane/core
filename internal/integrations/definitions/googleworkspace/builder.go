@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 var directorySyncScopes = []string{
@@ -120,6 +121,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: directorySyncScopes,
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: googleWorkspaceMappings(),
