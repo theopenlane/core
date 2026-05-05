@@ -2,7 +2,7 @@ package slateparser
 
 import (
 	"encoding/json"
-	"maps"
+	"strings"
 )
 
 // ContainsCommentsInTextJSON checks if the provided slate JSON elements contain any comments
@@ -20,8 +20,10 @@ func ContainsCommentsInTextJSON(elements []any) bool {
 	return false
 }
 
+// getChildrenFromSlateTextJSON recursively collects all leaf nodes (nodes with a "text" key)
+// from the slate element tree, handling both JSON string and map[string]any inputs
 func getChildrenFromSlateTextJSON(elements []any) []any {
-	children := make([]any, 0)
+	var leaves []any
 	for _, elem := range elements {
 		var m map[string]any
 		switch v := elem.(type) {
@@ -34,67 +36,97 @@ func getChildrenFromSlateTextJSON(elements []any) []any {
 		default:
 			continue
 		}
+		collectLeafNodes(m, &leaves)
+	}
+	return leaves
+}
 
-		if c, ok := m["children"].([]any); ok {
-			children = append(children, c...)
-		}
+// collectLeafNodes walks a slate node tree and appends leaf nodes (those with a "text" key) to leaves
+func collectLeafNodes(m map[string]any, leaves *[]any) {
+	if _, hasText := m["text"]; hasText {
+		*leaves = append(*leaves, m)
+		return
 	}
 
-	return children
+	if children, ok := m["children"].([]any); ok {
+		for _, child := range children {
+			if childMap, ok := child.(map[string]any); ok {
+				collectLeafNodes(childMap, leaves)
+			}
+		}
+	}
+}
+
+// valEqualBestEffort compares two any values for scalar JSON types without panicking on non-comparable types
+func valEqualBestEffort(a, b any) bool {
+	switch av := a.(type) {
+	case string:
+		bv, ok := b.(string)
+		return ok && av == bv
+	case bool:
+		bv, ok := b.(bool)
+		return ok && av == bv
+	case float64:
+		bv, ok := b.(float64)
+		return ok && av == bv
+	case nil:
+		return b == nil
+	default:
+		// non-comparable type (slice, nested map, etc.) — conservatively treat as not equal
+		return false
+	}
+}
+
+func isCommentKey(key string) bool {
+	return key == "comment" || strings.HasPrefix(key, "comment_")
 }
 
 // OnlyCommentsAdded checks if the only changes between the old and new slate JSON elements are the addition of comments
 func OnlyCommentsAdded(oldText []any, newText []any) bool {
-	// for each I want to see if the only change is the addition of a comment, if so return true, otherwise false
-	oldChildren := getChildrenFromSlateTextJSON(oldText)
-	newChildren := getChildrenFromSlateTextJSON(newText)
+	oldLeaves := getChildrenFromSlateTextJSON(oldText)
+	newLeaves := getChildrenFromSlateTextJSON(newText)
 
-	if len(oldChildren) != len(newChildren) {
+	if len(oldLeaves) != len(newLeaves) || len(newLeaves) == 0 {
 		return false
 	}
 
-	// compare all children, and check the text is the same, comments are OK
-	for i, oldChild := range oldChildren {
-		// get the map
-		oldChildMap, oldOK := oldChild.(map[string]any)
-		newChildMap, newOK := newChildren[i].(map[string]any)
+	for i, oldChild := range oldLeaves {
+		oldLeaf, oldOK := oldChild.(map[string]any)
+		newLeaf, newOK := newLeaves[i].(map[string]any)
 
-		// if its not a map, we can't compare, so we assume it's not just a comment change and return false
-		if !oldOK || !newOK {
+		if !oldOK || !newOK || oldLeaf == nil || newLeaf == nil {
 			return false
 		}
 
-		// if they are equal, continue to the next one
-		if maps.Equal(oldChildMap, newChildMap) {
-			continue
+		// text must be unchanged
+		oldTextStr, _ := oldLeaf["text"].(string)
+		newTextStr, _ := newLeaf["text"].(string)
+		if oldTextStr != newTextStr {
+			return false
 		}
 
-		allowedKeys := map[string]bool{
-			"text":    true,
-			"comment": true,
-		}
+		// new leaf may only add comment-related keys; all other keys must exist in old with equal values
+		for key, newVal := range newLeaf {
+			if isCommentKey(key) {
+				continue
+			}
 
-		// if there are other keys besides text and comment, return false
-		for key := range newChildMap {
-			if !allowedKeys[key] {
+			oldVal, exists := oldLeaf[key]
+			if !exists || !valEqualBestEffort(oldVal, newVal) {
 				return false
 			}
 		}
 
-		// if they are not equal, check the text is the same
-		oldText, oldOK := oldChildMap["text"]
-		newText, newOK := newChildMap["text"]
+		// no non-comment keys should be removed from old
+		for key := range oldLeaf {
+			if isCommentKey(key) {
+				continue
+			}
 
-		if oldOK && newOK {
-			oldTextStr, oldOK := oldText.(string)
-			newTextStr, newOK := newText.(string)
-
-			// if they are strings and they are not equal, then it's not just a comment change, return false
-			if oldOK && newOK && oldTextStr != newTextStr {
+			if _, exists := newLeaf[key]; !exists {
 				return false
 			}
 		}
-
 	}
 
 	return true
