@@ -16,8 +16,6 @@ const (
 
 	// FullFetchMinInterval is the minimum interval for operations that always fetch all records
 	FullFetchMinInterval = time.Hour
-	// FullFetchMaxInterval is the maximum interval for operations that always fetch all records
-	FullFetchMaxInterval = 48 * time.Hour
 	// FullHighDriftThreshold is the delta above which the interval snaps to minimum
 	FullHighDriftThreshold = 1000
 )
@@ -73,7 +71,6 @@ func NewFullFetchSchedule(opts ...ScheduleOption) *Schedule {
 	s := NewSchedule(append(
 		[]ScheduleOption{
 			WithMinInterval(FullFetchMinInterval),
-			WithMaxInterval(FullFetchMaxInterval),
 			WithHighDriftThreshold(FullHighDriftThreshold),
 		}, opts...)...)
 	return &s
