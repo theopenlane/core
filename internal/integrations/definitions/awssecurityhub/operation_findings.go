@@ -16,19 +16,14 @@ import (
 )
 
 const (
-	// defaultPageSize is the default number of Security Hub findings requested per paginated API call
+	// defaultPageSize is the number of Security Hub findings requested per paginated API call
 	defaultPageSize = int32(100)
-	// maxPageSize is the maximum number of findings that can be requested per API page
-	maxPageSize = int32(100)
 	// vul
 	vulnerabilityType = "Software and Configuration Checks/Vulnerabilities/CVE"
 )
 
 // FindingSync holds per-invocation execution controls for the vulnerabilities.collect operation
-type FindingSync struct {
-	// MaxFindings caps the total number of findings returned; 0 means no limit
-	MaxFindings int `json:"maxFindings,omitempty" jsonschema:"title=Max Findings,description=Maximum number of findings to collect. 0 means no limit."`
-}
+type FindingSync struct{}
 
 // FindingsCollect collects AWS Security Hub findings
 type FindingsCollect struct{}
@@ -42,23 +37,11 @@ func (v FindingsCollect) IngestHandle() types.IngestHandler {
 
 // Run collects Security Hub findings
 func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, cfg FindingSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	pageSize := defaultPageSize
-
-	if cfg.MaxFindings > 0 && int32(cfg.MaxFindings) < maxPageSize { //nolint:gosec // bounded by maxPageSize
-		pageSize = int32(cfg.MaxFindings) //nolint:gosec
-	}
-
 	var (
 		findingEnvelopes       []types.MappingEnvelope
 		vulnerabilityEnvelopes []types.MappingEnvelope
-		total                  int
 		nextToken              *string
 	)
-
-	if cfg.MaxFindings > 0 {
-		findingEnvelopes = make([]types.MappingEnvelope, 0, cfg.MaxFindings)
-		vulnerabilityEnvelopes = make([]types.MappingEnvelope, 0, cfg.MaxFindings)
-	}
 
 	filters, err := buildFilters(ctx, credentials, lastRunAt)
 	if err != nil {
@@ -71,10 +54,9 @@ func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentia
 		logx.FromContext(ctx).Debug().Msg("awssecurityhub: no account filter added, pulling all results allowed by service account")
 	}
 
-collectLoop:
 	for {
 		input := &securityhub.GetFindingsInput{
-			MaxResults: aws.Int32(pageSize),
+			MaxResults: aws.Int32(defaultPageSize),
 			Filters:    filters,
 		}
 		if nextToken != nil {
@@ -88,10 +70,6 @@ collectLoop:
 		}
 
 		for i, finding := range resp.Findings {
-			if cfg.MaxFindings > 0 && total >= cfg.MaxFindings {
-				break collectLoop
-			}
-
 			envelope, err := buildFindingEnvelope(resp.Findings[i])
 			if err != nil {
 				return nil, err
@@ -102,9 +80,6 @@ collectLoop:
 			} else {
 				findingEnvelopes = append(findingEnvelopes, envelope)
 			}
-
-			total++
-
 		}
 
 		if resp.NextToken == nil || *resp.NextToken == "" {

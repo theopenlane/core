@@ -94,4 +94,7 @@ type OperationRegistration struct {
 	// ReconcileSchedule overrides the default adaptive schedule for this operation's reconcile cycles;
 	// useful for operations that always do a full fetch and should run less frequently
 	ReconcileSchedule *gala.Schedule `json:"-"`
+	// SkipDefaultLookback disables the runtime's default lookback window on initial runs;
+	// when true, LastRunAt is nil on first run so the handler performs a full fetch
+	SkipDefaultLookback bool `json:"-"`
 }

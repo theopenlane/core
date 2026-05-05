@@ -139,6 +139,31 @@ func TestBuildFilters(t *testing.T) {
 		assert.Equal(t, "us-west-2", *filters.Region[0].Value)
 	})
 
+	t.Run("lastRunAt 90 days ago sets UpdatedAt filter to that window", func(t *testing.T) {
+		t.Parallel()
+
+		creds := makeAssumeRoleBindings(t, AssumeRoleCredentialSchema{
+			RoleARN:    "arn:aws:iam::123456789012:role/test-role",
+			HomeRegion: "us-east-1",
+		})
+
+		lastRunAt := time.Now().UTC().Add(-90 * 24 * time.Hour)
+
+		filters, err := buildFilters(context.Background(), creds, &lastRunAt)
+		gtassert.NilError(t, err)
+		gtassert.Assert(t, len(filters.UpdatedAt) == 1, "expected 1 UpdatedAt filter")
+
+		start, err := time.Parse(time.RFC3339, *filters.UpdatedAt[0].Start)
+		gtassert.NilError(t, err)
+
+		diff := start.Sub(lastRunAt)
+		if diff < 0 {
+			diff = -diff
+		}
+
+		gtassert.Assert(t, diff < time.Second, "expected UpdatedAt.Start to match lastRunAt within 1s, got diff %v", diff)
+	})
+
 	t.Run("lastRunAt sets UpdatedAt filter", func(t *testing.T) {
 		t.Parallel()
 

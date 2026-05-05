@@ -146,6 +146,7 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags"},
 					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},

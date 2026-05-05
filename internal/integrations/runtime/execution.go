@@ -330,6 +330,11 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		}
 	}
 
+	if lastRunAt == nil && !operation.SkipDefaultLookback {
+		t := time.Now().UTC().Add(-r.defaultLookback)
+		lastRunAt = &t
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,

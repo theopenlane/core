@@ -120,6 +120,7 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: directorySyncScopes,
 					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},

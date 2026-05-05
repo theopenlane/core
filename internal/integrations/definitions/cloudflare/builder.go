@@ -86,6 +86,7 @@ func Builder() registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
