@@ -176,11 +176,12 @@ func normalizeDispatchError(err error) error {
 	}
 }
 
-// NewForTesting constructs a Runtime backed only by the supplied registry
-// Use only in unit tests that exercise registry lookup without executing operations
+// NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client.
+// Use only in unit tests that exercise registry lookup or operation request wiring.
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
+	do.ProvideValue(injector, &ent.Client{})
 
 	return &Runtime{
 		injector:        injector,
@@ -260,7 +261,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule()); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule(), rt.HandleRecurringCampaigns, gala.NewSchedule()); err != nil {
 		return nil, err
 	}
 

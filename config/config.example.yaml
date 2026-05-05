@@ -6,13 +6,13 @@ auth:
             clientid: ""
             clientsecret: ""
             redirecturl: /v1/github/callback
-            scopes: null
+            scopes: []
         google:
             clientendpoint: ""
             clientid: ""
             clientsecret: ""
             redirecturl: /v1/google/callback
-            scopes: null
+            scopes: []
         redirecturl: http://localhost:3001/api/auth/callback/theopenlane
         webauthn:
             debug: false
@@ -21,16 +21,16 @@ auth:
             enforcetimeout: true
             maxdevices: 10
             relyingpartyid: ""
-            requestorigins: null
+            requestorigins: []
             timeout: 60000000000
-    supportedproviders: null
+    supportedproviders: []
     token:
         accessduration: 3600000000000
         apitokens:
             delimiter: .
             enabled: false
             envprefix: IAM_API_TOKEN_KEY_
-            keys: null
+            keys: {}
             prefix: ""
             secretsize: 32
         assessmentaccessduration: 3600000000000
@@ -39,7 +39,7 @@ auth:
         issuer: ""
         jwkscachettl: 300000000000
         jwksendpoint: ""
-        keys: null
+        keys: {}
         kid: ""
         redis:
             blacklistprefix: 'token:blacklist:'
@@ -103,30 +103,9 @@ db:
     runmigrations: true
     secondarydbsource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
 domain: ""
-email:
-    companyaddress: ""
-    companyname: ""
-    corporation: ""
-    fromemail: ""
-    logourl: ""
-    questionnaireemail: ""
-    supportemail: ""
-    templatespath: ""
-    urls:
-        billing: ""
-        docs: ""
-        invite: ""
-        product: ""
-        questionnaire: ""
-        reset: ""
-        root: ""
-        verify: ""
-        verifybilling: ""
-        verifysubscriber: ""
-    year: 0
 entconfig:
     billing:
-        bypassemaildomains: null
+        bypassemaildomains: []
         requirepaymentmethod: false
     emailvalidation:
         allowedemailtypes:
@@ -137,7 +116,7 @@ entconfig:
         enabled: false
         enablegravatarcheck: true
         enablesmtpcheck: false
-    entitytypes: null
+    entitytypes: []
     maxpoolsize: 200
     maxschemaimportsize: 262144
     modules:
@@ -149,33 +128,36 @@ entconfig:
     summarizer:
         llm:
             anthropic:
-                apiKey: ""
                 baseurl: ""
                 betaheader: ""
                 legacytextcompletion: false
-                model: ""
             cloudflare:
                 accountid: ""
-                apiKey: ""
-                model: ""
                 serverurl: ""
             openai:
-                apiKey: ""
-                model: ""
                 organizationid: ""
                 url: ""
             provider: none
         maximumsentences: 10
         type: lexrank
 integrations:
-    awssecurityhub:
-        accessKeyId: ""
+    awsSecurityHub:
+        accesskeyid: ""
         arn: ""
-        secretAccessKey: ""
+        secretaccesskey: ""
     azureentraid:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    email:
+        apiKey: ""
+        docsURL: https://docs.theopenlane.io
+        fromEmail: support@mail.theopenlane.io
+        productURL: https://console.theopenlane.io
+        provider: resend
+        questionnaireEmail: support@mail.theopenlane.io
+        rootURL: https://www.theopenlane.io
+        supportEmail: support@theopenlane.io
     githubapp:
         appid: ""
         appslug: ""
@@ -200,6 +182,10 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    slackRuntime:
+        botToken: ""
+        defaultChannel: ""
+        webhookURL: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:
@@ -207,37 +193,37 @@ jobqueue:
         enablesemanticmetrics: true
         metricsdurationunit: ms
     riverconf:
-        AdvisoryLockPrefix: 0
-        CancelledJobRetentionPeriod: 0
-        CompletedJobRetentionPeriod: 0
-        DiscardedJobRetentionPeriod: 0
-        ErrorHandler: null
-        FetchCooldown: 0
-        FetchPollInterval: 0
-        Hooks: null
-        ID: ""
-        JobCleanerTimeout: 0
-        JobInsertMiddleware: null
-        JobTimeout: 0
-        Logger: null
-        MaxAttempts: 0
-        Middleware: null
-        PeriodicJobs: null
-        PollOnly: false
-        Queues: null
-        ReindexerSchedule: null
-        ReindexerTimeout: 0
-        RescueStuckJobsAfter: 0
-        RetryPolicy: null
-        Schema: ""
-        SkipJobKindValidation: false
-        SkipUnknownJobCheck: false
-        Test:
-            DisableUniqueEnforcement: false
-            Time: null
-        TestOnly: false
-        WorkerMiddleware: null
-        Workers: null
+        advisorylockprefix: 0
+        cancelledjobretentionperiod: 0s
+        completedjobretentionperiod: 0s
+        discardedjobretentionperiod: 0s
+        errorhandler: null
+        fetchcooldown: 0s
+        fetchpollinterval: 0s
+        hooks: []
+        id: ""
+        jobcleanertimeout: 0s
+        jobinsertmiddleware: []
+        jobtimeout: 0s
+        logger: null
+        maxattempts: 0
+        middleware: []
+        periodicjobs: []
+        pollonly: false
+        queues: {}
+        reindexerschedule: null
+        reindexertimeout: 0s
+        rescuestuckjobsafter: 0s
+        retrypolicy: null
+        schema: ""
+        skipjobkindvalidation: false
+        skipunknownjobcheck: false
+        test:
+            disableuniqueenforcement: false
+            time: null
+        testonly: false
+        workermiddleware: []
+        workers: null
     runmigrations: false
 keywatcher:
     enabled: false
@@ -318,10 +304,10 @@ ratelimit:
     includepath: false
     keyprefix: ""
     options:
-        - expiration: 0
-          flushinterval: 0
+        - expiration: 0s
+          flushinterval: 0s
           requests: 500
-          window: 60000000000
+          window: 1m0s
     sendretryafterheader: true
 redis:
     address: localhost:6379
@@ -341,14 +327,14 @@ refreshinterval: 600000000000
 server:
     cachecontrol:
         enabled: true
-        etagheaders: null
-        nocacheheaders: null
+        etagheaders: []
+        nocacheheaders: {}
     complexitylimit: 100
     cors:
-        alloworigins: null
+        alloworigins: []
         cookieinsecure: false
         enabled: true
-        prefixes: null
+        prefixes: {}
     csrfprotection:
         cookie: ol.csrf-token
         cookiedomain: ""
@@ -358,7 +344,7 @@ server:
         header: X-CSRF-Token
         samesite: Lax
         secure: true
-    defaulttrustcenterdomain: ""
+    defaulttrustcenterdomain: trust.theopenlane.net
     dev: false
     enablegraphextensions: true
     enablegraphsubscriptions: false
@@ -408,10 +394,6 @@ shortlinks:
     clientsecret: ""
     enabled: false
     endpointurl: https://admin.s.theopenlane.io/api/links
-slack:
-    newsubscribermessagefile: ""
-    newusermessagefile: ""
-    webhookurl: ""
 subscription:
     enabled: false
     privatestripekey: ""
@@ -419,7 +401,7 @@ subscription:
     stripecancellationreturnurl: https://console.theopenlane.io/organization-settings/billing
     stripewebhookapiversion: 2026_02_25_CLOVER
     stripewebhookdiscardapiversion: 2025_12_15_CLOVER
-    stripewebhookevents: null
+    stripewebhookevents: []
     stripewebhooksecret: ""
     stripewebhooksecrets:
         2025_12_15_CLOVER: ""

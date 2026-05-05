@@ -406,38 +406,6 @@ func (ec *executionContext) fieldContext_SearchResults_customTypeEnums(_ context
 	return fc, nil
 }
 
-func (ec *executionContext) _SearchResults_emailBrandings(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SearchResults_emailBrandings(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.EmailBrandings, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailBrandingConnection) graphql.Marshaler {
-			return ec.marshalOEmailBrandingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailBrandingConnection(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SearchResults_emailBrandings(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_EmailBrandingConnection(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _SearchResults_emailTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1515,8 +1483,6 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			out.Values[i] = ec._SearchResults_controlObjectives(ctx, field, obj)
 		case "customTypeEnums":
 			out.Values[i] = ec._SearchResults_customTypeEnums(ctx, field, obj)
-		case "emailBrandings":
-			out.Values[i] = ec._SearchResults_emailBrandings(ctx, field, obj)
 		case "emailTemplates":
 			out.Values[i] = ec._SearchResults_emailTemplates(ctx, field, obj)
 		case "entities":

@@ -11,9 +11,7 @@ import (
 	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/httpsling"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 
@@ -92,8 +90,6 @@ type Handler struct {
 	WebAuthn *webauthn.WebAuthn
 	// OTPManager contains the configuration settings for the OTP provider
 	OTPManager *totp.Client
-	// Email contains email sending configuration for the server
-	Emailer emailtemplates.Config
 	// Entitlements contains the entitlements client
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client

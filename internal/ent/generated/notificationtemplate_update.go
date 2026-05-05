@@ -231,6 +231,12 @@ func (_u *NotificationTemplateUpdate) SetNillableChannel(v *enums.Channel) *Noti
 	return _u
 }
 
+// ClearChannel clears the value of the "channel" field.
+func (_u *NotificationTemplateUpdate) ClearChannel() *NotificationTemplateUpdate {
+	_u.mutation.ClearChannel()
+	return _u
+}
+
 // SetFormat sets the "format" field.
 func (_u *NotificationTemplateUpdate) SetFormat(v enums.NotificationTemplateFormat) *NotificationTemplateUpdate {
 	_u.mutation.SetFormat(v)
@@ -766,6 +772,9 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 	if value, ok := _u.mutation.Channel(); ok {
 		_spec.SetField(notificationtemplate.FieldChannel, field.TypeEnum, value)
 	}
+	if _u.mutation.ChannelCleared() {
+		_spec.ClearField(notificationtemplate.FieldChannel, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Format(); ok {
 		_spec.SetField(notificationtemplate.FieldFormat, field.TypeEnum, value)
 	}
@@ -1205,6 +1214,12 @@ func (_u *NotificationTemplateUpdateOne) SetNillableChannel(v *enums.Channel) *N
 	if v != nil {
 		_u.SetChannel(*v)
 	}
+	return _u
+}
+
+// ClearChannel clears the value of the "channel" field.
+func (_u *NotificationTemplateUpdateOne) ClearChannel() *NotificationTemplateUpdateOne {
+	_u.mutation.ClearChannel()
 	return _u
 }
 
@@ -1772,6 +1787,9 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 	}
 	if value, ok := _u.mutation.Channel(); ok {
 		_spec.SetField(notificationtemplate.FieldChannel, field.TypeEnum, value)
+	}
+	if _u.mutation.ChannelCleared() {
+		_spec.ClearField(notificationtemplate.FieldChannel, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Format(); ok {
 		_spec.SetField(notificationtemplate.FieldFormat, field.TypeEnum, value)

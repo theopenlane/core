@@ -3,9 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
-	"time"
 
-	"entgo.io/ent/dialect/sql"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -16,6 +14,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -91,41 +90,38 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 
 // verifySubscriberToken checks the token provided by the user and verifies it against the database
 func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *generated.Subscriber) error {
-	// create User struct from entSubscriber
-	user := &User{
-		ID:                       entSubscriber.ID,
-		Email:                    entSubscriber.Email,
-		EmailVerificationSecret:  *entSubscriber.Secret,
-		EmailVerificationToken:   sql.NullString{String: entSubscriber.Token, Valid: true},
-		EmailVerificationExpires: sql.NullString{String: entSubscriber.TTL.Format(time.RFC3339Nano), Valid: true},
+	if entSubscriber.TTL == nil || entSubscriber.Secret == nil {
+		logx.FromContext(ctx).Error().Msg("subscriber token missing required fields")
+
+		return ErrUnableToVerifyEmail
 	}
 
 	// setup token to be validated
 	t := &tokens.VerificationToken{
 		Email: entSubscriber.Email,
 	}
-
-	var err error
-
-	t.ExpiresAt, err = user.GetVerificationExpires()
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse expiration")
-
-		return ErrUnableToVerifyEmail
-	}
+	t.ExpiresAt = *entSubscriber.TTL
 
 	// verify token is valid, otherwise reset and send new token
-	if err := t.Verify(user.GetVerificationToken(), user.EmailVerificationSecret); err != nil {
+	if err := t.Verify(entSubscriber.Token, *entSubscriber.Secret); err != nil {
 		// if token is expired, create new token and send email
 		if errors.Is(err, tokens.ErrTokenExpired) {
-			if err := user.CreateVerificationToken(); err != nil {
+			verify, err := tokens.NewVerificationToken(entSubscriber.Email)
+			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
 
 				return err
 			}
 
+			tokenValue, secret, err := verify.Sign()
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error signing verification token")
+
+				return err
+			}
+
 			// update token settings in the database
-			if err := h.updateSubscriberVerificationToken(ctx, user); err != nil {
+			if err := h.updateSubscriberVerificationToken(ctx, entSubscriber.ID, tokenValue, verify.ExpiresAt, secret); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verification token")
 
 				return err
@@ -135,7 +131,16 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 			ctxWithToken := token.NewContextWithSignUpToken(ctx, entSubscriber.Email)
 
 			// resend email with new token to the subscriber
-			if err := h.sendSubscriberEmail(ctxWithToken, user, entSubscriber.OwnerID); err != nil {
+			org, err := h.getOrgByID(ctxWithToken, entSubscriber.OwnerID)
+			if err != nil {
+				return err
+			}
+
+			if err := h.sendEmail(ctxWithToken, email.SubscribeOp.Name(), email.SubscribeRequest{
+				RecipientInfo: email.RecipientInfo{Email: entSubscriber.Email},
+				OrgName:       org.DisplayName,
+				Token:         tokenValue,
+			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
 
 				return err

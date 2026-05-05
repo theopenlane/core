@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -572,6 +573,20 @@ func (_u *IntegrationUpdate) SetNillablePrimaryDirectory(v *bool) *IntegrationUp
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationUpdate) SetCampaignEmail(v bool) *IntegrationUpdate {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableCampaignEmail(v *bool) *IntegrationUpdate {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdate) SetOwner(v *Organization) *IntegrationUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -840,6 +855,21 @@ func (_u *IntegrationUpdate) AddEmailTemplates(v ...*EmailTemplate) *Integration
 		ids[i] = v[i].ID
 	}
 	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *IntegrationUpdate) AddCampaignIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *IntegrationUpdate) AddCampaigns(v ...*Campaign) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
 }
 
 // AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
@@ -1267,6 +1297,27 @@ func (_u *IntegrationUpdate) RemoveEmailTemplates(v ...*EmailTemplate) *Integrat
 	return _u.RemoveEmailTemplateIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *IntegrationUpdate) ClearCampaigns() *IntegrationUpdate {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *IntegrationUpdate) RemoveCampaignIDs(ids ...string) *IntegrationUpdate {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *IntegrationUpdate) RemoveCampaigns(v ...*Campaign) *IntegrationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
 // ClearIntegrationWebhooks clears all "integration_webhooks" edges to the IntegrationWebhook entity.
 func (_u *IntegrationUpdate) ClearIntegrationWebhooks() *IntegrationUpdate {
 	_u.mutation.ClearIntegrationWebhooks()
@@ -1559,6 +1610,9 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2464,6 +2518,54 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3153,6 +3255,20 @@ func (_u *IntegrationUpdateOne) SetNillablePrimaryDirectory(v *bool) *Integratio
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationUpdateOne) SetCampaignEmail(v bool) *IntegrationUpdateOne {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableCampaignEmail(v *bool) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *IntegrationUpdateOne) SetOwner(v *Organization) *IntegrationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -3421,6 +3537,21 @@ func (_u *IntegrationUpdateOne) AddEmailTemplates(v ...*EmailTemplate) *Integrat
 		ids[i] = v[i].ID
 	}
 	return _u.AddEmailTemplateIDs(ids...)
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_u *IntegrationUpdateOne) AddCampaignIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.AddCampaignIDs(ids...)
+	return _u
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_u *IntegrationUpdateOne) AddCampaigns(v ...*Campaign) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCampaignIDs(ids...)
 }
 
 // AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
@@ -3848,6 +3979,27 @@ func (_u *IntegrationUpdateOne) RemoveEmailTemplates(v ...*EmailTemplate) *Integ
 	return _u.RemoveEmailTemplateIDs(ids...)
 }
 
+// ClearCampaigns clears all "campaigns" edges to the Campaign entity.
+func (_u *IntegrationUpdateOne) ClearCampaigns() *IntegrationUpdateOne {
+	_u.mutation.ClearCampaigns()
+	return _u
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to Campaign entities by IDs.
+func (_u *IntegrationUpdateOne) RemoveCampaignIDs(ids ...string) *IntegrationUpdateOne {
+	_u.mutation.RemoveCampaignIDs(ids...)
+	return _u
+}
+
+// RemoveCampaigns removes "campaigns" edges to Campaign entities.
+func (_u *IntegrationUpdateOne) RemoveCampaigns(v ...*Campaign) *IntegrationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCampaignIDs(ids...)
+}
+
 // ClearIntegrationWebhooks clears all "integration_webhooks" edges to the IntegrationWebhook entity.
 func (_u *IntegrationUpdateOne) ClearIntegrationWebhooks() *IntegrationUpdateOne {
 	_u.mutation.ClearIntegrationWebhooks()
@@ -4170,6 +4322,9 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -5075,6 +5230,54 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			},
 		}
 		edge.Schema = _u.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

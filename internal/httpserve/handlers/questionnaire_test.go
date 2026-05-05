@@ -2,7 +2,6 @@ package handlers_test
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,19 +10,17 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
@@ -298,13 +295,16 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{
-				Args: jobs.EmailArgs{},
-			},
-		})
-	require.NotNil(t, job)
+	suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: testEmail},
+		AssessmentName: "Test Assessment Already Completed",
+		AuthURL:        "https://questionnaire.example.com/auth?token=test",
+	})
+
+	suite.WaitForEvents()
+
+	msgs := suite.mockEmailSender().Messages()
+	require.Len(t, msgs, 1)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, anonUser)
@@ -751,13 +751,16 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-		[]rivertest.ExpectedJob{
-			{
-				Args: jobs.EmailArgs{},
-			},
-		})
-	require.NotNil(t, job)
+	suite.dispatchSystemEmail(questionnaireCtx, emaildef.QuestionnaireAuthOp.Name(), emaildef.QuestionnaireAuthEmail{
+		RecipientInfo:  emaildef.RecipientInfo{Email: testEmail},
+		AssessmentName: "Test Assessment Already Completed",
+		AuthURL:        "https://questionnaire.example.com/auth?token=test",
+	})
+
+	suite.WaitForEvents()
+
+	msgs := suite.mockEmailSender().Messages()
+	require.Len(t, msgs, 1)
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, anonUser)

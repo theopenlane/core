@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -461,6 +462,20 @@ func (_c *IntegrationCreate) SetNillablePrimaryDirectory(v *bool) *IntegrationCr
 	return _c
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_c *IntegrationCreate) SetCampaignEmail(v bool) *IntegrationCreate {
+	_c.mutation.SetCampaignEmail(v)
+	return _c
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableCampaignEmail(v *bool) *IntegrationCreate {
+	if v != nil {
+		_c.SetCampaignEmail(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationCreate) SetID(v string) *IntegrationCreate {
 	_c.mutation.SetID(v)
@@ -750,6 +765,21 @@ func (_c *IntegrationCreate) AddEmailTemplates(v ...*EmailTemplate) *Integration
 	return _c.AddEmailTemplateIDs(ids...)
 }
 
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by IDs.
+func (_c *IntegrationCreate) AddCampaignIDs(ids ...string) *IntegrationCreate {
+	_c.mutation.AddCampaignIDs(ids...)
+	return _c
+}
+
+// AddCampaigns adds the "campaigns" edges to the Campaign entity.
+func (_c *IntegrationCreate) AddCampaigns(v ...*Campaign) *IntegrationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignIDs(ids...)
+}
+
 // AddIntegrationWebhookIDs adds the "integration_webhooks" edge to the IntegrationWebhook entity by IDs.
 func (_c *IntegrationCreate) AddIntegrationWebhookIDs(ids ...string) *IntegrationCreate {
 	_c.mutation.AddIntegrationWebhookIDs(ids...)
@@ -862,6 +892,10 @@ func (_c *IntegrationCreate) defaults() error {
 		v := integration.DefaultPrimaryDirectory
 		_c.mutation.SetPrimaryDirectory(v)
 	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		v := integration.DefaultCampaignEmail
+		_c.mutation.SetCampaignEmail(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integration.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized integration.DefaultID (forgotten import generated/runtime?)")
@@ -897,6 +931,9 @@ func (_c *IntegrationCreate) check() error {
 	}
 	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
 		return &ValidationError{Name: "primary_directory", err: errors.New(`generated: missing required field "Integration.primary_directory"`)}
+	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		return &ValidationError{Name: "campaign_email", err: errors.New(`generated: missing required field "Integration.campaign_email"`)}
 	}
 	return nil
 }
@@ -1045,6 +1082,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integration.FieldPrimaryDirectory, field.TypeBool, value)
 		_node.PrimaryDirectory = value
+	}
+	if value, ok := _c.mutation.CampaignEmail(); ok {
+		_spec.SetField(integration.FieldCampaignEmail, field.TypeBool, value)
+		_node.CampaignEmail = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1402,6 +1443,23 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EmailTemplate
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.CampaignsTable,
+			Columns: []string{integration.CampaignsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

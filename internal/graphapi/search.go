@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -344,15 +343,16 @@ func adminSearchCampaigns(ctx context.Context, query string, after *entgql.Curso
 				campaign.NameContainsFold(query),                 // search by Name
 				campaign.DescriptionContainsFold(query),          // search by Description
 				campaign.RecurrenceTimezoneContainsFold(query),   // search by RecurrenceTimezone
-				campaign.TemplateIDContainsFold(query),           // search by TemplateID
 				campaign.EntityIDContainsFold(query),             // search by EntityID
+				campaign.TemplateIDContainsFold(query),           // search by TemplateID
 				campaign.AssessmentIDContainsFold(query),         // search by AssessmentID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(metadata)::text LIKE $14", likeQuery)) // search by Metadata
 				},
-				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
 				campaign.EmailTemplateIDContainsFold(query), // search by EmailTemplateID
+				campaign.IntegrationIDContainsFold(query),   // search by IntegrationID
+				campaign.EmailBrandingIDContainsFold(query), // search by EmailBrandingID
 			),
 		)
 
@@ -642,50 +642,6 @@ func adminSearchCustomTypeEnums(ctx context.Context, query string, after *entgql
 	return request.Paginate(ctx, after, first, before, last)
 }
 
-// searchEmailBranding searches for EmailBranding based on the query string looking for matches
-func searchEmailBrandings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
-	request := withTransactionalMutation(ctx).EmailBranding.Query().
-		Where(
-			emailbranding.Or(
-				emailbranding.ID(query),               // search equal to ID
-				emailbranding.NameContainsFold(query), // search by Name
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
-				},
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchEmailBranding searches for EmailBranding based on the query string looking for matches
-func adminSearchEmailBrandings(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
-	request := withTransactionalMutation(ctx).EmailBranding.Query().
-		Where(
-			emailbranding.Or(
-				emailbranding.ID(query), // search equal to ID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
-				},
-				emailbranding.OwnerIDContainsFold(query),         // search by OwnerID
-				emailbranding.NameContainsFold(query),            // search by Name
-				emailbranding.BrandNameContainsFold(query),       // search by BrandName
-				emailbranding.LogoRemoteURLContainsFold(query),   // search by LogoRemoteURL
-				emailbranding.PrimaryColorContainsFold(query),    // search by PrimaryColor
-				emailbranding.SecondaryColorContainsFold(query),  // search by SecondaryColor
-				emailbranding.BackgroundColorContainsFold(query), // search by BackgroundColor
-				emailbranding.TextColorContainsFold(query),       // search by TextColor
-				emailbranding.ButtonColorContainsFold(query),     // search by ButtonColor
-				emailbranding.ButtonTextColorContainsFold(query), // search by ButtonTextColor
-				emailbranding.LinkColorContainsFold(query),       // search by LinkColor
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
 // searchEmailTemplate searches for EmailTemplate based on the query string looking for matches
 func searchEmailTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailTemplateConnection, error) {
 	request := withTransactionalMutation(ctx).EmailTemplate.Query().
@@ -714,10 +670,6 @@ func adminSearchEmailTemplates(ctx context.Context, query string, after *entgql.
 				emailtemplate.NameContainsFold(query),                 // search by Name
 				emailtemplate.DescriptionContainsFold(query),          // search by Description
 				emailtemplate.LocaleContainsFold(query),               // search by Locale
-				emailtemplate.SubjectTemplateContainsFold(query),      // search by SubjectTemplate
-				emailtemplate.PreheaderTemplateContainsFold(query),    // search by PreheaderTemplate
-				emailtemplate.BodyTemplateContainsFold(query),         // search by BodyTemplate
-				emailtemplate.TextTemplateContainsFold(query),         // search by TextTemplate
 				emailtemplate.IntegrationIDContainsFold(query),        // search by IntegrationID
 				emailtemplate.WorkflowDefinitionIDContainsFold(query), // search by WorkflowDefinitionID
 				emailtemplate.WorkflowInstanceIDContainsFold(query),   // search by WorkflowInstanceID

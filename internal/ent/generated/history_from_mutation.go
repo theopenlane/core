@@ -1995,12 +1995,12 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetRecurrenceInterval(recurrenceInterval)
 	}
 
-	if recurrenceCron, exists := m.RecurrenceCron(); exists {
-		create = create.SetNillableRecurrenceCron(&recurrenceCron)
-	}
-
 	if recurrenceTimezone, exists := m.RecurrenceTimezone(); exists {
 		create = create.SetRecurrenceTimezone(recurrenceTimezone)
+	}
+
+	if recurrenceCron, exists := m.RecurrenceCron(); exists {
+		create = create.SetNillableRecurrenceCron(&recurrenceCron)
 	}
 
 	if lastRunAt, exists := m.LastRunAt(); exists {
@@ -2027,12 +2027,12 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableLastResentAt(&lastResentAt)
 	}
 
-	if templateID, exists := m.TemplateID(); exists {
-		create = create.SetTemplateID(templateID)
-	}
-
 	if entityID, exists := m.EntityID(); exists {
 		create = create.SetEntityID(entityID)
+	}
+
+	if templateID, exists := m.TemplateID(); exists {
+		create = create.SetTemplateID(templateID)
 	}
 
 	if assessmentID, exists := m.AssessmentID(); exists {
@@ -2043,12 +2043,16 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMetadata(metadata)
 	}
 
-	if emailBrandingID, exists := m.EmailBrandingID(); exists {
-		create = create.SetEmailBrandingID(emailBrandingID)
-	}
-
 	if emailTemplateID, exists := m.EmailTemplateID(); exists {
 		create = create.SetEmailTemplateID(emailTemplateID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if emailBrandingID, exists := m.EmailBrandingID(); exists {
+		create = create.SetEmailBrandingID(emailBrandingID)
 	}
 
 	_, err := create.Save(ctx)
@@ -2232,16 +2236,16 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetRecurrenceInterval(campaign.RecurrenceInterval)
 		}
 
-		if recurrenceCron, exists := m.RecurrenceCron(); exists {
-			create = create.SetNillableRecurrenceCron(&recurrenceCron)
-		} else {
-			create = create.SetNillableRecurrenceCron(campaign.RecurrenceCron)
-		}
-
 		if recurrenceTimezone, exists := m.RecurrenceTimezone(); exists {
 			create = create.SetRecurrenceTimezone(recurrenceTimezone)
 		} else {
 			create = create.SetRecurrenceTimezone(campaign.RecurrenceTimezone)
+		}
+
+		if recurrenceCron, exists := m.RecurrenceCron(); exists {
+			create = create.SetNillableRecurrenceCron(&recurrenceCron)
+		} else {
+			create = create.SetNillableRecurrenceCron(campaign.RecurrenceCron)
 		}
 
 		if lastRunAt, exists := m.LastRunAt(); exists {
@@ -2280,16 +2284,16 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableLastResentAt(campaign.LastResentAt)
 		}
 
-		if templateID, exists := m.TemplateID(); exists {
-			create = create.SetTemplateID(templateID)
-		} else {
-			create = create.SetTemplateID(campaign.TemplateID)
-		}
-
 		if entityID, exists := m.EntityID(); exists {
 			create = create.SetEntityID(entityID)
 		} else {
 			create = create.SetEntityID(campaign.EntityID)
+		}
+
+		if templateID, exists := m.TemplateID(); exists {
+			create = create.SetTemplateID(templateID)
+		} else {
+			create = create.SetTemplateID(campaign.TemplateID)
 		}
 
 		if assessmentID, exists := m.AssessmentID(); exists {
@@ -2304,16 +2308,22 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMetadata(campaign.Metadata)
 		}
 
-		if emailBrandingID, exists := m.EmailBrandingID(); exists {
-			create = create.SetEmailBrandingID(emailBrandingID)
-		} else {
-			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
-		}
-
 		if emailTemplateID, exists := m.EmailTemplateID(); exists {
 			create = create.SetEmailTemplateID(emailTemplateID)
 		} else {
 			create = create.SetEmailTemplateID(campaign.EmailTemplateID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(campaign.IntegrationID)
+		}
+
+		if emailBrandingID, exists := m.EmailBrandingID(); exists {
+			create = create.SetEmailBrandingID(emailBrandingID)
+		} else {
+			create = create.SetEmailBrandingID(campaign.EmailBrandingID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -2376,20 +2386,21 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsRecurring(campaign.IsRecurring).
 			SetRecurrenceFrequency(campaign.RecurrenceFrequency).
 			SetRecurrenceInterval(campaign.RecurrenceInterval).
-			SetNillableRecurrenceCron(campaign.RecurrenceCron).
 			SetRecurrenceTimezone(campaign.RecurrenceTimezone).
+			SetNillableRecurrenceCron(campaign.RecurrenceCron).
 			SetNillableLastRunAt(campaign.LastRunAt).
 			SetNillableNextRunAt(campaign.NextRunAt).
 			SetNillableRecurrenceEndAt(campaign.RecurrenceEndAt).
 			SetRecipientCount(campaign.RecipientCount).
 			SetResendCount(campaign.ResendCount).
 			SetNillableLastResentAt(campaign.LastResentAt).
-			SetTemplateID(campaign.TemplateID).
 			SetEntityID(campaign.EntityID).
+			SetTemplateID(campaign.TemplateID).
 			SetAssessmentID(campaign.AssessmentID).
 			SetMetadata(campaign.Metadata).
-			SetEmailBrandingID(campaign.EmailBrandingID).
 			SetEmailTemplateID(campaign.EmailTemplateID).
+			SetIntegrationID(campaign.IntegrationID).
+			SetEmailBrandingID(campaign.EmailBrandingID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -6917,317 +6928,6 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetScopeID(documentdata.ScopeID).
 			SetTemplateID(documentdata.TemplateID).
 			SetData(documentdata.Data).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *EmailBrandingMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.EmailBrandingHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if name, exists := m.Name(); exists {
-		create = create.SetName(name)
-	}
-
-	if brandName, exists := m.BrandName(); exists {
-		create = create.SetBrandName(brandName)
-	}
-
-	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
-		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
-	}
-
-	if primaryColor, exists := m.PrimaryColor(); exists {
-		create = create.SetPrimaryColor(primaryColor)
-	}
-
-	if secondaryColor, exists := m.SecondaryColor(); exists {
-		create = create.SetSecondaryColor(secondaryColor)
-	}
-
-	if backgroundColor, exists := m.BackgroundColor(); exists {
-		create = create.SetBackgroundColor(backgroundColor)
-	}
-
-	if textColor, exists := m.TextColor(); exists {
-		create = create.SetTextColor(textColor)
-	}
-
-	if buttonColor, exists := m.ButtonColor(); exists {
-		create = create.SetButtonColor(buttonColor)
-	}
-
-	if buttonTextColor, exists := m.ButtonTextColor(); exists {
-		create = create.SetButtonTextColor(buttonTextColor)
-	}
-
-	if linkColor, exists := m.LinkColor(); exists {
-		create = create.SetLinkColor(linkColor)
-	}
-
-	if fontFamily, exists := m.FontFamily(); exists {
-		create = create.SetFontFamily(fontFamily)
-	}
-
-	if isDefault, exists := m.IsDefault(); exists {
-		create = create.SetIsDefault(isDefault)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *EmailBrandingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		emailbranding, err := client.EmailBranding.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.EmailBrandingHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(emailbranding.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(emailbranding.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(emailbranding.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(emailbranding.UpdatedBy)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(emailbranding.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(emailbranding.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(emailbranding.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(emailbranding.OwnerID)
-		}
-
-		if name, exists := m.Name(); exists {
-			create = create.SetName(name)
-		} else {
-			create = create.SetName(emailbranding.Name)
-		}
-
-		if brandName, exists := m.BrandName(); exists {
-			create = create.SetBrandName(brandName)
-		} else {
-			create = create.SetBrandName(emailbranding.BrandName)
-		}
-
-		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
-			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
-		} else {
-			create = create.SetNillableLogoRemoteURL(emailbranding.LogoRemoteURL)
-		}
-
-		if primaryColor, exists := m.PrimaryColor(); exists {
-			create = create.SetPrimaryColor(primaryColor)
-		} else {
-			create = create.SetPrimaryColor(emailbranding.PrimaryColor)
-		}
-
-		if secondaryColor, exists := m.SecondaryColor(); exists {
-			create = create.SetSecondaryColor(secondaryColor)
-		} else {
-			create = create.SetSecondaryColor(emailbranding.SecondaryColor)
-		}
-
-		if backgroundColor, exists := m.BackgroundColor(); exists {
-			create = create.SetBackgroundColor(backgroundColor)
-		} else {
-			create = create.SetBackgroundColor(emailbranding.BackgroundColor)
-		}
-
-		if textColor, exists := m.TextColor(); exists {
-			create = create.SetTextColor(textColor)
-		} else {
-			create = create.SetTextColor(emailbranding.TextColor)
-		}
-
-		if buttonColor, exists := m.ButtonColor(); exists {
-			create = create.SetButtonColor(buttonColor)
-		} else {
-			create = create.SetButtonColor(emailbranding.ButtonColor)
-		}
-
-		if buttonTextColor, exists := m.ButtonTextColor(); exists {
-			create = create.SetButtonTextColor(buttonTextColor)
-		} else {
-			create = create.SetButtonTextColor(emailbranding.ButtonTextColor)
-		}
-
-		if linkColor, exists := m.LinkColor(); exists {
-			create = create.SetLinkColor(linkColor)
-		} else {
-			create = create.SetLinkColor(emailbranding.LinkColor)
-		}
-
-		if fontFamily, exists := m.FontFamily(); exists {
-			create = create.SetFontFamily(fontFamily)
-		} else {
-			create = create.SetFontFamily(emailbranding.FontFamily)
-		}
-
-		if isDefault, exists := m.IsDefault(); exists {
-			create = create.SetIsDefault(isDefault)
-		} else {
-			create = create.SetIsDefault(emailbranding.IsDefault)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *EmailBrandingMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		emailbranding, err := client.EmailBranding.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.EmailBrandingHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(emailbranding.CreatedAt).
-			SetUpdatedAt(emailbranding.UpdatedAt).
-			SetCreatedBy(emailbranding.CreatedBy).
-			SetUpdatedBy(emailbranding.UpdatedBy).
-			SetDeletedAt(emailbranding.DeletedAt).
-			SetDeletedBy(emailbranding.DeletedBy).
-			SetTags(emailbranding.Tags).
-			SetOwnerID(emailbranding.OwnerID).
-			SetName(emailbranding.Name).
-			SetBrandName(emailbranding.BrandName).
-			SetNillableLogoRemoteURL(emailbranding.LogoRemoteURL).
-			SetPrimaryColor(emailbranding.PrimaryColor).
-			SetSecondaryColor(emailbranding.SecondaryColor).
-			SetBackgroundColor(emailbranding.BackgroundColor).
-			SetTextColor(emailbranding.TextColor).
-			SetButtonColor(emailbranding.ButtonColor).
-			SetButtonTextColor(emailbranding.ButtonTextColor).
-			SetLinkColor(emailbranding.LinkColor).
-			SetFontFamily(emailbranding.FontFamily).
-			SetIsDefault(emailbranding.IsDefault).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -12114,6 +11814,10 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPrimaryDirectory(primaryDirectory)
 	}
 
+	if campaignEmail, exists := m.CampaignEmail(); exists {
+		create = create.SetCampaignEmail(campaignEmail)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -12337,6 +12041,12 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPrimaryDirectory(integration.PrimaryDirectory)
 		}
 
+		if campaignEmail, exists := m.CampaignEmail(); exists {
+			create = create.SetCampaignEmail(campaignEmail)
+		} else {
+			create = create.SetCampaignEmail(integration.CampaignEmail)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -12404,6 +12114,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetStatus(integration.Status).
 			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
 			SetPrimaryDirectory(integration.PrimaryDirectory).
+			SetCampaignEmail(integration.CampaignEmail).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -68,6 +68,7 @@ func (NotificationTemplate) Fields() []ent.Field {
 			Optional(),
 		field.Enum("channel").
 			Comment("channel this template is intended for").
+			Optional().
 			GoType(enums.Channel("")).
 			Annotations(
 				entgql.OrderField("CHANNEL"),
@@ -171,14 +172,9 @@ func (NotificationTemplate) Fields() []ent.Field {
 func (NotificationTemplate) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "channel", "locale", "topic_pattern").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields(ownerFieldName, "key").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("key").
-			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL and system_owned = true")),
 	}
 }
 
@@ -241,6 +237,7 @@ func (NotificationTemplate) Modules() []models.OrgModule {
 func (NotificationTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNotificationTemplateSanitize(),
+		hooks.HookExtractNotificationTemplateVariables(),
 	}
 }
 

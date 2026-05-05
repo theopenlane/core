@@ -11,6 +11,9 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 	"github.com/stretchr/testify/require"
+
+	"github.com/theopenlane/core/internal/integrations/templatekit"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestMessageSendRunDestinations(t *testing.T) {
@@ -20,9 +23,9 @@ func TestMessageSendRunDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))
+	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
-	resultBytes, err := MessageSend{}.Run(context.Background(), client, MessageSendOperation{
+	resultBytes, err := MessageSend{}.Run(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
 		Destinations: []string{"C11111", "C22222"},
 		Text:         "hello from destinations",
 	})
@@ -45,9 +48,9 @@ func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
 	server := httptest.NewServer(recorded.handler(t))
 	defer server.Close()
 
-	client := slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))
+	client := &SlackClient{API: slackgo.New("testing-token", slackgo.OptionAPIURL(server.URL+"/"))}
 
-	resultBytes, err := MessageSend{}.Run(context.Background(), client, MessageSendOperation{
+	resultBytes, err := MessageSend{}.Run(context.Background(), types.OperationRequest{}, client, MessageSendOperation{
 		Channel:      "C11111",
 		Destinations: []string{"C11111", "C22222", "C22222"},
 		Text:         "hello dedupe",
@@ -58,6 +61,34 @@ func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
 	require.NoError(t, json.Unmarshal(resultBytes, &result))
 	require.Len(t, result.Deliveries, 2)
 	require.Equal(t, []string{"C11111", "C22222"}, recorded.channelValues())
+}
+
+func TestResolveOperationTemplateNoop(t *testing.T) {
+	t.Parallel()
+
+	cfg := MessageSendOperation{
+		Channel: "C11111",
+		Text:    "hello",
+	}
+
+	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	require.NoError(t, err)
+	require.Equal(t, "C11111", cfg.Channel)
+	require.Equal(t, "hello", cfg.Text)
+}
+
+func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
+	t.Parallel()
+
+	cfg := MessageSendOperation{
+		TemplateID:  "some-id",
+		TemplateKey: "some-key",
+		Channel:     "C11111",
+		Text:        "hello",
+	}
+
+	err := templatekit.ResolveOperationTemplate(context.Background(), types.OperationRequest{}, cfg.TemplateID, cfg.TemplateKey, &cfg)
+	require.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
 }
 
 // slackPostMessageRecorder captures chat.postMessage requests made against a test HTTP server

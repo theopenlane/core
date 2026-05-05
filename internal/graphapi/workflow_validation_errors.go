@@ -103,8 +103,6 @@ var (
 	ErrCreateObjectTypeInvalid = errors.New("create_object has invalid object_type")
 	// ErrCreateObjectFieldsRequired is returned when create object fields are required
 	ErrCreateObjectFieldsRequired = errors.New("create_object requires fields")
-	// ErrNotificationTemplateBothIDAndKey is returned when both template_id and template_key are set
-	ErrNotificationTemplateBothIDAndKey = errors.New("template_id and template_key cannot both be set")
 	// ErrIntegrationOperationRequired is returned when integration operation is required
 	ErrIntegrationOperationRequired = errors.New("integration action requires operation_name")
 	// ErrIntegrationScopeExpressionRequired is returned when scope payload/resource is set without scope expression
@@ -113,10 +111,4 @@ var (
 	ErrIntegrationScopeExpressionInvalid = errors.New("integration action has invalid scope expression")
 	// ErrIntegrationScopeEvaluatorInit is returned when integration scope evaluator initialization fails
 	ErrIntegrationScopeEvaluatorInit = errors.New("integration scope evaluator initialization failed")
-	// ErrOwnerIDRequired is returned when owner_id is required for validation
-	ErrOwnerIDRequired = errors.New("owner_id required for notification template validation")
-	// ErrNotificationTemplateNotFound is returned when a notification template is not found
-	ErrNotificationTemplateNotFound = errors.New("notification template not found")
-	// ErrNotificationTemplateKeyNotFound is returned when a notification template key is not found
-	ErrNotificationTemplateKeyNotFound = errors.New("notification template key not found")
 )

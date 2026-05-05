@@ -166,16 +166,6 @@
           "type": "array",
           "description": "List of message targets: USER/GROUP/ROLE/RESOLVER for user-directed notifications"
         },
-        "template_id": {
-          "type": "string"
-        },
-        "template_key": {
-          "type": "string"
-        },
-        "operation_name": {
-          "type": "string",
-          "description": "Integration operation to invoke when the template has an integration_id"
-        },
         "topic": {
           "type": "string",
           "description": "Optional notification topic for categorization"
@@ -248,6 +238,60 @@
       "type": "object",
       "title": "ReviewActionParams",
       "description": "Parameters for REQUEST_REVIEW actions that require user or group review"
+    },
+    "SendEmailActionParams": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/internal/workflows/send-email-action-params",
+      "properties": {
+        "targets": {
+          "items": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "USER",
+                  "GROUP",
+                  "ROLE",
+                  "RESOLVER",
+                  "CHANNEL"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "resolver_key": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "emailTemplateId": {
+          "type": "string"
+        },
+        "emailTemplateKey": {
+          "type": "string"
+        },
+        "to": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "from": {
+          "type": "string"
+        },
+        "replyTo": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "TargetConfig": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",

@@ -12,9 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/slacknotify"
 	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -202,47 +200,8 @@ func (PingWebhook) Handle(ctx context.Context, request types.WebhookHandleReques
 	return nil
 }
 
-// Handle sends the GitHub App installation-created Slack notification
-func (InstallationCreatedWebhook) Handle(ctx context.Context, request types.WebhookHandleRequest) error {
-	if !slacknotify.NotificationsEnabled() {
-		return nil
-	}
-
-	envelope, err := installationCreatedWebhookEvent.UnmarshalPayload(request.Event.Payload)
-	if err != nil {
-		return ErrWebhookPayloadInvalid
-	}
-
-	org, err := request.DB.Organization.Get(ctx, request.Integration.OwnerID)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("organization_id", request.Integration.OwnerID).Msg("failed to resolve openlane organization name for github installation webhook")
-		return nil
-	}
-
-	openlaneOrgName := org.ID
-	if org.DisplayName != "" {
-		openlaneOrgName = org.DisplayName
-	} else if org.Name != "" {
-		openlaneOrgName = org.Name
-	}
-
-	githubOrg := ""
-	githubAccountType := ""
-	if envelope.Integration != nil && envelope.Integration.Account != nil {
-		githubOrg = envelope.Integration.Account.Login
-		githubAccountType = envelope.Integration.Account.Type
-	}
-
-	message, err := slacknotify.RenderGitHubAppInstallMessage(githubOrg, githubAccountType, openlaneOrgName, request.Integration.OwnerID)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("integration_id", request.Integration.ID).Msg("failed to render github installation webhook slack message")
-		return nil
-	}
-
-	if err := slacknotify.SendNotification(ctx, message); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("integration_id", request.Integration.ID).Msg("failed to send github installation webhook slack notification")
-	}
-
+// Handle is a no-op; platform notifications for installation events are dispatched by the runtime
+func (InstallationCreatedWebhook) Handle(_ context.Context, _ types.WebhookHandleRequest) error {
 	return nil
 }
 

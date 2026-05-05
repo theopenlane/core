@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -2000,15 +2001,6 @@ type EmailTemplateBuilder struct {
 	TemplateContext *enums.TemplateContext
 }
 
-// EmailBrandingBuilder is used to create email branding
-type EmailBrandingBuilder struct {
-	client *client
-
-	// Fields
-	Name         string
-	PrimaryColor string
-}
-
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
 	// Add the database client to context so the authz client is available for feature checks
@@ -2725,7 +2717,7 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 	}
 
 	if e.Key == "" {
-		e.Key = ulids.New().String()
+		e.Key = emaildef.BrandedMessageOp.Name()
 	}
 
 	if e.TemplateContext == nil {
@@ -2736,30 +2728,15 @@ func (e *EmailTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.E
 		SetName(e.Name).
 		SetKey(e.Key).
 		SetTemplateContext(*e.TemplateContext).
+		SetDefaults(map[string]any{
+			"subject": "Test subject",
+			"title":   "Test title",
+			"intros":  []any{"Test body"},
+		}).
 		Save(ctx)
 	requireNoError(t, err)
 
 	return emailTemplate
-}
-
-func (e *EmailBrandingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.EmailBranding {
-	ctx = setContext(ctx, e.client.db)
-
-	if e.Name == "" {
-		e.Name = gofakeit.Company() + " Email Branding"
-	}
-
-	if e.PrimaryColor == "" {
-		e.PrimaryColor = gofakeit.HexColor()
-	}
-
-	emailBranding, err := e.client.db.EmailBranding.Create().
-		SetName(e.Name).
-		SetPrimaryColor(e.PrimaryColor).
-		Save(ctx)
-	requireNoError(t, err)
-
-	return emailBranding
 }
 
 func (p *PlatformBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Platform {

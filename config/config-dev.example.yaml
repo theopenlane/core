@@ -105,22 +105,6 @@ sessions:
   samesite: "Lax"
   secure: false # set to true in production
 
-# email settings
-email:
-  companyaddress: 5150 Broadway St &middot; San Antonio, TX 78209
-  companyname: Openlane
-  corporation: theopenlane, Inc.
-  fromemail: no-reply@mail.theopenlane.io
-  supportemail: support@theopenlane.io
-  urls:
-    verifysubscriber: https://www.theopenlane.io/subscribe
-    verify: https://console.theopenlane.io/verify
-    reset: https://console.theopenlane.io/password-reset
-    invite: https://console.theopenlane.io/invite
-    root: https://www.theopenlane.io
-    docs: https://docs.theopenlane.io
-    product: https://console.theopenlane.io
-
 ratelimit:
   enabled: false
 
@@ -170,22 +154,11 @@ objectstorage:
 
 subscription:
   enabled: false
-  privatestripekey: sk_test_redacted
+  privatestripekey: not_an_actual_key
   stripebillingportalsuccessurl: http://localhost:3001/organization-settings/billing
   stripecancellationreturnurl: http://localhost:3001/organization-settings/billing/subscription_canceled
   stripewebhookurl: https://localhost:17608/v1/stripe/webhook
   stripewebhooksecret: ""
-
-integrationoauthprovider:
-    enabled: false
-    successredirecturl: ""
-integrationgithubapp:
-    enabled: false
-    appid: ""
-    appslug: ""
-    privatekey: ""
-    webhooksecret: ""
-    successredirecturl: ""
 
 cloudflare:
     apitoken: ""
@@ -193,3 +166,43 @@ cloudflare:
     clientid: ""
     clientsecret: ""
     enabled: false
+
+integrations:
+    oidclocal:
+      clientid: local-core-oidc
+      clientsecret: local-core-oidc-secret
+      discoveryurl: http://localhost:5557/dex
+      enabled: false
+      redirecturl: http://localhost:17608/v1/integrations/auth/callback
+    email:
+      apiKey: ""
+      docsURL: https://docs.theopenlane.io
+      fromEmail: support@mail.theopenlane.io
+      productURL: https://console.theopenlane.io
+      provider: resend
+      questionnaireEmail: support@mail.theopenlane.io
+      rootURL: https://www.theopenlane.io
+      supportEmail: support@theopenlane.io
+
+workflows:
+    cel:
+        comprehensionnestinglimit: 0
+        costlimit: 0
+        crosstypenumericcomparisons: false
+        evaloptimize: true
+        extendedvalidations: true
+        identifierescapesyntax: false
+        interruptcheckfrequency: 100
+        macrocalltracking: false
+        optionaltypes: false
+        parserexpressionsizelimit: 100000
+        parserrecursionlimit: 250
+        timeout: 100000000
+        trackstate: false
+    enabled: true
+    gala:
+        enabled: true
+        failonenqueueerror: false
+        maxretries: 5
+        queuename: events
+        workercount: 10

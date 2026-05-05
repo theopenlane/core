@@ -19,11 +19,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -49,7 +49,7 @@ type CampaignQuery struct {
 	withInternalOwnerGroup       *GroupQuery
 	withAssessment               *AssessmentQuery
 	withTemplate                 *TemplateQuery
-	withEmailBranding            *EmailBrandingQuery
+	withIntegration              *IntegrationQuery
 	withEmailTemplate            *EmailTemplateQuery
 	withEntity                   *EntityQuery
 	withCampaignTargets          *CampaignTargetQuery
@@ -309,9 +309,9 @@ func (_q *CampaignQuery) QueryTemplate() *TemplateQuery {
 	return query
 }
 
-// QueryEmailBranding chains the current query on the "email_branding" edge.
-func (_q *CampaignQuery) QueryEmailBranding() *EmailBrandingQuery {
-	query := (&EmailBrandingClient{config: _q.config}).Query()
+// QueryIntegration chains the current query on the "integration" edge.
+func (_q *CampaignQuery) QueryIntegration() *IntegrationQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -322,11 +322,11 @@ func (_q *CampaignQuery) QueryEmailBranding() *EmailBrandingQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
-			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EmailBrandingTable, campaign.EmailBrandingColumn),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.IntegrationTable, campaign.IntegrationColumn),
 		)
 		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailBranding
+		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -784,7 +784,7 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		withInternalOwnerGroup:  _q.withInternalOwnerGroup.Clone(),
 		withAssessment:          _q.withAssessment.Clone(),
 		withTemplate:            _q.withTemplate.Clone(),
-		withEmailBranding:       _q.withEmailBranding.Clone(),
+		withIntegration:         _q.withIntegration.Clone(),
 		withEmailTemplate:       _q.withEmailTemplate.Clone(),
 		withEntity:              _q.withEntity.Clone(),
 		withCampaignTargets:     _q.withCampaignTargets.Clone(),
@@ -890,14 +890,14 @@ func (_q *CampaignQuery) WithTemplate(opts ...func(*TemplateQuery)) *CampaignQue
 	return _q
 }
 
-// WithEmailBranding tells the query-builder to eager-load the nodes that are connected to
-// the "email_branding" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *CampaignQuery) WithEmailBranding(opts ...func(*EmailBrandingQuery)) *CampaignQuery {
-	query := (&EmailBrandingClient{config: _q.config}).Query()
+// WithIntegration tells the query-builder to eager-load the nodes that are connected to
+// the "integration" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithIntegration(opts ...func(*IntegrationQuery)) *CampaignQuery {
+	query := (&IntegrationClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withEmailBranding = query
+	_q.withIntegration = query
 	return _q
 }
 
@@ -1104,7 +1104,7 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			_q.withInternalOwnerGroup != nil,
 			_q.withAssessment != nil,
 			_q.withTemplate != nil,
-			_q.withEmailBranding != nil,
+			_q.withIntegration != nil,
 			_q.withEmailTemplate != nil,
 			_q.withEntity != nil,
 			_q.withCampaignTargets != nil,
@@ -1191,9 +1191,9 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			return nil, err
 		}
 	}
-	if query := _q.withEmailBranding; query != nil {
-		if err := _q.loadEmailBranding(ctx, query, nodes, nil,
-			func(n *Campaign, e *EmailBranding) { n.Edges.EmailBranding = e }); err != nil {
+	if query := _q.withIntegration; query != nil {
+		if err := _q.loadIntegration(ctx, query, nodes, nil,
+			func(n *Campaign, e *Integration) { n.Edges.Integration = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1685,11 +1685,11 @@ func (_q *CampaignQuery) loadTemplate(ctx context.Context, query *TemplateQuery,
 	}
 	return nil
 }
-func (_q *CampaignQuery) loadEmailBranding(ctx context.Context, query *EmailBrandingQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *EmailBranding)) error {
+func (_q *CampaignQuery) loadIntegration(ctx context.Context, query *IntegrationQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *Integration)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Campaign)
 	for i := range nodes {
-		fk := nodes[i].EmailBrandingID
+		fk := nodes[i].IntegrationID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1698,7 +1698,7 @@ func (_q *CampaignQuery) loadEmailBranding(ctx context.Context, query *EmailBran
 	if len(ids) == 0 {
 		return nil
 	}
-	query.Where(emailbranding.IDIn(ids...))
+	query.Where(integration.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
@@ -1706,7 +1706,7 @@ func (_q *CampaignQuery) loadEmailBranding(ctx context.Context, query *EmailBran
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "email_branding_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "integration_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2219,8 +2219,8 @@ func (_q *CampaignQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withTemplate != nil {
 			_spec.Node.AddColumnOnce(campaign.FieldTemplateID)
 		}
-		if _q.withEmailBranding != nil {
-			_spec.Node.AddColumnOnce(campaign.FieldEmailBrandingID)
+		if _q.withIntegration != nil {
+			_spec.Node.AddColumnOnce(campaign.FieldIntegrationID)
 		}
 		if _q.withEmailTemplate != nil {
 			_spec.Node.AddColumnOnce(campaign.FieldEmailTemplateID)

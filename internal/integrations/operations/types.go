@@ -2,6 +2,7 @@ package operations
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -24,8 +25,12 @@ type IngestContext struct {
 
 // DispatchRequest describes one requested operation dispatch
 type DispatchRequest struct {
-	// IntegrationID is the target installation identifier
+	// IntegrationID is the target integration identifier; required on the customer path, empty on the runtime path
 	IntegrationID string
+	// DefinitionID is the definition identifier carried as metadata on the runtime path
+	DefinitionID string
+	// OwnerID is the owning organization carried on the runtime path; derived from the DB record for customer dispatch
+	OwnerID string
 	// Operation is the definition-local operation identifier
 	Operation string
 	// Config is the operation configuration payload
@@ -36,6 +41,10 @@ type DispatchRequest struct {
 	RunType enums.IntegrationRunType
 	// Workflow carries optional workflow linkage for workflow-triggered operations
 	Workflow *types.WorkflowMeta
+	// ScheduledAt defers execution until the specified time; nil means immediate
+	ScheduledAt *time.Time
+	// Runtime signals that this dispatch should use the runtime provider path
+	Runtime bool
 }
 
 // DispatchResult captures the queued run metadata

@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	// definitionID is the stable identifier for the Microsoft Teams integration definition
-	definitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
+	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
+	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
 	// installation is the typed installation metadata handle for the Microsoft Teams definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client
@@ -21,7 +21,7 @@ var (
 	// healthDefaultOperation is the operation ref for the Microsoft Teams health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
-	messageSendSchema, messageSendOperation = providerkit.OperationSchema[MessageSendOperation]()
+	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation
@@ -36,6 +36,8 @@ type teamsCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// DefaultMessaging marks this installation as the preferred Teams tenant for workflow messaging operations
+	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 }

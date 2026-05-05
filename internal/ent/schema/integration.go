@@ -152,6 +152,9 @@ func (Integration) Fields() []ent.Field {
 		field.Bool("primary_directory").
 			Comment("designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization").
 			Default(false),
+		field.Bool("campaign_email").
+			Comment("designates this email integration as the one to use for campaign dispatch within its owner organization").
+			Default(false),
 	}
 }
 
@@ -190,6 +193,7 @@ func (i Integration) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(i, NotificationTemplate{}),
 		defaultEdgeToWithPagination(i, EmailTemplate{}),
+		defaultEdgeToWithPagination(i, Campaign{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: IntegrationWebhook{},
@@ -224,6 +228,7 @@ func (i Integration) Mixin() []ent.Mixin {
 func (Integration) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookIntegrationPrimaryDirectory(),
+		hooks.HookIntegrationCampaignEmail(),
 	}
 }
 

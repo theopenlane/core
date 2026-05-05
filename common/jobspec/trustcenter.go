@@ -6,9 +6,9 @@ import "github.com/riverqueue/river"
 type AttestNDARequestArgs struct {
 	// NDARequestID is the id of the request
 	NDARequestID string `json:"nda_request_id"`
-
-	// TrustCenterNDAFullURL is the url to access the private document
-	TrustCenterNDAFullURL string `json:"trust_center_nda_full_url"`
+	// TrustCenterID is the trust center identifier; the worker uses this
+	// together with NDARequestID to construct the auth URL at execution time
+	TrustCenterID string `json:"trustCenterId"`
 }
 
 // Kind satisfies the river.Job interface

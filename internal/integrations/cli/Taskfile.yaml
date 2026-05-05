@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/go-task/task/main/website/src/public/schema.json
+
+version: "3"
+
+vars:
+  CLI: go run main.go
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  schema:
+    desc: regenerate the integrations CLI JSON schema and example YAML config
+    cmds:
+      - go run jsonschema/schema_generator.go
+
+  help:
+    desc: show integrations CLI help
+    cmds:
+      - '{{.CLI}} --help'
