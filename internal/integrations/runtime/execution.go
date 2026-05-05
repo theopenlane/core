@@ -319,11 +319,28 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client initialized")
 	}
 
+	var lastRunAt *time.Time
+
+	if db := r.dbOrNil(); db != nil {
+		var lastRunErr error
+
+		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
+		if lastRunErr != nil {
+			logx.FromContext(ctx).Warn().Err(lastRunErr).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("could not resolve last successful run time, proceeding without incremental filter")
+		}
+	}
+
+	if lastRunAt == nil && !operation.SkipDefaultLookback {
+		t := time.Now().UTC().Add(-r.defaultLookback)
+		lastRunAt = &t
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,
 		Client:      client,
 		Config:      jsonx.CloneRawMessage(config),
+		LastRunAt:   lastRunAt,
 	}
 
 	if operation.IngestHandle != nil {

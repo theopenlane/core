@@ -3,6 +3,7 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
@@ -47,6 +48,9 @@ type OperationRequest struct {
 	Client any
 	// Config is the operation-specific configuration payload
 	Config json.RawMessage
+	// LastRunAt is the finish time of the most recent successful run for this operation,
+	// used by handlers that support incremental/delta fetches
+	LastRunAt *time.Time
 }
 
 // OperationHandler executes one definition operation
@@ -87,4 +91,10 @@ type OperationRegistration struct {
 	// when set, the resolved config is used as the operation config for reconcile runs and as the
 	// source for per-operation filter expressions in the ingest pipeline
 	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
+	// ReconcileSchedule overrides the default adaptive schedule for this operation's reconcile cycles;
+	// useful for operations that always do a full fetch and should run less frequently
+	ReconcileSchedule *gala.Schedule `json:"-"`
+	// SkipDefaultLookback disables the runtime's default lookback window on initial runs;
+	// when true, LastRunAt is nil on first run so the handler performs a full fetch
+	SkipDefaultLookback bool `json:"-"`
 }

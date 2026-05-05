@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"testing"
+	"time"
+
+	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -201,6 +204,55 @@ func TestExecuteOperationWithCredentials(t *testing.T) {
 	if captured.Credentials[0].Ref != ref {
 		t.Fatalf("expected credential ref %v, got %v", ref, captured.Credentials[0].Ref)
 	}
+}
+
+func TestExecuteOperationAppliesDefaultLookbackWhenNoLastRun(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	before := time.Now().UTC()
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, captured.LastRunAt != nil, "expected LastRunAt to be set via default lookback")
+
+	after := time.Now().UTC()
+	expectedEarliest := before.Add(-defaultLookbackDuration)
+	expectedLatest := after.Add(-defaultLookbackDuration)
+	assert.Assert(t, !captured.LastRunAt.Before(expectedEarliest), "LastRunAt %v is before expected window start %v", captured.LastRunAt, expectedEarliest)
+	assert.Assert(t, !captured.LastRunAt.After(expectedLatest), "LastRunAt %v is after expected window end %v", captured.LastRunAt, expectedLatest)
+}
+
+func TestExecuteOperationSkipDefaultLookbackLeavesLastRunAtNil(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name:                "test-op",
+		SkipDefaultLookback: true,
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, captured.LastRunAt == nil, "expected LastRunAt to be nil when SkipDefaultLookback is set")
 }
 
 func TestExecuteOperationPassesRequestFields(t *testing.T) {

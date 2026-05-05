@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"strings"
+	"time"
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
@@ -30,8 +31,6 @@ const (
 type FindingsSync struct {
 	// PageSize controls the number of findings per API page
 	PageSize int `json:"page_size,omitempty"`
-	// MaxFindings caps the total number of findings returned
-	MaxFindings int `json:"max_findings,omitempty"`
 }
 
 // FindingsCollect collects GCP SCC findings for ingest
@@ -40,12 +39,12 @@ type FindingsCollect struct{}
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequestConfig(sccClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
-		return f.Run(ctx, request.Credentials, client, cfg)
+		return f.Run(ctx, request.Credentials, client, cfg, request.LastRunAt)
 	})
 }
 
 // Run collects GCP SCC findings from configured sources
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -65,48 +64,27 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 		pageSize = findingsMaxPageSize
 	}
 
-	if maxFindings := cfg.MaxFindings; maxFindings > 0 && maxFindings < pageSize {
-		pageSize = maxFindings
-	}
-
-	maxFindings := cfg.MaxFindings
 	marshaler := protojson.MarshalOptions{UseProtoNames: true}
 	findingEnvelopes := make([]types.MappingEnvelope, 0)
 	vulnEnvelopes := make([]types.MappingEnvelope, 0)
 	riskEnvelopes := make([]types.MappingEnvelope, 0)
 
-	collected := 0
+	var timeFilter string
+	if lastRunAt != nil {
+		timeFilter = fmt.Sprintf(`event_time >= "%s"`, lastRunAt.UTC().Format(time.RFC3339))
+	}
 
-collectLoop:
 	for _, sourceName := range sources {
-		req := &securitycenterpb.ListFindingsRequest{
-			PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
+		pageResults, err := listAllFindings(ctx, c, sourceName, pageSize, timeFilter)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error listing findings")
+			return nil, ErrListFindingsFailed
 		}
 
-		if sourceName != "" {
-			req.Parent = sourceName
-		}
-
-		it := c.ListFindings(ctx, req)
-
-		for {
-			result, err := it.Next()
-			if errors.Is(err, iterator.Done) {
-				break
-			}
-
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error listing findings")
-				return nil, ErrListFindingsFailed
-			}
-
+		for _, result := range pageResults {
 			finding := result.GetFinding()
 			if finding == nil {
 				continue
-			}
-
-			if maxFindings > 0 && collected >= maxFindings {
-				break collectLoop
 			}
 
 			envelope, err := buildFindingEnvelope(sourceName, finding, marshaler)
@@ -122,8 +100,6 @@ collectLoop:
 			default:
 				findingEnvelopes = append(findingEnvelopes, envelope)
 			}
-
-			collected++
 		}
 	}
 
@@ -141,6 +117,37 @@ collectLoop:
 			Envelopes: vulnEnvelopes,
 		},
 	}, nil
+}
+
+// listAllFindings paginates through all pages of findings for a single source and returns every result
+func listAllFindings(ctx context.Context, c *cloudscc.Client, sourceName string, pageSize int, timeFilter string) ([]*securitycenterpb.ListFindingsResponse_ListFindingsResult, error) {
+	req := &securitycenterpb.ListFindingsRequest{
+		PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min
+		Filter:   timeFilter,
+	}
+
+	if sourceName != "" {
+		req.Parent = sourceName
+	}
+
+	it := c.ListFindings(ctx, req)
+
+	var results []*securitycenterpb.ListFindingsResponse_ListFindingsResult
+
+	for {
+		result, err := it.Next()
+		if errors.Is(err, iterator.Done) {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, result)
+	}
+
+	return results, nil
 }
 
 // buildFindingEnvelope serializes a finding into a mapping envelope

@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -124,7 +125,8 @@ func Builder(cfg Config) registry.Builder {
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
 						},
 					},
-					IngestHandle: RepositorySync{}.IngestHandle(),
+					IngestHandle:        RepositorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 				},
 				{
 					Name:           vulnerabilityCollectOperation.Name(),
@@ -156,7 +158,9 @@ func Builder(cfg Config) registry.Builder {
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
+					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: githubAppMappings(),
