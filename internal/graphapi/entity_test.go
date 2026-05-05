@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	"github.com/samber/lo"
@@ -329,7 +330,8 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "happy path, update display name",
 			request: testclient.UpdateEntityInput{
-				DisplayName: lo.ToPtr("blue spruce"),
+				DisplayName:    lo.ToPtr("blue spruce"),
+				ApprovedForUse: lo.ToPtr(true),
 				Note: &testclient.CreateNoteInput{
 					Text: "the pine tree with blue-green colored needles",
 				},
@@ -341,6 +343,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 			name: "update description using api token",
 			request: testclient.UpdateEntityInput{
 				Description: lo.ToPtr("the pine tree with blue-green colored needles"),
+				Status:      &enums.EntityStatusDraft,
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -352,6 +355,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 					Text: "the pine tree with blue-green colored needles",
 				},
 				Domains: []string{"https://appalachiatrees.com"},
+				Status:  &enums.EntityStatusActive,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -359,8 +363,18 @@ func TestMutationUpdateEntity(t *testing.T) {
 		{
 			name: "update status and domain",
 			request: testclient.UpdateEntityInput{
-				Status:        &enums.EntityStatusSuspended,
-				AppendDomains: []string{"example.com"},
+				Status:         &enums.EntityStatusSuspended,
+				AppendDomains:  []string{"example.com"},
+				ApprovedForUse: lo.ToPtr(false),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "conflicting status and approved for use, approved should take precedence",
+			request: testclient.UpdateEntityInput{
+				Status:         &enums.EntityStatusActive,
+				ApprovedForUse: lo.ToPtr(false),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -429,6 +443,19 @@ func TestMutationUpdateEntity(t *testing.T) {
 
 				assert.Check(t, is.Len(resp.UpdateEntity.Entity.Notes.Edges, numNotes))
 				assert.Check(t, is.Equal(tc.request.Note.Text, resp.UpdateEntity.Entity.Notes.Edges[0].Node.Text))
+			}
+
+			// if approed for use is set, it should always respect that over status
+			if tc.request.ApprovedForUse != nil {
+				assert.Check(t, is.Equal(*tc.request.ApprovedForUse, *resp.UpdateEntity.Entity.ApprovedForUse))
+			} else if tc.request.Status != nil {
+				// else its done based on status, where active and approved are approved
+				status := *tc.request.Status
+				if slices.Contains([]enums.EntityStatus{enums.EntityStatusApproved, enums.EntityStatusActive}, status) {
+					assert.Check(t, *resp.UpdateEntity.Entity.ApprovedForUse)
+				} else {
+					assert.Check(t, !*resp.UpdateEntity.Entity.ApprovedForUse)
+				}
 			}
 		})
 	}
