@@ -125,7 +125,8 @@ func Builder(cfg Config) registry.Builder {
 							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
 						},
 					},
-					IngestHandle: RepositorySync{}.IngestHandle(),
+					IngestHandle:        RepositorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 				},
 				{
 					Name:           vulnerabilityCollectOperation.Name(),
