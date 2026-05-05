@@ -14,7 +14,7 @@ replace github.com/theopenlane/core/common => ./common
 
 require (
 	ariga.io/entcache v0.1.0
-	cloud.google.com/go/securitycenter v1.42.0
+	cloud.google.com/go/securitycenter v1.43.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
 	github.com/99designs/gqlgen v0.17.90
