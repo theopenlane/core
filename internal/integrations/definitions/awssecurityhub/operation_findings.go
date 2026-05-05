@@ -172,7 +172,10 @@ func buildFilters(ctx context.Context, creds types.CredentialBindings, lastRunAt
 
 	if lastRunAt != nil {
 		filters.UpdatedAt = []securityhubtypes.DateFilter{
-			{Start: aws.String(lastRunAt.UTC().Format(time.RFC3339))},
+			{
+				Start: aws.String(lastRunAt.UTC().Format(time.RFC3339)),
+				End:   aws.String(time.Now().UTC().Format(time.RFC3339)),
+			},
 		}
 	}
 

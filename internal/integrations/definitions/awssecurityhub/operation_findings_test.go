@@ -147,10 +147,19 @@ func TestBuildFilters(t *testing.T) {
 			HomeRegion: "us-east-1",
 		})
 
+		before := time.Now().UTC()
 		ts := time.Date(2025, 1, 15, 12, 0, 0, 0, time.UTC)
 		filters, err := buildFilters(context.Background(), creds, &ts)
+		after := time.Now().UTC()
+
 		require.NoError(t, err)
 		require.Len(t, filters.UpdatedAt, 1)
 		gtassert.Equal(t, "2025-01-15T12:00:00Z", *filters.UpdatedAt[0].Start)
+		require.NotNil(t, filters.UpdatedAt[0].End)
+
+		end, err := time.Parse(time.RFC3339, *filters.UpdatedAt[0].End)
+		require.NoError(t, err)
+		gtassert.Assert(t, !end.Before(before), "End should not be before the call")
+		gtassert.Assert(t, !end.After(after), "End should not be after the call")
 	})
 }
