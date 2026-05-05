@@ -69,9 +69,14 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				err = ErrFeatureNotEnabled
 			}
 
+			m := "unknown"
+			if module != nil {
+				m = module.String()
+			}
+
 			logx.FromContext(ctx).Info().
 				Interface("required_features", schemaFeatures).
-				Str("missing_module", module.String()).
+				Str("missing_module", m).
 				Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
