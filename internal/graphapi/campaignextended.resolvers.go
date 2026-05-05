@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"errors"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
@@ -69,9 +68,7 @@ func (r *mutationResolver) LaunchCampaign(ctx context.Context, input model.Launc
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
-		logx.FromContext(ctx).Error().Msg("no caller in context")
-
-		return nil, errors.New("internal error")
+		return nil, rout.ErrPermissionDenied
 	}
 
 	ctx, err := common.SetOrganizationInAuthContext(ctx, &caller.OrganizationID)

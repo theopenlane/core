@@ -80,7 +80,7 @@ func HookExtractNotificationTemplateVariables() ent.Hook {
 
 			if v, exists := m.Jsonconfig(); exists {
 				jsonconfig = v
-			} else if !m.Op().Is(ent.OpCreate) {
+			} else if m.Op().Is(ent.OpUpdateOne) {
 				if old, err := m.OldJsonconfig(ctx); err == nil {
 					jsonconfig = old
 				}

@@ -175,18 +175,14 @@ integrations:
       enabled: false
       redirecturl: http://localhost:17608/v1/integrations/auth/callback
     email:
-        api_key: ""
-        company_address: 5150 Broadway St San Antonio, TX 78209
-        company_name: Openlane
-        corporation: theopenlane, Inc.
-        docs_url: https://docs.theopenlane.io
-        from_email: support@mail.theopenlane.io
-        logo_url: https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/12e42452-e66e-4bae-0011-45a3f2cb6200/public
-        product_url: https://console.theopenlane.io
-        provider: resend
-        questionnaire_email: no-reply@mail.theopenlane.io
-        root_url: https://www.theopenlane.io
-        support_email: support@theopenlane.io
+      apiKey: ""
+      docsURL: https://docs.theopenlane.io
+      fromEmail: support@mail.theopenlane.io
+      productURL: https://console.theopenlane.io
+      provider: resend
+      questionnaireEmail: support@mail.theopenlane.io
+      rootURL: https://www.theopenlane.io
+      supportEmail: support@theopenlane.io
 
 workflows:
     cel:

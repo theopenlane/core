@@ -343,7 +343,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 	var lastRunAt *time.Time
 
-	if db := r.dbOrNil(); db != nil {
+	if db := r.dbOrNil(); db != nil && db.IntegrationRun != nil && integration != nil {
 		var lastRunErr error
 
 		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)

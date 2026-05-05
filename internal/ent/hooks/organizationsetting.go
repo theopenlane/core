@@ -234,8 +234,6 @@ func sendBillingEmailChangeNotifications(ctx context.Context, client *generated.
 			ChangedAt:       changedAt,
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notification")
-
-			return err
 		}
 	}
 

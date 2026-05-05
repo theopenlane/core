@@ -63,23 +63,9 @@ func HookSubscriberCreate() ent.Hook {
 				}
 			}
 
-			tokenRaw, tokenOK := m.Token()
-			tokenValue, err := requiredMutationString("token", tokenRaw, tokenOK)
-			if err != nil {
-				return nil, err
-			}
-
-			emailRaw, emailOK := m.Email()
-			emailAddress, err := requiredMutationString("email", emailRaw, emailOK)
-			if err != nil {
-				return nil, err
-			}
-
-			orgIDValue, ownerOK := m.OwnerID()
-			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
-			if err != nil {
-				return nil, err
-			}
+			tokenValue, _ := m.Token()
+			emailAddress, _ := m.Email()
+			orgID, _ := m.OwnerID()
 
 			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
 			if err != nil {

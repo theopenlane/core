@@ -69,24 +69,10 @@ func HookInvite() ent.Hook {
 				}
 			}
 
-			orgIDValue, ownerOK := m.OwnerID()
-			orgID, err := requiredMutationString("owner_id", orgIDValue, ownerOK)
-			if err != nil {
-				return nil, err
-			}
-
+			orgID, _ := m.OwnerID()
 			reqID, _ := m.RequestorID()
-			tokenRaw, tokenOK := m.Token()
-			tokenValue, err := requiredMutationString("token", tokenRaw, tokenOK)
-			if err != nil {
-				return nil, err
-			}
-
-			recipientRaw, recipientOK := m.Recipient()
-			emailAddress, err := requiredMutationString("recipient", recipientRaw, recipientOK)
-			if err != nil {
-				return nil, err
-			}
+			tokenValue, _ := m.Token()
+			emailAddress, _ := m.Recipient()
 
 			role, _ := m.Role()
 

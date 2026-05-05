@@ -155,7 +155,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
 				Email: user.Email,
 			}); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to send new user slack notification")
 			}
 
 			return v, nil

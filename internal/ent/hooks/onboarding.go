@@ -81,7 +81,7 @@ func HookOnboarding() ent.Hook {
 				Compliance:     compliance,
 				DemoRequested:  demoRequested,
 			}); err != nil {
-				return nil, err
+				logx.FromContext(ctx).Error().Err(err).Msg("unable to send demo request slack notification")
 			}
 
 			if len(domains) > 0 {

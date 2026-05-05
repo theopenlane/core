@@ -113,7 +113,7 @@ func normalizeUser(user slackgo.User) slackUserPayload {
 		Deleted:           user.Deleted,
 		IsBot:             user.IsBot,
 		IsAdmin:           user.IsAdmin,
-		Has2FA:            user.Has2FA,
+		Has2FA:            user.Has2FA != nil && *user.Has2FA,
 		IsRestricted:      user.IsRestricted,
 		IsUltraRestricted: user.IsUltraRestricted,
 		IsStranger:        user.IsStranger,

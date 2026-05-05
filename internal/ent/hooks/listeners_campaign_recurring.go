@@ -93,10 +93,18 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 	}
 }
 
-// recomputeNextRunAt computes next_run_at from now and persists it
+// recomputeNextRunAt computes next_run_at from the last run (or now if never run) and persists it
 func recomputeNextRunAt(ctx context.Context, client *entgen.Client, camp *entgen.Campaign) error {
-	now := time.Now()
-	nextRun := operations.NextCampaignRunAt(now, camp.RecurrenceFrequency, camp.RecurrenceInterval, camp.RecurrenceTimezone)
+	base := time.Now()
+	if camp.LastRunAt != nil {
+		base = time.Time(*camp.LastRunAt)
+	}
+
+	nextRun := operations.NextCampaignRunAt(base, camp.RecurrenceFrequency, camp.RecurrenceInterval, camp.RecurrenceTimezone)
+
+	if !nextRun.After(time.Now()) {
+		nextRun = time.Now()
+	}
 
 	if err := client.Campaign.UpdateOneID(camp.ID).
 		SetNextRunAt(models.DateTime(nextRun)).
