@@ -30,13 +30,13 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
 func (v FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(securityHubClient, findingsCollectOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client, cfg FindingSync) ([]types.IngestPayloadSet, error) {
-		return v.Run(ctx, client, request.Credentials, cfg, request.LastRunAt)
+	return providerkit.WithClientRequest(securityHubClient, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) ([]types.IngestPayloadSet, error) {
+		return v.Run(ctx, client, request.Credentials, request.LastRunAt)
 	})
 }
 
 // Run collects Security Hub findings
-func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, cfg FindingSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	var (
 		findingEnvelopes       []types.MappingEnvelope
 		vulnerabilityEnvelopes []types.MappingEnvelope
