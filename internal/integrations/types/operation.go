@@ -79,9 +79,10 @@ type OperationRegistration struct {
 	ConfigSchema json.RawMessage `json:"configSchema,omitempty"`
 	// UISchema is optional UI layout hints for the input form; nil when absent
 	UISchema json.RawMessage `json:"uiSchema,omitempty"`
-	// CustomerSelectable reports whether the operation is exposed in customer-facing pickers;
-	// false by default, true for operations that customers may pick from a catalog
-	CustomerSelectable bool `json:"customerSelectable,omitempty"`
+	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces;
+	// nil (default) and true are treated as selectable, false hides the operation from
+	// provider listings and catalog pickers (used for internal system operations)
+	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
 	// Ingest declares the normalized schemas emitted by the operation

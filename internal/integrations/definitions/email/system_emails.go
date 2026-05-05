@@ -682,10 +682,11 @@ func AllEmailOperations() []types.OperationRegistration {
 	})
 }
 
-// CustomerSelectableDispatchers returns the dispatchers marked as customer-selectable
+// CustomerSelectableDispatchers returns the dispatchers explicitly marked as customer-selectable
 func CustomerSelectableDispatchers() []Dispatcher {
 	return lo.Filter(dispatchers, func(d Dispatcher, _ int) bool {
-		return d.Registration().CustomerSelectable
+		cs := d.Registration().CustomerSelectable
+		return cs != nil && *cs
 	})
 }
 

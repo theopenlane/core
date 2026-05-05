@@ -8,6 +8,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -123,12 +125,13 @@ Compliance:
 // message: the input is rendered through tmpl and posted via the SlackClient's active transport
 func systemMessageRegistration[T any](op types.OperationRef[T], schema json.RawMessage, description string, tmpl *template.Template) types.OperationRegistration {
 	return types.OperationRegistration{
-		Name:         op.Name(),
-		Description:  description,
-		Topic:        DefinitionID.OperationTopic(op.Name()),
-		ClientRef:    slackClient.ID(),
-		ConfigSchema: schema,
-		Policy:       types.ExecutionPolicy{SkipRunRecord: true},
+		Name:               op.Name(),
+		Description:        description,
+		Topic:              DefinitionID.OperationTopic(op.Name()),
+		ClientRef:          slackClient.ID(),
+		ConfigSchema:       schema,
+		CustomerSelectable: lo.ToPtr(false),
+		Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 		Handle: providerkit.WithClientConfig(slackClient, op, ErrOperationConfigInvalid,
 			func(ctx context.Context, c *SlackClient, cfg T) (json.RawMessage, error) {
 				return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)

@@ -3,6 +3,7 @@
 package emailtest
 
 import (
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/internal/integrations/cli/cmd"
@@ -32,7 +33,7 @@ func list() error {
 		rows = append(rows, []string{
 			op.Name,
 			op.Description,
-			cmd.BoolStr(op.CustomerSelectable),
+			cmd.BoolStr(lo.FromPtr(op.CustomerSelectable)),
 		})
 	}
 

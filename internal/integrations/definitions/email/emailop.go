@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
@@ -89,7 +90,7 @@ type Operation[T Recipient] struct {
 	// Description is the human-readable summary shown in the catalog picker
 	Description string
 	// CustomerSelectable gates whether the entry is exposed via the customer-facing catalog query
-	CustomerSelectable bool
+	CustomerSelectable *bool
 	// Subject returns the rendered subject line for the email
 	Subject func(cfg RuntimeEmailConfig, input T) string
 	// Theme is the newman render theme applied to this email
@@ -209,7 +210,7 @@ func (e Operation[T]) Registration() types.OperationRegistration {
 		Topic:              DefinitionID.OperationTopic(e.Op.Name()),
 		ClientRef:          emailClientRef.ID(),
 		ConfigSchema:       e.Schema,
-		CustomerSelectable: e.CustomerSelectable,
+		CustomerSelectable: lo.ToPtr(e.CustomerSelectable != nil && *e.CustomerSelectable),
 		Handle:             e.handler(),
 	}
 }

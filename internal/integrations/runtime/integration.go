@@ -64,16 +64,16 @@ func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, own
 		return "", err
 	}
 
+	if len(integrations) == 1 {
+		return integrations[0].ID, nil
+	}
+
 	if len(prefer) > 0 {
 		for _, inst := range integrations {
 			if prefer[0](inst) {
 				return inst.ID, nil
 			}
 		}
-	}
-
-	if len(integrations) == 1 {
-		return integrations[0].ID, nil
 	}
 
 	return "", nil

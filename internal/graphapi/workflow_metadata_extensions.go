@@ -136,7 +136,9 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 			entry.UserInputSchema = jsonx.CloneRawMessage(def.UserInput.Schema)
 		}
 
-		operations := buildOperationEntries(def.Operations)
+		operations := buildOperationEntries(lo.Filter(def.Operations, func(op types.OperationRegistration, _ int) bool {
+			return op.CustomerSelectable == nil || *op.CustomerSelectable
+		}))
 		slices.SortFunc(operations, func(a, b integrationOperationEntry) int {
 			if a.Name < b.Name {
 				return -1

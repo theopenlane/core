@@ -1,6 +1,7 @@
 package email
 
 import (
+	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -60,7 +61,7 @@ var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Schema:             brandedMessageSchema,
 	Theme:              baseTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
-	CustomerSelectable: true,
+	CustomerSelectable: lo.ToPtr(true),
 	Subject: func(_ RuntimeEmailConfig, req BrandedMessageRequest) string {
 		return req.Subject
 	},
