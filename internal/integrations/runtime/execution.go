@@ -319,9 +319,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client initialized")
 	}
 
-	lastRunAt, err := operations.LastSuccessfulRunAt(ctx, r.DB(), integration.ID, operation.Name)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("could not resolve last successful run time, proceeding without incremental filter")
+	var lastRunAt *time.Time
+
+	if db := r.dbOrNil(); db != nil {
+		var lastRunErr error
+
+		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
+		if lastRunErr != nil {
+			logx.FromContext(ctx).Warn().Err(lastRunErr).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("could not resolve last successful run time, proceeding without incremental filter")
+		}
 	}
 
 	req := types.OperationRequest{

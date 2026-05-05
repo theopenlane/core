@@ -88,6 +88,16 @@ func (r *Runtime) DB() *ent.Client {
 	return do.MustInvoke[*ent.Client](r.injector)
 }
 
+// dbOrNil returns the Ent client if registered, nil otherwise
+func (r *Runtime) dbOrNil() *ent.Client {
+	db, err := do.Invoke[*ent.Client](r.injector)
+	if err != nil {
+		return nil
+	}
+
+	return db
+}
+
 // keystore returns the credential store from the injector
 func (r *Runtime) keystore() *keystore.Store {
 	return do.MustInvoke[*keystore.Store](r.injector)
