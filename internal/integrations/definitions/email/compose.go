@@ -38,7 +38,7 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 			emailtemplate.IDEQ(emailTemplateID),
 			emailtemplate.ActiveEQ(true),
 			emailtemplate.OwnerIDEQ(ownerID),
-		).
+		). // file attachment support is limited but adding it here for future support
 		WithFiles(func(q *generated.FileQuery) {
 			q.Select(
 				file.FieldProvidedFileName,
@@ -62,6 +62,7 @@ func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID st
 // markCampaignTargetSent records the current time as the sent_at timestamp on a campaign target
 func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID string) error {
 	now := models.DateTime(time.Now())
+
 	if err := db.CampaignTarget.UpdateOneID(targetID).
 		SetSentAt(now).
 		SetStatus(enums.AssessmentResponseStatusSent).
@@ -96,6 +97,8 @@ func createAssessmentResponseForRecipient(ctx context.Context, db *generated.Cli
 }
 
 // staticAttachmentsFromFiles converts File edge records to newman attachments
+// should technically work with inline files where we have the actual bytes from the db but most of our
+// files are stored in s3 so this is primarily for future support of static attachments on email templates
 func staticAttachmentsFromFiles(ctx context.Context, files []*generated.File) []*newman.Attachment {
 	attachments := make([]*newman.Attachment, 0, len(files))
 
@@ -139,6 +142,8 @@ func TargetDispatchable(status enums.AssessmentResponseStatus, sentAt *models.Da
 }
 
 // splitFullName splits a full name string into first and last components on the first space
+// this is really only used to get the first name so the split should be consistent but callers should
+// be weary of edge cases like mononyms, multiple middle names, and suffixes (e.g. "Jr.") when using last name
 func splitFullName(fullName string) (string, string) {
 	name := strings.TrimSpace(fullName)
 	if name == "" {
@@ -150,15 +155,14 @@ func splitFullName(fullName string) (string, string) {
 	return first, strings.TrimSpace(last)
 }
 
-// TargetSendFunc is the per-target callback invoked by dispatchCampaignTargets for each
-// dispatchable target. Implementations handle the target-specific send logic
+// TargetSendFunc is per-target callback invoked by dispatchCampaignTargets for each dispatchable target
 type TargetSendFunc func(ctx context.Context, target *generated.CampaignTarget) error
 
 // loadCampaignWithTargets loads a campaign by ID, queries its targets, and filters them
-// by dispatch eligibility. The optional queryOpts are applied to the campaign query for
-// edge-loading (e.g. email template + files)
+// by dispatch eligibility. The optional queryOpts are applied to the campaign query for edge-loading
 func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input CampaignDispatchInput, queryOpts ...func(*generated.CampaignQuery)) (*generated.Campaign, []*generated.CampaignTarget, int, error) {
 	q := db.Campaign.Query().Where(campaign.IDEQ(input.CampaignID))
+
 	for _, opt := range queryOpts {
 		opt(q)
 	}

@@ -1,3 +1,5 @@
+//go:build examples
+
 package cmd
 
 import "errors"

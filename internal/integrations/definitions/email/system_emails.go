@@ -41,9 +41,7 @@ const (
 	brandLight100  = "#d1f6ee" // --color-brand-100
 )
 
-// applySystemBranding applies the default Openlane system email color treatment:
-// dark green hero with light text and teal call-to-action buttons.
-// Used by system emails that do NOT have a callout section
+// applySystemBranding applies the default Openlane system email color treatment
 func applySystemBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.HeroBackgroundColor = brandDarkGreen
 	cfg.HeadingColor = "#ffffff"
@@ -51,20 +49,19 @@ func applySystemBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.FooterTextColor = "#14171e"
 	cfg.ButtonColor = brandTeal
 	cfg.ButtonTextColor = brandDarkGreen
+
 	return cfg
 }
 
-// applyCalloutBranding applies the Openlane system email treatment for emails
-// with a callout section: default hero colors with a teal button, paired with
-// a dark green callout box (styled via Callout.Style in the Build function)
+// applyCalloutBranding applies the Openlane system email treatment for emails with a callout section
 func applyCalloutBranding(cfg RuntimeEmailConfig) RuntimeEmailConfig {
 	cfg.ButtonColor = brandTeal
 	cfg.ButtonTextColor = brandDarkGreen
+
 	return cfg
 }
 
-// calloutStyle returns a render.Style that brands the callout box with the
-// dark green background and white text
+// calloutStyle returns a render.Style that brands the callout box with the dark green background and white text
 func calloutStyle() render.Style {
 	return render.Style{
 		BackgroundColor: brandDarkGreen,

@@ -1,3 +1,5 @@
+//go:build examples
+
 // Package quickstart provides a single end-to-end smoke test command that
 // creates an email branding, an email template, a campaign targeting the
 // authenticated user, and launches the campaign. It is intended for local

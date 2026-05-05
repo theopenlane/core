@@ -168,6 +168,7 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Cli
 		if err := client.Sender.SendBatchEmailWithContext(ctx, batchMsgs); err != nil {
 			if errors.Is(err, newman.ErrBatchNotImplemented) {
 				logx.FromContext(ctx).Info().Msg("batch send not supported, falling back to individual sends")
+
 				return sendCampaignIndividual(ctx, db, client, messages, targetIDs, nil)
 			}
 
@@ -178,6 +179,7 @@ func sendCampaignMessages(ctx context.Context, db *generated.Client, client *Cli
 
 		for _, id := range batchIDs {
 			if err := markCampaignTargetSent(ctx, db, id); err != nil {
+				// Log the error but continue marking the rest of the batch as sent to avoid blocking on individual failures
 				logx.FromContext(ctx).Error().Err(err).Str("target_id", id).Msg("failed marking target sent")
 			}
 		}

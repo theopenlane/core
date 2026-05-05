@@ -39,8 +39,7 @@ func (s SendQuestionnaireCampaign) Handle() types.OperationHandler {
 }
 
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment
-// responses, generates anonymous JWT access tokens, and sends questionnaire access emails.
-// Returns a marshaled CampaignDispatchResult with counts
+// responses, generates anonymous JWT access tokens, and sends questionnaire access emails
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {
 	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput)
 	if err != nil {

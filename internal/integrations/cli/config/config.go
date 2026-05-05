@@ -1,6 +1,5 @@
-// Package config handles CLI configuration loading for the integrations CLI:
-// env vars, config file, and flags merged into a single koanf namespace, plus
-// the typed structs that subcommands read via Unmarshal.
+//go:build examples
+
 package config
 
 import (
@@ -228,8 +227,7 @@ type OpenlaneConfig struct {
 // OpenlaneAuthConfig defines credentials and auth strategy
 type OpenlaneAuthConfig struct {
 	// Mode selects the auth strategy: auto prefers token/pat when present and
-	// falls back to credential login; token requires Token or PAT; credentials
-	// requires Email and Password
+	// falls back to credential login
 	Mode string `json:"mode" koanf:"mode" default:"credentials"`
 	// Token is the API bearer token (PAT or API token)
 	Token string `json:"token" koanf:"token" default:"" sensitive:"true"`

@@ -76,6 +76,7 @@ func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
 			if err != nil {
 				return nil, err
 			}
+
 			out = append(out, rendered)
 		}
 
@@ -87,6 +88,7 @@ func interpolateTemplateValue(value any, vars map[string]any) (any, error) {
 			if err != nil {
 				return nil, err
 			}
+
 			out[key] = rendered
 		}
 

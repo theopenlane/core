@@ -7,8 +7,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 )
 
-// nonTemplateConfigFields are RuntimeEmailConfig keys excluded from template
-// variables (secrets, provider internals, non-scalar types)
+// nonTemplateConfigFields are RuntimeEmailConfig keys excluded from template variables
 var nonTemplateConfigFields = map[string]struct{}{
 	"apiKey":             {},
 	"provider":           {},

@@ -19,7 +19,7 @@ type Recipient interface {
 	GetRecipient() RecipientInfo
 }
 
-// Dispatcher describes a catalog-addressable email operation that can be invoked by key.
+// Dispatcher describes a catalog-addressable email operation that can be invoked by key
 // The implementation owns typed decoding of the payload and projection into render.EmailContent;
 // callers supply a raw JSON payload whose shape matches the registered input type
 type Dispatcher interface {
@@ -191,6 +191,7 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 		Config:  client.Config,
 		Body:    e.Build(client.Config, input),
 	}
+
 	if e.Config != nil {
 		content.Config = e.Config(client.Config, input)
 	}
