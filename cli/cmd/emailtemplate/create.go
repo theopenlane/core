@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -27,8 +26,6 @@ func init() {
 	createCmd.Flags().StringP("key", "k", "", "stable identifier for the template")
 	createCmd.Flags().StringP("name", "n", "", "display name for the template")
 	createCmd.Flags().StringP("description", "d", "", "description of the template")
-	createCmd.Flags().String("template-context", "", "runtime data context (e.g. CAMPAIGN_RECIPIENT, TRANSACTIONAL, WORKFLOW_ACTION)")
-	createCmd.Flags().String("template-format", "", "template format for rendering (TEXT, MARKDOWN, HTML)")
 	createCmd.Flags().String("locale", "", "locale for the template, e.g. en-US")
 	createCmd.Flags().Bool("active", true, "whether the template is active")
 }
@@ -52,11 +49,6 @@ func createValidation() (input graphclient.CreateEmailTemplateInput, err error) 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	if templateFormat := cmd.Config.String("template-format"); templateFormat != "" {
-		f := enums.NotificationTemplateFormat(templateFormat)
-		input.Format = &f
 	}
 
 	locale := cmd.Config.String("locale")

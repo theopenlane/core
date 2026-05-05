@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Read(//Users/manderson/core_emailtemplates/**)",
-      "Read(//Users/manderson/**)",
-      "Bash(task go:build)"
-    ]
-  }
-}
