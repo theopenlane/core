@@ -141,7 +141,7 @@ entconfig:
         maximumsentences: 10
         type: lexrank
 integrations:
-    awsSecurityHub:
+    awssecurityhub:
         accesskeyid: ""
         arn: ""
         secretaccesskey: ""
@@ -182,7 +182,7 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
-    slackRuntime:
+    slackruntime:
         botToken: ""
         defaultChannel: ""
         webhookURL: ""

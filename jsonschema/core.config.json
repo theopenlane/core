@@ -131,7 +131,7 @@
     },
     "catalog.Config": {
       "properties": {
-        "awsSecurityHub": {
+        "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },
         "githubapp": {
@@ -140,7 +140,7 @@
         "slack": {
           "$ref": "#/$defs/slack.Config"
         },
-        "slackRuntime": {
+        "slackruntime": {
           "$ref": "#/$defs/slack.RuntimeSlackConfig"
         },
         "googleworkspace": {
