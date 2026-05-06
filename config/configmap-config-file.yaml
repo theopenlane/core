@@ -943,10 +943,10 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrations }}
     integrations:
-      {{- if .Values.openlane.coreConfiguration.integrations.awsSecurityHub }}
-      awsSecurityHub:
-        {{- if .Values.openlane.coreConfiguration.integrations.awsSecurityHub.arn }}
-        arn: {{ .Values.openlane.coreConfiguration.integrations.awsSecurityHub.arn | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub }}
+      awssecurityhub:
+        {{- if .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn }}
+        arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
@@ -967,16 +967,16 @@ data:
         appid: {{ .Values.openlane.coreConfiguration.integrations.slack.appid | quote }}
         {{- end }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime }}
-      slackRuntime:
-        {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime.webhookURL }}
-        webhookURL: {{ .Values.openlane.coreConfiguration.integrations.slackRuntime.webhookURL | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrations.slackruntime }}
+      slackruntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL }}
+        webhookURL: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime.botToken }}
-        botToken: {{ .Values.openlane.coreConfiguration.integrations.slackRuntime.botToken | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.botToken }}
+        botToken: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.botToken | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.slackRuntime.defaultChannel }}
-        defaultChannel: {{ .Values.openlane.coreConfiguration.integrations.slackRuntime.defaultChannel | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel }}
+        defaultChannel: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googleworkspace }}
