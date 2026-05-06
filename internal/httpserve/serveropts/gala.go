@@ -91,12 +91,8 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaVendorScoringListeners},
 		{galaApp, hooks.RegisterGalaIdentityResolutionListeners},
 		{galaApp, hooks.RegisterGalaDocumentAssociationListeners},
-<<<<<<< HEAD
 		{galaApp, hooks.RegisterGalaQuestionnaireTransformListeners},
-||||||| 655c68bda
-=======
 		{galaApp, hooks.RegisterGalaCampaignRecurringListeners},
->>>>>>> origin/main
 		{notificationGala, hooks.RegisterGalaNotificationListeners},
 	}
 

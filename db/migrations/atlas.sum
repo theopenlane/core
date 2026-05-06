@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-h1:s6N+15AopA+PkNsoJPYrzmFmWObUj+L0TmA9jPYc8TQ=
-||||||| 655c68bda
-h1:tw2M1n/oOmzuO8XIBK/lrcOB/jC+1gxzWkje07fW0+E=
-=======
-h1:B4ttU88utgzPcAzTVHnmn08ZtEaxYiF8lpOOpbNbVEc=
->>>>>>> origin/main
+h1:Y9hrevXsGNePv95VUPB5o2xZ3z9x9P1htd/c5ekBjTg=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -130,11 +124,7 @@ h1:B4ttU88utgzPcAzTVHnmn08ZtEaxYiF8lpOOpbNbVEc=
 20260428175156_check_results.sql h1:fVouTpJ/GiDG6akVD2qnVO2Fex2/YJxfdBqzClmTIf4=
 20260428175159_check_results_history.sql h1:EgarioS1a6agyRnfepqS+pIAi065ICTsLSi0+NAlRcQ=
 20260428234637_dir_groups_edge.sql h1:c2GXe3T20LoE+fSY09IaT+WZ1rbLCH9/DA9YRG8rCdo=
-<<<<<<< HEAD
-20260505131705_template_transformation_config.sql h1:Jfr5FI3UsPyxYzJ1DZ2iDrgjzhE3dX7AFDEXZ2MAYTQ=
-20260505131711_template_transformation_config_history.sql h1:6v3LVptMQZHcduXkYroSKNt/nXChil8rI8fBMg20H8I=
-||||||| 655c68bda
-=======
 20260430235858_removeemailbranding.sql h1:9TiV+AurHAoVuR49zZZhv08BdjWjKKPlt5nWLzZBEMY=
 20260430235901_removeemailbranding_history.sql h1:DvYD69AWfki3tWx+v4GLl6olKKnNoVR4zsKWsp7vyzI=
->>>>>>> origin/main
+20260506191803_template_transform_configuration.sql h1:XCplpE17zH2UpSedhavYZx5mr37mYIdG85keAp9nbzs=
+20260506191810_template_transform_configuration_history.sql h1:+GaieWup7+BM/QWgnkyJHTk8eblt6bCiIsjK2oeJhMY=
