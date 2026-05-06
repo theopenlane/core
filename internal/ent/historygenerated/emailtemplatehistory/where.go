@@ -1263,6 +1263,16 @@ func FormatNotIn(vs ...enums.NotificationTemplateFormat) predicate.EmailTemplate
 	return predicate.EmailTemplateHistory(sql.FieldNotIn(FieldFormat, v...))
 }
 
+// FormatIsNil applies the IsNil predicate on the "format" field.
+func FormatIsNil() predicate.EmailTemplateHistory {
+	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldFormat))
+}
+
+// FormatNotNil applies the NotNil predicate on the "format" field.
+func FormatNotNil() predicate.EmailTemplateHistory {
+	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldFormat))
+}
+
 // LocaleEQ applies the EQ predicate on the "locale" field.
 func LocaleEQ(v string) predicate.EmailTemplateHistory {
 	return predicate.EmailTemplateHistory(sql.FieldEQ(FieldLocale, v))
@@ -1736,6 +1746,16 @@ func TemplateContextNotIn(vs ...enums.TemplateContext) predicate.EmailTemplateHi
 		v[i] = vs[i]
 	}
 	return predicate.EmailTemplateHistory(sql.FieldNotIn(FieldTemplateContext, v...))
+}
+
+// TemplateContextIsNil applies the IsNil predicate on the "template_context" field.
+func TemplateContextIsNil() predicate.EmailTemplateHistory {
+	return predicate.EmailTemplateHistory(sql.FieldIsNull(FieldTemplateContext))
+}
+
+// TemplateContextNotNil applies the NotNil predicate on the "template_context" field.
+func TemplateContextNotNil() predicate.EmailTemplateHistory {
+	return predicate.EmailTemplateHistory(sql.FieldNotNull(FieldTemplateContext))
 }
 
 // DefaultsIsNil applies the IsNil predicate on the "defaults" field.

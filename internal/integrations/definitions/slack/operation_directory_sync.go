@@ -2,6 +2,7 @@ package slack
 
 import (
 	"context"
+	"time"
 
 	slackgo "github.com/slack-go/slack"
 
@@ -53,25 +54,27 @@ type slackUserPayload struct {
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client)
+	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, request types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
+		return d.Run(ctx, client.API, request.LastRunAt)
 	})
 }
 
 // Run collects Slack workspace users and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	users, err := client.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
 		return nil, ErrUsersFetchFailed
 	}
 
-	logx.FromContext(ctx).Info().Int("total_users", len(users)).Msg("slack directory sync: fetched users")
-
 	envelopes := make([]types.MappingEnvelope, 0, len(users))
 
 	for _, user := range users {
 		if user.IsBot {
+			continue
+		}
+
+		if lastRunAt != nil && !time.Unix(int64(user.Updated), 0).After(*lastRunAt) {
 			continue
 		}
 
@@ -110,7 +113,7 @@ func normalizeUser(user slackgo.User) slackUserPayload {
 		Deleted:           user.Deleted,
 		IsBot:             user.IsBot,
 		IsAdmin:           user.IsAdmin,
-		Has2FA:            user.Has2FA,
+		Has2FA:            user.Has2FA != nil && *user.Has2FA,
 		IsRestricted:      user.IsRestricted,
 		IsUltraRestricted: user.IsUltraRestricted,
 		IsStranger:        user.IsStranger,

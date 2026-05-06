@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 h1:LfM0Ww7VjDNEF/L0CpfX2UMXJPuLgBZdfYefv0+NPs8=
+||||||| 655c68bda
+h1:I/YeMApsVX5AYsISXROPDtK+Ad3OgIg7dUAgAwyzO6E=
+=======
+h1:pWsKxTVBaupJqLFSa2g2ozEYaxNcn0hwRyMohq3F73s=
+>>>>>>> origin/main
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -124,5 +130,11 @@ h1:LfM0Ww7VjDNEF/L0CpfX2UMXJPuLgBZdfYefv0+NPs8=
 20260428175204_check_results.sql h1:jqXFnZdekLj/2nkJlqGQfuB/5yBhwxUGuANVjOmwYDI=
 20260428175207_check_results_history.sql h1:zwnxBlQdywaDyl6Bbask5IZD9YcGbEeswBGYJVjNqG0=
 20260428234644_dir_groups_edge.sql h1:VjalJ3pP2Ep3W4xYbTupFNy4tFd9UFJredurRqojABw=
+<<<<<<< HEAD
 20260505131721_template_transformation_config.sql h1:OhTuP9DgmeXOGjm01qv2aXSxCkLU8k3EVjYBwPh/cEs=
 20260505131727_template_transformation_config_history.sql h1:KYFfNd9iN2C4Zb8me40OCj7Am6V2zf9nIaD8MjVYDMs=
+||||||| 655c68bda
+=======
+20260430235905_removeemailbranding.sql h1:SWXW3VfWlPGMe/Mr14flZX/JNjMCb05BpH5MMngacUk=
+20260430235908_removeemailbranding_history.sql h1:v7AzRhF759dzRErtVdXsP28tg67P1Nk8+V0saEkQ9qA=
+>>>>>>> origin/main

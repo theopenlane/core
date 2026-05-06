@@ -248,6 +248,7 @@ type ComplexityRoot struct {
 		EntityID               func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
+		IntegrationID          func(childComplexity int) int
 		InternalOwner          func(childComplexity int) int
 		InternalOwnerGroupID   func(childComplexity int) int
 		InternalOwnerUserID    func(childComplexity int) int
@@ -807,45 +808,8 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
-	EmailBrandingHistory struct {
-		BackgroundColor func(childComplexity int) int
-		BrandName       func(childComplexity int) int
-		ButtonColor     func(childComplexity int) int
-		ButtonTextColor func(childComplexity int) int
-		CreatedAt       func(childComplexity int) int
-		CreatedBy       func(childComplexity int) int
-		FontFamily      func(childComplexity int) int
-		HistoryTime     func(childComplexity int) int
-		ID              func(childComplexity int) int
-		IsDefault       func(childComplexity int) int
-		LinkColor       func(childComplexity int) int
-		LogoRemoteURL   func(childComplexity int) int
-		Name            func(childComplexity int) int
-		Operation       func(childComplexity int) int
-		OwnerID         func(childComplexity int) int
-		PrimaryColor    func(childComplexity int) int
-		Ref             func(childComplexity int) int
-		SecondaryColor  func(childComplexity int) int
-		Tags            func(childComplexity int) int
-		TextColor       func(childComplexity int) int
-		UpdatedAt       func(childComplexity int) int
-		UpdatedBy       func(childComplexity int) int
-	}
-
-	EmailBrandingHistoryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	EmailBrandingHistoryEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
 	EmailTemplateHistory struct {
 		Active               func(childComplexity int) int
-		BodyTemplate         func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Defaults             func(childComplexity int) int
@@ -855,22 +819,17 @@ type ComplexityRoot struct {
 		ID                   func(childComplexity int) int
 		IntegrationID        func(childComplexity int) int
 		InternalNotes        func(childComplexity int) int
-		Jsonconfig           func(childComplexity int) int
 		Key                  func(childComplexity int) int
 		Locale               func(childComplexity int) int
 		Metadata             func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
-		PreheaderTemplate    func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		Revision             func(childComplexity int) int
-		SubjectTemplate      func(childComplexity int) int
 		SystemInternalID     func(childComplexity int) int
 		SystemOwned          func(childComplexity int) int
 		TemplateContext      func(childComplexity int) int
-		TextTemplate         func(childComplexity int) int
-		Uischema             func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		Version              func(childComplexity int) int
@@ -1369,6 +1328,7 @@ type ComplexityRoot struct {
 	}
 
 	IntegrationHistory struct {
+		CampaignEmail            func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		DefinitionID             func(childComplexity int) int
@@ -2067,7 +2027,6 @@ type ComplexityRoot struct {
 		DirectoryMembershipHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DirectoryMembershipHistoryOrder, where *historygenerated.DirectoryMembershipHistoryWhereInput) int
 		DiscussionHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DiscussionHistoryOrder, where *historygenerated.DiscussionHistoryWhereInput) int
 		DocumentDataHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DocumentDataHistoryOrder, where *historygenerated.DocumentDataHistoryWhereInput) int
-		EmailBrandingHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailBrandingHistoryOrder, where *historygenerated.EmailBrandingHistoryWhereInput) int
 		EmailTemplateHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) int
 		EntityHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityHistoryOrder, where *historygenerated.EntityHistoryWhereInput) int
 		EntityTypeHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityTypeHistoryOrder, where *historygenerated.EntityTypeHistoryWhereInput) int
@@ -4616,6 +4575,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.ID(childComplexity), true
+
+	case "CampaignHistory.integrationID":
+		if e.ComplexityRoot.CampaignHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.IntegrationID(childComplexity), true
 
 	case "CampaignHistory.internalOwner":
 		if e.ComplexityRoot.CampaignHistory.InternalOwner == nil {
@@ -7655,208 +7621,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DocumentDataHistoryEdge.Node(childComplexity), true
 
-	case "EmailBrandingHistory.backgroundColor":
-		if e.ComplexityRoot.EmailBrandingHistory.BackgroundColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.BackgroundColor(childComplexity), true
-
-	case "EmailBrandingHistory.brandName":
-		if e.ComplexityRoot.EmailBrandingHistory.BrandName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.BrandName(childComplexity), true
-
-	case "EmailBrandingHistory.buttonColor":
-		if e.ComplexityRoot.EmailBrandingHistory.ButtonColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.ButtonColor(childComplexity), true
-
-	case "EmailBrandingHistory.buttonTextColor":
-		if e.ComplexityRoot.EmailBrandingHistory.ButtonTextColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.ButtonTextColor(childComplexity), true
-
-	case "EmailBrandingHistory.createdAt":
-		if e.ComplexityRoot.EmailBrandingHistory.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.CreatedAt(childComplexity), true
-
-	case "EmailBrandingHistory.createdBy":
-		if e.ComplexityRoot.EmailBrandingHistory.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.CreatedBy(childComplexity), true
-
-	case "EmailBrandingHistory.fontFamily":
-		if e.ComplexityRoot.EmailBrandingHistory.FontFamily == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.FontFamily(childComplexity), true
-
-	case "EmailBrandingHistory.historyTime":
-		if e.ComplexityRoot.EmailBrandingHistory.HistoryTime == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.HistoryTime(childComplexity), true
-
-	case "EmailBrandingHistory.id":
-		if e.ComplexityRoot.EmailBrandingHistory.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.ID(childComplexity), true
-
-	case "EmailBrandingHistory.isDefault":
-		if e.ComplexityRoot.EmailBrandingHistory.IsDefault == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.IsDefault(childComplexity), true
-
-	case "EmailBrandingHistory.linkColor":
-		if e.ComplexityRoot.EmailBrandingHistory.LinkColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.LinkColor(childComplexity), true
-
-	case "EmailBrandingHistory.logoRemoteURL":
-		if e.ComplexityRoot.EmailBrandingHistory.LogoRemoteURL == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.LogoRemoteURL(childComplexity), true
-
-	case "EmailBrandingHistory.name":
-		if e.ComplexityRoot.EmailBrandingHistory.Name == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.Name(childComplexity), true
-
-	case "EmailBrandingHistory.operation":
-		if e.ComplexityRoot.EmailBrandingHistory.Operation == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.Operation(childComplexity), true
-
-	case "EmailBrandingHistory.ownerID":
-		if e.ComplexityRoot.EmailBrandingHistory.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.OwnerID(childComplexity), true
-
-	case "EmailBrandingHistory.primaryColor":
-		if e.ComplexityRoot.EmailBrandingHistory.PrimaryColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.PrimaryColor(childComplexity), true
-
-	case "EmailBrandingHistory.ref":
-		if e.ComplexityRoot.EmailBrandingHistory.Ref == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.Ref(childComplexity), true
-
-	case "EmailBrandingHistory.secondaryColor":
-		if e.ComplexityRoot.EmailBrandingHistory.SecondaryColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.SecondaryColor(childComplexity), true
-
-	case "EmailBrandingHistory.tags":
-		if e.ComplexityRoot.EmailBrandingHistory.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.Tags(childComplexity), true
-
-	case "EmailBrandingHistory.textColor":
-		if e.ComplexityRoot.EmailBrandingHistory.TextColor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.TextColor(childComplexity), true
-
-	case "EmailBrandingHistory.updatedAt":
-		if e.ComplexityRoot.EmailBrandingHistory.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.UpdatedAt(childComplexity), true
-
-	case "EmailBrandingHistory.updatedBy":
-		if e.ComplexityRoot.EmailBrandingHistory.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistory.UpdatedBy(childComplexity), true
-
-	case "EmailBrandingHistoryConnection.edges":
-		if e.ComplexityRoot.EmailBrandingHistoryConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistoryConnection.Edges(childComplexity), true
-
-	case "EmailBrandingHistoryConnection.pageInfo":
-		if e.ComplexityRoot.EmailBrandingHistoryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistoryConnection.PageInfo(childComplexity), true
-
-	case "EmailBrandingHistoryConnection.totalCount":
-		if e.ComplexityRoot.EmailBrandingHistoryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistoryConnection.TotalCount(childComplexity), true
-
-	case "EmailBrandingHistoryEdge.cursor":
-		if e.ComplexityRoot.EmailBrandingHistoryEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistoryEdge.Cursor(childComplexity), true
-
-	case "EmailBrandingHistoryEdge.node":
-		if e.ComplexityRoot.EmailBrandingHistoryEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailBrandingHistoryEdge.Node(childComplexity), true
-
 	case "EmailTemplateHistory.active":
 		if e.ComplexityRoot.EmailTemplateHistory.Active == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Active(childComplexity), true
-
-	case "EmailTemplateHistory.bodyTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.BodyTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.BodyTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.createdAt":
 		if e.ComplexityRoot.EmailTemplateHistory.CreatedAt == nil {
@@ -7921,13 +7691,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.InternalNotes(childComplexity), true
 
-	case "EmailTemplateHistory.jsonconfig":
-		if e.ComplexityRoot.EmailTemplateHistory.Jsonconfig == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.Jsonconfig(childComplexity), true
-
 	case "EmailTemplateHistory.key":
 		if e.ComplexityRoot.EmailTemplateHistory.Key == nil {
 			break
@@ -7970,13 +7733,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistory.OwnerID(childComplexity), true
 
-	case "EmailTemplateHistory.preheaderTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.PreheaderTemplate(childComplexity), true
-
 	case "EmailTemplateHistory.ref":
 		if e.ComplexityRoot.EmailTemplateHistory.Ref == nil {
 			break
@@ -7990,13 +7746,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Revision(childComplexity), true
-
-	case "EmailTemplateHistory.subjectTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.SubjectTemplate(childComplexity), true
 
 	case "EmailTemplateHistory.systemInternalID":
 		if e.ComplexityRoot.EmailTemplateHistory.SystemInternalID == nil {
@@ -8018,20 +7767,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.TemplateContext(childComplexity), true
-
-	case "EmailTemplateHistory.textTemplate":
-		if e.ComplexityRoot.EmailTemplateHistory.TextTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.TextTemplate(childComplexity), true
-
-	case "EmailTemplateHistory.uischema":
-		if e.ComplexityRoot.EmailTemplateHistory.Uischema == nil {
-			break
-		}
-
-		return e.ComplexityRoot.EmailTemplateHistory.Uischema(childComplexity), true
 
 	case "EmailTemplateHistory.updatedAt":
 		if e.ComplexityRoot.EmailTemplateHistory.UpdatedAt == nil {
@@ -10762,6 +10497,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistoryEdge.Node(childComplexity), true
+
+	case "IntegrationHistory.campaignEmail":
+		if e.ComplexityRoot.IntegrationHistory.CampaignEmail == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationHistory.CampaignEmail(childComplexity), true
 
 	case "IntegrationHistory.createdAt":
 		if e.ComplexityRoot.IntegrationHistory.CreatedAt == nil {
@@ -14646,18 +14388,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.DocumentDataHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.DocumentDataHistoryOrder), args["where"].(*historygenerated.DocumentDataHistoryWhereInput)), true
-
-	case "Query.emailBrandingHistories":
-		if e.ComplexityRoot.Query.EmailBrandingHistories == nil {
-			break
-		}
-
-		args, err := ec.field_Query_emailBrandingHistories_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.EmailBrandingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.EmailBrandingHistoryOrder), args["where"].(*historygenerated.EmailBrandingHistoryWhereInput)), true
 
 	case "Query.emailTemplateHistories":
 		if e.ComplexityRoot.Query.EmailTemplateHistories == nil {
@@ -22102,8 +21832,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDiscussionHistoryWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
-		ec.unmarshalInputEmailBrandingHistoryOrder,
-		ec.unmarshalInputEmailBrandingHistoryWhereInput,
 		ec.unmarshalInputEmailTemplateHistoryOrder,
 		ec.unmarshalInputEmailTemplateHistoryWhereInput,
 		ec.unmarshalInputEntityHistoryOrder,
@@ -25196,13 +24924,13 @@ type CampaignHistory implements Node {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -25228,13 +24956,13 @@ type CampaignHistory implements Node {
   """
   lastResentAt: DateTime
   """
-  the template associated with the campaign
-  """
-  templateID: String
-  """
   the entity associated with the campaign
   """
   entityID: String
+  """
+  the template associated with the campaign
+  """
+  templateID: String
   """
   the assessment associated with the campaign
   """
@@ -25244,13 +24972,17 @@ type CampaignHistory implements Node {
   """
   metadata: Map
   """
-  the email branding associated with the campaign
-  """
-  emailBrandingID: String
-  """
   the email template associated with the campaign
   """
   emailTemplateID: String
+  """
+  the email integration used for campaign dispatch
+  """
+  integrationID: String
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
 }
 """
 CampaignHistoryCampaignStatus is enum for the field status
@@ -25803,24 +25535,6 @@ input CampaignHistoryWhereInput {
   lastResentAtIsNil: Boolean
   lastResentAtNotNil: Boolean
   """
-  template_id field predicates
-  """
-  templateID: String
-  templateIDNEQ: String
-  templateIDIn: [String!]
-  templateIDNotIn: [String!]
-  templateIDGT: String
-  templateIDGTE: String
-  templateIDLT: String
-  templateIDLTE: String
-  templateIDContains: String
-  templateIDHasPrefix: String
-  templateIDHasSuffix: String
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: String
-  templateIDContainsFold: String
-  """
   entity_id field predicates
   """
   entityID: String
@@ -25838,6 +25552,24 @@ input CampaignHistoryWhereInput {
   entityIDNotNil: Boolean
   entityIDEqualFold: String
   entityIDContainsFold: String
+  """
+  template_id field predicates
+  """
+  templateID: String
+  templateIDNEQ: String
+  templateIDIn: [String!]
+  templateIDNotIn: [String!]
+  templateIDGT: String
+  templateIDGTE: String
+  templateIDLT: String
+  templateIDLTE: String
+  templateIDContains: String
+  templateIDHasPrefix: String
+  templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: String
+  templateIDContainsFold: String
   """
   assessment_id field predicates
   """
@@ -25857,24 +25589,6 @@ input CampaignHistoryWhereInput {
   assessmentIDEqualFold: String
   assessmentIDContainsFold: String
   """
-  email_branding_id field predicates
-  """
-  emailBrandingID: String
-  emailBrandingIDNEQ: String
-  emailBrandingIDIn: [String!]
-  emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
-  emailBrandingIDContains: String
-  emailBrandingIDHasPrefix: String
-  emailBrandingIDHasSuffix: String
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: String
-  emailBrandingIDContainsFold: String
-  """
   email_template_id field predicates
   """
   emailTemplateID: String
@@ -25892,6 +25606,42 @@ input CampaignHistoryWhereInput {
   emailTemplateIDNotNil: Boolean
   emailTemplateIDEqualFold: String
   emailTemplateIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
 }
 type CampaignTargetHistory implements Node {
   id: ID!
@@ -32602,482 +32352,6 @@ input DocumentDataHistoryWhereInput {
   templateIDEqualFold: String
   templateIDContainsFold: String
 }
-type EmailBrandingHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: EmailBrandingHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: String
-  """
-  friendly name for this email branding configuration
-  """
-  name: String!
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  """
-  text color for emails
-  """
-  textColor: String
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  """
-  link color for emails
-  """
-  linkColor: String
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingHistoryFont
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-}
-"""
-A connection to a list of items.
-"""
-type EmailBrandingHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [EmailBrandingHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type EmailBrandingHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: EmailBrandingHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-EmailBrandingHistoryFont is enum for the field font_family
-"""
-enum EmailBrandingHistoryFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
-  COURIER
-  COURIER_BOLD
-  COURIER_BOLDOBLIQUE
-  COURIER_OBLIQUE
-  HELVETICA
-  HELVETICA_BOLD
-  HELVETICA_BOLDOBLIQUE
-  HELVETICA_OBLIQUE
-  SYMBOL
-  TIMES_BOLD
-  TIMES_BOLDITALIC
-  TIMES_ITALIC
-  TIMES_ROMAN
-}
-"""
-EmailBrandingHistoryOpType is enum for the field operation
-"""
-enum EmailBrandingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for EmailBrandingHistory connections
-"""
-input EmailBrandingHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order EmailBrandingHistories.
-  """
-  field: EmailBrandingHistoryOrderField!
-}
-"""
-Properties by which EmailBrandingHistory connections can be ordered.
-"""
-enum EmailBrandingHistoryOrderField {
-  history_time
-  created_at
-  updated_at
-  name
-}
-"""
-EmailBrandingHistoryWhereInput is used for filtering EmailBrandingHistory objects.
-Input was generated by ent.
-"""
-input EmailBrandingHistoryWhereInput {
-  not: EmailBrandingHistoryWhereInput
-  and: [EmailBrandingHistoryWhereInput!]
-  or: [EmailBrandingHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: EmailBrandingHistoryOpType
-  operationNEQ: EmailBrandingHistoryOpType
-  operationIn: [EmailBrandingHistoryOpType!]
-  operationNotIn: [EmailBrandingHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: String
-  ownerIDNEQ: String
-  ownerIDIn: [String!]
-  ownerIDNotIn: [String!]
-  ownerIDGT: String
-  ownerIDGTE: String
-  ownerIDLT: String
-  ownerIDLTE: String
-  ownerIDContains: String
-  ownerIDHasPrefix: String
-  ownerIDHasSuffix: String
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: String
-  ownerIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  brand_name field predicates
-  """
-  brandName: String
-  brandNameNEQ: String
-  brandNameIn: [String!]
-  brandNameNotIn: [String!]
-  brandNameGT: String
-  brandNameGTE: String
-  brandNameLT: String
-  brandNameLTE: String
-  brandNameContains: String
-  brandNameHasPrefix: String
-  brandNameHasSuffix: String
-  brandNameIsNil: Boolean
-  brandNameNotNil: Boolean
-  brandNameEqualFold: String
-  brandNameContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
-  secondary_color field predicates
-  """
-  secondaryColor: String
-  secondaryColorNEQ: String
-  secondaryColorIn: [String!]
-  secondaryColorNotIn: [String!]
-  secondaryColorGT: String
-  secondaryColorGTE: String
-  secondaryColorLT: String
-  secondaryColorLTE: String
-  secondaryColorContains: String
-  secondaryColorHasPrefix: String
-  secondaryColorHasSuffix: String
-  secondaryColorIsNil: Boolean
-  secondaryColorNotNil: Boolean
-  secondaryColorEqualFold: String
-  secondaryColorContainsFold: String
-  """
-  background_color field predicates
-  """
-  backgroundColor: String
-  backgroundColorNEQ: String
-  backgroundColorIn: [String!]
-  backgroundColorNotIn: [String!]
-  backgroundColorGT: String
-  backgroundColorGTE: String
-  backgroundColorLT: String
-  backgroundColorLTE: String
-  backgroundColorContains: String
-  backgroundColorHasPrefix: String
-  backgroundColorHasSuffix: String
-  backgroundColorIsNil: Boolean
-  backgroundColorNotNil: Boolean
-  backgroundColorEqualFold: String
-  backgroundColorContainsFold: String
-  """
-  text_color field predicates
-  """
-  textColor: String
-  textColorNEQ: String
-  textColorIn: [String!]
-  textColorNotIn: [String!]
-  textColorGT: String
-  textColorGTE: String
-  textColorLT: String
-  textColorLTE: String
-  textColorContains: String
-  textColorHasPrefix: String
-  textColorHasSuffix: String
-  textColorIsNil: Boolean
-  textColorNotNil: Boolean
-  textColorEqualFold: String
-  textColorContainsFold: String
-  """
-  button_color field predicates
-  """
-  buttonColor: String
-  buttonColorNEQ: String
-  buttonColorIn: [String!]
-  buttonColorNotIn: [String!]
-  buttonColorGT: String
-  buttonColorGTE: String
-  buttonColorLT: String
-  buttonColorLTE: String
-  buttonColorContains: String
-  buttonColorHasPrefix: String
-  buttonColorHasSuffix: String
-  buttonColorIsNil: Boolean
-  buttonColorNotNil: Boolean
-  buttonColorEqualFold: String
-  buttonColorContainsFold: String
-  """
-  button_text_color field predicates
-  """
-  buttonTextColor: String
-  buttonTextColorNEQ: String
-  buttonTextColorIn: [String!]
-  buttonTextColorNotIn: [String!]
-  buttonTextColorGT: String
-  buttonTextColorGTE: String
-  buttonTextColorLT: String
-  buttonTextColorLTE: String
-  buttonTextColorContains: String
-  buttonTextColorHasPrefix: String
-  buttonTextColorHasSuffix: String
-  buttonTextColorIsNil: Boolean
-  buttonTextColorNotNil: Boolean
-  buttonTextColorEqualFold: String
-  buttonTextColorContainsFold: String
-  """
-  link_color field predicates
-  """
-  linkColor: String
-  linkColorNEQ: String
-  linkColorIn: [String!]
-  linkColorNotIn: [String!]
-  linkColorGT: String
-  linkColorGTE: String
-  linkColorLT: String
-  linkColorLTE: String
-  linkColorContains: String
-  linkColorHasPrefix: String
-  linkColorHasSuffix: String
-  linkColorIsNil: Boolean
-  linkColorNotNil: Boolean
-  linkColorEqualFold: String
-  linkColorContainsFold: String
-  """
-  font_family field predicates
-  """
-  fontFamily: EmailBrandingHistoryFont
-  fontFamilyNEQ: EmailBrandingHistoryFont
-  fontFamilyIn: [EmailBrandingHistoryFont!]
-  fontFamilyNotIn: [EmailBrandingHistoryFont!]
-  fontFamilyIsNil: Boolean
-  fontFamilyNotNil: Boolean
-  """
-  is_default field predicates
-  """
-  isDefault: Boolean
-  isDefaultNEQ: Boolean
-  isDefaultIsNil: Boolean
-  isDefaultNotNil: Boolean
-}
 type EmailTemplateHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -33122,35 +32396,11 @@ type EmailTemplateHistory implements Node {
   """
   template format for rendering
   """
-  format: EmailTemplateHistoryNotificationTemplateFormat!
+  format: EmailTemplateHistoryNotificationTemplateFormat
   """
   locale for the template, e.g. en-US
   """
   locale: String!
-  """
-  subject template for email notifications
-  """
-  subjectTemplate: String
-  """
-  preheader/preview text template for email notifications
-  """
-  preheaderTemplate: String
-  """
-  body template for the email
-  """
-  bodyTemplate: String
-  """
-  plain text fallback template for the email
-  """
-  textTemplate: String
-  """
-  jsonschema for template data requirements
-  """
-  jsonconfig: Map
-  """
-  uischema for a template builder
-  """
-  uischema: Map
   """
   additional template metadata
   """
@@ -33166,7 +32416,7 @@ type EmailTemplateHistory implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateHistoryTemplateContext!
+  templateContext: EmailTemplateHistoryTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -33523,6 +32773,8 @@ input EmailTemplateHistoryWhereInput {
   formatNEQ: EmailTemplateHistoryNotificationTemplateFormat
   formatIn: [EmailTemplateHistoryNotificationTemplateFormat!]
   formatNotIn: [EmailTemplateHistoryNotificationTemplateFormat!]
+  formatIsNil: Boolean
+  formatNotNil: Boolean
   """
   locale field predicates
   """
@@ -33634,6 +32886,8 @@ input EmailTemplateHistoryWhereInput {
   templateContextNEQ: EmailTemplateHistoryTemplateContext
   templateContextIn: [EmailTemplateHistoryTemplateContext!]
   templateContextNotIn: [EmailTemplateHistoryTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   integration_id field predicates
   """
@@ -40113,6 +39367,10 @@ type IntegrationHistory implements Node {
   designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
   """
   primaryDirectory: Boolean!
+  """
+  designates this email integration as the one to use for campaign dispatch within its owner organization
+  """
+  campaignEmail: Boolean!
 }
 """
 A connection to a list of items.
@@ -40597,6 +39855,11 @@ input IntegrationHistoryWhereInput {
   """
   primaryDirectory: Boolean
   primaryDirectoryNEQ: Boolean
+  """
+  campaign_email field predicates
+  """
+  campaignEmail: Boolean
+  campaignEmailNEQ: Boolean
 }
 type InternalPolicyHistory implements Node {
   id: ID!
@@ -43587,7 +42850,7 @@ type NotificationTemplateHistory implements Node {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateHistoryChannel!
+  channel: NotificationTemplateHistoryChannel
   """
   template format for rendering
   """
@@ -44011,6 +43274,8 @@ input NotificationTemplateHistoryWhereInput {
   channelNEQ: NotificationTemplateHistoryChannel
   channelIn: [NotificationTemplateHistoryChannel!]
   channelNotIn: [NotificationTemplateHistoryChannel!]
+  channelIsNil: Boolean
+  channelNotNil: Boolean
   """
   format field predicates
   """
@@ -48991,37 +48256,6 @@ type Query {
     """
     where: DocumentDataHistoryWhereInput
   ): DocumentDataHistoryConnection!
-  emailBrandingHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailBrandingHistories returned from the connection.
-    """
-    orderBy: EmailBrandingHistoryOrder
-
-    """
-    Filtering options for EmailBrandingHistories returned from the connection.
-    """
-    where: EmailBrandingHistoryWhereInput
-  ): EmailBrandingHistoryConnection!
   emailTemplateHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67150,10 +66384,10 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_recurrenceFrequency(ctx, field)
 	case "recurrenceInterval":
 		return ec.fieldContext_CampaignHistory_recurrenceInterval(ctx, field)
-	case "recurrenceCron":
-		return ec.fieldContext_CampaignHistory_recurrenceCron(ctx, field)
 	case "recurrenceTimezone":
 		return ec.fieldContext_CampaignHistory_recurrenceTimezone(ctx, field)
+	case "recurrenceCron":
+		return ec.fieldContext_CampaignHistory_recurrenceCron(ctx, field)
 	case "lastRunAt":
 		return ec.fieldContext_CampaignHistory_lastRunAt(ctx, field)
 	case "nextRunAt":
@@ -67166,18 +66400,20 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_resendCount(ctx, field)
 	case "lastResentAt":
 		return ec.fieldContext_CampaignHistory_lastResentAt(ctx, field)
-	case "templateID":
-		return ec.fieldContext_CampaignHistory_templateID(ctx, field)
 	case "entityID":
 		return ec.fieldContext_CampaignHistory_entityID(ctx, field)
+	case "templateID":
+		return ec.fieldContext_CampaignHistory_templateID(ctx, field)
 	case "assessmentID":
 		return ec.fieldContext_CampaignHistory_assessmentID(ctx, field)
 	case "metadata":
 		return ec.fieldContext_CampaignHistory_metadata(ctx, field)
-	case "emailBrandingID":
-		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
 	case "emailTemplateID":
 		return ec.fieldContext_CampaignHistory_emailTemplateID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_CampaignHistory_integrationID(ctx, field)
+	case "emailBrandingID":
+		return ec.fieldContext_CampaignHistory_emailBrandingID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CampaignHistory", field.Name)
 }
@@ -68240,78 +67476,6 @@ func (ec *executionContext) childFields_DocumentDataHistoryEdge(ctx context.Cont
 	return nil, fmt.Errorf("no field named %q was found under type DocumentDataHistoryEdge", field.Name)
 }
 
-func (ec *executionContext) childFields_EmailBrandingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_EmailBrandingHistory_id(ctx, field)
-	case "historyTime":
-		return ec.fieldContext_EmailBrandingHistory_historyTime(ctx, field)
-	case "ref":
-		return ec.fieldContext_EmailBrandingHistory_ref(ctx, field)
-	case "operation":
-		return ec.fieldContext_EmailBrandingHistory_operation(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_EmailBrandingHistory_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_EmailBrandingHistory_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_EmailBrandingHistory_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_EmailBrandingHistory_updatedBy(ctx, field)
-	case "tags":
-		return ec.fieldContext_EmailBrandingHistory_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_EmailBrandingHistory_ownerID(ctx, field)
-	case "name":
-		return ec.fieldContext_EmailBrandingHistory_name(ctx, field)
-	case "brandName":
-		return ec.fieldContext_EmailBrandingHistory_brandName(ctx, field)
-	case "logoRemoteURL":
-		return ec.fieldContext_EmailBrandingHistory_logoRemoteURL(ctx, field)
-	case "primaryColor":
-		return ec.fieldContext_EmailBrandingHistory_primaryColor(ctx, field)
-	case "secondaryColor":
-		return ec.fieldContext_EmailBrandingHistory_secondaryColor(ctx, field)
-	case "backgroundColor":
-		return ec.fieldContext_EmailBrandingHistory_backgroundColor(ctx, field)
-	case "textColor":
-		return ec.fieldContext_EmailBrandingHistory_textColor(ctx, field)
-	case "buttonColor":
-		return ec.fieldContext_EmailBrandingHistory_buttonColor(ctx, field)
-	case "buttonTextColor":
-		return ec.fieldContext_EmailBrandingHistory_buttonTextColor(ctx, field)
-	case "linkColor":
-		return ec.fieldContext_EmailBrandingHistory_linkColor(ctx, field)
-	case "fontFamily":
-		return ec.fieldContext_EmailBrandingHistory_fontFamily(ctx, field)
-	case "isDefault":
-		return ec.fieldContext_EmailBrandingHistory_isDefault(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistory", field.Name)
-}
-
-func (ec *executionContext) childFields_EmailBrandingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_EmailBrandingHistoryConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_EmailBrandingHistoryConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_EmailBrandingHistoryConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_EmailBrandingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_EmailBrandingHistoryEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_EmailBrandingHistoryEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type EmailBrandingHistoryEdge", field.Name)
-}
-
 func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -68350,18 +67514,6 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_format(ctx, field)
 	case "locale":
 		return ec.fieldContext_EmailTemplateHistory_locale(ctx, field)
-	case "subjectTemplate":
-		return ec.fieldContext_EmailTemplateHistory_subjectTemplate(ctx, field)
-	case "preheaderTemplate":
-		return ec.fieldContext_EmailTemplateHistory_preheaderTemplate(ctx, field)
-	case "bodyTemplate":
-		return ec.fieldContext_EmailTemplateHistory_bodyTemplate(ctx, field)
-	case "textTemplate":
-		return ec.fieldContext_EmailTemplateHistory_textTemplate(ctx, field)
-	case "jsonconfig":
-		return ec.fieldContext_EmailTemplateHistory_jsonconfig(ctx, field)
-	case "uischema":
-		return ec.fieldContext_EmailTemplateHistory_uischema(ctx, field)
 	case "metadata":
 		return ec.fieldContext_EmailTemplateHistory_metadata(ctx, field)
 	case "active":
@@ -69424,6 +68576,8 @@ func (ec *executionContext) childFields_IntegrationHistory(ctx context.Context, 
 		return ec.fieldContext_IntegrationHistory_providerMetadataSnapshot(ctx, field)
 	case "primaryDirectory":
 		return ec.fieldContext_IntegrationHistory_primaryDirectory(ctx, field)
+	case "campaignEmail":
+		return ec.fieldContext_IntegrationHistory_campaignEmail(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type IntegrationHistory", field.Name)
 }

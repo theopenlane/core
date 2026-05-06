@@ -10,12 +10,8 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/newman"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -160,13 +156,12 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			if tc.expectedStatus != http.StatusOK {
 				assert.Contains(t, out.Error, tc.expectedResp)
 			} else {
-				job := rivertest.RequireInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()), &jobs.EmailArgs{
-					Message: *newman.NewEmailMessageWithOptions(
-						newman.WithSubject("Openlane Password Reset - Action Required"),
-					),
-				}, nil)
-				require.NotNil(t, job)
-				require.Equal(t, []string{tc.email}, job.Args.Message.To)
+				suite.WaitForEvents()
+
+				msgs := suite.mockEmailSender().Messages()
+				require.NotEmpty(t, msgs)
+				assert.Contains(t, msgs[len(msgs)-1].Subject, "Password Reset")
+				require.Equal(t, []string{tc.email}, msgs[len(msgs)-1].To)
 			}
 		})
 	}

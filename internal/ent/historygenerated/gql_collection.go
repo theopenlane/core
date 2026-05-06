@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
@@ -1273,15 +1272,15 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceInterval)
 				fieldSeen[campaignhistory.FieldRecurrenceInterval] = struct{}{}
 			}
-		case "recurrenceCron":
-			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceCron]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceCron)
-				fieldSeen[campaignhistory.FieldRecurrenceCron] = struct{}{}
-			}
 		case "recurrenceTimezone":
 			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceTimezone]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceTimezone)
 				fieldSeen[campaignhistory.FieldRecurrenceTimezone] = struct{}{}
+			}
+		case "recurrenceCron":
+			if _, ok := fieldSeen[campaignhistory.FieldRecurrenceCron]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldRecurrenceCron)
+				fieldSeen[campaignhistory.FieldRecurrenceCron] = struct{}{}
 			}
 		case "lastRunAt":
 			if _, ok := fieldSeen[campaignhistory.FieldLastRunAt]; !ok {
@@ -1313,15 +1312,15 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldLastResentAt)
 				fieldSeen[campaignhistory.FieldLastResentAt] = struct{}{}
 			}
-		case "templateID":
-			if _, ok := fieldSeen[campaignhistory.FieldTemplateID]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldTemplateID)
-				fieldSeen[campaignhistory.FieldTemplateID] = struct{}{}
-			}
 		case "entityID":
 			if _, ok := fieldSeen[campaignhistory.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldEntityID)
 				fieldSeen[campaignhistory.FieldEntityID] = struct{}{}
+			}
+		case "templateID":
+			if _, ok := fieldSeen[campaignhistory.FieldTemplateID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldTemplateID)
+				fieldSeen[campaignhistory.FieldTemplateID] = struct{}{}
 			}
 		case "assessmentID":
 			if _, ok := fieldSeen[campaignhistory.FieldAssessmentID]; !ok {
@@ -1333,15 +1332,20 @@ func (_q *CampaignHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, campaignhistory.FieldMetadata)
 				fieldSeen[campaignhistory.FieldMetadata] = struct{}{}
 			}
-		case "emailBrandingID":
-			if _, ok := fieldSeen[campaignhistory.FieldEmailBrandingID]; !ok {
-				selectedFields = append(selectedFields, campaignhistory.FieldEmailBrandingID)
-				fieldSeen[campaignhistory.FieldEmailBrandingID] = struct{}{}
-			}
 		case "emailTemplateID":
 			if _, ok := fieldSeen[campaignhistory.FieldEmailTemplateID]; !ok {
 				selectedFields = append(selectedFields, campaignhistory.FieldEmailTemplateID)
 				fieldSeen[campaignhistory.FieldEmailTemplateID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[campaignhistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldIntegrationID)
+				fieldSeen[campaignhistory.FieldIntegrationID] = struct{}{}
+			}
+		case "emailBrandingID":
+			if _, ok := fieldSeen[campaignhistory.FieldEmailBrandingID]; !ok {
+				selectedFields = append(selectedFields, campaignhistory.FieldEmailBrandingID)
+				fieldSeen[campaignhistory.FieldEmailBrandingID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -4114,195 +4118,6 @@ func newDocumentDataHistoryPaginateArgs(rv map[string]any) *documentdatahistoryP
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (_q *EmailBrandingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EmailBrandingHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return _q, nil
-	}
-	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return _q, nil
-}
-
-func (_q *EmailBrandingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(emailbrandinghistory.Columns))
-		selectedFields = []string{emailbrandinghistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldHistoryTime)
-				fieldSeen[emailbrandinghistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldRef)
-				fieldSeen[emailbrandinghistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldOperation)
-				fieldSeen[emailbrandinghistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldCreatedAt)
-				fieldSeen[emailbrandinghistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldUpdatedAt)
-				fieldSeen[emailbrandinghistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldCreatedBy)
-				fieldSeen[emailbrandinghistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldUpdatedBy)
-				fieldSeen[emailbrandinghistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "tags":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldTags]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldTags)
-				fieldSeen[emailbrandinghistory.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldOwnerID)
-				fieldSeen[emailbrandinghistory.FieldOwnerID] = struct{}{}
-			}
-		case "name":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldName]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldName)
-				fieldSeen[emailbrandinghistory.FieldName] = struct{}{}
-			}
-		case "brandName":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldBrandName]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldBrandName)
-				fieldSeen[emailbrandinghistory.FieldBrandName] = struct{}{}
-			}
-		case "logoRemoteURL":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldLogoRemoteURL]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldLogoRemoteURL)
-				fieldSeen[emailbrandinghistory.FieldLogoRemoteURL] = struct{}{}
-			}
-		case "primaryColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldPrimaryColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldPrimaryColor)
-				fieldSeen[emailbrandinghistory.FieldPrimaryColor] = struct{}{}
-			}
-		case "secondaryColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldSecondaryColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldSecondaryColor)
-				fieldSeen[emailbrandinghistory.FieldSecondaryColor] = struct{}{}
-			}
-		case "backgroundColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldBackgroundColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldBackgroundColor)
-				fieldSeen[emailbrandinghistory.FieldBackgroundColor] = struct{}{}
-			}
-		case "textColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldTextColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldTextColor)
-				fieldSeen[emailbrandinghistory.FieldTextColor] = struct{}{}
-			}
-		case "buttonColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldButtonColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldButtonColor)
-				fieldSeen[emailbrandinghistory.FieldButtonColor] = struct{}{}
-			}
-		case "buttonTextColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldButtonTextColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldButtonTextColor)
-				fieldSeen[emailbrandinghistory.FieldButtonTextColor] = struct{}{}
-			}
-		case "linkColor":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldLinkColor]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldLinkColor)
-				fieldSeen[emailbrandinghistory.FieldLinkColor] = struct{}{}
-			}
-		case "fontFamily":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldFontFamily]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldFontFamily)
-				fieldSeen[emailbrandinghistory.FieldFontFamily] = struct{}{}
-			}
-		case "isDefault":
-			if _, ok := fieldSeen[emailbrandinghistory.FieldIsDefault]; !ok {
-				selectedFields = append(selectedFields, emailbrandinghistory.FieldIsDefault)
-				fieldSeen[emailbrandinghistory.FieldIsDefault] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		_q.Select(selectedFields...)
-	}
-	return nil
-}
-
-type emailbrandinghistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []EmailBrandingHistoryPaginateOption
-}
-
-func newEmailBrandingHistoryPaginateArgs(rv map[string]any) *emailbrandinghistoryPaginateArgs {
-	args := &emailbrandinghistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &EmailBrandingHistoryOrder{Field: &EmailBrandingHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithEmailBrandingHistoryOrder(order))
-			}
-		case *EmailBrandingHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithEmailBrandingHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*EmailBrandingHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithEmailBrandingHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *EmailTemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*EmailTemplateHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -4407,36 +4222,6 @@ func (_q *EmailTemplateHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[emailtemplatehistory.FieldLocale]; !ok {
 				selectedFields = append(selectedFields, emailtemplatehistory.FieldLocale)
 				fieldSeen[emailtemplatehistory.FieldLocale] = struct{}{}
-			}
-		case "subjectTemplate":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldSubjectTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldSubjectTemplate)
-				fieldSeen[emailtemplatehistory.FieldSubjectTemplate] = struct{}{}
-			}
-		case "preheaderTemplate":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldPreheaderTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldPreheaderTemplate)
-				fieldSeen[emailtemplatehistory.FieldPreheaderTemplate] = struct{}{}
-			}
-		case "bodyTemplate":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldBodyTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldBodyTemplate)
-				fieldSeen[emailtemplatehistory.FieldBodyTemplate] = struct{}{}
-			}
-		case "textTemplate":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldTextTemplate]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldTextTemplate)
-				fieldSeen[emailtemplatehistory.FieldTextTemplate] = struct{}{}
-			}
-		case "jsonconfig":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldJsonconfig]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldJsonconfig)
-				fieldSeen[emailtemplatehistory.FieldJsonconfig] = struct{}{}
-			}
-		case "uischema":
-			if _, ok := fieldSeen[emailtemplatehistory.FieldUischema]; !ok {
-				selectedFields = append(selectedFields, emailtemplatehistory.FieldUischema)
-				fieldSeen[emailtemplatehistory.FieldUischema] = struct{}{}
 			}
 		case "metadata":
 			if _, ok := fieldSeen[emailtemplatehistory.FieldMetadata]; !ok {
@@ -7200,6 +6985,11 @@ func (_q *IntegrationHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[integrationhistory.FieldPrimaryDirectory]; !ok {
 				selectedFields = append(selectedFields, integrationhistory.FieldPrimaryDirectory)
 				fieldSeen[integrationhistory.FieldPrimaryDirectory] = struct{}{}
+			}
+		case "campaignEmail":
+			if _, ok := fieldSeen[integrationhistory.FieldCampaignEmail]; !ok {
+				selectedFields = append(selectedFields, integrationhistory.FieldCampaignEmail)
+				fieldSeen[integrationhistory.FieldCampaignEmail] = struct{}{}
 			}
 		case "id":
 		case "__typename":

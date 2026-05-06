@@ -18,11 +18,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -362,20 +362,6 @@ func (_c *CampaignCreate) SetNillableRecurrenceInterval(v *int) *CampaignCreate 
 	return _c
 }
 
-// SetRecurrenceCron sets the "recurrence_cron" field.
-func (_c *CampaignCreate) SetRecurrenceCron(v models.Cron) *CampaignCreate {
-	_c.mutation.SetRecurrenceCron(v)
-	return _c
-}
-
-// SetNillableRecurrenceCron sets the "recurrence_cron" field if the given value is not nil.
-func (_c *CampaignCreate) SetNillableRecurrenceCron(v *models.Cron) *CampaignCreate {
-	if v != nil {
-		_c.SetRecurrenceCron(*v)
-	}
-	return _c
-}
-
 // SetRecurrenceTimezone sets the "recurrence_timezone" field.
 func (_c *CampaignCreate) SetRecurrenceTimezone(v string) *CampaignCreate {
 	_c.mutation.SetRecurrenceTimezone(v)
@@ -386,6 +372,20 @@ func (_c *CampaignCreate) SetRecurrenceTimezone(v string) *CampaignCreate {
 func (_c *CampaignCreate) SetNillableRecurrenceTimezone(v *string) *CampaignCreate {
 	if v != nil {
 		_c.SetRecurrenceTimezone(*v)
+	}
+	return _c
+}
+
+// SetRecurrenceCron sets the "recurrence_cron" field.
+func (_c *CampaignCreate) SetRecurrenceCron(v models.Cron) *CampaignCreate {
+	_c.mutation.SetRecurrenceCron(v)
+	return _c
+}
+
+// SetNillableRecurrenceCron sets the "recurrence_cron" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableRecurrenceCron(v *models.Cron) *CampaignCreate {
+	if v != nil {
+		_c.SetRecurrenceCron(*v)
 	}
 	return _c
 }
@@ -474,20 +474,6 @@ func (_c *CampaignCreate) SetNillableLastResentAt(v *models.DateTime) *CampaignC
 	return _c
 }
 
-// SetTemplateID sets the "template_id" field.
-func (_c *CampaignCreate) SetTemplateID(v string) *CampaignCreate {
-	_c.mutation.SetTemplateID(v)
-	return _c
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_c *CampaignCreate) SetNillableTemplateID(v *string) *CampaignCreate {
-	if v != nil {
-		_c.SetTemplateID(*v)
-	}
-	return _c
-}
-
 // SetEntityID sets the "entity_id" field.
 func (_c *CampaignCreate) SetEntityID(v string) *CampaignCreate {
 	_c.mutation.SetEntityID(v)
@@ -498,6 +484,20 @@ func (_c *CampaignCreate) SetEntityID(v string) *CampaignCreate {
 func (_c *CampaignCreate) SetNillableEntityID(v *string) *CampaignCreate {
 	if v != nil {
 		_c.SetEntityID(*v)
+	}
+	return _c
+}
+
+// SetTemplateID sets the "template_id" field.
+func (_c *CampaignCreate) SetTemplateID(v string) *CampaignCreate {
+	_c.mutation.SetTemplateID(v)
+	return _c
+}
+
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableTemplateID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
 	}
 	return _c
 }
@@ -522,20 +522,6 @@ func (_c *CampaignCreate) SetMetadata(v map[string]interface{}) *CampaignCreate 
 	return _c
 }
 
-// SetEmailBrandingID sets the "email_branding_id" field.
-func (_c *CampaignCreate) SetEmailBrandingID(v string) *CampaignCreate {
-	_c.mutation.SetEmailBrandingID(v)
-	return _c
-}
-
-// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
-func (_c *CampaignCreate) SetNillableEmailBrandingID(v *string) *CampaignCreate {
-	if v != nil {
-		_c.SetEmailBrandingID(*v)
-	}
-	return _c
-}
-
 // SetEmailTemplateID sets the "email_template_id" field.
 func (_c *CampaignCreate) SetEmailTemplateID(v string) *CampaignCreate {
 	_c.mutation.SetEmailTemplateID(v)
@@ -546,6 +532,34 @@ func (_c *CampaignCreate) SetEmailTemplateID(v string) *CampaignCreate {
 func (_c *CampaignCreate) SetNillableEmailTemplateID(v *string) *CampaignCreate {
 	if v != nil {
 		_c.SetEmailTemplateID(*v)
+	}
+	return _c
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_c *CampaignCreate) SetIntegrationID(v string) *CampaignCreate {
+	_c.mutation.SetIntegrationID(v)
+	return _c
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableIntegrationID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetIntegrationID(*v)
+	}
+	return _c
+}
+
+// SetEmailBrandingID sets the "email_branding_id" field.
+func (_c *CampaignCreate) SetEmailBrandingID(v string) *CampaignCreate {
+	_c.mutation.SetEmailBrandingID(v)
+	return _c
+}
+
+// SetNillableEmailBrandingID sets the "email_branding_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableEmailBrandingID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetEmailBrandingID(*v)
 	}
 	return _c
 }
@@ -634,9 +648,9 @@ func (_c *CampaignCreate) SetTemplate(v *Template) *CampaignCreate {
 	return _c.SetTemplateID(v.ID)
 }
 
-// SetEmailBranding sets the "email_branding" edge to the EmailBranding entity.
-func (_c *CampaignCreate) SetEmailBranding(v *EmailBranding) *CampaignCreate {
-	return _c.SetEmailBrandingID(v.ID)
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_c *CampaignCreate) SetIntegration(v *Integration) *CampaignCreate {
+	return _c.SetIntegrationID(v.ID)
 }
 
 // SetEmailTemplate sets the "email_template" edge to the EmailTemplate entity.
@@ -920,14 +934,14 @@ func (_c *CampaignCreate) check() error {
 			return &ValidationError{Name: "recurrence_frequency", err: fmt.Errorf(`generated: validator failed for field "Campaign.recurrence_frequency": %w`, err)}
 		}
 	}
-	if v, ok := _c.mutation.RecurrenceCron(); ok {
-		if err := campaign.RecurrenceCronValidator(string(v)); err != nil {
-			return &ValidationError{Name: "recurrence_cron", err: fmt.Errorf(`generated: validator failed for field "Campaign.recurrence_cron": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.RecurrenceTimezone(); ok {
 		if err := campaign.RecurrenceTimezoneValidator(v); err != nil {
 			return &ValidationError{Name: "recurrence_timezone", err: fmt.Errorf(`generated: validator failed for field "Campaign.recurrence_timezone": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.RecurrenceCron(); ok {
+		if err := campaign.RecurrenceCronValidator(string(v)); err != nil {
+			return &ValidationError{Name: "recurrence_cron", err: fmt.Errorf(`generated: validator failed for field "Campaign.recurrence_cron": %w`, err)}
 		}
 	}
 	return nil
@@ -1054,13 +1068,13 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 		_spec.SetField(campaign.FieldRecurrenceInterval, field.TypeInt, value)
 		_node.RecurrenceInterval = value
 	}
-	if value, ok := _c.mutation.RecurrenceCron(); ok {
-		_spec.SetField(campaign.FieldRecurrenceCron, field.TypeString, value)
-		_node.RecurrenceCron = &value
-	}
 	if value, ok := _c.mutation.RecurrenceTimezone(); ok {
 		_spec.SetField(campaign.FieldRecurrenceTimezone, field.TypeString, value)
 		_node.RecurrenceTimezone = value
+	}
+	if value, ok := _c.mutation.RecurrenceCron(); ok {
+		_spec.SetField(campaign.FieldRecurrenceCron, field.TypeString, value)
+		_node.RecurrenceCron = &value
 	}
 	if value, ok := _c.mutation.LastRunAt(); ok {
 		_spec.SetField(campaign.FieldLastRunAt, field.TypeTime, value)
@@ -1089,6 +1103,10 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(campaign.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.EmailBrandingID(); ok {
+		_spec.SetField(campaign.FieldEmailBrandingID, field.TypeString, value)
+		_node.EmailBrandingID = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1231,22 +1249,22 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 		_node.TemplateID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.EmailBrandingIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.IntegrationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   campaign.EmailBrandingTable,
-			Columns: []string{campaign.EmailBrandingColumn},
+			Table:   campaign.IntegrationTable,
+			Columns: []string{campaign.IntegrationColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.EmailBrandingID = nodes[0]
+		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EmailTemplateIDs(); len(nodes) > 0 {

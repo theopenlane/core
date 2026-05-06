@@ -171,7 +171,6 @@ func (n NotificationPreference) Edges() []ent.Edge {
 func (NotificationPreference) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("owner_id", "user_id", "channel").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

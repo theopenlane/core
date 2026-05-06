@@ -218,6 +218,26 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		orgID = integCaller.OrganizationID
 	}
 
+	resolvedInstallationID := params.InstallationID
+	if resolvedInstallationID == "" && params.DefinitionID != "" {
+		resolved, resolveErr := e.integrationRuntime.ResolveOwnerIntegration(ctx, params.DefinitionID, orgID, preferDefaultMessaging)
+		if resolveErr != nil {
+			return resolveErr
+		}
+
+		resolvedInstallationID = resolved
+	}
+
+	if resolvedInstallationID == "" {
+		logx.FromContext(ctx).Warn().
+			Str("definition_id", params.DefinitionID).
+			Str("installation_id", params.InstallationID).
+			Str("operation", string(operationName)).
+			Msg("integration action skipped: no connected integration found")
+
+		return nil
+	}
+
 	meta := &types.WorkflowMeta{
 		InstanceID:  instance.ID,
 		ActionKey:   action.Key,
@@ -228,9 +248,9 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		meta.ObjectType = obj.Type
 	}
 
-	_, err := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
+	_, queueErr := e.QueueIntegrationOperation(ctx, IntegrationQueueRequest{
 		OrgID:              orgID,
-		InstallationID:     params.InstallationID,
+		InstallationID:     resolvedInstallationID,
 		DefinitionID:       params.DefinitionID,
 		Operation:          operationName,
 		Config:             jsonx.CloneRawMessage(params.Config),
@@ -241,13 +261,13 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 		RunType:            enums.IntegrationRunTypeEvent,
 		Workflow:           meta,
 	})
-	if err != nil {
-		if errors.Is(err, ErrIntegrationScopeConditionFalse) {
+	if queueErr != nil {
+		if errors.Is(queueErr, ErrIntegrationScopeConditionFalse) {
 			logIntegrationScopeSkipped(ctx, params.DefinitionID, string(operationName), params.InstallationID, params.ScopeExpression)
 			return nil
 		}
 
-		return err
+		return queueErr
 	}
 
 	markIntegrationQueued(ctx)
@@ -279,6 +299,19 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 	if receipt.Err != nil {
 		logx.FromContext(ctx).Warn().Err(receipt.Err).Msg("failed to emit workflow action completed for integration run")
 	}
+}
+
+// preferDefaultMessaging selects an integration installation marked as the default for messaging operations
+func preferDefaultMessaging(inst *ent.Integration) bool {
+	var cfg struct {
+		DefaultMessaging bool `json:"defaultMessaging"`
+	}
+
+	if json.Unmarshal(inst.Config.ClientConfig, &cfg) != nil {
+		return false
+	}
+
+	return cfg.DefaultMessaging
 }
 
 // evaluateInstallationScope evaluates optional scope expressions before queueing integration runs

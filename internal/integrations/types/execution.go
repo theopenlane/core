@@ -31,6 +31,12 @@ type ExecutionMetadata struct {
 	DeliveryID string `json:"deliveryId,omitempty"`
 	// Workflow captures workflow linkage when present
 	Workflow *WorkflowMeta `json:"workflow,omitempty"`
+	// Runtime signals that this execution uses the runtime provider path
+	Runtime bool `json:"runtime,omitempty"`
+	// SkipPrimaryDirectorySync bypasses primary_directory sibling clearing during hook maintenance updates
+	SkipPrimaryDirectorySync bool `json:"skipPrimaryDirectorySync,omitempty"`
+	// SkipCampaignEmailSync bypasses campaign_email sibling clearing during hook maintenance updates
+	SkipCampaignEmailSync bool `json:"skipCampaignEmailSync,omitempty"`
 }
 
 // ExecutionMetadataKey stores durable integration execution metadata on a context

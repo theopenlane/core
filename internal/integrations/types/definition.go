@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -52,6 +53,18 @@ type Definition struct {
 	Mappings []MappingRegistration `json:"mappings,omitempty"`
 	// Webhooks lists the webhook contracts exposed by the definition
 	Webhooks []WebhookRegistration `json:"webhooks,omitempty"`
+	// GalaListeners declares standalone gala listeners registered on the integration runtime
+	GalaListeners []GalaListenerRegistration `json:"-"`
+	// RuntimeIntegration declares that this definition can be fully provisioned from a single runtime config struct
+	RuntimeIntegration *RuntimeIntegrationRegistration `json:"runtimeIntegration,omitempty"`
+}
+
+// GalaListenerRegistration declares a gala listener that should be registered on the integration runtime at startup
+type GalaListenerRegistration struct {
+	// Name is a stable listener identifier for diagnostics
+	Name string
+	// Register registers the listener on the supplied gala registry
+	Register func(registry *gala.Registry) ([]gala.ListenerID, error)
 }
 
 // OperatorConfigRegistration describes operator-owned configuration for a definition

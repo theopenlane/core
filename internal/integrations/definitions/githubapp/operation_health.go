@@ -18,7 +18,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 
 // Run executes the health check using the GitHub GraphQL client
 func (HealthCheck) Run(ctx context.Context, client GraphQLClient) (json.RawMessage, error) {
-	_, err := queryRepositories(ctx, client, 1)
+	_, err := queryRepositories(ctx, client, 1, nil)
 	if err != nil {
 		return nil, err
 	}

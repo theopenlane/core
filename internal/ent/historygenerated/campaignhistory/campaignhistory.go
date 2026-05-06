@@ -76,10 +76,10 @@ const (
 	FieldRecurrenceFrequency = "recurrence_frequency"
 	// FieldRecurrenceInterval holds the string denoting the recurrence_interval field in the database.
 	FieldRecurrenceInterval = "recurrence_interval"
-	// FieldRecurrenceCron holds the string denoting the recurrence_cron field in the database.
-	FieldRecurrenceCron = "recurrence_cron"
 	// FieldRecurrenceTimezone holds the string denoting the recurrence_timezone field in the database.
 	FieldRecurrenceTimezone = "recurrence_timezone"
+	// FieldRecurrenceCron holds the string denoting the recurrence_cron field in the database.
+	FieldRecurrenceCron = "recurrence_cron"
 	// FieldLastRunAt holds the string denoting the last_run_at field in the database.
 	FieldLastRunAt = "last_run_at"
 	// FieldNextRunAt holds the string denoting the next_run_at field in the database.
@@ -92,18 +92,20 @@ const (
 	FieldResendCount = "resend_count"
 	// FieldLastResentAt holds the string denoting the last_resent_at field in the database.
 	FieldLastResentAt = "last_resent_at"
-	// FieldTemplateID holds the string denoting the template_id field in the database.
-	FieldTemplateID = "template_id"
 	// FieldEntityID holds the string denoting the entity_id field in the database.
 	FieldEntityID = "entity_id"
+	// FieldTemplateID holds the string denoting the template_id field in the database.
+	FieldTemplateID = "template_id"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
-	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
-	FieldEmailBrandingID = "email_branding_id"
 	// FieldEmailTemplateID holds the string denoting the email_template_id field in the database.
 	FieldEmailTemplateID = "email_template_id"
+	// FieldIntegrationID holds the string denoting the integration_id field in the database.
+	FieldIntegrationID = "integration_id"
+	// FieldEmailBrandingID holds the string denoting the email_branding_id field in the database.
+	FieldEmailBrandingID = "email_branding_id"
 	// Table holds the table name of the campaignhistory in the database.
 	Table = "campaign_history"
 )
@@ -139,20 +141,21 @@ var Columns = []string{
 	FieldIsRecurring,
 	FieldRecurrenceFrequency,
 	FieldRecurrenceInterval,
-	FieldRecurrenceCron,
 	FieldRecurrenceTimezone,
+	FieldRecurrenceCron,
 	FieldLastRunAt,
 	FieldNextRunAt,
 	FieldRecurrenceEndAt,
 	FieldRecipientCount,
 	FieldResendCount,
 	FieldLastResentAt,
-	FieldTemplateID,
 	FieldEntityID,
+	FieldTemplateID,
 	FieldAssessmentID,
 	FieldMetadata,
-	FieldEmailBrandingID,
 	FieldEmailTemplateID,
+	FieldIntegrationID,
+	FieldEmailBrandingID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -389,14 +392,14 @@ func ByRecurrenceInterval(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRecurrenceInterval, opts...).ToFunc()
 }
 
-// ByRecurrenceCron orders the results by the recurrence_cron field.
-func ByRecurrenceCron(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRecurrenceCron, opts...).ToFunc()
-}
-
 // ByRecurrenceTimezone orders the results by the recurrence_timezone field.
 func ByRecurrenceTimezone(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRecurrenceTimezone, opts...).ToFunc()
+}
+
+// ByRecurrenceCron orders the results by the recurrence_cron field.
+func ByRecurrenceCron(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRecurrenceCron, opts...).ToFunc()
 }
 
 // ByLastRunAt orders the results by the last_run_at field.
@@ -429,14 +432,14 @@ func ByLastResentAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastResentAt, opts...).ToFunc()
 }
 
-// ByTemplateID orders the results by the template_id field.
-func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
-}
-
 // ByEntityID orders the results by the entity_id field.
 func ByEntityID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEntityID, opts...).ToFunc()
+}
+
+// ByTemplateID orders the results by the template_id field.
+func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
 }
 
 // ByAssessmentID orders the results by the assessment_id field.
@@ -444,14 +447,19 @@ func ByAssessmentID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentID, opts...).ToFunc()
 }
 
-// ByEmailBrandingID orders the results by the email_branding_id field.
-func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
-}
-
 // ByEmailTemplateID orders the results by the email_template_id field.
 func ByEmailTemplateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmailTemplateID, opts...).ToFunc()
+}
+
+// ByIntegrationID orders the results by the integration_id field.
+func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByEmailBrandingID orders the results by the email_branding_id field.
+func ByEmailBrandingID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailBrandingID, opts...).ToFunc()
 }
 
 var (

@@ -2,8 +2,7 @@ package graphapi
 
 import (
 	"context"
-	"errors"
-	"strings"
+	"encoding/json"
 	"time"
 
 	"github.com/theopenlane/iam/auth"
@@ -15,10 +14,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -38,7 +38,6 @@ type campaignDispatchOptions struct {
 
 // campaignDispatchState holds state accumulated during dispatch processing.
 type campaignDispatchState struct {
-	client         *generated.Client
 	campaignObj    *generated.Campaign
 	opts           campaignDispatchOptions
 	resend         bool
@@ -74,8 +73,7 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 		return nil, rout.NewMissingRequiredFieldError("campaignID")
 	}
 
-	client := withTransactionalMutation(ctx)
-	campaignObj, err := client.Campaign.Get(ctx, campaignID)
+	campaignObj, err := withTransactionalMutation(ctx).Campaign.Query().Where(campaign.ID(campaignID)).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
@@ -96,7 +94,6 @@ func (r *mutationResolver) initCampaignDispatch(ctx context.Context, campaignID 
 	}
 
 	return &campaignDispatchState{
-		client:         client,
 		campaignObj:    campaignObj,
 		opts:           opts,
 		resend:         resend,
@@ -119,90 +116,64 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return err
 	}
 
-	if campaignObj.CampaignType != enums.CampaignTypeQuestionnaire {
-		return ErrCampaignDispatchNotQuestionnaire
-	}
-
-	if campaignObj.AssessmentID == "" {
-		return ErrCampaignMissingAssessmentID
-	}
-
 	if campaignObj.Status == enums.CampaignStatusCompleted || campaignObj.Status == enums.CampaignStatusCanceled {
 		return ErrCampaignDispatchInactive
 	}
 
+	switch campaignObj.CampaignType {
+	case enums.CampaignTypeQuestionnaire:
+		if campaignObj.AssessmentID == "" {
+			return ErrCampaignMissingAssessmentID
+		}
+	default:
+		if campaignObj.EmailTemplateID == "" {
+			return ErrCampaignMissingEmailTemplate
+		}
+	}
+
 	return nil
 }
 
-// processDispatchTargets iterates through targets and dispatches or counts them.
+// processDispatchTargets counts total targets and, for immediate dispatch,
+// delegates to the appropriate email operation via the integration runtime.
+// Actual sent/skipped/failed counts are determined by the async operation
 func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *campaignDispatchState) error {
-	targets, err := state.client.CampaignTarget.Query().
+	totalCount, err := withTransactionalMutation(ctx).CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(state.campaignObj.ID)).
-		All(ctx)
+		Count(ctx)
 	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaigntarget"})
 	}
 
-	for _, target := range targets {
-		if !campaignTargetDispatchable(target.Status, state.resend, state.includeOverdue) {
-			state.skippedCount++
-			continue
-		}
+	state.queuedCount = totalCount
 
-		if state.shouldSchedule {
-			state.queuedCount++
-			continue
-		}
-
-		if err := r.dispatchSingleTarget(ctx, state, target); err != nil {
-			return err
-		}
+	if state.shouldSchedule || totalCount == 0 {
+		return nil
 	}
 
-	return nil
+	return r.dispatchCampaignOperation(ctx, state)
 }
 
-// dispatchSingleTarget sends an assessment response for a single target.
-func (r *mutationResolver) dispatchSingleTarget(ctx context.Context, state *campaignDispatchState, target *generated.CampaignTarget) error {
-	sendCtx := hooks.WithCampaignEmailContext(ctx, hooks.CampaignEmailContextKey{
-		CampaignID:       state.campaignObj.ID,
-		CampaignTargetID: target.ID,
-	})
-
-	create := state.client.AssessmentResponse.Create().
-		SetAssessmentID(state.campaignObj.AssessmentID).
-		SetCampaignID(state.campaignObj.ID).
-		SetEmail(target.Email)
-
-	if state.campaignObj.EntityID != "" {
-		create.SetEntityID(state.campaignObj.EntityID)
+// dispatchCampaignOperation dispatches the campaign email operation through the
+// integration runtime. It performs an active lookup for the email integration at
+// dispatch time so integrations created after campaign creation are picked up
+func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state *campaignDispatchState) error {
+	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	if rt == nil {
+		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	if shouldSetCampaignDueDate(state.campaignObj, state.resend, state.now) {
-		create.SetDueDate(time.Time(*state.campaignObj.DueDate))
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, rt, state.campaignObj, state.resend, state.includeOverdue, "", nil)
+	if err != nil {
+		return err
 	}
 
-	if err := create.Exec(sendCtx); err != nil {
-		if errors.Is(err, hooks.ErrAssessmentInProgress) {
-			state.skippedCount++
-			return nil
-		}
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessmentresponse"})
+	if _, err := rt.Dispatch(ctx, req); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", state.campaignObj.ID).Msg("failed dispatching campaign operation")
+
+		return err
 	}
 
-	newStatus := enums.AssessmentResponseStatusSent
-	if target.Status == enums.AssessmentResponseStatusOverdue {
-		newStatus = enums.AssessmentResponseStatusOverdue
-	}
-
-	if err := state.client.CampaignTarget.UpdateOneID(target.ID).
-		SetStatus(newStatus).
-		SetSentAt(models.DateTime(state.now)).
-		Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "campaigntarget"})
-	}
-
-	state.queuedCount++
 	return nil
 }
 
@@ -214,22 +185,25 @@ func (r *mutationResolver) updateCampaignAfterDispatch(ctx context.Context, stat
 	return r.updateCampaignForImmediateDispatch(ctx, state)
 }
 
-// updateCampaignForScheduledDispatch enqueues the job and sets scheduled status.
+// updateCampaignForScheduledDispatch enqueues the job and persists schedule
+// metadata for both initial launches and scheduled resends
 func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Context, state *campaignDispatchState) error {
-	if err := r.enqueueCampaignDispatchJob(ctx, state.campaignObj, state.opts.Action, state.scheduleAt); err != nil {
+	if err := r.enqueueCampaignDispatchJob(ctx, state); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "campaign"})
 	}
 
-	if state.opts.Action != campaignDispatchActionLaunch {
-		return nil
-	}
-
-	update := state.client.Campaign.UpdateOneID(state.campaignObj.ID).
-		SetStatus(enums.CampaignStatusScheduled).
-		SetIsActive(false)
+	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID)
 
 	if state.scheduleAt != nil {
 		update.SetScheduledAt(models.DateTime(*state.scheduleAt))
+	}
+
+	switch state.opts.Action {
+	case campaignDispatchActionLaunch:
+		update.SetStatus(enums.CampaignStatusScheduled).
+			SetIsActive(false)
+	case campaignDispatchActionResend, campaignDispatchActionResendIncomplete:
+		update.AddResendCount(1)
 	}
 
 	if err := update.Exec(ctx); err != nil {
@@ -241,7 +215,7 @@ func (r *mutationResolver) updateCampaignForScheduledDispatch(ctx context.Contex
 
 // updateCampaignForImmediateDispatch sets the campaign to active and updates timestamps.
 func (r *mutationResolver) updateCampaignForImmediateDispatch(ctx context.Context, state *campaignDispatchState) error {
-	update := state.client.Campaign.UpdateOneID(state.campaignObj.ID).
+	update := withTransactionalMutation(ctx).Campaign.UpdateOneID(state.campaignObj.ID).
 		SetStatus(enums.CampaignStatusActive).
 		SetIsActive(true)
 
@@ -263,7 +237,7 @@ func (r *mutationResolver) updateCampaignForImmediateDispatch(ctx context.Contex
 
 // buildDispatchPayload fetches the final campaign state and constructs the response.
 func (r *mutationResolver) buildDispatchPayload(ctx context.Context, state *campaignDispatchState) (*model.CampaignLaunchPayload, error) {
-	query, err := state.client.Campaign.Query().
+	query, err := withTransactionalMutation(ctx).Campaign.Query().
 		Where(campaign.ID(state.campaignObj.ID)).
 		CollectFields(ctx)
 	if err != nil {
@@ -274,8 +248,6 @@ func (r *mutationResolver) buildDispatchPayload(ctx context.Context, state *camp
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "campaign"})
 	}
-
-	r.recordCampaignDispatchEvent(ctx, state.campaignObj, state.opts.Action, state.queuedCount, state.skippedCount, state.scheduleAt)
 
 	return &model.CampaignLaunchPayload{
 		Campaign:     finalResult,
@@ -296,35 +268,6 @@ func campaignDispatchBehavior(action jobspec.CampaignDispatchAction) (bool, bool
 	default:
 		return false, false, ErrCampaignDispatchActionUnsupported
 	}
-}
-
-// campaignTargetDispatchable determines whether a target should be dispatched.
-func campaignTargetDispatchable(status enums.AssessmentResponseStatus, resend bool, includeOverdue bool) bool {
-	switch status {
-	case enums.AssessmentResponseStatusCompleted:
-		return false
-	case enums.AssessmentResponseStatusOverdue:
-		return includeOverdue || resend
-	case enums.AssessmentResponseStatusSent:
-		return resend
-	default:
-		return true
-	}
-}
-
-// shouldSetCampaignDueDate determines whether due dates should be set on responses.
-func shouldSetCampaignDueDate(campaignObj *generated.Campaign, resend bool, now time.Time) bool {
-	if campaignObj == nil || campaignObj.DueDate == nil || campaignObj.DueDate.IsZero() {
-		return false
-	}
-
-	if !resend {
-		return true
-	}
-
-	due := time.Time(*campaignObj.DueDate)
-
-	return due.After(now)
 }
 
 // resolveCampaignScheduleAt chooses the effective schedule time for a dispatch action.
@@ -348,74 +291,81 @@ func resolveCampaignScheduleAt(now time.Time, campaignObj *generated.Campaign, a
 	return nil, nil
 }
 
-// enqueueCampaignDispatchJob inserts the campaign dispatch job into the queue.
-func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, campaignObj *generated.Campaign, action jobspec.CampaignDispatchAction, scheduledAt *time.Time) error {
-	if campaignObj == nil || scheduledAt == nil {
+// buildCampaignEmailDispatchRequest constructs the integration dispatch request for the campaign email operation
+func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (operations.DispatchRequest, error) {
+	if campaignObj == nil {
+		return operations.DispatchRequest{}, emaildef.ErrCampaignNotFound
+	}
+
+	operation := emaildef.SendCampaignOp.Name()
+	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
+		CampaignDispatchInput: emaildef.CampaignDispatchInput{
+			CampaignID:     campaignObj.ID,
+			Resend:         resend,
+			IncludeOverdue: includeOverdue,
+		},
+	})
+	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire {
+		operation = emaildef.SendQuestionnaireCampaignOp.Name()
+		config, err = json.Marshal(emaildef.SendQuestionnaireCampaignRequest{
+			CampaignDispatchInput: emaildef.CampaignDispatchInput{
+				CampaignID:     campaignObj.ID,
+				Resend:         resend,
+				IncludeOverdue: includeOverdue,
+			},
+			TestEmail: testEmail,
+		})
+	}
+	if err != nil {
+		return operations.DispatchRequest{}, err
+	}
+
+	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *generated.Integration) bool {
+		return inst.CampaignEmail
+	})
+	if err != nil {
+		return operations.DispatchRequest{}, err
+	}
+
+	return operations.DispatchRequest{
+		IntegrationID: integrationID,
+		DefinitionID:  emaildef.DefinitionID.ID(),
+		OwnerID:       campaignObj.OwnerID,
+		Operation:     operation,
+		Config:        config,
+		RunType:       enums.IntegrationRunTypeEvent,
+		ScheduledAt:   scheduledAt,
+		Runtime:       integrationID == "",
+	}, nil
+}
+
+// enqueueCampaignDispatchJob schedules a campaign dispatch through the integration
+// framework with deferred execution at the specified time. Uses the customer
+// integration when available, falling back to the runtime provider
+func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state *campaignDispatchState) error {
+	if state == nil || state.campaignObj == nil || state.scheduleAt == nil {
 		return ErrCampaignDispatchScheduleRequired
 	}
 
-	args := jobspec.CampaignDispatchArgs{
-		CampaignID:  campaignObj.ID,
-		Action:      action,
-		ScheduledAt: scheduledAt,
+	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	if rt == nil {
+		return ErrCampaignDispatchRuntimeRequired
 	}
 
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
-		args.RequestedBy = caller.SubjectID
-	}
-
-	opts := args.InsertOpts()
-	opts.ScheduledAt = *scheduledAt
-
-	_, err := r.db.Job.Insert(ctx, args, &opts)
+	req, err := r.buildCampaignEmailDispatchRequest(ctx, rt, state.campaignObj, state.resend, state.includeOverdue, "", state.scheduleAt)
 	if err != nil {
-		if hooks.IsUniqueConstraintError(err) {
-			logx.FromContext(ctx).Info().Err(err).Msg("campaign dispatch job already scheduled")
+		return err
+	}
 
-			return nil
-		}
+	if _, err := rt.Dispatch(ctx, req); err != nil {
+		logx.FromContext(ctx).Error().Err(err).
+			Str("campaign_id", state.campaignObj.ID).
+			Msg("failed scheduling campaign dispatch")
 
 		return err
 	}
 
 	return nil
-}
-
-// recordCampaignDispatchEvent emits an audit event for the dispatch request.
-func (r *mutationResolver) recordCampaignDispatchEvent(ctx context.Context, campaignObj *generated.Campaign, action jobspec.CampaignDispatchAction, queuedCount, skippedCount int, scheduleAt *time.Time) {
-	if campaignObj == nil {
-		return
-	}
-
-	eventType := "campaign." + strings.ToLower(string(action))
-	if scheduleAt != nil {
-		eventType += ".scheduled"
-	}
-
-	metadata := map[string]any{
-		"campaign_id":   campaignObj.ID,
-		"action":        string(action),
-		"queued_count":  queuedCount,
-		"skipped_count": skippedCount,
-	}
-	if scheduleAt != nil {
-		metadata["scheduled_at"] = scheduleAt.UTC().Format(time.RFC3339Nano)
-	}
-
-	input := generated.CreateEventInput{
-		EventType:       eventType,
-		Metadata:        metadata,
-		OrganizationIDs: []string{campaignObj.OwnerID},
-	}
-
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.SubjectID != "" {
-		input.UserIDs = []string{caller.SubjectID}
-	}
-
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	if err := withTransactionalMutation(allowCtx).Event.Create().SetInput(input).Exec(allowCtx); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to record campaign dispatch event")
-	}
 }
 
 // ensureCampaignEditAccess verifies the caller can edit the campaign.
@@ -441,9 +391,13 @@ func (r *mutationResolver) ensureCampaignEditAccess(ctx context.Context, campaig
 		SubjectID:   caller.SubjectID,
 	})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking campaign edit access")
+
 		return err
 	}
 	if !allow {
+		logx.FromContext(ctx).Warn().Str("campaign_id", campaignID).Msg("access denied to edit campaign")
+
 		return newPermissionDeniedError()
 	}
 	return nil

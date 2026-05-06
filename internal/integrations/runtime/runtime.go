@@ -3,6 +3,7 @@ package runtime
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
@@ -15,6 +16,11 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
+)
+
+const (
+	// defaultLookbackDuration is used when no last successful run is recorded for an operation
+	defaultLookbackDuration = 90 * 24 * time.Hour
 )
 
 // Config defines the dependencies required to build the integrations runtime
@@ -33,6 +39,9 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
+	// DefaultLookback sets how far back to fetch data when an operation has no prior successful run;
+	// defaults to 90 days when zero
+	DefaultLookback time.Duration
 }
 
 // PostExecutionHook is called after HandleOperation completes with the processed
@@ -45,6 +54,8 @@ type Runtime struct {
 	injector do.Injector
 	// postExecutionHook is an optional callback invoked after each HandleOperation call
 	postExecutionHook PostExecutionHook
+	// defaultLookback is applied as LastRunAt when an operation has no prior successful run
+	defaultLookback time.Duration
 }
 
 // SetPostExecutionHook registers a callback invoked after each HandleOperation call
@@ -86,6 +97,16 @@ func FromClient(ctx context.Context, client *ent.Client) *Runtime {
 // DB returns the Ent client from the injector
 func (r *Runtime) DB() *ent.Client {
 	return do.MustInvoke[*ent.Client](r.injector)
+}
+
+// dbOrNil returns the Ent client if registered, nil otherwise
+func (r *Runtime) dbOrNil() *ent.Client {
+	db, err := do.Invoke[*ent.Client](r.injector)
+	if err != nil {
+		return nil
+	}
+
+	return db
 }
 
 // keystore returns the credential store from the injector
@@ -155,22 +176,30 @@ func normalizeDispatchError(err error) error {
 	}
 }
 
-// NewForTesting constructs a Runtime backed only by the supplied registry
-// Use only in unit tests that exercise registry lookup without executing operations
+// NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client.
+// Use only in unit tests that exercise registry lookup or operation request wiring.
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
+	do.ProvideValue(injector, &ent.Client{})
 
 	return &Runtime{
-		injector: injector,
+		injector:        injector,
+		defaultLookback: defaultLookbackDuration,
 	}
 }
 
 // New wires the integrations runtime
 func New(config Config) (*Runtime, error) {
+	lookback := config.DefaultLookback
+	if lookback <= 0 {
+		lookback = defaultLookbackDuration
+	}
+
 	injector := do.New()
 	rt := &Runtime{
-		injector: injector,
+		injector:        injector,
+		defaultLookback: lookback,
 	}
 
 	do.ProvideValue(injector, config.DB)
@@ -232,7 +261,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule()); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule(), rt.HandleRecurringCampaigns, gala.NewSchedule()); err != nil {
 		return nil, err
 	}
 

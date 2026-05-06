@@ -12,7 +12,7 @@ func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
+				ID:          DefinitionID.ID(),
 				Family:      "Microsoft",
 				DisplayName: "Microsoft Teams",
 				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
@@ -47,7 +47,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
@@ -86,16 +86,16 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call Graph /me to verify Teams access",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    teamsClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
 					Handle:       HealthCheck{}.Handle(),
 				},
 				{
-					Name:         messageSendOperation.Name(),
+					Name:         MessageSendOp.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        definitionID.OperationTopic(messageSendOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(MessageSendOp.Name()),
 					ClientRef:    teamsClient.ID(),
 					ConfigSchema: messageSendSchema,
 					Handle:       MessageSend{}.Handle(),

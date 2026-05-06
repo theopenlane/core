@@ -16,14 +16,12 @@ Config contains the configuration for the core server
 |[**db**](#db)|`object`||yes|
 |[**jobqueue**](#jobqueue)|`object`|||
 |[**redis**](#redis)|`object`|||
-|[**email**](#email)|`object`|||
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
 |[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
-|[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
 |[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
@@ -96,9 +94,6 @@ Config contains the configuration for the core server
         "metrics": {}
     },
     "redis": {},
-    "email": {
-        "urls": {}
-    },
     "sessions": {},
     "totp": {},
     "ratelimit": {
@@ -126,15 +121,16 @@ Config contains the configuration for the core server
         "stripewebhooksecrets": {}
     },
     "keywatcher": {},
-    "slack": {},
     "integrations": {
+        "awssecurityhub": {},
         "githubapp": {},
         "slack": {},
+        "slackruntime": {},
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
         "oidclocal": {},
-        "awssecurityhub": {}
+        "email": {}
     },
     "workflows": {
         "cel": {},
@@ -1124,52 +1120,6 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**maxactiveconns**|`integer`|||
 
 **Additional Properties:** not allowed  
-<a name="email"></a>
-## email: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**companyname**|`string`|||
-|**companyaddress**|`string`|||
-|**corporation**|`string`|||
-|**year**|`integer`|||
-|**fromemail**|`string`|||
-|**supportemail**|`string`|||
-|**questionnaireemail**|`string`|||
-|**logourl**|`string`|||
-|[**urls**](#emailurls)|`object`|||
-|**templatespath**|`string`|||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "urls": {}
-}
-```
-
-<a name="emailurls"></a>
-### email\.urls: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**root**|`string`|||
-|**product**|`string`|||
-|**docs**|`string`|||
-|**verify**|`string`|||
-|**invite**|`string`|||
-|**reset**|`string`|||
-|**verifysubscriber**|`string`|||
-|**verifybilling**|`string`|||
-|**billing**|`string`|||
-|**questionnaire**|`string`|||
-
-**Additional Properties:** not allowed  
 <a name="sessions"></a>
 ## sessions: object
 
@@ -1567,21 +1517,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
 
 **Additional Properties:** not allowed  
-<a name="slack"></a>
-## slack: object
-
-Slack contains settings for Slack notifications
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**webhookurl**|`string`|WebhookURL is the Slack webhook to post messages to<br/>||
-|**newsubscribermessagefile**|`string`|NewSubscriberMessageFile is the path to the template used for new subscriber notifications<br/>||
-|**newusermessagefile**|`string`|NewUserMessageFile is the path to the template used for new user notifications<br/>||
-
-**Additional Properties:** not allowed  
 <a name="integrations"></a>
 ## integrations: object
 
@@ -1589,29 +1524,45 @@ Slack contains settings for Slack notifications
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
+|[**slackruntime**](#integrationsslackruntime)|`object`|||
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
-|[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
+|[**email**](#integrationsemail)|`object`||yes|
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
+    "awssecurityhub": {},
     "githubapp": {},
     "slack": {},
+    "slackruntime": {},
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
     "oidclocal": {},
-    "awssecurityhub": {}
+    "email": {}
 }
 ```
 
+<a name="integrationsawssecurityhub"></a>
+### integrations\.awssecurityhub: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|||
+|**secretaccesskey**|`string`|||
+|**arn**|`string`|||
+
+**Additional Properties:** not allowed  
 <a name="integrationsgithubapp"></a>
 ### integrations\.githubapp: object
 
@@ -1636,6 +1587,18 @@ Slack contains settings for Slack notifications
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 |**appid**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="integrationsslackruntime"></a>
+### integrations\.slackruntime: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**webhookURL**|`string`|Slack incoming webhook URL for fire-and-forget system notifications<br/>||
+|**botToken**|`string`|Bot User OAuth Token for full Web API access to the platform workspace<br/>||
+|**defaultChannel**|`string`|Default channel id for system messages when no explicit channel is provided<br/>||
 
 **Additional Properties:** not allowed  
 <a name="integrationsgoogleworkspace"></a>
@@ -1688,16 +1651,42 @@ Slack contains settings for Slack notifications
 |**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed  
-<a name="integrationsawssecurityhub"></a>
-### integrations\.awssecurityhub: object
+<a name="integrationsemail"></a>
+### integrations\.email: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|||
-|**secretaccesskey**|`string`|||
-|**arn**|`string`|||
+|**apiKey**|`string`|Email provider API key<br/>|yes|
+|**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"sendgrid"`, `"postmark"`<br/>|yes|
+|**fromEmail**|`string`|Sender email address<br/>|yes|
+|**supportEmail**|`string`|Support contact email address<br/>|no|
+|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
+|**rootURL**|`string`|Root application URL used to construct email action links<br/>|no|
+|**productURL**|`string`|Product home URL<br/>|no|
+|**docsURL**|`string`|Documentation URL<br/>|no|
+|**CompanyName**|`string`|Company display name<br/>|no|
+|**CompanyAddress**|`string`|Company mailing address<br/>|no|
+|**Corporation**|`string`|Legal corporation name<br/>|no|
+|**LogoURL**|`string`|Hero logo URL displayed in the email body<br/>|no|
+|**HeaderLogoURL**|`string`|Small logo or icon displayed in the top header bar<br/>|no|
+|**Copyright**|`string`|Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year<br/>|no|
+|**TroubleText**|`string`|Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time<br/>|no|
+|**TermsURL**|`string`|Terms of service link for email footers<br/>|no|
+|**PrivacyURL**|`string`|Privacy policy link for email footers<br/>|no|
+|**UnsubscribeURL**|`string`|Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email<br/>|no|
+|**HeaderText**|`string`|Text displayed in the upper-right corner of the modern theme header<br/>|no|
+|**CardStyle**|`string`|Card visual style<br/>Enum: `"flat"`, `"elevated"`<br/>|no|
+|**BodyBackgroundColor**|`string`|Outer page background color<br/>|no|
+|**CardBackgroundColor**|`string`|Card container background color<br/>|no|
+|**HeroBackgroundColor**|`string`|Hero banner section background color<br/>|no|
+|**ButtonColor**|`string`|Call-to-action button background color<br/>|no|
+|**ButtonTextColor**|`string`|Call-to-action button text color<br/>|no|
+|**HeadingColor**|`string`|Heading and title text color<br/>|no|
+|**TextColor**|`string`|Body paragraph text color<br/>|no|
+|**FooterTextColor**|`string`|Muted text color for headers footers and secondary content<br/>|no|
+|**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="workflows"></a>

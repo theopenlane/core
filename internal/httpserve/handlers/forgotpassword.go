@@ -9,6 +9,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -82,8 +83,10 @@ func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User
 		return nil, err
 	}
 
-	// add email send to the job queue
-	if err := h.sendPasswordResetRequestEmail(ctx, user); err != nil {
+	if err := h.sendEmail(ctx, email.ResetRequestOp.Name(), email.PasswordResetEmailRequest{
+		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		Token:         meowtoken.Token,
+	}); err != nil {
 		return nil, err
 	}
 

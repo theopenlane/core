@@ -4340,13 +4340,13 @@ type Campaign implements Node {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -4372,13 +4372,13 @@ type Campaign implements Node {
   """
   lastResentAt: DateTime
   """
-  the template associated with the campaign
-  """
-  templateID: ID
-  """
   the entity associated with the campaign
   """
   entityID: ID
+  """
+  the template associated with the campaign
+  """
+  templateID: ID
   """
   the assessment associated with the campaign
   """
@@ -4388,13 +4388,17 @@ type Campaign implements Node {
   """
   metadata: Map
   """
-  the email branding associated with the campaign
-  """
-  emailBrandingID: ID
-  """
   the email template associated with the campaign
   """
   emailTemplateID: ID
+  """
+  the email integration used for campaign dispatch
+  """
+  integrationID: ID
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
   owner: Organization
   blockedGroups(
     """
@@ -4493,7 +4497,7 @@ type Campaign implements Node {
   internalOwnerGroup: Group
   assessment: Assessment
   template: Template
-  emailBranding: EmailBranding
+  integration: Integration
   emailTemplate: EmailTemplate
   entity: Entity
   campaignTargets(
@@ -5683,24 +5687,6 @@ input CampaignWhereInput {
   lastResentAtIsNil: Boolean
   lastResentAtNotNil: Boolean
   """
-  template_id field predicates
-  """
-  templateID: ID
-  templateIDNEQ: ID
-  templateIDIn: [ID!]
-  templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
-  templateIDContains: ID
-  templateIDHasPrefix: ID
-  templateIDHasSuffix: ID
-  templateIDIsNil: Boolean
-  templateIDNotNil: Boolean
-  templateIDEqualFold: ID
-  templateIDContainsFold: ID
-  """
   entity_id field predicates
   """
   entityID: ID
@@ -5718,6 +5704,24 @@ input CampaignWhereInput {
   entityIDNotNil: Boolean
   entityIDEqualFold: ID
   entityIDContainsFold: ID
+  """
+  template_id field predicates
+  """
+  templateID: ID
+  templateIDNEQ: ID
+  templateIDIn: [ID!]
+  templateIDNotIn: [ID!]
+  templateIDGT: ID
+  templateIDGTE: ID
+  templateIDLT: ID
+  templateIDLTE: ID
+  templateIDContains: ID
+  templateIDHasPrefix: ID
+  templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
+  templateIDEqualFold: ID
+  templateIDContainsFold: ID
   """
   assessment_id field predicates
   """
@@ -5737,24 +5741,6 @@ input CampaignWhereInput {
   assessmentIDEqualFold: ID
   assessmentIDContainsFold: ID
   """
-  email_branding_id field predicates
-  """
-  emailBrandingID: ID
-  emailBrandingIDNEQ: ID
-  emailBrandingIDIn: [ID!]
-  emailBrandingIDNotIn: [ID!]
-  emailBrandingIDGT: ID
-  emailBrandingIDGTE: ID
-  emailBrandingIDLT: ID
-  emailBrandingIDLTE: ID
-  emailBrandingIDContains: ID
-  emailBrandingIDHasPrefix: ID
-  emailBrandingIDHasSuffix: ID
-  emailBrandingIDIsNil: Boolean
-  emailBrandingIDNotNil: Boolean
-  emailBrandingIDEqualFold: ID
-  emailBrandingIDContainsFold: ID
-  """
   email_template_id field predicates
   """
   emailTemplateID: ID
@@ -5772,6 +5758,42 @@ input CampaignWhereInput {
   emailTemplateIDNotNil: Boolean
   emailTemplateIDEqualFold: ID
   emailTemplateIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  email_branding_id field predicates
+  """
+  emailBrandingID: String
+  emailBrandingIDNEQ: String
+  emailBrandingIDIn: [String!]
+  emailBrandingIDNotIn: [String!]
+  emailBrandingIDGT: String
+  emailBrandingIDGTE: String
+  emailBrandingIDLT: String
+  emailBrandingIDLTE: String
+  emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
+  emailBrandingIDHasSuffix: String
+  emailBrandingIDIsNil: Boolean
+  emailBrandingIDNotNil: Boolean
+  emailBrandingIDEqualFold: String
+  emailBrandingIDContainsFold: String
   """
   owner edge predicates
   """
@@ -5813,10 +5835,10 @@ input CampaignWhereInput {
   hasTemplate: Boolean
   hasTemplateWith: [TemplateWhereInput!]
   """
-  email_branding edge predicates
+  integration edge predicates
   """
-  hasEmailBranding: Boolean
-  hasEmailBrandingWith: [EmailBrandingWhereInput!]
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
   """
   email_template edge predicates
   """
@@ -10816,13 +10838,13 @@ input CreateCampaignInput {
   """
   recurrenceInterval: Int
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
   """
   when the campaign was last executed
   """
@@ -10851,6 +10873,10 @@ input CreateCampaignInput {
   additional metadata about the campaign
   """
   metadata: Map
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -10859,7 +10885,7 @@ input CreateCampaignInput {
   internalOwnerGroupID: ID
   assessmentID: ID
   templateID: ID
-  emailBrandingID: ID
+  integrationID: ID
   emailTemplateID: ID
   entityID: ID
   campaignTargetIDs: [ID!]
@@ -11862,70 +11888,6 @@ input CreateDocumentDataInput {
   fileIDs: [ID!]
 }
 """
-CreateEmailBrandingInput is used for create EmailBranding object.
-Input was generated by ent.
-"""
-input CreateEmailBrandingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  friendly name for this email branding configuration
-  """
-  name: String!
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  """
-  text color for emails
-  """
-  textColor: String
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  """
-  link color for emails
-  """
-  linkColor: String
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  ownerID: ID
-  blockedGroupIDs: [ID!]
-  editorIDs: [ID!]
-  viewerIDs: [ID!]
-  campaignIDs: [ID!]
-  emailTemplateIDs: [ID!]
-}
-"""
 CreateEmailTemplateInput is used for create EmailTemplate object.
 Input was generated by ent.
 """
@@ -12001,7 +11963,7 @@ input CreateEmailTemplateInput {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -12010,7 +11972,6 @@ input CreateEmailTemplateInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  emailBrandingIDs: [ID!]
   integrationID: ID
   workflowDefinitionID: ID
   workflowInstanceID: ID
@@ -13659,7 +13620,7 @@ input CreateNotificationTemplateInput {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateChannel!
+  channel: NotificationTemplateChannel
   """
   template format for rendering
   """
@@ -13827,7 +13788,6 @@ input CreateOrganizationInput {
   settingID: ID
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
-  emailBrandingIDs: [ID!]
   emailTemplateIDs: [ID!]
   notificationPreferenceIDs: [ID!]
   notificationTemplateIDs: [ID!]
@@ -21588,624 +21548,6 @@ input DocumentDataWhereInput {
   """
   tagsHas: String
 }
-type EmailBranding implements Node {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
-  friendly name for this email branding configuration
-  """
-  name: String!
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  """
-  text color for emails
-  """
-  textColor: String
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  """
-  link color for emails
-  """
-  linkColor: String
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  owner: Organization
-  blockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  editors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  campaigns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Campaigns returned from the connection.
-    """
-    orderBy: [CampaignOrder!]
-
-    """
-    Filtering options for Campaigns returned from the connection.
-    """
-    where: CampaignWhereInput
-  ): CampaignConnection!
-  emailTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailTemplates returned from the connection.
-    """
-    orderBy: [EmailTemplateOrder!]
-
-    """
-    Filtering options for EmailTemplates returned from the connection.
-    """
-    where: EmailTemplateWhereInput
-  ): EmailTemplateConnection!
-}
-"""
-A connection to a list of items.
-"""
-type EmailBrandingConnection {
-  """
-  A list of edges.
-  """
-  edges: [EmailBrandingEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type EmailBrandingEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: EmailBranding
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-EmailBrandingFont is enum for the field font_family
-"""
-enum EmailBrandingFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
-  COURIER
-  COURIER_BOLD
-  COURIER_BOLDOBLIQUE
-  COURIER_OBLIQUE
-  HELVETICA
-  HELVETICA_BOLD
-  HELVETICA_BOLDOBLIQUE
-  HELVETICA_OBLIQUE
-  SYMBOL
-  TIMES_BOLD
-  TIMES_BOLDITALIC
-  TIMES_ITALIC
-  TIMES_ROMAN
-}
-"""
-Ordering options for EmailBranding connections
-"""
-input EmailBrandingOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order EmailBrandings.
-  """
-  field: EmailBrandingOrderField!
-}
-"""
-Properties by which EmailBranding connections can be ordered.
-"""
-enum EmailBrandingOrderField {
-  created_at
-  updated_at
-  name
-}
-"""
-EmailBrandingWhereInput is used for filtering EmailBranding objects.
-Input was generated by ent.
-"""
-input EmailBrandingWhereInput {
-  not: EmailBrandingWhereInput
-  and: [EmailBrandingWhereInput!]
-  or: [EmailBrandingWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  brand_name field predicates
-  """
-  brandName: String
-  brandNameNEQ: String
-  brandNameIn: [String!]
-  brandNameNotIn: [String!]
-  brandNameGT: String
-  brandNameGTE: String
-  brandNameLT: String
-  brandNameLTE: String
-  brandNameContains: String
-  brandNameHasPrefix: String
-  brandNameHasSuffix: String
-  brandNameIsNil: Boolean
-  brandNameNotNil: Boolean
-  brandNameEqualFold: String
-  brandNameContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  primary_color field predicates
-  """
-  primaryColor: String
-  primaryColorNEQ: String
-  primaryColorIn: [String!]
-  primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
-  primaryColorContains: String
-  primaryColorHasPrefix: String
-  primaryColorHasSuffix: String
-  primaryColorIsNil: Boolean
-  primaryColorNotNil: Boolean
-  primaryColorEqualFold: String
-  primaryColorContainsFold: String
-  """
-  secondary_color field predicates
-  """
-  secondaryColor: String
-  secondaryColorNEQ: String
-  secondaryColorIn: [String!]
-  secondaryColorNotIn: [String!]
-  secondaryColorGT: String
-  secondaryColorGTE: String
-  secondaryColorLT: String
-  secondaryColorLTE: String
-  secondaryColorContains: String
-  secondaryColorHasPrefix: String
-  secondaryColorHasSuffix: String
-  secondaryColorIsNil: Boolean
-  secondaryColorNotNil: Boolean
-  secondaryColorEqualFold: String
-  secondaryColorContainsFold: String
-  """
-  background_color field predicates
-  """
-  backgroundColor: String
-  backgroundColorNEQ: String
-  backgroundColorIn: [String!]
-  backgroundColorNotIn: [String!]
-  backgroundColorGT: String
-  backgroundColorGTE: String
-  backgroundColorLT: String
-  backgroundColorLTE: String
-  backgroundColorContains: String
-  backgroundColorHasPrefix: String
-  backgroundColorHasSuffix: String
-  backgroundColorIsNil: Boolean
-  backgroundColorNotNil: Boolean
-  backgroundColorEqualFold: String
-  backgroundColorContainsFold: String
-  """
-  text_color field predicates
-  """
-  textColor: String
-  textColorNEQ: String
-  textColorIn: [String!]
-  textColorNotIn: [String!]
-  textColorGT: String
-  textColorGTE: String
-  textColorLT: String
-  textColorLTE: String
-  textColorContains: String
-  textColorHasPrefix: String
-  textColorHasSuffix: String
-  textColorIsNil: Boolean
-  textColorNotNil: Boolean
-  textColorEqualFold: String
-  textColorContainsFold: String
-  """
-  button_color field predicates
-  """
-  buttonColor: String
-  buttonColorNEQ: String
-  buttonColorIn: [String!]
-  buttonColorNotIn: [String!]
-  buttonColorGT: String
-  buttonColorGTE: String
-  buttonColorLT: String
-  buttonColorLTE: String
-  buttonColorContains: String
-  buttonColorHasPrefix: String
-  buttonColorHasSuffix: String
-  buttonColorIsNil: Boolean
-  buttonColorNotNil: Boolean
-  buttonColorEqualFold: String
-  buttonColorContainsFold: String
-  """
-  button_text_color field predicates
-  """
-  buttonTextColor: String
-  buttonTextColorNEQ: String
-  buttonTextColorIn: [String!]
-  buttonTextColorNotIn: [String!]
-  buttonTextColorGT: String
-  buttonTextColorGTE: String
-  buttonTextColorLT: String
-  buttonTextColorLTE: String
-  buttonTextColorContains: String
-  buttonTextColorHasPrefix: String
-  buttonTextColorHasSuffix: String
-  buttonTextColorIsNil: Boolean
-  buttonTextColorNotNil: Boolean
-  buttonTextColorEqualFold: String
-  buttonTextColorContainsFold: String
-  """
-  link_color field predicates
-  """
-  linkColor: String
-  linkColorNEQ: String
-  linkColorIn: [String!]
-  linkColorNotIn: [String!]
-  linkColorGT: String
-  linkColorGTE: String
-  linkColorLT: String
-  linkColorLTE: String
-  linkColorContains: String
-  linkColorHasPrefix: String
-  linkColorHasSuffix: String
-  linkColorIsNil: Boolean
-  linkColorNotNil: Boolean
-  linkColorEqualFold: String
-  linkColorContainsFold: String
-  """
-  font_family field predicates
-  """
-  fontFamily: EmailBrandingFont
-  fontFamilyNEQ: EmailBrandingFont
-  fontFamilyIn: [EmailBrandingFont!]
-  fontFamilyNotIn: [EmailBrandingFont!]
-  fontFamilyIsNil: Boolean
-  fontFamilyNotNil: Boolean
-  """
-  is_default field predicates
-  """
-  isDefault: Boolean
-  isDefaultNEQ: Boolean
-  isDefaultIsNil: Boolean
-  isDefaultNotNil: Boolean
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
-  """
-  campaigns edge predicates
-  """
-  hasCampaigns: Boolean
-  hasCampaignsWith: [CampaignWhereInput!]
-  """
-  email_templates edge predicates
-  """
-  hasEmailTemplates: Boolean
-  hasEmailTemplatesWith: [EmailTemplateWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
 type EmailTemplate implements Node {
   id: ID!
   createdAt: Time
@@ -22247,35 +21589,11 @@ type EmailTemplate implements Node {
   """
   template format for rendering
   """
-  format: EmailTemplateNotificationTemplateFormat!
+  format: EmailTemplateNotificationTemplateFormat
   """
   locale for the template, e.g. en-US
   """
   locale: String!
-  """
-  subject template for email notifications
-  """
-  subjectTemplate: String
-  """
-  preheader/preview text template for email notifications
-  """
-  preheaderTemplate: String
-  """
-  body template for the email
-  """
-  bodyTemplate: String
-  """
-  plain text fallback template for the email
-  """
-  textTemplate: String
-  """
-  jsonschema for template data requirements
-  """
-  jsonconfig: Map
-  """
-  uischema for a template builder
-  """
-  uischema: Map
   """
   additional template metadata
   """
@@ -22291,7 +21609,7 @@ type EmailTemplate implements Node {
   """
   runtime data context defining available variable keys for this template
   """
-  templateContext: EmailTemplateTemplateContext!
+  templateContext: EmailTemplateTemplateContext
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -22402,7 +21720,6 @@ type EmailTemplate implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  emailBranding: [EmailBranding!]
   integration: Integration
   workflowDefinition: WorkflowDefinition
   workflowInstance: WorkflowInstance
@@ -22794,6 +22111,8 @@ input EmailTemplateWhereInput {
   formatNEQ: EmailTemplateNotificationTemplateFormat
   formatIn: [EmailTemplateNotificationTemplateFormat!]
   formatNotIn: [EmailTemplateNotificationTemplateFormat!]
+  formatIsNil: Boolean
+  formatNotNil: Boolean
   """
   locale field predicates
   """
@@ -22905,6 +22224,8 @@ input EmailTemplateWhereInput {
   templateContextNEQ: EmailTemplateTemplateContext
   templateContextIn: [EmailTemplateTemplateContext!]
   templateContextNotIn: [EmailTemplateTemplateContext!]
+  templateContextIsNil: Boolean
+  templateContextNotNil: Boolean
   """
   integration_id field predicates
   """
@@ -22979,11 +22300,6 @@ input EmailTemplateWhereInput {
   """
   hasViewers: Boolean
   hasViewersWith: [GroupWhereInput!]
-  """
-  email_branding edge predicates
-  """
-  hasEmailBranding: Boolean
-  hasEmailBrandingWith: [EmailBrandingWhereInput!]
   """
   integration edge predicates
   """
@@ -34993,6 +34309,10 @@ type Integration implements Node {
   designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
   """
   primaryDirectory: Boolean!
+  """
+  designates this email integration as the one to use for campaign dispatch within its owner organization
+  """
+  campaignEmail: Boolean!
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -35527,6 +34847,37 @@ type Integration implements Node {
     """
     where: EmailTemplateWhereInput
   ): EmailTemplateConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -35998,6 +35349,11 @@ input IntegrationWhereInput {
   primaryDirectory: Boolean
   primaryDirectoryNEQ: Boolean
   """
+  campaign_email field predicates
+  """
+  campaignEmail: Boolean
+  campaignEmailNEQ: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -36102,6 +35458,11 @@ input IntegrationWhereInput {
   """
   hasEmailTemplates: Boolean
   hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
   """
   entities edge predicates
   """
@@ -41971,7 +41332,7 @@ type NotificationTemplate implements Node {
   """
   channel this template is intended for
   """
-  channel: NotificationTemplateChannel!
+  channel: NotificationTemplateChannel
   """
   template format for rendering
   """
@@ -42380,6 +41741,8 @@ input NotificationTemplateWhereInput {
   channelNEQ: NotificationTemplateChannel
   channelIn: [NotificationTemplateChannel!]
   channelNotIn: [NotificationTemplateChannel!]
+  channelIsNil: Boolean
+  channelNotNil: Boolean
   """
   format field predicates
   """
@@ -44027,37 +43390,6 @@ type Organization implements Node {
     """
     where: APITokenWhereInput
   ): APITokenConnection!
-  emailBrandings(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailBrandings returned from the connection.
-    """
-    orderBy: [EmailBrandingOrder!]
-
-    """
-    Filtering options for EmailBrandings returned from the connection.
-    """
-    where: EmailBrandingWhereInput
-  ): EmailBrandingConnection!
   emailTemplates(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -47356,11 +46688,6 @@ input OrganizationWhereInput {
   """
   hasAPITokens: Boolean
   hasAPITokensWith: [APITokenWhereInput!]
-  """
-  email_brandings edge predicates
-  """
-  hasEmailBrandings: Boolean
-  hasEmailBrandingsWith: [EmailBrandingWhereInput!]
   """
   email_templates edge predicates
   """
@@ -53528,37 +52855,6 @@ type Query {
     """
     where: DocumentDataWhereInput
   ): DocumentDataConnection!
-  emailBrandings(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for EmailBrandings returned from the connection.
-    """
-    orderBy: [EmailBrandingOrder!]
-
-    """
-    Filtering options for EmailBrandings returned from the connection.
-    """
-    where: EmailBrandingWhereInput
-  ): EmailBrandingConnection!
   emailTemplates(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -72785,15 +72081,15 @@ input UpdateCampaignInput {
   recurrenceInterval: Int
   clearRecurrenceInterval: Boolean
   """
-  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  recurrenceCron: String
-  clearRecurrenceCron: Boolean
-  """
   timezone used for the recurrence schedule
   """
   recurrenceTimezone: String
   clearRecurrenceTimezone: Boolean
+  """
+  cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *
+  """
+  recurrenceCron: String
+  clearRecurrenceCron: Boolean
   """
   when the campaign was last executed
   """
@@ -72829,6 +72125,11 @@ input UpdateCampaignInput {
   """
   metadata: Map
   clearMetadata: Boolean
+  """
+  the email branding associated with the campaign
+  """
+  emailBrandingID: String
+  clearEmailBrandingID: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -72846,8 +72147,8 @@ input UpdateCampaignInput {
   clearAssessment: Boolean
   templateID: ID
   clearTemplate: Boolean
-  emailBrandingID: ID
-  clearEmailBranding: Boolean
+  integrationID: ID
+  clearIntegration: Boolean
   emailTemplateID: ID
   clearEmailTemplate: Boolean
   entityID: ID
@@ -74172,92 +73473,6 @@ input UpdateDocumentDataInput {
   clearFiles: Boolean
 }
 """
-UpdateEmailBrandingInput is used for update EmailBranding object.
-Input was generated by ent.
-"""
-input UpdateEmailBrandingInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  friendly name for this email branding configuration
-  """
-  name: String
-  """
-  brand name displayed in templates
-  """
-  brandName: String
-  clearBrandName: Boolean
-  """
-  URL of the brand logo for emails
-  """
-  logoRemoteURL: String
-  clearLogoRemoteURL: Boolean
-  """
-  primary brand color for emails
-  """
-  primaryColor: String
-  clearPrimaryColor: Boolean
-  """
-  secondary brand color for emails
-  """
-  secondaryColor: String
-  clearSecondaryColor: Boolean
-  """
-  background color for emails
-  """
-  backgroundColor: String
-  clearBackgroundColor: Boolean
-  """
-  text color for emails
-  """
-  textColor: String
-  clearTextColor: Boolean
-  """
-  button background color for emails
-  """
-  buttonColor: String
-  clearButtonColor: Boolean
-  """
-  button text color for emails
-  """
-  buttonTextColor: String
-  clearButtonTextColor: Boolean
-  """
-  link color for emails
-  """
-  linkColor: String
-  clearLinkColor: Boolean
-  """
-  font family for emails
-  """
-  fontFamily: EmailBrandingFont
-  clearFontFamily: Boolean
-  """
-  whether this is the default email branding for the organization
-  """
-  isDefault: Boolean
-  clearIsDefault: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
-  addCampaignIDs: [ID!]
-  removeCampaignIDs: [ID!]
-  clearCampaigns: Boolean
-  addEmailTemplateIDs: [ID!]
-  removeEmailTemplateIDs: [ID!]
-  clearEmailTemplates: Boolean
-}
-"""
 UpdateEmailTemplateInput is used for update EmailTemplate object.
 Input was generated by ent.
 """
@@ -74294,6 +73509,7 @@ input UpdateEmailTemplateInput {
   template format for rendering
   """
   format: EmailTemplateNotificationTemplateFormat
+  clearFormat: Boolean
   """
   locale for the template, e.g. en-US
   """
@@ -74345,6 +73561,7 @@ input UpdateEmailTemplateInput {
   runtime data context defining available variable keys for this template
   """
   templateContext: EmailTemplateTemplateContext
+  clearTemplateContext: Boolean
   """
   static variable values merged as base layer at render time; call-site data takes precedence
   """
@@ -74359,9 +73576,6 @@ input UpdateEmailTemplateInput {
   addViewerIDs: [ID!]
   removeViewerIDs: [ID!]
   clearViewers: Boolean
-  addEmailBrandingIDs: [ID!]
-  removeEmailBrandingIDs: [ID!]
-  clearEmailBranding: Boolean
   integrationID: ID
   clearIntegration: Boolean
   workflowDefinitionID: ID
@@ -76668,6 +75882,7 @@ input UpdateNotificationTemplateInput {
   channel this template is intended for
   """
   channel: NotificationTemplateChannel
+  clearChannel: Boolean
   """
   template format for rendering
   """
@@ -76867,9 +76082,6 @@ input UpdateOrganizationInput {
   addAPITokenIDs: [ID!]
   removeAPITokenIDs: [ID!]
   clearAPITokens: Boolean
-  addEmailBrandingIDs: [ID!]
-  removeEmailBrandingIDs: [ID!]
-  clearEmailBrandings: Boolean
   addEmailTemplateIDs: [ID!]
   removeEmailTemplateIDs: [ID!]
   clearEmailTemplates: Boolean

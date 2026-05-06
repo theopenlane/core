@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -346,6 +345,14 @@ func (_c *EmailTemplateCreate) SetTemplateContext(v enums.TemplateContext) *Emai
 	return _c
 }
 
+// SetNillableTemplateContext sets the "template_context" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableTemplateContext(v *enums.TemplateContext) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetTemplateContext(*v)
+	}
+	return _c
+}
+
 // SetDefaults sets the "defaults" field.
 func (_c *EmailTemplateCreate) SetDefaults(v map[string]interface{}) *EmailTemplateCreate {
 	_c.mutation.SetDefaults(v)
@@ -456,21 +463,6 @@ func (_c *EmailTemplateCreate) AddViewers(v ...*Group) *EmailTemplateCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddViewerIDs(ids...)
-}
-
-// AddEmailBrandingIDs adds the "email_branding" edge to the EmailBranding entity by IDs.
-func (_c *EmailTemplateCreate) AddEmailBrandingIDs(ids ...string) *EmailTemplateCreate {
-	_c.mutation.AddEmailBrandingIDs(ids...)
-	return _c
-}
-
-// AddEmailBranding adds the "email_branding" edges to the EmailBranding entity.
-func (_c *EmailTemplateCreate) AddEmailBranding(v ...*EmailBranding) *EmailTemplateCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddEmailBrandingIDs(ids...)
 }
 
 // SetIntegration sets the "integration" edge to the Integration entity.
@@ -646,9 +638,6 @@ func (_c *EmailTemplateCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.name": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Format(); !ok {
-		return &ValidationError{Name: "format", err: errors.New(`generated: missing required field "EmailTemplate.format"`)}
-	}
 	if v, ok := _c.mutation.Format(); ok {
 		if err := emailtemplate.FormatValidator(v); err != nil {
 			return &ValidationError{Name: "format", err: fmt.Errorf(`generated: validator failed for field "EmailTemplate.format": %w`, err)}
@@ -662,9 +651,6 @@ func (_c *EmailTemplateCreate) check() error {
 	}
 	if _, ok := _c.mutation.Version(); !ok {
 		return &ValidationError{Name: "version", err: errors.New(`generated: missing required field "EmailTemplate.version"`)}
-	}
-	if _, ok := _c.mutation.TemplateContext(); !ok {
-		return &ValidationError{Name: "template_context", err: errors.New(`generated: missing required field "EmailTemplate.template_context"`)}
 	}
 	if v, ok := _c.mutation.TemplateContext(); ok {
 		if err := emailtemplate.TemplateContextValidator(v); err != nil {
@@ -875,23 +861,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 			},
 		}
 		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.EmailBrandingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   emailtemplate.EmailBrandingTable,
-			Columns: emailtemplate.EmailBrandingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.EmailBrandingEmailTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

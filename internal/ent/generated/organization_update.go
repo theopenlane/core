@@ -32,7 +32,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
@@ -743,21 +742,6 @@ func (_u *OrganizationUpdate) AddAPITokens(v ...*APIToken) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddAPITokenIDs(ids...)
-}
-
-// AddEmailBrandingIDs adds the "email_brandings" edge to the EmailBranding entity by IDs.
-func (_u *OrganizationUpdate) AddEmailBrandingIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddEmailBrandingIDs(ids...)
-	return _u
-}
-
-// AddEmailBrandings adds the "email_brandings" edges to the EmailBranding entity.
-func (_u *OrganizationUpdate) AddEmailBrandings(v ...*EmailBranding) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingIDs(ids...)
 }
 
 // AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
@@ -2558,27 +2542,6 @@ func (_u *OrganizationUpdate) RemoveAPITokens(v ...*APIToken) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
-}
-
-// ClearEmailBrandings clears all "email_brandings" edges to the EmailBranding entity.
-func (_u *OrganizationUpdate) ClearEmailBrandings() *OrganizationUpdate {
-	_u.mutation.ClearEmailBrandings()
-	return _u
-}
-
-// RemoveEmailBrandingIDs removes the "email_brandings" edge to EmailBranding entities by IDs.
-func (_u *OrganizationUpdate) RemoveEmailBrandingIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveEmailBrandingIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBrandings removes "email_brandings" edges to EmailBranding entities.
-func (_u *OrganizationUpdate) RemoveEmailBrandings(v ...*EmailBranding) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingIDs(ids...)
 }
 
 // ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
@@ -5713,54 +5676,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			},
 		}
 		edge.Schema = _u.schemaConfig.APIToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10452,21 +10367,6 @@ func (_u *OrganizationUpdateOne) AddAPITokens(v ...*APIToken) *OrganizationUpdat
 	return _u.AddAPITokenIDs(ids...)
 }
 
-// AddEmailBrandingIDs adds the "email_brandings" edge to the EmailBranding entity by IDs.
-func (_u *OrganizationUpdateOne) AddEmailBrandingIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddEmailBrandingIDs(ids...)
-	return _u
-}
-
-// AddEmailBrandings adds the "email_brandings" edges to the EmailBranding entity.
-func (_u *OrganizationUpdateOne) AddEmailBrandings(v ...*EmailBranding) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingIDs(ids...)
-}
-
 // AddEmailTemplateIDs adds the "email_templates" edge to the EmailTemplate entity by IDs.
 func (_u *OrganizationUpdateOne) AddEmailTemplateIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddEmailTemplateIDs(ids...)
@@ -12265,27 +12165,6 @@ func (_u *OrganizationUpdateOne) RemoveAPITokens(v ...*APIToken) *OrganizationUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAPITokenIDs(ids...)
-}
-
-// ClearEmailBrandings clears all "email_brandings" edges to the EmailBranding entity.
-func (_u *OrganizationUpdateOne) ClearEmailBrandings() *OrganizationUpdateOne {
-	_u.mutation.ClearEmailBrandings()
-	return _u
-}
-
-// RemoveEmailBrandingIDs removes the "email_brandings" edge to EmailBranding entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveEmailBrandingIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveEmailBrandingIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBrandings removes "email_brandings" edges to EmailBranding entities.
-func (_u *OrganizationUpdateOne) RemoveEmailBrandings(v ...*EmailBranding) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingIDs(ids...)
 }
 
 // ClearEmailTemplates clears all "email_templates" edges to the EmailTemplate entity.
@@ -15450,54 +15329,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.APIToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingsTable,
-			Columns: []string{organization.EmailBrandingsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(emailbranding.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.EmailBranding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

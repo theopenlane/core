@@ -2,7 +2,6 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 	createBulkCSVEmailTemplate(input: $input) {
 		emailTemplates {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -11,20 +10,15 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version
@@ -37,7 +31,6 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 	createBulkEmailTemplate(input: $input) {
 		emailTemplates {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -46,20 +39,15 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version
@@ -72,7 +60,6 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 	createEmailTemplate(input: $input) {
 		emailTemplate {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -81,20 +68,15 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version
@@ -125,7 +107,6 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 		edges {
 			node {
 				active
-				bodyTemplate
 				createdAt
 				createdBy
 				defaults
@@ -134,20 +115,15 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				id
 				integrationID
 				internalNotes
-				jsonconfig
 				key
 				locale
 				metadata
 				name
 				ownerID
-				preheaderTemplate
 				revision
-				subjectTemplate
 				systemInternalID
 				systemOwned
 				templateContext
-				textTemplate
-				uischema
 				updatedAt
 				updatedBy
 				version
@@ -160,7 +136,6 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 query GetEmailTemplateByID ($emailTemplateId: ID!) {
 	emailTemplate(id: $emailTemplateId) {
 		active
-		bodyTemplate
 		createdAt
 		createdBy
 		defaults
@@ -169,20 +144,15 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		id
 		integrationID
 		internalNotes
-		jsonconfig
 		key
 		locale
 		metadata
 		name
 		ownerID
-		preheaderTemplate
 		revision
-		subjectTemplate
 		systemInternalID
 		systemOwned
 		templateContext
-		textTemplate
-		uischema
 		updatedAt
 		updatedBy
 		version
@@ -202,7 +172,6 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 		edges {
 			node {
 				active
-				bodyTemplate
 				createdAt
 				createdBy
 				defaults
@@ -211,20 +180,15 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				id
 				integrationID
 				internalNotes
-				jsonconfig
 				key
 				locale
 				metadata
 				name
 				ownerID
-				preheaderTemplate
 				revision
-				subjectTemplate
 				systemInternalID
 				systemOwned
 				templateContext
-				textTemplate
-				uischema
 				updatedAt
 				updatedBy
 				version
@@ -238,7 +202,6 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 	updateBulkCSVEmailTemplate(input: $input) {
 		emailTemplates {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -247,20 +210,15 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version
@@ -274,7 +232,6 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 	updateBulkEmailTemplate(ids: $ids, input: $input) {
 		emailTemplates {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -283,20 +240,15 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version
@@ -310,7 +262,6 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 	updateEmailTemplate(id: $updateEmailTemplateId, input: $input) {
 		emailTemplate {
 			active
-			bodyTemplate
 			createdAt
 			createdBy
 			defaults
@@ -319,20 +270,15 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			id
 			integrationID
 			internalNotes
-			jsonconfig
 			key
 			locale
 			metadata
 			name
 			ownerID
-			preheaderTemplate
 			revision
-			subjectTemplate
 			systemInternalID
 			systemOwned
 			templateContext
-			textTemplate
-			uischema
 			updatedAt
 			updatedBy
 			version

@@ -1146,6 +1146,243 @@ func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	}
 }
 
+// TestRuntimeIntegrationRegistration verifies a definition with RuntimeIntegration can register and cache a client
+func TestRuntimeIntegrationRegistration(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          "def_runtime",
+			DisplayName: "Runtime Test",
+			Active:      true,
+			Visible:     true,
+		},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref:    integrationtypes.NewRuntimeRefID("TestRuntimeConfig"),
+			Schema: json.RawMessage(`{"type":"object"}`),
+			Config: json.RawMessage(`{"key":"val"}`),
+			Build: func(_ context.Context, config json.RawMessage) (any, error) {
+				return "runtime-client-" + string(config), nil
+			},
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "send", Topic: gala.TopicName("def_runtime.send"), Handle: newTestHandler()},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	client, ok := reg.RuntimeClient("def_runtime")
+	if !ok {
+		t.Fatal("RuntimeClient() returned false, want true")
+	}
+
+	got, _ := client.(string)
+	if got != `runtime-client-{"key":"val"}` {
+		t.Fatalf("RuntimeClient() = %q, want cached client", got)
+	}
+
+	if !reg.IsRuntimeIntegration("def_runtime") {
+		t.Fatal("IsRuntimeIntegration() = false, want true")
+	}
+}
+
+// TestRuntimeIntegrationNilConfig verifies a runtime definition with nil config registers but has no cached client
+func TestRuntimeIntegrationNilConfig(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          "def_runtime_nocfg",
+			DisplayName: "Runtime No Config",
+			Active:      true,
+		},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref:    integrationtypes.NewRuntimeRefID("Unconfigured"),
+			Schema: json.RawMessage(`{"type":"object"}`),
+			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
+				return "should-not-be-called", nil
+			},
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("def_runtime_nocfg.op"), Handle: newTestHandler()},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	_, ok := reg.RuntimeClient("def_runtime_nocfg")
+	if ok {
+		t.Fatal("RuntimeClient() returned true for nil config, want false")
+	}
+
+	if !reg.IsRuntimeIntegration("def_runtime_nocfg") {
+		t.Fatal("IsRuntimeIntegration() = false, want true")
+	}
+}
+
+// TestRuntimeCoexistsWithCredentials verifies runtime integration can coexist with credentials
+func TestRuntimeCoexistsWithCredentials(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref:    integrationtypes.NewRuntimeRefID("WithCreds"),
+			Schema: json.RawMessage(`{"type":"object"}`),
+			Config: json.RawMessage(`{"key":"val"}`),
+			Build: func(_ context.Context, config json.RawMessage) (any, error) {
+				return "runtime-client", nil
+			},
+		},
+		CredentialRegistrations: []integrationtypes.CredentialRegistration{
+			{Ref: testCredentialSlot, Schema: testCredentialSchema},
+		},
+		Clients: []integrationtypes.ClientRegistration{
+			{
+				Ref:            integrationtypes.NewClientRef[string]().ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
+				Build: func(_ context.Context, _ integrationtypes.ClientBuildRequest) (any, error) {
+					return "customer-client", nil
+				},
+			},
+		},
+		Connections: []integrationtypes.ConnectionRegistration{
+			{
+				CredentialRef:  testCredentialSlot,
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
+			},
+		},
+		UserInput: &integrationtypes.UserInputRegistration{
+			Schema: json.RawMessage(`{"type":"object"}`),
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("def_runtime_creds.op"), Handle: newTestHandler()},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	client, ok := reg.RuntimeClient("def_runtime_creds")
+	if !ok {
+		t.Fatal("RuntimeClient() returned false, want true")
+	}
+
+	got, _ := client.(string)
+	if got != "runtime-client" {
+		t.Fatalf("RuntimeClient() = %q, want %q", got, "runtime-client")
+	}
+
+	if !reg.IsRuntimeIntegration("def_runtime_creds") {
+		t.Fatal("IsRuntimeIntegration() = false, want true")
+	}
+}
+
+// TestRuntimeCoexistsWithOperatorConfig verifies a definition can declare both a runtime integration and operator config
+func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref:   integrationtypes.NewRuntimeRefID("OpConflict"),
+			Build: func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
+		},
+		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("expected registration to succeed, got %v", err)
+	}
+}
+
+// TestRuntimeBuildRequired verifies runtime integration rejects nil Build function
+func TestRuntimeBuildRequired(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref: integrationtypes.NewRuntimeRefID("NoBuild"),
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrRuntimeBuildRequired) {
+		t.Fatalf("expected ErrRuntimeBuildRequired, got %v", err)
+	}
+}
+
+// TestRuntimeBuildError verifies build failure during registration propagates
+func TestRuntimeBuildError(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	buildErr := errors.New("provider init failed")
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
+		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
+			Ref:    integrationtypes.NewRuntimeRefID("FailBuild"),
+			Config: json.RawMessage(`{}`),
+			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
+				return nil, buildErr
+			},
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, buildErr) {
+		t.Fatalf("expected build error, got %v", err)
+	}
+}
+
+// TestRuntimeClientMiss verifies RuntimeClient returns false for non-runtime definitions
+func TestRuntimeClientMiss(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def, _ := minimalDefinition("def_standard")
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+
+	_, ok := reg.RuntimeClient("def_standard")
+	if ok {
+		t.Fatal("RuntimeClient() returned true for standard definition, want false")
+	}
+
+	if reg.IsRuntimeIntegration("def_standard") {
+		t.Fatal("IsRuntimeIntegration() = true for standard definition, want false")
+	}
+}
+
 // TestEmptyRegistryLookups verifies all collection methods return empty on fresh registry
 func TestEmptyRegistryLookups(t *testing.T) {
 	t.Parallel()

@@ -82,6 +82,8 @@ const (
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
 	FieldPrimaryDirectory = "primary_directory"
+	// FieldCampaignEmail holds the string denoting the campaign_email field in the database.
+	FieldCampaignEmail = "campaign_email"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -124,6 +126,8 @@ const (
 	EdgeNotificationTemplates = "notification_templates"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
 	EdgeEmailTemplates = "email_templates"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
 	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
 	EdgeIntegrationWebhooks = "integration_webhooks"
 	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
@@ -265,6 +269,13 @@ const (
 	EmailTemplatesInverseTable = "email_templates"
 	// EmailTemplatesColumn is the table column denoting the email_templates relation/edge.
 	EmailTemplatesColumn = "integration_id"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "integration_id"
 	// IntegrationWebhooksTable is the table that holds the integration_webhooks relation/edge.
 	IntegrationWebhooksTable = "integration_webhooks"
 	// IntegrationWebhooksInverseTable is the table name for the IntegrationWebhook entity.
@@ -321,6 +332,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldProviderMetadataSnapshot,
 	FieldPrimaryDirectory,
+	FieldCampaignEmail,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "integrations"
@@ -378,7 +390,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -397,6 +409,8 @@ var (
 	PlatformIDValidator func(string) error
 	// DefaultPrimaryDirectory holds the default value on creation for the "primary_directory" field.
 	DefaultPrimaryDirectory bool
+	// DefaultCampaignEmail holds the default value on creation for the "campaign_email" field.
+	DefaultCampaignEmail bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -544,6 +558,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryDirectory orders the results by the primary_directory field.
 func ByPrimaryDirectory(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryDirectory, opts...).ToFunc()
+}
+
+// ByCampaignEmail orders the results by the campaign_email field.
+func ByCampaignEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignEmail, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -812,6 +831,20 @@ func ByEmailTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByIntegrationWebhooksCount orders the results by integration_webhooks count.
 func ByIntegrationWebhooksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -998,6 +1031,13 @@ func newEmailTemplatesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EmailTemplatesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EmailTemplatesTable, EmailTemplatesColumn),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
 	)
 }
 func newIntegrationWebhooksStep() *sqlgraph.Step {

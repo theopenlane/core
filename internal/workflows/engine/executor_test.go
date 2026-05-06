@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -12,8 +13,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -224,6 +227,74 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 
 	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, obj)
 	s.NoError(err)
+}
+
+// TestExecuteSendEmail verifies SEND_EMAIL action composition and queue insertion.
+func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
+	userID, orgID, userCtx := s.SetupTestUser()
+
+	wfEngine := s.Engine()
+	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
+	seedCtx := s.SeedContext(userID, orgID)
+
+	err := s.client.Job.TruncateRiverTables(context.Background())
+	s.Require().NoError(err)
+
+	emailRecord, err := s.client.EmailTemplate.Create().
+		SetOwnerID(orgID).
+		SetKey(emaildef.BrandedMessageOp.Name()).
+		SetName("Workflow Send Email").
+		SetLocale("en-US").
+		SetFormat(enums.NotificationTemplateFormatHTML).
+		SetTemplateContext(enums.TemplateContextWorkflowAction).
+		SetDefaults(map[string]any{
+			"subject": "Workflow Send Email",
+			"title":   "Workflow Send Email",
+			"intros":  []any{"Hi from workflow"},
+		}).
+		SetActive(true).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-SEND-EMAIL-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
+		EventType:     "UPDATE",
+		ChangedFields: []string{"status"},
+	})
+
+	params := workflows.SendEmailActionParams{
+		EmailTemplateID: emailRecord.ID,
+		To:              []string{"person@example.com"},
+		From:            "noreply@example.com",
+	}
+
+	paramsBytes, err := json.Marshal(params)
+	s.Require().NoError(err)
+
+	action := models.WorkflowAction{
+		Type:   enums.WorkflowActionTypeSendEmail.String(),
+		Key:    "send_email",
+		Params: paramsBytes,
+	}
+
+	err = wfEngine.Execute(userCtx, action, instance, obj)
+	s.Require().NoError(err)
+	s.WaitForEvents()
+
+	msgs := s.mockEmailSender().Messages()
+	s.Require().Len(msgs, 1)
+	s.Equal([]string{"person@example.com"}, msgs[0].To)
+	s.Equal("Workflow Send Email", msgs[0].Subject)
+	s.Contains(msgs[0].Text, "Hi from workflow")
+
+	_, err = s.client.EmailTemplate.Delete().Where(emailtemplate.NameEQ("Workflow Send Email")).Exec(seedCtx)
+	s.Require().NoError(err)
 }
 
 // TestExecuteWebhook verifies the webhook action executor correctly calls external URLs

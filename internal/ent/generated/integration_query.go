@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
@@ -71,6 +72,7 @@ type IntegrationQuery struct {
 	withPlatform                   *PlatformQuery
 	withNotificationTemplates      *NotificationTemplateQuery
 	withEmailTemplates             *EmailTemplateQuery
+	withCampaigns                  *CampaignQuery
 	withIntegrationWebhooks        *IntegrationWebhookQuery
 	withIntegrationRuns            *IntegrationRunQuery
 	withEntities                   *EntityQuery
@@ -94,6 +96,7 @@ type IntegrationQuery struct {
 	withNamedCheckResults          map[string]*CheckResultQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
 	withNamedEmailTemplates        map[string]*EmailTemplateQuery
+	withNamedCampaigns             map[string]*CampaignQuery
 	withNamedIntegrationWebhooks   map[string]*IntegrationWebhookQuery
 	withNamedIntegrationRuns       map[string]*IntegrationRunQuery
 	withNamedEntities              map[string]*EntityQuery
@@ -658,6 +661,31 @@ func (_q *IntegrationQuery) QueryEmailTemplates() *EmailTemplateQuery {
 	return query
 }
 
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *IntegrationQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.CampaignsTable, integration.CampaignsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryIntegrationWebhooks chains the current query on the "integration_webhooks" edge.
 func (_q *IntegrationQuery) QueryIntegrationWebhooks() *IntegrationWebhookQuery {
 	query := (&IntegrationWebhookClient{config: _q.config}).Query()
@@ -946,6 +974,7 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withPlatform:              _q.withPlatform.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
 		withEmailTemplates:        _q.withEmailTemplates.Clone(),
+		withCampaigns:             _q.withCampaigns.Clone(),
 		withIntegrationWebhooks:   _q.withIntegrationWebhooks.Clone(),
 		withIntegrationRuns:       _q.withIntegrationRuns.Clone(),
 		withEntities:              _q.withEntities.Clone(),
@@ -1187,6 +1216,17 @@ func (_q *IntegrationQuery) WithEmailTemplates(opts ...func(*EmailTemplateQuery)
 	return _q
 }
 
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithCampaigns(opts ...func(*CampaignQuery)) *IntegrationQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
 // WithIntegrationWebhooks tells the query-builder to eager-load the nodes that are connected to
 // the "integration_webhooks" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IntegrationQuery) WithIntegrationWebhooks(opts ...func(*IntegrationWebhookQuery)) *IntegrationQuery {
@@ -1305,7 +1345,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [25]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1327,6 +1367,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withPlatform != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withEmailTemplates != nil,
+			_q.withCampaigns != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
 			_q.withEntities != nil,
@@ -1509,6 +1550,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Integration) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Integration, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withIntegrationWebhooks; query != nil {
 		if err := _q.loadIntegrationWebhooks(ctx, query, nodes,
 			func(n *Integration) { n.Edges.IntegrationWebhooks = []*IntegrationWebhook{} },
@@ -1648,6 +1696,13 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadEmailTemplates(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedEmailTemplates(name) },
 			func(n *Integration, e *EmailTemplate) { n.appendNamedEmailTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Integration) { n.appendNamedCampaigns(name) },
+			func(n *Integration, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2533,6 +2588,36 @@ func (_q *IntegrationQuery) loadEmailTemplates(ctx context.Context, query *Email
 	}
 	return nil
 }
+func (_q *IntegrationQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *Campaign)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Integration)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaign.FieldIntegrationID)
+	}
+	query.Where(predicate.Campaign(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(integration.CampaignsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IntegrationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IntegrationQuery) loadIntegrationWebhooks(ctx context.Context, query *IntegrationWebhookQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *IntegrationWebhook)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Integration)
@@ -3001,6 +3086,20 @@ func (_q *IntegrationQuery) WithNamedEmailTemplates(name string, opts ...func(*E
 		_q.withNamedEmailTemplates = make(map[string]*EmailTemplateQuery)
 	}
 	_q.withNamedEmailTemplates[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *IntegrationQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
 	return _q
 }
 

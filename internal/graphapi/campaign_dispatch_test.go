@@ -10,11 +10,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 // TestCampaignTargetDispatchableOverdueResend ensures overdue targets can be resent.
 func TestCampaignTargetDispatchableOverdueResend(t *testing.T) {
-	dispatchable := campaignTargetDispatchable(enums.AssessmentResponseStatusOverdue, true, false)
+	dispatchable := emaildef.TargetDispatchable(enums.AssessmentResponseStatusOverdue, nil, true, false)
 	assert.Check(t, dispatchable)
 }
 
@@ -41,18 +42,4 @@ func TestResolveCampaignScheduleAt(t *testing.T) {
 	scheduled, err = resolveCampaignScheduleAt(now, campaign, campaignDispatchActionResend, nil)
 	assert.NilError(t, err)
 	assert.Check(t, scheduled == nil)
-}
-
-// TestShouldSetCampaignDueDate ensures due-date behavior on resend.
-func TestShouldSetCampaignDueDate(t *testing.T) {
-	now := time.Date(2024, time.January, 2, 15, 4, 5, 0, time.UTC)
-	past := models.DateTime(now.Add(-time.Hour))
-	future := models.DateTime(now.Add(time.Hour))
-
-	campaignPast := &generated.Campaign{DueDate: &past}
-	campaignFuture := &generated.Campaign{DueDate: &future}
-
-	assert.Check(t, !shouldSetCampaignDueDate(campaignPast, true, now))
-	assert.Check(t, shouldSetCampaignDueDate(campaignFuture, true, now))
-	assert.Check(t, shouldSetCampaignDueDate(campaignFuture, false, now))
 }

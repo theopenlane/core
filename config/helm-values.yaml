@@ -118,7 +118,7 @@ coreConfiguration:
       # -- CookiePath specifies the path for the CSRF cookie, default to "/"
       cookiepath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-    defaulttrustcenterdomain: ""  # @schema type:string
+    defaulttrustcenterdomain: "trust.theopenlane.net"  # @schema type:string; default:trust.theopenlane.net
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: ""  # @schema type:string
@@ -349,28 +349,6 @@ coreConfiguration:
     minidleconns: 0  # @schema type:integer; default:0
     maxidleconns: 0  # @schema type:integer; default:0
     maxactiveconns: 0  # @schema type:integer; default:0
-  # -- Email contains email sending configuration for the server
-  email:
-    companyname: ""  # @schema type:string
-    companyaddress: ""  # @schema type:string
-    corporation: ""  # @schema type:string
-    year: 0  # @schema type:integer
-    fromemail: ""  # @schema type:string
-    supportemail: ""  # @schema type:string
-    questionnaireemail: ""  # @schema type:string
-    logourl: ""  # @schema type:string
-    urls:
-      root: ""  # @schema type:string
-      product: ""  # @schema type:string
-      docs: ""  # @schema type:string
-      verify: ""  # @schema type:string
-      invite: ""  # @schema type:string
-      reset: ""  # @schema type:string
-      verifysubscriber: ""  # @schema type:string
-      verifybilling: ""  # @schema type:string
-      billing: ""  # @schema type:string
-      questionnaire: ""  # @schema type:string
-    templatespath: ""  # @schema type:string
   # -- Sessions config for user sessions and cookies
   sessions:
     domain: ""  # @schema type:string
@@ -525,20 +503,23 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- KeyDir is the path to the directory containing PEM keys for JWT signing
     keydir: "./keys"  # @schema type:string; default:./keys
-  # -- Slack contains settings for Slack notifications
-  slack:
-    # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
-    newsubscribermessagefile: ""  # @schema type:string
-    # -- NewUserMessageFile is the path to the template used for new user notifications
-    newusermessagefile: ""  # @schema type:string
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
+    awssecurityhub:
+      arn: ""  # @schema type:string
     githubapp:
       appslug: ""  # @schema type:string
     slack:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       appid: ""  # @schema type:string
+    slackruntime:
+      # -- Slack incoming webhook URL for fire-and-forget system notifications
+      webhookURL: ""  # @schema type:string
+      # -- Bot User OAuth Token for full Web API access to the platform workspace
+      botToken: ""  # @schema type:string
+      # -- Default channel id for system messages when no explicit channel is provided
+      defaultChannel: ""  # @schema type:string
     googleworkspace:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -553,8 +534,23 @@ coreConfiguration:
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
-    awssecurityhub:
-      arn: ""  # @schema type:string
+    email:
+      # -- Email provider API key
+      apiKey: ""  # @schema type:string
+      # -- Email service provider
+      provider: "resend"  # @schema type:string; default:resend
+      # -- Sender email address
+      fromEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      # -- Support contact email address
+      supportEmail: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
+      # -- Sender override for questionnaire auth emails
+      questionnaireEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      # -- Root application URL used to construct email action links
+      rootURL: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
+      # -- Product home URL
+      productURL: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
+      # -- Documentation URL
+      docsURL: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -886,14 +882,22 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2026_02_25_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2026_02_25_clover"  # @schema type:string
-    # -- core-slack-webhookurl secret configuration
-    core-slack-webhookurl:
+    # -- core-integrations-awssecurityhub-accesskeyid secret configuration
+    core-integrations-awssecurityhub-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for slack.webhookurl
-      secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
+      # -- Environment variable key for integrations.awssecurityhub.accessKeyId
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-slack-webhookurl"  # @schema type:string
+      remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
+    # -- core-integrations-awssecurityhub-secretaccesskey secret configuration
+    core-integrations-awssecurityhub-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.awssecurityhub.secretAccessKey
+      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret
@@ -958,22 +962,6 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
-    # -- core-integrations-awssecurityhub-accesskeyid secret configuration
-    core-integrations-awssecurityhub-accesskeyid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awssecurityhub.accessKeyId
-      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
-    # -- core-integrations-awssecurityhub-secretaccesskey secret configuration
-    core-integrations-awssecurityhub-secretaccesskey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awssecurityhub.secretAccessKey
-      secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
     # -- core-campaignwebhook-resendapikey secret configuration
     core-campaignwebhook-resendapikey:
       # -- Enable this external secret

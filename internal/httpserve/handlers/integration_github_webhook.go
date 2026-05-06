@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"strconv"
 
 	"entgo.io/ent/dialect/sql"
@@ -11,11 +12,15 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -82,7 +87,15 @@ func (h *Handler) GitHubAppWebhookHandler(ctx echo.Context, openapiCtx *OpenAPIC
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true)
+	if err := h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, installation, webhook, persistedWebhook, payload, true); err != nil {
+		return err
+	}
+
+	if err := h.dispatchGitHubInstallationSlackNotification(webhookCtx, req, installation, payload); err != nil {
+		logx.FromContext(webhookCtx).Warn().Err(err).Msg("failed to dispatch github installation slack notification")
+	}
+
+	return nil
 }
 
 // resolveGitHubAppWebhookInstallation extracts the githubapp installation ID from the webhook payload and looks up the corresponding integration record
@@ -128,4 +141,65 @@ func extractGitHubAppInstallationID(payload []byte) (string, error) {
 	}
 
 	return strconv.FormatInt(envelope.Installation.ID, 10), nil
+}
+
+// dispatchGitHubInstallationSlackNotification sends a Slack system message when a GitHub App is installed
+func (h *Handler) dispatchGitHubInstallationSlackNotification(ctx context.Context, req *http.Request, installation *ent.Integration, payload []byte) error {
+	if req.Header.Get("X-GitHub-Event") != "installation" {
+		return nil
+	}
+
+	var envelope struct {
+		Action       string `json:"action"`
+		Installation *struct {
+			Account *struct {
+				Login string `json:"login"`
+				Type  string `json:"type"`
+			} `json:"account"`
+		} `json:"installation"`
+	}
+
+	if err := jsonx.UnmarshalIfPresent(payload, &envelope); err != nil || envelope.Action != "created" {
+		return nil
+	}
+
+	org, err := h.DBClient.Organization.Get(ctx, installation.OwnerID)
+	if err != nil {
+		return err
+	}
+
+	openlaneOrgName := org.ID
+	switch {
+	case org.DisplayName != "":
+		openlaneOrgName = org.DisplayName
+	case org.Name != "":
+		openlaneOrgName = org.Name
+	}
+
+	var githubOrg, githubAccountType string
+	if envelope.Installation != nil && envelope.Installation.Account != nil {
+		githubOrg = envelope.Installation.Account.Login
+		githubAccountType = envelope.Installation.Account.Type
+	}
+
+	config, err := jsonx.ToRawMessage(slackdef.GitHubAppInstalledMessage{
+		GitHubOrganization:         githubOrg,
+		GitHubAccountType:          githubAccountType,
+		OpenlaneOrganization:       openlaneOrgName,
+		OpenlaneOrganizationID:     installation.OwnerID,
+		ShowOpenlaneOrganizationID: installation.OwnerID != "" && installation.OwnerID != openlaneOrgName,
+	})
+	if err != nil {
+		return err
+	}
+
+	_, err = h.IntegrationsRuntime.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: slackdef.DefinitionID.ID(),
+		Operation:    slackdef.GitHubAppInstallOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	})
+
+	return err
 }

@@ -1,10 +1,10 @@
 module github.com/theopenlane/core/common
 
-go 1.25.9
+go 1.26.2
 
 require (
 	entgo.io/ent v0.14.6
-	github.com/go-webauthn/webauthn v0.17.0
+	github.com/go-webauthn/webauthn v0.17.2
 	github.com/google/uuid v1.6.0
 	github.com/riverqueue/river v0.32.0
 	github.com/robfig/cron/v3 v3.0.1
@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/core v1.16.8
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.26.0
+	github.com/theopenlane/entx v0.27.1
 	github.com/theopenlane/utils v0.7.0
 	github.com/zitadel/oidc/v3 v3.46.0
 	golang.org/x/oauth2 v0.36.0
@@ -49,7 +49,7 @@ require (
 	github.com/jackc/pgx/v5 v5.9.2 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
-	github.com/mattn/go-isatty v0.0.21 // indirect
+	github.com/mattn/go-isatty v0.0.22 // indirect
 	github.com/mattn/go-sqlite3 v1.14.32 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/muhlemmer/gu v0.3.1 // indirect
@@ -70,7 +70,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
-	github.com/zclconf/go-cty v1.18.0 // indirect
+	github.com/zclconf/go-cty v1.18.1 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect

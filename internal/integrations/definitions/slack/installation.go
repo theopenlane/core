@@ -6,9 +6,11 @@ import (
 	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // resolveInstallationMetadata derives Slack workspace metadata from whichever credential is bound
+// and merges any provider input (for example, a user-selected default channel) supplied at install time
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	token, err := resolveAccessToken(req.Credentials)
 	if err != nil {
@@ -24,8 +26,14 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, nil
 	}
 
+	var input InstallationInput
+	if err := jsonx.UnmarshalIfPresent(req.Input, &input); err != nil {
+		return InstallationMetadata{}, false, ErrInstallationInputDecode
+	}
+
 	return InstallationMetadata{
-		TeamID:   authTest.TeamID,
-		TeamName: authTest.Team,
+		TeamID:         authTest.TeamID,
+		TeamName:       authTest.Team,
+		DefaultChannel: input.DefaultChannel,
 	}, true, nil
 }

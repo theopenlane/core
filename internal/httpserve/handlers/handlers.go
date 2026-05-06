@@ -11,9 +11,7 @@ import (
 	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/httpsling"
-
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 
@@ -92,8 +90,6 @@ type Handler struct {
 	WebAuthn *webauthn.WebAuthn
 	// OTPManager contains the configuration settings for the OTP provider
 	OTPManager *totp.Client
-	// Email contains email sending configuration for the server
-	Emailer emailtemplates.Config
 	// Entitlements contains the entitlements client
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
@@ -258,7 +254,7 @@ func registerPathParameters[T any](example T, op *openapi3.Operation) {
 	t := reflect.TypeOf(example)
 
 	// Handle pointer types
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 
@@ -371,7 +367,7 @@ func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *
 		typ := reflect.TypeOf(requestExample)
 
 		// Handle pointer types
-		if typ.Kind() == reflect.Ptr {
+		if typ.Kind() == reflect.Pointer {
 			typ = typ.Elem()
 		}
 

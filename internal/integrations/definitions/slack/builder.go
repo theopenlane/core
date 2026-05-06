@@ -2,6 +2,7 @@ package slack
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
@@ -11,28 +12,13 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-var chatScopes = []string{
-	"channels:read",
-	"chat:write",
-	"chat:write.public",
-	"chat:write.customize",
-}
-var directoryScopes = []string{
-	"groups:read",
-	"team:read",
-	"users:read",
-	"users:read.email",
-	"users.profile:read",
-}
-
-var scopes = append(chatScopes, directoryScopes...)
-
-// Builder returns the Slack definition builder with the supplied operator config applied
-func Builder(cfg Config) registry.Builder {
+// Builder returns the Slack definition builder with the supplied operator and runtime config applied
+// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send
+func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		return types.Definition{
+		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
+				ID:          DefinitionID.ID(),
 				Family:      "Slack",
 				DisplayName: "Slack",
 				Description: "Integrate with Slack to verify workspace posture and send operational or compliance notifications.",
@@ -72,7 +58,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://slack.com/oauth/v2/authorize",
@@ -133,33 +119,33 @@ func Builder(cfg Config) registry.Builder {
 				{
 					Ref:            slackClient.ID(),
 					CredentialRefs: []types.CredentialSlotID{slackCredential.ID(), slackBotTokenCredential.ID()},
-					Description:    "Slack Web API client",
+					Description:    "Unified Slack client wrapping the Web API and system-notification transports",
 					Build:          Client{}.Build,
 				},
 			},
-			Operations: []types.OperationRegistration{
-				{
+			Operations: append(AllSlackSystemMessages(),
+				types.OperationRegistration{
 					Name:         healthCheckOperation.Name(),
 					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					Policy:       types.ExecutionPolicy{Inline: true},
 					ConfigSchema: healthCheckSchema,
 					Handle:       HealthCheck{}.Handle(),
 				},
-				{
-					Name:                messageSendOperation.Name(),
+				types.OperationRegistration{
+					Name:                MessageSendOp.Name(),
 					Description:         "Send a Slack message via chat.postMessage",
-					Topic:               definitionID.OperationTopic(messageSendOperation.Name()),
+					Topic:               DefinitionID.OperationTopic(MessageSendOp.Name()),
 					ClientRef:           slackClient.ID(),
 					ConfigSchema:        messageSendSchema,
 					Handle:              MessageSend{}.Handle(),
 					RequiredPermissions: scopes,
 				},
-				{
+				types.OperationRegistration{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect workspace users as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
+					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
@@ -169,12 +155,43 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: scopes,
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 				},
-			},
+			),
 			Mappings: slackMappings(),
-		}, nil
+		}
+
+		if runtime != nil && runtime.Provisioned() {
+			runtimeSlackRef.SetConfig(runtime)
+
+			marshaledConfig, err := runtimeSlackRef.MarshalConfig()
+			if err != nil {
+				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
+			}
+
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Ref:    runtimeSlackRef.ID(),
+				Schema: runtimeSlackSchema,
+				Config: marshaledConfig,
+				Build:  buildRuntimeSlackClient,
+			}
+		}
+
+		return def, nil
 	})
+}
+
+var scopes = []string{
+	"chat:write",
+	"chat:write.public",
+	"chat:write.customize",
+	"channels:read",
+	"groups:read",
+	"team:read",
+	"users:read",
+	"users:read.email",
+	"users.profile:read",
 }

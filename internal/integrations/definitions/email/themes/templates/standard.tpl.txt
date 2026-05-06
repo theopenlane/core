@@ -1,0 +1,99 @@
+<h2>
+{{ if .Body.Title }}
+    {{ .Body.Title }}
+{{ else }}
+    {{ .Body.Greeting }} {{ .Body.Name }},
+{{ end }}
+</h2>
+{{ if ne .Body.Intros.Markdown "" }}
+    {{ .Body.Intros.Markdown.ToHTML }}
+{{ else if gt (len .Body.Intros.Unsafe) 0 }}
+    {{ range $line := .Body.Intros.Unsafe }}
+        <p>{{ $line }}</p>
+    {{ end }}
+{{ else }}
+    {{ range $line := .Body.Intros.Paragraphs}}
+        <p>{{ $line }}</p>
+    {{ end }}
+{{ end }}
+{{ if ne .Body.FreeMarkdown "" }}
+    {{ .Body.FreeMarkdown.ToHTML }}
+{{ else }}
+    {{ with .Body.Callout }}
+        {{ $ordered := .Ordered }}
+        {{ if .Title }}
+{{ .Title }}
+        {{ end }}
+        {{ range $i, $item := .Items }}
+            {{ if $ordered }}{{ add $i 1 }}. {{ $item }}{{ else }}- {{ $item }}{{ end }}
+        {{ end }}
+    {{ end }}
+    {{ with .Body.Dictionary.Cells }}
+        <ul>
+            {{ range $entry := . }}
+            <li>
+                {{ $entry.Key }}: {{ if gt (len $entry.Value) 0 }}{{ $entry.Value }}{{ else if gt (len $entry.UnsafeValue) 0 }}{{ $entry.UnsafeValue }}{{ else }}No Value Set{{ end }}
+            </li>
+            {{ end }}
+        </ul>
+    {{ end }}
+    {{ with .Body.Tables }}
+        {{ if gt (len .) 0 }}
+            {{ range $table := . }}
+                {{ $data := .Data }}
+                {{ $columns := .Columns }}
+                {{ if gt (len $data) 0 }}
+                    {{ if $table.Title }}
+                        <span style="text-align:left;font-weight:bold;">{{ $table.Title }}</span>
+                    {{ end }}
+                    <table class="data-table" width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            {{ $col := index $data 0 }}
+                            {{ range $entry := $col }}
+                            <th>{{ $entry.Key }} </th>
+                            {{ end }}
+                        </tr>
+                        {{ range $row := $data }}
+                        <tr>
+                            {{ range $cell := $row }}
+                            <td>{{ if gt (len $cell.Value) 0 }}{{ $cell.Value }}{{ else if gt (len $cell.UnsafeValue) 0 }}{{ $cell.UnsafeValue }}{{ else }}No Value Set{{ end }}</td>
+                            {{ end }}
+                        </tr>
+                        {{ end }}
+                    </table>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    {{ with .Body.Actions }}
+        {{ range $action := . }}
+        <p>
+            {{ $action.Instructions }}
+            {{ if $action.InviteCode }}
+            {{ $action.InviteCode }}
+            {{ end }}
+            {{ if $action.Button.Link }}
+            {{ $action.Button.Link }}
+            {{ end }}
+        </p>
+        {{ end }}
+    {{ end }}
+{{ end }}
+{{ if ne .Body.Outros.Markdown "" }}
+    {{ .Body.Outros.Markdown.ToHTML }}
+{{ else if gt (len .Body.Outros.Unsafe) 0 }}
+    {{ range $line := .Body.Outros.Unsafe }}
+        <p>{{ $line }}</p>
+    {{ end }}
+{{ else }}
+    {{ range $line := .Body.Outros.Paragraphs}}
+        <p>{{ $line }}</p>
+    {{ end }}
+{{ end }}
+{{ if and .Body.Signature (gt (len .Body.Signature) 0) }}
+<p>{{ .Body.Signature }}{{ if .Body.SignatureName }}<br>{{ .Body.SignatureName }}{{ end }}</p>
+{{ else }}
+<p>Stay compliant,<br>The Openlane Team</p>
+{{ end }}
+<p>{{ .Config.CompanyName }} - {{ .Config.ProductURL }}</p>
+<p>{{ .Config.Copyright }}</p>

@@ -201,6 +201,8 @@ var (
 	ErrFailedToGetProgramByID = errors.New("could not get program by id when updating")
 	// ErrFailedToGetIdsForProgramUpdate is returned when a program mutation's ids cannot be retrieved, which is necessary to validate bulk updates
 	ErrFailedToGetIDsForProgramUpdate = errors.New("could not get ids for mutation program update")
+	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
+	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/riverqueue/river"
-
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/pkg/gala"
@@ -12,7 +11,7 @@ import (
 )
 
 // RegisterRuntimeListeners registers all Gala listeners needed by the integration runtime
-func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule) error {
+func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error, reconcileHandle ReconcileHandler, reconcileSchedule gala.Schedule, recurringCampaignHandle RecurringCampaignHandler, recurringCampaignSchedule gala.Schedule) error {
 	if runtime == nil {
 		return ErrGalaRequired
 	}
@@ -57,8 +56,18 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, operat
 		}
 	}
 
-	if err := RegisterReconcileListener(runtime, reconcileHandle, reconcileSchedule); err != nil {
+	if err := RegisterReconcileListener(runtime, reg, reconcileHandle, reconcileSchedule); err != nil {
 		return err
+	}
+
+	if err := RegisterRecurringCampaignListener(runtime, recurringCampaignHandle, recurringCampaignSchedule); err != nil {
+		return err
+	}
+
+	for _, listener := range reg.GalaListeners() {
+		if _, err := listener.Register(runtime.Registry()); err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent"
@@ -36,13 +37,22 @@ func HookEntityFiles() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
+var (
+	approvedStatus = []enums.EntityStatus{enums.EntityStatusApproved, enums.EntityStatusActive}
+)
+
 // HookEntityApprovedForUse sets approved_for_use based on the entity status.
 func HookEntityApprovedForUse() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.EntityFunc(func(ctx context.Context, m *generated.EntityMutation) (generated.Value, error) {
+			_, ok := m.ApprovedForUse()
+			if ok {
+				return next.Mutate(ctx, m)
+			}
+
 			status, _ := m.Status()
 
-			m.SetApprovedForUse(status == enums.EntityStatusApproved)
+			m.SetApprovedForUse(slices.Contains(approvedStatus, status))
 
 			return next.Mutate(ctx, m)
 		})

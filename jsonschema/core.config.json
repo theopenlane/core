@@ -131,11 +131,17 @@
     },
     "catalog.Config": {
       "properties": {
+        "awssecurityhub": {
+          "$ref": "#/$defs/awssecurityhub.Config"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
         "slack": {
           "$ref": "#/$defs/slack.Config"
+        },
+        "slackruntime": {
+          "$ref": "#/$defs/slack.RuntimeSlackConfig"
         },
         "googleworkspace": {
           "$ref": "#/$defs/googleworkspace.Config"
@@ -149,8 +155,8 @@
         "oidclocal": {
           "$ref": "#/$defs/oidclocal.Config"
         },
-        "awssecurityhub": {
-          "$ref": "#/$defs/awssecurityhub.Config"
+        "email": {
+          "$ref": "#/$defs/email.RuntimeEmailConfig"
         }
       },
       "additionalProperties": false,
@@ -314,25 +320,6 @@
       ],
       "description": "Server settings for the echo server"
     },
-    "config.Slack": {
-      "properties": {
-        "webhookurl": {
-          "type": "string",
-          "description": "WebhookURL is the Slack webhook to post messages to"
-        },
-        "newsubscribermessagefile": {
-          "type": "string",
-          "description": "NewSubscriberMessageFile is the path to the template used for new subscriber notifications"
-        },
-        "newusermessagefile": {
-          "type": "string",
-          "description": "NewUserMessageFile is the path to the template used for new user notifications"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Slack contains settings for Slack notifications"
-    },
     "config.TLS": {
       "properties": {
         "enabled": {
@@ -418,77 +405,141 @@
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
     },
-    "emailtemplates.Config": {
+    "email.RuntimeEmailConfig": {
       "properties": {
-        "companyname": {
-          "type": "string"
+        "apiKey": {
+          "type": "string",
+          "description": "Email provider API key"
         },
-        "companyaddress": {
-          "type": "string"
+        "provider": {
+          "type": "string",
+          "enum": [
+            "resend",
+            "sendgrid",
+            "postmark"
+          ],
+          "description": "Email service provider"
         },
-        "corporation": {
-          "type": "string"
+        "fromEmail": {
+          "type": "string",
+          "description": "Sender email address"
         },
-        "year": {
-          "type": "integer"
+        "supportEmail": {
+          "type": "string",
+          "description": "Support contact email address"
         },
-        "fromemail": {
-          "type": "string"
+        "questionnaireEmail": {
+          "type": "string",
+          "description": "Sender override for questionnaire auth emails"
         },
-        "supportemail": {
-          "type": "string"
+        "rootURL": {
+          "type": "string",
+          "description": "Root application URL used to construct email action links"
         },
-        "questionnaireemail": {
-          "type": "string"
+        "productURL": {
+          "type": "string",
+          "description": "Product home URL"
         },
-        "logourl": {
-          "type": "string"
+        "docsURL": {
+          "type": "string",
+          "description": "Documentation URL"
         },
-        "urls": {
-          "$ref": "#/$defs/emailtemplates.URLConfig"
+        "CompanyName": {
+          "type": "string",
+          "description": "Company display name"
         },
-        "templatespath": {
-          "type": "string"
+        "CompanyAddress": {
+          "type": "string",
+          "description": "Company mailing address"
+        },
+        "Corporation": {
+          "type": "string",
+          "description": "Legal corporation name"
+        },
+        "LogoURL": {
+          "type": "string",
+          "description": "Hero logo URL displayed in the email body"
+        },
+        "HeaderLogoURL": {
+          "type": "string",
+          "description": "Small logo or icon displayed in the top header bar"
+        },
+        "Copyright": {
+          "type": "string",
+          "description": "Copyright override for email footers; when empty the template renders a dynamic notice from Corporation and the current year"
+        },
+        "TroubleText": {
+          "type": "string",
+          "description": "Fallback help text shown below action buttons; {ACTION} is replaced with the button text at render time"
+        },
+        "TermsURL": {
+          "type": "string",
+          "description": "Terms of service link for email footers"
+        },
+        "PrivacyURL": {
+          "type": "string",
+          "description": "Privacy policy link for email footers"
+        },
+        "UnsubscribeURL": {
+          "type": "string",
+          "description": "Unsubscribe link override for email footers; when empty the template constructs one from ProductURL and the recipient email"
+        },
+        "HeaderText": {
+          "type": "string",
+          "description": "Text displayed in the upper-right corner of the modern theme header"
+        },
+        "CardStyle": {
+          "type": "string",
+          "enum": [
+            "flat",
+            "elevated"
+          ],
+          "description": "Card visual style"
+        },
+        "BodyBackgroundColor": {
+          "type": "string",
+          "description": "Outer page background color"
+        },
+        "CardBackgroundColor": {
+          "type": "string",
+          "description": "Card container background color"
+        },
+        "HeroBackgroundColor": {
+          "type": "string",
+          "description": "Hero banner section background color"
+        },
+        "ButtonColor": {
+          "type": "string",
+          "description": "Call-to-action button background color"
+        },
+        "ButtonTextColor": {
+          "type": "string",
+          "description": "Call-to-action button text color"
+        },
+        "HeadingColor": {
+          "type": "string",
+          "description": "Heading and title text color"
+        },
+        "TextColor": {
+          "type": "string",
+          "description": "Body paragraph text color"
+        },
+        "FooterTextColor": {
+          "type": "string",
+          "description": "Muted text color for headers footers and secondary content"
+        },
+        "Tagline": {
+          "type": "string",
+          "description": "Short descriptive footer line rendered above the social row in modern themes"
         }
       },
       "additionalProperties": false,
-      "type": "object"
-    },
-    "emailtemplates.URLConfig": {
-      "properties": {
-        "root": {
-          "type": "string"
-        },
-        "product": {
-          "type": "string"
-        },
-        "docs": {
-          "type": "string"
-        },
-        "verify": {
-          "type": "string"
-        },
-        "invite": {
-          "type": "string"
-        },
-        "reset": {
-          "type": "string"
-        },
-        "verifysubscriber": {
-          "type": "string"
-        },
-        "verifybilling": {
-          "type": "string"
-        },
-        "billing": {
-          "type": "string"
-        },
-        "questionnaire": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "required": [
+        "apiKey",
+        "provider",
+        "fromEmail"
+      ]
     },
     "entconfig.Billing": {
       "properties": {
@@ -1325,6 +1376,24 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "slack.RuntimeSlackConfig": {
+      "properties": {
+        "webhookURL": {
+          "type": "string",
+          "description": "Slack incoming webhook URL for fire-and-forget system notifications"
+        },
+        "botToken": {
+          "type": "string",
+          "description": "Bot User OAuth Token for full Web API access to the platform workspace"
+        },
+        "defaultChannel": {
+          "type": "string",
+          "description": "Default channel id for system messages when no explicit channel is provided"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "slog.Logger": {
       "properties": {},
       "additionalProperties": false,
@@ -1899,10 +1968,6 @@
       "$ref": "#/$defs/cache.Config",
       "description": "Redis contains the redis configuration for the key-value store"
     },
-    "email": {
-      "$ref": "#/$defs/emailtemplates.Config",
-      "description": "Email contains email sending configuration for the server"
-    },
     "sessions": {
       "$ref": "#/$defs/sessions.Config",
       "description": "Sessions config for user sessions and cookies"
@@ -1926,10 +1991,6 @@
     "keywatcher": {
       "$ref": "#/$defs/config.KeyWatcher",
       "description": "Keywatcher contains the configuration for the key watcher that manages JWT signing keys"
-    },
-    "slack": {
-      "$ref": "#/$defs/config.Slack",
-      "description": "Slack contains settings for Slack notifications"
     },
     "integrations": {
       "$ref": "#/$defs/catalog.Config",

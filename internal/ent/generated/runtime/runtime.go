@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -760,14 +759,14 @@ func init() {
 	campaignDescRecurrenceInterval := campaignFields[11].Descriptor()
 	// campaign.DefaultRecurrenceInterval holds the default value on creation for the recurrence_interval field.
 	campaign.DefaultRecurrenceInterval = campaignDescRecurrenceInterval.Default.(int)
-	// campaignDescRecurrenceCron is the schema descriptor for recurrence_cron field.
-	campaignDescRecurrenceCron := campaignFields[12].Descriptor()
-	// campaign.RecurrenceCronValidator is a validator for the "recurrence_cron" field. It is called by the builders before save.
-	campaign.RecurrenceCronValidator = campaignDescRecurrenceCron.Validators[0].(func(string) error)
 	// campaignDescRecurrenceTimezone is the schema descriptor for recurrence_timezone field.
-	campaignDescRecurrenceTimezone := campaignFields[13].Descriptor()
+	campaignDescRecurrenceTimezone := campaignFields[12].Descriptor()
 	// campaign.RecurrenceTimezoneValidator is a validator for the "recurrence_timezone" field. It is called by the builders before save.
 	campaign.RecurrenceTimezoneValidator = campaignDescRecurrenceTimezone.Validators[0].(func(string) error)
+	// campaignDescRecurrenceCron is the schema descriptor for recurrence_cron field.
+	campaignDescRecurrenceCron := campaignFields[13].Descriptor()
+	// campaign.RecurrenceCronValidator is a validator for the "recurrence_cron" field. It is called by the builders before save.
+	campaign.RecurrenceCronValidator = campaignDescRecurrenceCron.Validators[0].(func(string) error)
 	// campaignDescRecipientCount is the schema descriptor for recipient_count field.
 	campaignDescRecipientCount := campaignFields[17].Descriptor()
 	// campaign.DefaultRecipientCount holds the default value on creation for the recipient_count field.
@@ -2112,146 +2111,6 @@ func init() {
 	documentdataDescID := documentdataMixinFields2[0].Descriptor()
 	// documentdata.DefaultID holds the default value on creation for the id field.
 	documentdata.DefaultID = documentdataDescID.Default.(func() string)
-	emailbrandingMixin := schema.EmailBranding{}.Mixin()
-	emailbranding.Policy = privacy.NewPolicies(schema.EmailBranding{})
-	emailbranding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := emailbranding.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	emailbrandingMixinHooks0 := emailbrandingMixin[0].Hooks()
-	emailbrandingMixinHooks1 := emailbrandingMixin[1].Hooks()
-	emailbrandingMixinHooks3 := emailbrandingMixin[3].Hooks()
-	emailbrandingMixinHooks5 := emailbrandingMixin[5].Hooks()
-	emailbrandingMixinHooks6 := emailbrandingMixin[6].Hooks()
-
-	emailbranding.Hooks[1] = emailbrandingMixinHooks0[0]
-
-	emailbranding.Hooks[2] = emailbrandingMixinHooks1[0]
-
-	emailbranding.Hooks[3] = emailbrandingMixinHooks3[0]
-
-	emailbranding.Hooks[4] = emailbrandingMixinHooks5[0]
-
-	emailbranding.Hooks[5] = emailbrandingMixinHooks5[1]
-
-	emailbranding.Hooks[6] = emailbrandingMixinHooks6[0]
-
-	emailbranding.Hooks[7] = emailbrandingMixinHooks6[1]
-
-	emailbranding.Hooks[8] = emailbrandingMixinHooks6[2]
-	emailbrandingMixinInters1 := emailbrandingMixin[1].Interceptors()
-	emailbrandingMixinInters5 := emailbrandingMixin[5].Interceptors()
-	emailbranding.Interceptors[0] = emailbrandingMixinInters1[0]
-	emailbranding.Interceptors[1] = emailbrandingMixinInters5[0]
-	emailbranding.Interceptors[2] = emailbrandingMixinInters5[1]
-	emailbrandingMixinFields0 := emailbrandingMixin[0].Fields()
-	_ = emailbrandingMixinFields0
-	emailbrandingMixinFields2 := emailbrandingMixin[2].Fields()
-	_ = emailbrandingMixinFields2
-	emailbrandingMixinFields3 := emailbrandingMixin[3].Fields()
-	_ = emailbrandingMixinFields3
-	emailbrandingMixinFields5 := emailbrandingMixin[5].Fields()
-	_ = emailbrandingMixinFields5
-	emailbrandingFields := schema.EmailBranding{}.Fields()
-	_ = emailbrandingFields
-	// emailbrandingDescCreatedAt is the schema descriptor for created_at field.
-	emailbrandingDescCreatedAt := emailbrandingMixinFields0[0].Descriptor()
-	// emailbranding.DefaultCreatedAt holds the default value on creation for the created_at field.
-	emailbranding.DefaultCreatedAt = emailbrandingDescCreatedAt.Default.(func() time.Time)
-	// emailbrandingDescUpdatedAt is the schema descriptor for updated_at field.
-	emailbrandingDescUpdatedAt := emailbrandingMixinFields0[1].Descriptor()
-	// emailbranding.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	emailbranding.DefaultUpdatedAt = emailbrandingDescUpdatedAt.Default.(func() time.Time)
-	// emailbranding.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	emailbranding.UpdateDefaultUpdatedAt = emailbrandingDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// emailbrandingDescTags is the schema descriptor for tags field.
-	emailbrandingDescTags := emailbrandingMixinFields3[0].Descriptor()
-	// emailbranding.DefaultTags holds the default value on creation for the tags field.
-	emailbranding.DefaultTags = emailbrandingDescTags.Default.([]string)
-	// emailbrandingDescOwnerID is the schema descriptor for owner_id field.
-	emailbrandingDescOwnerID := emailbrandingMixinFields5[0].Descriptor()
-	// emailbranding.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	emailbranding.OwnerIDValidator = emailbrandingDescOwnerID.Validators[0].(func(string) error)
-	// emailbrandingDescName is the schema descriptor for name field.
-	emailbrandingDescName := emailbrandingFields[0].Descriptor()
-	// emailbranding.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	emailbranding.NameValidator = func() func(string) error {
-		validators := emailbrandingDescName.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(name string) error {
-			for _, fn := range fns {
-				if err := fn(name); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// emailbrandingDescBrandName is the schema descriptor for brand_name field.
-	emailbrandingDescBrandName := emailbrandingFields[1].Descriptor()
-	// emailbranding.BrandNameValidator is a validator for the "brand_name" field. It is called by the builders before save.
-	emailbranding.BrandNameValidator = emailbrandingDescBrandName.Validators[0].(func(string) error)
-	// emailbrandingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	emailbrandingDescLogoRemoteURL := emailbrandingFields[2].Descriptor()
-	// emailbranding.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
-	emailbranding.LogoRemoteURLValidator = func() func(string) error {
-		validators := emailbrandingDescLogoRemoteURL.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(logo_remote_url string) error {
-			for _, fn := range fns {
-				if err := fn(logo_remote_url); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// emailbrandingDescPrimaryColor is the schema descriptor for primary_color field.
-	emailbrandingDescPrimaryColor := emailbrandingFields[3].Descriptor()
-	// emailbranding.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
-	emailbranding.PrimaryColorValidator = emailbrandingDescPrimaryColor.Validators[0].(func(string) error)
-	// emailbrandingDescSecondaryColor is the schema descriptor for secondary_color field.
-	emailbrandingDescSecondaryColor := emailbrandingFields[4].Descriptor()
-	// emailbranding.SecondaryColorValidator is a validator for the "secondary_color" field. It is called by the builders before save.
-	emailbranding.SecondaryColorValidator = emailbrandingDescSecondaryColor.Validators[0].(func(string) error)
-	// emailbrandingDescBackgroundColor is the schema descriptor for background_color field.
-	emailbrandingDescBackgroundColor := emailbrandingFields[5].Descriptor()
-	// emailbranding.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
-	emailbranding.BackgroundColorValidator = emailbrandingDescBackgroundColor.Validators[0].(func(string) error)
-	// emailbrandingDescTextColor is the schema descriptor for text_color field.
-	emailbrandingDescTextColor := emailbrandingFields[6].Descriptor()
-	// emailbranding.TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
-	emailbranding.TextColorValidator = emailbrandingDescTextColor.Validators[0].(func(string) error)
-	// emailbrandingDescButtonColor is the schema descriptor for button_color field.
-	emailbrandingDescButtonColor := emailbrandingFields[7].Descriptor()
-	// emailbranding.ButtonColorValidator is a validator for the "button_color" field. It is called by the builders before save.
-	emailbranding.ButtonColorValidator = emailbrandingDescButtonColor.Validators[0].(func(string) error)
-	// emailbrandingDescButtonTextColor is the schema descriptor for button_text_color field.
-	emailbrandingDescButtonTextColor := emailbrandingFields[8].Descriptor()
-	// emailbranding.ButtonTextColorValidator is a validator for the "button_text_color" field. It is called by the builders before save.
-	emailbranding.ButtonTextColorValidator = emailbrandingDescButtonTextColor.Validators[0].(func(string) error)
-	// emailbrandingDescLinkColor is the schema descriptor for link_color field.
-	emailbrandingDescLinkColor := emailbrandingFields[9].Descriptor()
-	// emailbranding.LinkColorValidator is a validator for the "link_color" field. It is called by the builders before save.
-	emailbranding.LinkColorValidator = emailbrandingDescLinkColor.Validators[0].(func(string) error)
-	// emailbrandingDescIsDefault is the schema descriptor for is_default field.
-	emailbrandingDescIsDefault := emailbrandingFields[11].Descriptor()
-	// emailbranding.DefaultIsDefault holds the default value on creation for the is_default field.
-	emailbranding.DefaultIsDefault = emailbrandingDescIsDefault.Default.(bool)
-	// emailbrandingDescID is the schema descriptor for id field.
-	emailbrandingDescID := emailbrandingMixinFields2[0].Descriptor()
-	// emailbranding.DefaultID holds the default value on creation for the id field.
-	emailbranding.DefaultID = emailbrandingDescID.Default.(func() string)
 	emailtemplateMixin := schema.EmailTemplate{}.Mixin()
 	emailtemplate.Policy = privacy.NewPolicies(emailtemplateMixin[6], schema.EmailTemplate{})
 	emailtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3668,6 +3527,8 @@ func init() {
 	integration.Hooks[7] = integrationMixinHooks8[0]
 
 	integration.Hooks[8] = integrationHooks[0]
+
+	integration.Hooks[9] = integrationHooks[1]
 	integrationMixinInters1 := integrationMixin[1].Interceptors()
 	integrationMixinInters5 := integrationMixin[5].Interceptors()
 	integration.Interceptors[0] = integrationMixinInters1[0]
@@ -3712,6 +3573,10 @@ func init() {
 	integrationDescPrimaryDirectory := integrationFields[16].Descriptor()
 	// integration.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integration.DefaultPrimaryDirectory = integrationDescPrimaryDirectory.Default.(bool)
+	// integrationDescCampaignEmail is the schema descriptor for campaign_email field.
+	integrationDescCampaignEmail := integrationFields[17].Descriptor()
+	// integration.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
+	integration.DefaultCampaignEmail = integrationDescCampaignEmail.Default.(bool)
 	// integrationDescID is the schema descriptor for id field.
 	integrationDescID := integrationMixinFields2[0].Descriptor()
 	// integration.DefaultID holds the default value on creation for the id field.
@@ -4950,6 +4815,8 @@ func init() {
 	notificationtemplate.Hooks[7] = notificationtemplateMixinHooks6[1]
 
 	notificationtemplate.Hooks[8] = notificationtemplateHooks[0]
+
+	notificationtemplate.Hooks[9] = notificationtemplateHooks[1]
 	notificationtemplateMixinInters1 := notificationtemplateMixin[1].Interceptors()
 	notificationtemplateMixinInters5 := notificationtemplateMixin[5].Interceptors()
 	notificationtemplate.Interceptors[0] = notificationtemplateMixinInters1[0]

@@ -218,24 +218,109 @@ func generateJSONSchema(jsonSchemaPath string, structure interface{}, commentMap
 }
 
 // generateYAMLConfig creates the YAML configuration file with default values populated.
-// It also ensures example map entries and initializes special config sections.
+// Only fields with a koanf struct tag are included; fields without koanf tags are treated
+// as internal defaults not addressable through configuration
 func generateYAMLConfig(yamlConfigPath string, yamlConfig *config.Config) error {
 	if yamlConfig == nil {
 		yamlConfig = buildDefaultConfig()
 	}
 
-	// Marshal the config struct to YAML
-	yamlSchema, err := yaml.Marshal(yamlConfig)
+	filtered := structToKoanfMap(reflect.ValueOf(yamlConfig).Elem())
+
+	yamlSchema, err := yaml.Marshal(filtered)
 	if err != nil {
 		return fmt.Errorf("failed to marshal YAML config: %w", err)
 	}
 
-	// Write the YAML config to file
 	if err := os.WriteFile(yamlConfigPath, yamlSchema, ownerReadWrite); err != nil {
 		return fmt.Errorf("failed to write YAML config file: %w", err)
 	}
 
 	return nil
+}
+
+// structToKoanfMap recursively builds an ordered map containing only fields that carry a
+// koanf struct tag. Fields tagged koanf:"-" are skipped. This ensures generated config
+// files only surface fields that are addressable via koanf/environment.
+// When a struct has no koanf-tagged fields at all (external package types), it falls back
+// to rendering all exported fields via json tags to preserve the previous behavior
+func structToKoanfMap(val reflect.Value) map[string]any {
+	val = reflect.Indirect(val)
+	if !val.IsValid() || val.Kind() != reflect.Struct {
+		return nil
+	}
+
+	t := val.Type()
+
+	if !hasKoanfFields(t) {
+		return structValueToMap(val)
+	}
+
+	result := make(map[string]any)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		tag := field.Tag.Get(tagName)
+		if tag == "" || tag == skipper {
+			continue
+		}
+
+		fieldValue := val.Field(i)
+		for fieldValue.Kind() == reflect.Ptr {
+			if fieldValue.IsNil() {
+				break
+			}
+			fieldValue = fieldValue.Elem()
+		}
+
+		if !fieldValue.IsValid() {
+			result[tag] = nil
+			continue
+		}
+
+		switch fieldValue.Kind() {
+		case reflect.Struct:
+			if isDurationType(fieldValue.Type()) {
+				result[tag] = time.Duration(fieldValue.Int())
+			} else {
+				nested := structToKoanfMap(fieldValue)
+				if nested != nil {
+					result[tag] = nested
+				}
+			}
+		case reflect.Map:
+			result[tag] = convertValueForYAML(fieldValue)
+		case reflect.Slice, reflect.Array:
+			result[tag] = convertValueForYAML(fieldValue)
+		default:
+			result[tag] = fieldValue.Interface()
+		}
+	}
+
+	return result
+}
+
+// hasKoanfFields reports whether a struct type has at least one exported field with a
+// non-empty, non-skipper koanf tag. Structs from external packages that don't use koanf
+// will return false, signaling that all their fields should be rendered as-is
+func hasKoanfFields(t reflect.Type) bool {
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		tag := field.Tag.Get(tagName)
+		if tag != "" && tag != skipper {
+			return true
+		}
+	}
+
+	return false
 }
 
 // buildDefaultConfig returns a config struct populated with default and example values.
@@ -1317,7 +1402,9 @@ func handlePrimitiveField(result *strings.Builder, fieldName, description, inden
 	fmt.Fprintf(result, "%s%s: %s%s\n", indentStr, fieldName, value, typeInfo)
 }
 
-// generateYAMLWithComments recursively generates YAML with comments from struct fields (legacy function for compatibility)
+// generateYAMLWithComments recursively generates YAML with comments from struct fields.
+// Only fields with a koanf struct tag are emitted; fields without koanf tags are internal
+// defaults not surfaced in generated config files
 func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.Value, commentMap map[string]string, indent int) error {
 	if !v.IsValid() {
 		return nil
@@ -1332,6 +1419,12 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 
 		// Skip unexported fields
 		if !field.IsExported() {
+			continue
+		}
+
+		// Only emit fields addressable via koanf configuration
+		koanfTag := field.Tag.Get(tagName)
+		if koanfTag == "" || koanfTag == skipper {
 			continue
 		}
 
@@ -1370,13 +1463,15 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 		// Handle different field types
 		switch fieldValue.Kind() {
 		case reflect.Struct:
-			// Write field name for struct
 			fmt.Fprintf(result, "%s%s:\n", indentStr, fieldName)
 
-			// Recurse into struct
-			err := generateYAMLWithComments(result, fullPath+".", fieldValue, commentMap, indent+1)
-			if err != nil {
-				return err
+			if hasKoanfFields(fieldValue.Type()) {
+				err := generateYAMLWithComments(result, fullPath+".", fieldValue, commentMap, indent+1)
+				if err != nil {
+					return err
+				}
+			} else {
+				generateYAMLWithCommentsAllFields(result, fullPath+".", fieldValue, commentMap, indent+1)
 			}
 
 		case reflect.Slice:
@@ -1391,6 +1486,64 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 	}
 
 	return nil
+}
+
+// generateYAMLWithCommentsAllFields renders all exported json-tagged fields of a struct
+// that has no koanf tags (external package types like river.Config)
+func generateYAMLWithCommentsAllFields(result *strings.Builder, prefix string, v reflect.Value, commentMap map[string]string, indent int) {
+	if !v.IsValid() {
+		return
+	}
+
+	t := v.Type()
+	indentStr := strings.Repeat("  ", indent)
+
+	for i := 0; i < v.NumField(); i++ {
+		field := t.Field(i)
+		fieldValue := v.Field(i)
+
+		if !field.IsExported() {
+			continue
+		}
+
+		jsonTag := field.Tag.Get("json")
+		if jsonTag == "" || jsonTag == "-" {
+			continue
+		}
+
+		fieldName := strings.Split(jsonTag, ",")[0]
+		if fieldName == "" {
+			fieldName = strings.ToLower(field.Name)
+		}
+
+		var fullPath string
+		if prefix != "" {
+			fullPath = prefix + fieldName
+		} else {
+			fullPath = fieldName
+		}
+
+		if field.Tag.Get("sensitive") == "true" || isExternalSensitiveField(fullPath) {
+			continue
+		}
+
+		description := fieldDescription(field, t, commentMap)
+		defaultTag := field.Tag.Get("default")
+
+		WriteFieldDescription(result, description, indentStr)
+
+		switch fieldValue.Kind() {
+		case reflect.Struct:
+			fmt.Fprintf(result, "%s%s:\n", indentStr, fieldName)
+			generateYAMLWithCommentsAllFields(result, fullPath+".", fieldValue, commentMap, indent+1)
+		case reflect.Slice:
+			handleSliceField(result, fieldName, "", indentStr, fieldValue)
+		case reflect.Map:
+			handleMapField(result, fieldName, "", indentStr)
+		default:
+			handlePrimitiveField(result, fieldName, "", indentStr, defaultTag, field, fieldValue)
+		}
+	}
 }
 
 func fieldDescription(field reflect.StructField, parentType reflect.Type, commentMap map[string]string) string {
@@ -1420,7 +1573,7 @@ func lookupComment(commentMap map[string]string, parentType reflect.Type, fieldN
 	}
 
 	t := parentType
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 

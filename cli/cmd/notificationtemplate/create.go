@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -29,12 +28,6 @@ func init() {
 	createCmd.Flags().StringP("description", "d", "", "description of the template")
 	createCmd.Flags().String("channel", "", "channel this template is intended for (e.g. EMAIL, SLACK)")
 	createCmd.Flags().String("topic-pattern", "", "topic name or wildcard pattern this template targets")
-	createCmd.Flags().String("title-template", "", "title template for external channel messages")
-	createCmd.Flags().String("subject-template", "", "subject template for email notifications")
-	createCmd.Flags().String("body-template", "", "body template for the notification")
-	createCmd.Flags().String("template-format", "", "template format for rendering (TEXT, MARKDOWN, HTML)")
-	createCmd.Flags().String("locale", "", "locale for the template, e.g. en-US")
-	createCmd.Flags().String("email-template-id", "", "email template used for branded email delivery")
 	createCmd.Flags().Bool("active", true, "whether the template is active")
 }
 
@@ -54,13 +47,6 @@ func createValidation() (input graphclient.CreateNotificationTemplateInput, err 
 
 	input.Name = name
 
-	channel := cmd.Config.String("channel")
-	if channel == "" {
-		return input, cmd.NewRequiredFieldMissingError("channel")
-	}
-
-	input.Channel = enums.Channel(channel)
-
 	topicPattern := cmd.Config.String("topic-pattern")
 	if topicPattern == "" {
 		return input, cmd.NewRequiredFieldMissingError("topic pattern")
@@ -71,37 +57,6 @@ func createValidation() (input graphclient.CreateNotificationTemplateInput, err 
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	titleTemplate := cmd.Config.String("title-template")
-	if titleTemplate != "" {
-		input.TitleTemplate = &titleTemplate
-	}
-
-	subjectTemplate := cmd.Config.String("subject-template")
-	if subjectTemplate != "" {
-		input.SubjectTemplate = &subjectTemplate
-	}
-
-	bodyTemplate := cmd.Config.String("body-template")
-	if bodyTemplate != "" {
-		input.BodyTemplate = &bodyTemplate
-	}
-
-	templateFormat := cmd.Config.String("template-format")
-	if templateFormat != "" {
-		f := enums.NotificationTemplateFormat(templateFormat)
-		input.Format = &f
-	}
-
-	locale := cmd.Config.String("locale")
-	if locale != "" {
-		input.Locale = &locale
-	}
-
-	emailTemplateID := cmd.Config.String("email-template-id")
-	if emailTemplateID != "" {
-		input.EmailTemplateID = &emailTemplateID
 	}
 
 	active := cmd.Config.Bool("active")

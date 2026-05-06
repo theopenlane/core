@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v5/okta"
+	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"

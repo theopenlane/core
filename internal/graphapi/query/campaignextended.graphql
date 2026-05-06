@@ -24,7 +24,7 @@ mutation CreateCampaignWithTargets($input: CreateCampaignWithTargetsInput!) {
       nextRunAt
       ownerID
       recipientCount
-      recurrenceCron
+
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -86,7 +86,7 @@ mutation CreateCampaignWithTargetsCSV($campaign: CreateCampaignInput!, $targets:
       nextRunAt
       ownerID
       recipientCount
-      recurrenceCron
+
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -148,7 +148,7 @@ mutation LaunchCampaign($input: LaunchCampaignInput!) {
       nextRunAt
       ownerID
       recipientCount
-      recurrenceCron
+
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -193,7 +193,7 @@ mutation ResendCampaignIncompleteTargets($input: ResendCampaignIncompleteInput!)
       nextRunAt
       ownerID
       recipientCount
-      recurrenceCron
+
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval
@@ -238,7 +238,7 @@ mutation SendCampaignTestEmail($input: SendCampaignTestEmailInput!) {
       nextRunAt
       ownerID
       recipientCount
-      recurrenceCron
+
       recurrenceEndAt
       recurrenceFrequency
       recurrenceInterval

@@ -615,30 +615,6 @@ func (f DocumentDataMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DocumentDataMutation", m)
 }
 
-// The EmailBrandingQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type EmailBrandingQueryRuleFunc func(context.Context, *generated.EmailBrandingQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f EmailBrandingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.EmailBrandingQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.EmailBrandingQuery", q)
-}
-
-// The EmailBrandingMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type EmailBrandingMutationRuleFunc func(context.Context, *generated.EmailBrandingMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f EmailBrandingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.EmailBrandingMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.EmailBrandingMutation", m)
-}
-
 // The EmailTemplateQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type EmailTemplateQueryRuleFunc func(context.Context, *generated.EmailTemplateQuery) error
@@ -2780,8 +2756,6 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
-	case *generated.EmailBrandingQuery:
-		return q.Filter(), nil
 	case *generated.EmailTemplateQuery:
 		return q.Filter(), nil
 	case *generated.EmailVerificationTokenQuery:
@@ -3002,8 +2976,6 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.DiscussionMutation:
 		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
-		return m.Filter(), nil
-	case *generated.EmailBrandingMutation:
 		return m.Filter(), nil
 	case *generated.EmailTemplateMutation:
 		return m.Filter(), nil
