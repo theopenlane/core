@@ -141,7 +141,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		for _, envelope := range payloadSet.Envelopes {
 			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("integration", definition.Family).Str("integration_id", definition.ID).Str("schema", payloadSet.Schema).Msg("integration: error mapping ingest record")
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("error mapping ingest record")
 				return err
 			}
 
@@ -150,6 +150,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 
 			if err = handle(ctx, record); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("ingest persist failed")
 				return err
 			}
 		}
@@ -167,7 +168,7 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("integration: ingest filter failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")
 		return mappedIngestRecord{}, false, ErrIngestFilterFailed
 	}
 	if !matched {
@@ -176,7 +177,7 @@ func mapIngestRecord(ctx context.Context, definition types.Definition, schema st
 
 	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("integration: error transforming ingest")
+		logx.FromContext(ctx).Error().Err(err).Msg("ingest transform failed")
 
 		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
 	}

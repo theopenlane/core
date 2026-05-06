@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -67,15 +68,27 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		}
 	}
 
+	// not all schemas have a credential schema, those with oauth like Google Workspace, will
+	// have an empty schema
+	if credentialType.Schema == nil {
+		return nil, nil
+	}
+
 	currentCreds, err := jsonx.ToMap(obj.InstallationMetadata.Attributes)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error getting current credentials, returning full schema")
+
 		return credentialType.Schema, nil
+	}
+
+	if currentCreds == nil {
+		return nil, nil
 	}
 
 	out, err := providerkit.InjectDefaults(credentialType.Schema, currentCreds)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error injecting credential defaults, returning full schema")
+
 		return credentialType.Schema, nil
 	}
 
@@ -99,7 +112,8 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 
 	currentConfig, err := jsonx.ToMap(obj.Config.ClientConfig)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting current config, returning full schema")
+		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error getting current config, returning full schema")
+
 		return def.UserInput.Schema, nil
 	}
 

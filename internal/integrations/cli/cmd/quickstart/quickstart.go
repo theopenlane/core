@@ -263,7 +263,7 @@ func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, k
 	input := graphclient.CreateEmailTemplateInput{
 		Key:             key,
 		Name:            name,
-		TemplateContext: lo.ToPtr(enums.TemplateContextCampaignRecipient),
+		TemplateContext: enums.TemplateContextCampaignRecipient,
 		Defaults:        defaults,
 		Active:          lo.ToPtr(true),
 	}
