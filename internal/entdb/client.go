@@ -285,6 +285,7 @@ func (c *client) runGooseMigrations() error {
 
 	migrations := migratedb.GooseMigrationsPG
 
+	goose.SetLogger(newGooseLogger(c.config.Debug))
 	goose.SetBaseFS(migrations)
 
 	if err := goose.SetDialect(driver); err != nil {
@@ -378,6 +379,7 @@ func (c *client) seedData() error {
 
 	seeds := migratedb.SeedMigrationsPG
 
+	goose.SetLogger(newGooseLogger(c.config.Debug))
 	goose.SetBaseFS(seeds)
 
 	if err := goose.SetDialect(driver); err != nil {
