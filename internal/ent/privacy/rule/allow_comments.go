@@ -53,7 +53,7 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 			oldDetailsTyped, _ := oldDetailsJSON.([]any)
 			newDetailsTyped, _ := newDetailsJSON.([]any)
 
-			if slateparser.OnlyCommentsAdded(oldDetailsTyped, newDetailsTyped) {
+			if slateparser.NoDetailsChanged(oldDetailsTyped, newDetailsTyped) {
 				return privacy.Allowf("mutation has only comments added to details_json, allowing")
 			}
 		}
