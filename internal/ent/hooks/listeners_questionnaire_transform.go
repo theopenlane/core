@@ -17,9 +17,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -159,8 +161,16 @@ type questionnaireTransformRequest struct {
 type entityTransform struct {
 	Name                 string
 	DisplayName          string
+	Description          string
 	Status               enums.EntityStatus
 	ContractStartDate    *models.DateTime
+	ContractEndDate      *models.DateTime
+	HasSoc2              *bool
+	AnnualSpend          *float64
+	BillingModel         string
+	Links                []string
+	EnvironmentName      string
+	EnvironmentID        string
 	InternalOwner        string
 	InternalOwnerUserID  string
 	InternalOwnerGroupID string
@@ -231,6 +241,14 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 
 		if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverInternalOwner)) {
 			if err := resolveInternalOwner(ctx, client, req.OrganizationID, rawValue, values); err != nil {
+				return nil, err
+			}
+
+			continue
+		}
+
+		if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverEnvironment)) {
+			if err := resolveEnvironment(ctx, client, req.OrganizationID, rawValue, values); err != nil {
 				return nil, err
 			}
 
@@ -318,6 +336,45 @@ func resolveInternalOwner(ctx context.Context, client *entgen.Client, organizati
 	return nil
 }
 
+func resolveEnvironment(ctx context.Context, client *entgen.Client, organizationID string, value any, values map[string]any) error {
+	environment := strings.TrimSpace(getStringValue(value))
+	if environment == "" {
+		return nil
+	}
+
+	predicates := []predicate.CustomTypeEnum{
+		customtypeenum.NameEqualFold(environment),
+		customtypeenum.FieldEQ("environment"),
+		customtypeenum.DeletedAtIsNil(),
+		customtypeenum.Or(
+			customtypeenum.SystemOwned(true),
+			customtypeenum.OwnerIDEQ(organizationID),
+		),
+	}
+
+	enum, err := client.CustomTypeEnum.Query().
+		Where(append(predicates, customtypeenum.ObjectTypeEQ(""))...).
+		Only(ctx)
+	if err != nil && entgen.IsNotFound(err) {
+		enum, err = client.CustomTypeEnum.Query().
+			Where(append(predicates, customtypeenum.ObjectTypeEQ("entity"))...).
+			Only(ctx)
+	}
+
+	if err != nil {
+		if entgen.IsNotFound(err) {
+			return &questionnaireValidationError{Message: fmt.Sprintf("environment %q is not configured", environment)}
+		}
+
+		return fmt.Errorf("resolve environment: %w", err)
+	}
+
+	values[entity.FieldEnvironmentID] = enum.ID
+	values[entity.FieldEnvironmentName] = enum.Name
+
+	return nil
+}
+
 func applyTransform(value any, transform enums.TemplateProjectionTransform) (any, error) {
 	if transform == "" {
 		return value, nil
@@ -326,10 +383,22 @@ func applyTransform(value any, transform enums.TemplateProjectionTransform) (any
 	switch {
 	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformString.String()):
 		return getStringValue(value), nil
+
 	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformSlugify.String()):
 		return strcase.KebabCase(strings.TrimSpace(getStringValue(value))), nil
+
 	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformDate.String()):
 		return getDatetimeValue(value)
+
+	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformBool.String()):
+		return getBoolValue(value)
+
+	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformFloat.String()):
+		return getFloatValue(value)
+
+	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformStringArray.String()):
+
+		return getStringArrayValue(value), nil
 	default:
 		return nil, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform %q", transform)}
 	}
@@ -347,6 +416,9 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 		case entity.FieldDisplayName:
 
 			input.DisplayName = strings.TrimSpace(getStringValue(value))
+
+		case entity.FieldDescription:
+			input.Description = strings.TrimSpace(getStringValue(value))
 
 		case entity.FieldStatus:
 
@@ -369,6 +441,47 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 			}
 
 			input.ContractStartDate = &t
+
+		case entity.FieldContractEndDate:
+			t, ok := value.(models.DateTime)
+			if !ok {
+				return input, &questionnaireValidationError{Message: "contract_end_date must be a date"}
+			}
+
+			input.ContractEndDate = &t
+
+		case entity.FieldHasSoc2:
+			hasSoc2, ok := value.(bool)
+			if !ok {
+				return input, &questionnaireValidationError{Message: "has_soc2 must be a bool"}
+			}
+
+			input.HasSoc2 = &hasSoc2
+
+		case entity.FieldAnnualSpend:
+			annualSpend, ok := value.(float64)
+			if !ok {
+				return input, &questionnaireValidationError{Message: "annual_spend must be a float"}
+			}
+
+			input.AnnualSpend = &annualSpend
+
+		case entity.FieldBillingModel:
+			input.BillingModel = strings.TrimSpace(getStringValue(value))
+
+		case entity.FieldLinks:
+			links, ok := value.([]string)
+			if !ok {
+				return input, &questionnaireValidationError{Message: "links must be a string array"}
+			}
+
+			input.Links = links
+
+		case entity.FieldEnvironmentName:
+			input.EnvironmentName = strings.TrimSpace(getStringValue(value))
+
+		case entity.FieldEnvironmentID:
+			input.EnvironmentID = strings.TrimSpace(getStringValue(value))
 
 		case entity.FieldInternalOwner:
 
@@ -433,8 +546,37 @@ func createEntity(ctx context.Context, client *entgen.Client, organizationID str
 		SetStatus(input.Status).
 		SetVendorMetadata(metadata)
 
+	if input.Description != "" {
+		create.SetDescription(input.Description)
+	}
+
 	if input.ContractStartDate != nil {
 		create.SetContractStartDate(*input.ContractStartDate)
+	}
+
+	if input.ContractEndDate != nil {
+		create.SetContractEndDate(*input.ContractEndDate)
+	}
+
+	if input.HasSoc2 != nil {
+		create.SetHasSoc2(*input.HasSoc2)
+	}
+
+	if input.AnnualSpend != nil {
+		create.SetAnnualSpend(*input.AnnualSpend)
+	}
+
+	if input.BillingModel != "" {
+		create.SetBillingModel(input.BillingModel)
+	}
+
+	if len(input.Links) > 0 {
+		create.SetLinks(input.Links)
+	}
+
+	if input.EnvironmentID != "" {
+		create.SetEnvironmentID(input.EnvironmentID)
+		create.SetEnvironmentName(input.EnvironmentName)
 	}
 
 	switch {
@@ -455,8 +597,37 @@ func updateEntity(ctx context.Context, client *entgen.Client, existing *entgen.E
 		SetStatus(input.Status).
 		SetVendorMetadata(mergeTransformMetadata(existing.VendorMetadata, metadata))
 
+	if input.Description != "" {
+		update.SetDescription(input.Description)
+	}
+
 	if input.ContractStartDate != nil {
 		update.SetContractStartDate(*input.ContractStartDate)
+	}
+
+	if input.ContractEndDate != nil {
+		update.SetContractEndDate(*input.ContractEndDate)
+	}
+
+	if input.HasSoc2 != nil {
+		update.SetHasSoc2(*input.HasSoc2)
+	}
+
+	if input.AnnualSpend != nil {
+		update.SetAnnualSpend(*input.AnnualSpend)
+	}
+
+	if input.BillingModel != "" {
+		update.SetBillingModel(input.BillingModel)
+	}
+
+	if len(input.Links) > 0 {
+		update.SetLinks(input.Links)
+	}
+
+	if input.EnvironmentID != "" {
+		update.SetEnvironmentID(input.EnvironmentID)
+		update.SetEnvironmentName(input.EnvironmentName)
 	}
 
 	switch {
@@ -572,8 +743,84 @@ func getStringValue(value any) string {
 		return v.String()
 	case bool:
 		return strconv.FormatBool(v)
+	case float64:
+		return strconv.FormatFloat(v, 'f', -1, 64)
+	case float32:
+		return strconv.FormatFloat(float64(v), 'f', -1, 32)
+	case int:
+		return strconv.Itoa(v)
+	case int64:
+		return strconv.FormatInt(v, 10)
 	default:
 		return fmt.Sprintf("%v", value)
+	}
+}
+
+func getBoolValue(value any) (bool, error) {
+	switch v := value.(type) {
+	case bool:
+		return v, nil
+	case string:
+		switch strings.ToLower(strings.TrimSpace(v)) {
+
+		case "true", "yes", "y", "1":
+
+			return true, nil
+
+		case "false", "no", "n", "0":
+
+			return false, nil
+		}
+	}
+
+	return false, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform bool value %T", value)}
+}
+
+func getFloatValue(value any) (float64, error) {
+	switch v := value.(type) {
+	case float64:
+		return v, nil
+	case float32:
+		return float64(v), nil
+	case int:
+		return float64(v), nil
+	case int64:
+		return float64(v), nil
+	case string:
+		parsed, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
+		if err != nil {
+			return 0, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform float %q", v)}
+		}
+
+		return parsed, nil
+	default:
+		return 0, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform float value %T", value)}
+	}
+}
+
+func getStringArrayValue(value any) []string {
+	switch v := value.(type) {
+	case []string:
+		return v
+	case []any:
+		values := make([]string, 0, len(v))
+
+		for _, i := range v {
+			value := strings.TrimSpace(getStringValue(i))
+			if value != "" {
+				values = append(values, value)
+			}
+		}
+
+		return values
+	default:
+
+		value := strings.TrimSpace(getStringValue(value))
+		if value == "" {
+			return nil
+		}
+
+		return []string{value}
 	}
 }
 

@@ -12,6 +12,8 @@ type TemplateProjectionResolver string
 const (
 	// TemplateProjectionResolverInternalOwner resolves an owner value to a user, group, or fallback string.
 	TemplateProjectionResolverInternalOwner TemplateProjectionResolver = "internal_owner"
+	// TemplateProjectionResolverEnvironment resolves an environment value to an existing custom enum.
+	TemplateProjectionResolverEnvironment TemplateProjectionResolver = "environment"
 )
 
 // TemplateProjectionConfig describes how document data should be projected into a typed schema.
