@@ -122,10 +122,10 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "integrations": {
-        "awsSecurityHub": {},
+        "awssecurityhub": {},
         "githubapp": {},
         "slack": {},
-        "slackRuntime": {},
+        "slackruntime": {},
         "googleworkspace": {},
         "azureentraid": {},
         "microsoftteams": {},
@@ -1524,10 +1524,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**awsSecurityHub**](#integrationsawssecurityhub)|`object`|||
+|[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
 |[**githubapp**](#integrationsgithubapp)|`object`|||
 |[**slack**](#integrationsslack)|`object`|||
-|[**slackRuntime**](#integrationsslackruntime)|`object`|||
+|[**slackruntime**](#integrationsslackruntime)|`object`|||
 |[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
 |[**azureentraid**](#integrationsazureentraid)|`object`|||
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
@@ -1539,10 +1539,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 ```json
 {
-    "awsSecurityHub": {},
+    "awssecurityhub": {},
     "githubapp": {},
     "slack": {},
-    "slackRuntime": {},
+    "slackruntime": {},
     "googleworkspace": {},
     "azureentraid": {},
     "microsoftteams": {},
@@ -1552,7 +1552,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 ```
 
 <a name="integrationsawssecurityhub"></a>
-### integrations\.awsSecurityHub: object
+### integrations\.awssecurityhub: object
 
 **Properties**
 
@@ -1590,7 +1590,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 **Additional Properties:** not allowed  
 <a name="integrationsslackruntime"></a>
-### integrations\.slackRuntime: object
+### integrations\.slackruntime: object
 
 **Properties**
 
