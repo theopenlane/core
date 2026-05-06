@@ -152,8 +152,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) error {
 	contextManager, err := NewContextManager(
 		NewKeyCodec("caller", auth.CallerKey),
-		NewKeyCodec("log_fields", logx.FieldsKey()),
-		NewLegacyContextCodec(),
+		logFieldsCodec{},
 	)
 	if err != nil {
 		return err

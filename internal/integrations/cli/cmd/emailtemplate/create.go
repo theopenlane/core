@@ -89,7 +89,7 @@ func buildCreateInput() (graphclient.CreateEmailTemplateInput, error) {
 
 	if tc := cmd.Config.String("template-context"); tc != "" {
 		v := enums.TemplateContext(tc)
-		input.TemplateContext = &v
+		input.TemplateContext = v
 	}
 
 	if format := cmd.Config.String("template-format"); format != "" {
