@@ -505,7 +505,7 @@ coreConfiguration:
     keydir: "./keys"  # @schema type:string; default:./keys
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
-    awsSecurityHub:
+    awssecurityhub:
       arn: ""  # @schema type:string
     githubapp:
       appslug: ""  # @schema type:string
@@ -513,7 +513,7 @@ coreConfiguration:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       appid: ""  # @schema type:string
-    slackRuntime:
+    slackruntime:
       # -- Slack incoming webhook URL for fire-and-forget system notifications
       webhookURL: ""  # @schema type:string
       # -- Bot User OAuth Token for full Web API access to the platform workspace
@@ -886,7 +886,7 @@ externalSecrets:
     core-integrations-awssecurityhub-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awsSecurityHub.accessKeyId
+      # -- Environment variable key for integrations.awssecurityhub.accessKeyId
       secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-awssecurityhub-accesskeyid"  # @schema type:string
@@ -894,7 +894,7 @@ externalSecrets:
     core-integrations-awssecurityhub-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.awsSecurityHub.secretAccessKey
+      # -- Environment variable key for integrations.awssecurityhub.secretAccessKey
       secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string

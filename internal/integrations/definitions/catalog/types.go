@@ -15,13 +15,13 @@ import (
 // this is here purely to drive the konaf output config constructs we use as a standard in this repo
 type Config struct {
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
-	AWSSecurityHub awssecurityhub.Config `json:"awsSecurityHub" koanf:"awsSecurityHub"`
+	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition
 	Slack slack.Config `json:"slack" koanf:"slack"`
 	// SlackRuntime holds runtime-provisioned configuration for system Slack notifications
-	SlackRuntime slack.RuntimeSlackConfig `json:"slackRuntime" koanf:"slackRuntime"`
+	SlackRuntime slack.RuntimeSlackConfig `json:"slackruntime" koanf:"slackruntime"`
 	// GoogleWorkspace holds OAuth credentials for the Google Workspace definition
 	GoogleWorkspace googleworkspace.Config `json:"googleworkspace" koanf:"googleworkspace"`
 	// AzureEntraID holds OAuth credentials for the Azure Entra ID definition
