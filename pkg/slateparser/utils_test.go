@@ -203,6 +203,17 @@ func TestOnlyCommentsAdded(t *testing.T) {
 		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
 	})
 
+	t.Run("child with non-comparable value does not panic", func(t *testing.T) {
+		// []any values can't be safely compared; best-effort returns false rather than panicking
+		makeSlateWith := func(child map[string]any) []any {
+			return []any{map[string]any{"type": "paragraph", "children": []any{child}}}
+		}
+		marks := []any{"bold"}
+		oldText := makeSlateWith(map[string]any{"text": "hello", "marks": marks})
+		newText := makeSlateWith(map[string]any{"text": "hello", "marks": marks})
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
 	t.Run("multiple children, extra key added", func(t *testing.T) {
 		oldText := makeSlate(
 			map[string]any{"text": "a"},
@@ -213,5 +224,201 @@ func TestOnlyCommentsAdded(t *testing.T) {
 			map[string]any{"text": "b", "comment": "c2"},
 		)
 		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	// bold/italic/underline are stored as booleans on leaf nodes in Slate
+	t.Run("bold mark unchanged, comment added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "comment": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("bold mark changed", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(map[string]any{"text": "hello", "bold": false})
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("bold mark added (formatting change, not comment)", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "hello", "bold": true})
+		assert.Check(t, !slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("multiple marks unchanged, comment added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
+		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true, "comment": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	// Slate adds both "comment" and "comment_<id>" keys when creating a comment
+	t.Run("comment and comment_id keys added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "hello", "comment": true, "comment_MDHGnHfbfTfX": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("multiple comment_id keys added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello"})
+		newText := makeSlate(map[string]any{"text": "hello", "comment": true, "comment_abc": true, "comment_xyz": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("bold with comment_id added", func(t *testing.T) {
+		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "comment": true, "comment_abc123": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	// Slate table elements have colSizes []float64 on the element node (not on leaf nodes),
+	// and deeply nested children: table → tr → td → p → {text: "..."}
+	t.Run("table with colSizes, no changes", func(t *testing.T) {
+		makeTable := func() []any {
+			return []any{map[string]any{
+				"type":     "table",
+				"id":       "tbl1",
+				"colSizes": []any{0.0, 190.45703125, 296.11328125},
+				"children": []any{
+					map[string]any{
+						"type": "tr", "id": "tr1",
+						"children": []any{
+							map[string]any{
+								"type": "td", "id": "td1",
+								"children": []any{
+									map[string]any{
+										"type": "p", "id": "p1",
+										"children": []any{map[string]any{"text": "Version"}},
+									},
+								},
+							},
+							map[string]any{
+								"type": "td", "id": "td2",
+								"children": []any{
+									map[string]any{
+										"type": "p", "id": "p2",
+										"children": []any{map[string]any{"text": "Date"}},
+									},
+								},
+							},
+						},
+					},
+				},
+			}}
+		}
+		assert.Check(t, slateparser.OnlyCommentsAdded(makeTable(), makeTable()))
+	})
+
+	t.Run("table with colSizes, comment added to leaf", func(t *testing.T) {
+		makeTableLeaf := func(leaf map[string]any) []any {
+			return []any{map[string]any{
+				"type":     "table",
+				"id":       "tbl1",
+				"colSizes": []any{0.0, 190.45703125},
+				"children": []any{
+					map[string]any{
+						"type": "tr", "id": "tr1",
+						"children": []any{
+							map[string]any{
+								"type": "td", "id": "td1",
+								"children": []any{
+									map[string]any{
+										"type": "p", "id": "p1",
+										"children": []any{leaf},
+									},
+								},
+							},
+						},
+					},
+				},
+			}}
+		}
+		oldText := makeTableLeaf(map[string]any{"text": "Version"})
+		newText := makeTableLeaf(map[string]any{"text": "Version", "comment": true, "comment_abc": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("table with colSizes, text changed in leaf", func(t *testing.T) {
+		makeTableLeaf := func(text string) []any {
+			return []any{map[string]any{
+				"type":     "table",
+				"id":       "tbl1",
+				"colSizes": []any{0.0, 190.45703125},
+				"children": []any{
+					map[string]any{
+						"type": "tr", "id": "tr1",
+						"children": []any{
+							map[string]any{
+								"type": "td", "id": "td1",
+								"children": []any{
+									map[string]any{
+										"type": "p", "id": "p1",
+										"children": []any{map[string]any{"text": text}},
+									},
+								},
+							},
+						},
+					},
+				},
+			}}
+		}
+		assert.Check(t, !slateparser.OnlyCommentsAdded(makeTableLeaf("Version"), makeTableLeaf("Changed")))
+	})
+
+	// td cells in some Slate table plugins carry colSpan/rowSpan as float64
+	t.Run("table cell with colSpan and rowSpan, comment added to leaf", func(t *testing.T) {
+		makeCell := func(leaf map[string]any) []any {
+			return []any{map[string]any{
+				"type": "table", "id": "tbl1",
+				"children": []any{
+					map[string]any{
+						"type": "tr", "id": "tr1",
+						"children": []any{
+							map[string]any{
+								"type": "td", "id": "td1",
+								"colSpan": float64(1), "rowSpan": float64(1),
+								"children": []any{
+									map[string]any{
+										"type": "p", "id": "p1",
+										"children": []any{leaf},
+									},
+								},
+							},
+						},
+					},
+				},
+			}}
+		}
+		oldText := makeCell(map[string]any{"text": "hello"})
+		newText := makeCell(map[string]any{"text": "hello", "comment": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	// list items use indent (float64) and listStyleType (string) on the element, not the leaf
+	t.Run("list item with indent, no changes", func(t *testing.T) {
+		makeList := func(leaf map[string]any) []any {
+			return []any{map[string]any{
+				"type":          "p",
+				"indent":        float64(1),
+				"listStyleType": "disc",
+				"children":      []any{leaf},
+			}}
+		}
+		oldText := makeList(map[string]any{"text": "Confidentiality Policy"})
+		newText := makeList(map[string]any{"text": "Confidentiality Policy"})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
+	})
+
+	t.Run("list item with indent, comment added to leaf", func(t *testing.T) {
+		makeList := func(leaf map[string]any) []any {
+			return []any{map[string]any{
+				"type":          "p",
+				"indent":        float64(1),
+				"listStyleType": "disc",
+				"children":      []any{leaf},
+			}}
+		}
+		oldText := makeList(map[string]any{"text": "Confidentiality Policy"})
+		newText := makeList(map[string]any{"text": "Confidentiality Policy", "comment": true, "comment_xyz": true})
+		assert.Check(t, slateparser.OnlyCommentsAdded(oldText, newText))
 	})
 }
