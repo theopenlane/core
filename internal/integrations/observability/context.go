@@ -78,4 +78,3 @@ func WithOperation(ctx context.Context, operation string) context.Context {
 func WithRunID(ctx context.Context, runID string) context.Context {
 	return logx.WithField(ctx, FieldRunID, runID)
 }
-
