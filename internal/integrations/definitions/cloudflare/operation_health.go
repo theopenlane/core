@@ -32,7 +32,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *cf.Client) (json.RawMessage, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve credentials")
+		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error attempting to resolve credentials")
 		return nil, err
 	}
 
@@ -40,7 +40,7 @@ func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings
 		AccountID: cf.F(meta.AccountID),
 	})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("githubapp: healthcheck failed on token verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: healthcheck failed on token verification")
 		return nil, ErrTokenVerificationFailed
 	}
 

@@ -108,14 +108,18 @@ func SchemaID(schema json.RawMessage) string {
 // as "default" at every level of nesting, following $ref pointers into $defs recursively.
 // Using jsonschema.Schema preserves the original property ordering on serialization
 func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMessage, error) {
-	var doc jsonschema.Schema
-	if err := json.Unmarshal(schema, &doc); err != nil {
-		return schema, err
+	if schema == nil {
+		return nil, nil
 	}
 
 	typeName := SchemaID(schema)
 	if typeName == "" {
 		return schema, nil
+	}
+
+	var doc jsonschema.Schema
+	if err := json.Unmarshal(schema, &doc); err != nil {
+		return schema, err
 	}
 
 	typeDef, ok := doc.Definitions[typeName]

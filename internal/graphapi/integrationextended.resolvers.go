@@ -67,15 +67,25 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		}
 	}
 
+	// not all schemas have a credential schema, those with oauth like Google Workspace, will
+	// have an empty schema
+	if credentialType.Schema == nil {
+		return nil, nil
+	}
+
 	currentCreds, err := jsonx.ToMap(obj.InstallationMetadata.Attributes)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		logx.FromContext(ctx).Error().Err(err).Str("integration", obj.Family).Msg("error getting current credentials, returning full schema")
 		return credentialType.Schema, nil
+	}
+
+	if currentCreds == nil {
+		return nil, nil
 	}
 
 	out, err := providerkit.InjectDefaults(credentialType.Schema, currentCreds)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error getting current credentials, returning full schema")
+		logx.FromContext(ctx).Error().Err(err).Str("integration", obj.Family).Msg("error getting current credentials, returning full schema")
 		return credentialType.Schema, nil
 	}
 
