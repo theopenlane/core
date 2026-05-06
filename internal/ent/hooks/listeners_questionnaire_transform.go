@@ -103,6 +103,7 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		AssessmentID:         assessment.ID,
 		AssessmentResponseID: response.ID,
 		DocumentDataID:       response.DocumentDataID,
+		Email:                response.Email,
 		Data:                 document.Data,
 		Config:               config,
 	})
@@ -154,6 +155,7 @@ type questionnaireTransformRequest struct {
 	AssessmentID         string
 	AssessmentResponseID string
 	DocumentDataID       string
+	Email                string
 	Data                 map[string]any
 	Config               models.TemplateProjectionConfig
 }
@@ -232,6 +234,14 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 	for _, mapping := range req.Config.Mappings {
 		rawValue, ok := valueAtPath(req.Data, mapping.From)
 		if !ok || isEmptyValue(rawValue) {
+			if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverInternalOwner)) && req.Email != "" {
+				if err := resolveInternalOwner(ctx, client, req.OrganizationID, req.Email, values); err != nil {
+					return nil, err
+				}
+
+				continue
+			}
+
 			if mapping.Required {
 				return nil, &questionnaireValidationError{Message: fmt.Sprintf("missing required transform field %q", mapping.From)}
 			}

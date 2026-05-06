@@ -9,6 +9,8 @@ import (
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/iam/tokens"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -16,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/urlx"
-	"github.com/theopenlane/iam/tokens"
 )
 
 // maxQuestionnaireTags is the pre-allocation capacity for per-message newman tags
