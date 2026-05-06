@@ -229,6 +229,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessment.FieldDeletedBy:           {Type: field.TypeString, Column: assessment.FieldDeletedBy},
 			assessment.FieldTags:                {Type: field.TypeJSON, Column: assessment.FieldTags},
 			assessment.FieldOwnerID:             {Type: field.TypeString, Column: assessment.FieldOwnerID},
+			assessment.FieldSystemOwned:         {Type: field.TypeBool, Column: assessment.FieldSystemOwned},
+			assessment.FieldInternalNotes:       {Type: field.TypeString, Column: assessment.FieldInternalNotes},
+			assessment.FieldSystemInternalID:    {Type: field.TypeString, Column: assessment.FieldSystemInternalID},
 			assessment.FieldName:                {Type: field.TypeString, Column: assessment.FieldName},
 			assessment.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
 			assessment.FieldTemplateID:          {Type: field.TypeString, Column: assessment.FieldTemplateID},
@@ -18292,6 +18295,21 @@ func (f *AssessmentFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *AssessmentFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *AssessmentFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(assessment.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *AssessmentFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(assessment.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *AssessmentFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(assessment.FieldSystemInternalID))
 }
 
 // WhereName applies the entql string predicate on the name field.

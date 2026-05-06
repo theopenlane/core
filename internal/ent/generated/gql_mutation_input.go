@@ -874,6 +874,8 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 // CreateAssessmentInput represents a mutation input for creating assessments.
 type CreateAssessmentInput struct {
 	Tags                  []string
+	InternalNotes         *string
+	SystemInternalID      *string
 	Name                  string
 	AssessmentType        *enums.AssessmentType
 	Jsonconfig            map[string]interface{}
@@ -894,6 +896,12 @@ type CreateAssessmentInput struct {
 func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.AssessmentType; v != nil {
@@ -948,6 +956,10 @@ type UpdateAssessmentInput struct {
 	ClearTags                   bool
 	Tags                        []string
 	AppendTags                  []string
+	ClearInternalNotes          bool
+	InternalNotes               *string
+	ClearSystemInternalID       bool
+	SystemInternalID            *string
 	Name                        *string
 	ClearJsonconfig             bool
 	Jsonconfig                  map[string]interface{}
@@ -992,6 +1004,18 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)

@@ -101,12 +101,15 @@ type ComplexityRoot struct {
 		CreatedBy           func(childComplexity int) int
 		HistoryTime         func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		InternalNotes       func(childComplexity int) int
 		Jsonconfig          func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Operation           func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
 		Ref                 func(childComplexity int) int
 		ResponseDueDuration func(childComplexity int) int
+		SystemInternalID    func(childComplexity int) int
+		SystemOwned         func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
 		Uischema            func(childComplexity int) int
@@ -3736,6 +3739,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssessmentHistory.ID(childComplexity), true
 
+	case "AssessmentHistory.internalNotes":
+		if e.ComplexityRoot.AssessmentHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.InternalNotes(childComplexity), true
+
 	case "AssessmentHistory.jsonconfig":
 		if e.ComplexityRoot.AssessmentHistory.Jsonconfig == nil {
 			break
@@ -3777,6 +3787,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.ResponseDueDuration(childComplexity), true
+
+	case "AssessmentHistory.systemInternalID":
+		if e.ComplexityRoot.AssessmentHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SystemInternalID(childComplexity), true
+
+	case "AssessmentHistory.systemOwned":
+		if e.ComplexityRoot.AssessmentHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SystemOwned(childComplexity), true
 
 	case "AssessmentHistory.tags":
 		if e.ComplexityRoot.AssessmentHistory.Tags == nil {
@@ -22948,6 +22972,18 @@ type AssessmentHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -23175,6 +23211,49 @@ input AssessmentHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -66072,6 +66151,12 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_AssessmentHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_AssessmentHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_AssessmentHistory_systemInternalID(ctx, field)
 	case "name":
 		return ec.fieldContext_AssessmentHistory_name(ctx, field)
 	case "assessmentType":

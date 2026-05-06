@@ -188,6 +188,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
@@ -204,13 +207,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[13]},
+				Columns:    []*schema.Column{AssessmentsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessments_templates_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[14]},
+				Columns:    []*schema.Column{AssessmentsColumns[17]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -219,7 +222,7 @@ var (
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[13]},
+				Columns: []*schema.Column{AssessmentsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -227,7 +230,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[13]},
+				Columns: []*schema.Column{AssessmentsColumns[11], AssessmentsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

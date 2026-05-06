@@ -216,6 +216,10 @@ func init() {
 	assessmenthistoryDescTags := assessmenthistoryFields[10].Descriptor()
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
 	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
+	// assessmenthistoryDescSystemOwned is the schema descriptor for system_owned field.
+	assessmenthistoryDescSystemOwned := assessmenthistoryFields[12].Descriptor()
+	// assessmenthistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	assessmenthistory.DefaultSystemOwned = assessmenthistoryDescSystemOwned.Default.(bool)
 	// assessmenthistoryDescID is the schema descriptor for id field.
 	assessmenthistoryDescID := assessmenthistoryFields[9].Descriptor()
 	// assessmenthistory.DefaultID holds the default value on creation for the id field.

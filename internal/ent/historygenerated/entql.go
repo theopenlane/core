@@ -176,6 +176,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmenthistory.FieldDeletedBy:           {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
 			assessmenthistory.FieldTags:                {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
 			assessmenthistory.FieldOwnerID:             {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
+			assessmenthistory.FieldSystemOwned:         {Type: field.TypeBool, Column: assessmenthistory.FieldSystemOwned},
+			assessmenthistory.FieldInternalNotes:       {Type: field.TypeString, Column: assessmenthistory.FieldInternalNotes},
+			assessmenthistory.FieldSystemInternalID:    {Type: field.TypeString, Column: assessmenthistory.FieldSystemInternalID},
 			assessmenthistory.FieldName:                {Type: field.TypeString, Column: assessmenthistory.FieldName},
 			assessmenthistory.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
 			assessmenthistory.FieldTemplateID:          {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
@@ -3679,6 +3682,21 @@ func (f *AssessmentHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *AssessmentHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *AssessmentHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(assessmenthistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *AssessmentHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(assessmenthistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *AssessmentHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(assessmenthistory.FieldSystemInternalID))
 }
 
 // WhereName applies the entql string predicate on the name field.

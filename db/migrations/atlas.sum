@@ -1,4 +1,4 @@
-h1:Y9hrevXsGNePv95VUPB5o2xZ3z9x9P1htd/c5ekBjTg=
+h1:4Hn9EU1CCmv6g2WnYyIGXeYd8j08sn3h7cNfXkH431o=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -128,3 +128,5 @@ h1:Y9hrevXsGNePv95VUPB5o2xZ3z9x9P1htd/c5ekBjTg=
 20260430235901_removeemailbranding_history.sql h1:DvYD69AWfki3tWx+v4GLl6olKKnNoVR4zsKWsp7vyzI=
 20260506191803_template_transform_configuration.sql h1:XCplpE17zH2UpSedhavYZx5mr37mYIdG85keAp9nbzs=
 20260506191810_template_transform_configuration_history.sql h1:+GaieWup7+BM/QWgnkyJHTk8eblt6bCiIsjK2oeJhMY=
+20260506225654_system_admin_assessments.sql h1:sDMg0EMAC5q505wiOHBu22g7WTNvVrrHWp6EXjcUp/s=
+20260506225701_system_admin_assessments_history.sql h1:xE0/mslyYjB8UvBcEf0XhN4N1GFlVjsY/4yVMS29ZMM=

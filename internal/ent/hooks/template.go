@@ -40,7 +40,31 @@ func HookTemplate() ent.Hook {
 				return nil, fmt.Errorf("%w: only system admins can create or update a vendor intake template", ErrInvalidInput)
 			}
 
-			return next.Mutate(ctx, m)
+			if !m.Op().Is(ent.OpCreate) {
+				return next.Mutate(ctx, m)
+			}
+
+			value, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			tmpl, ok := value.(*generated.Template)
+			if !ok {
+				return value, nil
+			}
+
+			if _, err = m.Client().Assessment.Create().
+				SetName(tmpl.Name).
+				SetTemplateID(tmpl.ID).
+				SetAssessmentType(enums.AssessmentTypeExternal).
+				SetSystemOwned(true).
+				Save(ctx); err != nil {
+				return nil, err
+			}
+
+			return value, nil
+
 		})
 	},
 		hook.And(
