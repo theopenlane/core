@@ -92,7 +92,8 @@ func TestQueryAssessmentResponse(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.expectedResult.ID, resp.AssessmentResponse.ID))
-			assert.Check(t, is.Equal(tc.expectedResult.Email, resp.AssessmentResponse.Email))
+			assert.Assert(t, resp.AssessmentResponse.Email != nil)
+			assert.Check(t, is.Equal(tc.expectedResult.Email, *resp.AssessmentResponse.Email))
 			assert.Check(t, is.Equal(tc.expectedResult.AssessmentID, resp.AssessmentResponse.AssessmentID))
 		})
 	}
