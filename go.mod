@@ -39,7 +39,7 @@ require (
 	github.com/elimity-com/scim v0.0.0-20260506142751-830e1caafcc3
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.19.0
-	github.com/fsnotify/fsnotify v1.9.0
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/gertd/go-pluralize v0.2.1
