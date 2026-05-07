@@ -36,7 +36,7 @@ require (
 	github.com/danieljoos/wincred v1.2.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/fatih/color v1.19.0 // indirect
-	github.com/fsnotify/fsnotify v1.9.0 // indirect
+	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.1 // indirect
