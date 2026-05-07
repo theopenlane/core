@@ -851,6 +851,20 @@ func (_c *EntityHistoryCreate) SetVendorMetadata(v map[string]interface{}) *Enti
 	return _c
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_c *EntityHistoryCreate) SetLogoRemoteURL(v string) *EntityHistoryCreate {
+	_c.mutation.SetLogoRemoteURL(v)
+	return _c
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableLogoRemoteURL(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetLogoRemoteURL(*v)
+	}
+	return _c
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_c *EntityHistoryCreate) SetLogoFileID(v string) *EntityHistoryCreate {
 	_c.mutation.SetLogoFileID(v)
@@ -1350,6 +1364,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entityhistory.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
 	}
 	if value, ok := _c.mutation.LogoFileID(); ok {
 		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
