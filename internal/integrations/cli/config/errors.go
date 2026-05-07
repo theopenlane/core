@@ -6,7 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/samber/lo"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
