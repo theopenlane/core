@@ -9,16 +9,16 @@ var (
 	// definitionID is the stable identifier for the Authentik integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AUTHENTIK000000000000001")
 	// integration is the typed installation metadata handle for the Authentik definition
-	// integration = types.NewInstallationRef(resolveInstallationMetadata)
+	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// authentikCredentialSchema is the JSON schema for the Authentik credential
 	// authentikCredential is the typed runtime ref for resolving the credential
 	authentikCredentialSchema, authentikCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
-	// authentikClient = types.NewClientRef[*Client]()
+	authentikClient = types.NewClientRef[*Client]()
 	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
-	// healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	// directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()``
+	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 
 // CredentialSchema holds the Authentik instance credentials for one installation
@@ -41,13 +41,18 @@ type UserInput struct {
 
 // InstallationMetadata holds the stable Authentik instance identity for one installation
 type InstallationMetadata struct {
-	// BaseURL is the base URL of the connected Authentik instance
+	// Domain is the primary domain of the Authentik instance
+	Domain string `json:"domain,omitempty"`
+	// TenantID is the UUID of the Authentik tenant
+	TenantID string `json:"tenantId,omitempty"`
+	// BaseURL is the base URL of the Authentik instance
 	BaseURL string `json:"baseUrl,omitempty"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalName: m.BaseURL,
+		ExternalName: m.Domain,
+		ExternalID:   m.TenantID,
 	}
 }

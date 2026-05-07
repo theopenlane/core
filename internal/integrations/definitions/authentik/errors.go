@@ -27,4 +27,8 @@ var (
 	ErrPayloadEncode = errors.New("authentik: payload encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("authentik: result encode failed")
+	// ErrRequestFailed indicates a request to the Authentik API failed after retries
+	ErrRequestFailed = errors.New("authentik: request failed after retries")
+	// ErrRequestBuildFailed indicates a request to the Authentik API failed to build
+	ErrRequestBuildFailed = errors.New("authentik: failed to build request")
 )
