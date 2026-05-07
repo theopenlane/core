@@ -18,7 +18,7 @@ COPY --from=builder /go/bin/core /bin/core
 COPY --from=ghcr.io/theopenlane/riverboat:amd64-latest /bin/riverboat /bin/riverboat
 
 # Copy redis binary
-COPY --from=redis:7.4.8 /usr/local/bin/redis-server /bin/redis-server
+COPY --from=redis:7.4.9 /usr/local/bin/redis-server /bin/redis-server
 
 # Copy FGA binary
 COPY --from=openfga/openfga:v1.15.1 /openfga /bin/openfga
