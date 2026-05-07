@@ -352,8 +352,8 @@ github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 h1:JeSE6pjso5T
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674/go.mod h1:r4w70xmWCQKmi1ONH4KIaBptdivuRPyosB9RmPlGEwA=
 github.com/gotestyourself/gotestyourself v2.2.0+incompatible h1:AQwinXlbQR2HvPjQZOmDhRqsv5mZf+Jb1RnSLxcqZcI=
 github.com/gotestyourself/gotestyourself v2.2.0+incompatible/go.mod h1:zZKM6oeNM8k+FRljX1mnzVYeS8wiGgQyvST1/GafPbY=
-github.com/gqlgo/gqlgenc v0.36.0 h1:uM9oQGcZ4p/OPX1etDWAE6pNBi5LrT4pc7Ize3TDh4Q=
-github.com/gqlgo/gqlgenc v0.36.0/go.mod h1:pddHUsQ++UHjbQ0rwUJJOxGa55do4zPqMXahlUzBeWo=
+github.com/gqlgo/gqlgenc v0.37.0 h1:ZdI9B1jyhfS+G4V6gE4Jx5Ddhn56d+RQHy81NhfING4=
+github.com/gqlgo/gqlgenc v0.37.0/go.mod h1:fCdd4cN/vEEKDSxnV1nbReNtNAq+Px/W+ko/aGRdivE=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 h1:UH//fgunKIs4JdUbpDl1VZCDaL56wXCB/5+wF6uHfaI=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0/go.mod h1:g5qyo/la0ALbONm6Vbp88Yd8NsDy6rZz+RcrMPxvld8=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0 h1:5VipnvEpbqr2gA2VbM+nYVbkIF28c5ZQfqCBQ5g2xfk=
