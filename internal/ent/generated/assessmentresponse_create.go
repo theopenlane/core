@@ -194,6 +194,14 @@ func (_c *AssessmentResponseCreate) SetEmail(v string) *AssessmentResponseCreate
 	return _c
 }
 
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmail(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmail(*v)
+	}
+	return _c
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_c *AssessmentResponseCreate) SetSendAttempts(v int) *AssessmentResponseCreate {
 	_c.mutation.SetSendAttempts(v)
@@ -582,9 +590,6 @@ func (_c *AssessmentResponseCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsTest(); !ok {
 		return &ValidationError{Name: "is_test", err: errors.New(`generated: missing required field "AssessmentResponse.is_test"`)}
-	}
-	if _, ok := _c.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "AssessmentResponse.email"`)}
 	}
 	if v, ok := _c.mutation.Email(); ok {
 		if err := assessmentresponse.EmailValidator(v); err != nil {

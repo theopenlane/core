@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -97,8 +98,16 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		return nil
 	}
 
+	organizationID := response.OwnerID
+	if organizationID == "" {
+		organizationID = document.OwnerID
+	}
+	if organizationID == "" {
+		organizationID = assessment.OwnerID
+	}
+
 	err = transformQuestionnaire(allowCtx, client, questionnaireTransformRequest{
-		OrganizationID:       assessment.OwnerID,
+		OrganizationID:       organizationID,
 		TemplateID:           assessment.TemplateID,
 		AssessmentID:         assessment.ID,
 		AssessmentResponseID: response.ID,
@@ -137,6 +146,7 @@ func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) 
 }
 
 const transformMetadataKey = "questionnaire_transform"
+const entityTransformFieldNotes = "notes"
 
 type questionnaireValidationError struct {
 	Message string
@@ -171,6 +181,7 @@ type entityTransform struct {
 	AnnualSpend          *float64
 	BillingModel         string
 	Links                []string
+	Notes                string
 	EnvironmentName      string
 	EnvironmentID        string
 	InternalOwner        string
@@ -218,6 +229,10 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 	}
 
 	if err := connectEntitySources(ctx, client, req, record.ID); err != nil {
+		return err
+	}
+
+	if err := createEntityNote(ctx, client, req, record.ID, input.Notes); err != nil {
 		return err
 	}
 
@@ -371,12 +386,20 @@ func resolveEnvironment(ctx context.Context, client *entgen.Client, organization
 			Only(ctx)
 	}
 
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return &questionnaireValidationError{Message: fmt.Sprintf("environment %q is not configured", environment)}
-		}
-
+	if err != nil && !entgen.IsNotFound(err) {
 		return fmt.Errorf("resolve environment: %w", err)
+	}
+
+	if entgen.IsNotFound(err) {
+		enum, err = client.CustomTypeEnum.Create().
+			SetName(environment).
+			SetField("environment").
+			SetObjectType("").
+			SetOwnerID(organizationID).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("create environment enum: %w", err)
+		}
 	}
 
 	values[entity.FieldEnvironmentID] = enum.ID
@@ -486,6 +509,9 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 			}
 
 			input.Links = links
+
+		case entityTransformFieldNotes:
+			input.Notes = strings.TrimSpace(getStringValue(value))
 
 		case entity.FieldEnvironmentName:
 			input.EnvironmentName = strings.TrimSpace(getStringValue(value))
@@ -673,6 +699,46 @@ func connectEntitySources(ctx context.Context, client *entgen.Client, req questi
 			Exec(ctx); err != nil {
 			return fmt.Errorf("link transformed entity to assessment response: %w", err)
 		}
+	}
+
+	return nil
+}
+
+func createEntityNote(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string, text string) error {
+	text = strings.TrimSpace(text)
+	if text == "" {
+		return nil
+	}
+
+	reference := fmt.Sprintf("%s:%s", transformMetadataKey, req.AssessmentResponseID)
+
+	id, err := client.Note.Query().
+		Where(
+			note.OwnerIDEQ(req.OrganizationID),
+			note.NoteRefEQ(reference),
+		).
+		OnlyID(ctx)
+	if err != nil && !entgen.IsNotFound(err) {
+		return fmt.Errorf("query transformed entity note: %w", err)
+	}
+
+	if id == "" {
+		createdEnum, err := client.Note.Create().
+			SetOwnerID(req.OrganizationID).
+			SetText(text).
+			SetNoteRef(reference).
+			Save(ctx)
+		if err != nil {
+			return fmt.Errorf("create transformed entity note: %w", err)
+		}
+
+		id = createdEnum.ID
+	}
+
+	if err := client.Entity.UpdateOneID(entityID).
+		AddNoteIDs(id).
+		Exec(ctx); err != nil && !entgen.IsConstraintError(err) {
+		return fmt.Errorf("link transformed entity note: %w", err)
 	}
 
 	return nil

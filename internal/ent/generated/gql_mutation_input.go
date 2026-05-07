@@ -1129,7 +1129,7 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
-	Email              string
+	Email              *string
 	EmailDeliveredAt   *time.Time
 	EmailOpenedAt      *time.Time
 	EmailClickedAt     *time.Time
@@ -1149,7 +1149,9 @@ type CreateAssessmentResponseInput struct {
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	m.SetEmail(i.Email)
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
 	if v := i.EmailDeliveredAt; v != nil {
 		m.SetEmailDeliveredAt(*v)
 	}

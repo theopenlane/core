@@ -77,15 +77,16 @@ func (AssessmentResponse) Fields() []ent.Field {
 
 		field.String("email").
 			Comment("the email address of the recipient").
+			Optional().
+			Validate(func(email string) error {
+				_, err := mail.ParseAddress(email)
+				return err
+			}).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
 			).
-			Immutable().
-			Validate(func(email string) error {
-				_, err := mail.ParseAddress(email)
-				return err
-			}),
+			Immutable(),
 
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send to the recipient about this assessment, maximum of 5").

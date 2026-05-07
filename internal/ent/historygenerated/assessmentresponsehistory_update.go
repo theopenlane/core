@@ -598,6 +598,9 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
 	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)
+	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -1296,6 +1299,9 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
+	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)

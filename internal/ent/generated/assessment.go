@@ -59,6 +59,9 @@ type Assessment struct {
 	// The values are being populated by the AssessmentQuery when eager-loading is set.
 	Edges        AssessmentEdges `json:"edges"`
 	selectValues sql.SelectValues
+
+	// AccessURL is the anonymous questionnaire access URL for system-owned assessments
+	AccessURL string `json:"accessURL,omitempty"`
 }
 
 // AssessmentEdges holds the relations/edges for other nodes in the graph.

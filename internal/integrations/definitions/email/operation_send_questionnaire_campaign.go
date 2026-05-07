@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strings"
 
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/utils/ulids"
@@ -80,6 +81,10 @@ func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationReq
 // token URL, dispatches the questionnaire access email through the questionnaireAuthEmail
 // operation, and marks campaign targets as sent for non-test dispatches
 func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationRequest, db *generated.Client, client *Client, camp *generated.Campaign, assessmentName string, email string, campaignTargetID string, isTest bool) error {
+	if strings.TrimSpace(email) == "" {
+		return nil
+	}
+
 	response, err := createAssessmentResponseForRecipient(ctx, db, camp, camp.AssessmentID, email, isTest)
 	if err != nil {
 		return err

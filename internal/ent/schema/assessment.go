@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -139,7 +140,9 @@ func (Assessment) Indexes() []ent.Index {
 
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorAssessmentAccessURL(),
+	}
 }
 
 func (Assessment) Hooks() []ent.Hook {

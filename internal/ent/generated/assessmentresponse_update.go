@@ -688,6 +688,9 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
 	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmail, field.TypeString)
+	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -1669,6 +1672,9 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
+	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmail, field.TypeString)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)

@@ -247,7 +247,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "is_test", Type: field.TypeBool, Default: false},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "email_delivered_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_opened_at", Type: field.TypeTime, Nullable: true},

@@ -42,24 +42,30 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 	}
 
 	email := caller.SubjectEmail
-	if email == "" {
-		return h.BadRequest(ctx, ErrMissingEmail, openapi)
-	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, caller)
 	allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
 
-	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
-		Where(
-			assessmentresponse.AssessmentIDEQ(assessmentID),
-			assessmentresponse.EmailEQ(email),
-		).
-		WithDocument().
-		Only(allowCtx)
-	if err != nil && !generated.IsNotFound(err) {
-		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+	var (
+		assessmentResponse *generated.AssessmentResponse
+		err                error
+	)
+
+	// email not required because we can generate anon links that can now be shared
+	// but if it exists, verify that it matche the response we created when we sent it out
+	if email != "" {
+		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
+			Where(
+				assessmentresponse.AssessmentIDEQ(assessmentID),
+				assessmentresponse.EmailEQ(email),
+			).
+			WithDocument().
+			Only(allowCtx)
+		if err != nil && !generated.IsNotFound(err) {
+			logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 	}
 
 	if assessmentResponse != nil {
@@ -128,6 +134,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		assessmentID string
 		email        string
 		allowCtx     context.Context
+		ownerID      string
 	)
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -138,6 +145,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
 		if callerOk && anonCaller != nil {
 			email = anonCaller.SubjectEmail
+			ownerID = anonCaller.OrganizationID
 			allowCtx = auth.WithCaller(allowCtx, anonCaller)
 		}
 
@@ -159,6 +167,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 		assessmentID = req.AssessmentID
 		email = qCaller.SubjectEmail
+		ownerID = qCaller.OrganizationID
 
 		// bypass org filter and FGA tuple creation for questionnaire submissions;
 		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
@@ -191,30 +200,34 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if email == "" {
-		return h.BadRequest(ctx, ErrMissingEmail, openapi)
+	if ownerID == "" {
+		ownerID = assessment.OwnerID
 	}
 
-	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
-		Where(assessmentresponse.EmailEqualFold(email),
-			assessmentresponse.AssessmentIDEQ(assessmentID)).
-		Only(allowCtx)
+	var assessmentResponse *generated.AssessmentResponse
 
-	if generated.IsNotFound(err) {
-		return h.NotFound(ctx, ErrAssessmentResponseNotFound, openapi)
+	if email != "" {
+		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
+			Where(assessmentresponse.EmailEqualFold(email),
+				assessmentresponse.AssessmentIDEQ(assessmentID)).
+			Only(allowCtx)
+
+		if generated.IsNotFound(err) {
+			return h.NotFound(ctx, ErrAssessmentResponseNotFound, openapi)
+		}
+
+		if err != nil {
+			return h.NotFound(ctx, err, openapi)
+		}
 	}
 
-	if err != nil {
-		return h.NotFound(ctx, err, openapi)
-	}
-
-	if assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
+	if assessmentResponse != nil && assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
 		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 	}
 
 	var documentDataID string
 
-	if assessmentResponse.DocumentDataID != "" {
+	if assessmentResponse != nil && assessmentResponse.DocumentDataID != "" {
 		err = h.DBClient.DocumentData.UpdateOneID(assessmentResponse.DocumentDataID).
 			SetData(req.Data).
 			Exec(allowCtx)
@@ -226,7 +239,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		documentDataID = assessmentResponse.DocumentDataID
 	} else {
 		documentDataQuery := h.DBClient.DocumentData.Create().
-			SetOwnerID(assessment.OwnerID)
+			SetOwnerID(ownerID)
 
 		if assessment.TemplateID != "" {
 			documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
@@ -239,6 +252,17 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		}
 
 		documentDataID = documentData.ID
+	}
+
+	if assessmentResponse == nil {
+		assessmentResponse, err = h.DBClient.AssessmentResponse.Create().
+			SetAssessmentID(assessmentID).
+			SetOwnerID(ownerID).
+			Save(allowCtx)
+		if err != nil {
+			logx.FromContext(reqCtx).Err(err).Msg("could not create assessment response")
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		}
 	}
 
 	responseUpdate := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).

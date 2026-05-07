@@ -167,6 +167,7 @@ func serve(ctx context.Context) error {
 		ent.SessionConfig(so.Config.Handler.SessionConfig),
 		ent.EntConfig(&so.Config.Settings.EntConfig),
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
+		ent.QuestionnaireProductURL(so.Config.Settings.Integrations.Email.ProductURL),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
 		ent.Shortlinks(so.Config.Handler.ShortlinksClient),

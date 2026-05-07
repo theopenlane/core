@@ -478,6 +478,10 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 			entc.DependencyType(&entitlements.StripeClient{}),
 		),
 		entc.Dependency(
+			entc.DependencyName("QuestionnaireProductURL"),
+			entc.DependencyType(""),
+		),
+		entc.Dependency(
 			entc.DependencyName("ObjectManager"),
 			entc.DependencyType(&objects.Service{}),
 		),

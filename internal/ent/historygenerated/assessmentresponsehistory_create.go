@@ -224,6 +224,14 @@ func (_c *AssessmentResponseHistoryCreate) SetEmail(v string) *AssessmentRespons
 	return _c
 }
 
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmail(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmail(*v)
+	}
+	return _c
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_c *AssessmentResponseHistoryCreate) SetSendAttempts(v int) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetSendAttempts(v)
@@ -561,9 +569,6 @@ func (_c *AssessmentResponseHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsTest(); !ok {
 		return &ValidationError{Name: "is_test", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.is_test"`)}
-	}
-	if _, ok := _c.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.email"`)}
 	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		return &ValidationError{Name: "send_attempts", err: errors.New(`historygenerated: missing required field "AssessmentResponseHistory.send_attempts"`)}
