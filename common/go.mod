@@ -6,7 +6,7 @@ require (
 	entgo.io/ent v0.14.6
 	github.com/go-webauthn/webauthn v0.17.2
 	github.com/google/uuid v1.6.0
-	github.com/riverqueue/river v0.32.0
+	github.com/riverqueue/river v0.35.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
@@ -55,9 +55,9 @@ require (
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/riverqueue/river/riverdriver v0.32.0 // indirect
-	github.com/riverqueue/river/rivershared v0.32.0 // indirect
-	github.com/riverqueue/river/rivertype v0.32.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.35.1 // indirect
+	github.com/riverqueue/river/rivershared v0.35.1 // indirect
+	github.com/riverqueue/river/rivertype v0.35.1 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
