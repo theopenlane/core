@@ -64,12 +64,12 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 	}
 
 	if q.TokenManager == nil {
-		return fmt.Errorf("token manager is required")
+		return fmt.Errorf("token manager is required") //nolint:err113
 	}
 
 	productURL := strings.TrimSpace(q.QuestionnaireProductURL)
 	if productURL == "" {
-		return fmt.Errorf("questionnaire product URL is required")
+		return fmt.Errorf("questionnaire product URL is required") //nolint:err113
 	}
 
 	baseURL, err := url.Parse(productURL + "/questionnaire")
