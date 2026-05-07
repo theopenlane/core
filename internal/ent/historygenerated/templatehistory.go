@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -72,7 +73,9 @@ type TemplateHistory struct {
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID string `json:"trust_center_id,omitempty"`
-	selectValues  sql.SelectValues
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
+	selectValues           sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -80,7 +83,7 @@ func (*TemplateHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case templatehistory.FieldTags, templatehistory.FieldJsonconfig, templatehistory.FieldUischema:
+		case templatehistory.FieldTags, templatehistory.FieldJsonconfig, templatehistory.FieldUischema, templatehistory.FieldTransformConfiguration:
 			values[i] = new([]byte)
 		case templatehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -269,6 +272,14 @@ func (_m *TemplateHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
 			}
+		case templatehistory.FieldTransformConfiguration:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field transform_configuration", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TransformConfiguration); err != nil {
+					return fmt.Errorf("unmarshal field transform_configuration: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -383,6 +394,9 @@ func (_m *TemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("transform_configuration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TransformConfiguration))
 	builder.WriteByte(')')
 	return builder.String()
 }

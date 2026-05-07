@@ -89,6 +89,9 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
@@ -127,7 +130,7 @@ var (
 		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_id", Type: field.TypeString, Nullable: true},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "email_delivered_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_opened_at", Type: field.TypeTime, Nullable: true},
@@ -2710,10 +2713,11 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA"}, Default: "QUESTIONNAIRE"},
+		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA", "VENDOR_INTAKE"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "transform_configuration", Type: field.TypeJSON, Nullable: true},
 	}
 	// TemplateHistoryTable holds the schema information for the "template_history" table.
 	TemplateHistoryTable = &schema.Table{

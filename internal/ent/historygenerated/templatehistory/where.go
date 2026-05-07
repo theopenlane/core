@@ -1523,6 +1523,16 @@ func TrustCenterIDContainsFold(v string) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
+// TransformConfigurationIsNil applies the IsNil predicate on the "transform_configuration" field.
+func TransformConfigurationIsNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldIsNull(FieldTransformConfiguration))
+}
+
+// TransformConfigurationNotNil applies the NotNil predicate on the "transform_configuration" field.
+func TransformConfigurationNotNil() predicate.TemplateHistory {
+	return predicate.TemplateHistory(sql.FieldNotNull(FieldTransformConfiguration))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.TemplateHistory) predicate.TemplateHistory {
 	return predicate.TemplateHistory(sql.AndPredicates(predicates...))

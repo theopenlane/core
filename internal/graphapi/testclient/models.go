@@ -971,6 +971,12 @@ type Assessment struct {
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
@@ -991,6 +997,7 @@ type Assessment struct {
 	IdentityHolders     *IdentityHolderConnection     `json:"identityHolders"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 	Campaigns           *CampaignConnection           `json:"campaigns"`
+	AccessURL           *string                       `json:"accessURL,omitempty"`
 }
 
 func (Assessment) IsNode() {}
@@ -1062,7 +1069,7 @@ type AssessmentResponse struct {
 	// the entity associated with this assessment response
 	EntityID *string `json:"entityID,omitempty"`
 	// the email address of the recipient
-	Email string `json:"email"`
+	Email *string `json:"email,omitempty"`
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
 	SendAttempts int64 `json:"sendAttempts"`
 	// when the assessment email was delivered to the recipient
@@ -1306,6 +1313,8 @@ type AssessmentResponseWhereInput struct {
 	EmailContains     *string  `json:"emailContains,omitempty"`
 	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
+	EmailIsNil        *bool    `json:"emailIsNil,omitempty"`
+	EmailNotNil       *bool    `json:"emailNotNil,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
 	// send_attempts field predicates
@@ -1547,6 +1556,43 @@ type AssessmentWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -6076,6 +6122,10 @@ type CreateActionPlanInput struct {
 type CreateAssessmentInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string                `json:"name"`
 	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
@@ -6100,7 +6150,7 @@ type CreateAssessmentInput struct {
 // Input was generated by ent.
 type CreateAssessmentResponseInput struct {
 	// the email address of the recipient
-	Email string `json:"email"`
+	Email *string `json:"email,omitempty"`
 	// when the assessment email was delivered to the recipient
 	EmailDeliveredAt *time.Time `json:"emailDeliveredAt,omitempty"`
 	// when the assessment email was opened by the recipient
@@ -9145,16 +9195,18 @@ type CreateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
-	Uischema          map[string]any `json:"uischema,omitempty"`
-	OwnerID           *string        `json:"ownerID,omitempty"`
-	EnvironmentID     *string        `json:"environmentID,omitempty"`
-	ScopeID           *string        `json:"scopeID,omitempty"`
-	DocumentIDs       []string       `json:"documentIDs,omitempty"`
-	FileIDs           []string       `json:"fileIDs,omitempty"`
-	TrustCenterID     *string        `json:"trustCenterID,omitempty"`
-	AssessmentIDs     []string       `json:"assessmentIDs,omitempty"`
-	CampaignIDs       []string       `json:"campaignIDs,omitempty"`
-	IdentityHolderIDs []string       `json:"identityHolderIDs,omitempty"`
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	OwnerID                *string                          `json:"ownerID,omitempty"`
+	EnvironmentID          *string                          `json:"environmentID,omitempty"`
+	ScopeID                *string                          `json:"scopeID,omitempty"`
+	DocumentIDs            []string                         `json:"documentIDs,omitempty"`
+	FileIDs                []string                         `json:"fileIDs,omitempty"`
+	TrustCenterID          *string                          `json:"trustCenterID,omitempty"`
+	AssessmentIDs          []string                         `json:"assessmentIDs,omitempty"`
+	CampaignIDs            []string                         `json:"campaignIDs,omitempty"`
+	IdentityHolderIDs      []string                         `json:"identityHolderIDs,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -35638,16 +35690,18 @@ type Template struct {
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
-	TrustCenterID   *string                   `json:"trustCenterID,omitempty"`
-	Owner           *Organization             `json:"owner,omitempty"`
-	Environment     *CustomTypeEnum           `json:"environment,omitempty"`
-	Scope           *CustomTypeEnum           `json:"scope,omitempty"`
-	Documents       *DocumentDataConnection   `json:"documents"`
-	Files           *FileConnection           `json:"files"`
-	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
-	Assessments     *AssessmentConnection     `json:"assessments"`
-	Campaigns       *CampaignConnection       `json:"campaigns"`
-	IdentityHolders *IdentityHolderConnection `json:"identityHolders"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	Owner                  *Organization                    `json:"owner,omitempty"`
+	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
+	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
+	Documents              *DocumentDataConnection          `json:"documents"`
+	Files                  *FileConnection                  `json:"files"`
+	TrustCenter            *TrustCenter                     `json:"trustCenter,omitempty"`
+	Assessments            *AssessmentConnection            `json:"assessments"`
+	Campaigns              *CampaignConnection              `json:"campaigns"`
+	IdentityHolders        *IdentityHolderConnection        `json:"identityHolders"`
 }
 
 func (Template) IsNode() {}
@@ -39095,6 +39149,12 @@ type UpdateAssessmentInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name *string `json:"name,omitempty"`
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
@@ -44214,29 +44274,32 @@ type UpdateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema                map[string]any `json:"uischema,omitempty"`
-	ClearUischema           *bool          `json:"clearUischema,omitempty"`
-	EnvironmentID           *string        `json:"environmentID,omitempty"`
-	ClearEnvironment        *bool          `json:"clearEnvironment,omitempty"`
-	ScopeID                 *string        `json:"scopeID,omitempty"`
-	ClearScope              *bool          `json:"clearScope,omitempty"`
-	AddDocumentIDs          []string       `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs       []string       `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments          *bool          `json:"clearDocuments,omitempty"`
-	AddFileIDs              []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs           []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles              *bool          `json:"clearFiles,omitempty"`
-	TrustCenterID           *string        `json:"trustCenterID,omitempty"`
-	ClearTrustCenter        *bool          `json:"clearTrustCenter,omitempty"`
-	AddAssessmentIDs        []string       `json:"addAssessmentIDs,omitempty"`
-	RemoveAssessmentIDs     []string       `json:"removeAssessmentIDs,omitempty"`
-	ClearAssessments        *bool          `json:"clearAssessments,omitempty"`
-	AddCampaignIDs          []string       `json:"addCampaignIDs,omitempty"`
-	RemoveCampaignIDs       []string       `json:"removeCampaignIDs,omitempty"`
-	ClearCampaigns          *bool          `json:"clearCampaigns,omitempty"`
-	AddIdentityHolderIDs    []string       `json:"addIdentityHolderIDs,omitempty"`
-	RemoveIdentityHolderIDs []string       `json:"removeIdentityHolderIDs,omitempty"`
-	ClearIdentityHolders    *bool          `json:"clearIdentityHolders,omitempty"`
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration      *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
+	ClearTransformConfiguration *bool                            `json:"clearTransformConfiguration,omitempty"`
+	EnvironmentID               *string                          `json:"environmentID,omitempty"`
+	ClearEnvironment            *bool                            `json:"clearEnvironment,omitempty"`
+	ScopeID                     *string                          `json:"scopeID,omitempty"`
+	ClearScope                  *bool                            `json:"clearScope,omitempty"`
+	AddDocumentIDs              []string                         `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs           []string                         `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments              *bool                            `json:"clearDocuments,omitempty"`
+	AddFileIDs                  []string                         `json:"addFileIDs,omitempty"`
+	RemoveFileIDs               []string                         `json:"removeFileIDs,omitempty"`
+	ClearFiles                  *bool                            `json:"clearFiles,omitempty"`
+	TrustCenterID               *string                          `json:"trustCenterID,omitempty"`
+	ClearTrustCenter            *bool                            `json:"clearTrustCenter,omitempty"`
+	AddAssessmentIDs            []string                         `json:"addAssessmentIDs,omitempty"`
+	RemoveAssessmentIDs         []string                         `json:"removeAssessmentIDs,omitempty"`
+	ClearAssessments            *bool                            `json:"clearAssessments,omitempty"`
+	AddCampaignIDs              []string                         `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs           []string                         `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns              *bool                            `json:"clearCampaigns,omitempty"`
+	AddIdentityHolderIDs        []string                         `json:"addIdentityHolderIDs,omitempty"`
+	RemoveIdentityHolderIDs     []string                         `json:"removeIdentityHolderIDs,omitempty"`
+	ClearIdentityHolders        *bool                            `json:"clearIdentityHolders,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

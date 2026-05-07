@@ -776,6 +776,18 @@ type AssessmentHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -1004,6 +1016,49 @@ input AssessmentHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -1094,7 +1149,7 @@ type AssessmentResponseHistory implements Node {
   """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
@@ -1465,6 +1520,8 @@ input AssessmentResponseHistoryWhereInput {
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
   emailEqualFold: String
   emailContainsFold: String
   """
@@ -34418,6 +34475,10 @@ type TemplateHistory implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: String
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -34494,6 +34555,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
+  VENDOR_INTAKE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.

@@ -229,6 +229,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessment.FieldDeletedBy:           {Type: field.TypeString, Column: assessment.FieldDeletedBy},
 			assessment.FieldTags:                {Type: field.TypeJSON, Column: assessment.FieldTags},
 			assessment.FieldOwnerID:             {Type: field.TypeString, Column: assessment.FieldOwnerID},
+			assessment.FieldSystemOwned:         {Type: field.TypeBool, Column: assessment.FieldSystemOwned},
+			assessment.FieldInternalNotes:       {Type: field.TypeString, Column: assessment.FieldInternalNotes},
+			assessment.FieldSystemInternalID:    {Type: field.TypeString, Column: assessment.FieldSystemInternalID},
 			assessment.FieldName:                {Type: field.TypeString, Column: assessment.FieldName},
 			assessment.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
 			assessment.FieldTemplateID:          {Type: field.TypeString, Column: assessment.FieldTemplateID},
@@ -3138,28 +3141,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Template",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			template.FieldCreatedAt:        {Type: field.TypeTime, Column: template.FieldCreatedAt},
-			template.FieldUpdatedAt:        {Type: field.TypeTime, Column: template.FieldUpdatedAt},
-			template.FieldCreatedBy:        {Type: field.TypeString, Column: template.FieldCreatedBy},
-			template.FieldUpdatedBy:        {Type: field.TypeString, Column: template.FieldUpdatedBy},
-			template.FieldDeletedAt:        {Type: field.TypeTime, Column: template.FieldDeletedAt},
-			template.FieldDeletedBy:        {Type: field.TypeString, Column: template.FieldDeletedBy},
-			template.FieldTags:             {Type: field.TypeJSON, Column: template.FieldTags},
-			template.FieldOwnerID:          {Type: field.TypeString, Column: template.FieldOwnerID},
-			template.FieldSystemOwned:      {Type: field.TypeBool, Column: template.FieldSystemOwned},
-			template.FieldInternalNotes:    {Type: field.TypeString, Column: template.FieldInternalNotes},
-			template.FieldSystemInternalID: {Type: field.TypeString, Column: template.FieldSystemInternalID},
-			template.FieldEnvironmentName:  {Type: field.TypeString, Column: template.FieldEnvironmentName},
-			template.FieldEnvironmentID:    {Type: field.TypeString, Column: template.FieldEnvironmentID},
-			template.FieldScopeName:        {Type: field.TypeString, Column: template.FieldScopeName},
-			template.FieldScopeID:          {Type: field.TypeString, Column: template.FieldScopeID},
-			template.FieldName:             {Type: field.TypeString, Column: template.FieldName},
-			template.FieldTemplateType:     {Type: field.TypeEnum, Column: template.FieldTemplateType},
-			template.FieldDescription:      {Type: field.TypeString, Column: template.FieldDescription},
-			template.FieldKind:             {Type: field.TypeEnum, Column: template.FieldKind},
-			template.FieldJsonconfig:       {Type: field.TypeJSON, Column: template.FieldJsonconfig},
-			template.FieldUischema:         {Type: field.TypeJSON, Column: template.FieldUischema},
-			template.FieldTrustCenterID:    {Type: field.TypeString, Column: template.FieldTrustCenterID},
+			template.FieldCreatedAt:              {Type: field.TypeTime, Column: template.FieldCreatedAt},
+			template.FieldUpdatedAt:              {Type: field.TypeTime, Column: template.FieldUpdatedAt},
+			template.FieldCreatedBy:              {Type: field.TypeString, Column: template.FieldCreatedBy},
+			template.FieldUpdatedBy:              {Type: field.TypeString, Column: template.FieldUpdatedBy},
+			template.FieldDeletedAt:              {Type: field.TypeTime, Column: template.FieldDeletedAt},
+			template.FieldDeletedBy:              {Type: field.TypeString, Column: template.FieldDeletedBy},
+			template.FieldTags:                   {Type: field.TypeJSON, Column: template.FieldTags},
+			template.FieldOwnerID:                {Type: field.TypeString, Column: template.FieldOwnerID},
+			template.FieldSystemOwned:            {Type: field.TypeBool, Column: template.FieldSystemOwned},
+			template.FieldInternalNotes:          {Type: field.TypeString, Column: template.FieldInternalNotes},
+			template.FieldSystemInternalID:       {Type: field.TypeString, Column: template.FieldSystemInternalID},
+			template.FieldEnvironmentName:        {Type: field.TypeString, Column: template.FieldEnvironmentName},
+			template.FieldEnvironmentID:          {Type: field.TypeString, Column: template.FieldEnvironmentID},
+			template.FieldScopeName:              {Type: field.TypeString, Column: template.FieldScopeName},
+			template.FieldScopeID:                {Type: field.TypeString, Column: template.FieldScopeID},
+			template.FieldName:                   {Type: field.TypeString, Column: template.FieldName},
+			template.FieldTemplateType:           {Type: field.TypeEnum, Column: template.FieldTemplateType},
+			template.FieldDescription:            {Type: field.TypeString, Column: template.FieldDescription},
+			template.FieldKind:                   {Type: field.TypeEnum, Column: template.FieldKind},
+			template.FieldJsonconfig:             {Type: field.TypeJSON, Column: template.FieldJsonconfig},
+			template.FieldUischema:               {Type: field.TypeJSON, Column: template.FieldUischema},
+			template.FieldTrustCenterID:          {Type: field.TypeString, Column: template.FieldTrustCenterID},
+			template.FieldTransformConfiguration: {Type: field.TypeJSON, Column: template.FieldTransformConfiguration},
 		},
 	}
 	graph.Nodes[85] = &sqlgraph.Node{
@@ -18291,6 +18295,21 @@ func (f *AssessmentFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *AssessmentFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *AssessmentFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(assessment.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *AssessmentFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(assessment.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *AssessmentFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(assessment.FieldSystemInternalID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -43958,6 +43977,11 @@ func (f *TemplateFilter) WhereUischema(p entql.BytesP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TemplateFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(template.FieldTrustCenterID))
+}
+
+// WhereTransformConfiguration applies the entql json.RawMessage predicate on the transform_configuration field.
+func (f *TemplateFilter) WhereTransformConfiguration(p entql.BytesP) {
+	f.Where(p.Field(template.FieldTransformConfiguration))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

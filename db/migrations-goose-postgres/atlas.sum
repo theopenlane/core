@@ -1,4 +1,4 @@
-h1:pWsKxTVBaupJqLFSa2g2ozEYaxNcn0hwRyMohq3F73s=
+h1:bTS473ANRcj7po+gFtLaa6oGZxZs6KnBsxdxdUToRiU=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -126,3 +126,5 @@ h1:pWsKxTVBaupJqLFSa2g2ozEYaxNcn0hwRyMohq3F73s=
 20260428234644_dir_groups_edge.sql h1:VjalJ3pP2Ep3W4xYbTupFNy4tFd9UFJredurRqojABw=
 20260430235905_removeemailbranding.sql h1:SWXW3VfWlPGMe/Mr14flZX/JNjMCb05BpH5MMngacUk=
 20260430235908_removeemailbranding_history.sql h1:v7AzRhF759dzRErtVdXsP28tg67P1Nk8+V0saEkQ9qA=
+20260507150654_system_admin_assessments.sql h1:z1S7+y2yka7DuUki6ZfU+bJ+Oe1R9PwXpOKE1A/fQfA=
+20260507150704_system_admin_assessments_history.sql h1:RwzwBtlkYkYsmerUGcsC68gxKJ3CslBVPO6Rrq/cMgk=

@@ -167,6 +167,9 @@ models:
   ExportMetadata:
     model:
       - github.com/theopenlane/core/common/models.ExportMetadata
+  TemplateProjectionConfig:
+    model:
+      - github.com/theopenlane/core/common/models.TemplateProjectionConfig
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map

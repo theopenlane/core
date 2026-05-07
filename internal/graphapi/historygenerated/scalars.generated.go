@@ -518,6 +518,16 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	return ret
 }
 
+func (ec *executionContext) unmarshalOTemplateProjectionConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, v any) (models.TemplateProjectionConfig, error) {
+	var res models.TemplateProjectionConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTemplateProjectionConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, sel ast.SelectionSet, v models.TemplateProjectionConfig) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTestingProceduresᚄ(ctx context.Context, v any) ([]models.TestingProcedures, error) {
 	if v == nil {
 		return nil, nil

@@ -188,6 +188,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
@@ -204,13 +207,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[13]},
+				Columns:    []*schema.Column{AssessmentsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessments_templates_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[14]},
+				Columns:    []*schema.Column{AssessmentsColumns[17]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -219,7 +222,7 @@ var (
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[13]},
+				Columns: []*schema.Column{AssessmentsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -227,7 +230,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[13]},
+				Columns: []*schema.Column{AssessmentsColumns[11], AssessmentsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -244,7 +247,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "is_test", Type: field.TypeBool, Default: false},
-		{Name: "email", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "email_delivered_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_opened_at", Type: field.TypeTime, Nullable: true},
@@ -7242,9 +7245,10 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "template_type", Type: field.TypeEnum, Enums: []string{"ROOTTEMPLATE", "DOCUMENT"}, Default: "DOCUMENT"},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA"}, Default: "QUESTIONNAIRE"},
+		{Name: "kind", Type: field.TypeEnum, Nullable: true, Enums: []string{"QUESTIONNAIRE", "TRUSTCENTER_NDA", "VENDOR_INTAKE"}, Default: "QUESTIONNAIRE"},
 		{Name: "jsonconfig", Type: field.TypeJSON},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "transform_configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
@@ -7258,25 +7262,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "templates_organizations_templates",
-				Columns:    []*schema.Column{TemplatesColumns[19]},
+				Columns:    []*schema.Column{TemplatesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "templates_custom_type_enums_environment",
-				Columns:    []*schema.Column{TemplatesColumns[20]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "templates_custom_type_enums_scope",
 				Columns:    []*schema.Column{TemplatesColumns[21]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "templates_trust_centers_templates",
+				Symbol:     "templates_custom_type_enums_scope",
 				Columns:    []*schema.Column{TemplatesColumns[22]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "templates_trust_centers_templates",
+				Columns:    []*schema.Column{TemplatesColumns[23]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7285,7 +7289,7 @@ var (
 			{
 				Name:    "template_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TemplatesColumns[19]},
+				Columns: []*schema.Column{TemplatesColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7293,7 +7297,7 @@ var (
 			{
 				Name:    "template_name_owner_id_template_type",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[13], TemplatesColumns[19], TemplatesColumns[14]},
+				Columns: []*schema.Column{TemplatesColumns[13], TemplatesColumns[20], TemplatesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7301,7 +7305,7 @@ var (
 			{
 				Name:    "template_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TemplatesColumns[22]},
+				Columns: []*schema.Column{TemplatesColumns[23]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL and kind = 'TRUSTCENTER_NDA'",
 				},

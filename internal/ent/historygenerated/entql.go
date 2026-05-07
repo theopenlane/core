@@ -176,6 +176,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmenthistory.FieldDeletedBy:           {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
 			assessmenthistory.FieldTags:                {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
 			assessmenthistory.FieldOwnerID:             {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
+			assessmenthistory.FieldSystemOwned:         {Type: field.TypeBool, Column: assessmenthistory.FieldSystemOwned},
+			assessmenthistory.FieldInternalNotes:       {Type: field.TypeString, Column: assessmenthistory.FieldInternalNotes},
+			assessmenthistory.FieldSystemInternalID:    {Type: field.TypeString, Column: assessmenthistory.FieldSystemInternalID},
 			assessmenthistory.FieldName:                {Type: field.TypeString, Column: assessmenthistory.FieldName},
 			assessmenthistory.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
 			assessmenthistory.FieldTemplateID:          {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
@@ -2548,31 +2551,32 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TemplateHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			templatehistory.FieldHistoryTime:      {Type: field.TypeTime, Column: templatehistory.FieldHistoryTime},
-			templatehistory.FieldRef:              {Type: field.TypeString, Column: templatehistory.FieldRef},
-			templatehistory.FieldOperation:        {Type: field.TypeEnum, Column: templatehistory.FieldOperation},
-			templatehistory.FieldCreatedAt:        {Type: field.TypeTime, Column: templatehistory.FieldCreatedAt},
-			templatehistory.FieldUpdatedAt:        {Type: field.TypeTime, Column: templatehistory.FieldUpdatedAt},
-			templatehistory.FieldCreatedBy:        {Type: field.TypeString, Column: templatehistory.FieldCreatedBy},
-			templatehistory.FieldUpdatedBy:        {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
-			templatehistory.FieldDeletedAt:        {Type: field.TypeTime, Column: templatehistory.FieldDeletedAt},
-			templatehistory.FieldDeletedBy:        {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
-			templatehistory.FieldTags:             {Type: field.TypeJSON, Column: templatehistory.FieldTags},
-			templatehistory.FieldOwnerID:          {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
-			templatehistory.FieldSystemOwned:      {Type: field.TypeBool, Column: templatehistory.FieldSystemOwned},
-			templatehistory.FieldInternalNotes:    {Type: field.TypeString, Column: templatehistory.FieldInternalNotes},
-			templatehistory.FieldSystemInternalID: {Type: field.TypeString, Column: templatehistory.FieldSystemInternalID},
-			templatehistory.FieldEnvironmentName:  {Type: field.TypeString, Column: templatehistory.FieldEnvironmentName},
-			templatehistory.FieldEnvironmentID:    {Type: field.TypeString, Column: templatehistory.FieldEnvironmentID},
-			templatehistory.FieldScopeName:        {Type: field.TypeString, Column: templatehistory.FieldScopeName},
-			templatehistory.FieldScopeID:          {Type: field.TypeString, Column: templatehistory.FieldScopeID},
-			templatehistory.FieldName:             {Type: field.TypeString, Column: templatehistory.FieldName},
-			templatehistory.FieldTemplateType:     {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
-			templatehistory.FieldDescription:      {Type: field.TypeString, Column: templatehistory.FieldDescription},
-			templatehistory.FieldKind:             {Type: field.TypeEnum, Column: templatehistory.FieldKind},
-			templatehistory.FieldJsonconfig:       {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
-			templatehistory.FieldUischema:         {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
-			templatehistory.FieldTrustCenterID:    {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
+			templatehistory.FieldHistoryTime:            {Type: field.TypeTime, Column: templatehistory.FieldHistoryTime},
+			templatehistory.FieldRef:                    {Type: field.TypeString, Column: templatehistory.FieldRef},
+			templatehistory.FieldOperation:              {Type: field.TypeEnum, Column: templatehistory.FieldOperation},
+			templatehistory.FieldCreatedAt:              {Type: field.TypeTime, Column: templatehistory.FieldCreatedAt},
+			templatehistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: templatehistory.FieldUpdatedAt},
+			templatehistory.FieldCreatedBy:              {Type: field.TypeString, Column: templatehistory.FieldCreatedBy},
+			templatehistory.FieldUpdatedBy:              {Type: field.TypeString, Column: templatehistory.FieldUpdatedBy},
+			templatehistory.FieldDeletedAt:              {Type: field.TypeTime, Column: templatehistory.FieldDeletedAt},
+			templatehistory.FieldDeletedBy:              {Type: field.TypeString, Column: templatehistory.FieldDeletedBy},
+			templatehistory.FieldTags:                   {Type: field.TypeJSON, Column: templatehistory.FieldTags},
+			templatehistory.FieldOwnerID:                {Type: field.TypeString, Column: templatehistory.FieldOwnerID},
+			templatehistory.FieldSystemOwned:            {Type: field.TypeBool, Column: templatehistory.FieldSystemOwned},
+			templatehistory.FieldInternalNotes:          {Type: field.TypeString, Column: templatehistory.FieldInternalNotes},
+			templatehistory.FieldSystemInternalID:       {Type: field.TypeString, Column: templatehistory.FieldSystemInternalID},
+			templatehistory.FieldEnvironmentName:        {Type: field.TypeString, Column: templatehistory.FieldEnvironmentName},
+			templatehistory.FieldEnvironmentID:          {Type: field.TypeString, Column: templatehistory.FieldEnvironmentID},
+			templatehistory.FieldScopeName:              {Type: field.TypeString, Column: templatehistory.FieldScopeName},
+			templatehistory.FieldScopeID:                {Type: field.TypeString, Column: templatehistory.FieldScopeID},
+			templatehistory.FieldName:                   {Type: field.TypeString, Column: templatehistory.FieldName},
+			templatehistory.FieldTemplateType:           {Type: field.TypeEnum, Column: templatehistory.FieldTemplateType},
+			templatehistory.FieldDescription:            {Type: field.TypeString, Column: templatehistory.FieldDescription},
+			templatehistory.FieldKind:                   {Type: field.TypeEnum, Column: templatehistory.FieldKind},
+			templatehistory.FieldJsonconfig:             {Type: field.TypeJSON, Column: templatehistory.FieldJsonconfig},
+			templatehistory.FieldUischema:               {Type: field.TypeJSON, Column: templatehistory.FieldUischema},
+			templatehistory.FieldTrustCenterID:          {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
+			templatehistory.FieldTransformConfiguration: {Type: field.TypeJSON, Column: templatehistory.FieldTransformConfiguration},
 		},
 	}
 	graph.Nodes[59] = &sqlgraph.Node{
@@ -3678,6 +3682,21 @@ func (f *AssessmentHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *AssessmentHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *AssessmentHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(assessmenthistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *AssessmentHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(assessmenthistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *AssessmentHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(assessmenthistory.FieldSystemInternalID))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -14238,6 +14257,11 @@ func (f *TemplateHistoryFilter) WhereUischema(p entql.BytesP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TemplateHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(templatehistory.FieldTrustCenterID))
+}
+
+// WhereTransformConfiguration applies the entql json.RawMessage predicate on the transform_configuration field.
+func (f *TemplateHistoryFilter) WhereTransformConfiguration(p entql.BytesP) {
+	f.Where(p.Field(templatehistory.FieldTransformConfiguration))
 }
 
 // addPredicate implements the predicateAdder interface.

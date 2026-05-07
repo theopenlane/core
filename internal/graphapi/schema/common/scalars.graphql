@@ -116,6 +116,10 @@ ExportMetadata contains metadata for an export record
 """
 scalar ExportMetadata
 """
+TemplateProjectionConfig describes how submitted template document data is projected into typed records.
+"""
+scalar TemplateProjectionConfig
+"""
 Any is a generic fallback type
 """
 scalar Any

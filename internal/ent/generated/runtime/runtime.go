@@ -367,7 +367,7 @@ func init() {
 	// actionplan.DefaultID holds the default value on creation for the id field.
 	actionplan.DefaultID = actionplanDescID.Default.(func() string)
 	assessmentMixin := schema.Assessment{}.Mixin()
-	assessment.Policy = privacy.NewPolicies(schema.Assessment{})
+	assessment.Policy = privacy.NewPolicies(assessmentMixin[7], schema.Assessment{})
 	assessment.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := assessment.Policy.EvalMutation(ctx, m); err != nil {
@@ -381,6 +381,7 @@ func init() {
 	assessmentMixinHooks3 := assessmentMixin[3].Hooks()
 	assessmentMixinHooks5 := assessmentMixin[5].Hooks()
 	assessmentMixinHooks6 := assessmentMixin[6].Hooks()
+	assessmentMixinHooks7 := assessmentMixin[7].Hooks()
 	assessmentHooks := schema.Assessment{}.Hooks()
 
 	assessment.Hooks[1] = assessmentMixinHooks0[0]
@@ -397,21 +398,27 @@ func init() {
 
 	assessment.Hooks[7] = assessmentMixinHooks6[2]
 
-	assessment.Hooks[8] = assessmentHooks[0]
+	assessment.Hooks[8] = assessmentMixinHooks7[0]
 
-	assessment.Hooks[9] = assessmentHooks[1]
+	assessment.Hooks[9] = assessmentMixinHooks7[1]
+
+	assessment.Hooks[10] = assessmentHooks[0]
+
+	assessment.Hooks[11] = assessmentHooks[1]
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters5 := assessmentMixin[5].Interceptors()
+	assessmentInters := schema.Assessment{}.Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
 	assessment.Interceptors[1] = assessmentMixinInters5[0]
+	assessment.Interceptors[2] = assessmentInters[0]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields2 := assessmentMixin[2].Fields()
 	_ = assessmentMixinFields2
 	assessmentMixinFields3 := assessmentMixin[3].Fields()
 	_ = assessmentMixinFields3
-	assessmentMixinFields5 := assessmentMixin[5].Fields()
-	_ = assessmentMixinFields5
+	assessmentMixinFields7 := assessmentMixin[7].Fields()
+	_ = assessmentMixinFields7
 	assessmentFields := schema.Assessment{}.Fields()
 	_ = assessmentFields
 	// assessmentDescCreatedAt is the schema descriptor for created_at field.
@@ -428,10 +435,10 @@ func init() {
 	assessmentDescTags := assessmentMixinFields3[0].Descriptor()
 	// assessment.DefaultTags holds the default value on creation for the tags field.
 	assessment.DefaultTags = assessmentDescTags.Default.([]string)
-	// assessmentDescOwnerID is the schema descriptor for owner_id field.
-	assessmentDescOwnerID := assessmentMixinFields5[0].Descriptor()
-	// assessment.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	assessment.OwnerIDValidator = assessmentDescOwnerID.Validators[0].(func(string) error)
+	// assessmentDescSystemOwned is the schema descriptor for system_owned field.
+	assessmentDescSystemOwned := assessmentMixinFields7[0].Descriptor()
+	// assessment.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	assessment.DefaultSystemOwned = assessmentDescSystemOwned.Default.(bool)
 	// assessmentDescName is the schema descriptor for name field.
 	assessmentDescName := assessmentFields[0].Descriptor()
 	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.

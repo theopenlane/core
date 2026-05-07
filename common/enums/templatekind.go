@@ -8,13 +8,19 @@ type TemplateKind string
 var (
 	// TemplateKindQuestionnaire indicates the questionnaire.
 	TemplateKindQuestionnaire TemplateKind = "QUESTIONNAIRE"
-	// TemplateKindTrustCenterNda indicates the trust center NDA.
+	// TemplateKindTrustCenterNda indicates the trustcenter nda.
 	TemplateKindTrustCenterNda TemplateKind = "TRUSTCENTER_NDA"
+	// TemplateKindVendorIntake indicates the vendor intake.
+	TemplateKindVendorIntake TemplateKind = "VENDOR_INTAKE"
 	// TemplateKindInvalid is used when an unknown or unsupported value is provided.
 	TemplateKindInvalid TemplateKind = "TEMPLATEKIND_INVALID"
 )
 
-var templateKindValues = []TemplateKind{TemplateKindQuestionnaire, TemplateKindTrustCenterNda}
+var templateKindValues = []TemplateKind{
+	TemplateKindQuestionnaire,
+	TemplateKindTrustCenterNda,
+	TemplateKindVendorIntake,
+}
 
 // Values returns a slice of strings representing all valid TemplateKind values.
 func (TemplateKind) Values() []string { return stringValues(templateKindValues) }

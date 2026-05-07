@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -87,6 +88,9 @@ func (Template) Fields() []ent.Field {
 			Optional(),
 		field.String("trust_center_id").
 			Comment("the id of the trust center this template is associated with").
+			Optional(),
+		field.JSON("transform_configuration", models.TemplateProjectionConfig{}).
+			Comment("configuration for converting a submitted assesment into records for the organization").
 			Optional(),
 	}
 }

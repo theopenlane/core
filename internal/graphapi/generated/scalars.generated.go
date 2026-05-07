@@ -732,6 +732,32 @@ func (ec *executionContext) marshalOSSOAuthorizationMap2githubᚗcomᚋtheopenla
 	return v
 }
 
+func (ec *executionContext) unmarshalOTemplateProjectionConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, v any) (models.TemplateProjectionConfig, error) {
+	var res models.TemplateProjectionConfig
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTemplateProjectionConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, sel ast.SelectionSet, v models.TemplateProjectionConfig) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOTemplateProjectionConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, v any) (*models.TemplateProjectionConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.TemplateProjectionConfig)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTemplateProjectionConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTemplateProjectionConfig(ctx context.Context, sel ast.SelectionSet, v *models.TemplateProjectionConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTestingProceduresᚄ(ctx context.Context, v any) ([]models.TestingProcedures, error) {
 	if v == nil {
 		return nil, nil

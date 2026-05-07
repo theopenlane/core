@@ -506,20 +506,21 @@ type (
 		// hooks to execute on mutations.
 		hooks *hooks
 		// interceptors to execute on queries.
-		inters             *inters
-		EntConfig          *entconfig.Config
-		HistoryClient      *historygenerated.Client
-		Secrets            *secrets.Keeper
-		Authz              fgax.Client
-		TokenManager       *tokens.TokenManager
-		SessionConfig      *sessions.SessionConfig
-		TOTP               *totp.Client
-		EntitlementManager *entitlements.StripeClient
-		ObjectManager      *objects.Service
-		Summarizer         *summarizer.Client
-		Shortlinks         *shortlinks.Client
-		Pool               *gala.Pool
-		EmailVerifier      *validator.EmailVerifier
+		inters                  *inters
+		EntConfig               *entconfig.Config
+		HistoryClient           *historygenerated.Client
+		Secrets                 *secrets.Keeper
+		Authz                   fgax.Client
+		TokenManager            *tokens.TokenManager
+		SessionConfig           *sessions.SessionConfig
+		TOTP                    *totp.Client
+		EntitlementManager      *entitlements.StripeClient
+		QuestionnaireProductURL string
+		ObjectManager           *objects.Service
+		Summarizer              *summarizer.Client
+		Shortlinks              *shortlinks.Client
+		Pool                    *gala.Pool
+		EmailVerifier           *validator.EmailVerifier
 		// IntegrationsRuntime configures the integrations runtime.
 		IntegrationsRuntime any
 
@@ -627,6 +628,13 @@ func TOTP(v *totp.Client) Option {
 func EntitlementManager(v *entitlements.StripeClient) Option {
 	return func(c *config) {
 		c.EntitlementManager = v
+	}
+}
+
+// QuestionnaireProductURL configures the QuestionnaireProductURL.
+func QuestionnaireProductURL(v string) Option {
+	return func(c *config) {
+		c.QuestionnaireProductURL = v
 	}
 }
 

@@ -75,6 +75,10 @@ func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID 
 
 // createAssessmentResponseForRecipient creates a new assessment response record for the campaign and recipient email
 func createAssessmentResponseForRecipient(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, email string, isTest bool) (*generated.AssessmentResponse, error) {
+	if strings.TrimSpace(email) == "" {
+		return nil, nil
+	}
+
 	create := db.AssessmentResponse.Create().
 		SetAssessmentID(assessmentID).
 		SetCampaignID(camp.ID).

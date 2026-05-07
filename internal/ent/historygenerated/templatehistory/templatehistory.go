@@ -70,6 +70,8 @@ const (
 	FieldUischema = "uischema"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldTransformConfiguration holds the string denoting the transform_configuration field in the database.
+	FieldTransformConfiguration = "transform_configuration"
 	// Table holds the table name of the templatehistory in the database.
 	Table = "template_history"
 )
@@ -102,6 +104,7 @@ var Columns = []string{
 	FieldJsonconfig,
 	FieldUischema,
 	FieldTrustCenterID,
+	FieldTransformConfiguration,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -166,7 +169,7 @@ const DefaultKind enums.TemplateKind = "QUESTIONNAIRE"
 // KindValidator is a validator for the "kind" field enum values. It is called by the builders before save.
 func KindValidator(k enums.TemplateKind) error {
 	switch k.String() {
-	case "QUESTIONNAIRE", "TRUSTCENTER_NDA":
+	case "QUESTIONNAIRE", "TRUSTCENTER_NDA", "VENDOR_INTAKE":
 		return nil
 	default:
 		return fmt.Errorf("templatehistory: invalid enum value for kind field: %q", k)

@@ -1611,6 +1611,18 @@ type Assessment implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -1944,7 +1956,7 @@ type AssessmentResponse implements Node {
   """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
@@ -2307,6 +2319,8 @@ input AssessmentResponseWhereInput {
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
   emailEqualFold: String
   emailContainsFold: String
   """
@@ -2595,6 +2609,49 @@ input AssessmentWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -10552,6 +10609,14 @@ input CreateAssessmentInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -10586,7 +10651,7 @@ input CreateAssessmentResponseInput {
   """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   when the assessment email was delivered to the recipient
   """
@@ -15433,6 +15498,10 @@ input CreateTemplateInput {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -66691,6 +66760,10 @@ type Template implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: ID
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -66917,6 +66990,7 @@ TemplateTemplateKind is enum for the field kind
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
+  VENDOR_INTAKE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -71742,6 +71816,16 @@ input UpdateAssessmentInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the assessment, e.g. cloud providers, marketing team
   """
@@ -78578,6 +78662,11 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
+  clearTransformConfiguration: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
