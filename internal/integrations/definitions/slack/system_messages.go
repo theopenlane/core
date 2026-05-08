@@ -78,9 +78,7 @@ var (
 		`New waitlist subscriber: {{ .Email }}`)
 
 	newUserTemplate = newSystemTemplate("new_user",
-		`New user registered: {{ .Email }}
-
-This message was sent using the integrations runtime framework.`)
+		`New user registered: {{ .Email }}`)
 
 	integrationInstalledTemplate = newSystemTemplate("integration_installed",
 		`Integration installed: {{ .IntegrationName }}
