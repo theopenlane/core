@@ -986,48 +986,6 @@ type DocumentDataUpdatePayload struct {
 	DocumentData *generated.DocumentData `json:"documentData"`
 }
 
-// Return response for createBulkEmailBranding mutation
-type EmailBrandingBulkCreatePayload struct {
-	// Created emailBrandings
-	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
-}
-
-// Return response for deleteBulkEmailBranding mutation
-type EmailBrandingBulkDeletePayload struct {
-	// Deleted emailBranding IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkEmailBranding mutation
-type EmailBrandingBulkUpdatePayload struct {
-	// Updated emailBrandings
-	EmailBrandings []*generated.EmailBranding `json:"emailBrandings,omitempty"`
-	// IDs of the updated emailBrandings
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-}
-
-// Return response for createEmailBranding mutation
-type EmailBrandingCreatePayload struct {
-	// Created emailBranding
-	EmailBranding *generated.EmailBranding `json:"emailBranding"`
-}
-
-// Return response for deleteEmailBranding mutation
-type EmailBrandingDeletePayload struct {
-	// Deleted emailBranding ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateEmailBranding mutation
-type EmailBrandingUpdatePayload struct {
-	// Updated emailBranding
-	EmailBranding *generated.EmailBranding `json:"emailBranding"`
-}
-
 // Return response for createBulkEmailTemplate mutation
 type EmailTemplateBulkCreatePayload struct {
 	// Created emailTemplates
@@ -1050,6 +1008,30 @@ type EmailTemplateBulkUpdatePayload struct {
 	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
 	// IDs of the updated emailTemplates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// EmailTemplateCatalog contains the available customer-selectable email template types
+// from the operation catalog.
+type EmailTemplateCatalog struct {
+	// Available email template types.
+	Entries []*EmailTemplateCatalogEntry `json:"entries"`
+}
+
+// EmailTemplateCatalogEntry describes a single customer-selectable email template
+// type from the operation catalog. The key is stored on the EmailTemplate record to
+// link it back to the rendering pipeline at send time.
+type EmailTemplateCatalogEntry struct {
+	// Stable catalog key stored on the EmailTemplate record to resolve the
+	// rendering pipeline at send time.
+	Key string `json:"key"`
+	// Human-readable description of the template type.
+	Description string `json:"description"`
+	// JSON Schema describing the configurable fields for this template type.
+	// The UI uses this to render a dynamic form; the submitted values become
+	// the EmailTemplate defaults field.
+	ConfigSchema map[string]any `json:"configSchema"`
+	// Rendered HTML preview of the template with default/example values.
+	HTMLPreview string `json:"htmlPreview"`
 }
 
 // Return response for createEmailTemplate mutation
@@ -2729,7 +2711,6 @@ type SearchResults struct {
 	Controls              *generated.ControlConnection              `json:"controls,omitempty"`
 	ControlObjectives     *generated.ControlObjectiveConnection     `json:"controlObjectives,omitempty"`
 	CustomTypeEnums       *generated.CustomTypeEnumConnection       `json:"customTypeEnums,omitempty"`
-	EmailBrandings        *generated.EmailBrandingConnection        `json:"emailBrandings,omitempty"`
 	EmailTemplates        *generated.EmailTemplateConnection        `json:"emailTemplates,omitempty"`
 	Entities              *generated.EntityConnection               `json:"entities,omitempty"`
 	Evidences             *generated.EvidenceConnection             `json:"evidences,omitempty"`
@@ -3083,6 +3064,15 @@ type TemplateDeletePayload struct {
 type TemplateUpdatePayload struct {
 	// Updated template
 	Template *generated.Template `json:"template"`
+}
+
+// TemplateVariable describes a single system-provided template variable
+// available for use in email templates.
+type TemplateVariable struct {
+	// The variable key as used in templates (e.g. "companyName" for {{ .companyName }}).
+	Name string `json:"name"`
+	// Human-readable description of what the variable contains.
+	Description string `json:"description"`
 }
 
 // Return response for requestNewTrustCenterToken mutation

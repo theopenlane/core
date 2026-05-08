@@ -8,11 +8,16 @@ import (
 	slackgo "github.com/slack-go/slack"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/templatekit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
+	// TemplateID references a notification template by database ID
+	TemplateID string `json:"templateId,omitempty" jsonschema:"title=Template ID"`
+	// TemplateKey references a notification template by key
+	TemplateKey string `json:"templateKey,omitempty" jsonschema:"title=Template Key"`
 	// Channel is the Slack channel identifier to post to
 	Channel string `json:"channel,omitempty" jsonschema:"title=Channel"`
 	// Destinations are Slack channel identifiers to post the same message to
@@ -47,11 +52,15 @@ type MessageDelivery struct {
 
 // Handle adapts message send to the generic operation registration boundary
 func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(slackClient, messageSendOperation, ErrOperationConfigInvalid, m.Run)
+	return providerkit.WithClientRequestConfig(slackClient, MessageSendOp, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Slack message via chat.postMessage
-func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOperation) (json.RawMessage, error) {
+func (MessageSend) Run(ctx context.Context, req types.OperationRequest, c *SlackClient, cfg MessageSendOperation) (json.RawMessage, error) {
+	if err := templatekit.ResolveOperationTemplate(ctx, req, cfg.TemplateID, cfg.TemplateKey, &cfg); err != nil {
+		return nil, err
+	}
+
 	destinations := lo.Uniq(lo.Compact(append([]string{cfg.Channel}, cfg.Destinations...)))
 	if len(destinations) == 0 {
 		return nil, ErrChannelMissing
@@ -93,7 +102,7 @@ func (MessageSend) Run(ctx context.Context, c *slackgo.Client, cfg MessageSendOp
 
 	deliveries := make([]MessageDelivery, 0, len(destinations))
 	for _, destination := range destinations {
-		respChannel, ts, err := c.PostMessageContext(ctx, destination, opts...)
+		respChannel, ts, err := c.API.PostMessageContext(ctx, destination, opts...)
 		if err != nil {
 			return nil, ErrMessageSendFailed
 		}

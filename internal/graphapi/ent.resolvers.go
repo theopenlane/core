@@ -751,40 +751,6 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
-// EmailBrandings is the resolver for the emailBrandings field.
-func (r *queryResolver) EmailBrandings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailBrandingOrder, where *generated.EmailBrandingWhereInput) (*generated.EmailBrandingConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.EmailBrandingOrder{
-			{
-				Field:     generated.EmailBrandingOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).EmailBranding.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithEmailBrandingOrder(orderBy),
-		generated.WithEmailBrandingFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "emailbranding"})
-	}
-
-	return res, err
-}
-
 // EmailTemplates is the resolver for the emailTemplates field.
 func (r *queryResolver) EmailTemplates(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) (*generated.EmailTemplateConnection, error) {
 	// set page limit if nothing was set

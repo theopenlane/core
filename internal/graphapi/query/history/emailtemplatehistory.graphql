@@ -10,7 +10,6 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 		edges {
 			node {
 				active
-				bodyTemplate
 				createdAt
 				createdBy
 				defaults
@@ -20,22 +19,17 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				id
 				integrationID
 				internalNotes
-				jsonconfig
 				key
 				locale
 				metadata
 				name
 				operation
 				ownerID
-				preheaderTemplate
 				ref
 				revision
-				subjectTemplate
 				systemInternalID
 				systemOwned
 				templateContext
-				textTemplate
-				uischema
 				updatedAt
 				updatedBy
 				version
@@ -57,7 +51,6 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 		edges {
 			node {
 				active
-				bodyTemplate
 				createdAt
 				createdBy
 				defaults
@@ -67,22 +60,17 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				id
 				integrationID
 				internalNotes
-				jsonconfig
 				key
 				locale
 				metadata
 				name
 				operation
 				ownerID
-				preheaderTemplate
 				ref
 				revision
-				subjectTemplate
 				systemInternalID
 				systemOwned
 				templateContext
-				textTemplate
-				uischema
 				updatedAt
 				updatedBy
 				version

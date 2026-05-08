@@ -80,3 +80,4 @@ junit*.xml
 # build files
 dist/
 .objects-examples.yaml
+internal/integrations/cli/config/.integrations.yaml

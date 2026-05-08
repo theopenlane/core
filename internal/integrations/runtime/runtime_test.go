@@ -5,6 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"testing"
+	"time"
+
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -157,6 +160,35 @@ func TestNewWithBuildersNoRegistry(t *testing.T) {
 	if !ok {
 		t.Fatal("expected built definition to be registered")
 	}
+}
+
+func TestNewDefaultLookback(t *testing.T) {
+	t.Parallel()
+
+	g := newTestGala(t)
+	rt, err := New(Config{
+		Gala:     g,
+		Registry: registry.New(),
+		Keystore: &keystore.Store{},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, rt.defaultLookback, defaultLookbackDuration)
+}
+
+func TestNewCustomLookback(t *testing.T) {
+	t.Parallel()
+
+	g := newTestGala(t)
+	custom := 30 * 24 * time.Hour
+
+	rt, err := New(Config{
+		Gala:            g,
+		Registry:        registry.New(),
+		Keystore:        &keystore.Store{},
+		DefaultLookback: custom,
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, rt.defaultLookback, custom)
 }
 
 func TestNormalizeDispatchError(t *testing.T) {

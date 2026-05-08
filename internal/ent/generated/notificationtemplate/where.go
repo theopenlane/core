@@ -1118,6 +1118,16 @@ func ChannelNotIn(vs ...enums.Channel) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(sql.FieldNotIn(FieldChannel, v...))
 }
 
+// ChannelIsNil applies the IsNil predicate on the "channel" field.
+func ChannelIsNil() predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldIsNull(FieldChannel))
+}
+
+// ChannelNotNil applies the NotNil predicate on the "channel" field.
+func ChannelNotNil() predicate.NotificationTemplate {
+	return predicate.NotificationTemplate(sql.FieldNotNull(FieldChannel))
+}
+
 // FormatEQ applies the EQ predicate on the "format" field.
 func FormatEQ(v enums.NotificationTemplateFormat) predicate.NotificationTemplate {
 	vc := v

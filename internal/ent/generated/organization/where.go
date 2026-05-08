@@ -1900,35 +1900,6 @@ func HasAPITokensWith(preds ...predicate.APIToken) predicate.Organization {
 	})
 }
 
-// HasEmailBrandings applies the HasEdge predicate on the "email_brandings" edge.
-func HasEmailBrandings() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EmailBrandingsTable, EmailBrandingsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBranding
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEmailBrandingsWith applies the HasEdge predicate on the "email_brandings" edge with a given conditions (other predicates).
-func HasEmailBrandingsWith(preds ...predicate.EmailBranding) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newEmailBrandingsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBranding
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasEmailTemplates applies the HasEdge predicate on the "email_templates" edge.
 func HasEmailTemplates() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

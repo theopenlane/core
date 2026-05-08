@@ -14,18 +14,35 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Dispatch validates and enqueues one operation execution request
+// Dispatch validates and enqueues one operation execution request. When
+// DispatchRequest.Runtime is true, no DB integration lookup is performed and
+// the client is resolved from the registry at execution time
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
-	if req.IntegrationID == "" || req.Operation == "" {
+	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
 		return DispatchResult{}, ErrDispatchInputInvalid
 	}
 
-	installationRecord, err := db.Integration.Get(ctx, req.IntegrationID)
-	if err != nil {
-		return DispatchResult{}, err
+	var (
+		definitionID string
+		ownerID      = req.OwnerID
+		installation *ent.Integration
+	)
+
+	switch {
+	case req.Runtime:
+		definitionID = req.DefinitionID
+	default:
+		record, err := db.Integration.Get(ctx, req.IntegrationID)
+		if err != nil {
+			return DispatchResult{}, err
+		}
+
+		installation = record
+		definitionID = record.DefinitionID
+		ownerID = record.OwnerID
 	}
 
-	operation, err := reg.Operation(installationRecord.DefinitionID, req.Operation)
+	operation, err := reg.Operation(definitionID, req.Operation)
 	if err != nil {
 		return DispatchResult{}, err
 	}
@@ -43,42 +60,32 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		runType = enums.IntegrationRunTypeManual
 	}
 
-	runRecord, err := CreatePendingRun(ctx, db, installationRecord, DispatchRequest{
-		IntegrationID:      req.IntegrationID,
-		Operation:          req.Operation,
-		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild,
-		RunType:            runType,
-	})
-	if err != nil {
-		return DispatchResult{}, err
-	}
-
 	metadata := types.ExecutionMetadata{
-		OwnerID:       installationRecord.OwnerID,
-		IntegrationID: installationRecord.ID,
-		DefinitionID:  installationRecord.DefinitionID,
+		OwnerID:       ownerID,
+		IntegrationID: req.IntegrationID,
+		DefinitionID:  definitionID,
 		Operation:     req.Operation,
-		RunID:         runRecord.ID,
 		RunType:       runType,
 		Workflow:      req.Workflow,
+		Runtime:       req.Runtime,
 	}
 
-	// Inherit webhook/event context from the parent execution when dispatching
-	// from a webhook handler so the envelope carries the triggering event identity
-	if existing, ok := types.ExecutionMetadataFromContext(ctx); ok {
-		if metadata.Webhook == "" {
-			metadata.Webhook = existing.Webhook
+	if installation != nil && !operation.Policy.SkipRunRecord {
+		runRecord, err := CreatePendingRun(ctx, db, installation, DispatchRequest{
+			IntegrationID:      req.IntegrationID,
+			Operation:          req.Operation,
+			Config:             jsonx.CloneRawMessage(req.Config),
+			ForceClientRebuild: req.ForceClientRebuild,
+			RunType:            runType,
+		})
+		if err != nil {
+			return DispatchResult{}, err
 		}
 
-		if metadata.Event == "" {
-			metadata.Event = existing.Event
-		}
-
-		if metadata.DeliveryID == "" {
-			metadata.DeliveryID = existing.DeliveryID
-		}
+		metadata.RunID = runRecord.ID
 	}
+
+	inheritWebhookContext(ctx, &metadata)
 
 	tags := types.GetTagsForExecutionMetadata(metadata)
 
@@ -88,28 +95,52 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild,
 	}, gala.Headers{
-		IdempotencyKey: runRecord.ID,
+		IdempotencyKey: metadata.RunID,
 		Properties:     metadata.Properties(),
 		Tags:           tags,
+		ScheduledAt:    req.ScheduledAt,
 	})
 
 	if receipt.Err != nil {
-		if completeErr := CompleteRun(ctx, db, runRecord.ID, time.Now(), RunResult{
-			Status:  enums.IntegrationRunStatusFailed,
-			Summary: "dispatch failed",
-			Error:   receipt.Err.Error(),
-		}); completeErr != nil {
-			return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+		if metadata.RunID != "" {
+			if completeErr := CompleteRun(ctx, db, metadata.RunID, time.Now(), RunResult{
+				Status:  enums.IntegrationRunStatusFailed,
+				Summary: "dispatch failed",
+				Error:   receipt.Err.Error(),
+			}); completeErr != nil {
+				return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+			}
 		}
 
 		return DispatchResult{}, receipt.Err
 	}
 
 	return DispatchResult{
-		RunID:   runRecord.ID,
+		RunID:   metadata.RunID,
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
+}
+
+// inheritWebhookContext propagates webhook/event context from a parent execution
+// so the envelope carries the triggering event identity
+func inheritWebhookContext(ctx context.Context, metadata *types.ExecutionMetadata) {
+	existing, ok := types.ExecutionMetadataFromContext(ctx)
+	if !ok {
+		return
+	}
+
+	if metadata.Webhook == "" {
+		metadata.Webhook = existing.Webhook
+	}
+
+	if metadata.Event == "" {
+		metadata.Event = existing.Event
+	}
+
+	if metadata.DeliveryID == "" {
+		metadata.DeliveryID = existing.DeliveryID
+	}
 }
 
 // ValidateConfig validates one raw configuration payload against the operation schema

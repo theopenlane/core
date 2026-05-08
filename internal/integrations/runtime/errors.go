@@ -27,4 +27,6 @@ var (
 	ErrCredentialInvalid = errors.New("integrations/runtime: credential invalid")
 	// ErrCredentialNotDeclared indicates the credential is not declared on the resolved connection
 	ErrCredentialNotDeclared = errors.New("integrations/runtime: credential not declared on connection")
+	// ErrRuntimeClientNotFound indicates no pre-built runtime client exists for the requested definition
+	ErrRuntimeClientNotFound = errors.New("integrations/runtime: runtime client not found")
 )

@@ -18,20 +18,6 @@ import (
 	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/entx/genhooks"
-	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/entx/integrationmapping"
-	"github.com/theopenlane/entx/oscalgen"
-	"github.com/theopenlane/entx/workflowgen"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/iam/sessions"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/iam/totp"
-
 	"github.com/theopenlane/core/common/enums/exportenums"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/filecategorygen"
@@ -45,6 +31,18 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/genhooks"
+	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/entx/integrationmapping"
+	"github.com/theopenlane/entx/oscalgen"
+	"github.com/theopenlane/entx/workflowgen"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/iam/totp"
 )
 
 var (
@@ -470,10 +468,6 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 		entc.Dependency(
 			entc.DependencyName("SessionConfig"),
 			entc.DependencyType(&sessions.SessionConfig{}),
-		),
-		entc.Dependency(
-			entc.DependencyName("Emailer"),
-			entc.DependencyType(&emailtemplates.Config{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("TOTP"),

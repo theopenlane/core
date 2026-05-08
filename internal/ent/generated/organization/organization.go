@@ -103,8 +103,6 @@ const (
 	EdgePersonalAccessTokens = "personal_access_tokens"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
-	// EdgeEmailBrandings holds the string denoting the email_brandings edge name in mutations.
-	EdgeEmailBrandings = "email_brandings"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
 	EdgeEmailTemplates = "email_templates"
 	// EdgeIntegrationWebhooks holds the string denoting the integration_webhooks edge name in mutations.
@@ -456,13 +454,6 @@ const (
 	APITokensInverseTable = "api_tokens"
 	// APITokensColumn is the table column denoting the api_tokens relation/edge.
 	APITokensColumn = "owner_id"
-	// EmailBrandingsTable is the table that holds the email_brandings relation/edge.
-	EmailBrandingsTable = "email_brandings"
-	// EmailBrandingsInverseTable is the table name for the EmailBranding entity.
-	// It exists in this package in order to avoid circular dependency with the "emailbranding" package.
-	EmailBrandingsInverseTable = "email_brandings"
-	// EmailBrandingsColumn is the table column denoting the email_brandings relation/edge.
-	EmailBrandingsColumn = "owner_id"
 	// EmailTemplatesTable is the table that holds the email_templates relation/edge.
 	EmailTemplatesTable = "email_templates"
 	// EmailTemplatesInverseTable is the table name for the EmailTemplate entity.
@@ -1578,20 +1569,6 @@ func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAPITokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAPITokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEmailBrandingsCount orders the results by email_brandings count.
-func ByEmailBrandingsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingsStep(), opts...)
-	}
-}
-
-// ByEmailBrandings orders the results by email_brandings terms.
-func ByEmailBrandings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2950,13 +2927,6 @@ func newAPITokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(APITokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, APITokensTable, APITokensColumn),
-	)
-}
-func newEmailBrandingsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EmailBrandingsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EmailBrandingsTable, EmailBrandingsColumn),
 	)
 }
 func newEmailTemplatesStep() *sqlgraph.Step {

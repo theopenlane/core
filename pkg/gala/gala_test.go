@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/do/v2"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -1866,16 +1867,16 @@ func TestRegistryEncodePayloadTypeMismatch(t *testing.T) {
 	}
 }
 
-func TestContextCodecKey(t *testing.T) {
-	codec := NewContextCodec()
+func TestLogFieldsCodecKey(t *testing.T) {
+	codec := logFieldsCodec{}
 
-	if key := codec.Key(); key != "durable" {
-		t.Fatalf("expected key 'durable', got %q", key)
+	if key := codec.Key(); key != "log_fields" {
+		t.Fatalf("expected key 'log_fields', got %q", key)
 	}
 }
 
-func TestContextCodecCaptureWithoutAuthContext(t *testing.T) {
-	codec := NewContextCodec()
+func TestLogFieldsCodecCaptureEmpty(t *testing.T) {
+	codec := logFieldsCodec{}
 
 	raw, present, err := codec.Capture(context.Background())
 	if err != nil {
@@ -1891,28 +1892,13 @@ func TestContextCodecCaptureWithoutAuthContext(t *testing.T) {
 	}
 }
 
-func TestContextCodecCaptureAndRestore(t *testing.T) {
-	codec := NewContextCodec()
+func TestLogFieldsCodecCaptureAndRestore(t *testing.T) {
+	codec := logFieldsCodec{}
 
-	ctx := auth.WithCaller(context.Background(), &auth.Caller{
-		SubjectID:          "subject_test",
-		OrganizationID:     "org_test",
-		OrganizationName:   "org_name_test",
-		OrganizationIDs:    []string{"org_1", "org_2"},
-		ActiveSubscription: true,
-		Capabilities:       auth.CapSystemAdmin | auth.CapBypassFGA | auth.CapInternalOperation,
-		Impersonation: &auth.ImpersonationContext{
-			Type:              auth.AdminImpersonation,
-			ImpersonatorID:    "admin_test",
-			ImpersonatorEmail: "admin@example.com",
-			TargetUserID:      "subject_test",
-			TargetUserEmail:   "subject@example.com",
-			Reason:            "legacy-compat",
-		},
-		OriginalSystemAdmin: &auth.Caller{
-			SubjectID:    "admin_test",
-			Capabilities: auth.CapSystemAdmin,
-		},
+	ctx := logx.WithFields(context.Background(), map[string]any{
+		"integration_id": "int_abc",
+		"definition_id":  "def_xyz",
+		"operation":      "sync_users",
 	})
 
 	raw, present, err := codec.Capture(ctx)
@@ -1929,46 +1915,22 @@ func TestContextCodecCaptureAndRestore(t *testing.T) {
 		t.Fatalf("restore failed: %v", err)
 	}
 
-	restoredCaller, restoredCallerOk := auth.CallerFromContext(restored)
-	if !restoredCallerOk || restoredCaller == nil {
-		t.Fatalf("failed to get caller from restored context")
+	fields := logx.FieldsFromContext(restored)
+	if fields["integration_id"] != "int_abc" {
+		t.Fatalf("expected integration_id 'int_abc', got %v", fields["integration_id"])
 	}
 
-	if restoredCaller.SubjectID != "subject_test" {
-		t.Fatalf("expected subject ID 'subject_test', got %q", restoredCaller.SubjectID)
+	if fields["definition_id"] != "def_xyz" {
+		t.Fatalf("expected definition_id 'def_xyz', got %v", fields["definition_id"])
 	}
 
-	if len(restoredCaller.OrgIDs()) != 2 {
-		t.Fatalf("expected 2 organization IDs, got %d", len(restoredCaller.OrgIDs()))
-	}
-
-	if restoredCaller.OrganizationName != "org_name_test" {
-		t.Fatalf("expected organization name 'org_name_test', got %q", restoredCaller.OrganizationName)
-	}
-
-	if !restoredCaller.ActiveSubscription {
-		t.Fatalf("expected active subscription to round-trip")
-	}
-
-	if restoredCaller.Impersonation == nil || restoredCaller.Impersonation.ImpersonatorID != "admin_test" {
-		t.Fatalf("expected impersonation to round-trip")
-	}
-
-	if restoredCaller.OriginalSystemAdmin == nil || restoredCaller.OriginalSystemAdmin.SubjectID != "admin_test" {
-		t.Fatalf("expected original system admin to round-trip")
-	}
-
-	if !restoredCaller.Has(auth.CapSystemAdmin) {
-		t.Fatalf("expected IsSystemAdmin to be true")
-	}
-
-	if restoredCaller.Capabilities != auth.CapSystemAdmin|auth.CapBypassFGA|auth.CapInternalOperation {
-		t.Fatalf("expected capabilities to round-trip, got %d", restoredCaller.Capabilities)
+	if fields["operation"] != "sync_users" {
+		t.Fatalf("expected operation 'sync_users', got %v", fields["operation"])
 	}
 }
 
-func TestContextCodecRestoreInvalidJSON(t *testing.T) {
-	codec := NewContextCodec()
+func TestLogFieldsCodecRestoreInvalidJSON(t *testing.T) {
+	codec := logFieldsCodec{}
 
 	_, err := codec.Restore(context.Background(), []byte("{invalid"))
 	if !errors.Is(err, ErrContextSnapshotRestoreFailed) {
@@ -1976,84 +1938,68 @@ func TestContextCodecRestoreInvalidJSON(t *testing.T) {
 	}
 }
 
-func TestLegacyContextCodecCaptureDisabled(t *testing.T) {
-	codec := NewLegacyContextCodec()
+func TestLogFieldsCodecRestoreEmptyMap(t *testing.T) {
+	codec := logFieldsCodec{}
 
-	raw, present, err := codec.Capture(auth.WithCaller(context.Background(), &auth.Caller{
-		SubjectID: "subject_legacy",
-	}))
+	restored, err := codec.Restore(context.Background(), []byte("{}"))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if present {
-		t.Fatalf("expected legacy codec capture to be disabled")
-	}
-
-	if raw != nil {
-		t.Fatalf("expected no snapshot payload when capture is disabled")
+	fields := logx.FieldsFromContext(restored)
+	if len(fields) != 0 {
+		t.Fatalf("expected no fields, got %d", len(fields))
 	}
 }
 
-func TestAuthContextSnapshotToCaller(t *testing.T) {
-	snapshot := AuthSnapshot{
-		SubjectID:          "sub_123",
-		SubjectName:        "Test User",
-		SubjectEmail:       "test@example.com",
-		OrganizationID:     "org_456",
-		OrganizationName:   "Test Org",
-		OrganizationIDs:    []string{"org_456", "org_789"},
-		AuthenticationType: string(auth.JWTAuthentication),
-		OrganizationRole:   string(auth.OwnerRole),
-		ActiveSubscription: true,
-		Capabilities:       uint64(auth.CapBypassFGA),
-		Impersonation: &auth.ImpersonationContext{
-			Type:              auth.AdminImpersonation,
-			ImpersonatorID:    "admin_1",
-			ImpersonatorEmail: "admin@example.com",
-			TargetUserID:      "sub_123",
-			TargetUserEmail:   "test@example.com",
-			Reason:            "compat",
-		},
-		OriginalSystemAdmin: &AuthSnapshot{
-			SubjectID:    "admin_1",
-			Capabilities: uint64(auth.CapSystemAdmin),
-		},
-		IsSystemAdmin: true,
+func TestLogFieldsCodecRoundTripViaContextManager(t *testing.T) {
+	manager, err := NewContextManager(
+		NewKeyCodec("caller", auth.CallerKey),
+		logFieldsCodec{},
+	)
+	if err != nil {
+		t.Fatalf("failed to create context manager: %v", err)
 	}
 
-	caller := snapshot.toCaller()
+	ctx := auth.WithCaller(context.Background(), &auth.Caller{
+		SubjectID:      "subject_rt",
+		OrganizationID: "org_rt",
+	})
+	ctx = logx.WithFields(ctx, map[string]any{
+		"integration_id": "int_rt",
+		"run_id":         "run_rt",
+	})
 
-	if caller.SubjectID != "sub_123" {
-		t.Fatalf("expected subject ID 'sub_123', got %q", caller.SubjectID)
+	snapshot, err := manager.Capture(ctx)
+	if err != nil {
+		t.Fatalf("capture failed: %v", err)
 	}
 
-	if caller.AuthenticationType != auth.JWTAuthentication {
-		t.Fatalf("expected JWT authentication type")
+	if len(snapshot.Values) != 2 {
+		t.Fatalf("expected 2 snapshot values (caller + log_fields), got %d", len(snapshot.Values))
 	}
 
-	if caller.OrganizationRole != auth.OwnerRole {
-		t.Fatalf("expected owner role")
+	restored, err := manager.Restore(context.Background(), snapshot)
+	if err != nil {
+		t.Fatalf("restore failed: %v", err)
 	}
 
-	if !caller.Has(auth.CapSystemAdmin) {
-		t.Fatalf("expected system admin capability to be set")
+	caller, ok := auth.CallerFromContext(restored)
+	if !ok || caller == nil {
+		t.Fatalf("expected caller in restored context")
 	}
 
-	if !caller.Has(auth.CapBypassFGA) {
-		t.Fatalf("expected non-admin capabilities to be restored")
+	if caller.SubjectID != "subject_rt" {
+		t.Fatalf("expected subject ID 'subject_rt', got %q", caller.SubjectID)
 	}
 
-	if !caller.ActiveSubscription {
-		t.Fatalf("expected active subscription to be restored")
+	fields := logx.FieldsFromContext(restored)
+	if fields["integration_id"] != "int_rt" {
+		t.Fatalf("expected integration_id 'int_rt', got %v", fields["integration_id"])
 	}
 
-	if caller.Impersonation == nil || caller.Impersonation.ImpersonatorID != "admin_1" {
-		t.Fatalf("expected impersonation to be restored")
-	}
-
-	if caller.OriginalSystemAdmin == nil || caller.OriginalSystemAdmin.SubjectID != "admin_1" {
-		t.Fatalf("expected original system admin to be restored")
+	if fields["run_id"] != "run_rt" {
+		t.Fatalf("expected run_id 'run_rt', got %v", fields["run_id"])
 	}
 }
 

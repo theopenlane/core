@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/fgax"
@@ -131,15 +130,10 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "action_plan", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ActionPlanBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -185,28 +179,8 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some actionplan deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ActionPlanBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -235,15 +209,10 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "api_token", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.APITokenBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -289,28 +258,8 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some apitoken deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.APITokenBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -410,15 +359,10 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "assessment", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.AssessmentBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -464,28 +408,8 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some assessment deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.AssessmentBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -514,15 +438,10 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "asset", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.AssetBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -568,28 +487,8 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some asset deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.AssetBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -836,15 +735,10 @@ func (r *mutationResolver) bulkDeleteCheckResult(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "check_result", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.CheckResultBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -890,28 +784,8 @@ func (r *mutationResolver) bulkDeleteCheckResult(ctx context.Context, ids []stri
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some checkresult deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.CheckResultBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1030,15 +904,10 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "contact", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ContactBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -1084,28 +953,8 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some contact deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ContactBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1224,15 +1073,10 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ControlBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -1278,28 +1122,8 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some control deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ControlBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1328,15 +1152,10 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control_implementation", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ControlImplementationBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -1382,28 +1201,8 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlimplementation deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ControlImplementationBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1522,15 +1321,10 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control_objective", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ControlObjectiveBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -1576,28 +1370,8 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlobjective deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ControlObjectiveBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -1716,15 +1490,10 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "custom_domain", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.CustomDomainBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -1770,28 +1539,8 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some customdomain deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.CustomDomainBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -2024,15 +1773,10 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "dns_verification", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.DNSVerificationBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -2078,28 +1822,8 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some dnsverification deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.DNSVerificationBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -2218,15 +1942,10 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "document_data", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.DocumentDataBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -2272,28 +1991,8 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some documentdata deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.DocumentDataBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -2384,200 +2083,6 @@ func (r *mutationResolver) bulkUpdateCSVDocumentData(ctx context.Context, inputs
 	return &model.DocumentDataBulkUpdatePayload{
 		DocumentData: results,
 		UpdatedIDs:   updatedIDs,
-	}, nil
-}
-
-// bulkCreateEmailBranding uses the CreateBulk function to create multiple EmailBranding entities
-func (r *mutationResolver) bulkCreateEmailBranding(ctx context.Context, input []*generated.CreateEmailBrandingInput) (*model.EmailBrandingBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.EmailBrandingCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.EmailBranding.Create().SetInput(*data)
-	}
-
-	res, err := c.EmailBranding.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "emailbranding"})
-	}
-
-	// return response
-	return &model.EmailBrandingBulkCreatePayload{
-		EmailBrandings: res,
-	}, nil
-}
-
-// bulkUpdateEmailBranding updates multiple EmailBranding entities
-func (r *mutationResolver) bulkUpdateEmailBranding(ctx context.Context, ids []string, input generated.UpdateEmailBrandingInput) (*model.EmailBrandingBulkUpdatePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	ids = r.filterAuthorizedIDs(ctx, ids, "email_branding", fgax.CanEdit)
-	if len(ids) == 0 {
-		return &model.EmailBrandingBulkUpdatePayload{
-			EmailBrandings: []*generated.EmailBranding{},
-			UpdatedIDs:     []string{},
-		}, nil
-	}
-
-	c := withTransactionalMutation(ctx)
-	results := make([]*generated.EmailBranding, 0, len(ids))
-	updatedIDs := make([]string, 0, len(ids))
-
-	// update each emailbranding individually to ensure proper validation
-	for _, id := range ids {
-		if id == "" {
-			logx.FromContext(ctx).Error().Msg("empty id in bulk update for emailbranding")
-			continue
-		}
-
-		// get the existing entity first
-		existing, err := c.EmailBranding.Get(ctx, id)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to get emailbranding in bulk update operation")
-			continue
-		}
-
-		// setup update request
-		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to update emailbranding in bulk operation")
-			continue
-		}
-
-		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, id)
-	}
-
-	return &model.EmailBrandingBulkUpdatePayload{
-		EmailBrandings: results,
-		UpdatedIDs:     updatedIDs,
-	}, nil
-}
-
-// bulkUpdateCSVEmailBranding updates multiple EmailBranding entities from CSV data with per-row values
-func (r *mutationResolver) bulkUpdateCSVEmailBranding(ctx context.Context, inputs []*csvgenerated.EmailBrandingCSVUpdateInput) (*model.EmailBrandingBulkUpdatePayload, error) {
-	if len(inputs) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	c := withTransactionalMutation(ctx)
-	results := make([]*generated.EmailBranding, 0, len(inputs))
-	updatedIDs := make([]string, 0, len(inputs))
-
-	// update each emailbranding individually with its own input values
-	for _, input := range inputs {
-		if input == nil || input.ID == "" {
-			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for emailbranding")
-			continue
-		}
-
-		// get the existing entity first
-		existing, err := c.EmailBranding.Get(ctx, input.ID)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", input.ID).Msg("failed to get emailbranding in CSV bulk update operation")
-			continue
-		}
-
-		// setup update request with this row's input values
-		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("emailbranding_id", input.ID).Msg("failed to update emailbranding in CSV bulk operation")
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "emailbranding"})
-		}
-
-		results = append(results, updatedEntity)
-		updatedIDs = append(updatedIDs, input.ID)
-	}
-
-	return &model.EmailBrandingBulkUpdatePayload{
-		EmailBrandings: results,
-		UpdatedIDs:     updatedIDs,
-	}, nil
-}
-
-// bulkDeleteEmailBranding deletes multiple EmailBranding entities by their IDs
-func (r *mutationResolver) bulkDeleteEmailBranding(ctx context.Context, ids []string) (*model.EmailBrandingBulkDeletePayload, error) {
-	if len(ids) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("ids")
-	}
-
-	originalIDs := append([]string(nil), ids...)
-	ids = r.filterAuthorizedIDs(ctx, ids, "email_branding", fgax.CanDelete)
-	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
-		return &model.EmailBrandingBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
-		}, nil
-	}
-
-	deletedIDs := make([]string, 0, len(ids))
-	errors := make([]error, 0, len(ids))
-
-	var mu sync.Mutex
-
-	funcs := make([]func(), 0, len(ids))
-	for _, id := range ids {
-		funcs = append(funcs, func() {
-			// use r.db in context so interceptors use the connection pool instead of the shared transaction
-			poolCtx := generated.NewContext(ctx, r.db)
-
-			// delete each emailbranding individually to ensure proper cleanup
-			if err := r.db.EmailBranding.DeleteOneID(id).Exec(poolCtx); err != nil {
-				logx.FromContext(poolCtx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to delete emailbranding in bulk operation")
-				mu.Lock()
-				errors = append(errors, err)
-				mu.Unlock()
-				return
-			}
-
-			if err := generated.EmailBrandingEdgeCleanup(poolCtx, id); err != nil {
-				logx.FromContext(poolCtx).Error().Err(err).Str("emailbranding_id", id).Msg("failed to cleanup emailbranding edges in bulk operation")
-				mu.Lock()
-				errors = append(errors, err)
-				mu.Unlock()
-				return
-			}
-
-			mu.Lock()
-			deletedIDs = append(deletedIDs, id)
-			mu.Unlock()
-		})
-	}
-
-	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
-		return nil, err
-	}
-
-	if len(errors) > 0 {
-		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some emailbranding deletions failed")
-	}
-
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
-	return &model.EmailBrandingBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
 	}, nil
 }
 
@@ -2696,15 +2201,10 @@ func (r *mutationResolver) bulkDeleteEmailTemplate(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "email_template", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.EmailTemplateBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -2750,28 +2250,8 @@ func (r *mutationResolver) bulkDeleteEmailTemplate(ctx context.Context, ids []st
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some emailtemplate deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.EmailTemplateBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -2800,15 +2280,10 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "entity", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.EntityBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -2854,28 +2329,8 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entity deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.EntityBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -2994,15 +2449,10 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "entity_type", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.EntityTypeBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3048,28 +2498,8 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entitytype deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.EntityTypeBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -3188,15 +2618,10 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "event", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.EventBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3242,28 +2667,8 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some event deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.EventBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -3472,15 +2877,10 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "evidence", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.EvidenceBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3526,28 +2926,8 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some evidence deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.EvidenceBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -3557,15 +2937,10 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "export", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ExportBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3611,28 +2986,8 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ExportBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -3751,15 +3106,10 @@ func (r *mutationResolver) bulkDeleteFinding(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "finding", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.FindingBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3805,28 +3155,8 @@ func (r *mutationResolver) bulkDeleteFinding(ctx context.Context, ids []string) 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some finding deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.FindingBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -3874,15 +3204,10 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.GroupBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -3928,28 +3253,8 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some group deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.GroupBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -4068,15 +3373,10 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group_membership", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.GroupMembershipBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -4122,28 +3422,8 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupmembership deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.GroupMembershipBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -4262,15 +3542,10 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group_setting", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.GroupSettingBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -4316,28 +3591,8 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupsetting deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.GroupSettingBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -4546,15 +3801,10 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "hush", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.HushBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -4600,28 +3850,8 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some hush deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.HushBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -4650,15 +3880,10 @@ func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "identity_holder", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.IdentityHolderBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -4704,28 +3929,8 @@ func (r *mutationResolver) bulkDeleteIdentityHolder(ctx context.Context, ids []s
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some identityholder deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.IdentityHolderBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -4934,15 +4139,10 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "internal_policy", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.InternalPolicyBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -4988,28 +4188,8 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some internalpolicy deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.InternalPolicyBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -5038,15 +4218,10 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "invite", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.InviteBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -5092,28 +4267,8 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some invite deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.InviteBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -5232,15 +4387,10 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "job_template", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.JobTemplateBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -5286,28 +4436,8 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some jobtemplate deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.JobTemplateBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -5426,15 +4556,10 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "mappable_domain", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.MappableDomainBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -5480,28 +4605,8 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappabledomain deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.MappableDomainBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -5620,15 +4725,10 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "mapped_control", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.MappedControlBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -5674,28 +4774,8 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappedcontrol deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.MappedControlBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -5814,15 +4894,10 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "narrative", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.NarrativeBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -5868,28 +4943,8 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some narrative deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.NarrativeBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6098,15 +5153,10 @@ func (r *mutationResolver) bulkDeleteNotificationPreference(ctx context.Context,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "notification_preference", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.NotificationPreferenceBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -6152,28 +5202,8 @@ func (r *mutationResolver) bulkDeleteNotificationPreference(ctx context.Context,
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some notificationpreference deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.NotificationPreferenceBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6292,15 +5322,10 @@ func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "notification_template", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.NotificationTemplateBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -6346,28 +5371,8 @@ func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, i
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some notificationtemplate deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.NotificationTemplateBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6396,15 +5401,10 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "organization_setting", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.OrganizationSettingBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -6450,28 +5450,8 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationsetting deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.OrganizationSettingBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6590,15 +5570,10 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "org_membership", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.OrgMembershipBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -6644,28 +5619,8 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some orgmembership deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.OrgMembershipBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6893,15 +5848,10 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "procedure", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ProcedureBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -6947,28 +5897,8 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ProcedureBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -6997,15 +5927,10 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "program", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ProgramBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -7051,28 +5976,8 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some program deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ProgramBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -7191,15 +6096,10 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "program_membership", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ProgramMembershipBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -7245,28 +6145,8 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some programmembership deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ProgramMembershipBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -7475,15 +6355,10 @@ func (r *mutationResolver) bulkDeleteRemediation(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "remediation", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.RemediationBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -7529,28 +6404,8 @@ func (r *mutationResolver) bulkDeleteRemediation(ctx context.Context, ids []stri
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some remediation deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.RemediationBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -7579,15 +6434,10 @@ func (r *mutationResolver) bulkDeleteReview(ctx context.Context, ids []string) (
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "review", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ReviewBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -7633,28 +6483,8 @@ func (r *mutationResolver) bulkDeleteReview(ctx context.Context, ids []string) (
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some review deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ReviewBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -7863,15 +6693,10 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "risk", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.RiskBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -7917,28 +6742,8 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some risk deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.RiskBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -8057,15 +6862,10 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "scan", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ScanBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -8111,28 +6911,8 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scan deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ScanBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -8161,15 +6941,10 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "scheduled_job", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.ScheduledJobBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -8215,28 +6990,8 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scheduledjob deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.ScheduledJobBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -8445,15 +7200,10 @@ func (r *mutationResolver) bulkDeleteSLADefinition(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "sla_definition", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.SLADefinitionBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -8499,28 +7249,8 @@ func (r *mutationResolver) bulkDeleteSLADefinition(ctx context.Context, ids []st
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some sladefinition deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.SLADefinitionBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -8549,15 +7279,10 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "subcontrol", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.SubcontrolBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -8603,28 +7328,8 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subcontrol deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.SubcontrolBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -8833,15 +7538,10 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "subprocessor", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.SubprocessorBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -8887,28 +7587,8 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subprocessor deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.SubprocessorBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9046,15 +7726,10 @@ func (r *mutationResolver) bulkDeleteSystemDetail(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "system_detail", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.SystemDetailBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -9100,28 +7775,8 @@ func (r *mutationResolver) bulkDeleteSystemDetail(ctx context.Context, ids []str
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some systemdetail deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.SystemDetailBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9259,15 +7914,10 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "task", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TaskBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -9313,28 +7963,8 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some task deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TaskBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9363,15 +7993,10 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "template", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TemplateBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -9417,28 +8042,8 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some template deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TemplateBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9557,15 +8162,10 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_compliance", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TrustCenterComplianceBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -9611,28 +8211,8 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentercompliance deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TrustCenterComplianceBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9841,15 +8421,10 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_doc", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TrustCenterDocBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -9895,28 +8470,8 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterdoc deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TrustCenterDocBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -9964,15 +8519,10 @@ func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_faq", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TrustCenterFAQBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10018,28 +8568,8 @@ func (r *mutationResolver) bulkDeleteTrustCenterFAQ(ctx context.Context, ids []s
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterfaq deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TrustCenterFAQBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -10158,15 +8688,10 @@ func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_nda_request", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TrustCenterNDARequestBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10212,28 +8737,8 @@ func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, 
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterndarequest deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TrustCenterNDARequestBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -10352,15 +8857,10 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_subprocessor", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.TrustCenterSubprocessorBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10406,28 +8906,8 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentersubprocessor deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.TrustCenterSubprocessorBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -10456,15 +8936,10 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "user_setting", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.UserSettingBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10510,28 +8985,8 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some usersetting deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.UserSettingBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -10740,15 +9195,10 @@ func (r *mutationResolver) bulkDeleteVendorRiskScore(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.VendorRiskScoreBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10794,28 +9244,8 @@ func (r *mutationResolver) bulkDeleteVendorRiskScore(ctx context.Context, ids []
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorriskscore deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.VendorRiskScoreBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -10934,15 +9364,10 @@ func (r *mutationResolver) bulkDeleteVendorScoringConfig(ctx context.Context, id
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.VendorScoringConfigBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -10988,28 +9413,8 @@ func (r *mutationResolver) bulkDeleteVendorScoringConfig(ctx context.Context, id
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vendorscoringconfig deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.VendorScoringConfigBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 
@@ -11128,15 +9533,10 @@ func (r *mutationResolver) bulkDeleteVulnerability(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
-	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vulnerability", fgax.CanDelete)
 	if len(ids) == 0 {
-		err := gqlerrors.BulkActionIncomplete
-
 		return &model.VulnerabilityBulkDeletePayload{
-			DeletedIDs:    []string{},
-			NotDeletedIDs: originalIDs,
-			Error:         &err,
+			DeletedIDs: []string{},
 		}, nil
 	}
 
@@ -11182,28 +9582,8 @@ func (r *mutationResolver) bulkDeleteVulnerability(ctx context.Context, ids []st
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some vulnerability deletions failed")
 	}
 
-	deleted := make(map[string]struct{}, len(deletedIDs))
-	for _, id := range deletedIDs {
-		deleted[id] = struct{}{}
-	}
-
-	notDeletedIDs := make([]string, 0, len(originalIDs))
-	for _, id := range originalIDs {
-		if _, ok := deleted[id]; !ok {
-			notDeletedIDs = append(notDeletedIDs, id)
-		}
-	}
-
-	var err *string
-	if len(notDeletedIDs) > 0 {
-		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
-		err = &bulkActionIncomplete
-	}
-
 	return &model.VulnerabilityBulkDeletePayload{
-		DeletedIDs:    deletedIDs,
-		NotDeletedIDs: notDeletedIDs,
-		Error:         err,
+		DeletedIDs: deletedIDs,
 	}, nil
 }
 

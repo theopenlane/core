@@ -552,6 +552,20 @@ func (_u *IntegrationHistoryUpdate) SetNillablePrimaryDirectory(v *bool) *Integr
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationHistoryUpdate) SetCampaignEmail(v bool) *IntegrationHistoryUpdate {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdate) SetNillableCampaignEmail(v *bool) *IntegrationHistoryUpdate {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdate) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -805,6 +819,9 @@ func (_u *IntegrationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integrationhistory.FieldCampaignEmail, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1346,6 +1363,20 @@ func (_u *IntegrationHistoryUpdateOne) SetNillablePrimaryDirectory(v *bool) *Int
 	return _u
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_u *IntegrationHistoryUpdateOne) SetCampaignEmail(v bool) *IntegrationHistoryUpdateOne {
+	_u.mutation.SetCampaignEmail(v)
+	return _u
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_u *IntegrationHistoryUpdateOne) SetNillableCampaignEmail(v *bool) *IntegrationHistoryUpdateOne {
+	if v != nil {
+		_u.SetCampaignEmail(*v)
+	}
+	return _u
+}
+
 // Mutation returns the IntegrationHistoryMutation object of the builder.
 func (_u *IntegrationHistoryUpdateOne) Mutation() *IntegrationHistoryMutation {
 	return _u.mutation
@@ -1629,6 +1660,9 @@ func (_u *IntegrationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Inte
 	}
 	if value, ok := _u.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.CampaignEmail(); ok {
+		_spec.SetField(integrationhistory.FieldCampaignEmail, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.IntegrationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

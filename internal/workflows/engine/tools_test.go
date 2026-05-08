@@ -15,13 +15,14 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	dbtestutils "github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
+
+	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -42,6 +43,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/mutations"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
@@ -75,6 +81,8 @@ type WorkflowEngineTestSuite struct {
 	stripeMockBackend *mocks.MockStripeBackend
 	ofgaTF            *fgatest.OpenFGATestFixture
 	galaRuntime       *gala.Gala
+	integrationsRT    *intruntime.Runtime
+	slackMock         *slackdef.MockSlackRuntime
 }
 
 // TestWorkflowEngineTestSuite runs all the tests in the WorkflowEngineTestSuite
@@ -156,7 +164,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		generated.Authz(*fgaClient),
 		generated.TokenManager(tm),
 		generated.SessionConfig(&sessionConfig),
-		generated.Emailer(&emailtemplates.Config{}),
 		generated.HistoryClient(historyClient),
 		generated.EntitlementManager(entitlements),
 		generated.Pool(pool),
@@ -206,11 +213,59 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.client = db
 	s.galaRuntime = runtime
 
+	// wire integration runtime with mock email and slack providers
+	credStore, err := keystore.NewStore(db)
+	s.Require().NoError(err)
+
+	s.slackMock = slackdef.NewMockSlackRuntime()
+
+	rt, err := intruntime.New(intruntime.Config{
+		DB:       db,
+		Gala:     runtime,
+		Keystore: credStore,
+		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
+			s.slackMock.Builder(),
+		},
+	})
+	s.Require().NoError(err)
+
+	db.IntegrationsRuntime = rt
+	s.integrationsRT = rt
+
+	wfEngine, ok = db.WorkflowEngine.(*engine.WorkflowEngine)
+	s.Require().True(ok)
+
+	s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
+		Runtime: rt,
+	}))
+
 	s.requireWorkflowSetup(workflowCfg, runtime)
+}
+
+// mockSlackRecorder returns the mock Slack message recorder
+func (s *WorkflowEngineTestSuite) mockSlackRecorder() *slackdef.SlackMessageRecorder {
+	s.Require().NotNil(s.slackMock, "slack mock not initialized")
+	return s.slackMock.Recorder
+}
+
+// mockEmailSender returns the mock email sender from the integration runtime
+func (s *WorkflowEngineTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := s.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	s.Require().True(ok, "email runtime client not found")
+
+	ms := emaildef.MockSenderFromClient(rc)
+	s.Require().NotNil(ms, "mock sender not found")
+
+	return ms
 }
 
 // TearDownSuite cleans up test dependencies
 func (s *WorkflowEngineTestSuite) TearDownSuite() {
+	if s.slackMock != nil {
+		s.slackMock.Close()
+	}
+
 	if s.galaRuntime != nil {
 		_ = s.galaRuntime.StopWorkers(context.Background())
 		_ = s.galaRuntime.Close()

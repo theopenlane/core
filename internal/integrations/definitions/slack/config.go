@@ -8,4 +8,6 @@ type Config struct {
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Slack application
 	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
+	// AppID is the oauth app id used for opening the app within a slack workspace
+	AppID string `json:"appid" koanf:"appid"`
 }

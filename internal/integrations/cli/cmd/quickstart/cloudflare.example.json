@@ -1,0 +1,26 @@
+{
+  "subject": "Cloudflare - {{ .campaignName }}",
+  "preheader": "Hi {{ .firstName }}, a security review from Cloudflare is waiting for you",
+  "title": "Cloudflare Security Review",
+  "intros": [
+    "Hi {{ .firstName }}, you have a pending security review from Cloudflare.",
+    "Campaign: {{ .campaignName }}",
+    "Please complete your review by {{ .campaignDueDate }}.",
+    "Cloudflare helps build a better Internet by providing security, performance, and reliability services."
+  ],
+  "buttonText": "Complete Review",
+  "buttonLink": "{{ .rootURL }}/campaigns",
+  "outros": [
+    "If you have questions about this review, contact your Cloudflare account team.",
+    "Need help? Reach us at security-reviews@cloudflare.com."
+  ],
+  "headerLogoURL": "https://imagedelivery.net/2gi-D0CFOlSOflWJG-LQaA/69fff95d-06de-4ce4-f8b5-3214ea761400/w=240,fit=contain",
+  "primaryColor": "#f6821f",
+  "buttonColor": "#f6821f",
+  "buttonTextColor": "#ffffff",
+  "bodyBackgroundColor": "#f4f4f4",
+  "cardBackgroundColor": "#ffffff",
+  "heroBackgroundColor": "#fef7f1",
+  "textColor": "#404040",
+  "footerTextColor": "#6b6b6b"
+}

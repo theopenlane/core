@@ -3,7 +3,7 @@ package okta
 import (
 	"context"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v5/okta"
+	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
 	"github.com/theopenlane/core/internal/integrations/types"
 )

@@ -188,6 +188,11 @@ func PrimaryDirectory(v bool) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldPrimaryDirectory, v))
 }
 
+// CampaignEmail applies equality check predicate on the "campaign_email" field. It's identical to CampaignEmailEQ.
+func CampaignEmail(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldCreatedAt, v))
@@ -1883,6 +1888,16 @@ func PrimaryDirectoryNEQ(v bool) predicate.Integration {
 	return predicate.Integration(sql.FieldNEQ(FieldPrimaryDirectory, v))
 }
 
+// CampaignEmailEQ applies the EQ predicate on the "campaign_email" field.
+func CampaignEmailEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldCampaignEmail, v))
+}
+
+// CampaignEmailNEQ applies the NEQ predicate on the "campaign_email" field.
+func CampaignEmailNEQ(v bool) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldCampaignEmail, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Integration {
 	return predicate.Integration(func(s *sql.Selector) {
@@ -2484,6 +2499,35 @@ func HasEmailTemplatesWith(preds ...predicate.EmailTemplate) predicate.Integrati
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.EmailTemplate
 		step.Edge.Schema = schemaConfig.EmailTemplate
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCampaigns applies the HasEdge predicate on the "campaigns" edge.
+func HasCampaigns() predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCampaignsWith applies the HasEdge predicate on the "campaigns" edge with a given conditions (other predicates).
+func HasCampaignsWith(preds ...predicate.Campaign) predicate.Integration {
+	return predicate.Integration(func(s *sql.Selector) {
+		step := newCampaignsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

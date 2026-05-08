@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -174,5 +175,12 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 		return nil, err
 	}
 
-	return meowtoken, h.sendVerificationEmail(ctx, user, meowtoken.Token)
+	if err := h.sendEmail(ctx, email.VerifyEmailOp.Name(), email.VerifyEmailRequest{
+		RecipientInfo: email.RecipientInfo{Email: user.Email, FirstName: user.FirstName, LastName: user.LastName},
+		Token:         meowtoken.Token,
+	}); err != nil {
+		return nil, err
+	}
+
+	return meowtoken, nil
 }

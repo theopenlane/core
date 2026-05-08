@@ -14,6 +14,9 @@ type Config struct {
 	CEL CELConfig `json:"cel" koanf:"cel"`
 	// Gala controls gala runtime wiring for workflow and mutation eventing.
 	Gala GalaConfig `json:"gala" koanf:"gala"`
+	// RuntimeDefinitions holds in-memory workflow definitions that participate in
+	// trigger matching without DB persistence
+	RuntimeDefinitions *RuntimeDefinitionRegistry `json:"-" koanf:"-"`
 }
 
 // CELConfig contains CEL evaluation and validation settings for workflows
@@ -173,12 +176,20 @@ func WithCELTrackState(enabled bool) ConfigOpts {
 	}
 }
 
+// WithRuntimeDefinitions configures the engine with in-memory runtime definitions
+func WithRuntimeDefinitions(defs *RuntimeDefinitionRegistry) ConfigOpts {
+	return func(c *Config) {
+		c.RuntimeDefinitions = defs
+	}
+}
+
 // WithConfig applies all settings from a Config struct
 func WithConfig(cfg Config) ConfigOpts {
 	return func(c *Config) {
 		c.Enabled = cfg.Enabled
 		c.CEL = cfg.CEL
 		c.Gala = cfg.Gala
+		c.RuntimeDefinitions = cfg.RuntimeDefinitions
 	}
 }
 

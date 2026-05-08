@@ -44,6 +44,8 @@ linters:
       - internal/ent/csvgenerated
       - internal/ent/workflowgenerated
       - internal/ent/integrationgenerated
+      - internal/integrations/cli
+      - internal/integrations/definitions/email/themmes
 formatters:
   enable:
     - gofmt

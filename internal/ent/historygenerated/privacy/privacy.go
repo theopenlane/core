@@ -545,30 +545,6 @@ func (f DocumentDataHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.DocumentDataHistoryMutation", m)
 }
 
-// The EmailBrandingHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type EmailBrandingHistoryQueryRuleFunc func(context.Context, *historygenerated.EmailBrandingHistoryQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f EmailBrandingHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
-	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.EmailBrandingHistoryQuery", q)
-}
-
-// The EmailBrandingHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type EmailBrandingHistoryMutationRuleFunc func(context.Context, *historygenerated.EmailBrandingHistoryMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f EmailBrandingHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
-	if m, ok := m.(*historygenerated.EmailBrandingHistoryMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.EmailBrandingHistoryMutation", m)
-}
-
 // The EmailTemplateHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type EmailTemplateHistoryQueryRuleFunc func(context.Context, *historygenerated.EmailTemplateHistoryQuery) error
@@ -2104,8 +2080,6 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.DocumentDataHistoryQuery:
 		return q.Filter(), nil
-	case *historygenerated.EmailBrandingHistoryQuery:
-		return q.Filter(), nil
 	case *historygenerated.EmailTemplateHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.EntityHistoryQuery:
@@ -2270,8 +2244,6 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.DiscussionHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.DocumentDataHistoryMutation:
-		return m.Filter(), nil
-	case *historygenerated.EmailBrandingHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.EmailTemplateHistoryMutation:
 		return m.Filter(), nil

@@ -499,7 +499,7 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 	}
 }
 
-func TestReviewWithMutlipleConnectedEntities(t *testing.T) {
+func TestReviewWithMultipleConnectedEntities(t *testing.T) {
 	testEntity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	ids := []string{testEntity.ID}

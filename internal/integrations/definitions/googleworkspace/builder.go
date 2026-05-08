@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 var directorySyncScopes = []string{
@@ -55,7 +56,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							AuthURL:      "https://accounts.google.com/o/oauth2/v2/auth",
@@ -119,7 +120,9 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: directorySyncScopes,
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: googleWorkspaceMappings(),

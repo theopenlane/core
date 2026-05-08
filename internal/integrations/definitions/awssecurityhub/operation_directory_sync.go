@@ -2,6 +2,7 @@ package awssecurityhub
 
 import (
 	"context"
+	"fmt"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
@@ -217,8 +218,7 @@ func listIAMUsers(ctx context.Context, client *iam.Client) ([]iamtypes.User, err
 
 		resp, err := client.ListUsers(ctx, input)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("awsiam: error listing IAM users")
-			return nil, ErrIAMUsersFetchFailed
+			return nil, fmt.Errorf("%w: %w", ErrIAMUsersFetchFailed, err)
 		}
 
 		users = append(users, resp.Users...)
@@ -254,8 +254,7 @@ func listUserTags(ctx context.Context, client *iam.Client, userName string) ([]i
 
 		resp, err := client.ListUserTags(ctx, input)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("userName", userName).Msg("awsiam: error listing tags for user")
-			return nil, ErrIAMUsersFetchFailed
+			return nil, fmt.Errorf("%w: %w", ErrIAMUsersFetchFailed, err)
 		}
 
 		tags = append(tags, resp.Tags...)
@@ -282,8 +281,7 @@ func listIAMGroups(ctx context.Context, client *iam.Client) ([]iamtypes.Group, e
 
 		resp, err := client.ListGroups(ctx, input)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("awsiam: error listing IAM groups")
-			return nil, ErrIAMGroupsFetchFailed
+			return nil, fmt.Errorf("%w: %w", ErrIAMGroupsFetchFailed, err)
 		}
 
 		groups = append(groups, resp.Groups...)
@@ -313,8 +311,7 @@ func listGroupsForUser(ctx context.Context, client *iam.Client, userName string)
 
 		resp, err := client.ListGroupsForUser(ctx, input)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("userName", userName).Msg("awsiam: error listing groups for user")
-			return nil, ErrIAMGroupsForUserFetchFailed
+			return nil, fmt.Errorf("%w: %w", ErrIAMGroupsForUserFetchFailed, err)
 		}
 
 		groups = append(groups, resp.Groups...)

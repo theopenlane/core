@@ -1,0 +1,47 @@
+extend type Query {
+    """
+    Returns all customer-selectable email template types from the operation catalog.
+    Each entry describes a template layout the customer can choose when creating an
+    email template, including the JSON schema for its configurable fields and a
+    rendered HTML preview of the template with default values.
+    """
+    emailTemplateCatalog: EmailTemplateCatalog!
+}
+
+"""
+EmailTemplateCatalog contains the available customer-selectable email template types
+from the operation catalog.
+"""
+type EmailTemplateCatalog {
+    """
+    Available email template types.
+    """
+    entries: [EmailTemplateCatalogEntry!]!
+}
+
+"""
+EmailTemplateCatalogEntry describes a single customer-selectable email template
+type from the operation catalog. The key is stored on the EmailTemplate record to
+link it back to the rendering pipeline at send time.
+"""
+type EmailTemplateCatalogEntry {
+    """
+    Stable catalog key stored on the EmailTemplate record to resolve the
+    rendering pipeline at send time.
+    """
+    key: String!
+    """
+    Human-readable description of the template type.
+    """
+    description: String!
+    """
+    JSON Schema describing the configurable fields for this template type.
+    The UI uses this to render a dynamic form; the submitted values become
+    the EmailTemplate defaults field.
+    """
+    configSchema: Map!
+    """
+    Rendered HTML preview of the template with default/example values.
+    """
+    htmlPreview: String!
+}

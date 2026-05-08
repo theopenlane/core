@@ -48,7 +48,7 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	client, err := gitHubClient.Cast(clientValue)
 	require.NoError(t, err)
 
-	repositories, err := queryRepositories(context.Background(), client, 1)
+	repositories, err := queryRepositories(context.Background(), client, 1, nil)
 	require.NoError(t, err)
 	require.Len(t, repositories, 1)
 	require.Equal(t, "/api/graphql", requestPath)
@@ -163,7 +163,7 @@ func TestBuildRefreshesExpiredInstallationToken(t *testing.T) {
 	client, err := gitHubClient.Cast(clientValue)
 	require.NoError(t, err)
 
-	repositories, err := queryRepositories(context.Background(), client, 1)
+	repositories, err := queryRepositories(context.Background(), client, 1, nil)
 	require.NoError(t, err)
 	require.Len(t, repositories, 1)
 	require.Equal(t, 1, tokenRequestCount)

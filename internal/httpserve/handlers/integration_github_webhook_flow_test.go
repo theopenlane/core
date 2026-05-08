@@ -7,7 +7,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"html/template"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -24,8 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/internal/slacknotify"
-	"github.com/theopenlane/core/pkg/slacktemplates"
 )
 
 const githubAppWebhookPath = "/github/app/webhook"
@@ -183,13 +180,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 		Save(user.UserCtx)
 	assert.NoError(t, err)
 
-	recorder := newSlackWebhookRecorder(t)
-	defer recorder.Close()
-
-	slacknotify.SetConfig(slacknotify.SlackConfig{WebhookURL: recorder.URL()})
-	t.Cleanup(func() {
-		slacknotify.SetConfig(slacknotify.SlackConfig{})
-	})
+	suite.sharedSlackRecorder.Reset()
 
 	payload := []byte(`{"action":"created","installation":{"id":1002,"account":{"login":"acme-github-org","type":"Organization"}}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -205,18 +196,15 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplate
 	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
 	suite.h.IntegrationsRuntime.Gala().WaitIdle()
 
-	bodies := recorder.Bodies()
+	bodies := suite.sharedSlackRecorder.Bodies()
 	assert.Len(t, bodies, 1)
 
 	text := slackMessageText(t, bodies[0])
-	expected := renderGitHubAppInstallTemplate(t, map[string]any{
-		"GitHubOrganization":         "acme-github-org",
-		"GitHubAccountType":          "Organization",
-		"OpenlaneOrganization":       "Acme Security",
-		"OpenlaneOrganizationID":     user.OrganizationID,
-		"ShowOpenlaneOrganizationID": true,
-	})
-	assert.Equal(t, strings.TrimSpace(expected), strings.TrimSpace(text))
+	expected := "Openlane GitHub App installation completed\n" +
+		"GitHub organization: acme-github-org\n" +
+		"GitHub account type: Organization\n" +
+		"Openlane organization: Acme Security (" + user.OrganizationID + ")"
+	assert.Equal(t, expected, strings.TrimSpace(text))
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
@@ -322,6 +310,17 @@ func (r *slackWebhookRecorder) Bodies() []string {
 	return append([]string(nil), r.bodies...)
 }
 
+func (r *slackWebhookRecorder) Reset() {
+	if r == nil {
+		return
+	}
+
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	r.bodies = nil
+}
+
 func (r *slackWebhookRecorder) Close() {
 	if r == nil || r.server == nil {
 		return
@@ -340,18 +339,6 @@ func slackMessageText(t *testing.T, requestBody string) string {
 	assert.NotEmpty(t, payload.Text)
 
 	return payload.Text
-}
-
-func renderGitHubAppInstallTemplate(t *testing.T, data map[string]any) string {
-	t.Helper()
-
-	tmpl, err := template.ParseFS(slacktemplates.Templates, slacktemplates.GitHubAppInstallName)
-	assert.NoError(t, err)
-
-	var rendered strings.Builder
-	assert.NoError(t, tmpl.Execute(&rendered, data))
-
-	return rendered.String()
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration() {

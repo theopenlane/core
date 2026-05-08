@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // Builder returns the Cloudflare definition builder
@@ -15,7 +16,7 @@ func Builder() registry.Builder {
 				ID:          definitionID.ID(),
 				Family:      "Cloudflare",
 				DisplayName: "Cloudflare",
-				Description: "Validate Cloudflare account access and collect security-relevant account and zone context for posture workflows.",
+				Description: "Perform directory sync and asset collection from Cloudflare.",
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare/overview",
 				Tags:        []string{"directory", "assets"},
@@ -85,7 +86,9 @@ func Builder() registry.Builder {
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
+					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
+					ReconcileSchedule:   gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: cloudflareMappings(),

@@ -69,6 +69,7 @@ func (EmailTemplate) Fields() []ent.Field {
 			Optional(),
 		field.Enum("format").
 			Comment("template format for rendering").
+			Optional().
 			GoType(enums.NotificationTemplateFormat("")).
 			Default(enums.NotificationTemplateFormatHTML.String()).
 			Annotations(
@@ -82,26 +83,40 @@ func (EmailTemplate) Fields() []ent.Field {
 			),
 		field.String("subject_template").
 			Comment("subject template for email notifications").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.String("preheader_template").
 			Comment("preheader/preview text template for email notifications").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.Text("body_template").
 			Comment("body template for the email").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.Text("text_template").
 			Comment("plain text fallback template for the email").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+			),
 		field.JSON("jsonconfig", map[string]any{}).
 			Comment("jsonschema for template data requirements").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("uischema", map[string]any{}).
 			Comment("uischema for a template builder").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
 		field.JSON("metadata", map[string]any{}).
@@ -125,6 +140,7 @@ func (EmailTemplate) Fields() []ent.Field {
 		field.Enum("template_context").
 			Comment("runtime data context defining available variable keys for this template").
 			GoType(enums.TemplateContext("")).
+			Optional().
 			Annotations(
 				entgql.OrderField("TEMPLATE_CONTEXT"),
 			),
@@ -150,18 +166,13 @@ func (EmailTemplate) Fields() []ent.Field {
 func (EmailTemplate) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields(ownerFieldName, "key").
-			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("key").
-			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL and system_owned = true")),
 	}
 }
 
 // Edges of the EmailTemplate.
 func (e EmailTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFrom(e, EmailBranding{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: e,
 			edgeSchema: Integration{},

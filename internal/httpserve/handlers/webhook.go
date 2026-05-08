@@ -493,7 +493,6 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	}
 
 	if stripeOrgSubscription.Active {
-
 		err := transaction.FromContext(ctx).OrganizationSetting.Update().
 			Where(organizationsetting.OrganizationID(orgSubscription.OwnerID)).
 			ClearPendingDeletionAt().

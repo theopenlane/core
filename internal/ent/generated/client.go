@@ -40,7 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailbranding"
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -134,7 +133,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
@@ -195,8 +193,6 @@ type Client struct {
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
-	// EmailBranding is the client for interacting with the EmailBranding builders.
-	EmailBranding *EmailBrandingClient
 	// EmailTemplate is the client for interacting with the EmailTemplate builders.
 	EmailTemplate *EmailTemplateClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
@@ -410,7 +406,6 @@ func (c *Client) init() {
 	c.DirectorySyncRun = NewDirectorySyncRunClient(c.config)
 	c.Discussion = NewDiscussionClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
-	c.EmailBranding = NewEmailBrandingClient(c.config)
 	c.EmailTemplate = NewEmailTemplateClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
 	c.Entity = NewEntityClient(c.config)
@@ -518,7 +513,6 @@ type (
 		Authz              fgax.Client
 		TokenManager       *tokens.TokenManager
 		SessionConfig      *sessions.SessionConfig
-		Emailer            *emailtemplates.Config
 		TOTP               *totp.Client
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
@@ -619,13 +613,6 @@ func TokenManager(v *tokens.TokenManager) Option {
 func SessionConfig(v *sessions.SessionConfig) Option {
 	return func(c *config) {
 		c.SessionConfig = v
-	}
-}
-
-// Emailer configures the Emailer.
-func Emailer(v *emailtemplates.Config) Option {
-	return func(c *config) {
-		c.Emailer = v
 	}
 }
 
@@ -733,7 +720,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
-		EmailBranding:              NewEmailBrandingClient(cfg),
 		EmailTemplate:              NewEmailTemplateClient(cfg),
 		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
 		Entity:                     NewEntityClient(cfg),
@@ -860,7 +846,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
-		EmailBranding:              NewEmailBrandingClient(cfg),
 		EmailTemplate:              NewEmailTemplateClient(cfg),
 		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
 		Entity:                     NewEntityClient(cfg),
@@ -980,10 +965,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
 		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
 		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
-		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
-		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
-		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
+		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
+		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
+		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
@@ -1014,10 +999,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
 		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
 		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailBranding,
-		c.EmailTemplate, c.EmailVerificationToken, c.Entity, c.EntityType, c.Event,
-		c.Evidence, c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl,
-		c.Group, c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
+		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
+		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
+		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
+		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
 		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
 		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
@@ -1157,8 +1142,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Discussion.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
-	case *EmailBrandingMutation:
-		return c.EmailBranding.mutate(ctx, m)
 	case *EmailTemplateMutation:
 		return c.EmailTemplate.mutate(ctx, m)
 	case *EmailVerificationTokenMutation:
@@ -3449,18 +3432,18 @@ func (c *CampaignClient) QueryTemplate(_m *Campaign) *TemplateQuery {
 	return query
 }
 
-// QueryEmailBranding queries the email_branding edge of a Campaign.
-func (c *CampaignClient) QueryEmailBranding(_m *Campaign) *EmailBrandingQuery {
-	query := (&EmailBrandingClient{config: c.config}).Query()
+// QueryIntegration queries the integration edge of a Campaign.
+func (c *CampaignClient) QueryIntegration(_m *Campaign) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(campaign.Table, campaign.FieldID, id),
-			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EmailBrandingTable, campaign.EmailBrandingColumn),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, campaign.IntegrationTable, campaign.IntegrationColumn),
 		)
 		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.EmailBranding
+		step.To.Schema = schemaConfig.Integration
 		step.Edge.Schema = schemaConfig.Campaign
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -8427,255 +8410,6 @@ func (c *DocumentDataClient) mutate(ctx context.Context, m *DocumentDataMutation
 	}
 }
 
-// EmailBrandingClient is a client for the EmailBranding schema.
-type EmailBrandingClient struct {
-	config
-}
-
-// NewEmailBrandingClient returns a client for the EmailBranding from the given config.
-func NewEmailBrandingClient(c config) *EmailBrandingClient {
-	return &EmailBrandingClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `emailbranding.Hooks(f(g(h())))`.
-func (c *EmailBrandingClient) Use(hooks ...Hook) {
-	c.hooks.EmailBranding = append(c.hooks.EmailBranding, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `emailbranding.Intercept(f(g(h())))`.
-func (c *EmailBrandingClient) Intercept(interceptors ...Interceptor) {
-	c.inters.EmailBranding = append(c.inters.EmailBranding, interceptors...)
-}
-
-// Create returns a builder for creating a EmailBranding entity.
-func (c *EmailBrandingClient) Create() *EmailBrandingCreate {
-	mutation := newEmailBrandingMutation(c.config, OpCreate)
-	return &EmailBrandingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of EmailBranding entities.
-func (c *EmailBrandingClient) CreateBulk(builders ...*EmailBrandingCreate) *EmailBrandingCreateBulk {
-	return &EmailBrandingCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *EmailBrandingClient) MapCreateBulk(slice any, setFunc func(*EmailBrandingCreate, int)) *EmailBrandingCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &EmailBrandingCreateBulk{err: fmt.Errorf("calling to EmailBrandingClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*EmailBrandingCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &EmailBrandingCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for EmailBranding.
-func (c *EmailBrandingClient) Update() *EmailBrandingUpdate {
-	mutation := newEmailBrandingMutation(c.config, OpUpdate)
-	return &EmailBrandingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *EmailBrandingClient) UpdateOne(_m *EmailBranding) *EmailBrandingUpdateOne {
-	mutation := newEmailBrandingMutation(c.config, OpUpdateOne, withEmailBranding(_m))
-	return &EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *EmailBrandingClient) UpdateOneID(id string) *EmailBrandingUpdateOne {
-	mutation := newEmailBrandingMutation(c.config, OpUpdateOne, withEmailBrandingID(id))
-	return &EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for EmailBranding.
-func (c *EmailBrandingClient) Delete() *EmailBrandingDelete {
-	mutation := newEmailBrandingMutation(c.config, OpDelete)
-	return &EmailBrandingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *EmailBrandingClient) DeleteOne(_m *EmailBranding) *EmailBrandingDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *EmailBrandingClient) DeleteOneID(id string) *EmailBrandingDeleteOne {
-	builder := c.Delete().Where(emailbranding.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &EmailBrandingDeleteOne{builder}
-}
-
-// Query returns a query builder for EmailBranding.
-func (c *EmailBrandingClient) Query() *EmailBrandingQuery {
-	return &EmailBrandingQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeEmailBranding},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a EmailBranding entity by its id.
-func (c *EmailBrandingClient) Get(ctx context.Context, id string) (*EmailBranding, error) {
-	return c.Query().Where(emailbranding.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *EmailBrandingClient) GetX(ctx context.Context, id string) *EmailBranding {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryOwner(_m *EmailBranding) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, emailbranding.OwnerTable, emailbranding.OwnerColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.EmailBranding
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryBlockedGroups queries the blocked_groups edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryBlockedGroups(_m *EmailBranding) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.BlockedGroupsTable, emailbranding.BlockedGroupsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEditors queries the editors edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryEditors(_m *EmailBranding) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.EditorsTable, emailbranding.EditorsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryViewers queries the viewers edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryViewers(_m *EmailBranding) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.ViewersTable, emailbranding.ViewersColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryCampaigns queries the campaigns edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryCampaigns(_m *EmailBranding) *CampaignQuery {
-	query := (&CampaignClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(campaign.Table, campaign.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, emailbranding.CampaignsTable, emailbranding.CampaignsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.Campaign
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEmailTemplates queries the email_templates edge of a EmailBranding.
-func (c *EmailBrandingClient) QueryEmailTemplates(_m *EmailBranding) *EmailTemplateQuery {
-	query := (&EmailTemplateClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailbranding.Table, emailbranding.FieldID, id),
-			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, emailbranding.EmailTemplatesTable, emailbranding.EmailTemplatesPrimaryKey...),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *EmailBrandingClient) Hooks() []Hook {
-	hooks := c.hooks.EmailBranding
-	return append(hooks[:len(hooks):len(hooks)], emailbranding.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *EmailBrandingClient) Interceptors() []Interceptor {
-	inters := c.inters.EmailBranding
-	return append(inters[:len(inters):len(inters)], emailbranding.Interceptors[:]...)
-}
-
-func (c *EmailBrandingClient) mutate(ctx context.Context, m *EmailBrandingMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&EmailBrandingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&EmailBrandingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&EmailBrandingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&EmailBrandingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown EmailBranding mutation op: %q", m.Op())
-	}
-}
-
 // EmailTemplateClient is a client for the EmailTemplate schema.
 type EmailTemplateClient struct {
 	config
@@ -8854,25 +8588,6 @@ func (c *EmailTemplateClient) QueryViewers(_m *EmailTemplate) *GroupQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEmailBranding queries the email_branding edge of a EmailTemplate.
-func (c *EmailTemplateClient) QueryEmailBranding(_m *EmailTemplate) *EmailBrandingQuery {
-	query := (&EmailBrandingClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(emailtemplate.Table, emailtemplate.FieldID, id),
-			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, emailtemplate.EmailBrandingTable, emailtemplate.EmailBrandingPrimaryKey...),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBrandingEmailTemplates
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -15618,6 +15333,25 @@ func (c *IntegrationClient) QueryEmailTemplates(_m *Integration) *EmailTemplateQ
 	return query
 }
 
+// QueryCampaigns queries the campaigns edge of a Integration.
+func (c *IntegrationClient) QueryCampaigns(_m *Integration) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.CampaignsTable, integration.CampaignsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.Campaign
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryIntegrationWebhooks queries the integration_webhooks edge of a Integration.
 func (c *IntegrationClient) QueryIntegrationWebhooks(_m *Integration) *IntegrationWebhookQuery {
 	query := (&IntegrationWebhookClient{config: c.config}).Query()
@@ -21301,25 +21035,6 @@ func (c *OrganizationClient) QueryAPITokens(_m *Organization) *APITokenQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.APIToken
 		step.Edge.Schema = schemaConfig.APIToken
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEmailBrandings queries the email_brandings edge of a Organization.
-func (c *OrganizationClient) QueryEmailBrandings(_m *Organization) *EmailBrandingQuery {
-	query := (&EmailBrandingClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(emailbranding.Table, emailbranding.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailBrandingsTable, organization.EmailBrandingsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.EmailBranding
-		step.Edge.Schema = schemaConfig.EmailBranding
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -37657,8 +37372,8 @@ type (
 		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
 		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken,
-		Entity, EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
 		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
@@ -37681,8 +37396,8 @@ type (
 		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
 		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailBranding, EmailTemplate, EmailVerificationToken,
-		Entity, EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
+		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
+		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
 		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,

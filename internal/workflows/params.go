@@ -28,16 +28,10 @@ type ApprovalActionParams struct {
 	Fields []string `json:"fields,omitempty"`
 }
 
-// NotificationActionParams defines params for NOTIFICATION actions
+// NotificationActionParams defines params for in-app NOTIFICATION actions
 type NotificationActionParams struct {
 	// TargetedActionParams identifies notification message targets
 	TargetedActionParams
-	// TemplateID references a notification template by ID
-	TemplateID string `json:"template_id,omitempty"`
-	// TemplateKey references a notification template by key
-	TemplateKey string `json:"template_key,omitempty"`
-	// OperationName identifies the integration operation to invoke when the template has an integration_id
-	OperationName string `json:"operation_name,omitempty"`
 	// Topic sets an optional notification topic
 	Topic string `json:"topic"`
 	// Title is the notification title
@@ -46,6 +40,22 @@ type NotificationActionParams struct {
 	Body string `json:"body"`
 	// Data is an optional payload merged into the notification data
 	Data map[string]any `json:"data"`
+}
+
+// SendEmailActionParams defines params for SEND_EMAIL actions
+type SendEmailActionParams struct {
+	// TargetedActionParams identifies users, groups, roles, or resolvers to email
+	TargetedActionParams
+	// EmailTemplateID references an email template by database ID
+	EmailTemplateID string `json:"emailTemplateId,omitempty"`
+	// EmailTemplateKey references an email template by catalog key
+	EmailTemplateKey string `json:"emailTemplateKey,omitempty"`
+	// To contains explicit recipient email addresses
+	To []string `json:"to,omitempty"`
+	// From overrides the default sender email address
+	From string `json:"from,omitempty"`
+	// ReplyTo sets an optional reply-to email address
+	ReplyTo string `json:"replyTo,omitempty"`
 }
 
 // WebhookActionParams defines params for WEBHOOK actions

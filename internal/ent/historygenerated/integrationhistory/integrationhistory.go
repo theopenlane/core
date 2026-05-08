@@ -90,6 +90,8 @@ const (
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
 	FieldPrimaryDirectory = "primary_directory"
+	// FieldCampaignEmail holds the string denoting the campaign_email field in the database.
+	FieldCampaignEmail = "campaign_email"
 	// Table holds the table name of the integrationhistory in the database.
 	Table = "integration_history"
 )
@@ -132,6 +134,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldProviderMetadataSnapshot,
 	FieldPrimaryDirectory,
+	FieldCampaignEmail,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -167,6 +170,8 @@ var (
 	DefaultSystemOwned bool
 	// DefaultPrimaryDirectory holds the default value on creation for the "primary_directory" field.
 	DefaultPrimaryDirectory bool
+	// DefaultCampaignEmail holds the default value on creation for the "campaign_email" field.
+	DefaultCampaignEmail bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -339,6 +344,11 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByPrimaryDirectory orders the results by the primary_directory field.
 func ByPrimaryDirectory(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPrimaryDirectory, opts...).ToFunc()
+}
+
+// ByCampaignEmail orders the results by the campaign_email field.
+func ByCampaignEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCampaignEmail, opts...).ToFunc()
 }
 
 var (
