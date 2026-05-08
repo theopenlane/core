@@ -41,10 +41,10 @@ type UserInput struct {
 
 // InstallationMetadata holds the stable Authentik instance identity for one installation
 type InstallationMetadata struct {
-	// Domain is the primary domain of the Authentik instance
-	Domain string `json:"domain,omitempty"`
-	// TenantID is the UUID of the Authentik tenant
-	TenantID string `json:"tenantId,omitempty"`
+	// Brand is the Authentik instance brand name
+	Brand string `json:"brand,omitempty"`
+	// Host is the HTTP host of the Authentik instance
+	Host string `json:"host,omitempty"`
 	// BaseURL is the base URL of the Authentik instance
 	BaseURL string `json:"baseUrl,omitempty"`
 }
@@ -52,7 +52,7 @@ type InstallationMetadata struct {
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalName: m.Domain,
-		ExternalID:   m.TenantID,
+		ExternalName: m.Brand,
+		ExternalID:   m.Host,
 	}
 }

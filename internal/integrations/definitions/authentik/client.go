@@ -22,18 +22,20 @@ const (
 	authentikGroupsEndpoint = "/api/v3/core/groups/"
 	// authentikMeEndpoint is the path for the Authentik current-user endpoint
 	authentikMeEndpoint = "/api/v3/core/users/me/"
-	// authentikDomainsEndpoint is the path for the Authentik domains endpoint
-	authentikDomainsEndpoint = "/api/v3/tenants/domains/"
+	// authentikSystemEndpoint is the path for the Authentik admin system info endpoint
+	authentikSystemEndpoint = "/api/v3/admin/system/"
 )
 
 // UserResponse represents a single Authentik user from the API
 type UserResponse struct {
-	PK       int    `json:"pk"`
-	Username string `json:"username"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	IsActive bool   `json:"is_active"`
-	Type     string `json:"type"`
+	PK          int    `json:"pk"`
+	Username    string `json:"username"`
+	Name        string `json:"name"`
+	Email       string `json:"email"`
+	IsActive    bool   `json:"is_active"`
+	Type        string `json:"type"`
+	IsSuperuser bool   `json:"is_superuser"`
+	UID         string `json:"uid"`
 }
 
 // GroupResponse represents a single Authentik group from the API
@@ -42,14 +44,17 @@ type GroupResponse struct {
 	Name        string         `json:"name"`
 	IsSuperuser bool           `json:"is_superuser"`
 	Parent      string         `json:"parent,omitempty"`
-	MembersObj  []MemberObject `json:"members_obj"`
+	UsersObj    []MemberObject `json:"users_obj"`
 }
 
 // MemberObject represents a group member embedded in a group response
 type MemberObject struct {
 	PK       int    `json:"pk"`
 	Username string `json:"username"`
+	Name     string `json:"name"`
 	Email    string `json:"email"`
+	IsActive bool   `json:"is_active"`
+	UID      string `json:"uid"`
 }
 
 // PaginatedResponse is the generic paginated wrapper Authentik uses for list endpoints
@@ -67,12 +72,16 @@ type PaginationMeta struct {
 	TotalPages int `json:"total_pages"`
 }
 
-// DomainResponse represents a single domain entry from Authentik
-type DomainResponse struct {
-	ID        int    `json:"id"`
-	Domain    string `json:"domain"`
-	IsPrimary bool   `json:"is_primary"`
-	Tenant    string `json:"tenant"`
+// SystemResponse represents the Authentik admin system info response
+type SystemResponse struct {
+	Brand    string        `json:"brand"`
+	HTTPHost string        `json:"http_host"`
+	Runtime  SystemRuntime `json:"runtime"`
+}
+
+// SystemRuntime holds runtime info from the Authentik system endpoint
+type SystemRuntime struct {
+	AuthentikVersion string `json:"authentik_version"`
 }
 
 // Client is the Authentik API client for one installation

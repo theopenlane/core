@@ -24,7 +24,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, nil
 	}
 
-	// build a temporary client to call the domains endpoint
+	// build a temporary client to call the system endpoint
 	client := &Client{
 		BaseURL: cred.BaseURL,
 		Token:   cred.Token,
@@ -33,21 +33,21 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		},
 	}
 
-	domain, tenantID, err := resolvePrimaryDomain(ctx, client)
+	brand, host, err := resolveSystemInfo(ctx, client)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}
 
 	return InstallationMetadata{
-		Domain:   domain,
-		TenantID: tenantID,
-		BaseURL:  cred.BaseURL,
+		Brand:   brand,
+		Host:    host,
+		BaseURL: cred.BaseURL,
 	}, true, nil
 }
 
-// resolvePrimaryDomain fetches the primary domain and tenant UUID from the Authentik instance
-func resolvePrimaryDomain(ctx context.Context, client *Client) (string, string, error) {
-	url := fmt.Sprintf("%s%s", client.BaseURL, authentikDomainsEndpoint)
+// resolveSystemInfo fetches the brand name and HTTP host from the Authentik admin system endpoint
+func resolveSystemInfo(ctx context.Context, client *Client) (string, string, error) {
+	url := fmt.Sprintf("%s%s", client.BaseURL, authentikSystemEndpoint)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -61,17 +61,10 @@ func resolvePrimaryDomain(ctx context.Context, client *Client) (string, string, 
 
 	defer resp.Body.Close()
 
-	var result PaginatedResponse[DomainResponse]
+	var result SystemResponse
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return "", "", ErrCredentialDecode
 	}
 
-	for _, d := range result.Results {
-		if d.IsPrimary {
-			return d.Domain, d.Tenant, nil
-		}
-	}
-
-	// fallback to BaseURL if no primary domain found
-	return client.BaseURL, "", nil
+	return result.Brand, result.HTTPHost, nil
 }

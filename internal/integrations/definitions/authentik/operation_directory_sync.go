@@ -80,7 +80,7 @@ func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types
 
 		groupEnvelopes = append(groupEnvelopes, envelope)
 
-		for _, member := range group.MembersObj {
+		for _, member := range group.UsersObj {
 			memberID := strconv.Itoa(member.PK)
 
 			if _, ok := includedUsers[memberID]; !ok {
