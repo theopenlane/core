@@ -166,9 +166,12 @@ func Builder(cfg Config) registry.Builder {
 			Mappings: githubAppMappings(),
 			Webhooks: []types.WebhookRegistration{
 				{
-					Name:   InstallationEventsWebhook.Name(),
-					Verify: app.Verify,
-					Event:  app.Event,
+					Name:               InstallationEventsWebhook.Name(),
+					StaticRoute:        "/github/app/webhook",
+					SecretSource:       func() string { return cfg.WebhookSecret },
+					ResolveIntegration: ResolveWebhookIntegration,
+					Verify:             app.Verify,
+					Event:              app.Event,
 					Events: []types.WebhookEventRegistration{
 						{
 							Name:   pingWebhookEvent.Name(),

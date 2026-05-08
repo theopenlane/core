@@ -535,8 +535,8 @@ coreConfiguration:
       discoveryurl: "http://localhost:5557/dex"  # @schema type:string; default:http://localhost:5557/dex
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
     email:
-      # -- Email provider API key
-      apiKey: ""  # @schema type:string
+      # -- Directory for dev-mode email output
+      testDir: "fixtures/email"  # @schema type:string; default:fixtures/email
       # -- Email service provider
       provider: "resend"  # @schema type:string; default:resend
       # -- Sender email address
@@ -574,10 +574,6 @@ coreConfiguration:
       maxretries: 5  # @schema type:integer; default:5
       failonenqueueerror: false  # @schema type:boolean; default:false
       queuename: "events"  # @schema type:string; default:events
-  # -- CampaignWebhook contains webhook configuration for campaign-related email providers
-  campaignwebhook:
-    # -- Enabled toggles the campaign webhook handler
-    enabled: false  # @schema type:boolean; default:false
   # -- Cloudflare contains configuration for Cloudflare integration
   cloudflare:
     # -- Enabled toggles the Cloudflare snapshot handler
@@ -962,22 +958,22 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_OIDCLOCAL_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-oidclocal-clientsecret"  # @schema type:string
-    # -- core-campaignwebhook-resendapikey secret configuration
-    core-campaignwebhook-resendapikey:
+    # -- core-integrations-email-resendsecret secret configuration
+    core-integrations-email-resendsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for campaignwebhook.resendapikey
-      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDAPIKEY"  # @schema type:string
+      # -- Environment variable key for integrations.email.resendSecret
+      secretKey: "CORE_INTEGRATIONS_EMAIL_RESENDSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-campaignwebhook-resendapikey"  # @schema type:string
-    # -- core-campaignwebhook-resendsecret secret configuration
-    core-campaignwebhook-resendsecret:
+      remoteKey: "core-integrations-email-resendsecret"  # @schema type:string
+    # -- core-integrations-email-apikey secret configuration
+    core-integrations-email-apikey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for campaignwebhook.resendsecret
-      secretKey: "CORE_CAMPAIGNWEBHOOK_RESENDSECRET"  # @schema type:string
+      # -- Environment variable key for integrations.email.apiKey
+      secretKey: "CORE_INTEGRATIONS_EMAIL_APIKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-campaignwebhook-resendsecret"  # @schema type:string
+      remoteKey: "core-integrations-email-apikey"  # @schema type:string
     # -- core-cloudflare-apitoken secret configuration
     core-cloudflare-apitoken:
       # -- Enable this external secret

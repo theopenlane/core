@@ -209,10 +209,6 @@ func serve(ctx context.Context) error {
 		}
 	}
 
-	if so.Config.Settings.CampaignWebhook.Enabled {
-		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
-	}
-
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
 
 	// closeDB ensures the database client is closed exactly once; both the shutdown

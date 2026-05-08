@@ -27,4 +27,10 @@ var (
 	ErrAssessmentNotFound = errors.New("email: assessment not found")
 	// ErrQuestionnaireDispatchFailed indicates failure during dispatch of a questionnaire access email to a campaign target
 	ErrQuestionnaireDispatchFailed = errors.New("email: questionnaire dispatch failed")
+	// ErrWebhookSecretMissing indicates the Resend webhook signing secret is not configured
+	ErrWebhookSecretMissing = errors.New("email: webhook secret missing")
+	// ErrWebhookPayloadInvalid indicates the inbound webhook payload could not be decoded
+	ErrWebhookPayloadInvalid = errors.New("email: webhook payload invalid")
+	// ErrWebhookMissingID indicates the svix-id header is absent from the webhook request
+	ErrWebhookMissingID = errors.New("email: webhook missing svix-id header")
 )

@@ -39,6 +39,9 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
+	// DevMode is the server-level development flag; when true, integrations that
+	// support it use local file-based senders instead of calling provider APIs
+	DevMode bool
 	// DefaultLookback sets how far back to fetch data when an operation has no prior successful run;
 	// defaults to 90 days when zero
 	DefaultLookback time.Duration
@@ -56,6 +59,8 @@ type Runtime struct {
 	postExecutionHook PostExecutionHook
 	// defaultLookback is applied as LastRunAt when an operation has no prior successful run
 	defaultLookback time.Duration
+	// devMode indicates the server is running in development mode
+	devMode bool
 }
 
 // SetPostExecutionHook registers a callback invoked after each HandleOperation call
@@ -200,6 +205,7 @@ func New(config Config) (*Runtime, error) {
 	rt := &Runtime{
 		injector:        injector,
 		defaultLookback: lookback,
+		devMode:         config.DevMode,
 	}
 
 	do.ProvideValue(injector, config.DB)
@@ -226,7 +232,7 @@ func New(config Config) (*Runtime, error) {
 
 		builders := config.DefinitionBuilders
 		if len(builders) == 0 && config.Registry == nil {
-			builders = catalog.Builders(config.CatalogConfig)
+			builders = catalog.Builders(config.CatalogConfig, config.DevMode)
 		}
 
 		if len(builders) > 0 {

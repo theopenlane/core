@@ -1023,8 +1023,8 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.email }}
       email:
-        {{- if .Values.openlane.coreConfiguration.integrations.email.apiKey }}
-        apiKey: {{ .Values.openlane.coreConfiguration.integrations.email.apiKey | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.testDir }}
+        testDir: {{ .Values.openlane.coreConfiguration.integrations.email.testDir | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.provider }}
         provider: {{ .Values.openlane.coreConfiguration.integrations.email.provider | quote }}
@@ -1113,12 +1113,6 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
         {{- end }}
-      {{- end }}
-    {{- end }}
-    {{- if .Values.openlane.coreConfiguration.campaignwebhook }}
-    campaignwebhook:
-      {{- if .Values.openlane.coreConfiguration.campaignwebhook.enabled }}
-      enabled: {{ .Values.openlane.coreConfiguration.campaignwebhook.enabled }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.cloudflare }}

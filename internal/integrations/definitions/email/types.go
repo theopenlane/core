@@ -23,6 +23,8 @@ var (
 	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]() //nolint:revive
 	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
 	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]() //nolint:revive
+	// resendWebhookRef is the webhook ref for inbound Resend delivery events
+	resendWebhookRef = types.NewWebhookRef("resend.delivery")
 )
 
 // Tag key constants for email delivery tracking via provider webhooks
@@ -40,10 +42,14 @@ const (
 // at startup. Branding and presentation fields carry struct-tag defaults only and
 // are overridable per-send via UserInput or per-operation Config functions
 type RuntimeEmailConfig struct {
+	// TestDir is the directory where dev-mode email files are written
+	TestDir string `json:"testDir,omitempty" koanf:"testDir" jsonschema:"description=Directory for dev-mode email output" default:"fixtures/email"`
+	// ResendSecret is the Resend webhook signing secret for verifying inbound delivery events
+	ResendSecret string `json:"resendSecret,omitempty" koanf:"resendSecret" jsonschema:"description=Resend webhook signing secret" sensitive:"true"`
 	// APIKey is the email provider API key
-	APIKey string `json:"apiKey" koanf:"apiKey" jsonschema:"required,description=Email provider API key"`
+	APIKey string `json:"apiKey" koanf:"apiKey" jsonschema:"required,description=Email provider API key" sensitive:"true"`
 	// Provider is the email service provider name (resend, sendgrid, postmark)
-	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider" default:"resend"`
+	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
 	FromEmail string `json:"fromEmail" koanf:"fromEmail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
 	// SupportEmail is the support contact email address

@@ -407,6 +407,14 @@
     },
     "email.RuntimeEmailConfig": {
       "properties": {
+        "testDir": {
+          "type": "string",
+          "description": "Directory for dev-mode email output"
+        },
+        "resendSecret": {
+          "type": "string",
+          "description": "Resend webhook signing secret"
+        },
         "apiKey": {
           "type": "string",
           "description": "Email provider API key"
@@ -414,9 +422,7 @@
         "provider": {
           "type": "string",
           "enum": [
-            "resend",
-            "sendgrid",
-            "postmark"
+            "resend"
           ],
           "description": "Email service provider"
         },
@@ -893,25 +899,6 @@
       },
       "additionalProperties": false,
       "type": "object"
-    },
-    "handlers.CampaignWebhookConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled toggles the campaign webhook handler"
-        },
-        "resendapikey": {
-          "type": "string",
-          "description": "ResendAPIKey is the API key used for Resend client initialization"
-        },
-        "resendsecret": {
-          "type": "string",
-          "description": "ResendSecret is the signing secret used to verify Resend webhook payloads"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "CampaignWebhookConfig contains webhook configuration for campaign-related email providers."
     },
     "handlers.CloudflareConfig": {
       "properties": {
@@ -1999,10 +1986,6 @@
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"
-    },
-    "campaignwebhook": {
-      "$ref": "#/$defs/handlers.CampaignWebhookConfig",
-      "description": "CampaignWebhook contains webhook configuration for campaign-related email providers"
     },
     "cloudflare": {
       "$ref": "#/$defs/handlers.CloudflareConfig",

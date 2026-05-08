@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
@@ -134,34 +133,32 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integratio
 	return r.ensureWebhook(ctx, integration, webhook, previousIntegrationID)
 }
 
-// DispatchWebhookEvent emits one normalized integration webhook event through Gala
-func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Integration, webhookName string, event types.WebhookReceivedEvent) error {
-	if integration == nil {
-		return ErrInstallationRequired
+// DispatchWebhookEvent emits one normalized integration webhook event through Gala.
+// When integration is nil the event is dispatched as a runtime webhook with no DB-backed installation
+func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Integration, definitionID, webhookName string, event types.WebhookReceivedEvent) error {
+	if integration != nil {
+		definitionID = integration.DefinitionID
 	}
 
-	registration, err := r.Registry().WebhookEvent(integration.DefinitionID, webhookName, event.Name)
+	registration, err := r.Registry().WebhookEvent(definitionID, webhookName, event.Name)
 	if err != nil {
 		return err
 	}
 
 	metadata := types.ExecutionMetadata{
-		OwnerID:       integration.OwnerID,
-		IntegrationID: integration.ID,
-		DefinitionID:  integration.DefinitionID,
-		Webhook:       webhookName,
-		Event:         event.Name,
-		DeliveryID:    event.DeliveryID,
+		DefinitionID: definitionID,
+		Webhook:      webhookName,
+		Event:        event.Name,
+		DeliveryID:   event.DeliveryID,
+		Runtime:      r.Registry().IsRuntimeIntegration(definitionID),
+	}
+
+	if integration != nil {
+		metadata.OwnerID = integration.OwnerID
+		metadata.IntegrationID = integration.ID
 	}
 
 	tags := types.GetTagsForExecutionMetadata(metadata)
-	if integration.Name != "" {
-		tags = append(tags, strcase.UpperSnakeCase(integration.Name))
-	}
-
-	if integration.Family != "" {
-		tags = append(tags, strcase.UpperSnakeCase(integration.Family))
-	}
 
 	receipt := r.Gala().EmitWithHeaders(types.WithExecutionMetadata(ctx, metadata), registration.Topic, operations.WebhookEnvelope{
 		ExecutionMetadata: metadata,
@@ -183,12 +180,23 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		return err
 	}
 
-	webhook, err := r.EnsureWebhook(ctx, integration, envelope.Webhook, "")
+	registration, err := r.Registry().WebhookEvent(metadata.DefinitionID, envelope.Webhook, envelope.Event)
 	if err != nil {
 		return err
 	}
 
-	registration, err := r.Registry().WebhookEvent(integration.DefinitionID, envelope.Webhook, envelope.Event)
+	event := types.WebhookReceivedEvent{
+		Name:       envelope.Event,
+		DeliveryID: envelope.DeliveryID,
+		Payload:    jsonx.CloneRawMessage(envelope.Payload),
+		Headers:    maps.Clone(envelope.Headers),
+	}
+
+	if integration == nil {
+		return registration.Handle(ctx, types.WebhookHandleRequest{Event: event})
+	}
+
+	webhook, err := r.EnsureWebhook(ctx, integration, envelope.Webhook, "")
 	if err != nil {
 		return err
 	}
@@ -196,13 +204,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	return registration.Handle(ctx, types.WebhookHandleRequest{
 		Integration: integration,
 		Webhook:     webhook,
-		DB:          r.DB(),
-		Event: types.WebhookReceivedEvent{
-			Name:       envelope.Event,
-			DeliveryID: envelope.DeliveryID,
-			Payload:    jsonx.CloneRawMessage(envelope.Payload),
-			Headers:    maps.Clone(envelope.Headers),
-		},
+		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
 			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
 				Registry:    r.Registry(),
@@ -226,6 +228,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		},
 	})
 }
+
 
 // ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
 func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
@@ -255,15 +258,22 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 		endpointID := keygen.PrefixedSecret("tolwh")
 		endpointURL := webhookEndpointURL(registration, endpointID)
 
-		return db.IntegrationWebhook.Create().
+		create := db.IntegrationWebhook.Create().
 			SetOwnerID(intg.OwnerID).
 			SetIntegrationID(intg.ID).
 			SetProvider(intg.DefinitionID).
 			SetName(registration.Name).
 			SetAllowedEvents(allowedEvents).
 			SetEndpointID(endpointID).
-			SetEndpointURL(endpointURL).
-			Save(ctx)
+			SetEndpointURL(endpointURL)
+
+		if registration.SecretSource != nil {
+			if secret := registration.SecretSource(); secret != "" {
+				create.SetSecretToken(secret)
+			}
+		}
+
+		return create.Save(ctx)
 	}
 
 	row := rows[0]

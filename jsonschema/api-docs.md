@@ -24,7 +24,6 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
-|[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#shortlinks)|`object`|||
 
@@ -136,7 +135,6 @@ Config contains the configuration for the core server
         "cel": {},
         "gala": {}
     },
-    "campaignwebhook": {},
     "cloudflare": {},
     "shortlinks": {}
 }
@@ -1658,8 +1656,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**testDir**|`string`|Directory for dev-mode email output<br/>|no|
+|**resendSecret**|`string`|Resend webhook signing secret<br/>|no|
 |**apiKey**|`string`|Email provider API key<br/>|yes|
-|**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"sendgrid"`, `"postmark"`<br/>|yes|
+|**provider**|`string`|Email service provider<br/>Enum: `"resend"`<br/>|yes|
 |**fromEmail**|`string`|Sender email address<br/>|yes|
 |**supportEmail**|`string`|Support contact email address<br/>|no|
 |**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
@@ -1744,21 +1744,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**maxretries**|`integer`|||
 |**failonenqueueerror**|`boolean`|||
 |**queuename**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="campaignwebhook"></a>
-## campaignwebhook: object
-
-CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the campaign webhook handler<br/>||
-|**resendapikey**|`string`|ResendAPIKey is the API key used for Resend client initialization<br/>||
-|**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
 
 **Additional Properties:** not allowed  
 <a name="cloudflare"></a>

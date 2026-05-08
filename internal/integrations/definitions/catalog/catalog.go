@@ -17,14 +17,16 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
-// Builders returns the built-in reference definition builders
-func Builders(cfg Config) []registry.Builder {
+// Builders returns the built-in reference definition builders. devMode is the
+// server-level development flag; when true, integrations that support it (e.g.
+// email) use local file-based senders instead of calling provider APIs
+func Builders(cfg Config, devMode bool) []registry.Builder {
 	return []registry.Builder{
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
 		cloudflare.Builder(),
-		email.Builder(&cfg.Email),
+		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
@@ -32,6 +34,6 @@ func Builders(cfg Config) []registry.Builder {
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),
 		scim.Builder(),
-		slack.Builder(cfg.Slack, &cfg.SlackRuntime),
+		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
 	}
 }

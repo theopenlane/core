@@ -61,13 +61,6 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
 	}
 
-	// Verify the webhook signature using the persisted secret token before any further processing
-	if err := verifyWebhookHMACSHA256(req, payload, persistedWebhook.SecretToken); err != nil {
-		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
-
-		return h.BadRequest(ctx, err, openapiCtx)
-	}
-
 	integration, err := h.IntegrationsRuntime.ResolveIntegration(webhookCtx, integrationsruntime.IntegrationLookup{IntegrationID: persistedWebhook.IntegrationID})
 	if err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration")
@@ -83,7 +76,13 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context, openapiCtx *OpenAP
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
 	}
 
-	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, integration, webhookReg, persistedWebhook, payload, false)
+	if err := verifyIntegrationWebhook(webhookReg, req, payload, persistedWebhook, integration); err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
+
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, integration, webhookReg, persistedWebhook, payload)
 }
 
 // readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit
@@ -131,24 +130,28 @@ func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) e
 	return nil
 }
 
-// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration
-func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, integration *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte, skipVerify bool) error {
+// verifyIntegrationWebhook delegates verification to the registration's Verify func when present,
+// otherwise falls back to the framework HMAC-SHA256 verification
+func verifyIntegrationWebhook(reg types.WebhookRegistration, req *http.Request, payload []byte, persistedWebhook *ent.IntegrationWebhook, integration *ent.Integration) error {
+	if reg.Verify != nil {
+		return reg.Verify(types.WebhookInboundRequest{
+			Integration: integration,
+			Webhook:     persistedWebhook,
+			Request:     req,
+			Payload:     payload,
+		})
+	}
+
+	return verifyWebhookHMACSHA256(req, payload, persistedWebhook.SecretToken)
+}
+
+// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration.
+// Callers must verify the request before calling this function
+func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, integration *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte) error {
 	requestCtx = logx.WithFields(requestCtx, logx.LogFields{
 		"integration_id": integration.ID,
 		"webhook":        webhook.Name,
 	})
-
-	// this actually isn't skipping verification it's delegating to the app-level handler so it's preventing dual verification of the same payload
-	if !skipVerify && webhook.Verify != nil {
-		if err := webhook.Verify(types.WebhookInboundRequest{
-			Integration: integration,
-			Webhook:     persistedWebhook,
-			Request:     ctx.Request(),
-			Payload:     payload,
-		}); err != nil {
-			return h.BadRequest(ctx, err, openapiCtx)
-		}
-	}
 
 	if webhook.Event == nil {
 		logx.FromContext(requestCtx).Error().Msg("webhook registration missing event resolver")
@@ -185,7 +188,7 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
 	}
 
-	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, integration, webhook.Name, event); err != nil {
+	if err := h.IntegrationsRuntime.DispatchWebhookEvent(requestCtx, integration, integration.DefinitionID, webhook.Name, event); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to dispatch webhook event")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
@@ -193,6 +196,113 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 
 	if err := h.IntegrationsRuntime.FinalizeWebhookDelivery(requestCtx, persistedWebhook, event.DeliveryID, "accepted", nil); err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Str("event", event.Name).Msg("failed to finalize webhook delivery")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+}
+
+// IntegrationStaticWebhookHandler returns a handler for webhooks addressed by a fixed
+// definition-level route rather than a per-installation endpoint ID.
+// When ResolveIntegration is set, the handler resolves a DB-backed integration and
+// delegates to the full handleResolvedIntegrationWebhook pipeline (gala dispatch,
+// idempotency tracking, delivery finalization).
+// When ResolveIntegration is nil, the webhook is runtime-owned: the handler resolves
+// the event, finds the registered handler, and calls it inline with no DB integration
+func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName string) func(echo.Context, *OpenAPIContext) error {
+	return func(ctx echo.Context, openapiCtx *OpenAPIContext) error {
+		if isRegistrationContext(ctx) {
+			return nil
+		}
+
+		req := ctx.Request()
+
+		payload, err := readIntegrationWebhookPayload(ctx)
+		if err != nil {
+			return h.BadRequest(ctx, err, openapiCtx)
+		}
+
+		webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(definitionID, webhookName)
+		if err != nil {
+			return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
+		}
+
+		webhookCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
+		webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
+
+		if webhookReg.Verify != nil {
+			if err := webhookReg.Verify(types.WebhookInboundRequest{
+				Request: req,
+				Payload: payload,
+			}); err != nil {
+				logx.FromContext(webhookCtx).Error().Err(err).Msg("static webhook verification failed")
+
+				return h.BadRequest(ctx, err, openapiCtx)
+			}
+		}
+
+		if webhookReg.ResolveIntegration != nil {
+			return h.handleStaticWebhookWithIntegration(webhookCtx, ctx, openapiCtx, webhookName, webhookReg, req, payload)
+		}
+
+		return h.handleStaticWebhookRuntime(webhookCtx, ctx, openapiCtx, definitionID, webhookName, webhookReg, req, payload)
+	}
+}
+
+// handleStaticWebhookWithIntegration handles static webhooks backed by a DB integration record.
+// Used by definitions like GitHub App where webhooks resolve to a per-customer installation
+func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, webhookName string, webhookReg types.WebhookRegistration, req *http.Request, payload []byte) error {
+	integration, err := webhookReg.ResolveIntegration(webhookCtx, h.DBClient, types.WebhookInboundRequest{
+		Request: req,
+		Payload: payload,
+	})
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+		}
+
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to resolve integration for static webhook")
+
+		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+	}
+
+	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+
+	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(webhookCtx, integration, webhookName, "")
+	if err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to ensure webhook")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
+	}
+
+	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, openapiCtx, integration, webhookReg, persistedWebhook, payload)
+}
+
+// handleStaticWebhookRuntime handles static webhooks for runtime-owned definitions
+// that have no DB integration record. The event is resolved and dispatched through
+// the runtime which owns the DB client and handler lifecycle
+func (h *Handler) handleStaticWebhookRuntime(webhookCtx context.Context, ctx echo.Context, openapiCtx *OpenAPIContext, definitionID string, webhookName string, webhookReg types.WebhookRegistration, req *http.Request, payload []byte) error {
+	if webhookReg.Event == nil {
+		logx.FromContext(webhookCtx).Error().Msg("webhook registration missing event resolver")
+
+		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured, openapiCtx)
+	}
+
+	event, err := webhookReg.Event(types.WebhookInboundRequest{
+		Request: req,
+		Payload: payload,
+	})
+	if err != nil {
+		return h.BadRequest(ctx, err, openapiCtx)
+	}
+
+	if event.Name == "" {
+		return h.Success(ctx, rout.Reply{Success: true}, openapiCtx)
+	}
+
+	if err := h.IntegrationsRuntime.DispatchWebhookEvent(webhookCtx, nil, definitionID, webhookName, event); err != nil {
+		logx.FromContext(webhookCtx).Error().Err(err).Str("event", event.Name).Msg("runtime webhook event dispatch failed")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}

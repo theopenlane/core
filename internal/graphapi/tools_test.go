@@ -306,8 +306,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		Gala:     galaInstance,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig()),
-			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}),
+			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
 		},
 	})
 	requireNoError(t, err)

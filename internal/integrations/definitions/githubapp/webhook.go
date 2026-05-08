@@ -7,9 +7,15 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
+
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -191,7 +197,7 @@ func (PingWebhook) Handle(ctx context.Context, request types.WebhookHandleReques
 		return ErrWebhookMetadataEncode
 	}
 
-	if err := request.DB.Integration.UpdateOneID(request.Integration.ID).
+	if err := ent.FromContext(ctx).Integration.UpdateOneID(request.Integration.ID).
 		SetMetadata(mapx.DeepMergeMapAny(mapx.DeepCloneMapAny(request.Integration.Metadata), metadataPatch)).
 		Exec(ctx); err != nil {
 		return ErrWebhookPersistFailed
@@ -285,4 +291,41 @@ func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	}
 
 	return repo.Name
+}
+
+// ResolveWebhookIntegration locates the GitHub App integration record from an inbound webhook payload
+// by extracting the installation ID and querying the integration metadata
+func ResolveWebhookIntegration(ctx context.Context, db *ent.Client, req types.WebhookInboundRequest) (*ent.Integration, error) {
+	installationID, err := extractWebhookInstallationID(req.Payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return db.Integration.Query().
+		Where(
+			integration.DefinitionIDEQ(DefinitionID.ID()),
+			func(s *sql.Selector) {
+				s.Where(sqljson.ValueEQ(integration.FieldInstallationMetadata, installationID, sqljson.Path("attributes", "installationId")))
+			},
+		).
+		Only(ctx)
+}
+
+// extractWebhookInstallationID extracts the GitHub App installation ID from the webhook payload envelope
+func extractWebhookInstallationID(payload []byte) (string, error) {
+	var envelope struct {
+		Installation *struct {
+			ID int64 `json:"id"`
+		} `json:"installation"`
+	}
+
+	if err := json.Unmarshal(payload, &envelope); err != nil {
+		return "", ErrWebhookPayloadInvalid
+	}
+
+	if envelope.Installation == nil || envelope.Installation.ID == 0 {
+		return "", ErrInstallationIDMissing
+	}
+
+	return strconv.FormatInt(envelope.Installation.ID, 10), nil
 }

@@ -38,6 +38,7 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 			Keystore:      credStore,
 			RedisClient:   s.Config.Handler.RedisClient,
 			CatalogConfig: s.Config.Settings.Integrations,
+			DevMode:       s.Config.Settings.Server.Dev,
 		})
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to initialize integration runtime")

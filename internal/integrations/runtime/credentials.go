@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -298,6 +300,8 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		if err := r.reconcileOperations(systemCtx, installation); err != nil {
 			return err
 		}
+
+		r.notifyIntegrationInstalled(systemCtx, installation, def)
 	}
 
 	return nil
@@ -369,6 +373,36 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	}
 
 	return connection, nil
+}
+
+// notifyIntegrationInstalled dispatches a Slack system message when an integration
+// is connected for the first time. Failures are logged and do not block the installation
+func (r *Runtime) notifyIntegrationInstalled(ctx context.Context, installation *ent.Integration, def types.Definition) {
+	org, err := r.DB().Organization.Get(ctx, installation.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve organization for install notification")
+		return
+	}
+
+	config, err := json.Marshal(slackdef.IntegrationInstalledMessage{
+		IntegrationName:  def.DisplayName,
+		OrganizationName: org.DisplayName,
+		OrganizationID:   org.ID,
+	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to marshal install notification config")
+		return
+	}
+
+	if _, err := r.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: slackdef.DefinitionID.ID(),
+		Operation:    slackdef.IntegrationInstalledOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to dispatch install notification")
+	}
 }
 
 // persistConnectionState updates the provider state for an installation with a new credential reference

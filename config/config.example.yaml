@@ -79,10 +79,6 @@ authz:
     modulefile: ""
     storeid: ""
     storename: openlane
-campaignwebhook:
-    enabled: false
-    resendapikey: ""
-    resendsecret: ""
 cloudflare:
     accountid: ""
     apitoken: ""
@@ -156,8 +152,10 @@ integrations:
         productURL: https://console.theopenlane.io
         provider: resend
         questionnaireEmail: support@mail.theopenlane.io
+        resendSecret: ""
         rootURL: https://www.theopenlane.io
         supportEmail: support@theopenlane.io
+        testDir: fixtures/email
     githubapp:
         appid: ""
         appslug: ""
