@@ -79,6 +79,7 @@ github.com/gorilla/securecookie v1.1.2/go.mod h1:NfCASbcHqRSY+3a8tlWJwsQap2VX5pw
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 h1:JeSE6pjso5THxAzdVpqr6/geYxZytqFMBCOtn/ujyeo=
 github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674/go.mod h1:r4w70xmWCQKmi1ONH4KIaBptdivuRPyosB9RmPlGEwA=
 github.com/gqlgo/gqlgenc v0.37.0 h1:ZdI9B1jyhfS+G4V6gE4Jx5Ddhn56d+RQHy81NhfING4=
+github.com/gqlgo/gqlgenc v0.37.0/go.mod h1:fCdd4cN/vEEKDSxnV1nbReNtNAq+Px/W+ko/aGRdivE=
 github.com/hashicorp/golang-lru/v2 v2.0.7 h1:a+bsQ5rvGLjzHuww6tVxozPZFVghXaHOwFs4luLUK2k=
 github.com/hashicorp/golang-lru/v2 v2.0.7/go.mod h1:QeFd9opnmA6QUJc5vARoKUSoFhyfM2/ZepoAG6RGpeM=
 github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f h1:7LYC+Yfkj3CTRcShK0KOL/w6iTiKyqqBA9a41Wnggw8=
@@ -183,8 +184,8 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
-github.com/theopenlane/core v1.20.3 h1:wYLSqC5D+Gfe8XcHfC9M2ZnaApScWrETyeLtIsgGoZQ=
-github.com/theopenlane/core v1.20.3/go.mod h1:vkT79b2jqcnnY06EH3MyT3D0bfiOp1K5tk0ZsQBXrDM=
+github.com/theopenlane/core v1.20.4 h1:/Ck3J6MZSdWByGaBlt6Zrtz1h1Hle/jG9vUBQRfD+mI=
+github.com/theopenlane/core v1.20.4/go.mod h1:8RS0Tf0/Uy9xXDLWWur1+uT5jg/Nsug0c3sl28ZF9jo=
 github.com/theopenlane/core/common v1.0.21 h1:KWdGMCQT0WRdp4V/kvTUTnWu3cgE7ep9RFQeHIsK5AE=
 github.com/theopenlane/core/common v1.0.21/go.mod h1:waXdCoEZt/jaSmHa1e/U/of1AeauVg1WcaNg/usWAlg=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
