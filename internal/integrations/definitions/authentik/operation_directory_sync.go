@@ -2,7 +2,6 @@ package authentik
 
 import (
 	"context"
-	"strconv"
 
 	authentikSDK "goauthentik.io/api/v3"
 
@@ -41,7 +40,7 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 	includedUsers := make(map[string]struct{}, len(users))
 
 	for _, user := range users {
-		resourceID := strconv.Itoa(int(user.GetPk()))
+		resourceID := user.GetUid()
 
 		envelope, err := providerkit.MarshalEnvelope(resourceID, user, ErrPayloadEncode)
 		if err != nil {
@@ -80,7 +79,7 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 		groupEnvelopes = append(groupEnvelopes, envelope)
 
 		for _, member := range group.UsersObj {
-			memberID := strconv.Itoa(int(member.GetPk()))
+			memberID := member.GetUid()
 
 			if _, ok := includedUsers[memberID]; !ok {
 				continue
