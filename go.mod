@@ -53,7 +53,7 @@ require (
 	github.com/google/go-github/v84 v84.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.36.0
+	github.com/gqlgo/gqlgenc v0.37.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
@@ -160,7 +160,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.9.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.12.0 // indirect
-	github.com/Yamashou/gqlgenc v0.33.0
+	github.com/Yamashou/gqlgenc v0.33.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.10 // indirect
 	github.com/clipperhouse/displaywidth v0.6.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
