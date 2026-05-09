@@ -4,8 +4,6 @@ import "errors"
 
 // Campaign error constants used by dispatch/test-email flows.
 var (
-	// ErrCampaignDispatchNotQuestionnaire is returned when dispatching a non-questionnaire campaign.
-	ErrCampaignDispatchNotQuestionnaire = errors.New("campaign must be of type QUESTIONNAIRE to dispatch")
 	// ErrCampaignTestEmailNotQuestionnaire is returned when sending test emails for a non-questionnaire campaign.
 	ErrCampaignTestEmailNotQuestionnaire = errors.New("campaign must be of type QUESTIONNAIRE to send a test email")
 	// ErrCampaignMissingAssessmentID is returned when a campaign lacks an assessment reference.
@@ -18,4 +16,10 @@ var (
 	ErrCampaignDispatchScheduledAtInPast = errors.New("scheduledAt must be in the future")
 	// ErrCampaignDispatchScheduleRequired is returned when scheduling a job without a schedule time.
 	ErrCampaignDispatchScheduleRequired = errors.New("schedule time is required")
+	// ErrCampaignDispatchRuntimeRequired is returned when integration runtime dispatch is unavailable.
+	ErrCampaignDispatchRuntimeRequired = errors.New("campaign dispatch requires integration runtime")
+	// ErrCampaignTargetLimitExceeded is returned when a campaign exceeds the maximum allowed targets.
+	ErrCampaignTargetLimitExceeded = errors.New("campaign cannot exceed 500 targets")
+	// ErrCampaignMissingEmailTemplate is returned when a branded campaign has no linked email template.
+	ErrCampaignMissingEmailTemplate = errors.New("campaign requires a linked email template for dispatch")
 )

@@ -20,7 +20,6 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
@@ -30,6 +29,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -39,8 +39,13 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -117,6 +122,7 @@ type HandlerTestSuite struct {
 	sharedOTPManager     *totp.Client
 	sharedPool           *gala.Pool
 	galaRuntime          *gala.Gala
+	sharedSlackRecorder  *slackWebhookRecorder
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -227,7 +233,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	galaOpts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Emailer(&emailtemplates.Config{CompanyName: "Meow Inc."}),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&galaSessionConfig),
 		ent.EntConfig(&entconfig.Config{Modules: entconfig.Modules{Enabled: true, UseSandbox: true}}),
@@ -248,11 +253,15 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	credStore, err := keystore.NewStore(suite.galaDB)
 	require.NoError(suite.T(), err)
 
+	suite.sharedSlackRecorder = newSlackWebhookRecorder(suite.T())
+
 	rt, err := runtime.New(runtime.Config{
 		DB:       suite.galaDB,
 		Gala:     suite.galaRuntime,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
+			emaildef.Builder(emaildef.MockRuntimeConfig()),
+			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: suite.sharedSlackRecorder.URL()}),
 			registry.Builder(buildTestOAuthDefinition),
 			githubapp.Builder(defaultGitHubAppSpec()),
 			configTestDefinitionBuilder(configTestProviderID, false),
@@ -299,9 +308,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
-		ent.Emailer(&emailtemplates.Config{
-			CompanyName: "Meow Inc.",
-		}),
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{
@@ -329,7 +335,8 @@ func (suite *HandlerTestSuite) SetupTest() {
 	err = db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
 
-	// add db to test client
+	// add db to test client and wire integration runtime so email dispatch works
+	db.IntegrationsRuntime = suite.sharedIntegrationsRT
 	suite.db = db
 
 	// add the client
@@ -440,6 +447,8 @@ func (suite *HandlerTestSuite) TearDownTest() {
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
 	require.NoError(suite.T(), err)
+
+	suite.mockEmailSender().Reset()
 }
 
 func (suite *HandlerTestSuite) TearDownSuite() {
@@ -451,6 +460,8 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 	if suite.galaDB != nil {
 		_ = suite.galaDB.CloseAll()
 	}
+
+	suite.sharedSlackRecorder.Close()
 
 	testutils.TeardownFixture(suite.tf)
 
@@ -502,6 +513,36 @@ var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
+}
+
+// dispatchSystemEmail sends an email through the integrations runtime, mirroring
+// the sendSystemEmail path used by ent hooks and handler.sendEmail
+func (suite *HandlerTestSuite) dispatchSystemEmail(ctx context.Context, operationName string, input any) {
+	t := suite.T()
+	t.Helper()
+
+	config, err := json.Marshal(input)
+	require.NoError(t, err)
+
+	_, err = suite.sharedIntegrationsRT.Dispatch(ctx, operations.DispatchRequest{
+		DefinitionID: emaildef.DefinitionID.ID(),
+		Operation:    operationName,
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	})
+	require.NoError(t, err)
+}
+
+// mockEmailSender returns the mock email sender from the shared integration runtime
+func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.sharedIntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	suite.Require().True(ok, "email runtime client not found")
+
+	ms := emaildef.MockSenderFromClient(rc)
+	suite.Require().NotNil(ms, "mock sender not found")
+
+	return ms
 }
 
 func buildTestOAuthDefinition() (types.Definition, error) {

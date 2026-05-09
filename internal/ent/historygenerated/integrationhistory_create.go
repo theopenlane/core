@@ -475,6 +475,20 @@ func (_c *IntegrationHistoryCreate) SetNillablePrimaryDirectory(v *bool) *Integr
 	return _c
 }
 
+// SetCampaignEmail sets the "campaign_email" field.
+func (_c *IntegrationHistoryCreate) SetCampaignEmail(v bool) *IntegrationHistoryCreate {
+	_c.mutation.SetCampaignEmail(v)
+	return _c
+}
+
+// SetNillableCampaignEmail sets the "campaign_email" field if the given value is not nil.
+func (_c *IntegrationHistoryCreate) SetNillableCampaignEmail(v *bool) *IntegrationHistoryCreate {
+	if v != nil {
+		_c.SetCampaignEmail(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *IntegrationHistoryCreate) SetID(v string) *IntegrationHistoryCreate {
 	_c.mutation.SetID(v)
@@ -563,6 +577,10 @@ func (_c *IntegrationHistoryCreate) defaults() error {
 		v := integrationhistory.DefaultPrimaryDirectory
 		_c.mutation.SetPrimaryDirectory(v)
 	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		v := integrationhistory.DefaultCampaignEmail
+		_c.mutation.SetCampaignEmail(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if integrationhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized integrationhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -599,6 +617,9 @@ func (_c *IntegrationHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.PrimaryDirectory(); !ok {
 		return &ValidationError{Name: "primary_directory", err: errors.New(`historygenerated: missing required field "IntegrationHistory.primary_directory"`)}
+	}
+	if _, ok := _c.mutation.CampaignEmail(); !ok {
+		return &ValidationError{Name: "campaign_email", err: errors.New(`historygenerated: missing required field "IntegrationHistory.campaign_email"`)}
 	}
 	return nil
 }
@@ -775,6 +796,10 @@ func (_c *IntegrationHistoryCreate) createSpec() (*IntegrationHistory, *sqlgraph
 	if value, ok := _c.mutation.PrimaryDirectory(); ok {
 		_spec.SetField(integrationhistory.FieldPrimaryDirectory, field.TypeBool, value)
 		_node.PrimaryDirectory = value
+	}
+	if value, ok := _c.mutation.CampaignEmail(); ok {
+		_spec.SetField(integrationhistory.FieldCampaignEmail, field.TypeBool, value)
+		_node.CampaignEmail = value
 	}
 	return _node, _spec
 }

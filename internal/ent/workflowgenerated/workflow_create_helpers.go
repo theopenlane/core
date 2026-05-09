@@ -56,7 +56,6 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	}),
 	NormalizeSchemaType("Discussion"):     makeCreateEntry[generated.CreateDiscussionInput](func(client *generated.Client) *generated.DiscussionCreate { return client.Discussion.Create() }),
 	NormalizeSchemaType("DocumentData"):   makeCreateEntry[generated.CreateDocumentDataInput](func(client *generated.Client) *generated.DocumentDataCreate { return client.DocumentData.Create() }),
-	NormalizeSchemaType("EmailBranding"):  makeCreateEntry[generated.CreateEmailBrandingInput](func(client *generated.Client) *generated.EmailBrandingCreate { return client.EmailBranding.Create() }),
 	NormalizeSchemaType("EmailTemplate"):  makeCreateEntry[generated.CreateEmailTemplateInput](func(client *generated.Client) *generated.EmailTemplateCreate { return client.EmailTemplate.Create() }),
 	NormalizeSchemaType("Entity"):         makeCreateEntry[generated.CreateEntityInput](func(client *generated.Client) *generated.EntityCreate { return client.Entity.Create() }),
 	NormalizeSchemaType("EntityType"):     makeCreateEntry[generated.CreateEntityTypeInput](func(client *generated.Client) *generated.EntityTypeCreate { return client.EntityType.Create() }),

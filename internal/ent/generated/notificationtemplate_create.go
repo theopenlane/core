@@ -212,6 +212,14 @@ func (_c *NotificationTemplateCreate) SetChannel(v enums.Channel) *NotificationT
 	return _c
 }
 
+// SetNillableChannel sets the "channel" field if the given value is not nil.
+func (_c *NotificationTemplateCreate) SetNillableChannel(v *enums.Channel) *NotificationTemplateCreate {
+	if v != nil {
+		_c.SetChannel(*v)
+	}
+	return _c
+}
+
 // SetFormat sets the "format" field.
 func (_c *NotificationTemplateCreate) SetFormat(v enums.NotificationTemplateFormat) *NotificationTemplateCreate {
 	_c.mutation.SetFormat(v)
@@ -569,9 +577,6 @@ func (_c *NotificationTemplateCreate) check() error {
 		if err := notificationtemplate.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "NotificationTemplate.name": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Channel(); !ok {
-		return &ValidationError{Name: "channel", err: errors.New(`generated: missing required field "NotificationTemplate.channel"`)}
 	}
 	if v, ok := _c.mutation.Channel(); ok {
 		if err := notificationtemplate.ChannelValidator(v); err != nil {

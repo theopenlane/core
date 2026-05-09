@@ -194,14 +194,21 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 		))
 	}
 
-	defs, err = query.All(allowCtx)
+	candidates, err := query.All(allowCtx)
 	if err != nil {
 		return nil, scope.Fail(fmt.Errorf("%w: %w", ErrFailedToQueryDefinitions, err), nil)
 	}
 
+	// Merge in-memory runtime definitions that pass the same coarse prefilter
+	if e.runtimeDefs != nil {
+		for _, rdef := range e.runtimeDefs.Match(schemaType, eventType, changedFields, changedEdges) {
+			candidates = append(candidates, rdef.ToEntDefinition())
+		}
+	}
+
 	var matching []*generated.WorkflowDefinition
 
-	for _, def := range defs {
+	for _, def := range candidates {
 		if e.matchesTriggers(ctx, scope, def, eventType, changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj) {
 			matching = append(matching, def)
 		}

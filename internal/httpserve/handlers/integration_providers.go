@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -12,8 +14,15 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 		return nil
 	}
 
+	defs := h.IntegrationsRuntime.Registry().Definitions()
+	for i := range defs {
+		defs[i].Operations = lo.Filter(defs[i].Operations, func(op types.OperationRegistration, _ int) bool {
+			return op.CustomerSelectable == nil || *op.CustomerSelectable
+		})
+	}
+
 	return h.Success(ctx, IntegrationProvidersResponse{
 		Reply:     rout.Reply{Success: true},
-		Providers: h.IntegrationsRuntime.Registry().Definitions(),
+		Providers: defs,
 	})
 }

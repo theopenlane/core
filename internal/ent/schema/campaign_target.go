@@ -176,8 +176,7 @@ func (c CampaignTarget) Edges() []ent.Edge {
 // Indexes of the CampaignTarget
 func (CampaignTarget) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("campaign_id", "email").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("campaign_id", "email").Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("status"),
 		index.Fields("contact_id"),
 		index.Fields("user_id"),

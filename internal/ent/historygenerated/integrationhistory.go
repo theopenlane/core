@@ -93,7 +93,9 @@ type IntegrationHistory struct {
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
 	PrimaryDirectory bool `json:"primary_directory,omitempty"`
-	selectValues     sql.SelectValues
+	// designates this email integration as the one to use for campaign dispatch within its owner organization
+	CampaignEmail bool `json:"campaign_email,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -105,7 +107,7 @@ func (*IntegrationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integrationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case integrationhistory.FieldSystemOwned, integrationhistory.FieldPrimaryDirectory:
+		case integrationhistory.FieldSystemOwned, integrationhistory.FieldPrimaryDirectory, integrationhistory.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
 		case integrationhistory.FieldID, integrationhistory.FieldRef, integrationhistory.FieldCreatedBy, integrationhistory.FieldUpdatedBy, integrationhistory.FieldDeletedBy, integrationhistory.FieldOwnerID, integrationhistory.FieldInternalNotes, integrationhistory.FieldSystemInternalID, integrationhistory.FieldEnvironmentName, integrationhistory.FieldEnvironmentID, integrationhistory.FieldScopeName, integrationhistory.FieldScopeID, integrationhistory.FieldName, integrationhistory.FieldDescription, integrationhistory.FieldKind, integrationhistory.FieldIntegrationType, integrationhistory.FieldPlatformID, integrationhistory.FieldDefinitionID, integrationhistory.FieldDefinitionVersion, integrationhistory.FieldDefinitionSlug, integrationhistory.FieldFamily, integrationhistory.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -358,6 +360,12 @@ func (_m *IntegrationHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.PrimaryDirectory = value.Bool
 			}
+		case integrationhistory.FieldCampaignEmail:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_email", values[i])
+			} else if value.Valid {
+				_m.CampaignEmail = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -502,6 +510,9 @@ func (_m *IntegrationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("primary_directory=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PrimaryDirectory))
+	builder.WriteString(", ")
+	builder.WriteString("campaign_email=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CampaignEmail))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	oktagosdk "github.com/okta/okta-sdk-golang/v5/okta"
+	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -27,7 +27,7 @@ type directoryMembershipPayload struct {
 	// Group identifies the group the member belongs to
 	Group directoryGroupRef `json:"group"`
 	// Member is the group member record returned by the Okta API
-	Member *oktagosdk.GroupMember `json:"member,omitempty"`
+	Member *oktagosdk.User `json:"member,omitempty"`
 }
 
 // DirectorySync collects Okta directory users, groups, and memberships for ingest
@@ -210,13 +210,13 @@ func listDirectoryGroups(ctx context.Context, c *oktagosdk.APIClient) ([]oktagos
 }
 
 // listGroupMembers pages through all members of one Okta group
-func listGroupMembers(ctx context.Context, c *oktagosdk.APIClient, group *oktagosdk.Group) ([]oktagosdk.GroupMember, error) {
+func listGroupMembers(ctx context.Context, c *oktagosdk.APIClient, group *oktagosdk.Group) ([]oktagosdk.User, error) {
 	groupID := group.GetId()
 	if groupID == "" {
 		return nil, nil
 	}
 
-	members := make([]oktagosdk.GroupMember, 0)
+	members := make([]oktagosdk.User, 0)
 	cursor := ""
 
 	for {
@@ -247,7 +247,7 @@ func listGroupMembers(ctx context.Context, c *oktagosdk.APIClient, group *oktago
 }
 
 // isIncludedMember reports whether the member was included in the account ingest set
-func isIncludedMember(member *oktagosdk.GroupMember, includedUsers map[string]struct{}) bool {
+func isIncludedMember(member *oktagosdk.User, includedUsers map[string]struct{}) bool {
 	if member == nil || len(includedUsers) == 0 {
 		return false
 	}
@@ -287,7 +287,7 @@ func directoryGroupResource(group *oktagosdk.Group) string {
 }
 
 // directoryMemberResource returns the best stable resource identifier for one group member
-func directoryMemberResource(member *oktagosdk.GroupMember) string {
+func directoryMemberResource(member *oktagosdk.User) string {
 	if member == nil {
 		return ""
 	}

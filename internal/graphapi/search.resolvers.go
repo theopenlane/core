@@ -33,7 +33,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		controlResults              *generated.ControlConnection
 		controlobjectiveResults     *generated.ControlObjectiveConnection
 		customtypeenumResults       *generated.CustomTypeEnumConnection
-		emailbrandingResults        *generated.EmailBrandingConnection
 		emailtemplateResults        *generated.EmailTemplateConnection
 		entityResults               *generated.EntityConnection
 		evidenceResults             *generated.EvidenceConnection
@@ -190,18 +189,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, customtypeenumResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			emailbrandingResults, err = searchEmailBrandings(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, emailbrandingResults, highlightTracker)
 			}
 		},
 		func() {
@@ -640,11 +627,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += customtypeenumResults.TotalCount
 	}
-	if emailbrandingResults != nil && len(emailbrandingResults.Edges) > 0 {
-		res.EmailBrandings = emailbrandingResults
-
-		res.TotalCount += emailbrandingResults.TotalCount
-	}
 	if emailtemplateResults != nil && len(emailtemplateResults.Edges) > 0 {
 		res.EmailTemplates = emailtemplateResults
 
@@ -902,16 +884,6 @@ func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, 
 
 	// return the results
 	return customtypeenumResults, nil
-}
-func (r *queryResolver) EmailBrandingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailBrandingConnection, error) {
-	emailbrandingResults, err := searchEmailBrandings(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, common.ErrSearchFailed
-	}
-
-	// return the results
-	return emailbrandingResults, nil
 }
 func (r *queryResolver) EmailTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EmailTemplateConnection, error) {
 	emailtemplateResults, err := searchEmailTemplates(ctx, query, after, first, before, last)

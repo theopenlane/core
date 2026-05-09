@@ -64,9 +64,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
-	for _, hook := range history.Hooks[*EmailBrandingMutation]() {
-		c.EmailBranding.Use(hook)
-	}
 	for _, hook := range history.Hooks[*EmailTemplateMutation]() {
 		c.EmailTemplate.Use(hook)
 	}

@@ -74,17 +74,11 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 	return nil
 }
 
-// updateSubscriber updates a subscriber by in the database based on the input
-func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *User) error {
-	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse ttl")
-		return err
-	}
-
-	err = transaction.FromContext(ctx).Subscriber.UpdateOneID(user.ID).
-		SetToken(user.EmailVerificationToken.String).
-		SetSecret(user.EmailVerificationSecret).
+// updateSubscriberVerificationToken updates subscriber token fields in the database.
+func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, subscriberID, token string, ttl time.Time, secret []byte) error {
+	err := transaction.FromContext(ctx).Subscriber.UpdateOneID(subscriberID).
+		SetToken(token).
+		SetSecret(secret).
 		SetTTL(ttl).
 		Exec(ctx)
 	if err != nil {

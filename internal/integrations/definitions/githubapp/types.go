@@ -95,7 +95,7 @@ type RepositorySync struct {
 	// Disable is used to disable the directory sync operation from GitHub
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.IsPrivate == 'true'"`
 }
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes

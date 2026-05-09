@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/azuresecuritycenter"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/gcpscc"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
@@ -25,6 +26,7 @@ func Builders(cfg Config) []registry.Builder {
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
 		cloudflare.Builder(),
+		email.Builder(&cfg.Email),
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
@@ -32,6 +34,6 @@ func Builders(cfg Config) []registry.Builder {
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),
 		scim.Builder(),
-		slack.Builder(cfg.Slack),
+		slack.Builder(cfg.Slack, &cfg.SlackRuntime),
 	}
 }

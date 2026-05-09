@@ -138,6 +138,21 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("recurrence_interval"),
 			),
+		field.String("recurrence_timezone").
+			Comment("timezone used for the recurrence schedule").
+			Optional().
+			Validate(func(s string) error {
+				if s == "" {
+					return nil
+				}
+
+				_, err := time.LoadLocation(s)
+
+				return err
+			}).
+			Annotations(
+				entgql.OrderField("recurrence_timezone"),
+			),
 		field.String("recurrence_cron").
 			GoType(models.Cron("")).
 			Comment("cron schedule to run the campaign in cron 6-field syntax, e.g. 0 0 0 * * *").
@@ -155,21 +170,6 @@ func (Campaign) Fields() []ent.Field {
 			}).
 			Optional().
 			Nillable(),
-		field.String("recurrence_timezone").
-			Comment("timezone used for the recurrence schedule").
-			Optional().
-			Validate(func(s string) error {
-				if s == "" {
-					return nil
-				}
-
-				_, err := time.LoadLocation(s)
-
-				return err
-			}).
-			Annotations(
-				entgql.OrderField("recurrence_timezone"),
-			),
 		field.Time("last_run_at").
 			Comment("when the campaign was last executed").
 			GoType(models.DateTime{}).
@@ -218,17 +218,17 @@ func (Campaign) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("last_resent_at"),
 			),
-		field.String("template_id").
-			Comment("the template associated with the campaign").
-			Optional().
-			Annotations(
-				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
-			),
 		field.String("entity_id").
 			Comment("the entity associated with the campaign").
 			Optional().
 			Annotations(
 				entx.CSVRef().FromColumn("CampaignEntityName").MatchOn("name"),
+			),
+		field.String("template_id").
+			Comment("the template associated with the campaign").
+			Optional().
+			Annotations(
+				entx.CSVRef().FromColumn("CampaignTemplateRef").MatchOn("name"),
 			),
 		field.String("assessment_id").
 			Comment("the assessment associated with the campaign").
@@ -236,11 +236,14 @@ func (Campaign) Fields() []ent.Field {
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the campaign").
 			Optional(),
-		field.String("email_branding_id").
-			Comment("the email branding associated with the campaign").
-			Optional(),
 		field.String("email_template_id").
 			Comment("the email template associated with the campaign").
+			Optional(),
+		field.String("integration_id").
+			Comment("the email integration used for campaign dispatch").
+			Optional(),
+		field.String("email_branding_id").
+			Comment("the email branding associated with the campaign").
 			Optional(),
 	}
 }
@@ -282,10 +285,10 @@ func (c Campaign) Edges() []ent.Edge {
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: c,
-			edgeSchema: EmailBranding{},
-			field:      "email_branding_id",
+			edgeSchema: Integration{},
+			field:      "integration_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(EmailBranding{}.Name()),
+				accessmap.EdgeViewCheck(Integration{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

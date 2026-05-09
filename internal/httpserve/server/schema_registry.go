@@ -44,7 +44,7 @@ func (r *SchemaRegistry) RegisterType(v any) (*openapi3.SchemaRef, error) {
 	defer r.mu.Unlock()
 
 	t := reflect.TypeOf(v)
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 
@@ -91,7 +91,7 @@ func (r *SchemaRegistry) GetRef(v any) *openapi3.SchemaRef {
 	defer r.mu.RUnlock()
 
 	t := reflect.TypeOf(v)
-	if t.Kind() == reflect.Ptr {
+	if t.Kind() == reflect.Pointer {
 		t = t.Elem()
 	}
 

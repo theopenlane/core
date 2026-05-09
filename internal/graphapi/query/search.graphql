@@ -177,22 +177,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    emailBrandings {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          name
-          tags
-        }
-      }
-    }
     emailTemplates {
       totalCount
       pageInfo {

@@ -17,7 +17,6 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -66,8 +65,6 @@ type Config struct {
 	JobQueue riverqueue.Config `json:"jobqueue" koanf:"jobqueue"`
 	// Redis contains the redis configuration for the key-value store
 	Redis cache.Config `json:"redis" koanf:"redis"`
-	// Email contains email sending configuration for the server
-	Email emailtemplates.Config `json:"email" koanf:"email"`
 	// Sessions config for user sessions and cookies
 	Sessions sessions.Config `json:"sessions" koanf:"sessions"`
 	// TOTP contains the configuration for the TOTP provider
@@ -80,8 +77,6 @@ type Config struct {
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
 	Keywatcher KeyWatcher `json:"keywatcher" koanf:"keywatcher"`
-	// Slack contains settings for Slack notifications
-	Slack Slack `json:"slack" koanf:"slack"`
 	// Integrations contains operator-level credentials for all v2 integration definitions
 	Integrations catalog.Config `json:"integrations" koanf:"integrations"`
 	// Workflows contains the configuration for the workflows engine
@@ -141,7 +136,7 @@ type Server struct {
 	// SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key
 	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:""`
+	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:"trust.theopenlane.net"`
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
@@ -192,16 +187,6 @@ type PoolConfig struct {
 	MaxWorkers int `json:"maxworkers" koanf:"maxworkers" default:"100"`
 }
 
-// Slack contains settings for Slack notifications
-type Slack struct {
-	// WebhookURL is the Slack webhook to post messages to
-	WebhookURL string `json:"webhookurl" koanf:"webhookurl" sensitive:"true"`
-	// NewSubscriberMessageFile is the path to the template used for new subscriber notifications
-	NewSubscriberMessageFile string `json:"newsubscribermessagefile" koanf:"newsubscribermessagefile"`
-	// NewUserMessageFile is the path to the template used for new user notifications
-	NewUserMessageFile string `json:"newusermessagefile" koanf:"newusermessagefile"`
-}
-
 var (
 	defaultConfigFilePath         = "./config/.config.yaml"
 	ErrStripeWebhookVersionsMatch = errors.New("subscription.stripewebhookapiversion must differ from subscription.stripewebhookdiscardapiversion")
@@ -246,7 +231,7 @@ func applyDomain(v reflect.Value, domain string) {
 	}
 
 	switch v.Kind() {
-	case reflect.Ptr:
+	case reflect.Pointer:
 		// If it's a pointer, dereference and recurse
 		if !v.IsNil() {
 			applyDomain(v.Elem(), domain)

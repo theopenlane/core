@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
@@ -633,33 +632,6 @@ func (f TraverseDocumentDataHistory) Traverse(ctx context.Context, q historygene
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.DocumentDataHistoryQuery", q)
-}
-
-// The EmailBrandingHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type EmailBrandingHistoryFunc func(context.Context, *historygenerated.EmailBrandingHistoryQuery) (historygenerated.Value, error)
-
-// Query calls f(ctx, q).
-func (f EmailBrandingHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
-	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailBrandingHistoryQuery", q)
-}
-
-// The TraverseEmailBrandingHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseEmailBrandingHistory func(context.Context, *historygenerated.EmailBrandingHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseEmailBrandingHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseEmailBrandingHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
-	if q, ok := q.(*historygenerated.EmailBrandingHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *historygenerated.EmailBrandingHistoryQuery", q)
 }
 
 // The EmailTemplateHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2348,8 +2320,6 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.DiscussionHistoryQuery, predicate.DiscussionHistory, discussionhistory.OrderOption]{typ: historygenerated.TypeDiscussionHistory, tq: q}, nil
 	case *historygenerated.DocumentDataHistoryQuery:
 		return &query[*historygenerated.DocumentDataHistoryQuery, predicate.DocumentDataHistory, documentdatahistory.OrderOption]{typ: historygenerated.TypeDocumentDataHistory, tq: q}, nil
-	case *historygenerated.EmailBrandingHistoryQuery:
-		return &query[*historygenerated.EmailBrandingHistoryQuery, predicate.EmailBrandingHistory, emailbrandinghistory.OrderOption]{typ: historygenerated.TypeEmailBrandingHistory, tq: q}, nil
 	case *historygenerated.EmailTemplateHistoryQuery:
 		return &query[*historygenerated.EmailTemplateHistoryQuery, predicate.EmailTemplateHistory, emailtemplatehistory.OrderOption]{typ: historygenerated.TypeEmailTemplateHistory, tq: q}, nil
 	case *historygenerated.EntityHistoryQuery:

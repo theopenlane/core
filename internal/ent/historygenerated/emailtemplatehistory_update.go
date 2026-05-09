@@ -228,6 +228,12 @@ func (_u *EmailTemplateHistoryUpdate) SetNillableFormat(v *enums.NotificationTem
 	return _u
 }
 
+// ClearFormat clears the value of the "format" field.
+func (_u *EmailTemplateHistoryUpdate) ClearFormat() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearFormat()
+	return _u
+}
+
 // SetLocale sets the "locale" field.
 func (_u *EmailTemplateHistoryUpdate) SetLocale(v string) *EmailTemplateHistoryUpdate {
 	_u.mutation.SetLocale(v)
@@ -404,6 +410,12 @@ func (_u *EmailTemplateHistoryUpdate) SetNillableTemplateContext(v *enums.Templa
 	if v != nil {
 		_u.SetTemplateContext(*v)
 	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateHistoryUpdate) ClearTemplateContext() *EmailTemplateHistoryUpdate {
+	_u.mutation.ClearTemplateContext()
 	return _u
 }
 
@@ -631,6 +643,9 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if value, ok := _u.mutation.Format(); ok {
 		_spec.SetField(emailtemplatehistory.FieldFormat, field.TypeEnum, value)
 	}
+	if _u.mutation.FormatCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldFormat, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Locale(); ok {
 		_spec.SetField(emailtemplatehistory.FieldLocale, field.TypeString, value)
 	}
@@ -687,6 +702,9 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)
@@ -930,6 +948,12 @@ func (_u *EmailTemplateHistoryUpdateOne) SetNillableFormat(v *enums.Notification
 	return _u
 }
 
+// ClearFormat clears the value of the "format" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearFormat() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearFormat()
+	return _u
+}
+
 // SetLocale sets the "locale" field.
 func (_u *EmailTemplateHistoryUpdateOne) SetLocale(v string) *EmailTemplateHistoryUpdateOne {
 	_u.mutation.SetLocale(v)
@@ -1106,6 +1130,12 @@ func (_u *EmailTemplateHistoryUpdateOne) SetNillableTemplateContext(v *enums.Tem
 	if v != nil {
 		_u.SetTemplateContext(*v)
 	}
+	return _u
+}
+
+// ClearTemplateContext clears the value of the "template_context" field.
+func (_u *EmailTemplateHistoryUpdateOne) ClearTemplateContext() *EmailTemplateHistoryUpdateOne {
+	_u.mutation.ClearTemplateContext()
 	return _u
 }
 
@@ -1363,6 +1393,9 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	if value, ok := _u.mutation.Format(); ok {
 		_spec.SetField(emailtemplatehistory.FieldFormat, field.TypeEnum, value)
 	}
+	if _u.mutation.FormatCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldFormat, field.TypeEnum)
+	}
 	if value, ok := _u.mutation.Locale(); ok {
 		_spec.SetField(emailtemplatehistory.FieldLocale, field.TypeString, value)
 	}
@@ -1419,6 +1452,9 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if value, ok := _u.mutation.TemplateContext(); ok {
 		_spec.SetField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum, value)
+	}
+	if _u.mutation.TemplateContextCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldTemplateContext, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplatehistory.FieldDefaults, field.TypeJSON, value)

@@ -38,7 +38,7 @@ type pageInfo struct {
 }
 
 // queryRepositories lists repositories accessible to the installation
-func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) ([]repositoryNode, error) {
+func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int, lastRunAt *time.Time) ([]repositoryNode, error) {
 	repositories := make([]repositoryNode, 0)
 	if pageSize <= 0 {
 		pageSize = defaultPageSize
@@ -71,8 +71,18 @@ func queryRepositories(ctx context.Context, client GraphQLClient, pageSize int) 
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
-		repositories = append(repositories, query.Viewer.Repositories.Nodes...)
-		if !query.Viewer.Repositories.PageInfo.HasNextPage || query.Viewer.Repositories.PageInfo.EndCursor == "" {
+		done := false
+
+		for _, repo := range query.Viewer.Repositories.Nodes {
+			if lastRunAt != nil && !repo.UpdatedAt.After(*lastRunAt) {
+				done = true
+				break
+			}
+
+			repositories = append(repositories, repo)
+		}
+
+		if done || !query.Viewer.Repositories.PageInfo.HasNextPage || query.Viewer.Repositories.PageInfo.EndCursor == "" {
 			break
 		}
 

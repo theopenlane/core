@@ -23,6 +23,19 @@ type Headers struct {
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
 }
 
+// NewHeaders returns Headers with the given tags and the input marshaled as JSON in the "input" property
+func NewHeaders(tags []string, input any) Headers {
+	raw, err := json.Marshal(input)
+	if err != nil {
+		return Headers{Tags: tags}
+	}
+
+	return Headers{
+		Tags:       tags,
+		Properties: map[string]string{"input": string(raw)},
+	}
+}
+
 // Envelope is the durable event envelope
 type Envelope struct {
 	// ID is the unique event identifier

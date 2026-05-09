@@ -37,4 +37,8 @@ var (
 	ErrStringSliceFieldInvalid = errors.New("string slice field contains non-string values")
 	// ErrWorkflowObjectNodeInvalid is returned when a loaded workflow object does not implement generated.Noder
 	ErrWorkflowObjectNodeInvalid = errors.New("workflow object node type is invalid")
+	// ErrRuntimeDefinitionKeyRequired is returned when a runtime definition is registered without a key
+	ErrRuntimeDefinitionKeyRequired = errors.New("runtime definition key is required")
+	// ErrRuntimeDefinitionDuplicateKey is returned when a runtime definition key is already registered
+	ErrRuntimeDefinitionDuplicateKey = errors.New("runtime definition key already registered")
 )

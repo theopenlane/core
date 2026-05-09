@@ -24,6 +24,7 @@ query GetAllIntegrations {
 }
 query GetIntegrationByID ($integrationId: ID!) {
 	integration(id: $integrationId) {
+		campaignEmail
 		createdAt
 		createdBy
 		definitionID

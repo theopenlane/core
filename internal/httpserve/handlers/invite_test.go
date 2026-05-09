@@ -10,12 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/riverqueue/river/riverdriver/riverpgxv5"
-	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -163,32 +160,23 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.True(t, foundMember, "expected user to be a member of the group")
 
-			// ensure the email jobs are created
-			// there will be two because the first is the invite email
-			// and the 2nd one is the accepted email
-			job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
-				[]rivertest.ExpectedJob{
-					{
-						Args: jobs.EmailArgs{},
-					},
-					{
-						Args: jobs.EmailArgs{},
-					},
-				})
-			require.NotNil(t, job)
+			// verify the invite and acceptance emails were sent through the mock sender
+			suite.WaitForEvents()
 
-			// We cannot determine the order of which they will be processed really especially for job 2 and 3
-			// So just check and make sure they all contain these values at some point
+			msgs := suite.mockEmailSender().Messages()
+			require.Len(t, msgs, 2)
+
+			// check that both expected subject snippets appear across the sent messages
 			expectedSnippets := []string{
-				"Join your team",
-				"You've been added to an organization",
+				"Join Your Teammate",
+				"You've been added to an Organization",
 			}
 
 			found := make(map[string]bool)
 
-			for _, v := range job {
+			for _, msg := range msgs {
 				for _, snippet := range expectedSnippets {
-					if strings.Contains(string(v.EncodedArgs), snippet) {
+					if strings.Contains(msg.Subject, snippet) || strings.Contains(msg.HTML, snippet) || strings.Contains(msg.Text, snippet) {
 						found[snippet] = true
 						break
 					}

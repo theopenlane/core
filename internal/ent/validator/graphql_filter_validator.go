@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -27,20 +26,21 @@ func ValidateFilter(filter string, exportType enums.ExportType) error {
 	schemaDir := "../../graphapi/schema"
 
 	// Load all .graphql files in the directory
+	schemaFS := os.DirFS(schemaDir)
 	var sources []*ast.Source
-	err := filepath.Walk(schemaDir, func(path string, info fs.FileInfo, err error) error {
+	err := fs.WalkDir(schemaFS, ".", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			log.Error().Err(err).Str("path", path).Msg("Failed accessing file path")
 			return nil
 		}
-		if !info.IsDir() && strings.HasSuffix(info.Name(), ".graphql") {
-			data, readErr := os.ReadFile(path)
+		if !d.IsDir() && strings.HasSuffix(d.Name(), ".graphql") {
+			data, readErr := fs.ReadFile(schemaFS, path)
 			if readErr != nil {
 				log.Error().Err(readErr).Str("path", path).Msg("Failed to read schema file")
 				return nil
 			}
 			sources = append(sources, &ast.Source{
-				Name:  info.Name(),
+				Name:  d.Name(),
 				Input: string(data),
 			})
 		}

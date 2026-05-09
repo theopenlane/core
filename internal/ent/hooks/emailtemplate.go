@@ -2,98 +2,51 @@ package hooks
 
 import (
 	"context"
-	"fmt"
-	"regexp"
-	"strings"
 
 	"entgo.io/ent"
-	"github.com/microcosm-cc/bluemonday"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
-// tmplURLExpr matches Go template expressions of the form {{ .URLS.<Name> }}.
-// Only .URLS.* references are matched; arbitrary template expressions are left
-// for the sanitizer to handle normally (which strips them from href attributes).
-var tmplURLExpr = regexp.MustCompile(`\{\{\s*\.URLS\.[A-Za-z][A-Za-z0-9_]*\s*\}\}`)
-
-// tmplURLPlaceholderBase is the https base used to temporarily stand in for template
-// URL expressions during sanitization. The .invalid TLD is reserved by RFC 2606
-// and is not resolvable, making collisions with real content extremely unlikely.
-const tmplURLPlaceholderBase = "https://templ-url-placeholder.invalid/"
-
-// EmailTemplateSanitizePolicy returns a bluemonday policy suitable for storing
-// HTML email template source. It extends the UGC policy (which already covers tables,
-// images, links, and standard elements) with inline style support required for HTML
-// email layout. Go template URL expressions ({{ .URLS.* }}) in href and src attributes
-// are handled by SanitizeBodyHTML, which preprocesses them before passing content to this policy.
-func EmailTemplateSanitizePolicy() *bluemonday.Policy {
-	p := bluemonday.UGCPolicy()
-	p.AllowAttrs("style").OnElements("table", "tr", "td", "th", "div", "span", "p", "a", "img")
-
-	return p
-}
-
-// SanitizeBodyHTML sanitizes HTML email template body content using the provided policy
-// while preserving Go template URL expressions ({{ .URLS.<Name> }}) in attribute values.
-// Template expressions matching {{ .URLS.<Name> }} are replaced with indexed https placeholder
-// URLs before sanitization, then restored afterward. This is necessary because bluemonday's
-// URL scheme validation rejects non-URL strings regardless of any custom regex policy.
-// All other template expressions in href/src attributes are subject to normal policy enforcement
-// and will be stripped by bluemonday's URL scheme check.
-func SanitizeBodyHTML(p *bluemonday.Policy, content string) string {
-	var originals []string
-
-	processed := tmplURLExpr.ReplaceAllStringFunc(content, func(match string) string {
-		placeholder := fmt.Sprintf("%s%d", tmplURLPlaceholderBase, len(originals))
-		originals = append(originals, match)
-
-		return placeholder
-	})
-
-	sanitized := p.Sanitize(processed)
-
-	for i, original := range originals {
-		placeholder := fmt.Sprintf("%s%d", tmplURLPlaceholderBase, i)
-		sanitized = strings.Replace(sanitized, placeholder, original, 1)
-	}
-
-	return sanitized
-}
-
-// HookEmailTemplateSanitize sanitizes HTML template content fields on create and update
-// for non-system-owned email templates. System-owned templates are loaded via harmonize
-// and are trusted; user-composed templates are sanitized to prevent stored XSS.
-// Body content preserves {{ .URLS.<Name> }} template expressions; subject, preheader,
-// and text fields are stripped of all HTML.
+// HookEmailTemplateSanitize sanitizes customer-supplied fields on email template
+// create and update mutations. String values in the defaults map are scrubbed of
+// HTML tags to prevent stored XSS; Go template expressions like {{ .companyName }}
+// pass through unmodified since they are not HTML
 func HookEmailTemplateSanitize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.EmailTemplateFunc(func(ctx context.Context, m *generated.EmailTemplateMutation) (generated.Value, error) {
-			// system-owned templates are loaded via harmonize and are pre-trusted
-			if owned, exists := m.SystemOwned(); exists && owned {
-				return next.Mutate(ctx, m)
+			if defaults, ok := m.Defaults(); ok && len(defaults) > 0 {
+				m.SetDefaults(scrubMapStrings(defaults))
 			}
 
-			p := EmailTemplateSanitizePolicy()
-
-			if v, exists := m.SubjectTemplate(); exists {
-				m.SetSubjectTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			if name, ok := m.Name(); ok {
+				m.SetName(emaildef.EmailScrubber().Scrub(name))
 			}
 
-			if v, exists := m.PreheaderTemplate(); exists {
-				m.SetPreheaderTemplate(bluemonday.StrictPolicy().Sanitize(v))
-			}
-
-			if v, exists := m.BodyTemplate(); exists {
-				m.SetBodyTemplate(SanitizeBodyHTML(p, v))
-			}
-
-			if v, exists := m.TextTemplate(); exists {
-				m.SetTextTemplate(bluemonday.StrictPolicy().Sanitize(v))
+			if desc, ok := m.Description(); ok {
+				m.SetDescription(emaildef.EmailScrubber().Scrub(desc))
 			}
 
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
+
+// scrubMapStrings recursively scrubs all string values in a map using the email
+// HTML scrubber. Nested maps are traversed; non-string values are left untouched
+func scrubMapStrings(m map[string]any) map[string]any {
+	scrubber := emaildef.EmailScrubber()
+
+	for k, v := range m {
+		switch val := v.(type) {
+		case string:
+			m[k] = scrubber.Scrub(val)
+		case map[string]any:
+			m[k] = scrubMapStrings(val)
+		}
+	}
+
+	return m
 }

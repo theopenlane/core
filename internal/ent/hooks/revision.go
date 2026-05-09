@@ -64,16 +64,16 @@ func HookRevisionUpdate() ent.Hook {
 // If the revision is not set, it retrieves the current revision from the database and bumps the version based on the revision bump
 // If there is no revision bump set, it bumps the patch version
 func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
-	// if the revision is set, continue
 	revision, ok := mut.Revision()
-	if ok && revision != "" {
-		// revision is already set, do nothing
-		return nil
-	}
 
 	currentRevision, err := mut.OldRevision(ctx)
 	if err != nil {
 		return err
+	}
+
+	// if the revision is set and the old and new don't match, return - user manually set
+	if ok && revision != currentRevision {
+		return nil
 	}
 
 	revisionBump, ok := models.VersionBumpFromRequestContext(ctx)
@@ -135,7 +135,7 @@ func detailsUpdated(ctx context.Context, m MutationWithRevision) bool {
 		oldDetailsTyped, _ := oldDetailsJSON.([]any)
 		newDetailsTyped, _ := newDetailsJSON.([]any)
 
-		return !slateparser.OnlyCommentsAdded(oldDetailsTyped, newDetailsTyped)
+		return !slateparser.NoDetailsChanged(oldDetailsTyped, newDetailsTyped)
 	}
 
 	// if details json is not set, fallback to check details

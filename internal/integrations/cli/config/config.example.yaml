@@ -1,0 +1,19 @@
+# integrations CLI configuration. Comments describe each key; edit values as needed.
+# Openlane holds API host and authentication defaults used by every subcommand that talks
+# to the Openlane API
+openlane:
+  # Auth controls authentication for API requests
+  auth:
+    # Email is the login email used for auth-mode=credentials
+    email: mitb@theopenlane.io
+    # Mode selects the auth strategy: auto prefers token/pat when present and falls back to
+    # credential login; token requires Token or PAT; credentials requires Email and Password
+    mode: credentials
+    # Password is the login password used for auth-mode=credentials
+    password: mattisthebest1234
+    # PAT is a personal access token; used as a fallback when Token is empty
+    pat: ""
+    # Token is the API bearer token (PAT or API token)
+    token: ""
+  # Host is the base URL for the Openlane API
+  host: http://localhost:17608

@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -60,21 +61,22 @@ func calculateDirChecksum(paths ...string) (string, error) {
 	h := sha256.New()
 
 	for _, path := range paths {
-		if err := filepath.Walk(path, func(filePath string, info os.FileInfo, err error) error {
+		dirFS := os.DirFS(path)
+		if err := fs.WalkDir(dirFS, ".", func(relPath string, d fs.DirEntry, err error) error {
 			if err != nil {
 				return err
 			}
 
-			if info.IsDir() {
+			if d.IsDir() {
 				return nil
 			}
 
 			// Only process .go files and .graphql files
-			if filepath.Ext(filePath) != ".go" && filepath.Ext(filePath) != ".graphql" {
+			if filepath.Ext(relPath) != ".go" && filepath.Ext(relPath) != ".graphql" {
 				return nil
 			}
 
-			f, err := os.Open(filePath)
+			f, err := dirFS.Open(relPath)
 			if err != nil {
 				return err
 			}

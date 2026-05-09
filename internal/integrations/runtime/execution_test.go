@@ -5,8 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"testing"
+	"time"
+
+	"gotest.tools/v3/assert"
+
+	"github.com/samber/do/v2"
+	"github.com/theopenlane/iam/auth"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -18,6 +25,60 @@ func TestExecuteOperationNilInstallation(t *testing.T) {
 	_, err := rt.ExecuteOperation(context.Background(), nil, types.OperationRegistration{}, nil, nil)
 	if !errors.Is(err, ErrInstallationRequired) {
 		t.Fatalf("expected ErrInstallationRequired, got %v", err)
+	}
+}
+
+func TestBootstrapHandlerContextRuntimeRehydratesProcessDependencies(t *testing.T) {
+	t.Parallel()
+
+	db := &ent.Client{}
+	injector := do.New()
+	do.ProvideValue(injector, db)
+
+	rt := &Runtime{injector: injector}
+	caller := &auth.Caller{
+		SubjectID:      "user_123",
+		OrganizationID: "org_123",
+	}
+	metadata := types.ExecutionMetadata{
+		OwnerID:      "org_123",
+		DefinitionID: "email",
+		Operation:    "send_email",
+		Runtime:      true,
+	}
+
+	ctx := auth.WithCaller(context.Background(), caller)
+	gotCtx, integration, gotMetadata, err := rt.bootstrapHandlerContext(ctx, metadata)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if integration != nil {
+		t.Fatalf("expected no integration for runtime execution, got %#v", integration)
+	}
+	if gotMetadata != metadata {
+		t.Fatalf("expected metadata passthrough, got %#v", gotMetadata)
+	}
+	if ent.FromContext(gotCtx) != db {
+		t.Fatal("expected ent client to be reattached to handler context")
+	}
+	if _, allowed := privacy.DecisionFromContext(gotCtx); !allowed {
+		t.Fatal("expected runtime handler context to carry an internal privacy decision")
+	}
+
+	gotCaller, ok := auth.CallerFromContext(gotCtx)
+	if !ok || gotCaller == nil {
+		t.Fatal("expected original caller to remain on handler context")
+	}
+	if gotCaller.SubjectID != caller.SubjectID || gotCaller.OrganizationID != caller.OrganizationID {
+		t.Fatalf("expected original caller, got %#v", gotCaller)
+	}
+
+	gotExecution, ok := types.ExecutionMetadataFromContext(gotCtx)
+	if !ok {
+		t.Fatal("expected execution metadata on handler context")
+	}
+	if gotExecution != metadata {
+		t.Fatalf("expected execution metadata %#v, got %#v", metadata, gotExecution)
 	}
 }
 
@@ -201,6 +262,55 @@ func TestExecuteOperationWithCredentials(t *testing.T) {
 	if captured.Credentials[0].Ref != ref {
 		t.Fatalf("expected credential ref %v, got %v", ref, captured.Credentials[0].Ref)
 	}
+}
+
+func TestExecuteOperationAppliesDefaultLookbackWhenNoLastRun(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	before := time.Now().UTC()
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name: "test-op",
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, captured.LastRunAt != nil, "expected LastRunAt to be set via default lookback")
+
+	after := time.Now().UTC()
+	expectedEarliest := before.Add(-defaultLookbackDuration)
+	expectedLatest := after.Add(-defaultLookbackDuration)
+	assert.Assert(t, !captured.LastRunAt.Before(expectedEarliest), "LastRunAt %v is before expected window start %v", captured.LastRunAt, expectedEarliest)
+	assert.Assert(t, !captured.LastRunAt.After(expectedLatest), "LastRunAt %v is after expected window end %v", captured.LastRunAt, expectedLatest)
+}
+
+func TestExecuteOperationSkipDefaultLookbackLeavesLastRunAtNil(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+	}, types.OperationRegistration{
+		Name:                "test-op",
+		SkipDefaultLookback: true,
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Assert(t, captured.LastRunAt == nil, "expected LastRunAt to be nil when SkipDefaultLookback is set")
 }
 
 func TestExecuteOperationPassesRequestFields(t *testing.T) {

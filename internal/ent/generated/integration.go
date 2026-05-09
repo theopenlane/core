@@ -87,6 +87,8 @@ type Integration struct {
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
 	PrimaryDirectory bool `json:"primary_directory,omitempty"`
+	// designates this email integration as the one to use for campaign dispatch within its owner organization
+	CampaignEmail bool `json:"campaign_email,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationQuery when eager-loading is set.
 	Edges              IntegrationEdges `json:"edges"`
@@ -139,6 +141,8 @@ type IntegrationEdges struct {
 	NotificationTemplates []*NotificationTemplate `json:"notification_templates,omitempty"`
 	// EmailTemplates holds the value of the email_templates edge.
 	EmailTemplates []*EmailTemplate `json:"email_templates,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// IntegrationWebhooks holds the value of the integration_webhooks edge.
 	IntegrationWebhooks []*IntegrationWebhook `json:"integration_webhooks,omitempty"`
 	// IntegrationRuns holds the value of the integration_runs edge.
@@ -147,9 +151,9 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [23]map[string]int
 
 	namedSecrets               map[string][]*Hush
 	namedFiles                 map[string][]*File
@@ -168,6 +172,7 @@ type IntegrationEdges struct {
 	namedCheckResults          map[string][]*CheckResult
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedEmailTemplates        map[string][]*EmailTemplate
+	namedCampaigns             map[string][]*Campaign
 	namedIntegrationWebhooks   map[string][]*IntegrationWebhook
 	namedIntegrationRuns       map[string][]*IntegrationRun
 	namedEntities              map[string][]*Entity
@@ -370,10 +375,19 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 	return nil, &NotLoadedError{edge: "email_templates"}
 }
 
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[21] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
+}
+
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -382,7 +396,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -391,7 +405,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -404,7 +418,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
-		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory:
+		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
 		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
@@ -643,6 +657,12 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.PrimaryDirectory = value.Bool
 			}
+		case integration.FieldCampaignEmail:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_email", values[i])
+			} else if value.Valid {
+				_m.CampaignEmail = value.Bool
+			}
 		case integration.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field file_integrations", values[i])
@@ -773,6 +793,11 @@ func (_m *Integration) QueryNotificationTemplates() *NotificationTemplateQuery {
 // QueryEmailTemplates queries the "email_templates" edge of the Integration entity.
 func (_m *Integration) QueryEmailTemplates() *EmailTemplateQuery {
 	return NewIntegrationClient(_m.config).QueryEmailTemplates(_m)
+}
+
+// QueryCampaigns queries the "campaigns" edge of the Integration entity.
+func (_m *Integration) QueryCampaigns() *CampaignQuery {
+	return NewIntegrationClient(_m.config).QueryCampaigns(_m)
 }
 
 // QueryIntegrationWebhooks queries the "integration_webhooks" edge of the Integration entity.
@@ -912,6 +937,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("primary_directory=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PrimaryDirectory))
+	builder.WriteString(", ")
+	builder.WriteString("campaign_email=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CampaignEmail))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1321,6 +1349,30 @@ func (_m *Integration) appendNamedEmailTemplates(name string, edges ...*EmailTem
 		_m.Edges.namedEmailTemplates[name] = []*EmailTemplate{}
 	} else {
 		_m.Edges.namedEmailTemplates[name] = append(_m.Edges.namedEmailTemplates[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
 	}
 }
 

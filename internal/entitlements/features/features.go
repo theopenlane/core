@@ -20,7 +20,6 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Discussion":                 {models.CatalogBaseModule},
 	"DNSVerification":            {models.CatalogTrustCenterModule},
 	"DocumentData":               {models.CatalogComplianceModule},
-	"EmailBranding":              {models.CatalogBaseModule},
 	"EmailTemplate":              {models.CatalogBaseModule},
 	"EmailVerificationToken":     {models.CatalogBaseModule},
 	"Entity":                     {models.CatalogEntityManagementModule, models.CatalogComplianceModule},

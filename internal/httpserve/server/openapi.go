@@ -4,14 +4,9 @@ import (
 	"context"
 	"fmt"
 	"go/doc"
-	"go/parser"
-	"go/token"
 	"maps"
 	"net/url"
-	"os"
-	"path/filepath"
 	"reflect"
-	"runtime"
 	"sort"
 	"strings"
 	"sync"
@@ -19,6 +14,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
+	"golang.org/x/tools/go/packages"
 
 	"github.com/theopenlane/core/internal/httpserve/specs"
 )
@@ -60,7 +56,7 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	}
 
 	securityschemes["oauth2"] = &openapi3.SecuritySchemeRef{
-		Value: (*OAuth2)(&OAuth2{
+		Value: (*OAuth2)(&OAuth2{ //nolint:gosec
 			AuthorizationURL: "https://api.theopenlane.io/oauth2/authorize",
 			TokenURL:         "https://api.theopenlane.io/oauth2/token",
 			RefreshURL:       "https://api.theopenlane.io/oauth2/refresh",
@@ -466,10 +462,12 @@ func getTypeDescription(t reflect.Type) string {
 	pkgPath := t.PkgPath()
 
 	// Find the Go source files for this package
-	fset := token.NewFileSet()
+	cfg := &packages.Config{
+		Mode: packages.NeedName | packages.NeedSyntax,
+	}
 
-	// Try to parse the package directory
-	pkgs, err := parser.ParseDir(fset, getPackageDir(pkgPath), nil, parser.ParseComments)
+	// Load the package by import path, respecting build tags
+	pkgs, err := packages.Load(cfg, pkgPath)
 	if err != nil {
 		return ""
 	}
@@ -477,7 +475,10 @@ func getTypeDescription(t reflect.Type) string {
 	// Look through all packages
 	for _, pkg := range pkgs {
 		// Create doc package
-		docPkg := doc.New(pkg, "./", 0)
+		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
+		if err != nil {
+			continue
+		}
 
 		// Look for the type in the package
 		for _, typ := range docPkg.Types {
@@ -494,28 +495,6 @@ func getTypeDescription(t reflect.Type) string {
 				return description
 			}
 		}
-	}
-
-	return ""
-}
-
-// getPackageDir attempts to find the directory for a given package path
-func getPackageDir(pkgPath string) string {
-	// For local packages, try to find the source directory
-	if strings.Contains(pkgPath, "github.com/theopenlane/core") {
-		// Get the current file's directory
-		_, filename, _, ok := runtime.Caller(0)
-		if !ok {
-			return ""
-		}
-
-		// Navigate to the project root and then to the package
-		projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filename))) // Go up from server -> httpserve -> internal -> core
-
-		// Convert package path to file path
-		relativePath := strings.TrimPrefix(pkgPath, "github.com/theopenlane/core/")
-
-		return filepath.Join(projectRoot, relativePath)
 	}
 
 	return ""
@@ -551,34 +530,24 @@ func addSchemaDescriptions(spec *openapi3.T) {
 func extractOpenAPITypeDescriptions() map[string]string {
 	descriptions := make(map[string]string)
 
-	// Get the path to the openapi package
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		return descriptions
+	// Load the package by import path, respecting build tags
+	cfg := &packages.Config{
+		Mode: packages.NeedName | packages.NeedSyntax,
 	}
 
 	// Navigate from server -> httpserve -> internal -> core -> common/openapi
-	projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(filename))))
-	openapiPkgPath := filepath.Join(projectRoot, "common", "openapi")
-
-	// Check if the directory exists before attempting to parse
-	// This handles the case where the binary is running without source code (e.g., in a container)
-	if _, err := os.Stat(openapiPkgPath); os.IsNotExist(err) {
-		return descriptions
-	}
-
-	// Parse the package
-	fset := token.NewFileSet()
-
-	pkgs, err := parser.ParseDir(fset, openapiPkgPath, nil, parser.ParseComments)
+	pkgs, err := packages.Load(cfg, "github.com/theopenlane/core/common/openapi")
 	if err != nil {
-		log.Warn().Err(err).Msg("failed to parse openapi package for type descriptions")
+		log.Warn().Err(err).Msg("failed to load openapi package for type descriptions")
 		return descriptions
 	}
 
 	// Extract type descriptions from all packages in the directory
 	for _, pkg := range pkgs {
-		docPkg := doc.New(pkg, "./", 0)
+		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
+		if err != nil {
+			continue
+		}
 
 		for _, typ := range docPkg.Types {
 			if typ.Doc != "" {

@@ -52,7 +52,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration:         installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oidcLocalCred]{
 						CredentialRef: oidcCredential,
-						Config: auth.OAuthConfig{
+						Config: auth.OAuthConfig{ //nolint:gosec
 							ClientID:     cfg.ClientID,
 							ClientSecret: cfg.ClientSecret,
 							DiscoveryURL: cfg.DiscoveryURL,

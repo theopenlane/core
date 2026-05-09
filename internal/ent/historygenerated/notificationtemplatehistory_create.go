@@ -244,6 +244,14 @@ func (_c *NotificationTemplateHistoryCreate) SetChannel(v enums.Channel) *Notifi
 	return _c
 }
 
+// SetNillableChannel sets the "channel" field if the given value is not nil.
+func (_c *NotificationTemplateHistoryCreate) SetNillableChannel(v *enums.Channel) *NotificationTemplateHistoryCreate {
+	if v != nil {
+		_c.SetChannel(*v)
+	}
+	return _c
+}
+
 // SetFormat sets the "format" field.
 func (_c *NotificationTemplateHistoryCreate) SetFormat(v enums.NotificationTemplateFormat) *NotificationTemplateHistoryCreate {
 	_c.mutation.SetFormat(v)
@@ -564,9 +572,6 @@ func (_c *NotificationTemplateHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "NotificationTemplateHistory.name"`)}
-	}
-	if _, ok := _c.mutation.Channel(); !ok {
-		return &ValidationError{Name: "channel", err: errors.New(`historygenerated: missing required field "NotificationTemplateHistory.channel"`)}
 	}
 	if v, ok := _c.mutation.Channel(); ok {
 		if err := notificationtemplatehistory.ChannelValidator(v); err != nil {

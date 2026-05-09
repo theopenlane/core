@@ -49,6 +49,8 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
 	accountID, err := resolveDirectoryAccountID(ctx, db, integration, input.DirectoryAccountID)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory account for membership")
+
 		return input, err
 	}
 
@@ -58,7 +60,8 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("account_id", input.DirectoryAccountID).Str("group_id", input.DirectoryGroupID).Interface("meta", input.Metadata).Msg("integrations: unable to find group for membership")
+		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory group for membership")
+
 		return input, err
 	}
 

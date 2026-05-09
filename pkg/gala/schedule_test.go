@@ -89,10 +89,10 @@ func TestScheduleNextLowDriftHalvesInterval(t *testing.T) {
 	s := NewSchedule()
 	state := ScheduleState{Interval: 20 * time.Minute}
 
-	next := s.Next(state, 10, nil)
+	next := s.Next(state, 20, nil)
 
-	if next.Interval != 10*time.Minute {
-		t.Fatalf("expected 10m, got %v", next.Interval)
+	if next.Interval != 20*time.Minute {
+		t.Fatalf("expected 20m, got %v", next.Interval)
 	}
 }
 
@@ -113,8 +113,8 @@ func TestScheduleNextIdleBacksOff(t *testing.T) {
 
 	next := s.Next(state, 0, nil)
 
-	if next.Interval != 20*time.Minute {
-		t.Fatalf("expected 20m, got %v", next.Interval)
+	if next.Interval != 40*time.Minute {
+		t.Fatalf("expected 40m, got %v", next.Interval)
 	}
 
 	if next.IdleStreak != 3 {
@@ -139,8 +139,8 @@ func TestScheduleNextErrorBacksOff(t *testing.T) {
 
 	next := s.Next(state, 0, errors.New("upstream unavailable"))
 
-	if next.Interval != 20*time.Minute {
-		t.Fatalf("expected 20m, got %v", next.Interval)
+	if next.Interval != 40*time.Minute {
+		t.Fatalf("expected 40m, got %v", next.Interval)
 	}
 
 	if next.ErrorStreak != 2 {

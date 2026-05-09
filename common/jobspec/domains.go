@@ -118,7 +118,7 @@ type CreatePreviewDomainSSLAcmeArgs struct {
 }
 
 // Kind satisfies the river.Job interface
-func (CreatePreviewDomainSSLAcmeArgs) Kind() string { return "create_preview_doman_ssl" }
+func (CreatePreviewDomainSSLAcmeArgs) Kind() string { return "create_preview_domain_ssl" }
 
 // InsertOpts provides the default configuration when processing this job.
 func (CreatePreviewDomainSSLAcmeArgs) InsertOpts() river.InsertOpts {

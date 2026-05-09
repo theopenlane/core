@@ -48,4 +48,5 @@ var WorkflowDefinitionSchemaExtensionTypes = []WorkflowSchemaTypeDefinition{
 	{Name: "FieldUpdateActionParams", Type: reflect.TypeFor[FieldUpdateActionParams]()},
 	{Name: "IntegrationActionParams", Type: reflect.TypeFor[IntegrationActionParams]()},
 	{Name: "CreateObjectActionParams", Type: reflect.TypeFor[CreateObjectActionParams]()},
+	{Name: "SendEmailActionParams", Type: reflect.TypeFor[SendEmailActionParams]()},
 }

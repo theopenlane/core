@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailbrandinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
@@ -187,11 +186,6 @@ var documentdatahistoryImplementors = []string{"DocumentDataHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*DocumentDataHistory) IsNode() {}
-
-var emailbrandinghistoryImplementors = []string{"EmailBrandingHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*EmailBrandingHistory) IsNode() {}
 
 var emailtemplatehistoryImplementors = []string{"EmailTemplateHistory", "Node"}
 
@@ -714,15 +708,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(documentdatahistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, documentdatahistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case emailbrandinghistory.Table:
-		query := c.EmailBrandingHistory.Query().
-			Where(emailbrandinghistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, emailbrandinghistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1625,22 +1610,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.DocumentDataHistory.Query().
 			Where(documentdatahistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, documentdatahistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case emailbrandinghistory.Table:
-		query := c.EmailBrandingHistory.Query().
-			Where(emailbrandinghistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, emailbrandinghistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
