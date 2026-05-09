@@ -3,7 +3,7 @@ package authentik
 import (
 	"context"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 
 	authentikSDK "goauthentik.io/api/v3"
@@ -34,9 +34,19 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrBaseURLMissing
 	}
 
+	host, err := extractHost(cred.BaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	scheme, err := extractScheme(cred.BaseURL)
+	if err != nil {
+		return nil, err
+	}
+
 	cfg := authentikSDK.NewConfiguration()
-	cfg.Host = extractHost(cred.BaseURL)
-	cfg.Scheme = extractScheme(cred.BaseURL)
+	cfg.Host = host
+	cfg.Scheme = scheme
 	cfg.HTTPClient = &http.Client{Timeout: authentikRequestTimeout}
 	cfg.AddDefaultHeader("Authorization", "Bearer "+cred.Token)
 
@@ -58,18 +68,21 @@ func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, err
 }
 
 // extractHost extracts the host from a base URL
-func extractHost(baseURL string) string {
-	host := strings.TrimPrefix(baseURL, "https://")
-	host = strings.TrimPrefix(host, "http://")
+func extractHost(baseURL string) (string, error) {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
+	}
 
-	return strings.TrimRight(host, "/")
+	return u.Host, nil
 }
 
 // extractScheme extracts the scheme from a base URL
-func extractScheme(baseURL string) string {
-	if strings.HasPrefix(baseURL, "https://") {
-		return "https"
+func extractScheme(baseURL string) (string, error) {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
 	}
 
-	return "http"
+	return u.Scheme, nil
 }
