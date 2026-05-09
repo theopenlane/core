@@ -3,8 +3,8 @@ package authentik
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"net/http"
+
+	authentikSDK "goauthentik.io/api/v3"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -13,7 +13,7 @@ import (
 // HealthCheck holds the result of an Authentik health check
 type HealthCheck struct {
 	// PK is the Authentik user identifier
-	PK int `json:"pk"`
+	PK int32 `json:"pk"`
 	// Username is the Authentik service account username
 	Username string `json:"username"`
 	// Email is the Authentik service account email
@@ -26,29 +26,22 @@ func (h HealthCheck) Handle() types.OperationHandler {
 }
 
 // Run executes the Authentik health check
-func (HealthCheck) Run(ctx context.Context, c *Client) (json.RawMessage, error) {
-	url := fmt.Sprintf("%s%s", c.BaseURL, authentikMeEndpoint)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return nil, ErrRequestBuildFailed
-	}
-
-	resp, err := c.do(ctx, req)
+func (HealthCheck) Run(ctx context.Context, c *authentikSDK.APIClient) (json.RawMessage, error) {
+	me, _, err := c.CoreApi.CoreUsersMeRetrieve(ctx).Execute()
 	if err != nil {
 		return nil, ErrHealthCheckFailed
 	}
 
-	defer resp.Body.Close()
+	user := me.GetUser()
 
-	var me MeResponse
-	if err := json.NewDecoder(resp.Body).Decode(&me); err != nil {
-		return nil, ErrHealthCheckFailed
+	email := ""
+	if user.Email != nil {
+		email = *user.Email
 	}
 
 	return providerkit.EncodeResult(HealthCheck{
-		PK:       me.User.PK,
-		Username: me.User.Username,
-		Email:    me.User.Email,
+		PK:       user.GetPk(),
+		Username: user.GetUsername(),
+		Email:    email,
 	}, ErrResultEncode)
 }

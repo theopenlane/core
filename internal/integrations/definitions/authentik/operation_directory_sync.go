@@ -2,10 +2,9 @@ package authentik
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"net/http"
 	"strconv"
+
+	authentikSDK "goauthentik.io/api/v3"
 
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
@@ -14,14 +13,14 @@ import (
 )
 
 // directoryDefaultPageSize is the number of records requested per Authentik API page
-const directoryDefaultPageSize = 100
+const directoryDefaultPageSize = int32(100)
 
 // DirectorySync collects Authentik directory users, groups, and memberships for ingest
 type DirectorySync struct{}
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(authentikClient, func(ctx context.Context, request types.OperationRequest, c *Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(authentikClient, func(ctx context.Context, request types.OperationRequest, c *authentikSDK.APIClient) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
@@ -32,7 +31,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 }
 
 // Run collects Authentik directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -42,7 +41,7 @@ func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types
 	includedUsers := make(map[string]struct{}, len(users))
 
 	for _, user := range users {
-		resourceID := strconv.Itoa(user.PK)
+		resourceID := strconv.Itoa(int(user.GetPk()))
 
 		envelope, err := providerkit.MarshalEnvelope(resourceID, user, ErrPayloadEncode)
 		if err != nil {
@@ -73,7 +72,7 @@ func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
 
 	for _, group := range groups {
-		envelope, err := providerkit.MarshalEnvelope(group.PK, group, ErrPayloadEncode)
+		envelope, err := providerkit.MarshalEnvelope(group.GetPk(), group, ErrPayloadEncode)
 		if err != nil {
 			return nil, err
 		}
@@ -81,13 +80,13 @@ func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types
 		groupEnvelopes = append(groupEnvelopes, envelope)
 
 		for _, member := range group.UsersObj {
-			memberID := strconv.Itoa(member.PK)
+			memberID := strconv.Itoa(int(member.GetPk()))
 
 			if _, ok := includedUsers[memberID]; !ok {
 				continue
 			}
 
-			envelope, err := providerkit.MarshalEnvelope(group.PK, member, ErrPayloadEncode)
+			envelope, err := providerkit.MarshalEnvelope(group.GetPk(), member, ErrPayloadEncode)
 			if err != nil {
 				return nil, err
 			}
@@ -111,25 +110,26 @@ func (DirectorySync) Run(ctx context.Context, c *Client, cfg UserInput) ([]types
 }
 
 // listDirectoryUsers pages through all Authentik users
-func listDirectoryUsers(ctx context.Context, c *Client) ([]UserResponse, error) {
-	users := make([]UserResponse, 0)
-	page := 1
+func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient) ([]authentikSDK.User, error) {
+	users := make([]authentikSDK.User, 0)
+	page := int32(1)
 
 	for {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
 
-		url := fmt.Sprintf("%s%s?page=%d&page_size=%d", c.BaseURL, authentikUsersEndpoint, page, directoryDefaultPageSize)
-
-		batch, err := fetchPage[UserResponse](ctx, c, url)
+		result, _, err := c.CoreApi.CoreUsersList(ctx).
+			Page(page).
+			PageSize(directoryDefaultPageSize).
+			Execute()
 		if err != nil {
 			return nil, ErrDirectoryUsersFetchFailed
 		}
 
-		users = append(users, batch.Results...)
+		users = append(users, result.Results...)
 
-		if batch.Pagination.Next == 0 {
+		if result.Pagination.Next == 0 {
 			break
 		}
 
@@ -140,25 +140,27 @@ func listDirectoryUsers(ctx context.Context, c *Client) ([]UserResponse, error) 
 }
 
 // listDirectoryGroups pages through all Authentik groups with embedded members
-func listDirectoryGroups(ctx context.Context, c *Client) ([]GroupResponse, error) {
-	groups := make([]GroupResponse, 0)
-	page := 1
+func listDirectoryGroups(ctx context.Context, c *authentikSDK.APIClient) ([]authentikSDK.Group, error) {
+	groups := make([]authentikSDK.Group, 0)
+	page := int32(1)
 
 	for {
 		if err := ctx.Err(); err != nil {
 			return nil, err
 		}
 
-		url := fmt.Sprintf("%s%s?page=%d&page_size=%d&include_users=true", c.BaseURL, authentikGroupsEndpoint, page, directoryDefaultPageSize)
-
-		batch, err := fetchPage[GroupResponse](ctx, c, url)
+		result, _, err := c.CoreApi.CoreGroupsList(ctx).
+			Page(page).
+			PageSize(directoryDefaultPageSize).
+			IncludeUsers(true).
+			Execute()
 		if err != nil {
 			return nil, ErrDirectoryGroupsFetchFailed
 		}
 
-		groups = append(groups, batch.Results...)
+		groups = append(groups, result.Results...)
 
-		if batch.Pagination.Next == 0 {
+		if result.Pagination.Next == 0 {
 			break
 		}
 
@@ -166,26 +168,4 @@ func listDirectoryGroups(ctx context.Context, c *Client) ([]GroupResponse, error
 	}
 
 	return groups, nil
-}
-
-// fetchPage executes a single paginated GET request and decodes the response
-func fetchPage[T any](ctx context.Context, c *Client, url string) (PaginatedResponse[T], error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return PaginatedResponse[T]{}, ErrRequestBuildFailed
-	}
-
-	resp, err := c.do(ctx, req)
-	if err != nil {
-		return PaginatedResponse[T]{}, err
-	}
-
-	defer resp.Body.Close()
-
-	var result PaginatedResponse[T]
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return PaginatedResponse[T]{}, ErrPayloadEncode
-	}
-
-	return result, nil
 }

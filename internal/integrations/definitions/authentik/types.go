@@ -3,6 +3,7 @@ package authentik
 import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	authentikSDK "goauthentik.io/api/v3"
 )
 
 var (
@@ -14,7 +15,7 @@ var (
 	// authentikCredential is the typed runtime ref for resolving the credential
 	authentikCredentialSchema, authentikCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
-	authentikClient = types.NewClientRef[*Client]()
+	authentikClient = types.NewClientRef[*authentikSDK.APIClient]()
 	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync

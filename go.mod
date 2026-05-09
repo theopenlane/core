@@ -149,6 +149,7 @@ require (
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.3 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
+	goauthentik.io/api/v3 v3.2026020.16 // indirect
 )
 
 require (
