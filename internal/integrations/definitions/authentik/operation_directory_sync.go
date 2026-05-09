@@ -2,6 +2,7 @@ package authentik
 
 import (
 	"context"
+	"time"
 
 	authentikSDK "goauthentik.io/api/v3"
 
@@ -25,13 +26,13 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
 		}
 
-		return d.Run(ctx, c, cfg)
+		return d.Run(ctx, c, cfg, request.LastRunAt)
 	})
 }
 
 // Run collects Authentik directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
-	users, err := listDirectoryUsers(ctx, c)
+func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+	users, err := listDirectoryUsers(ctx, c, lastRunAt)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +110,7 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 }
 
 // listDirectoryUsers pages through all Authentik users
-func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient) ([]authentikSDK.User, error) {
+func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunAt *time.Time) ([]authentikSDK.User, error) {
 	users := make([]authentikSDK.User, 0)
 	page := int32(1)
 
@@ -118,10 +119,15 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient) ([]authe
 			return nil, err
 		}
 
-		result, _, err := c.CoreApi.CoreUsersList(ctx).
+		req := c.CoreApi.CoreUsersList(ctx).
 			Page(page).
-			PageSize(directoryDefaultPageSize).
-			Execute()
+			PageSize(directoryDefaultPageSize)
+
+		if lastRunAt != nil {
+			req = req.LastUpdatedGt(*lastRunAt)
+		}
+
+		result, _, err := req.Execute()
 		if err != nil {
 			return nil, ErrDirectoryUsersFetchFailed
 		}

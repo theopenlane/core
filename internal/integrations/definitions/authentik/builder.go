@@ -71,8 +71,9 @@ func Builder() registry.Builder {
 					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    authentikClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					ConfigSchema:        directorySyncSchema,
+					Policy:              types.ExecutionPolicy{Reconcile: true},
+					SkipDefaultLookback: true,
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
