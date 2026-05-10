@@ -10,11 +10,11 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
@@ -124,25 +124,24 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, ErrInternalServerError
 			}
 
-			ndaRequestID, err := m.Client().TrustCenterNDARequest.Query().Where(
-				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
-				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
-			).FirstID(ctx)
+			result, err := attestNDADocument(ctx, m.Client(), createdDocData, templateID, tcID)
 			if err != nil {
-				return nil, err
-			}
-
-			if err := enqueueJob(ctx, m.Job, jobspec.AttestNDARequestArgs{
-				NDARequestID:  ndaRequestID,
-				TrustCenterID: tcID,
-			}, nil); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("nda_request_id", ndaRequestID).Msg("failed to enqueue attest nda request job")
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to attest NDA document")
 
 				return nil, err
 			}
 
-			return v, err
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
+				RecipientInfo:      emaildef.RecipientInfo{Email: caller.SubjectEmail},
+				OrgName:            result.OrgName,
+				TrustCenterURL:     result.TrustCenterURL,
+				AttachmentFilename: "signed_nda.pdf",
+				AttachmentData:     result.AttestedPDF,
+			}); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA signed email")
+			}
+
+			return v, nil
 		})
 	}, ent.OpCreate)
 }

@@ -305,6 +305,10 @@ func serve(ctx context.Context) error {
 		if err := rt.SeedRecurringCampaigns(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
 		}
+
+		if err := rt.SeedPaymentReminders(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed payment reminder listener")
+		}
 	}
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {

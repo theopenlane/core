@@ -1,6 +1,7 @@
 package email
 
 import (
+	"fmt"
 	"html"
 	"html/template"
 	"net/url"
@@ -202,6 +203,15 @@ type BillingEmailChangedEmail struct {
 	ChangedAt time.Time `json:"changed_at" jsonschema:"required,description=Timestamp of the change"`
 }
 
+// OrgDeletionNoticeEmail is the input for the organization deletion notice operation
+type OrgDeletionNoticeEmail struct {
+	RecipientInfo
+	// OrgName is the name of the organization scheduled for deletion
+	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
+	// DeletionDate is the date the organization will be deleted
+	DeletionDate time.Time `json:"deletion_date" jsonschema:"required,description=Scheduled deletion date"`
+}
+
 // --- Schema + operation ref vars ---
 
 var (
@@ -218,6 +228,7 @@ var (
 	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()        //nolint:revive
 	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()      //nolint:revive
 	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()    //nolint:revive
+	orgDeletionNoticeSchema, OrgDeletionNoticeOp     = providerkit.OperationSchema[OrgDeletionNoticeEmail]()      //nolint:revive
 )
 
 // --- Email operation definitions ---
@@ -671,6 +682,43 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ BillingEmailChangedEmail) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
+})
+
+var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
+	Op: OrgDeletionNoticeOp, Schema: orgDeletionNoticeSchema, Theme: baseTheme,
+	Description: "System notification that an organization has been scheduled for deletion due to missing payment method",
+	Subject: func(_ RuntimeEmailConfig, req OrgDeletionNoticeEmail) string {
+		return fmt.Sprintf("Organization Deletion Notice for %s", req.OrgName)
+	},
+	Build: func(cfg RuntimeEmailConfig, req OrgDeletionNoticeEmail) render.ContentBody {
+		return render.ContentBody{
+			Preheader: "Your organization " + req.OrgName + " has been scheduled for deletion",
+			Header:    defaultHeader(cfg),
+			Title:     "Organization Deletion Notice",
+			Intros: render.IntrosBlock{
+				Paragraphs: []string{
+					"This email is to notify you that your organization " + req.OrgName + " has been scheduled for deletion.",
+				},
+			},
+			Dictionary: render.Dictionary{
+				Cells: []render.Cell{
+					{Key: "Scheduled deletion date", Value: req.DeletionDate.Format("January 2, 2006")},
+				},
+			},
+			Actions: []render.Action{{
+				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing"},
+			}},
+			Outros: render.OutrosBlock{
+				Paragraphs: []string{
+					"If you want to keep your account, please add a payment method before the scheduled deletion date.",
+					"If you believe this was done in error, please contact our support team immediately at " + cfg.SupportEmail + ".",
+				},
+			},
+		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ OrgDeletionNoticeEmail) RuntimeEmailConfig {
 		return applySystemBranding(cfg)
 	},
 })

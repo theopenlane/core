@@ -229,7 +229,6 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	})
 }
 
-
 // ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
 func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {

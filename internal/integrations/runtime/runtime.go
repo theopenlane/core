@@ -39,6 +39,8 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
+	// PaymentReminder configures the payment reminder scheduled listener
+	PaymentReminder operations.PaymentReminderConfig
 	// DevMode is the server-level development flag; when true, integrations that
 	// support it use local file-based senders instead of calling provider APIs
 	DevMode bool
@@ -59,6 +61,8 @@ type Runtime struct {
 	postExecutionHook PostExecutionHook
 	// defaultLookback is applied as LastRunAt when an operation has no prior successful run
 	defaultLookback time.Duration
+	// paymentReminderConfig holds the payment reminder scheduling parameters
+	paymentReminderConfig operations.PaymentReminderConfig
 	// devMode indicates the server is running in development mode
 	devMode bool
 }
@@ -203,9 +207,10 @@ func New(config Config) (*Runtime, error) {
 
 	injector := do.New()
 	rt := &Runtime{
-		injector:        injector,
-		defaultLookback: lookback,
-		devMode:         config.DevMode,
+		injector:              injector,
+		defaultLookback:       lookback,
+		paymentReminderConfig: config.PaymentReminder,
+		devMode:               config.DevMode,
 	}
 
 	do.ProvideValue(injector, config.DB)
@@ -267,7 +272,12 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule(), rt.HandleRecurringCampaigns, gala.NewSchedule()); err != nil {
+	paymentReminderSchedule := gala.NewSchedule(
+		gala.WithMinInterval(operations.PaymentReminderMinInterval),
+		gala.WithMaxInterval(operations.PaymentReminderMaxInterval),
+	)
+
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent, rt.HandleReconcile, gala.NewSchedule(), rt.HandleRecurringCampaigns, gala.NewSchedule(), rt.HandlePaymentReminders, paymentReminderSchedule); err != nil {
 		return nil, err
 	}
 

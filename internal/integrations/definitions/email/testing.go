@@ -1,9 +1,13 @@
 package email
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"time"
 
+	"github.com/go-pdf/fpdf"
+	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/theopenlane/newman/providers/mock"
 )
 
@@ -111,7 +115,7 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			OrgName:            "SecureCorp",
 			TrustCenterURL:     "https://trustcenter.example.com/securecorp",
 			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
-			AttachmentData:     []byte("%PDF-1.4 test NDA document content"),
+			AttachmentData:     testAttestedNDAPDF(),
 		},
 		"TrustCenterAuthEmail": TrustCenterAuthEmail{
 			RecipientInfo: r,
@@ -129,6 +133,11 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			OldBillingEmail: "old-billing@acme.com",
 			NewBillingEmail: "new-billing@acme.com",
 			ChangedAt:       time.Now().UTC(),
+		},
+		"OrgDeletionNoticeEmail": OrgDeletionNoticeEmail{
+			RecipientInfo: r,
+			OrgName:       "Acme Corp",
+			DeletionDate:  time.Now().UTC().AddDate(0, 0, 7),
 		},
 		"BrandedMessageRequest": BrandedMessageRequest{
 			RecipientInfo: r,
@@ -157,4 +166,73 @@ func TestFixture(name, toEmail string) json.RawMessage {
 	}
 
 	return data
+}
+
+// testAttestedNDAPDF generates a realistic two-page attested NDA PDF using the
+// same fpdf + pdfcpu pipeline as the production attestation code
+func testAttestedNDAPDF() []byte {
+	original := testMinimalPDF("Non-Disclosure Agreement — SecureCorp")
+	attestation := testAttestationCertPDF()
+
+	var buf bytes.Buffer
+
+	if err := api.MergeRaw([]io.ReadSeeker{
+		bytes.NewReader(original),
+		bytes.NewReader(attestation),
+	}, &buf, false, nil); err != nil {
+		return original
+	}
+
+	return buf.Bytes()
+}
+
+const (
+	testPDFFontSize   = 14
+	testPDFCellHeight = 10
+)
+
+// testMinimalPDF creates a valid single-page PDF with the given title text
+func testMinimalPDF(title string) []byte {
+	pdf := fpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "B", testPDFFontSize)
+	pdf.Cell(0, testPDFCellHeight, title)
+
+	var buf bytes.Buffer
+
+	_ = pdf.Output(&buf)
+
+	return buf.Bytes()
+}
+
+// testAttestationCertPDF creates a single-page attestation certificate with sample data
+func testAttestationCertPDF() []byte {
+	pdf := fpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "B", 18) //nolint:mnd
+	pdf.Cell(0, testPDFCellHeight, "Signature Certification")
+	pdf.Ln(20) //nolint:mnd
+
+	fields := []struct{ label, value string }{
+		{"Name", "Wilfred Netherton"},
+		{"Email", "wilfred@example.com"},
+		{"Company", "SecureCorp"},
+		{"Timestamp", "June 15, 2025 2:30 PM UTC"},
+		{"IP Address", "192.168.1.42"},
+		{"Browser", "Mozilla/5.0 (test fixture)"},
+	}
+
+	for _, f := range fields {
+		pdf.SetFont("Helvetica", "B", 11) //nolint:mnd
+		pdf.Cell(40, 8, f.label+":")      //nolint:mnd
+		pdf.SetFont("Helvetica", "", 11)  //nolint:mnd
+		pdf.Cell(0, 8, f.value)           //nolint:mnd
+		pdf.Ln(testPDFCellHeight)
+	}
+
+	var buf bytes.Buffer
+
+	_ = pdf.Output(&buf)
+
+	return buf.Bytes()
 }

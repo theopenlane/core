@@ -203,6 +203,8 @@ var (
 	ErrFailedToGetIDsForProgramUpdate = errors.New("could not get ids for mutation program update")
 	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
 	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
+	// ErrMissingNDATemplateFile is returned when the NDA template has no attached file for attestation
+	ErrMissingNDATemplateFile = errors.New("NDA template must have at least one attached file")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
