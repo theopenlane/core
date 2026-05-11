@@ -453,6 +453,26 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 	}
 }
 
+// expectAttestedUpload sets up mock expectations for the attested PDF upload triggered by attestNDADocument
+func expectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) {
+	assert.Assert(t, mockProvider != nil)
+
+	mockScheme := "file://"
+
+	mockProvider.On("GetScheme").Return(&mockScheme).Once()
+	mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+	mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+		FileMetadata: pkgobjects.FileMetadata{
+			Key:          "test-key-attested",
+			Folder:       "test-folder",
+			Bucket:       "test-bucket",
+			ContentType:  "application/pdf",
+			ProviderType: storage.DiskProvider,
+			FullURI:      "file:///tmp/test-file-attested",
+		},
+	}, nil).Once()
+}
+
 func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload, kind enums.TemplateKind) {
 	assert.Assert(t, mockProvider != nil)
 

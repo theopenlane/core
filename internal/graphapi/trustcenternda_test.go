@@ -251,6 +251,9 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	up := uploadFile(t, pdfFilePath)
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
+	// the happy path triggers attestNDADocument which uploads the attested PDF
+	expectAttestedUpload(t, suite.client.mockProvider)
+
 	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{up})

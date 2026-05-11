@@ -178,6 +178,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
 	metadata := envelope.ExecutionMetadata
 	ctx = intobvs.WithContext(ctx, metadata)
+	ctx = ent.NewContext(privacy.DecisionContext(ctx, privacy.Allow), r.DB())
 
 	var integration *ent.Integration
 
