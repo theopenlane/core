@@ -5,9 +5,9 @@ import (
 
 	"github.com/resend/resend-go/v3"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Builder returns the email definition builder with the supplied runtime config applied.
@@ -55,7 +55,7 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 				},
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			Operations: append(AllEmailOperations(),
 				types.OperationRegistration{

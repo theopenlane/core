@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -40,7 +40,7 @@ type PaymentReminderEnvelope struct {
 }
 
 // paymentReminderSchemaName is the type name derived from the JSON schema reflector
-var paymentReminderSchemaName = providerkit.SchemaID(providerkit.SchemaFrom[PaymentReminderEnvelope]())
+var paymentReminderSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[PaymentReminderEnvelope]())
 
 var (
 	// PaymentReminderTopic is the Gala topic name for payment reminder polling

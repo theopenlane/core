@@ -31,10 +31,10 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
+				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{

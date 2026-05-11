@@ -2,9 +2,6 @@ package hooks
 
 import (
 	"bytes"
-	"context"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/go-pdf/fpdf"
@@ -12,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -121,30 +119,6 @@ func TestFormatAttestTimestamp(t *testing.T) {
 	}
 }
 
-func TestDownloadFileContent(t *testing.T) {
-	expected := []byte("fake-pdf-content")
-
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write(expected)
-	}))
-	defer srv.Close()
-
-	data, err := downloadFileContent(context.Background(), srv.URL)
-	require.NoError(t, err)
-	assert.Equal(t, expected, data)
-}
-
-func TestDownloadFileContent_NonOK(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusNotFound)
-	}))
-	defer srv.Close()
-
-	_, err := downloadFileContent(context.Background(), srv.URL)
-	require.Error(t, err)
-	assert.Contains(t, err.Error(), "404")
-}
 
 func TestResolveOrgName(t *testing.T) {
 	t.Run("from setting", func(t *testing.T) {
@@ -165,6 +139,112 @@ func TestResolveOrgName(t *testing.T) {
 		tc.Edges.Setting = &generated.TrustCenterSetting{}
 
 		assert.Equal(t, "", resolveOrgName(tc))
+	})
+}
+
+func TestStorageFileFromEnt(t *testing.T) {
+	entFile := &generated.File{
+		ID:                  "file-123",
+		ProvidedFileName:    "nda_template.pdf",
+		StoragePath:         "org/files/nda_template.pdf",
+		StorageVolume:       "documents",
+		StorageRegion:       "us-east-1",
+		DetectedContentType: "application/pdf",
+		PersistedFileSize:   42000,
+		StorageProvider:     "s3",
+		URI:                 "s3://documents/org/files/nda_template.pdf",
+	}
+
+	result := storageFileFromEnt(entFile)
+
+	assert.Equal(t, entFile.ID, result.ID)
+	assert.Equal(t, entFile.ProvidedFileName, result.OriginalName)
+	assert.Equal(t, entFile.StoragePath, result.FileMetadata.Key)
+	assert.Equal(t, entFile.StorageVolume, result.FileMetadata.Bucket)
+	assert.Equal(t, entFile.StorageRegion, result.FileMetadata.Region)
+	assert.Equal(t, entFile.DetectedContentType, result.FileMetadata.ContentType)
+	assert.Equal(t, entFile.PersistedFileSize, result.FileMetadata.Size)
+	assert.Equal(t, entFile.URI, result.FileMetadata.FullURI)
+	assert.Equal(t, storagetypes.ProviderType(entFile.StorageProvider), result.FileMetadata.ProviderType)
+}
+
+func TestValidateTrustCenterNDAJSON(t *testing.T) {
+	validDoc := map[string]any{
+		"pdf_file_id":    "file-abc",
+		"acknowledgment": true,
+		"trust_center_id": "tc-123",
+		"signatory_info": map[string]any{
+			"email":        "jane@example.com",
+			"first_name":   "Jane",
+			"last_name":    "Doe",
+			"company_name": "Acme Corp",
+		},
+		"signature_metadata": map[string]any{
+			"user_id":    "user-456",
+			"pdf_hash":   "abc123hash",
+			"timestamp":  "2025-06-15T14:30:00Z",
+			"ip_address": "192.168.1.1",
+			"user_agent": "Mozilla/5.0",
+		},
+	}
+
+	t.Run("valid document passes", func(t *testing.T) {
+		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "jane@example.com", "user-456")
+		assert.NoError(t, err)
+	})
+
+	t.Run("mismatched trust center id", func(t *testing.T) {
+		err := validateTrustCenterNDAJSON(validDoc, "tc-wrong", "jane@example.com", "user-456")
+		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+	})
+
+	t.Run("mismatched email", func(t *testing.T) {
+		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "wrong@example.com", "user-456")
+		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+	})
+
+	t.Run("mismatched user id", func(t *testing.T) {
+		err := validateTrustCenterNDAJSON(validDoc, "tc-123", "jane@example.com", "user-wrong")
+		assert.ErrorIs(t, err, errDocInfoDoesNotMatchCaller)
+	})
+
+	t.Run("missing required field", func(t *testing.T) {
+		incomplete := map[string]any{
+			"pdf_file_id":    "file-abc",
+			"acknowledgment": true,
+			"trust_center_id": "tc-123",
+		}
+
+		err := validateTrustCenterNDAJSON(incomplete, "tc-123", "jane@example.com", "user-456")
+		assert.ErrorIs(t, err, errValidationFailed)
+	})
+
+	t.Run("empty signatory name fails schema", func(t *testing.T) {
+		doc := map[string]any{
+			"pdf_file_id":    "file-abc",
+			"acknowledgment": true,
+			"trust_center_id": "tc-123",
+			"signatory_info": map[string]any{
+				"email":        "jane@example.com",
+				"first_name":   "",
+				"last_name":    "Doe",
+				"company_name": "Acme Corp",
+			},
+			"signature_metadata": map[string]any{
+				"user_id":    "user-456",
+				"pdf_hash":   "abc123hash",
+				"timestamp":  "2025-06-15T14:30:00Z",
+				"ip_address": "192.168.1.1",
+			},
+		}
+
+		err := validateTrustCenterNDAJSON(doc, "tc-123", "jane@example.com", "user-456")
+		assert.ErrorIs(t, err, errValidationFailed)
+	})
+
+	t.Run("nil document", func(t *testing.T) {
+		err := validateTrustCenterNDAJSON(nil, "tc-123", "jane@example.com", "user-456")
+		assert.Error(t, err)
 	})
 }
 

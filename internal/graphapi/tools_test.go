@@ -1,6 +1,7 @@
 package graphapi_test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -12,6 +13,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/go-pdf/fpdf"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gqlgo/gqlgenc/clientv2"
@@ -243,6 +245,15 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	entitlements, err := suite.mockStripeClient()
 	requireNoError(t, err)
 
+	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
+	requireNoError(t, err)
+
+	c.mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("file:///tmp/test-presigned", nil).Maybe()
+	c.mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+		File: testPDFBytes(),
+		Size: 1024,
+	}, nil).Maybe()
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.TOTP(&totp.Client{
@@ -256,6 +267,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
 		ent.HistoryClient(hc),
+		ent.ObjectManager(c.objectStore),
 	}
 
 	// create database connection
@@ -267,9 +279,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
 		return suite.galaRuntime
 	}))
-
-	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
-	requireNoError(t, err)
 
 	// assign values
 	c.db = db
@@ -438,7 +447,7 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: []byte("test content"),
+			File: testPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
@@ -473,7 +482,7 @@ func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockPr
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: []byte("test content"),
+			File: testPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
@@ -578,6 +587,18 @@ func requireNoError(t *testing.T, err error) {
 
 		os.Exit(1)
 	}
+}
+
+func testPDFBytes() []byte {
+	pdf := fpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Helvetica", "", 12)
+	pdf.Cell(40, 10, "test")
+
+	var buf bytes.Buffer
+	_ = pdf.Output(&buf)
+
+	return buf.Bytes()
 }
 
 // mockStripeClient creates a new stripe client with mock backend

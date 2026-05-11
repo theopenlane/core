@@ -3,10 +3,10 @@ package googleworkspace
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 var directorySyncScopes = []string{
@@ -33,10 +33,10 @@ func Builder(cfg Config) registry.Builder {
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
+				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
