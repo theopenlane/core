@@ -24,7 +24,6 @@ the heart of the [Openlane](https://www.theopenlane.io) cloud service. [Sign up 
 - Questionnaire creation, customization, and automation for easier internal and external interactions with your staff, auditors, and vendors
 - Notification customizations, channel definitions, comments and histories on all your objects
 - Easy to use documentation editors and storage for Policies and Procedures, or whatever documentation is needed
-- Trust Center, including custom controls, vanity domains, and analytics
 - Vulnerability Management with integrations to GitHub, AWS Security Hub, and GCP Security Command Center
   .... and more!
 
