@@ -303,6 +303,15 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
+			name: "happy path, update due date",
+			id:   assessment.ID,
+			request: testclient.UpdateAssessmentInput{
+				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day,
+			},
+			client: suite.client.api,
+			ctx:    adminUser.UserCtx,
+		},
+		{
 			name: "happy path, update tags",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
@@ -385,6 +394,10 @@ func TestMutationUpdateAssessment(t *testing.T) {
 
 			if len(tc.request.AppendTags) > 0 {
 				assert.Check(t, len(resp.UpdateAssessment.Assessment.Tags) >= len(tc.request.AppendTags))
+			}
+
+			if tc.request.ResponseDueDuration != nil {
+				assert.Check(t, is.Equal(*resp.UpdateAssessment.Assessment.ResponseDueDuration, *tc.request.ResponseDueDuration))
 			}
 		})
 	}

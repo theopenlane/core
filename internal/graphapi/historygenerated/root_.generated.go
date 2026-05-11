@@ -22377,6 +22377,8 @@ enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/com
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 ActionPlanHistoryOpType is enum for the field operation
@@ -25039,6 +25041,8 @@ enum CampaignHistoryFrequency @goModel(model: "github.com/theopenlane/core/commo
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 CampaignHistoryOpType is enum for the field operation
@@ -33234,6 +33238,8 @@ enum EntityHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 EntityHistoryOpType is enum for the field operation
@@ -34612,6 +34618,8 @@ enum EvidenceHistoryFrequency @goModel(model: "github.com/theopenlane/core/commo
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 EvidenceHistoryOpType is enum for the field operation
@@ -40068,6 +40076,8 @@ enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 InternalPolicyHistoryOpType is enum for the field operation
@@ -46408,6 +46418,8 @@ enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/comm
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 ProcedureHistoryOpType is enum for the field operation
@@ -51864,6 +51876,8 @@ enum RiskHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/en
   BIANNUALLY
   MONTHLY
   NONE
+  BIENNIALLY
+  TRIENNIALLY
 }
 """
 RiskHistoryOpType is enum for the field operation

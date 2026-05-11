@@ -485,7 +485,7 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 				expectedReviewDate = lastReviewTime.AddDate(0, freq.addMonths, 0)
 			}
 
-			nextReviewTime := time.Time(*updatedEntity.NextReviewAt)
+			nextReviewTime := time.Time(*updatedEntity.NextReviewAt).UTC()
 
 			assert.Check(t, is.DeepEqual(expectedReviewDate.Year(), nextReviewTime.Year()),
 				"next_review_at year should match expected")
@@ -526,8 +526,8 @@ func TestReviewWithMultipleConnectedEntities(t *testing.T) {
 	assert.Check(t, newEntity.LastReviewedAt != nil, "last_reviewed_at should be set")
 	assert.Check(t, newEntity.NextReviewAt != nil, "next_review_at should be set")
 
-	lastReviewedTime := time.Time(*newEntity.LastReviewedAt)
-	nextReviewTime := time.Time(*newEntity.NextReviewAt)
+	lastReviewedTime := time.Time(*newEntity.LastReviewedAt).UTC()
+	nextReviewTime := time.Time(*newEntity.NextReviewAt).UTC()
 
 	expectedReviewDate := lastReviewedTime.AddDate(0, 1, 0)
 

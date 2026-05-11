@@ -93,21 +93,20 @@ func findExistingAssessmentResponse(ctx context.Context, client *generated.Clien
 // assessment response. For drafts it updates due date only. For non-drafts it increments send
 // attempts, resets overdue status, and sends a new email invitation.
 func handleExistingAssessmentResponse(ctx context.Context, m *generated.AssessmentResponseMutation, existingResponse *generated.AssessmentResponse, isTest bool) (*generated.AssessmentResponse, error) {
-	isDraft, _ := m.IsDraft()
-
-	if existingResponse.Status != enums.AssessmentResponseStatusDraft &&
-		existingResponse.Status != enums.AssessmentResponseStatusSent &&
-		existingResponse.Status != enums.AssessmentResponseStatusOverdue &&
+	if existingResponse.Status == enums.AssessmentResponseStatusCompleted &&
 		!isTest {
-		return nil, ErrAssessmentInProgress
+		return nil, ErrAssessmentInCompleted
 	}
 
 	update := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID)
 
 	if dueDate, ok := m.DueDate(); ok {
 		update = update.SetDueDate(dueDate)
+		// ensure if due date changes status is not marked as overdue
+		update = update.SetStatus(enums.AssessmentResponseStatusSent)
 	}
 
+	isDraft, _ := m.IsDraft()
 	if isDraft {
 		update = update.SetStatus(enums.AssessmentResponseStatusDraft)
 
@@ -220,12 +219,8 @@ func HookUpdateAssessmentResponse() ent.Hook {
 
 			newStatus, statusExists := m.Status()
 
-			if statusExists {
-				switch assessmentResp.Status {
-				case enums.AssessmentResponseStatusCompleted,
-					enums.AssessmentResponseStatusOverdue:
-					return nil, ErrAssessmentInProgress
-				}
+			if statusExists && assessmentResp.Status == enums.AssessmentResponseStatusCompleted {
+				return nil, ErrAssessmentInCompleted
 			}
 
 			isPastDue := !assessmentResp.DueDate.IsZero() && time.Now().After(assessmentResp.DueDate)

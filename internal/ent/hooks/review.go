@@ -18,7 +18,7 @@ import (
 )
 
 func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime) models.DateTime {
-	lastReviewDate := time.Time(lastReviewedAt)
+	lastReviewDate := time.Time(lastReviewedAt).UTC()
 
 	switch frequency {
 	case enums.FrequencyYearly:
