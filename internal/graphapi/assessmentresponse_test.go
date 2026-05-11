@@ -422,7 +422,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		assert.NilError(t, err)
 
 		_, err = suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
-		assert.ErrorContains(t, err, "assessment is already in progress or completed")
+		assert.ErrorContains(t, err, "assessment is already completed")
 	})
 
 	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg1}).MustDelete(testUser1.UserCtx, t)

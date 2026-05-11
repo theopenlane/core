@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	echo "github.com/theopenlane/echox"
@@ -13,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -257,6 +259,10 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	freshResponse, err := responseUpdate.Save(allowCtx)
 	if err != nil {
+		if errors.Is(err, hooks.ErrAssessmentInCompleted) {
+			return h.BadRequest(ctx, err, openapi)
+		}
+
 		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
