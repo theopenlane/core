@@ -122,10 +122,15 @@ func buildAWSServiceClientViaStaticCreds[T any](ctx context.Context, req types.C
 
 // buildAWSConfigFromStaticCreds constructs an AWS SDK config using static IAM credentials and a region
 func buildAWSConfigFromStaticCreds(ctx context.Context, cred ServiceAccountCredentialSchema) (awssdk.Config, error) {
+	if cred.Region == "" {
+		return awssdk.Config{}, ErrRegionMissing
+	}
+
 	provider := credentials.NewStaticCredentialsProvider(cred.AccessKeyID, cred.SecretAccessKey, cred.SessionToken)
 
 	cfg, err := config.LoadDefaultConfig(ctx,
 		config.WithCredentialsProvider(provider),
+		config.WithRegion(cred.Region),
 	)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("awssecurityhub: error loading aws config from static credentials")

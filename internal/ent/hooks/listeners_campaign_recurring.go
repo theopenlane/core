@@ -35,13 +35,15 @@ func RegisterGalaCampaignRecurringListeners(registry *gala.Registry) ([]gala.Lis
 	)
 }
 
-// handleCampaignRecurringMutation reacts to is_active and is_recurring field
-// changes on campaigns to keep next_run_at consistent with the desired state
+// handleCampaignRecurringMutation reacts to scheduling-relevant field changes
+// on campaigns to keep next_run_at consistent with the desired state
 func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	activeChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldIsActive)
-	recurringChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldIsRecurring)
+	activationChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldIsActive) ||
+		eventqueue.MutationFieldChanged(payload, campaign.FieldIsRecurring)
+	scheduleShapeChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceFrequency) ||
+		eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceInterval)
 
-	if !activeChanged && !recurringChanged {
+	if !activationChanged && !scheduleShapeChanged {
 		return nil
 	}
 
@@ -84,7 +86,9 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 	shouldSchedule := camp.IsRecurring && camp.IsActive && !isTerminalStatus(camp.Status) && camp.RecurrenceFrequency != enums.FrequencyNone
 
 	switch {
-	case shouldSchedule && camp.NextRunAt == nil:
+	case shouldSchedule && (activationChanged || camp.NextRunAt == nil):
+		return recomputeNextRunAt(ctx.Context, client, camp)
+	case shouldSchedule && scheduleShapeChanged:
 		return recomputeNextRunAt(ctx.Context, client, camp)
 	case !shouldSchedule && camp.NextRunAt != nil:
 		return clearNextRunAt(ctx.Context, client, camp.ID)

@@ -79,6 +79,10 @@ func RegisterScheduledListener[T any](cfg ScheduledListenerConfig[T]) error {
 			receipt := cfg.Runtime.EmitWithHeaders(emitCtx, cfg.Topic, cfg.Wrap(envelope, next), headers)
 
 			if execErr != nil {
+				if receipt.Err != nil {
+					logx.FromContext(ctx.Context).Error().Err(receipt.Err).Msg("scheduled listener re-emit failed, loop will not continue")
+				}
+
 				return river.JobCancel(execErr)
 			}
 

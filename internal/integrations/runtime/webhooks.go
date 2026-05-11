@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -175,9 +176,18 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
-	ctx, integration, metadata, err := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
-	if err != nil {
-		return err
+	metadata := envelope.ExecutionMetadata
+	ctx = intobvs.WithContext(ctx, metadata)
+
+	var integration *ent.Integration
+
+	if !metadata.Runtime {
+		var err error
+
+		integration, err = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: metadata.IntegrationID})
+		if err != nil {
+			return err
+		}
 	}
 
 	registration, err := r.Registry().WebhookEvent(metadata.DefinitionID, envelope.Webhook, envelope.Event)
