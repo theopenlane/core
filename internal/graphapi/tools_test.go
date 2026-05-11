@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/go-pdf/fpdf"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/go-pdf/fpdf"
 	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog"

@@ -119,7 +119,6 @@ func TestFormatAttestTimestamp(t *testing.T) {
 	}
 }
 
-
 func TestResolveOrgName(t *testing.T) {
 	t.Run("from setting", func(t *testing.T) {
 		tc := &generated.TrustCenter{}
@@ -170,8 +169,8 @@ func TestStorageFileFromEnt(t *testing.T) {
 
 func TestValidateTrustCenterNDAJSON(t *testing.T) {
 	validDoc := map[string]any{
-		"pdf_file_id":    "file-abc",
-		"acknowledgment": true,
+		"pdf_file_id":     "file-abc",
+		"acknowledgment":  true,
 		"trust_center_id": "tc-123",
 		"signatory_info": map[string]any{
 			"email":        "jane@example.com",
@@ -210,8 +209,8 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 
 	t.Run("missing required field", func(t *testing.T) {
 		incomplete := map[string]any{
-			"pdf_file_id":    "file-abc",
-			"acknowledgment": true,
+			"pdf_file_id":     "file-abc",
+			"acknowledgment":  true,
 			"trust_center_id": "tc-123",
 		}
 
@@ -221,8 +220,8 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 
 	t.Run("empty signatory name fails schema", func(t *testing.T) {
 		doc := map[string]any{
-			"pdf_file_id":    "file-abc",
-			"acknowledgment": true,
+			"pdf_file_id":     "file-abc",
+			"acknowledgment":  true,
 			"trust_center_id": "tc-123",
 			"signatory_info": map[string]any{
 				"email":        "jane@example.com",
