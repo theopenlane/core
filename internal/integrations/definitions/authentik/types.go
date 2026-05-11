@@ -32,10 +32,10 @@ type CredentialSchema struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DisableGroupSync when true only syncs users, skipping groups and memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
+	// DisableGroupSync when true only syncs users, skipping groups and memberships
+	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
 	// FilterExpr limits imported records to envelopes matching a CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }
