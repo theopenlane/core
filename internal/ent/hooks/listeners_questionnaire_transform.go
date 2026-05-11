@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/mail"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/common/enums"
@@ -24,6 +26,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -147,6 +153,7 @@ func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) 
 
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
+const questionnaireTransformDefinitionID = "questionnaire_transform"
 
 type questionnaireValidationError struct {
 	Message string
@@ -171,22 +178,8 @@ type questionnaireTransformRequest struct {
 }
 
 type entityTransform struct {
-	Name                 string
-	DisplayName          string
-	Description          string
-	Status               enums.EntityStatus
-	ContractStartDate    *models.DateTime
-	ContractEndDate      *models.DateTime
-	HasSoc2              *bool
-	AnnualSpend          *float64
-	BillingModel         string
-	Links                []string
-	Notes                string
-	EnvironmentName      string
-	EnvironmentID        string
-	InternalOwner        string
-	InternalOwnerUserID  string
-	InternalOwnerGroupID string
+	Input entgen.CreateEntityInput
+	Notes string
 }
 
 func transformQuestionnaire(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
@@ -218,12 +211,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	if input.Status == "" {
-		input.Status = getEntityStatusFromContract(input.ContractStartDate)
-	}
-
-	metadata := transformMetadata(req)
-	record, err := upsertEntity(ctx, client, req.OrganizationID, input, metadata)
+	record, err := persistEntityTransform(ctx, client, req, input)
 	if err != nil {
 		return err
 	}
@@ -438,39 +426,36 @@ func applyTransform(value any, transform enums.TemplateProjectionTransform) (any
 }
 
 func entityFromMapping(values map[string]any) (entityTransform, error) {
-	var input entityTransform
+	var mapped entityTransform
+	input := entgen.CreateEntityInput{}
 
 	for field, value := range values {
 		switch field {
 		case entity.FieldName:
-
-			input.Name = strings.TrimSpace(getStringValue(value))
+			input.Name = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldDisplayName:
-
-			input.DisplayName = strings.TrimSpace(getStringValue(value))
+			input.DisplayName = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldDescription:
-			input.Description = strings.TrimSpace(getStringValue(value))
+			input.Description = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldStatus:
-
 			status, ok := value.(enums.EntityStatus)
 			if !ok {
 				statusValue := strings.TrimSpace(getStringValue(value))
 				parsed := enums.ToEntityStatus(statusValue)
 				if parsed == nil || *parsed == "" {
-					return input, &questionnaireValidationError{Message: fmt.Sprintf("invalid entity status %q", statusValue)}
+					return mapped, &questionnaireValidationError{Message: fmt.Sprintf("invalid entity status %q", statusValue)}
 				}
 				status = *parsed
 			}
 
-			input.Status = status
+			input.Status = &status
 		case entity.FieldContractStartDate:
-
 			t, ok := value.(models.DateTime)
 			if !ok {
-				return input, &questionnaireValidationError{Message: "contract_start_date must be a date"}
+				return mapped, &questionnaireValidationError{Message: "contract_start_date must be a date"}
 			}
 
 			input.ContractStartDate = &t
@@ -478,7 +463,7 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 		case entity.FieldContractEndDate:
 			t, ok := value.(models.DateTime)
 			if !ok {
-				return input, &questionnaireValidationError{Message: "contract_end_date must be a date"}
+				return mapped, &questionnaireValidationError{Message: "contract_end_date must be a date"}
 			}
 
 			input.ContractEndDate = &t
@@ -486,7 +471,7 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 		case entity.FieldHasSoc2:
 			hasSoc2, ok := value.(bool)
 			if !ok {
-				return input, &questionnaireValidationError{Message: "has_soc2 must be a bool"}
+				return mapped, &questionnaireValidationError{Message: "has_soc2 must be a bool"}
 			}
 
 			input.HasSoc2 = &hasSoc2
@@ -494,194 +479,147 @@ func entityFromMapping(values map[string]any) (entityTransform, error) {
 		case entity.FieldAnnualSpend:
 			annualSpend, ok := value.(float64)
 			if !ok {
-				return input, &questionnaireValidationError{Message: "annual_spend must be a float"}
+				return mapped, &questionnaireValidationError{Message: "annual_spend must be a float"}
 			}
 
 			input.AnnualSpend = &annualSpend
 
 		case entity.FieldBillingModel:
-			input.BillingModel = strings.TrimSpace(getStringValue(value))
+			input.BillingModel = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldLinks:
 			links, ok := value.([]string)
 			if !ok {
-				return input, &questionnaireValidationError{Message: "links must be a string array"}
+				return mapped, &questionnaireValidationError{Message: "links must be a string array"}
 			}
 
 			input.Links = links
 
 		case entityTransformFieldNotes:
-			input.Notes = strings.TrimSpace(getStringValue(value))
+			mapped.Notes = strings.TrimSpace(getStringValue(value))
 
 		case entity.FieldEnvironmentName:
-			input.EnvironmentName = strings.TrimSpace(getStringValue(value))
+			input.EnvironmentName = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldEnvironmentID:
-			input.EnvironmentID = strings.TrimSpace(getStringValue(value))
+			input.EnvironmentID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldInternalOwner:
-
-			input.InternalOwner = strings.TrimSpace(getStringValue(value))
+			input.InternalOwner = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldInternalOwnerUserID:
-
-			input.InternalOwnerUserID = strings.TrimSpace(getStringValue(value))
+			input.InternalOwnerUserID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		case entity.FieldInternalOwnerGroupID:
-
-			input.InternalOwnerGroupID = strings.TrimSpace(getStringValue(value))
+			input.InternalOwnerGroupID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
 
 		default:
-			return input, &questionnaireValidationError{Message: fmt.Sprintf("unsupported entity transform field %q", field)}
+			return mapped, &questionnaireValidationError{Message: fmt.Sprintf("unsupported entity transform field %q", field)}
 		}
 	}
 
-	if input.DisplayName == "" {
-		return input, &questionnaireValidationError{Message: "entity transform requires display_name"}
+	if input.DisplayName == nil || *input.DisplayName == "" {
+		return mapped, &questionnaireValidationError{Message: "entity transform requires display_name"}
 	}
 
-	if input.Name == "" {
-		input.Name = strcase.KebabCase(strings.TrimSpace(input.DisplayName))
+	if input.Name == nil || *input.Name == "" {
+		input.Name = lo.ToPtr(strcase.KebabCase(strings.TrimSpace(*input.DisplayName)))
 	}
 
-	if input.Name == "" {
-		return input, &questionnaireValidationError{Message: "entity transform requires name"}
+	if input.Name == nil || *input.Name == "" {
+		return mapped, &questionnaireValidationError{Message: "entity transform requires name"}
 	}
 
-	return input, nil
+	mapped.Input = input
+
+	return mapped, nil
 }
 
-func upsertEntity(ctx context.Context, client *entgen.Client, organizationID string, input entityTransform, metadata map[string]any) (*entgen.Entity, error) {
-	existing, err := client.Entity.Query().
+func persistEntityTransform(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, mapped entityTransform) (*entgen.Entity, error) {
+	input := mapped.Input
+	input.OwnerID = lo.ToPtr(req.OrganizationID)
+	input.VendorMetadata = transformMetadata(req)
+
+	if input.Status == nil {
+		status := getEntityStatusFromContract(input.ContractStartDate)
+		input.Status = &status
+	}
+
+	if input.ExternalID == nil || *input.ExternalID == "" {
+		input.ExternalID = input.Name
+	}
+
+	payload, err := json.Marshal(input)
+	if err != nil {
+		return nil, fmt.Errorf("marshal transformed entity input: %w", err)
+	}
+
+	ingestRegistry := registry.New()
+	if err := ingestRegistry.Register(questionnaireTransformDefinition()); err != nil {
+		return nil, fmt.Errorf("register questionnaire transform ingest definition: %w", err)
+	}
+
+	integration := &entgen.Integration{
+		DefinitionID: questionnaireTransformDefinitionID,
+		OwnerID:      req.OrganizationID,
+	}
+
+	payloadSets := []integrationtypes.IngestPayloadSet{
+		{
+			Schema: integrationgenerated.IntegrationMappingSchemaEntity,
+			Envelopes: []integrationtypes.MappingEnvelope{
+				{
+					Resource: "questionnaire_document_data",
+					Action:   "completed",
+					Payload:  payload,
+				},
+			},
+		},
+	}
+
+	if err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
+		Registry:    ingestRegistry,
+		DB:          client,
+		Integration: integration,
+	}, "", []integrationtypes.IngestContract{
+		{Schema: integrationgenerated.IntegrationMappingSchemaEntity},
+	}, payloadSets, operations.IngestOptions{
+		Source: integrationgenerated.IntegrationIngestSourceDirect,
+	}); err != nil {
+		return nil, fmt.Errorf("persist transformed entity input: %w", err)
+	}
+
+	record, err := client.Entity.Query().
 		Where(
-			entity.OwnerIDEQ(organizationID),
-			entity.NameEqualFold(input.Name),
+			entity.OwnerIDEQ(req.OrganizationID),
+			entity.ExternalIDEQ(*input.ExternalID),
 		).
 		Only(ctx)
-	if err != nil && !entgen.IsNotFound(err) {
+	if err != nil {
 		return nil, fmt.Errorf("query transformed entity: %w", err)
 	}
 
-	if existing != nil {
-		return updateEntity(ctx, client, existing, input, metadata)
-	}
-
-	created, err := createEntity(ctx, client, organizationID, input, metadata)
-	if err != nil {
-		return nil, fmt.Errorf("create transformed entity: %w", err)
-	}
-
-	return created, nil
+	return record, nil
 }
 
-func createEntity(ctx context.Context, client *entgen.Client, organizationID string, input entityTransform, metadata map[string]any) (*entgen.Entity, error) {
-	create := client.Entity.Create().
-		SetOwnerID(organizationID).
-		SetName(input.Name).
-		SetDisplayName(input.DisplayName).
-		SetStatus(input.Status).
-		SetVendorMetadata(metadata)
-
-	if input.Description != "" {
-		create.SetDescription(input.Description)
+func questionnaireTransformDefinition() integrationtypes.Definition {
+	return integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{
+			ID:          questionnaireTransformDefinitionID,
+			Family:      questionnaireTransformDefinitionID,
+			DisplayName: "Questionnaire Transform",
+			Active:      true,
+			Visible:     false,
+		},
+		Mappings: []integrationtypes.MappingRegistration{
+			{
+				Schema: integrationgenerated.IntegrationMappingSchemaEntity,
+				Spec: integrationtypes.MappingOverride{
+					MapExpr: "payload",
+				},
+			},
+		},
 	}
-
-	if input.ContractStartDate != nil {
-		create.SetContractStartDate(*input.ContractStartDate)
-	}
-
-	if input.ContractEndDate != nil {
-		create.SetContractEndDate(*input.ContractEndDate)
-	}
-
-	if input.HasSoc2 != nil {
-		create.SetHasSoc2(*input.HasSoc2)
-	}
-
-	if input.AnnualSpend != nil {
-		create.SetAnnualSpend(*input.AnnualSpend)
-	}
-
-	if input.BillingModel != "" {
-		create.SetBillingModel(input.BillingModel)
-	}
-
-	if len(input.Links) > 0 {
-		create.SetLinks(input.Links)
-	}
-
-	if input.EnvironmentID != "" {
-		create.SetEnvironmentID(input.EnvironmentID)
-		create.SetEnvironmentName(input.EnvironmentName)
-	}
-
-	switch {
-	case input.InternalOwnerUserID != "":
-		create.SetInternalOwnerUserID(input.InternalOwnerUserID)
-	case input.InternalOwnerGroupID != "":
-		create.SetInternalOwnerGroupID(input.InternalOwnerGroupID)
-	case input.InternalOwner != "":
-		create.SetInternalOwner(input.InternalOwner)
-	}
-
-	return create.Save(ctx)
-}
-
-func updateEntity(ctx context.Context, client *entgen.Client, existing *entgen.Entity, input entityTransform, metadata map[string]any) (*entgen.Entity, error) {
-	update := client.Entity.UpdateOneID(existing.ID).
-		SetDisplayName(input.DisplayName).
-		SetStatus(input.Status).
-		SetVendorMetadata(mergeTransformMetadata(existing.VendorMetadata, metadata))
-
-	if input.Description != "" {
-		update.SetDescription(input.Description)
-	}
-
-	if input.ContractStartDate != nil {
-		update.SetContractStartDate(*input.ContractStartDate)
-	}
-
-	if input.ContractEndDate != nil {
-		update.SetContractEndDate(*input.ContractEndDate)
-	}
-
-	if input.HasSoc2 != nil {
-		update.SetHasSoc2(*input.HasSoc2)
-	}
-
-	if input.AnnualSpend != nil {
-		update.SetAnnualSpend(*input.AnnualSpend)
-	}
-
-	if input.BillingModel != "" {
-		update.SetBillingModel(input.BillingModel)
-	}
-
-	if len(input.Links) > 0 {
-		update.SetLinks(input.Links)
-	}
-
-	if input.EnvironmentID != "" {
-		update.SetEnvironmentID(input.EnvironmentID)
-		update.SetEnvironmentName(input.EnvironmentName)
-	}
-
-	switch {
-	case input.InternalOwnerUserID != "":
-		update.SetInternalOwnerUserID(input.InternalOwnerUserID).
-			ClearInternalOwnerGroupID().
-			ClearInternalOwner()
-	case input.InternalOwnerGroupID != "":
-		update.SetInternalOwnerGroupID(input.InternalOwnerGroupID).
-			ClearInternalOwnerUserID().
-			ClearInternalOwner()
-	case input.InternalOwner != "":
-		update.SetInternalOwner(input.InternalOwner).
-			ClearInternalOwnerUserID().
-			ClearInternalOwnerGroupID()
-	}
-
-	return update.Save(ctx)
 }
 
 func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string) error {
@@ -754,18 +692,6 @@ func transformMetadata(req questionnaireTransformRequest) map[string]any {
 			"document_data_id":       req.DocumentDataID,
 		},
 	}
-}
-
-func mergeTransformMetadata(existing map[string]any, metadata map[string]any) map[string]any {
-	merged := map[string]any{}
-	for key, value := range existing {
-		merged[key] = value
-	}
-	for key, value := range metadata {
-		merged[key] = value
-	}
-
-	return merged
 }
 
 // valueAtPath lets us read keys from a json map. this also supports the
