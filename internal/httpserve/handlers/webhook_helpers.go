@@ -157,8 +157,11 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 		err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
 			Exec(newCtx)
-		if err != nil && !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
-			return nil, err
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error creating trust center")
+			if !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
+				return nil, err
+			}
 		}
 	}
 

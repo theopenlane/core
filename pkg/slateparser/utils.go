@@ -2,6 +2,7 @@ package slateparser
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 )
 
@@ -72,8 +73,7 @@ func valEqualBestEffort(a, b any) bool {
 	case nil:
 		return b == nil
 	default:
-		// non-comparable type (slice, nested map, etc.) — conservatively treat as not equal
-		return false
+		return reflect.DeepEqual(a, b)
 	}
 }
 
@@ -81,8 +81,8 @@ func isCommentKey(key string) bool {
 	return key == "comment" || strings.HasPrefix(key, "comment_")
 }
 
-// OnlyCommentsAdded checks if the only changes between the old and new slate JSON elements are the addition of comments
-func OnlyCommentsAdded(oldText []any, newText []any) bool {
+// NoDetailsChanged checks if the only changes between the old and new slate JSON elements are the addition of comments (or no changes at all)
+func NoDetailsChanged(oldText []any, newText []any) bool {
 	oldLeaves := getChildrenFromSlateTextJSON(oldText)
 	newLeaves := getChildrenFromSlateTextJSON(newText)
 
@@ -105,7 +105,7 @@ func OnlyCommentsAdded(oldText []any, newText []any) bool {
 			return false
 		}
 
-		// new leaf may only add comment-related keys; all other keys must exist in old with equal values
+		// new leaf may only add/modify comment-related keys; all other keys must exist in old with equal values
 		for key, newVal := range newLeaf {
 			if isCommentKey(key) {
 				continue

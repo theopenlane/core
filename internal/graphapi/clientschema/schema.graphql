@@ -1143,6 +1143,8 @@ enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/common/enu
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for ActionPlan connections
@@ -5290,6 +5292,8 @@ enum CampaignFrequency @goModel(model: "github.com/theopenlane/core/common/enums
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Return response for launchCampaign mutation
@@ -25266,6 +25270,8 @@ enum EntityFrequency @goModel(model: "github.com/theopenlane/core/common/enums.F
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for Entity connections
@@ -27966,6 +27972,8 @@ enum EvidenceFrequency @goModel(model: "github.com/theopenlane/core/common/enums
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for Evidence connections
@@ -39170,6 +39178,8 @@ enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/common
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for InternalPolicy connections
@@ -60682,6 +60692,8 @@ enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/common/enum
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for Procedure connections
@@ -71720,6 +71732,8 @@ enum RiskFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Fre
 	BIANNUALLY
 	MONTHLY
 	NONE
+	BIENNIALLY
+	TRIENNIALLY
 }
 """
 Ordering options for Risk connections

@@ -22,7 +22,9 @@ import (
 // SeedRecurringCampaigns starts the durable recurring campaign polling loop
 // after runtime listeners have been registered.
 func (r *Runtime) SeedRecurringCampaigns(ctx context.Context) error {
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.RecurringCampaignTopic, operations.RecurringCampaignEnvelope{}, gala.Headers{})
+	receipt := r.Gala().EmitWithHeaders(ctx, operations.RecurringCampaignTopic, operations.RecurringCampaignEnvelope{}, gala.Headers{
+		Tags: []string{"campaigns"},
+	})
 
 	return receipt.Err
 }

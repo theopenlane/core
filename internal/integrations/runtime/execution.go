@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -51,9 +52,8 @@ func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.Ex
 // durable context values such as caller and integration execution metadata.
 func (r *Runtime) withHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) context.Context {
 	ctx = ent.NewContext(ctx, r.DB())
-	ctx = types.WithExecutionMetadata(ctx, metadata)
 
-	return ctx
+	return intobvs.WithContext(ctx, metadata)
 }
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,
@@ -64,6 +64,8 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		return ErrDefinitionNotFound
 	}
 
+	ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+
 	var errs []error
 
 	for _, op := range def.Operations {
@@ -72,7 +74,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		}
 
 		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
-			logx.FromContext(ctx).Debug().Str("integration_id", integration.ID).Str("operation", op.Name).Msg("operation is disabled, skipping reconcile")
+			logx.FromContext(ctx).Debug().Str("operation", op.Name).Msg("operation is disabled, skipping reconcile")
 
 			continue
 		}
@@ -92,13 +94,13 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		})
 
 		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", integration.ID).Str("operation", op.Name).Msg("failed to emit reconcile envelope")
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str("operation", op.Name).Msg("failed to emit reconcile envelope")
 			errs = append(errs, receipt.Err)
 
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", op.Name).Msg("reconcile envelope emitted")
+		logx.FromContext(ctx).Info().Str("operation", op.Name).Msg("reconcile envelope emitted")
 	}
 
 	return errors.Join(errs...)
@@ -129,7 +131,7 @@ type reconcileOutput struct {
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
 	ctx, installation, metadata, err := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Msg("reconcile bootstrap failed")
+		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.IntegrationRef{IntegrationID: envelope.IntegrationID, DefinitionID: envelope.DefinitionID}).Str("operation", envelope.Operation).Msg("reconcile bootstrap failed")
 
 		return 0, err
 	}
@@ -137,7 +139,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	db := r.DB()
 	startedAt := time.Now()
 
-	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("definition_id", envelope.DefinitionID).Str("operation", envelope.Operation).Msg("reconcile cycle started")
+	logx.FromContext(ctx).Info().Msg("reconcile cycle started")
 
 	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)
 	if err != nil {
@@ -145,7 +147,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	if operation.Disabled != nil && operation.Disabled(installation.Config.ClientConfig) {
-		logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Msg("operation is disabled, stopping reconcile cycle")
+		logx.FromContext(ctx).Debug().Msg("operation is disabled, stopping reconcile cycle")
 
 		return 0, operations.ErrOperationDisabled
 	}
@@ -164,12 +166,12 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	metadata.RunID = runRecord.ID
-	ctx = types.WithExecutionMetadata(ctx, metadata)
+	ctx = intobvs.WithContext(ctx, metadata)
 
 	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceOperation, metadata))
 
 	if execErr != nil {
-		logx.FromContext(ctx).Error().Err(execErr).Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", runRecord.ID).Msg("reconcile operation failed")
+		logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
 
 		if completeErr := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
 			Status: enums.IntegrationRunStatusFailed,
@@ -190,13 +192,13 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 			Error:         execErr.Error(),
 			DurationMS:    time.Since(startedAt).Milliseconds(),
 		}); outputErr != nil {
-			logx.FromContext(ctx).Error().Err(outputErr).Str("run_id", runRecord.ID).Msg("failed to record river output")
+			logx.FromContext(ctx).Error().Err(outputErr).Msg("failed to record river output")
 		}
 
 		return 0, execErr
 	}
 
-	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("operation", envelope.Operation).Str("run_id", runRecord.ID).Int("records", recordCount).Msg("reconcile operation completed")
+	logx.FromContext(ctx).Info().Int("records", recordCount).Msg("reconcile operation completed")
 
 	if err := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
 		Status:  enums.IntegrationRunStatusSuccess,
@@ -229,6 +231,9 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 	if integration == nil {
 		return nil, ErrInstallationRequired
 	}
+
+	ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
 		if err := validatePayload(operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
@@ -271,7 +276,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return execErr
 	}
 
-	logx.FromContext(ctx).Debug().Str("integration_id", envelope.IntegrationID).Str("definition_id", envelope.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation started")
+	logx.FromContext(ctx).Debug().Msg("operation started")
 
 	if tracked {
 		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
@@ -290,12 +295,12 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceOperation, metadata))
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.IntegrationID).Str("definition_id", metadata.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
 
 		return failRun(err, response)
 	}
 
-	logx.FromContext(ctx).Info().Str("integration_id", envelope.IntegrationID).Str("definition_id", metadata.DefinitionID).Str("operation", envelope.Operation).Str("run_id", envelope.RunID).Msg("operation completed")
+	logx.FromContext(ctx).Info().Msg("operation completed")
 
 	var completeErr error
 
@@ -336,7 +341,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 // When integration is nil the client is resolved from the registry's runtime client.
 // Returns the response payload, the number of ingest records processed (0 for non-ingest operations), and any error
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, int, error) {
-	client, definitionID, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
+	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -348,7 +353,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		lastRunAt, lastRunErr = operations.LastSuccessfulRunAt(ctx, db, integration.ID, operation.Name)
 		if lastRunErr != nil {
-			logx.FromContext(ctx).Warn().Err(lastRunErr).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("could not resolve last successful run time, proceeding without incremental filter")
+			logx.FromContext(ctx).Warn().Err(lastRunErr).Msg("could not resolve last successful run time, proceeding without incremental filter")
 		}
 	}
 
@@ -369,7 +374,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	if operation.IngestHandle != nil {
 		payloadSets, err := operation.IngestHandle(ctx, req)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("definition_id", definitionID).Str("operation", operation.Name).Msg("ingest handle failed")
+			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
 
 			return nil, 0, err
 		}
@@ -379,7 +384,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 			totalEnvelopes += len(ps.Envelopes)
 		}
 
-		logx.FromContext(ctx).Info().Str("definition_id", definitionID).Str("operation", operation.Name).Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
+		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
 		if err := operations.EmitPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
@@ -405,15 +410,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 // is non-nil, credentials are loaded from the keystore and the client is built
 // via the registered builder. When integration is nil, the pre-built runtime
 // client is retrieved from the registry
-func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, string, error) {
+func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, string, error) {
 	if !operation.ClientRef.Valid() {
 		if integration != nil {
-			return nil, integration.DefinitionID, nil
+			return nil, credentials, integration.DefinitionID, nil
 		}
 
 		meta, _ := types.ExecutionMetadataFromContext(ctx)
 
-		return nil, meta.DefinitionID, nil
+		return nil, credentials, meta.DefinitionID, nil
 	}
 
 	if integration == nil {
@@ -421,34 +426,34 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 
 		client, ok := r.Registry().RuntimeClient(meta.DefinitionID)
 		if !ok {
-			return nil, meta.DefinitionID, ErrRuntimeClientNotFound
+			return nil, credentials, meta.DefinitionID, ErrRuntimeClientNotFound
 		}
 
-		logx.FromContext(ctx).Info().Str("definition_id", meta.DefinitionID).Str("operation", operation.Name).Msg("runtime client resolved")
+		logx.FromContext(ctx).Info().Msg("runtime client resolved")
 
-		return client, meta.DefinitionID, nil
+		return client, credentials, meta.DefinitionID, nil
 	}
 
 	registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
 	if err != nil {
-		return nil, integration.DefinitionID, err
+		return nil, credentials, integration.DefinitionID, err
 	}
 
 	if credentials == nil {
 		credentials, err = r.loadCredentials(ctx, integration, registration.CredentialRefs)
 		if err != nil {
-			return nil, integration.DefinitionID, err
+			return nil, credentials, integration.DefinitionID, err
 		}
 	}
 
 	client, err := r.keystore().BuildClient(ctx, integration, registration, credentials, config, clientForce)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client build failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("client build failed")
 
-		return nil, integration.DefinitionID, err
+		return nil, credentials, integration.DefinitionID, err
 	}
 
-	logx.FromContext(ctx).Info().Str("integration_id", integration.ID).Str("operation", operation.Name).Msg("client initialized")
+	logx.FromContext(ctx).Info().Msg("client initialized")
 
-	return client, integration.DefinitionID, nil
+	return client, credentials, integration.DefinitionID, nil
 }

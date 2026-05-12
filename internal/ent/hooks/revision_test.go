@@ -47,10 +47,15 @@ func (suite *HookTestSuite) TestSetNewRevision() {
 		{
 			name: "mutation with revision set",
 			mutation: func() *generated.StandardMutation {
-				m := generated.StandardMutation{}
-				m.SetOp(ent.OpUpdateOne)
-				m.SetRevision("v0.4.3")
-				return &m
+				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				require.NoError(t, err)
+
+				update := suite.client.Standard.UpdateOne(std).SetRevision("v0.4.3")
+
+				err = update.Exec(ctx)
+				require.NoError(t, err)
+
+				return update.Mutation()
 			}(),
 			ctx:              context.Background(),
 			expectedRevision: "v0.4.3",
