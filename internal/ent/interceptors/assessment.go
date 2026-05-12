@@ -67,7 +67,7 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 		return fmt.Errorf("token manager is required") //nolint:err113
 	}
 
-	productURL := strings.TrimSpace(q.QuestionnaireProductURL)
+	productURL := strings.TrimSpace(q.EntConfig.QuestionnaireProductURL)
 	if productURL == "" {
 		return fmt.Errorf("questionnaire product URL is required") //nolint:err113
 	}
