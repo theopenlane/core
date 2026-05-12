@@ -56796,7 +56796,6 @@ TemplateHistoryTemplateKind is enum for the field kind
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
-  VENDOR_INTAKE
   EXTERNAL_INTAKE
 }
 """

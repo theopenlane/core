@@ -10,8 +10,6 @@ var (
 	TemplateKindQuestionnaire TemplateKind = "QUESTIONNAIRE"
 	// TemplateKindTrustCenterNda indicates the trustcenter nda.
 	TemplateKindTrustCenterNda TemplateKind = "TRUSTCENTER_NDA"
-	// TemplateKindVendorIntake indicates the vendor intake.
-	TemplateKindVendorIntake TemplateKind = "VENDOR_INTAKE"
 	// TemplateKindExternalIntake indicates the external intake.
 	TemplateKindExternalIntake TemplateKind = "EXTERNAL_INTAKE"
 	// TemplateKindInvalid is used when an unknown or unsupported value is provided.
@@ -20,8 +18,7 @@ var (
 
 var templateKindValues = []TemplateKind{
 	TemplateKindQuestionnaire,
-TemplateKindTrustCenterNda,
-	TemplateKindVendorIntake,
+	TemplateKindTrustCenterNda,
 	TemplateKindExternalIntake,
 }
 

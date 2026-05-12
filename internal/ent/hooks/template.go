@@ -32,7 +32,7 @@ func HookTemplate() ent.Hook {
 			}
 
 			kind, ok := m.Kind()
-			if !ok || kind != enums.TemplateKindVendorIntake {
+			if !ok || kind != enums.TemplateKindExternalIntake {
 				return next.Mutate(ctx, m)
 			}
 
