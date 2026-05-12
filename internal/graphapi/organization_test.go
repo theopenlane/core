@@ -588,17 +588,17 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		errorMsg    string
 	}{
 		{
-			name:  "update name, happy path",
+			name:  "update display name, happy path",
 			orgID: org.ID,
 			updateInput: testclient.UpdateOrganizationInput{
-				Name: &nameUpdate,
+				DisplayName: &nameUpdate,
 			},
 			client: suite.client.api,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate,
-				DisplayName: org.DisplayName,
+				Name:        org.Name,
+				DisplayName: nameUpdate,
 				Description: &org.Description,
 			},
 		},
@@ -617,8 +617,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate,
-				DisplayName: org.DisplayName,
+				Name:        org.Name,
+				DisplayName: nameUpdate,
 				Description: &org.Description,
 				Members: testclient.UpdateOrganization_UpdateOrganization_Organization_Members{
 					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_Members_Edges{
@@ -642,8 +642,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate,
-				DisplayName: org.DisplayName,
+				Name:        org.Name,
+				DisplayName: nameUpdate,
 				Description: &org.Description,
 				ProgramCreators: testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators{
 					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_ProgramCreators_Edges{
@@ -678,8 +678,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate,
-				DisplayName: org.DisplayName,
+				Name:        org.Name,
+				DisplayName: nameUpdate,
 				Description: &org.Description,
 				ProcedureCreators: testclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators{
 					Edges: []*testclient.UpdateOrganization_UpdateOrganization_Organization_ProcedureCreators_Edges{
@@ -728,8 +728,8 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:        reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate, // this would have been updated on the prior test
-				DisplayName: org.DisplayName,
+				Name:        org.Name,
+				DisplayName: nameUpdate, // this would have been updated on the prior test
 				Description: &descriptionUpdate,
 			},
 		},
@@ -743,7 +743,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate, // this would have been updated on the prior test
+				Name:        org.Name,
 				DisplayName: displayNameUpdate,
 				Description: &descriptionUpdate,
 			},
@@ -761,7 +761,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
-				Name:        nameUpdate,        // this would have been updated on the prior test
+				Name:        org.Name,          // this would have been updated on the prior test
 				DisplayName: displayNameUpdate, // this would have been updated on the prior test
 				Description: &descriptionUpdate,
 			},
@@ -778,7 +778,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			name:  "update name, too long",
 			orgID: org.ID,
 			updateInput: testclient.UpdateOrganizationInput{
-				Name: &nameUpdateLong,
+				DisplayName: &nameUpdateLong,
 			},
 			client:   suite.client.api,
 			ctx:      reqCtx,
@@ -788,7 +788,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			name:  "update name, no access",
 			orgID: org.ID,
 			updateInput: testclient.UpdateOrganizationInput{
-				Name: &nameUpdate,
+				DisplayName: &nameUpdate,
 			},
 			client:   suite.client.api,
 			ctx:      memberUserCtx,
@@ -798,7 +798,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			name:  "update name, not found",
 			orgID: org.ID,
 			updateInput: testclient.UpdateOrganizationInput{
-				Name: &nameUpdate,
+				DisplayName: &nameUpdate,
 			},
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
