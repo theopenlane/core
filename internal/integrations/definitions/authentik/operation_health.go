@@ -27,7 +27,11 @@ func (h HealthCheck) Handle() types.OperationHandler {
 
 // Run executes the Authentik health check
 func (HealthCheck) Run(ctx context.Context, c *authentikSDK.APIClient) (json.RawMessage, error) {
-	me, _, err := c.CoreApi.CoreUsersMeRetrieve(ctx).Execute()
+	me, resp, err := c.CoreApi.CoreUsersMeRetrieve(ctx).Execute()
+	if resp != nil {
+		_ = resp.Body.Close()
+	}
+
 	if err != nil {
 		return nil, ErrHealthCheckFailed
 	}

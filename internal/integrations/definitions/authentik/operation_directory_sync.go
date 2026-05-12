@@ -127,7 +127,11 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunA
 			req = req.LastUpdatedGt(*lastRunAt)
 		}
 
-		result, _, err := req.Execute()
+		result, resp, err := req.Execute()
+		if resp != nil {
+			_ = resp.Body.Close()
+		}
+
 		if err != nil {
 			return nil, ErrDirectoryUsersFetchFailed
 		}
@@ -154,11 +158,15 @@ func listDirectoryGroups(ctx context.Context, c *authentikSDK.APIClient) ([]auth
 			return nil, err
 		}
 
-		result, _, err := c.CoreApi.CoreGroupsList(ctx).
+		result, resp, err := c.CoreApi.CoreGroupsList(ctx).
 			Page(page).
 			PageSize(directoryDefaultPageSize).
 			IncludeUsers(true).
 			Execute()
+		if resp != nil {
+			_ = resp.Body.Close()
+		}
+
 		if err != nil {
 			return nil, ErrDirectoryGroupsFetchFailed
 		}

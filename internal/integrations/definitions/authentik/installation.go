@@ -25,7 +25,11 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 
 	apiClient := client.(*authentikSDK.APIClient)
 
-	info, _, err := apiClient.AdminApi.AdminSystemRetrieve(ctx).Execute()
+	info, resp, err := apiClient.AdminApi.AdminSystemRetrieve(ctx).Execute()
+	if resp != nil {
+		_ = resp.Body.Close()
+	}
+
 	if err != nil {
 		return InstallationMetadata{}, false, ErrHealthCheckFailed
 	}

@@ -8,7 +8,7 @@ import (
 
 // mapExprDirectoryAccount is the CEL mapping expression for Authentik user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-    {Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'uid' in payload ? payload.uid : ""`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryAccountExternalID, Expr: `'uid' in payload ? payload.uid : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountCanonicalEmail, Expr: `'email' in payload && payload.email != null ? payload.email : ""`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountDisplayName, Expr: `'name' in payload && payload.name != null && payload.name != "" ? payload.name : ('username' in payload ? payload.username : "")`},
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountStatus, Expr: `dyn('is_active' in payload ? (payload.is_active ? "ACTIVE" : "INACTIVE") : "INACTIVE")`},
