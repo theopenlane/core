@@ -196,7 +196,9 @@ func createReconcilerWithDB(c *cli.Command) (*reconciler.Reconciler, error) {
 		generated.EntitlementManager(stripeClient),
 	}
 
-	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, entOpts...)
+	clientOpts := []entdb.Option{}
+
+	dbClient, err := entdb.New(ctx, cfg.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("database client: %w", err)
 	}
