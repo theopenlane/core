@@ -216,7 +216,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	if err := connectEntitySources(ctx, client, req, record.ID); err != nil {
+	if err := connectEntitySources(ctx, client, req, record); err != nil {
 		return err
 	}
 
@@ -622,19 +622,33 @@ func questionnaireTransformDefinition() integrationtypes.Definition {
 	}
 }
 
-func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string) error {
+func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) error {
+	if record == nil {
+		return nil
+	}
+
 	if req.DocumentDataID != "" {
 		if err := client.DocumentData.UpdateOneID(req.DocumentDataID).
-			AddEntityIDs(entityID).
+			AddEntityIDs(record.ID).
 			Exec(ctx); err != nil && !entgen.IsConstraintError(err) {
 			return fmt.Errorf("link transformed entity to document data: %w", err)
 		}
 	}
 
 	if req.AssessmentResponseID != "" {
-		if err := client.AssessmentResponse.UpdateOneID(req.AssessmentResponseID).
-			SetEntityID(entityID).
-			Exec(ctx); err != nil {
+		update := client.AssessmentResponse.UpdateOneID(req.AssessmentResponseID).
+			SetEntityID(record.ID)
+
+		displayName := strings.TrimSpace(record.DisplayName)
+		if displayName == "" {
+			displayName = strings.TrimSpace(record.Name)
+		}
+
+		if displayName != "" {
+			update.SetDisplayName(displayName)
+		}
+
+		if err := update.Exec(ctx); err != nil {
 			return fmt.Errorf("link transformed entity to assessment response: %w", err)
 		}
 	}

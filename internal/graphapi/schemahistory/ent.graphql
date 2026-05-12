@@ -1147,6 +1147,10 @@ type AssessmentResponseHistory implements Node {
   """
   entityID: String
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
   email: String
@@ -1279,6 +1283,7 @@ enum AssessmentResponseHistoryOrderField {
   history_time
   created_at
   updated_at
+  display_name
   email
   send_attempts
   email_delivered_at
@@ -1506,6 +1511,24 @@ input AssessmentResponseHistoryWhereInput {
   entityIDNotNil: Boolean
   entityIDEqualFold: String
   entityIDContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   email field predicates
   """
@@ -34556,6 +34579,7 @@ enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/co
   QUESTIONNAIRE
   TRUSTCENTER_NDA
   VENDOR_INTAKE
+  EXTERNAL_INTAKE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.

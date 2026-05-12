@@ -135,6 +135,7 @@ type ComplexityRoot struct {
 		CompletedAt      func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
 		DocumentDataID   func(childComplexity int) int
 		DueDate          func(childComplexity int) int
 		Email            func(childComplexity int) int
@@ -3913,6 +3914,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponseHistory.CreatedBy(childComplexity), true
+
+	case "AssessmentResponseHistory.displayName":
+		if e.ComplexityRoot.AssessmentResponseHistory.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentResponseHistory.DisplayName(childComplexity), true
 
 	case "AssessmentResponseHistory.documentDataID":
 		if e.ComplexityRoot.AssessmentResponseHistory.DocumentDataID == nil {
@@ -23343,6 +23351,10 @@ type AssessmentResponseHistory implements Node {
   """
   entityID: String
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
   email: String
@@ -23475,6 +23487,7 @@ enum AssessmentResponseHistoryOrderField {
   history_time
   created_at
   updated_at
+  display_name
   email
   send_attempts
   email_delivered_at
@@ -23702,6 +23715,24 @@ input AssessmentResponseHistoryWhereInput {
   entityIDNotNil: Boolean
   entityIDEqualFold: String
   entityIDContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
   """
   email field predicates
   """
@@ -56752,6 +56783,7 @@ enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/co
   QUESTIONNAIRE
   TRUSTCENTER_NDA
   VENDOR_INTAKE
+  EXTERNAL_INTAKE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -66227,6 +66259,8 @@ func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Co
 		return ec.fieldContext_AssessmentResponseHistory_identityHolderID(ctx, field)
 	case "entityID":
 		return ec.fieldContext_AssessmentResponseHistory_entityID(ctx, field)
+	case "displayName":
+		return ec.fieldContext_AssessmentResponseHistory_displayName(ctx, field)
 	case "email":
 		return ec.fieldContext_AssessmentResponseHistory_email(ctx, field)
 	case "sendAttempts":

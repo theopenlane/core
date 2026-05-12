@@ -206,8 +206,9 @@ func searchAssessmentResponses(ctx context.Context, query string, after *entgql.
 	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
 		Where(
 			assessmentresponse.Or(
-				assessmentresponse.EmailContainsFold(query), // search by Email
-				assessmentresponse.ID(query),                // search equal to ID
+				assessmentresponse.DisplayNameContainsFold(query), // search by DisplayName
+				assessmentresponse.EmailContainsFold(query),       // search by Email
+				assessmentresponse.ID(query),                      // search equal to ID
 			),
 		)
 
@@ -225,10 +226,11 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 				assessmentresponse.CampaignIDContainsFold(query),       // search by CampaignID
 				assessmentresponse.IdentityHolderIDContainsFold(query), // search by IdentityHolderID
 				assessmentresponse.EntityIDContainsFold(query),         // search by EntityID
+				assessmentresponse.DisplayNameContainsFold(query),      // search by DisplayName
 				assessmentresponse.EmailContainsFold(query),            // search by Email
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(email_metadata)::text LIKE $8", likeQuery)) // search by EmailMetadata
+					s.Where(sql.ExprP("(email_metadata)::text LIKE $9", likeQuery)) // search by EmailMetadata
 				},
 			),
 		)

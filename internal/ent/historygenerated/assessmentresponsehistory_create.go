@@ -218,6 +218,20 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableEntityID(v *string) *Asses
 	return _c
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_c *AssessmentResponseHistoryCreate) SetDisplayName(v string) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableDisplayName(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *AssessmentResponseHistoryCreate) SetEmail(v string) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetEmail(v)
@@ -685,6 +699,10 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.EntityID(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldEntityID, field.TypeString, value)
 		_node.EntityID = value
+	}
+	if value, ok := _c.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
 	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldEmail, field.TypeString, value)

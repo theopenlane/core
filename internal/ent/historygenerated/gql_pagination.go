@@ -1312,6 +1312,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseHistoryOrderFieldDisplayName orders AssessmentResponseHistory by display_name.
+	AssessmentResponseHistoryOrderFieldDisplayName = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: assessmentresponsehistory.FieldDisplayName,
+		toTerm: assessmentresponsehistory.ByDisplayName,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssessmentResponseHistoryOrderFieldEmail orders AssessmentResponseHistory by email.
 	AssessmentResponseHistoryOrderFieldEmail = &AssessmentResponseHistoryOrderField{
 		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
@@ -1520,6 +1534,8 @@ func (f AssessmentResponseHistoryOrderField) String() string {
 		str = "created_at"
 	case AssessmentResponseHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentResponseHistoryOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssessmentResponseHistoryOrderFieldEmail.column:
 		str = "email"
 	case AssessmentResponseHistoryOrderFieldSendAttempts.column:
@@ -1570,6 +1586,8 @@ func (f *AssessmentResponseHistoryOrderField) UnmarshalGQL(v interface{}) error 
 		*f = *AssessmentResponseHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentResponseHistoryOrderFieldUpdatedAt
+	case "display_name":
+		*f = *AssessmentResponseHistoryOrderFieldDisplayName
 	case "email":
 		*f = *AssessmentResponseHistoryOrderFieldEmail
 	case "send_attempts":

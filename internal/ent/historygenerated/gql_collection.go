@@ -659,6 +659,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldEntityID)
 				fieldSeen[assessmentresponsehistory.FieldEntityID] = struct{}{}
 			}
+		case "displayName":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldDisplayName)
+				fieldSeen[assessmentresponsehistory.FieldDisplayName] = struct{}{}
+			}
 		case "email":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldEmail]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldEmail)

@@ -52,6 +52,8 @@ type AssessmentResponseHistory struct {
 	IdentityHolderID string `json:"identity_holder_id,omitempty"`
 	// the entity associated with this assessment response
 	EntityID string `json:"entity_id,omitempty"`
+	// display name for the submitted assessment response
+	DisplayName string `json:"display_name,omitempty"`
 	// the email address of the recipient
 	Email string `json:"email,omitempty"`
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
@@ -100,7 +102,7 @@ func (*AssessmentResponseHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assessmentresponsehistory.FieldSendAttempts, assessmentresponsehistory.FieldEmailOpenCount, assessmentresponsehistory.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
-		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldCampaignID, assessmentresponsehistory.FieldIdentityHolderID, assessmentresponsehistory.FieldEntityID, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
+		case assessmentresponsehistory.FieldID, assessmentresponsehistory.FieldRef, assessmentresponsehistory.FieldCreatedBy, assessmentresponsehistory.FieldUpdatedBy, assessmentresponsehistory.FieldDeletedBy, assessmentresponsehistory.FieldOwnerID, assessmentresponsehistory.FieldAssessmentID, assessmentresponsehistory.FieldCampaignID, assessmentresponsehistory.FieldIdentityHolderID, assessmentresponsehistory.FieldEntityID, assessmentresponsehistory.FieldDisplayName, assessmentresponsehistory.FieldEmail, assessmentresponsehistory.FieldStatus, assessmentresponsehistory.FieldDocumentDataID:
 			values[i] = new(sql.NullString)
 		case assessmentresponsehistory.FieldHistoryTime, assessmentresponsehistory.FieldCreatedAt, assessmentresponsehistory.FieldUpdatedAt, assessmentresponsehistory.FieldDeletedAt, assessmentresponsehistory.FieldEmailDeliveredAt, assessmentresponsehistory.FieldEmailOpenedAt, assessmentresponsehistory.FieldEmailClickedAt, assessmentresponsehistory.FieldLastEmailEventAt, assessmentresponsehistory.FieldAssignedAt, assessmentresponsehistory.FieldStartedAt, assessmentresponsehistory.FieldCompletedAt, assessmentresponsehistory.FieldDueDate:
 			values[i] = new(sql.NullTime)
@@ -214,6 +216,12 @@ func (_m *AssessmentResponseHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field entity_id", values[i])
 			} else if value.Valid {
 				_m.EntityID = value.String
+			}
+		case assessmentresponsehistory.FieldDisplayName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field display_name", values[i])
+			} else if value.Valid {
+				_m.DisplayName = value.String
 			}
 		case assessmentresponsehistory.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -393,6 +401,9 @@ func (_m *AssessmentResponseHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("entity_id=")
 	builder.WriteString(_m.EntityID)
+	builder.WriteString(", ")
+	builder.WriteString("display_name=")
+	builder.WriteString(_m.DisplayName)
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)

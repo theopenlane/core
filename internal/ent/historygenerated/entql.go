@@ -213,6 +213,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentresponsehistory.FieldCampaignID:       {Type: field.TypeString, Column: assessmentresponsehistory.FieldCampaignID},
 			assessmentresponsehistory.FieldIdentityHolderID: {Type: field.TypeString, Column: assessmentresponsehistory.FieldIdentityHolderID},
 			assessmentresponsehistory.FieldEntityID:         {Type: field.TypeString, Column: assessmentresponsehistory.FieldEntityID},
+			assessmentresponsehistory.FieldDisplayName:      {Type: field.TypeString, Column: assessmentresponsehistory.FieldDisplayName},
 			assessmentresponsehistory.FieldEmail:            {Type: field.TypeString, Column: assessmentresponsehistory.FieldEmail},
 			assessmentresponsehistory.FieldSendAttempts:     {Type: field.TypeInt, Column: assessmentresponsehistory.FieldSendAttempts},
 			assessmentresponsehistory.FieldEmailDeliveredAt: {Type: field.TypeTime, Column: assessmentresponsehistory.FieldEmailDeliveredAt},
@@ -3842,6 +3843,11 @@ func (f *AssessmentResponseHistoryFilter) WhereIdentityHolderID(p entql.StringP)
 // WhereEntityID applies the entql string predicate on the entity_id field.
 func (f *AssessmentResponseHistoryFilter) WhereEntityID(p entql.StringP) {
 	f.Where(p.Field(assessmentresponsehistory.FieldEntityID))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *AssessmentResponseHistoryFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(assessmentresponsehistory.FieldDisplayName))
 }
 
 // WhereEmail applies the entql string predicate on the email field.

@@ -194,6 +194,26 @@ func (_u *AssessmentResponseHistoryUpdate) ClearEntityID() *AssessmentResponseHi
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssessmentResponseHistoryUpdate) SetDisplayName(v string) *AssessmentResponseHistoryUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdate) SetNillableDisplayName(v *string) *AssessmentResponseHistoryUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssessmentResponseHistoryUpdate) ClearDisplayName() *AssessmentResponseHistoryUpdate {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseHistoryUpdate) SetSendAttempts(v int) *AssessmentResponseHistoryUpdate {
 	_u.mutation.ResetSendAttempts()
@@ -598,6 +618,12 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
 	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldDisplayName, field.TypeString)
+	}
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)
 	}
@@ -863,6 +889,26 @@ func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEntityID(v *string) *As
 // ClearEntityID clears the value of the "entity_id" field.
 func (_u *AssessmentResponseHistoryUpdateOne) ClearEntityID() *AssessmentResponseHistoryUpdateOne {
 	_u.mutation.ClearEntityID()
+	return _u
+}
+
+// SetDisplayName sets the "display_name" field.
+func (_u *AssessmentResponseHistoryUpdateOne) SetDisplayName(v string) *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDisplayName(v *string) *AssessmentResponseHistoryUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssessmentResponseHistoryUpdateOne) ClearDisplayName() *AssessmentResponseHistoryUpdateOne {
+	_u.mutation.ClearDisplayName()
 	return _u
 }
 
@@ -1299,6 +1345,12 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assessmentresponsehistory.FieldDisplayName, field.TypeString)
 	}
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)

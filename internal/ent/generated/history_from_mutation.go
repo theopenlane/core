@@ -947,6 +947,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetEntityID(entityID)
 	}
 
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
 	if email, exists := m.Email(); exists {
 		create = create.SetEmail(email)
 	}
@@ -1114,6 +1118,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetEntityID(assessmentresponse.EntityID)
 		}
 
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(assessmentresponse.DisplayName)
+		}
+
 		if email, exists := m.Email(); exists {
 			create = create.SetEmail(email)
 		} else {
@@ -1257,6 +1267,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetCampaignID(assessmentresponse.CampaignID).
 			SetIdentityHolderID(assessmentresponse.IdentityHolderID).
 			SetEntityID(assessmentresponse.EntityID).
+			SetDisplayName(assessmentresponse.DisplayName).
 			SetEmail(assessmentresponse.Email).
 			SetSendAttempts(assessmentresponse.SendAttempts).
 			SetEmailDeliveredAt(assessmentresponse.EmailDeliveredAt).
