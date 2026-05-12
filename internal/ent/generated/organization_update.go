@@ -208,20 +208,6 @@ func (_u *OrganizationUpdate) ClearTags() *OrganizationUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *OrganizationUpdate) SetName(v string) *OrganizationUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *OrganizationUpdate) SetNillableName(v *string) *OrganizationUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetDisplayName sets the "display_name" field.
 func (_u *OrganizationUpdate) SetDisplayName(v string) *OrganizationUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -4337,11 +4323,6 @@ func (_u *OrganizationUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *OrganizationUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := organization.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Organization.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := organization.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Organization.display_name": %w`, err)}
@@ -4413,9 +4394,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organization.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(organization.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)
@@ -9831,20 +9809,6 @@ func (_u *OrganizationUpdateOne) ClearTags() *OrganizationUpdateOne {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *OrganizationUpdateOne) SetName(v string) *OrganizationUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *OrganizationUpdateOne) SetNillableName(v *string) *OrganizationUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetDisplayName sets the "display_name" field.
 func (_u *OrganizationUpdateOne) SetDisplayName(v string) *OrganizationUpdateOne {
 	_u.mutation.SetDisplayName(v)
@@ -13973,11 +13937,6 @@ func (_u *OrganizationUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *OrganizationUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := organization.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Organization.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.DisplayName(); ok {
 		if err := organization.DisplayNameValidator(v); err != nil {
 			return &ValidationError{Name: "display_name", err: fmt.Errorf(`generated: validator failed for field "Organization.display_name": %w`, err)}
@@ -14066,9 +14025,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organization.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(organization.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organization.FieldDisplayName, field.TypeString, value)

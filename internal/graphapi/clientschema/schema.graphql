@@ -90472,10 +90472,6 @@ input UpdateOrganizationInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the name of the organization
-	"""
-	name: String
-	"""
 	The organization's displayed 'friendly' name
 	"""
 	displayName: String
