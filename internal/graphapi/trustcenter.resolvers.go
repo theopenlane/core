@@ -28,6 +28,8 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 
 	res, err := withTransactionalMutation(ctx).TrustCenter.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating trust center")
+
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenter"})
 	}
 
