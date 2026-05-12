@@ -283,18 +283,6 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 	return values, nil
 }
 
-func getEntityStatusFromContract(t *models.DateTime) enums.EntityStatus {
-	if t == nil || t.IsZero() {
-		return enums.EntityStatusUnderReview
-	}
-
-	if time.Time(*t).Before(time.Now()) {
-		return enums.EntityStatusActive
-	}
-
-	return enums.EntityStatusUnderReview
-}
-
 func resolveInternalOwner(ctx context.Context, client *entgen.Client, organizationID string, rawValue any, values map[string]any) error {
 	ownerValue := strings.TrimSpace(getStringValue(rawValue))
 	if ownerValue == "" {
@@ -539,11 +527,6 @@ func persistEntityTransform(ctx context.Context, client *entgen.Client, req ques
 	input := mapped.Input
 	input.OwnerID = lo.ToPtr(req.OrganizationID)
 	input.VendorMetadata = transformMetadata(req)
-
-	if input.Status == nil {
-		status := getEntityStatusFromContract(input.ContractStartDate)
-		input.Status = &status
-	}
 
 	if input.ExternalID == nil || *input.ExternalID == "" {
 		input.ExternalID = input.Name
