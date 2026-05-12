@@ -16348,7 +16348,6 @@ type UpdateOrganizationInput struct {
 	ClearTags                               bool
 	Tags                                    []string
 	AppendTags                              []string
-	Name                                    *string
 	DisplayName                             *string
 	ClearDescription                        bool
 	Description                             *string
@@ -16663,9 +16662,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
