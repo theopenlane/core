@@ -124,20 +124,6 @@ func (_u *OrganizationHistoryUpdate) ClearTags() *OrganizationHistoryUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *OrganizationHistoryUpdate) SetName(v string) *OrganizationHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *OrganizationHistoryUpdate) SetNillableName(v *string) *OrganizationHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetDisplayName sets the "display_name" field.
 func (_u *OrganizationHistoryUpdate) SetDisplayName(v string) *OrganizationHistoryUpdate {
 	_u.mutation.SetDisplayName(v)
@@ -372,9 +358,6 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
-	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organizationhistory.FieldDisplayName, field.TypeString, value)
 	}
@@ -528,20 +511,6 @@ func (_u *OrganizationHistoryUpdateOne) AppendTags(v []string) *OrganizationHist
 // ClearTags clears the value of the "tags" field.
 func (_u *OrganizationHistoryUpdateOne) ClearTags() *OrganizationHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *OrganizationHistoryUpdateOne) SetName(v string) *OrganizationHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *OrganizationHistoryUpdateOne) SetNillableName(v *string) *OrganizationHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
 	return _u
 }
 
@@ -808,9 +777,6 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(organizationhistory.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.DisplayName(); ok {
 		_spec.SetField(organizationhistory.FieldDisplayName, field.TypeString, value)

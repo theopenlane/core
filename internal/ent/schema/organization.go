@@ -59,6 +59,7 @@ func (Organization) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}).
+			Immutable().
 			MaxLen(orgNameMaxLen).
 			MinLen(minNameLength).
 			Validate(validator.SpecialCharValidator).
