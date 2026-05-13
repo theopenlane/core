@@ -343,7 +343,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 					"trust_center_id": "test123",
 				},
 			},
-			errorMsg: "validation failed:",
+			errorMsg: "NDA submission does not match authenticated user",
 		},
 		{
 			name: "email mismatch",

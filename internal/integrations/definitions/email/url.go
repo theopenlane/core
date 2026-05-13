@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -66,11 +67,13 @@ type trustCenterResolveResult struct {
 
 // resolveTrustCenterAnonURL loads a trust center and generates an anonymous access token URL
 func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, requestID, trustCenterID, email string, buildURL func(*generated.TrustCenter, string) url.URL) (trustCenterResolveResult, error) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		WithSetting().
-		Only(ctx)
+		Only(allowCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed loading trust center for email")
 		return trustCenterResolveResult{}, fmt.Errorf("%w: %w", ErrSendFailed, err)
