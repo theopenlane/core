@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"net/mail"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
 	"entgo.io/ent"
-	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/common/enums"
@@ -43,7 +43,7 @@ func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gal
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse),
 			Name:       "questionnaire.transform.assessment",
-			Operations: []string{ent.OpUpdateOne.String()},
+			Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
 			Handle:     handleAssessmentResponse,
 		},
 	)
@@ -145,6 +145,10 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 }
 
 func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) bool {
+	if payload.Operation == ent.OpCreate.String() {
+		return true
+	}
+
 	return eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldStatus) ||
 		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldDocumentDataID) ||
 		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldCompletedAt) ||
@@ -177,9 +181,14 @@ type questionnaireTransformRequest struct {
 	Config               models.TemplateProjectionConfig
 }
 
-type entityTransform struct {
-	Input entgen.CreateEntityInput
-	Notes string
+type mappedTransform struct {
+	Payload    map[string]any
+	Notes      string
+	ExternalID string
+}
+
+var questionnaireTransformInputTypes = map[string]reflect.Type{
+	integrationgenerated.IntegrationMappingSchemaEntity: reflect.TypeOf(entgen.CreateEntityInput{}),
 }
 
 func transformQuestionnaire(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
@@ -206,12 +215,12 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	input, err := entityFromMapping(values)
+	mapped, err := buildMappedTransformPayload(integrationgenerated.IntegrationMappingSchemaEntity, values, req)
 	if err != nil {
 		return err
 	}
 
-	record, err := persistEntityTransform(ctx, client, req, input)
+	record, err := persistTransformPayload(ctx, client, req, integrationgenerated.IntegrationMappingSchemaEntity, mapped)
 	if err != nil {
 		return err
 	}
@@ -220,7 +229,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	if err := createEntityNote(ctx, client, req, record.ID, input.Notes); err != nil {
+	if err := createEntityNote(ctx, client, req, record.ID, mapped.Notes); err != nil {
 		return err
 	}
 
@@ -413,128 +422,86 @@ func applyTransform(value any, transform enums.TemplateProjectionTransform) (any
 	}
 }
 
-func entityFromMapping(values map[string]any) (entityTransform, error) {
-	var mapped entityTransform
-	input := entgen.CreateEntityInput{}
+func buildMappedTransformPayload(schemaName string, values map[string]any, req questionnaireTransformRequest) (mappedTransform, error) {
+	schema, ok := integrationgenerated.IntegrationMappingSchemas[schemaName]
+	if !ok {
+		return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform schema %q", schemaName)}
+	}
+
+	mapped := mappedTransform{
+		Payload: map[string]any{},
+	}
 
 	for field, value := range values {
-		switch field {
-		case entity.FieldName:
-			input.Name = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldDisplayName:
-			input.DisplayName = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldDescription:
-			input.Description = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldStatus:
-			status, ok := value.(enums.EntityStatus)
-			if !ok {
-				statusValue := strings.TrimSpace(getStringValue(value))
-				parsed := enums.ToEntityStatus(statusValue)
-				if parsed == nil || *parsed == "" {
-					return mapped, &questionnaireValidationError{Message: fmt.Sprintf("invalid entity status %q", statusValue)}
-				}
-				status = *parsed
-			}
-
-			input.Status = &status
-		case entity.FieldContractStartDate:
-			t, ok := value.(models.DateTime)
-			if !ok {
-				return mapped, &questionnaireValidationError{Message: "contract_start_date must be a date"}
-			}
-
-			input.ContractStartDate = &t
-
-		case entity.FieldContractEndDate:
-			t, ok := value.(models.DateTime)
-			if !ok {
-				return mapped, &questionnaireValidationError{Message: "contract_end_date must be a date"}
-			}
-
-			input.ContractEndDate = &t
-
-		case entity.FieldHasSoc2:
-			hasSoc2, ok := value.(bool)
-			if !ok {
-				return mapped, &questionnaireValidationError{Message: "has_soc2 must be a bool"}
-			}
-
-			input.HasSoc2 = &hasSoc2
-
-		case entity.FieldAnnualSpend:
-			annualSpend, ok := value.(float64)
-			if !ok {
-				return mapped, &questionnaireValidationError{Message: "annual_spend must be a float"}
-			}
-
-			input.AnnualSpend = &annualSpend
-
-		case entity.FieldBillingModel:
-			input.BillingModel = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldLinks:
-			links, ok := value.([]string)
-			if !ok {
-				return mapped, &questionnaireValidationError{Message: "links must be a string array"}
-			}
-
-			input.Links = links
-
-		case entityTransformFieldNotes:
+		if field == entityTransformFieldNotes {
 			mapped.Notes = strings.TrimSpace(getStringValue(value))
 
-		case entity.FieldEnvironmentName:
-			input.EnvironmentName = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldEnvironmentID:
-			input.EnvironmentID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldInternalOwner:
-			input.InternalOwner = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldInternalOwnerUserID:
-			input.InternalOwnerUserID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		case entity.FieldInternalOwnerGroupID:
-			input.InternalOwnerGroupID = lo.ToPtr(strings.TrimSpace(getStringValue(value)))
-
-		default:
-			return mapped, &questionnaireValidationError{Message: fmt.Sprintf("unsupported entity transform field %q", field)}
+			continue
 		}
+
+		inputKey, ok := getIntegrationKey(schemaName, schema, field)
+		if !ok {
+			return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported %s transform field %q", schemaName, field)}
+		}
+
+		mapped.Payload[inputKey] = value
 	}
 
-	if input.DisplayName == nil || *input.DisplayName == "" {
-		return mapped, &questionnaireValidationError{Message: "entity transform requires display_name"}
+	mapped.Payload[integrationgenerated.IntegrationMappingEntityOwnerID] = req.OrganizationID
+	mapped.Payload[integrationgenerated.IntegrationMappingEntityVendorMetadata] = transformMetadata(req)
+
+	if _, ok := mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID]; !ok {
+		mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID] = mapped.Payload[integrationgenerated.IntegrationMappingEntityName]
 	}
 
-	if input.Name == nil || *input.Name == "" {
-		input.Name = lo.ToPtr(strcase.KebabCase(strings.TrimSpace(*input.DisplayName)))
+	mapped.ExternalID = strings.TrimSpace(getStringValue(mapped.Payload[integrationgenerated.IntegrationMappingEntityExternalID]))
+	if mapped.ExternalID == "" {
+		return mappedTransform{}, &questionnaireValidationError{Message: "entity transform requires external_id or name"}
 	}
-
-	if input.Name == nil || *input.Name == "" {
-		return mapped, &questionnaireValidationError{Message: "entity transform requires name"}
-	}
-
-	mapped.Input = input
 
 	return mapped, nil
 }
 
-func persistEntityTransform(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, mapped entityTransform) (*entgen.Entity, error) {
-	input := mapped.Input
-	input.OwnerID = lo.ToPtr(req.OrganizationID)
-	input.VendorMetadata = transformMetadata(req)
-
-	if input.ExternalID == nil || *input.ExternalID == "" {
-		input.ExternalID = input.Name
+func getIntegrationKey(schemaName string, schema integrationgenerated.IntegrationMappingSchema, key string) (string, bool) {
+	if _, ok := schema.AllowedKeys[key]; ok {
+		return key, true
 	}
 
-	payload, err := json.Marshal(input)
+	normalizedKey := strcase.LowerCamelCase(key)
+	if _, ok := schema.AllowedKeys[normalizedKey]; ok {
+		return normalizedKey, true
+	}
+
+	for _, field := range schema.Fields {
+		if key == field.EntField || strings.EqualFold(key, field.InputKey) || normalizedKey == field.InputKey {
+			return field.InputKey, true
+		}
+	}
+
+	return directInputKey(schemaName, normalizedKey)
+}
+
+func directInputKey(schemaName string, key string) (string, bool) {
+	inputType, ok := questionnaireTransformInputTypes[schemaName]
+	if !ok || key == "" {
+		return "", false
+	}
+
+	for i := 0; i < inputType.NumField(); i++ {
+		field := inputType.Field(i)
+		fieldKey := strcase.LowerCamelCase(field.Name)
+		if key == fieldKey || strings.EqualFold(key, field.Name) {
+			return fieldKey, true
+		}
+	}
+
+	return "", false
+}
+
+func persistTransformPayload(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, schema string, mapped mappedTransform) (*entgen.Entity, error) {
+	payload, err := json.Marshal(mapped.Payload)
 	if err != nil {
-		return nil, fmt.Errorf("marshal transformed entity input: %w", err)
+		return nil, fmt.Errorf("marshal transformed input: %w", err)
 	}
 
 	ingestRegistry := registry.New()
@@ -547,9 +514,9 @@ func persistEntityTransform(ctx context.Context, client *entgen.Client, req ques
 		OwnerID:      req.OrganizationID,
 	}
 
-	payloadSets := []integrationtypes.IngestPayloadSet{
+	sets := []integrationtypes.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaEntity,
+			Schema: schema,
 			Envelopes: []integrationtypes.MappingEnvelope{
 				{
 					Resource: "questionnaire_document_data",
@@ -565,17 +532,17 @@ func persistEntityTransform(ctx context.Context, client *entgen.Client, req ques
 		DB:          client,
 		Integration: integration,
 	}, "", []integrationtypes.IngestContract{
-		{Schema: integrationgenerated.IntegrationMappingSchemaEntity},
-	}, payloadSets, operations.IngestOptions{
+		{Schema: schema},
+	}, sets, operations.IngestOptions{
 		Source: integrationgenerated.IntegrationIngestSourceDirect,
 	}); err != nil {
-		return nil, fmt.Errorf("persist transformed entity input: %w", err)
+		return nil, fmt.Errorf("persist transformed input: %w", err)
 	}
 
 	record, err := client.Entity.Query().
 		Where(
 			entity.OwnerIDEQ(req.OrganizationID),
-			entity.ExternalIDEQ(*input.ExternalID),
+			entity.ExternalIDEQ(mapped.ExternalID),
 		).
 		Only(ctx)
 	if err != nil {
@@ -598,7 +565,7 @@ func questionnaireTransformDefinition() integrationtypes.Definition {
 			{
 				Schema: integrationgenerated.IntegrationMappingSchemaEntity,
 				Spec: integrationtypes.MappingOverride{
-					MapExpr: "payload",
+					MapExpr: "",
 				},
 			},
 		},

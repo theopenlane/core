@@ -356,6 +356,7 @@ const (
 	IntegrationMappingEntityContractEndDate                       = "contractEndDate"
 	IntegrationMappingEntityContractRenewalAt                     = "contractRenewalAt"
 	IntegrationMappingEntityContractStartDate                     = "contractStartDate"
+	IntegrationMappingEntityDescription                           = "description"
 	IntegrationMappingEntityDisplayName                           = "displayName"
 	IntegrationMappingEntityDomains                               = "domains"
 	IntegrationMappingEntityEntityRelationshipStateID             = "entityRelationshipStateID"
@@ -2174,6 +2175,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "description",
+				GoField:   "Description",
+				EntField:  "description",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "displayName",
 				GoField:   "DisplayName",
 				EntField:  "display_name",
@@ -2578,6 +2588,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"contractEndDate":                       {},
 			"contractRenewalAt":                     {},
 			"contractStartDate":                     {},
+			"description":                           {},
 			"displayName":                           {},
 			"domains":                               {},
 			"entityRelationshipStateID":             {},

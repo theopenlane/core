@@ -78,7 +78,7 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
-				entgql.Skip(entgql.SkipWhereInput),
+				entx.IntegrationMappingField(),
 			),
 		field.Strings("domains").
 			Comment("domains associated with the entity").
