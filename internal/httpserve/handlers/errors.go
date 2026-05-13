@@ -122,6 +122,8 @@ var (
 	ErrAssessmentResponseAlreadyCompleted = errors.New("assessment response has already been completed")
 	// ErrAssessmentResponseOverdue is returned when trying to access or submit a questionnaire that is past due
 	ErrAssessmentResponseOverdue = errors.New("assessment response is overdue")
+	// ErrAnonymousQuestionnaireDraft is returned when an anonymous questionnaire tries to save a draft
+	ErrAnonymousQuestionnaireDraft = errors.New("anonymous questionnaire responses cannot be saved as drafts")
 	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
 	ErrAuthenticationRequired = errors.New("authentication required")
 	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session

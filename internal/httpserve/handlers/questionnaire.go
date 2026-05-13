@@ -137,12 +137,14 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		email        string
 		allowCtx     context.Context
 		ownerID      string
+		isAnonymous  bool
 	)
 
 	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
 	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
 		assessmentID = anonAssessmentID
+		isAnonymous = true
 
 		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
 		if callerOk && anonCaller != nil {
@@ -186,6 +188,10 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	if len(req.Data) == 0 {
 		return h.BadRequest(ctx, ErrMissingQuestionnaireData, openapi)
+	}
+
+	if isAnonymous && req.IsDraft {
+		return h.BadRequest(ctx, ErrAnonymousQuestionnaireDraft, openapi)
 	}
 
 	assessment, err := h.DBClient.Assessment.Query().
