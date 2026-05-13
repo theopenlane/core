@@ -137,7 +137,7 @@ func TestRegisterGalaQuestionnaireTransformListeners(t *testing.T) {
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse)
 	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
-	require.False(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
 }
 
 func TestRegisterGalaNotificationListeners(t *testing.T) {
