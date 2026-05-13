@@ -7614,6 +7614,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVendorMetadata(vendorMetadata)
 	}
 
+	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+	}
+
 	if logoFileID, exists := m.LogoFileID(); exists {
 		create = create.SetNillableLogoFileID(&logoFileID)
 	}
@@ -8017,6 +8021,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVendorMetadata(entity.VendorMetadata)
 		}
 
+		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
+			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
+		} else {
+			create = create.SetNillableLogoRemoteURL(entity.LogoRemoteURL)
+		}
+
 		if logoFileID, exists := m.LogoFileID(); exists {
 			create = create.SetNillableLogoFileID(&logoFileID)
 		} else {
@@ -8130,6 +8140,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableNextReviewAt(entity.NextReviewAt).
 			SetNillableContractRenewalAt(entity.ContractRenewalAt).
 			SetVendorMetadata(entity.VendorMetadata).
+			SetNillableLogoRemoteURL(entity.LogoRemoteURL).
 			SetNillableLogoFileID(entity.LogoFileID).
 			SetExternalID(entity.ExternalID).
 			SetNillableObservedAt(entity.ObservedAt).
