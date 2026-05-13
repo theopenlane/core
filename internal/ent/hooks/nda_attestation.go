@@ -3,12 +3,13 @@ package hooks
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"time"
 
-	"github.com/go-pdf/fpdf"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
@@ -50,10 +51,11 @@ type signatureMetadata struct {
 
 // ndaAttestationResult holds the output of the NDA attestation process
 type ndaAttestationResult struct {
-	AttestedPDF    []byte
-	TrustCenterURL string
-	OrgName        string
-	TemplateFileID string
+	AttestedPDF     []byte
+	AttestedPDFHash string
+	TrustCenterURL  string
+	OrgName         string
+	TemplateFileID  string
 }
 
 // attestNDADocument performs the full NDA attestation flow: downloads the original PDF,
@@ -101,7 +103,10 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 		return nil, ErrFailedToCreateAttestedPDF
 	}
 
-	if err := uploadAttestedPDF(allowCtx, client, attestedPDF, docData.ID, templateFile.ID); err != nil {
+	pdfHash := sha256.Sum256(attestedPDF)
+	attestedPDFHash := hex.EncodeToString(pdfHash[:])
+
+	if err := uploadAttestedPDF(allowCtx, client, attestedPDF, docData, attestedPDFHash, templateFile.ID); err != nil {
 		return nil, err
 	}
 
@@ -126,22 +131,24 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 	tcURL := buildTrustCenterURL(customDomain, tc.Slug)
 
 	return &ndaAttestationResult{
-		AttestedPDF:    attestedPDF,
-		TrustCenterURL: tcURL,
-		OrgName:        orgName,
-		TemplateFileID: templateFile.ID,
+		AttestedPDF:     attestedPDF,
+		AttestedPDFHash: attestedPDFHash,
+		TrustCenterURL:  tcURL,
+		OrgName:         orgName,
+		TemplateFileID:  templateFile.ID,
 	}, nil
 }
 
-// uploadAttestedPDF uploads the attested PDF to storage and associates it with the document data
-func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPDF []byte, docDataID, templateFileID string) error {
+// uploadAttestedPDF uploads the attested PDF to storage, associates it with the document data,
+// and stores the SHA-256 hash of the final PDF on the document data record
+func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPDF []byte, docData *generated.DocumentData, pdfHash, templateFileID string) error {
 	fileName := fmt.Sprintf("attested_%s", templateFileID)
 
 	file := pkgobjects.File{
 		RawFile:              bytes.NewReader(attestedPDF),
 		OriginalName:         fileName,
 		FieldName:            "documentDataFile",
-		CorrelatedObjectID:   docDataID,
+		CorrelatedObjectID:   docData.ID,
 		CorrelatedObjectType: "DocumentData",
 		FileMetadata: pkgobjects.FileMetadata{
 			ContentType: "application/pdf",
@@ -159,10 +166,13 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		return ErrNoUploadedFiles
 	}
 
-	if err := client.DocumentData.UpdateOneID(docDataID).
-		AddFileIDs(uploadedFiles[0].ID).
-		Exec(ctx); err != nil {
+	data := docData.Data
+	data["attested_pdf_hash"] = pdfHash
 
+	if err := client.DocumentData.UpdateOneID(docData.ID).
+		AddFileIDs(uploadedFiles[0].ID).
+		SetData(data).
+		Exec(ctx); err != nil {
 		return ErrFailedToAssociateFile
 	}
 
@@ -197,42 +207,112 @@ func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentDat
 }
 
 const (
-	attestFontSize     = 18
-	attestFieldSize    = 11
-	attestLabelWidth   = 40
-	attestFieldHeight  = 8
-	attestLineSpacing  = 10
-	attestTitleSpacing = 20
+	attestFontSize   = 18
+	attestFieldSize  = 11
+	attestFieldYStep = 14
+	attestStartY     = 50
 )
+
+// attestationField represents a label-value pair rendered on the attestation certificate
+type attestationField struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
+// attestationPage is the JSON structure fed to pdfcpu's Create API
+type attestationPage struct {
+	Paper  string                        `json:"paper"`
+	Origin string                        `json:"origin"`
+	Fonts  map[string]attestationFont    `json:"fonts"`
+	Pages  map[string]attestationContent `json:"pages"`
+}
+
+// attestationFont describes a named font for the pdfcpu JSON schema
+type attestationFont struct {
+	Name string `json:"name"`
+	Size int    `json:"size"`
+}
+
+// attestationContent wraps the content block within a page
+type attestationContent struct {
+	Content attestationTextContent `json:"content"`
+}
+
+// attestationTextContent holds the text boxes rendered on a page
+type attestationTextContent struct {
+	Text []attestationTextBox `json:"text"`
+}
+
+// attestationTextBox describes a positioned text element
+type attestationTextBox struct {
+	Value string             `json:"value"`
+	Pos   [2]float64         `json:"pos"`
+	Font  attestationFontRef `json:"font"`
+}
+
+// attestationFontRef references a named font
+type attestationFontRef struct {
+	Name string `json:"name"`
+}
 
 // createAttestationCertificate generates a single-page PDF with the signature certification details
 func createAttestationCertificate(data *signedNDADocumentData) ([]byte, error) {
-	pdf := fpdf.New("P", "mm", "A4", "")
-	pdf.AddPage()
-
-	pdf.SetFont("Helvetica", "B", attestFontSize)
-	pdf.Cell(0, attestFieldHeight+2, "Signature Certification")
-	pdf.Ln(attestTitleSpacing)
-
-	fields := []struct{ label, value string }{
-		{"Name", data.SignatoryInfo.FirstName + " " + data.SignatoryInfo.LastName},
-		{"Email", data.SignatoryInfo.Email},
-		{"Company", data.SignatoryInfo.CompanyName},
-		{"Timestamp", formatAttestTimestamp(data.SignatureMetadata.Timestamp)},
-		{"IP Address", data.SignatureMetadata.IPAddress},
-		{"Browser", data.SignatureMetadata.UserAgent},
+	fields := []attestationField{
+		{"Name:", data.SignatoryInfo.FirstName + " " + data.SignatoryInfo.LastName},
+		{"Email:", data.SignatoryInfo.Email},
+		{"Company:", data.SignatoryInfo.CompanyName},
+		{"Timestamp:", formatAttestTimestamp(data.SignatureMetadata.Timestamp)},
+		{"IP Address:", data.SignatureMetadata.IPAddress},
+		{"Browser:", data.SignatureMetadata.UserAgent},
 	}
 
+	textBoxes := make([]attestationTextBox, 0, 1+len(fields)*2) //nolint:mnd
+
+	textBoxes = append(textBoxes, attestationTextBox{
+		Value: "Signature Certification",
+		Pos:   [2]float64{20, 20},
+		Font:  attestationFontRef{Name: "$title"},
+	})
+
+	y := float64(attestStartY)
+
 	for _, f := range fields {
-		pdf.SetFont("Helvetica", "B", attestFieldSize)
-		pdf.Cell(attestLabelWidth, attestFieldHeight, f.label+":")
-		pdf.SetFont("Helvetica", "", attestFieldSize)
-		pdf.Cell(0, attestFieldHeight, f.value)
-		pdf.Ln(attestLineSpacing)
+		textBoxes = append(textBoxes,
+			attestationTextBox{
+				Value: f.Label,
+				Pos:   [2]float64{20, y},
+				Font:  attestationFontRef{Name: "$labelBold"},
+			},
+			attestationTextBox{
+				Value: f.Value,
+				Pos:   [2]float64{80, y},
+				Font:  attestationFontRef{Name: "$field"},
+			},
+		)
+
+		y += attestFieldYStep
+	}
+
+	page := attestationPage{
+		Paper:  "A4P",
+		Origin: "UpperLeft",
+		Fonts: map[string]attestationFont{
+			"title":     {Name: "Helvetica-Bold", Size: attestFontSize},
+			"labelBold": {Name: "Helvetica-Bold", Size: attestFieldSize},
+			"field":     {Name: "Helvetica", Size: attestFieldSize},
+		},
+		Pages: map[string]attestationContent{
+			"1": {Content: attestationTextContent{Text: textBoxes}},
+		},
+	}
+
+	jsonData, err := json.Marshal(page)
+	if err != nil {
+		return nil, ErrFailedToGenerateAttestationPDF
 	}
 
 	var buf bytes.Buffer
-	if err := pdf.Output(&buf); err != nil {
+	if err := api.Create(nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
 		return nil, ErrFailedToGenerateAttestationPDF
 	}
 

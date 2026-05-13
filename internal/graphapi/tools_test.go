@@ -15,9 +15,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/go-pdf/fpdf"
 	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/mcuadros/go-defaults"
+	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/do/v2"
@@ -610,13 +610,27 @@ func requireNoError(t *testing.T, err error) {
 }
 
 func testPDFBytes() []byte {
-	pdf := fpdf.New("P", "mm", "A4", "")
-	pdf.AddPage()
-	pdf.SetFont("Helvetica", "", 12)
-	pdf.Cell(40, 10, "test")
+	page := map[string]any{
+		"paper":  "A4P",
+		"origin": "UpperLeft",
+		"fonts": map[string]any{
+			"f": map[string]any{"name": "Helvetica", "size": 12},
+		},
+		"pages": map[string]any{
+			"1": map[string]any{
+				"content": map[string]any{
+					"text": []map[string]any{
+						{"value": "test", "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$f"}},
+					},
+				},
+			},
+		},
+	}
+
+	jsonData, _ := json.Marshal(page)
 
 	var buf bytes.Buffer
-	_ = pdf.Output(&buf)
+	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
 
 	return buf.Bytes()
 }
