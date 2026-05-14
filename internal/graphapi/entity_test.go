@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/samber/lo"
@@ -313,6 +314,51 @@ func TestMutationCreateEntity(t *testing.T) {
 
 	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToDelete}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToDelete}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationCreateEntityEnrichment(t *testing.T) {
+	systemCtx := setContext(systemAdminUser.UserCtx, suite.client.db)
+
+	name := "Enriched Vendor " + ulids.New().String()
+	description := "Seeded subprocessor description"
+	logoRemoteURL := "https://example.com/enriched-logo.png"
+
+	subprocessor := (&SubprocessorBuilder{
+		client:        suite.client,
+		Name:          name,
+		Description:   description,
+		LogoRemoteURL: logoRemoteURL,
+	}).MustNew(systemAdminUser.UserCtx, t)
+
+	resp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+		Name: lo.ToPtr(strings.ToUpper(name)),
+		Tier: lo.ToPtr(enums.VendorTierStandard),
+	}, nil, nil, nil, nil, nil)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	assert.Check(t, is.Equal(description, *resp.CreateEntity.Entity.Description))
+	assert.Check(t, is.Equal(logoRemoteURL, *resp.CreateEntity.Entity.LogoRemoteURL))
+
+	userDescription := "User provided description"
+	userLogoURL := "https://example.com/requested-logo.png"
+
+	entityResp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+		Name:          lo.ToPtr(name + " entity"),
+		DisplayName:   lo.ToPtr(name),
+		Description:   lo.ToPtr(userDescription),
+		Tier:          lo.ToPtr(enums.VendorTierStandard),
+		LogoRemoteURL: lo.ToPtr(userLogoURL),
+	}, nil, nil, nil, nil, nil)
+
+	assert.NilError(t, err)
+	assert.Assert(t, entityResp != nil)
+	assert.Check(t, is.Equal(userDescription, *entityResp.CreateEntity.Entity.Description))
+	assert.Check(t, is.Equal(userLogoURL, *entityResp.CreateEntity.Entity.LogoRemoteURL))
+
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(systemCtx, t)
 }
 
 func TestMutationUpdateEntity(t *testing.T) {

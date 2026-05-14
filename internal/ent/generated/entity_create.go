@@ -834,6 +834,20 @@ func (_c *EntityCreate) SetVendorMetadata(v map[string]interface{}) *EntityCreat
 	return _c
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_c *EntityCreate) SetLogoRemoteURL(v string) *EntityCreate {
+	_c.mutation.SetLogoRemoteURL(v)
+	return _c
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableLogoRemoteURL(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetLogoRemoteURL(*v)
+	}
+	return _c
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_c *EntityCreate) SetLogoFileID(v string) *EntityCreate {
 	_c.mutation.SetLogoFileID(v)
@@ -1463,6 +1477,11 @@ func (_c *EntityCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.LogoRemoteURL(); ok {
+		if err := entity.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Entity.logo_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1694,6 +1713,10 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.VendorMetadata(); ok {
 		_spec.SetField(entity.FieldVendorMetadata, field.TypeJSON, value)
 		_node.VendorMetadata = value
+	}
+	if value, ok := _c.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entity.FieldLogoRemoteURL, field.TypeString, value)
+		_node.LogoRemoteURL = &value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(entity.FieldExternalID, field.TypeString, value)

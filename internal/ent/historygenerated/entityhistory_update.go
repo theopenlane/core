@@ -1158,6 +1158,26 @@ func (_u *EntityHistoryUpdate) ClearVendorMetadata() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_u *EntityHistoryUpdate) SetLogoRemoteURL(v string) *EntityHistoryUpdate {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableLogoRemoteURL(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (_u *EntityHistoryUpdate) ClearLogoRemoteURL() *EntityHistoryUpdate {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_u *EntityHistoryUpdate) SetLogoFileID(v string) *EntityHistoryUpdate {
 	_u.mutation.SetLogoFileID(v)
@@ -1690,6 +1710,12 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entityhistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(entityhistory.FieldLogoRemoteURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.LogoFileID(); ok {
 		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
@@ -2855,6 +2881,26 @@ func (_u *EntityHistoryUpdateOne) ClearVendorMetadata() *EntityHistoryUpdateOne 
 	return _u
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_u *EntityHistoryUpdateOne) SetLogoRemoteURL(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableLogoRemoteURL(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (_u *EntityHistoryUpdateOne) ClearLogoRemoteURL() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_u *EntityHistoryUpdateOne) SetLogoFileID(v string) *EntityHistoryUpdateOne {
 	_u.mutation.SetLogoFileID(v)
@@ -3417,6 +3463,12 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entityhistory.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(entityhistory.FieldLogoRemoteURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.LogoFileID(); ok {
 		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)

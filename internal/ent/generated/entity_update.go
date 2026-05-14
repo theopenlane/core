@@ -1176,6 +1176,26 @@ func (_u *EntityUpdate) ClearVendorMetadata() *EntityUpdate {
 	return _u
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_u *EntityUpdate) SetLogoRemoteURL(v string) *EntityUpdate {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableLogoRemoteURL(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (_u *EntityUpdate) ClearLogoRemoteURL() *EntityUpdate {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_u *EntityUpdate) SetLogoFileID(v string) *EntityUpdate {
 	_u.mutation.SetLogoFileID(v)
@@ -2274,6 +2294,11 @@ func (_u *EntityUpdate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
+		if err := entity.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Entity.logo_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2616,6 +2641,12 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entity.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(entity.FieldLogoRemoteURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
@@ -5220,6 +5251,26 @@ func (_u *EntityUpdateOne) ClearVendorMetadata() *EntityUpdateOne {
 	return _u
 }
 
+// SetLogoRemoteURL sets the "logo_remote_url" field.
+func (_u *EntityUpdateOne) SetLogoRemoteURL(v string) *EntityUpdateOne {
+	_u.mutation.SetLogoRemoteURL(v)
+	return _u
+}
+
+// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableLogoRemoteURL(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetLogoRemoteURL(*v)
+	}
+	return _u
+}
+
+// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
+func (_u *EntityUpdateOne) ClearLogoRemoteURL() *EntityUpdateOne {
+	_u.mutation.ClearLogoRemoteURL()
+	return _u
+}
+
 // SetLogoFileID sets the "logo_file_id" field.
 func (_u *EntityUpdateOne) SetLogoFileID(v string) *EntityUpdateOne {
 	_u.mutation.SetLogoFileID(v)
@@ -6331,6 +6382,11 @@ func (_u *EntityUpdateOne) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Entity.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.LogoRemoteURL(); ok {
+		if err := entity.LogoRemoteURLValidator(v); err != nil {
+			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "Entity.logo_remote_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -6690,6 +6746,12 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.VendorMetadataCleared() {
 		_spec.ClearField(entity.FieldVendorMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.LogoRemoteURL(); ok {
+		_spec.SetField(entity.FieldLogoRemoteURL, field.TypeString, value)
+	}
+	if _u.mutation.LogoRemoteURLCleared() {
+		_spec.ClearField(entity.FieldLogoRemoteURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(entity.FieldExternalID, field.TypeString, value)

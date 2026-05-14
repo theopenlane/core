@@ -374,6 +374,7 @@ const (
 	IntegrationMappingEntityInternalOwnerUserID                   = "internalOwnerUserID"
 	IntegrationMappingEntityLastReviewedAt                        = "lastReviewedAt"
 	IntegrationMappingEntityLinks                                 = "links"
+	IntegrationMappingEntityLogoRemoteURL                         = "logoRemoteURL"
 	IntegrationMappingEntityMfaEnforced                           = "mfaEnforced"
 	IntegrationMappingEntityMfaSupported                          = "mfaSupported"
 	IntegrationMappingEntityName                                  = "name"
@@ -2336,6 +2337,15 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 				LookupKey: false,
 			},
 			{
+				InputKey:  "logoRemoteURL",
+				GoField:   "LogoRemoteURL",
+				EntField:  "logo_remote_url",
+				Type:      "string",
+				Required:  false,
+				UpsertKey: false,
+				LookupKey: false,
+			},
+			{
 				InputKey:  "mfaEnforced",
 				GoField:   "MfaEnforced",
 				EntField:  "mfa_enforced",
@@ -2596,6 +2606,7 @@ var IntegrationMappingSchemas = map[string]IntegrationMappingSchema{
 			"internalOwnerUserID":                   {},
 			"lastReviewedAt":                        {},
 			"links":                                 {},
+			"logoRemoteURL":                         {},
 			"mfaEnforced":                           {},
 			"mfaSupported":                          {},
 			"name":                                  {},
