@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"github.com/stripe/stripe-go/v84"
@@ -15,7 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -155,10 +154,19 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 
 		newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
 
-		err := tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
-			Exec(newCtx)
+		// check for trustcenter existence for this org user
+		exists, err := tx.TrustCenter.Query().Where(trustcenter.OwnerID(orgSub.OwnerID)).
+			Exist(ctx)
 		if err != nil {
-			if !errors.Is(err, hooks.ErrNotSingularTrustCenter) {
+			logx.FromContext(ctx).Error().Err(err).Msg("could not query for trustcenter existence while syncing modules")
+			return nil, err
+		}
+
+		// if for some reason they do not have the trustcenter, then create it
+		if !exists {
+			err = tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
+				Exec(newCtx)
+			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error creating trust center")
 				return nil, err
 			}
