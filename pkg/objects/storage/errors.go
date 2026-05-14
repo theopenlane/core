@@ -7,6 +7,10 @@ var (
 	ErrJSONParseFailed = errors.New("failed to parse JSON")
 	// ErrYAMLParseFailed is returned when YAML parsing fails
 	ErrYAMLParseFailed = errors.New("failed to parse YAML")
+	// ErrDOCXParseFailed is returned when DOCX parsing fails
+	ErrDOCXParseFailed = errors.New("failed to parse DOCX")
+	// ErrPDFParseFailed is returned when PDF parsing fails
+	ErrPDFParseFailed = errors.New("failed to parse PDF")
 	// ErrProviderResolutionRequired is returned when provider resolution is required but not available
 	ErrProviderResolutionRequired = errors.New("provider resolution required - use external orchestration layer")
 )

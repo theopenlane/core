@@ -192,6 +192,32 @@ func TestParseDocument(t *testing.T) {
 				assert.Equal(t, []byte("some data"), data)
 			},
 		},
+		{
+			name:       "HTML strips tags and returns plain text",
+			data:       `<p>Hello <b>world</b></p><script>alert(1)</script>`,
+			mimeType:   "text/html",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Contains(t, str, "Hello")
+				assert.Contains(t, str, "world")
+				assert.NotContains(t, str, "<p>")
+				assert.NotContains(t, str, "<script>")
+				assert.NotContains(t, str, "alert(1)")
+			},
+		},
+		{
+			name:       "malformed PDF degrades to empty string",
+			data:       "this is not a pdf",
+			mimeType:   "application/pdf",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Equal(t, "", str)
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -475,4 +501,54 @@ func TestParseDocument_EmptyContent(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestParseDocument_PDF(t *testing.T) {
+	pdfPath := filepath.Join("..", "testdata", "sample.pdf")
+	pdfBytes, err := os.ReadFile(pdfPath)
+	require.NoError(t, err, "sample.pdf fixture missing — expected at %s", pdfPath)
+
+	t.Run("valid PDF returns extracted text", func(t *testing.T) {
+		result, err := ParseDocument(bytes.NewReader(pdfBytes), "application/pdf")
+		require.NoError(t, err)
+
+		str, ok := result.Data.(string)
+		require.True(t, ok, "expected string, got %T", result.Data)
+		assert.Contains(t, str, "Hello, world", "sample.pdf is known to contain 'Hello, world'")
+	})
+
+	t.Run("malformed PDF falls back to empty string without error", func(t *testing.T) {
+		result, err := ParseDocument(strings.NewReader("not a pdf"), "application/pdf")
+		require.NoError(t, err, "malformed PDFs should degrade gracefully, not fail the upload")
+
+		str, ok := result.Data.(string)
+		require.True(t, ok)
+		assert.Equal(t, "", str)
+	})
+}
+
+func TestParsePDF(t *testing.T) {
+	pdfPath := filepath.Join("..", "testdata", "sample.pdf")
+	pdfBytes, err := os.ReadFile(pdfPath)
+	require.NoError(t, err, "sample.pdf fixture missing — expected at %s", pdfPath)
+
+	t.Run("happy path extracts text from valid PDF", func(t *testing.T) {
+		text, err := parsePDF(pdfBytes)
+		require.NoError(t, err)
+		assert.Contains(t, text, "Hello, world")
+	})
+
+	t.Run("malformed PDF returns wrapped ErrPDFParseFailed", func(t *testing.T) {
+		text, err := parsePDF([]byte("definitely not a pdf"))
+		require.Error(t, err)
+		assert.ErrorIs(t, err, ErrPDFParseFailed)
+		assert.Empty(t, text)
+	})
+
+	t.Run("empty input returns wrapped ErrPDFParseFailed", func(t *testing.T) {
+		text, err := parsePDF([]byte{})
+		require.Error(t, err)
+		assert.ErrorIs(t, err, ErrPDFParseFailed)
+		assert.Empty(t, text)
+	})
 }

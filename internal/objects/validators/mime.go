@@ -10,6 +10,8 @@ var importSchemaMimeTypes = []string{
 	"text/plain; charset=utf-8", "text/plain",
 	"text/markdown",
 	"text/x-markdown",
+	"text/html",
+	"application/pdf",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 
