@@ -318,6 +318,9 @@ data:
         consoleurl: "http://localhost:3001"
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.entconfig.questionnaireproducturl }}
+      questionnaireproducturl: {{ .Values.openlane.coreConfiguration.entconfig.questionnaireproducturl | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.auth }}
     auth:

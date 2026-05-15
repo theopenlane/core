@@ -2685,6 +2685,21 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, assessment.FieldOwnerID)
 				fieldSeen[assessment.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[assessment.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldSystemOwned)
+				fieldSeen[assessment.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[assessment.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldInternalNotes)
+				fieldSeen[assessment.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[assessment.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldSystemInternalID)
+				fieldSeen[assessment.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[assessment.FieldName]; !ok {
 				selectedFields = append(selectedFields, assessment.FieldName)
@@ -3033,6 +3048,11 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[assessmentresponse.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponse.FieldEntityID)
 				fieldSeen[assessmentresponse.FieldEntityID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[assessmentresponse.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, assessmentresponse.FieldDisplayName)
+				fieldSeen[assessmentresponse.FieldDisplayName] = struct{}{}
 			}
 		case "email":
 			if _, ok := fieldSeen[assessmentresponse.FieldEmail]; !ok {
@@ -76143,6 +76163,11 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[template.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, template.FieldTrustCenterID)
 				fieldSeen[template.FieldTrustCenterID] = struct{}{}
+			}
+		case "transformConfiguration":
+			if _, ok := fieldSeen[template.FieldTransformConfiguration]; !ok {
+				selectedFields = append(selectedFields, template.FieldTransformConfiguration)
+				fieldSeen[template.FieldTransformConfiguration] = struct{}{}
 			}
 		case "id":
 		case "__typename":

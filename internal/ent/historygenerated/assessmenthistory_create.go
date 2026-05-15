@@ -162,6 +162,48 @@ func (_c *AssessmentHistoryCreate) SetNillableOwnerID(v *string) *AssessmentHist
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *AssessmentHistoryCreate) SetSystemOwned(v bool) *AssessmentHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableSystemOwned(v *bool) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *AssessmentHistoryCreate) SetInternalNotes(v string) *AssessmentHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableInternalNotes(v *string) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *AssessmentHistoryCreate) SetSystemInternalID(v string) *AssessmentHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableSystemInternalID(v *string) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *AssessmentHistoryCreate) SetName(v string) *AssessmentHistoryCreate {
 	_c.mutation.SetName(v)
@@ -298,6 +340,10 @@ func (_c *AssessmentHistoryCreate) defaults() error {
 		v := assessmenthistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := assessmenthistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.AssessmentType(); !ok {
 		v := assessmenthistory.DefaultAssessmentType
 		_c.mutation.SetAssessmentType(v)
@@ -415,6 +461,18 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(assessmenthistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(assessmenthistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(assessmenthistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(assessmenthistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)

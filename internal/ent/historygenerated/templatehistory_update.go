@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 
@@ -351,6 +352,26 @@ func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
 	return _u
 }
 
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateHistoryUpdate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+	_u.mutation.SetTransformConfiguration(v)
+	return _u
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateHistoryUpdate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdate {
+	if v != nil {
+		_u.SetTransformConfiguration(*v)
+	}
+	return _u
+}
+
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateHistoryUpdate) ClearTransformConfiguration() *TemplateHistoryUpdate {
+	_u.mutation.ClearTransformConfiguration()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -549,6 +570,12 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
+	}
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -890,6 +917,26 @@ func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateO
 	return _u
 }
 
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateHistoryUpdateOne) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+	_u.mutation.SetTransformConfiguration(v)
+	return _u
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateHistoryUpdateOne) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetTransformConfiguration(*v)
+	}
+	return _u
+}
+
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateHistoryUpdateOne) ClearTransformConfiguration() *TemplateHistoryUpdateOne {
+	_u.mutation.ClearTransformConfiguration()
+	return _u
+}
+
 // Mutation returns the TemplateHistoryMutation object of the builder.
 func (_u *TemplateHistoryUpdateOne) Mutation() *TemplateHistoryMutation {
 	return _u.mutation
@@ -1118,6 +1165,12 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
+	}
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
