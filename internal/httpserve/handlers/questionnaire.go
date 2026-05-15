@@ -55,7 +55,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 	)
 
 	// email not required because we can generate anon links that can now be shared
-	// but if it exists, verify that it matche the response we created when we sent it out
+	// but if it exists, verify that it matches the response we created when we sent it out
 	if email != "" {
 		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
 			Where(
