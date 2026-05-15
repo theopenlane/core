@@ -33,6 +33,8 @@ func (HealthCheck) Run(ctx context.Context, c *authentikSDK.APIClient) (json.Raw
 	}
 
 	if err != nil {
+	     logx.FromContext(ctx).Error().Err(err).Msg("error checking health")
+	     
 		return nil, ErrHealthCheckFailed
 	}
 

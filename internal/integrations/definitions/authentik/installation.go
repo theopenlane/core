@@ -20,6 +20,8 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 
 	client, err := Client{}.Build(ctx, types.ClientBuildRequest{Credentials: req.Credentials})
 	if err != nil {
+	    logx.FromContext(ctx).Error().Err(err).Msg("error  during installation")
+		
 		return InstallationMetadata{}, false, err
 	}
 
@@ -31,6 +33,8 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 	}
 
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking admin")
+		
 		return InstallationMetadata{}, false, ErrHealthCheckFailed
 	}
 
