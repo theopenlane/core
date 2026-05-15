@@ -273,6 +273,12 @@ func (Entity) Fields() []ent.Field {
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
 			Optional(),
+		field.String("logo_remote_url").
+			Comment("URL of the logo for the entity").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
 		field.String("logo_file_id").
 			Comment("The logo file id for the entity").
 			Optional().

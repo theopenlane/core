@@ -7033,6 +7033,8 @@ type CreateEntityInput struct {
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
+	// URL of the logo for the entity
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
 	// time when this entity was last observed by the source integration
@@ -13949,6 +13951,8 @@ type Entity struct {
 	ContractRenewalAt *models.DateTime `json:"contractRenewalAt,omitempty"`
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata map[string]any `json:"vendorMetadata,omitempty"`
+	// URL of the logo for the entity
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The logo file id for the entity
 	LogoFileID *string `json:"logoFileID,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
@@ -14971,6 +14975,22 @@ type EntityWhereInput struct {
 	ContractRenewalAtLte    *models.DateTime   `json:"contractRenewalAtLTE,omitempty"`
 	ContractRenewalAtIsNil  *bool              `json:"contractRenewalAtIsNil,omitempty"`
 	ContractRenewalAtNotNil *bool              `json:"contractRenewalAtNotNil,omitempty"`
+	// logo_remote_url field predicates
+	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
+	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
+	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
+	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
+	LogoRemoteURLGt           *string  `json:"logoRemoteURLGT,omitempty"`
+	LogoRemoteURLGte          *string  `json:"logoRemoteURLGTE,omitempty"`
+	LogoRemoteURLLt           *string  `json:"logoRemoteURLLT,omitempty"`
+	LogoRemoteURLLte          *string  `json:"logoRemoteURLLTE,omitempty"`
+	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
+	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
+	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
+	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
+	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
+	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
+	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
 	// logo_file_id field predicates
 	LogoFileID             *string  `json:"logoFileID,omitempty"`
 	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
@@ -40553,6 +40573,9 @@ type UpdateEntityInput struct {
 	// vendor metadata such as additional enrichment info, company size, public, etc.
 	VendorMetadata      map[string]any `json:"vendorMetadata,omitempty"`
 	ClearVendorMetadata *bool          `json:"clearVendorMetadata,omitempty"`
+	// URL of the logo for the entity
+	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
+	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID      *string `json:"externalID,omitempty"`
 	ClearExternalID *bool   `json:"clearExternalID,omitempty"`
@@ -42204,8 +42227,6 @@ type UpdateOrganizationInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// the name of the organization
-	Name *string `json:"name,omitempty"`
 	// The organization's displayed 'friendly' name
 	DisplayName *string `json:"displayName,omitempty"`
 	// An optional description of the organization

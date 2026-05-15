@@ -13252,6 +13252,10 @@ input CreateEntityInput {
 	"""
 	vendorMetadata: Map
 	"""
+	URL of the logo for the entity
+	"""
+	logoRemoteURL: String
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -24326,6 +24330,10 @@ type Entity implements Node {
 	"""
 	vendorMetadata: Map
 	"""
+	URL of the logo for the entity
+	"""
+	logoRemoteURL: String
+	"""
 	The logo file id for the entity
 	"""
 	logoFileID: ID
@@ -26374,6 +26382,24 @@ input EntityWhereInput {
 	contractRenewalAtLTE: DateTime
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
+	"""
+	logo_remote_url field predicates
+	"""
+	logoRemoteURL: String
+	logoRemoteURLNEQ: String
+	logoRemoteURLIn: [String!]
+	logoRemoteURLNotIn: [String!]
+	logoRemoteURLGT: String
+	logoRemoteURLGTE: String
+	logoRemoteURLLT: String
+	logoRemoteURLLTE: String
+	logoRemoteURLContains: String
+	logoRemoteURLHasPrefix: String
+	logoRemoteURLHasSuffix: String
+	logoRemoteURLIsNil: Boolean
+	logoRemoteURLNotNil: Boolean
+	logoRemoteURLEqualFold: String
+	logoRemoteURLContainsFold: String
 	"""
 	logo_file_id field predicates
 	"""
@@ -88161,6 +88187,11 @@ input UpdateEntityInput {
 	vendorMetadata: Map
 	clearVendorMetadata: Boolean
 	"""
+	URL of the logo for the entity
+	"""
+	logoRemoteURL: String
+	clearLogoRemoteURL: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -90355,10 +90386,6 @@ input UpdateOrganizationInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
-	"""
-	the name of the organization
-	"""
-	name: String
 	"""
 	The organization's displayed 'friendly' name
 	"""

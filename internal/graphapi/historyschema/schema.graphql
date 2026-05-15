@@ -11071,6 +11071,10 @@ type EntityHistory implements Node {
 	"""
 	vendorMetadata: Map
 	"""
+	URL of the logo for the entity
+	"""
+	logoRemoteURL: String
+	"""
 	The logo file id for the entity
 	"""
 	logoFileID: String
@@ -12018,6 +12022,24 @@ input EntityHistoryWhereInput {
 	contractRenewalAtLTE: DateTime
 	contractRenewalAtIsNil: Boolean
 	contractRenewalAtNotNil: Boolean
+	"""
+	logo_remote_url field predicates
+	"""
+	logoRemoteURL: String
+	logoRemoteURLNEQ: String
+	logoRemoteURLIn: [String!]
+	logoRemoteURLNotIn: [String!]
+	logoRemoteURLGT: String
+	logoRemoteURLGTE: String
+	logoRemoteURLLT: String
+	logoRemoteURLLTE: String
+	logoRemoteURLContains: String
+	logoRemoteURLHasPrefix: String
+	logoRemoteURLHasSuffix: String
+	logoRemoteURLIsNil: Boolean
+	logoRemoteURLNotNil: Boolean
+	logoRemoteURLEqualFold: String
+	logoRemoteURLContainsFold: String
 	"""
 	logo_file_id field predicates
 	"""

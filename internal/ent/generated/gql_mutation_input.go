@@ -7330,6 +7330,7 @@ type CreateEntityInput struct {
 	NextReviewAt                          *models.DateTime
 	ContractRenewalAt                     *models.DateTime
 	VendorMetadata                        map[string]interface{}
+	LogoRemoteURL                         *string
 	ExternalID                            *string
 	ObservedAt                            *models.DateTime
 	OwnerID                               *string
@@ -7493,6 +7494,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
 	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
@@ -7702,6 +7706,8 @@ type UpdateEntityInput struct {
 	ContractRenewalAt                          *models.DateTime
 	ClearVendorMetadata                        bool
 	VendorMetadata                             map[string]interface{}
+	ClearLogoRemoteURL                         bool
+	LogoRemoteURL                              *string
 	ClearExternalID                            bool
 	ExternalID                                 *string
 	ClearObservedAt                            bool
@@ -8061,6 +8067,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.VendorMetadata; v != nil {
 		m.SetVendorMetadata(v)
+	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
 	}
 	if i.ClearExternalID {
 		m.ClearExternalID()
@@ -16348,7 +16360,6 @@ type UpdateOrganizationInput struct {
 	ClearTags                               bool
 	Tags                                    []string
 	AppendTags                              []string
-	Name                                    *string
 	DisplayName                             *string
 	ClearDescription                        bool
 	Description                             *string
@@ -16663,9 +16674,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
 	}
 	if v := i.DisplayName; v != nil {
 		m.SetDisplayName(*v)
