@@ -70,6 +70,54 @@ func TestFileCategory(t *testing.T) {
 	}
 }
 
+func TestResolveProvidedExtension(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		file objects.File
+		want string
+	}{
+		{
+			name: "simple png",
+			file: objects.File{OriginalName: "avatar.png"},
+			want: ".png",
+		},
+		{
+			name: "filename with spaces, parentheses, and multiple dots",
+			file: objects.File{OriginalName: "Captura de pantalla 2026-03-26 a la(s) 5.35.31 p. m..png"},
+			want: ".png",
+		},
+		{
+			name: "pdf",
+			file: objects.File{OriginalName: "Q1-report.final.v2.pdf"},
+			want: ".pdf",
+		},
+		{
+			name: "uppercase extension is preserved",
+			file: objects.File{OriginalName: "SCAN.PDF"},
+			want: ".PDF",
+		},
+		{
+			name: "no extension returns empty",
+			file: objects.File{OriginalName: "README"},
+			want: "",
+		},
+		{
+			name: "empty filename returns empty",
+			file: objects.File{OriginalName: ""},
+			want: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			assert.Check(t, is.Equal(tt.want, resolveProvidedExtension(tt.file)))
+		})
+	}
+}
+
 func TestResolveFileName(t *testing.T) {
 	t.Parallel()
 

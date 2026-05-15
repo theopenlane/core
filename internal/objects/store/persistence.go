@@ -73,7 +73,7 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	set := ent.CreateFileInput{
 		Name:                  lo.ToPtr(retrieveFileName(f)),
 		ProvidedFileName:      f.OriginalName,
-		ProvidedFileExtension: filepath.Ext(f.ProvidedExtension),
+		ProvidedFileExtension: resolveProvidedExtension(f),
 		ProvidedFileSize:      &f.Size,
 		DetectedMimeType:      &f.ContentType,
 		DetectedContentType:   contentType,
@@ -102,6 +102,15 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	}
 
 	return entFile, nil
+}
+
+// resolveProvidedExtension returns the file extension derived from the client-provided
+// filename. OriginalName is the canonical source — the separate ProvidedExtension field
+// on pkgobjects.File is not populated by the multipart parser, so deriving from
+// OriginalName avoids drift and works for filenames containing spaces, multiple dots,
+// or other special characters.
+func resolveProvidedExtension(f pkgobjects.File) string {
+	return filepath.Ext(f.OriginalName)
 }
 
 func retrieveFileName(f pkgobjects.File) string {
