@@ -198,6 +198,26 @@ func (_u *AssessmentResponseUpdate) ClearEntityID() *AssessmentResponseUpdate {
 	return _u
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_u *AssessmentResponseUpdate) SetDisplayName(v string) *AssessmentResponseUpdate {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssessmentResponseUpdate) SetNillableDisplayName(v *string) *AssessmentResponseUpdate {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssessmentResponseUpdate) ClearDisplayName() *AssessmentResponseUpdate {
+	_u.mutation.ClearDisplayName()
+	return _u
+}
+
 // SetSendAttempts sets the "send_attempts" field.
 func (_u *AssessmentResponseUpdate) SetSendAttempts(v int) *AssessmentResponseUpdate {
 	_u.mutation.ResetSendAttempts()
@@ -688,6 +708,15 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
 	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponse.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assessmentresponse.FieldDisplayName, field.TypeString)
+	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmail, field.TypeString)
+	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)
 	}
@@ -1147,6 +1176,26 @@ func (_u *AssessmentResponseUpdateOne) SetNillableEntityID(v *string) *Assessmen
 // ClearEntityID clears the value of the "entity_id" field.
 func (_u *AssessmentResponseUpdateOne) ClearEntityID() *AssessmentResponseUpdateOne {
 	_u.mutation.ClearEntityID()
+	return _u
+}
+
+// SetDisplayName sets the "display_name" field.
+func (_u *AssessmentResponseUpdateOne) SetDisplayName(v string) *AssessmentResponseUpdateOne {
+	_u.mutation.SetDisplayName(v)
+	return _u
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_u *AssessmentResponseUpdateOne) SetNillableDisplayName(v *string) *AssessmentResponseUpdateOne {
+	if v != nil {
+		_u.SetDisplayName(*v)
+	}
+	return _u
+}
+
+// ClearDisplayName clears the value of the "display_name" field.
+func (_u *AssessmentResponseUpdateOne) ClearDisplayName() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearDisplayName()
 	return _u
 }
 
@@ -1669,6 +1718,15 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	}
 	if value, ok := _u.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponse.FieldDisplayName, field.TypeString, value)
+	}
+	if _u.mutation.DisplayNameCleared() {
+		_spec.ClearField(assessmentresponse.FieldDisplayName, field.TypeString)
+	}
+	if _u.mutation.EmailCleared() {
+		_spec.ClearField(assessmentresponse.FieldEmail, field.TypeString)
 	}
 	if value, ok := _u.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponse.FieldSendAttempts, field.TypeInt, value)

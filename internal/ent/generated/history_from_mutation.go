@@ -653,6 +653,18 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -756,6 +768,24 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetOwnerID(assessment.OwnerID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(assessment.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(assessment.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(assessment.SystemInternalID)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -835,6 +865,9 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(assessment.DeletedBy).
 			SetTags(assessment.Tags).
 			SetOwnerID(assessment.OwnerID).
+			SetSystemOwned(assessment.SystemOwned).
+			SetNillableInternalNotes(assessment.InternalNotes).
+			SetNillableSystemInternalID(assessment.SystemInternalID).
 			SetName(assessment.Name).
 			SetAssessmentType(assessment.AssessmentType).
 			SetTemplateID(assessment.TemplateID).
@@ -912,6 +945,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if entityID, exists := m.EntityID(); exists {
 		create = create.SetEntityID(entityID)
+	}
+
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
 	}
 
 	if email, exists := m.Email(); exists {
@@ -1081,6 +1118,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetEntityID(assessmentresponse.EntityID)
 		}
 
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(assessmentresponse.DisplayName)
+		}
+
 		if email, exists := m.Email(); exists {
 			create = create.SetEmail(email)
 		} else {
@@ -1224,6 +1267,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetCampaignID(assessmentresponse.CampaignID).
 			SetIdentityHolderID(assessmentresponse.IdentityHolderID).
 			SetEntityID(assessmentresponse.EntityID).
+			SetDisplayName(assessmentresponse.DisplayName).
 			SetEmail(assessmentresponse.Email).
 			SetSendAttempts(assessmentresponse.SendAttempts).
 			SetEmailDeliveredAt(assessmentresponse.EmailDeliveredAt).
@@ -22088,6 +22132,10 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if transformConfiguration, exists := m.TransformConfiguration(); exists {
+		create = create.SetTransformConfiguration(transformConfiguration)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -22251,6 +22299,12 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTrustCenterID(template.TrustCenterID)
 		}
 
+		if transformConfiguration, exists := m.TransformConfiguration(); exists {
+			create = create.SetTransformConfiguration(transformConfiguration)
+		} else {
+			create = create.SetTransformConfiguration(template.TransformConfiguration)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -22308,6 +22362,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetJsonconfig(template.Jsonconfig).
 			SetUischema(template.Uischema).
 			SetTrustCenterID(template.TrustCenterID).
+			SetTransformConfiguration(template.TransformConfiguration).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -353,6 +354,26 @@ func (_u *TemplateUpdate) SetNillableTrustCenterID(v *string) *TemplateUpdate {
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
 func (_u *TemplateUpdate) ClearTrustCenterID() *TemplateUpdate {
 	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateUpdate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateUpdate {
+	_u.mutation.SetTransformConfiguration(v)
+	return _u
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateUpdate {
+	if v != nil {
+		_u.SetTransformConfiguration(*v)
+	}
+	return _u
+}
+
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateUpdate) ClearTransformConfiguration() *TemplateUpdate {
+	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -748,6 +769,12 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
+	}
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(template.FieldTransformConfiguration, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1422,6 +1449,26 @@ func (_u *TemplateUpdateOne) ClearTrustCenterID() *TemplateUpdateOne {
 	return _u
 }
 
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_u *TemplateUpdateOne) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateUpdateOne {
+	_u.mutation.SetTransformConfiguration(v)
+	return _u
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetTransformConfiguration(*v)
+	}
+	return _u
+}
+
+// ClearTransformConfiguration clears the value of the "transform_configuration" field.
+func (_u *TemplateUpdateOne) ClearTransformConfiguration() *TemplateUpdateOne {
+	_u.mutation.ClearTransformConfiguration()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *TemplateUpdateOne) SetEnvironment(v *CustomTypeEnum) *TemplateUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -1844,6 +1891,12 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(template.FieldUischema, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
+	}
+	if _u.mutation.TransformConfigurationCleared() {
+		_spec.ClearField(template.FieldTransformConfiguration, field.TypeJSON)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
