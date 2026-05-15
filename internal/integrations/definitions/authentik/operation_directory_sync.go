@@ -170,6 +170,8 @@ func listDirectoryGroups(ctx context.Context, c *authentikSDK.APIClient) ([]auth
 		}
 
 		if err != nil {
+		    logx.FromContext(ctx).Error().Err(err).Msg("error listing groups")
+		    
 			return nil, ErrDirectoryGroupsFetchFailed
 		}
 
