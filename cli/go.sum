@@ -194,8 +194,7 @@ github.com/theopenlane/go-client v0.10.0 h1:gBEOEWXM3nP7VlXPcmgA/0RPWcvSz1XzFBwA
 github.com/theopenlane/go-client v0.10.0/go.mod h1:usNDyObWwEJmNph2vAlsYfnx1q6jxXMwOKC6kQAesFo=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.29.0 h1:mmN5ZC5wfKHiMm69XpTfcqZl0IPMCFTEZuGHI7j2u4I=
-github.com/theopenlane/iam v0.29.0/go.mod h1:WIWrlNu6gBNrEVNCtdAmGX7xrnv4+J2xPl0Frjw94rE=
+github.com/theopenlane/iam v0.29.1-0.20260514070756-034a3213bc90 h1:HcOK1+zND5ViWE+CbupHvzsJPm3TSgXDPsqxP/2xmCI=
 github.com/theopenlane/utils v0.7.0 h1:tSN9PBC8Ywn2As3TDW/1TAfWsVsodrccec40oAhiZgo=
 github.com/theopenlane/utils v0.7.0/go.mod h1:7U9CDoVzCAFWw/JygR5ZhCKGwhHBnuJpK3Jgh1m59+w=
 github.com/tinylib/msgp v1.6.4 h1:mOwYbyYDLPj35mkA2BjjYejgJk9BuHxDdvRnb6v2ZcQ=

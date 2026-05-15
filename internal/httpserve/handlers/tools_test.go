@@ -154,6 +154,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithDisableParentContext(),
 	)
 
 	// shared token manager to avoid RSA key generation

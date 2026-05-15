@@ -111,6 +111,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithDisableParentContext(),
 	)
 
 	fgaClient, err := s.ofgaTF.NewFgaClient(s.ctx)

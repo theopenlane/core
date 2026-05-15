@@ -82,6 +82,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithDisableParentContext(),
 	)
 	ctx := context.Background()
 

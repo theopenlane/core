@@ -170,6 +170,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		fgatest.WithModelFile(fgaModelFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithDisableParentContext(),
 	)
 
 	ctx := context.Background()
