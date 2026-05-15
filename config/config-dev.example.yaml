@@ -96,6 +96,7 @@ authz:
   createnewmodel: true
   credentials:
     apitoken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
+  disableparentcontext: true
 
 # session settings
 sessions:
