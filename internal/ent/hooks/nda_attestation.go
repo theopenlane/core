@@ -12,7 +12,7 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 
-	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -67,6 +67,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(allowCtx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template")
 		return nil, ErrFailedToFetchNDATemplate
 	}
 
@@ -74,6 +75,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	files, err := docTemplate.QueryFiles().All(fileCtx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template files")
 		return nil, ErrFailedToFetchNDATemplateFiles
 	}
 
@@ -85,6 +87,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	dataBytes, err := json.Marshal(docData.Data)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal document data")
 		return nil, ErrFailedToMarshalDocumentData
 	}
 
@@ -95,8 +98,11 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	storageFile := storageFileFromEnt(templateFile)
 
-	downloaded, err := client.ObjectManager.Download(ctx, nil, storageFile, nil)
+	getFileCtx := objects.WithModuleHint(ctx, models.CatalogTrustCenterModule)
+
+	downloaded, err := client.ObjectManager.Download(getFileCtx, nil, storageFile, nil)
 	if err != nil {
+		logx.FromContext(ctx).Error().Str("file", storageFile.ID).Str("provider", templateFile.StorageProvider).Err(err).Msg("failed to download original PDF")
 		return nil, ErrFailedToDownloadNDAPDF
 	}
 
@@ -159,14 +165,14 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		},
 	}
 
-	objects.SetTemplateKindHint(&file, enums.TemplateKindTrustCenterNda)
-
 	_, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upload pdf")
 		return ErrFailedToUploadAttestedPDF
 	}
 
 	if len(uploadedFiles) == 0 {
+		logx.FromContext(ctx).Error().Msg("no files were uploaded")
 		return ErrNoUploadedFiles
 	}
 
@@ -177,6 +183,7 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		AddFileIDs(uploadedFiles[0].ID).
 		SetData(data).
 		Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to associate files")
 		return ErrFailedToAssociateFile
 	}
 
