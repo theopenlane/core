@@ -1,6 +1,6 @@
 package storagetypes
 
-import "strings"
+import "mime"
 
 // DispositionInline is the Content-Disposition value used when a file's MIME
 // type is safe for the browser to render inline (PDFs, raster images).
@@ -32,8 +32,8 @@ var inlineSafeMIMEs = map[string]struct{}{
 // so the browser triggers a download rather than guessing what to do with an
 // unknown payload.
 //
-// The match strips any "; charset=..." or other parameters and is
-// case-insensitive, matching how browsers normalize Content-Type values.
+// Parameters (e.g. "; charset=utf-8") and casing are normalized via
+// mime.ParseMediaType. Malformed media types fall through to "attachment".
 func DispositionFor(contentType string) string {
 	if isInlineSafeMIME(contentType) {
 		return DispositionInline
@@ -42,21 +42,20 @@ func DispositionFor(contentType string) string {
 	return DispositionAttachment
 }
 
-// isInlineSafeMIME reports whether contentType, after normalizing case and
-// stripping parameters, is in the inline-safe allowlist.
+// isInlineSafeMIME reports whether contentType, after parsing as a media type
+// (which lowercases the type and strips parameters), is in the inline-safe
+// allowlist. Returns false for empty or malformed input.
 func isInlineSafeMIME(contentType string) bool {
 	if contentType == "" {
 		return false
 	}
 
-	base := contentType
-	if idx := strings.Index(base, ";"); idx >= 0 {
-		base = base[:idx]
+	mediaType, _, err := mime.ParseMediaType(contentType)
+	if err != nil {
+		return false
 	}
 
-	base = strings.ToLower(strings.TrimSpace(base))
-
-	_, ok := inlineSafeMIMEs[base]
+	_, ok := inlineSafeMIMEs[mediaType]
 
 	return ok
 }

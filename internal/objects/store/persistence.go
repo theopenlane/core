@@ -58,14 +58,9 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 }
 
 func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
-	// Re-detect the content type when the supplied value is missing OR generic.
-	// Some upload clients (curl, scripted uploads, certain browser flows for
-	// extensions the browser doesn't recognize) send application/octet-stream
-	// in the multipart part header. Persisting that loses the ability to
-	// serve the file with a meaningful Content-Type and disposition later.
 	contentType := f.ContentType
-	if contentType == "" || contentType == "application/octet-stream" {
-		if detectedType, err := storage.DetectContentType(f.RawFile); err == nil && detectedType != "" {
+	if contentType == "" {
+		if detectedType, err := storage.DetectContentType(f.RawFile); err == nil {
 			contentType = detectedType
 		}
 	}
