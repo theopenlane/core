@@ -148,9 +148,6 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	headers := ctx.Response().Header()
 	headers.Set(echo.HeaderContentType, downloadFile.DetectedContentType)
 	headers.Set(echo.HeaderContentDisposition, disposition)
-	// Prevent the browser from MIME-sniffing the body to a more dangerous type
-	// than DetectedContentType claims — critical now that this path may serve
-	// content with inline disposition.
 	headers.Set(echo.HeaderXContentTypeOptions, "nosniff")
 
 	return ctx.Blob(http.StatusOK, downloadFile.DetectedContentType, download.File)
