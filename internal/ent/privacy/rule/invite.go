@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -20,13 +19,8 @@ const (
 )
 
 // CanInviteUsers is a rule that returns allow decision if user has access to invite members or admins to the organization
-func CanInviteUsers() privacy.MutationRuleFunc {
-	return privacy.MutationRuleFunc(func(ctx context.Context, mutation ent.Mutation) error {
-		m, ok := mutation.(*generated.InviteMutation)
-		if !ok {
-			return privacy.Skip
-		}
-
+func CanInviteUsers() privacy.InviteMutationRuleFunc {
+	return privacy.InviteMutationRuleFunc(func(ctx context.Context, m *generated.InviteMutation) error {
 		oID, err := getInviteOwnerID(ctx, m)
 		if err != nil || oID == "" {
 			return privacy.Skipf("no owner set on request, cannot check access")
