@@ -108,6 +108,16 @@ func TestResolveProvidedExtension(t *testing.T) {
 			file: objects.File{OriginalName: ""},
 			want: "",
 		},
+		{
+			name: "explicit ProvidedExtension takes precedence over OriginalName",
+			file: objects.File{OriginalName: "avatar.png", ProvidedExtension: ".jpg"},
+			want: ".jpg",
+		},
+		{
+			name: "explicit ProvidedExtension used when OriginalName is empty",
+			file: objects.File{ProvidedExtension: ".png"},
+			want: ".png",
+		},
 	}
 
 	for _, tt := range tests {

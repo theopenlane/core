@@ -104,12 +104,15 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 	return entFile, nil
 }
 
-// resolveProvidedExtension returns the file extension derived from the client-provided
-// filename. OriginalName is the canonical source — the separate ProvidedExtension field
-// on pkgobjects.File is not populated by the multipart parser, so deriving from
-// OriginalName avoids drift and works for filenames containing spaces, multiple dots,
-// or other special characters.
+// resolveProvidedExtension returns the file extension to persist. It prefers an
+// explicitly-set ProvidedExtension and falls back to deriving from OriginalName,
+// which is the source populated by the multipart parser and handles filenames
+// with spaces, multiple dots, or other special characters.
 func resolveProvidedExtension(f pkgobjects.File) string {
+	if f.ProvidedExtension != "" {
+		return f.ProvidedExtension
+	}
+
 	return filepath.Ext(f.OriginalName)
 }
 
