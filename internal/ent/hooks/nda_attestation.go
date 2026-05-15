@@ -12,11 +12,13 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 
+	"github.com/theopenlane/core/common/enums"
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/upload"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -156,6 +158,8 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 			Key:         "documentDataFile",
 		},
 	}
+
+	objects.SetTemplateKindHint(&file, enums.TemplateKindTrustCenterNda)
 
 	_, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
 	if err != nil {
