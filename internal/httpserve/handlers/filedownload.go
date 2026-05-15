@@ -140,14 +140,12 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	// Format the disposition through mime.FormatMediaType so the filename is
 	// properly quoted/escaped; ProvidedFileName is user-supplied and could
 	// otherwise break out of the quoted-string or split headers via CR/LF.
-	disposition := mime.FormatMediaType(
-		storagetypes.DispositionFor(downloadFile.DetectedContentType),
-		map[string]string{"filename": downloadFile.ProvidedFileName},
-	)
+	// FormatMediaType returns "" for unrepresentable filenames; fall back to
+	// the bare disposition rather than emitting nothing.
+	dispBase := storagetypes.DispositionFor(downloadFile.DetectedContentType)
+	disposition := mime.FormatMediaType(dispBase, map[string]string{"filename": downloadFile.ProvidedFileName})
 	if disposition == "" {
-		// mime.FormatMediaType returns "" for unrepresentable filenames;
-		// fall back to a no-filename disposition rather than emitting nothing.
-		disposition = storagetypes.DispositionFor(downloadFile.DetectedContentType)
+		disposition = dispBase
 	}
 
 	headers := ctx.Response().Header()
@@ -156,7 +154,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	// Prevent the browser from MIME-sniffing the body to a more dangerous type
 	// than DetectedContentType claims — critical now that this path may serve
 	// content with inline disposition.
-	headers.Set("X-Content-Type-Options", "nosniff")
+	headers.Set(echo.HeaderXContentTypeOptions, "nosniff")
 
 	return ctx.Blob(http.StatusOK, downloadFile.DetectedContentType, download.File)
 }

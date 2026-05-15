@@ -29,7 +29,6 @@ func TestDispositionFor(t *testing.T) {
 		{"javascript text excluded", "text/javascript", DispositionAttachment},
 		{"xhtml excluded", "application/xhtml+xml", DispositionAttachment},
 
-		// Other common types — attachment is correct behavior.
 		{"octet-stream", "application/octet-stream", DispositionAttachment},
 		{"docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", DispositionAttachment},
 		{"zip", "application/zip", DispositionAttachment},
