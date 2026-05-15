@@ -139,7 +139,8 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 
 	headers := ctx.Response().Header()
 	headers.Set(echo.HeaderContentType, downloadFile.DetectedContentType)
-	headers.Set(echo.HeaderContentDisposition, fmt.Sprintf("attachment; filename=\"%s\"", downloadFile.ProvidedFileName))
+	headers.Set(echo.HeaderContentDisposition, fmt.Sprintf("%s; filename=\"%s\"",
+		storagetypes.DispositionFor(downloadFile.DetectedContentType), downloadFile.ProvidedFileName))
 
 	return ctx.Blob(http.StatusOK, downloadFile.DetectedContentType, download.File)
 }
