@@ -11,9 +11,7 @@ import (
 
 	"github.com/fumiama/go-docx"
 	"github.com/gabriel-vasile/mimetype"
-	"github.com/ledongthuc/pdf"
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v3"
 )
 
@@ -94,18 +92,6 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 		return &ParsedDocument{Frontmatter: fm, Data: body}, nil
 	case strings.Contains(mimeType, "text/html"):
 		return &ParsedDocument{Data: parseHTML(data)}, nil
-	case strings.Contains(mimeType, "application/pdf"):
-		// Degrade to empty details on extraction failure rather than rejecting the
-		// upload: many real-world PDFs (linearized, compressed xref streams, PDF
-		// 1.5+ object streams) trip the extractor even when the file is valid and
-		// renderable by Chrome/FilePreview. The file is preserved either way.
-		text, err := parsePDF(data)
-		if err != nil {
-			log.Warn().Err(err).Msg("pdf text extraction failed; storing file with empty details")
-			return &ParsedDocument{Data: ""}, nil
-		}
-
-		return &ParsedDocument{Data: text}, nil
 	default:
 		return &ParsedDocument{Data: data}, nil
 	}
@@ -213,38 +199,6 @@ func parseDocx(content []byte) (string, error) {
 	}
 
 	return strings.Join(paragraphs, "\n"), nil
-}
-
-// parsePDF extracts and returns the text content from a PDF file, preserving
-// page boundaries with a blank line between pages. Scanned PDFs without a text
-// layer return an empty string (no error) — the original file is still preserved
-// in object storage and rendered via FilePreview, so callers can decide whether
-// to treat empty extraction as a failure.
-func parsePDF(content []byte) (string, error) {
-	r, err := pdf.NewReader(bytes.NewReader(content), int64(len(content)))
-	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrPDFParseFailed, err)
-	}
-
-	var pages []string
-
-	for i := 1; i <= r.NumPage(); i++ {
-		p := r.Page(i)
-		if p.V.IsNull() {
-			continue
-		}
-
-		text, err := p.GetPlainText(nil)
-		if err != nil {
-			return "", fmt.Errorf("%w: page %d: %w", ErrPDFParseFailed, i, err)
-		}
-
-		if text = strings.TrimSpace(text); text != "" {
-			pages = append(pages, text)
-		}
-	}
-
-	return strings.Join(pages, "\n\n"), nil
 }
 
 // parseHTML strips all HTML tags from the input and returns the remaining plain text.

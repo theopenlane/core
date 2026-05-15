@@ -73,11 +73,11 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		"text/markdown",
 		"text/x-markdown",
 		"text/html",
-		"application/pdf",
 		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 	}
 
 	rejectedTypes := []string{
+		"application/pdf",
 		"application/javascript",
 		"application/x-msdownload",
 		"application/x-sh",
