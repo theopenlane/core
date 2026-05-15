@@ -84,6 +84,7 @@ mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String, $ent
 			}
 			id
 			logoFileID
+			logoRemoteURL
 			name
 			ownerID
 			tags
@@ -213,6 +214,7 @@ query GetEntityByID ($entityId: ID!) {
 		linkedAssetIds
 		links
 		logoFileID
+		logoRemoteURL
 		mfaEnforced
 		mfaSupported
 		name

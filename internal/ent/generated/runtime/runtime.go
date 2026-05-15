@@ -2479,6 +2479,24 @@ func init() {
 	entity.DefaultLinks = entityDescLinks.Default.([]string)
 	// entity.LinksValidator is a validator for the "links" field. It is called by the builders before save.
 	entity.LinksValidator = entityDescLinks.Validators[0].(func([]string) error)
+	// entityDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
+	entityDescLogoRemoteURL := entityFields[32].Descriptor()
+	// entity.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	entity.LogoRemoteURLValidator = func() func(string) error {
+		validators := entityDescLogoRemoteURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(logo_remote_url string) error {
+			for _, fn := range fns {
+				if err := fn(logo_remote_url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
 	// entityDescID is the schema descriptor for id field.
 	entityDescID := entityMixinFields2[0].Descriptor()
 	// entity.DefaultID holds the default value on creation for the id field.

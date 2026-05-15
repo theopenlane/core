@@ -4672,6 +4672,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldVendorMetadata)
 				fieldSeen[entityhistory.FieldVendorMetadata] = struct{}{}
 			}
+		case "logoRemoteURL":
+			if _, ok := fieldSeen[entityhistory.FieldLogoRemoteURL]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldLogoRemoteURL)
+				fieldSeen[entityhistory.FieldLogoRemoteURL] = struct{}{}
+			}
 		case "logoFileID":
 			if _, ok := fieldSeen[entityhistory.FieldLogoFileID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldLogoFileID)

@@ -886,6 +886,7 @@ type ComplexityRoot struct {
 		LinkedAssetIds                        func(childComplexity int) int
 		Links                                 func(childComplexity int) int
 		LogoFileID                            func(childComplexity int) int
+		LogoRemoteURL                         func(childComplexity int) int
 		MfaEnforced                           func(childComplexity int) int
 		MfaSupported                          func(childComplexity int) int
 		Name                                  func(childComplexity int) int
@@ -8100,6 +8101,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.LogoFileID(childComplexity), true
+
+	case "EntityHistory.logoRemoteURL":
+		if e.ComplexityRoot.EntityHistory.LogoRemoteURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.LogoRemoteURL(childComplexity), true
 
 	case "EntityHistory.mfaEnforced":
 		if e.ComplexityRoot.EntityHistory.MfaEnforced == nil {
@@ -33285,6 +33293,10 @@ type EntityHistory implements Node {
   """
   vendorMetadata: Map
   """
+  URL of the logo for the entity
+  """
+  logoRemoteURL: String
+  """
   The logo file id for the entity
   """
   logoFileID: String
@@ -34250,6 +34262,24 @@ input EntityHistoryWhereInput {
   contractRenewalAtLTE: DateTime
   contractRenewalAtIsNil: Boolean
   contractRenewalAtNotNil: Boolean
+  """
+  logo_remote_url field predicates
+  """
+  logoRemoteURL: String
+  logoRemoteURLNEQ: String
+  logoRemoteURLIn: [String!]
+  logoRemoteURLNotIn: [String!]
+  logoRemoteURLGT: String
+  logoRemoteURLGTE: String
+  logoRemoteURLLT: String
+  logoRemoteURLLTE: String
+  logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
+  logoRemoteURLHasSuffix: String
+  logoRemoteURLIsNil: Boolean
+  logoRemoteURLNotNil: Boolean
+  logoRemoteURLEqualFold: String
+  logoRemoteURLContainsFold: String
   """
   logo_file_id field predicates
   """
@@ -67834,6 +67864,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_contractRenewalAt(ctx, field)
 	case "vendorMetadata":
 		return ec.fieldContext_EntityHistory_vendorMetadata(ctx, field)
+	case "logoRemoteURL":
+		return ec.fieldContext_EntityHistory_logoRemoteURL(ctx, field)
 	case "logoFileID":
 		return ec.fieldContext_EntityHistory_logoFileID(ctx, field)
 	case "externalID":

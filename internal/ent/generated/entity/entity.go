@@ -138,6 +138,8 @@ const (
 	FieldContractRenewalAt = "contract_renewal_at"
 	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
 	FieldVendorMetadata = "vendor_metadata"
+	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
+	FieldLogoRemoteURL = "logo_remote_url"
 	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
 	FieldLogoFileID = "logo_file_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
@@ -494,6 +496,7 @@ var Columns = []string{
 	FieldNextReviewAt,
 	FieldContractRenewalAt,
 	FieldVendorMetadata,
+	FieldLogoRemoteURL,
 	FieldLogoFileID,
 	FieldExternalID,
 	FieldObservedAt,
@@ -628,6 +631,8 @@ var (
 	DefaultLinks []string
 	// LinksValidator is a validator for the "links" field. It is called by the builders before save.
 	LinksValidator func([]string) error
+	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
+	LogoRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -944,6 +949,11 @@ func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
 // ByContractRenewalAt orders the results by the contract_renewal_at field.
 func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
+}
+
+// ByLogoRemoteURL orders the results by the logo_remote_url field.
+func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
 }
 
 // ByLogoFileID orders the results by the logo_file_id field.

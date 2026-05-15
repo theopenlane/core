@@ -761,8 +761,9 @@ func adminSearchEntities(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(vendor_metadata)::text LIKE $35", likeQuery)) // search by VendorMetadata
 				},
-				entity.LogoFileIDContainsFold(query), // search by LogoFileID
-				entity.ExternalIDContainsFold(query), // search by ExternalID
+				entity.LogoRemoteURLContainsFold(query), // search by LogoRemoteURL
+				entity.LogoFileIDContainsFold(query),    // search by LogoFileID
+				entity.ExternalIDContainsFold(query),    // search by ExternalID
 			),
 		)
 

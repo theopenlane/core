@@ -985,6 +985,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldNextReviewAt:                          {Type: field.TypeTime, Column: entityhistory.FieldNextReviewAt},
 			entityhistory.FieldContractRenewalAt:                     {Type: field.TypeTime, Column: entityhistory.FieldContractRenewalAt},
 			entityhistory.FieldVendorMetadata:                        {Type: field.TypeJSON, Column: entityhistory.FieldVendorMetadata},
+			entityhistory.FieldLogoRemoteURL:                         {Type: field.TypeString, Column: entityhistory.FieldLogoRemoteURL},
 			entityhistory.FieldLogoFileID:                            {Type: field.TypeString, Column: entityhistory.FieldLogoFileID},
 			entityhistory.FieldExternalID:                            {Type: field.TypeString, Column: entityhistory.FieldExternalID},
 			entityhistory.FieldObservedAt:                            {Type: field.TypeTime, Column: entityhistory.FieldObservedAt},
@@ -7278,6 +7279,11 @@ func (f *EntityHistoryFilter) WhereContractRenewalAt(p entql.TimeP) {
 // WhereVendorMetadata applies the entql json.RawMessage predicate on the vendor_metadata field.
 func (f *EntityHistoryFilter) WhereVendorMetadata(p entql.BytesP) {
 	f.Where(p.Field(entityhistory.FieldVendorMetadata))
+}
+
+// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
+func (f *EntityHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldLogoRemoteURL))
 }
 
 // WhereLogoFileID applies the entql string predicate on the logo_file_id field.

@@ -324,6 +324,11 @@ func ContractRenewalAt(v models.DateTime) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldContractRenewalAt, v))
 }
 
+// LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
+func LogoRemoteURL(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
 // LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
 func LogoFileID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldLogoFileID, v))
@@ -3632,6 +3637,81 @@ func VendorMetadataIsNil() predicate.Entity {
 // VendorMetadataNotNil applies the NotNil predicate on the "vendor_metadata" field.
 func VendorMetadataNotNil() predicate.Entity {
 	return predicate.Entity(sql.FieldNotNull(FieldVendorMetadata))
+}
+
+// LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLNEQ applies the NEQ predicate on the "logo_remote_url" field.
+func LogoRemoteURLNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIn applies the In predicate on the "logo_remote_url" field.
+func LogoRemoteURLIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLNotIn applies the NotIn predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldLogoRemoteURL, vs...))
+}
+
+// LogoRemoteURLGT applies the GT predicate on the "logo_remote_url" field.
+func LogoRemoteURLGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLGTE applies the GTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLT applies the LT predicate on the "logo_remote_url" field.
+func LogoRemoteURLLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLLTE applies the LTE predicate on the "logo_remote_url" field.
+func LogoRemoteURLLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContains applies the Contains predicate on the "logo_remote_url" field.
+func LogoRemoteURLContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasPrefix applies the HasPrefix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLHasSuffix applies the HasSuffix predicate on the "logo_remote_url" field.
+func LogoRemoteURLHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLIsNil applies the IsNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLNotNil applies the NotNil predicate on the "logo_remote_url" field.
+func LogoRemoteURLNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldLogoRemoteURL))
+}
+
+// LogoRemoteURLEqualFold applies the EqualFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldLogoRemoteURL, v))
+}
+
+// LogoRemoteURLContainsFold applies the ContainsFold predicate on the "logo_remote_url" field.
+func LogoRemoteURLContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldLogoRemoteURL, v))
 }
 
 // LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
