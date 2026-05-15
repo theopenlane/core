@@ -152,13 +152,20 @@ type TrustCenterNDARequestEmail struct {
 	NDAURL string `json:"ndaUrl,omitempty" jsonschema:"description=NDA signing URL"`
 }
 
-// TrustCenterNDASignedEmail is the input for the NDA signed confirmation
+// TrustCenterNDASignedEmail is the input for the NDA signed confirmation.
+// Callers may pass either the pre-built TrustCenterURL or the RequestID + TrustCenterID pair;
+// when TrustCenterURL is empty the operation resolves it (with an auth token) from RequestID and TrustCenterID.
+// OrgName is resolved from TrustCenterID when empty
 type TrustCenterNDASignedEmail struct {
 	RecipientInfo
-	// OrgName is the organization whose NDA was signed
-	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
-	// TrustCenterURL is the URL to the trust center
-	TrustCenterURL string `json:"trust_center_url" jsonschema:"required,description=Trust center URL"`
+	// OrgName is the organization whose NDA was signed; resolved from TrustCenterID when empty
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
+	// TrustCenterURL is the URL to the trust center; when empty the operation constructs it with an auth token from RequestID and TrustCenterID
+	TrustCenterURL string `json:"trust_center_url,omitempty" jsonschema:"description=Trust center URL"`
+	// RequestID is the NDA request identifier used for JWT subject construction
+	RequestID string `json:"request_id,omitempty" jsonschema:"description=NDA request ID for token generation"`
+	// TrustCenterID is the trust center identifier used for URL construction
+	TrustCenterID string `json:"trust_center_id,omitempty" jsonschema:"description=Trust center ID for URL construction"`
 	// AttachmentFilename is the filename for the signed NDA attachment
 	AttachmentFilename string `json:"attachment_filename,omitempty" jsonschema:"description=Signed NDA attachment filename"`
 	// AttachmentData is the raw content of the signed NDA attachment
@@ -555,6 +562,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
 var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: baseTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
+	PreHook:     resolveTrustCenterNDASignedFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
 		return req.OrgName + " Trust Center NDA Signed"
 	},

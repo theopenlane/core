@@ -129,7 +129,11 @@ Config contains the configuration for the core server
         "azureentraid": {},
         "microsoftteams": {},
         "oidclocal": {},
-        "email": {}
+        "email": {},
+        "paymentreminder": {
+            "paymentmethodinterval": 30,
+            "deletiondays": 7
+        }
     },
     "workflows": {
         "cel": {},
@@ -1531,6 +1535,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
 |[**email**](#integrationsemail)|`object`||yes|
+|[**paymentreminder**](#integrationspaymentreminder)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1545,7 +1550,11 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "azureentraid": {},
     "microsoftteams": {},
     "oidclocal": {},
-    "email": {}
+    "email": {},
+    "paymentreminder": {
+        "paymentmethodinterval": 30,
+        "deletiondays": 7
+    }
 }
 ```
 
@@ -1689,6 +1698,27 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  
+<a name="integrationspaymentreminder"></a>
+### integrations\.paymentreminder: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**paymentmethodinterval**|`integer`|Days after org creation before marking for deletion<br/>Default: `30`<br/>||
+|**deletiondays**|`integer`|Days between marking and actual deletion<br/>Default: `7`<br/>||
+|**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "paymentmethodinterval": 30,
+    "deletiondays": 7
+}
+```
+
 <a name="workflows"></a>
 ## workflows: object
 

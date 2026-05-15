@@ -33,4 +33,6 @@ var (
 	ErrWebhookPayloadInvalid = errors.New("email: webhook payload invalid")
 	// ErrWebhookMissingID indicates the svix-id header is absent from the webhook request
 	ErrWebhookMissingID = errors.New("email: webhook missing svix-id header")
+	// ErrMissingURLResolutionFields indicates a PreHook cannot resolve a URL because required fields are empty
+	ErrMissingURLResolutionFields = errors.New("email: missing required fields for URL resolution")
 )

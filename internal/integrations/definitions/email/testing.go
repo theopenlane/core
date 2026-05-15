@@ -112,7 +112,7 @@ func TestFixture(name, toEmail string) json.RawMessage {
 		"TrustCenterNDASignedEmail": TrustCenterNDASignedEmail{
 			RecipientInfo:      r,
 			OrgName:            "SecureCorp",
-			TrustCenterURL:     "https://trustcenter.example.com/securecorp",
+			TrustCenterURL:     "https://trustcenter.example.com/securecorp?token=test",
 			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
 			AttachmentData:     testAttestedNDAPDF(),
 		},

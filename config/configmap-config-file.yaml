@@ -1048,6 +1048,18 @@ data:
         docsURL: {{ .Values.openlane.coreConfiguration.integrations.email.docsURL | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder }}
+      paymentreminder:
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.paymentmethodinterval }}
+        paymentmethodinterval: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.paymentmethodinterval }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
+        deletiondays: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

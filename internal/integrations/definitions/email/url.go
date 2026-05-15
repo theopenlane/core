@@ -106,8 +106,12 @@ func resolveTrustCenterAnonURL(ctx context.Context, req types.OperationRequest, 
 
 // resolveTrustCenterNDARequestFields populates NDAURL and OrgName on the input when empty
 func resolveTrustCenterNDARequestFields(ctx context.Context, req types.OperationRequest, input *TrustCenterNDARequestEmail) error {
-	if input.NDAURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
+	if input.NDAURL != "" {
 		return nil
+	}
+
+	if input.RequestID == "" || input.TrustCenterID == "" {
+		return ErrMissingURLResolutionFields
 	}
 
 	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterNDAURL)
@@ -123,10 +127,38 @@ func resolveTrustCenterNDARequestFields(ctx context.Context, req types.Operation
 	return nil
 }
 
+// resolveTrustCenterNDASignedFields populates TrustCenterURL and OrgName on the input when empty
+func resolveTrustCenterNDASignedFields(ctx context.Context, req types.OperationRequest, input *TrustCenterNDASignedEmail) error {
+	if input.TrustCenterURL != "" {
+		return nil
+	}
+
+	if input.RequestID == "" || input.TrustCenterID == "" {
+		return ErrMissingURLResolutionFields
+	}
+
+	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)
+	if err != nil {
+		return err
+	}
+
+	input.TrustCenterURL = result.URL
+
+	if input.OrgName == "" {
+		input.OrgName = result.OrgName
+	}
+
+	return nil
+}
+
 // resolveTrustCenterAuthFields populates AuthURL and OrgName on the input when empty
 func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationRequest, input *TrustCenterAuthEmail) error {
-	if input.AuthURL != "" || input.RequestID == "" || input.TrustCenterID == "" {
+	if input.AuthURL != "" {
 		return nil
+	}
+
+	if input.RequestID == "" || input.TrustCenterID == "" {
+		return fmt.Errorf("%w: RequestID and TrustCenterID are required when AuthURL is empty", ErrMissingURLResolutionFields)
 	}
 
 	result, err := resolveTrustCenterAnonURL(ctx, req, input.RequestID, input.TrustCenterID, input.Email, trustCenterBaseURL)

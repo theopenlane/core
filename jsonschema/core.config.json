@@ -157,6 +157,9 @@
         },
         "email": {
           "$ref": "#/$defs/email.RuntimeEmailConfig"
+        },
+        "paymentreminder": {
+          "$ref": "#/$defs/operations.PaymentReminderConfig"
         }
       },
       "additionalProperties": false,
@@ -1024,6 +1027,26 @@
         },
         "redirecturl": {
           "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "operations.PaymentReminderConfig": {
+      "properties": {
+        "paymentmethodinterval": {
+          "type": "integer",
+          "description": "Days after org creation before marking for deletion",
+          "default": 30
+        },
+        "deletiondays": {
+          "type": "integer",
+          "description": "Days between marking and actual deletion",
+          "default": 7
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the payment reminder listener is enabled"
         }
       },
       "additionalProperties": false,
