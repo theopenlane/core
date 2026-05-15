@@ -1,7 +1,7 @@
 services:
   postgresql:
     env_file:
-      - .env
+      - authentik.env
     environment:
       POSTGRES_DB: ${PG_DB:-authentik}
       POSTGRES_PASSWORD: ${PG_PASS:?database password required}
@@ -24,7 +24,7 @@ services:
       postgresql:
         condition: service_healthy
     env_file:
-      - .env
+      - authentik.env
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
@@ -38,15 +38,15 @@ services:
     restart: unless-stopped
     shm_size: 512mb
     volumes:
-      - ./data:/data
-      - ./custom-templates:/templates
+      - ./authentik-data:/data
+      - ./authentik-custom-templates:/templates
   worker:
     command: worker
     depends_on:
       postgresql:
         condition: service_healthy
     env_file:
-      - .env
+      - authentik.env
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgresql
       AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
@@ -59,9 +59,9 @@ services:
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/data
-      - ./certs:/certs
-      - ./custom-templates:/templates
+      - ./authentik-data:/data
+      - ./authentik-certs:/certs
+      - ./authentik-custom-templates:/templates
 volumes:
   database:
     driver: local

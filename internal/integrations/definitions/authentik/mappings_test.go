@@ -47,7 +47,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "authentik Default Admin", mapped["displayName"])
 		assert.Equal(t, "manab@gmail.com", mapped["canonicalEmail"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
-		assert.Equal(t, "internal", mapped["accountType"])
+		assert.Equal(t, "USER", mapped["accountType"])
 		assert.Equal(t, "2026-05-08T01:54:15.179825Z", mapped["addedAt"])
 		assert.Equal(t, "2026-05-09T08:11:37.941933Z", mapped["lastSeenAt"])
 		assert.Equal(t, "2026-05-08T01:55:21.345631Z", mapped["observedAt"])
@@ -64,7 +64,7 @@ func TestExamplePayloads(t *testing.T) {
 
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["externalID"])
 		assert.Equal(t, "authentik Admins", mapped["displayName"])
-		assert.Equal(t, "ADMIN", mapped["classification"])
+        assert.Equal(t, "SECURITY", mapped["classification"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 
@@ -126,7 +126,7 @@ func TestExamplePayloads(t *testing.T) {
 		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "service_account", mapped["accountType"])
+        assert.Equal(t, "SERVICE", mapped["accountType"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 }

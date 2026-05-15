@@ -249,3 +249,29 @@ tasks:
     cmds:
       - task: mailhog
       - task: mailhog:open
+
+  authentik:
+    dir: ..
+    desc: brings up the compose environment for authentik
+    cmds:
+      - "docker compose -f ./docker/docker-compose-authentik.yml up -d"
+
+  authentik:down:
+    dir: ..
+    desc: brings the authentik compose environment down
+    cmds:
+      - "docker compose -f ./docker/docker-compose-authentik.yml down"
+
+  authentik:open:
+    dir: ..
+    desc: opens the authentik web interface in a browser
+    cmds:
+      - 'open "http://localhost:9000"'
+
+  authentik:up:
+    dir: ..
+    desc: brings the authentik compose environment up and opens the web interface
+    aliases: [authentikup]
+    cmds:
+      - task: authentik
+      - task: authentik:open
