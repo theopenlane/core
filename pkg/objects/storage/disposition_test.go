@@ -1,4 +1,4 @@
-package storagetypes
+package storage
 
 import "testing"
 

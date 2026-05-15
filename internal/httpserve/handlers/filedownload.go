@@ -137,12 +137,9 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	// Format the disposition through mime.FormatMediaType so the filename is
-	// properly quoted/escaped; ProvidedFileName is user-supplied and could
-	// otherwise break out of the quoted-string or split headers via CR/LF.
-	// FormatMediaType returns "" for unrepresentable filenames; fall back to
-	// the bare disposition rather than emitting nothing.
-	dispBase := storagetypes.DispositionFor(downloadFile.DetectedContentType)
+	// FormatMediaType quotes/escapes the user-supplied filename so it can't
+	// break the header; it returns "" for unrepresentable names.
+	dispBase := storage.DispositionFor(downloadFile.DetectedContentType)
 	disposition := mime.FormatMediaType(dispBase, map[string]string{"filename": downloadFile.ProvidedFileName})
 	if disposition == "" {
 		disposition = dispBase
