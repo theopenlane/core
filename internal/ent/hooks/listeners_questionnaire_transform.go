@@ -37,7 +37,7 @@ import (
 
 // RegisterGalaQuestionnaireTransformListeners registers listeners that transform
 // completed questionnaire document data into configured target schemas.
-// this supports only entities for now
+// Supported types are defined in `TemplateProjectionTarget` enums
 func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
@@ -75,32 +75,24 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		Only(allowCtx)
 	if err != nil {
 		if entgen.IsNotFound(err) {
+			logx.FromContext(ctx.Context).Error().
+				Err(err).
+				Str("assessment_response_id", id).
+				Msg("assessment response not found for questionnaire transform")
+
 			return nil
 		}
+
+		logx.FromContext(ctx.Context).Error().
+			Err(err).
+			Str("assessment_response_id", id).
+			Msg("failed to load assessment response for questionnaire transform")
 
 		return err
 	}
 
-	if response.Status != enums.AssessmentResponseStatusCompleted || response.DocumentDataID == "" {
-		return nil
-	}
-
-	assessment := response.Edges.Assessment
-	if assessment == nil {
-		return nil
-	}
-
-	if assessment.Edges.Template == nil {
-		return nil
-	}
-
-	config := assessment.Edges.Template.TransformConfiguration
-	if !config.Enabled {
-		return nil
-	}
-
-	document := response.Edges.Document
-	if document == nil {
+	assessment, document, config, ok := validateQuestionnaire(response)
+	if !ok {
 		return nil
 	}
 
@@ -142,6 +134,29 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 	logger.Msg("questionnaire transform failed")
 
 	return err
+}
+
+func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {
+	if response == nil || response.Status != enums.AssessmentResponseStatusCompleted || response.DocumentDataID == "" {
+		return nil, nil, models.TemplateProjectionConfig{}, false
+	}
+
+	assessment := response.Edges.Assessment
+	if assessment == nil || assessment.Edges.Template == nil {
+		return nil, nil, models.TemplateProjectionConfig{}, false
+	}
+
+	config := assessment.Edges.Template.TransformConfiguration
+	if !config.Enabled {
+		return nil, nil, models.TemplateProjectionConfig{}, false
+	}
+
+	document := response.Edges.Document
+	if document == nil {
+		return nil, nil, models.TemplateProjectionConfig{}, false
+	}
+
+	return assessment, document, config, true
 }
 
 func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) bool {
@@ -201,8 +216,8 @@ func transformQuestionnaire(ctx context.Context, client *entgen.Client, req ques
 		return &questionnaireValidationError{Message: "missing transform organization id"}
 	}
 
-	switch {
-	case strings.EqualFold(req.Config.Target.String(), enums.TemplateProjectionTargetEntity.String()):
+	switch req.Config.Target {
+	case enums.TemplateProjectionTargetEntity:
 		return handleEntityTransform(ctx, client, req)
 	default:
 		return &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform target %q", req.Config.Target)}
@@ -246,7 +261,7 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 	for _, mapping := range req.Config.Mappings {
 		rawValue, ok := valueAtPath(req.Data, mapping.From)
 		if !ok || isEmptyValue(rawValue) {
-			if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverInternalOwner)) && req.Email != "" {
+			if mapping.Resolver == models.TemplateProjectionResolverInternalOwner && req.Email != "" {
 				if err := resolveInternalOwner(ctx, client, req.OrganizationID, req.Email, values); err != nil {
 					return nil, err
 				}
@@ -261,7 +276,7 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 			continue
 		}
 
-		if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverInternalOwner)) {
+		if mapping.Resolver == models.TemplateProjectionResolverInternalOwner {
 			if err := resolveInternalOwner(ctx, client, req.OrganizationID, rawValue, values); err != nil {
 				return nil, err
 			}
@@ -269,7 +284,7 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 			continue
 		}
 
-		if strings.EqualFold(string(mapping.Resolver), string(models.TemplateProjectionResolverEnvironment)) {
+		if mapping.Resolver == models.TemplateProjectionResolverEnvironment {
 			if err := resolveEnvironment(ctx, client, req.OrganizationID, rawValue, values); err != nil {
 				return nil, err
 			}
@@ -398,23 +413,23 @@ func applyTransform(value any, transform enums.TemplateProjectionTransform) (any
 		return value, nil
 	}
 
-	switch {
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformString.String()):
+	switch transform {
+	case enums.TemplateProjectionTransformString:
 		return getStringValue(value), nil
 
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformSlugify.String()):
+	case enums.TemplateProjectionTransformSlugify:
 		return strcase.KebabCase(strings.TrimSpace(getStringValue(value))), nil
 
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformDate.String()):
+	case enums.TemplateProjectionTransformDate:
 		return getDatetimeValue(value)
 
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformBool.String()):
+	case enums.TemplateProjectionTransformBool:
 		return getBoolValue(value)
 
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformFloat.String()):
+	case enums.TemplateProjectionTransformFloat:
 		return getFloatValue(value)
 
-	case strings.EqualFold(transform.String(), enums.TemplateProjectionTransformStringArray.String()):
+	case enums.TemplateProjectionTransformStringArray:
 
 		return getStringArrayValue(value), nil
 	default:
