@@ -133,6 +133,8 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunA
 		}
 
 		if err != nil {
+		    logx.FromContext(ctx).Error().Err(err).Msg("error listing users")
+		    
 			return nil, ErrDirectoryUsersFetchFailed
 		}
 
