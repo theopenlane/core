@@ -216,6 +216,10 @@ func init() {
 	assessmenthistoryDescTags := assessmenthistoryFields[10].Descriptor()
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
 	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
+	// assessmenthistoryDescSystemOwned is the schema descriptor for system_owned field.
+	assessmenthistoryDescSystemOwned := assessmenthistoryFields[12].Descriptor()
+	// assessmenthistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	assessmenthistory.DefaultSystemOwned = assessmenthistoryDescSystemOwned.Default.(bool)
 	// assessmenthistoryDescID is the schema descriptor for id field.
 	assessmenthistoryDescID := assessmenthistoryFields[9].Descriptor()
 	// assessmenthistory.DefaultID holds the default value on creation for the id field.
@@ -252,27 +256,27 @@ func init() {
 	// assessmentresponsehistory.DefaultIsTest holds the default value on creation for the is_test field.
 	assessmentresponsehistory.DefaultIsTest = assessmentresponsehistoryDescIsTest.Default.(bool)
 	// assessmentresponsehistoryDescSendAttempts is the schema descriptor for send_attempts field.
-	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[17].Descriptor()
+	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[18].Descriptor()
 	// assessmentresponsehistory.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponsehistory.DefaultSendAttempts = assessmentresponsehistoryDescSendAttempts.Default.(int)
 	// assessmentresponsehistoryDescEmailOpenCount is the schema descriptor for email_open_count field.
-	assessmentresponsehistoryDescEmailOpenCount := assessmentresponsehistoryFields[21].Descriptor()
+	assessmentresponsehistoryDescEmailOpenCount := assessmentresponsehistoryFields[22].Descriptor()
 	// assessmentresponsehistory.DefaultEmailOpenCount holds the default value on creation for the email_open_count field.
 	assessmentresponsehistory.DefaultEmailOpenCount = assessmentresponsehistoryDescEmailOpenCount.Default.(int)
 	// assessmentresponsehistoryDescEmailClickCount is the schema descriptor for email_click_count field.
-	assessmentresponsehistoryDescEmailClickCount := assessmentresponsehistoryFields[22].Descriptor()
+	assessmentresponsehistoryDescEmailClickCount := assessmentresponsehistoryFields[23].Descriptor()
 	// assessmentresponsehistory.DefaultEmailClickCount holds the default value on creation for the email_click_count field.
 	assessmentresponsehistory.DefaultEmailClickCount = assessmentresponsehistoryDescEmailClickCount.Default.(int)
 	// assessmentresponsehistoryDescAssignedAt is the schema descriptor for assigned_at field.
-	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[26].Descriptor()
+	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[27].Descriptor()
 	// assessmentresponsehistory.DefaultAssignedAt holds the default value on creation for the assigned_at field.
 	assessmentresponsehistory.DefaultAssignedAt = assessmentresponsehistoryDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
-	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[27].Descriptor()
+	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[28].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
 	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
 	// assessmentresponsehistoryDescIsDraft is the schema descriptor for is_draft field.
-	assessmentresponsehistoryDescIsDraft := assessmentresponsehistoryFields[31].Descriptor()
+	assessmentresponsehistoryDescIsDraft := assessmentresponsehistoryFields[32].Descriptor()
 	// assessmentresponsehistory.DefaultIsDraft holds the default value on creation for the is_draft field.
 	assessmentresponsehistory.DefaultIsDraft = assessmentresponsehistoryDescIsDraft.Default.(bool)
 	// assessmentresponsehistoryDescID is the schema descriptor for id field.

@@ -188,9 +188,31 @@ func (_c *AssessmentResponseCreate) SetNillableEntityID(v *string) *AssessmentRe
 	return _c
 }
 
+// SetDisplayName sets the "display_name" field.
+func (_c *AssessmentResponseCreate) SetDisplayName(v string) *AssessmentResponseCreate {
+	_c.mutation.SetDisplayName(v)
+	return _c
+}
+
+// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableDisplayName(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetDisplayName(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *AssessmentResponseCreate) SetEmail(v string) *AssessmentResponseCreate {
 	_c.mutation.SetEmail(v)
+	return _c
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableEmail(v *string) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetEmail(*v)
+	}
 	return _c
 }
 
@@ -583,9 +605,6 @@ func (_c *AssessmentResponseCreate) check() error {
 	if _, ok := _c.mutation.IsTest(); !ok {
 		return &ValidationError{Name: "is_test", err: errors.New(`generated: missing required field "AssessmentResponse.is_test"`)}
 	}
-	if _, ok := _c.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`generated: missing required field "AssessmentResponse.email"`)}
-	}
 	if v, ok := _c.mutation.Email(); ok {
 		if err := assessmentresponse.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "AssessmentResponse.email": %w`, err)}
@@ -677,6 +696,10 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
 		_node.IsTest = value
+	}
+	if value, ok := _c.mutation.DisplayName(); ok {
+		_spec.SetField(assessmentresponse.FieldDisplayName, field.TypeString, value)
+		_node.DisplayName = value
 	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponse.FieldEmail, field.TypeString, value)
