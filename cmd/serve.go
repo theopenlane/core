@@ -146,6 +146,7 @@ func serve(ctx context.Context) error {
 	})
 
 	email.SetDefaultTrustCenterDomain(so.Config.Settings.Server.DefaultTrustCenterDomain)
+	so.Config.Settings.EntConfig.QuestionnaireProductURL = so.Config.Settings.Integrations.Email.ProductURL
 
 	// create history client
 	histOpts := []historygenerated.Option{

@@ -953,7 +953,7 @@ type subprocessor
 
 type assessment
   relations
-    define can_view: [user] or can_edit or (viewer but not blocked)
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
     define can_edit: [user] or owner or delegate or (editor but not blocked)
     define can_delete: [user] or owner or (editor but not blocked)
     define parent: [organization]

@@ -121,6 +121,7 @@ entconfig:
         usesandbox: false
     notifications:
         consoleurl: http://localhost:3001
+    questionnaireproducturl: https://console.theopenlane.io
     summarizer:
         llm:
             anthropic:

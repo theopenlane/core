@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -91,7 +92,8 @@ func TestQueryAssessmentResponse(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			assert.Check(t, is.Equal(tc.expectedResult.ID, resp.AssessmentResponse.ID))
-			assert.Check(t, is.Equal(tc.expectedResult.Email, resp.AssessmentResponse.Email))
+			assert.Assert(t, resp.AssessmentResponse.Email != nil)
+			assert.Check(t, is.Equal(tc.expectedResult.Email, *resp.AssessmentResponse.Email))
 			assert.Check(t, is.Equal(tc.expectedResult.AssessmentID, resp.AssessmentResponse.AssessmentID))
 		})
 	}
@@ -329,7 +331,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - can create via GraphQL",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        gofakeit.Email(),
+				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment.ID,
 				OwnerID:      &testUser1.OrganizationID,
 			},
@@ -339,7 +341,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - can create via PAT",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        gofakeit.Email(),
+				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment.ID,
 			},
 			client: suite.client.apiWithPAT,
@@ -348,7 +350,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		{
 			name: "success - different org user can create",
 			request: testclient.CreateAssessmentResponseInput{
-				Email:        gofakeit.Email(),
+				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment2.ID,
 				OwnerID:      &testUser2.OrganizationID,
 			},
@@ -376,9 +378,8 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 	}
 
 	t.Run("send attempts should increment on duplicate response", func(t *testing.T) {
-		email := gofakeit.Email()
 		req := testclient.CreateAssessmentResponseInput{
-			Email:        email,
+			Email:        lo.ToPtr(gofakeit.Email()),
 			AssessmentID: assessment.ID,
 			OwnerID:      &testUser1.OrganizationID,
 		}
@@ -401,9 +402,8 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 	})
 
 	t.Run("completed response should not be updated", func(t *testing.T) {
-		email := gofakeit.Email()
 		req := testclient.CreateAssessmentResponseInput{
-			Email:        email,
+			Email:        lo.ToPtr(gofakeit.Email()),
 			AssessmentID: assessment.ID,
 			OwnerID:      &testUser1.OrganizationID,
 		}

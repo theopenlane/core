@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -301,6 +302,20 @@ func (_c *TemplateCreate) SetTrustCenterID(v string) *TemplateCreate {
 func (_c *TemplateCreate) SetNillableTrustCenterID(v *string) *TemplateCreate {
 	if v != nil {
 		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_c *TemplateCreate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateCreate {
+	_c.mutation.SetTransformConfiguration(v)
+	return _c
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateCreate {
+	if v != nil {
+		_c.SetTransformConfiguration(*v)
 	}
 	return _c
 }
@@ -629,6 +644,10 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Uischema(); ok {
 		_spec.SetField(template.FieldUischema, field.TypeJSON, value)
 		_node.Uischema = value
+	}
+	if value, ok := _c.mutation.TransformConfiguration(); ok {
+		_spec.SetField(template.FieldTransformConfiguration, field.TypeJSON, value)
+		_node.TransformConfiguration = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

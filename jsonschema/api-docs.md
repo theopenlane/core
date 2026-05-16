@@ -384,6 +384,7 @@ Config holds the configuration for the ent server
 |[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
 |[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
 |[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
+|**questionnaireproducturl**|`string`|QuestionnaireProductURL is the product URL used to build questionnaire access links<br/>||
 
 **Additional Properties:** not allowed  
 **Example**

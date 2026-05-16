@@ -74,18 +74,26 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Annotations(
 				entx.CSVRef().FromColumn("AssessmentResponseEntityName").MatchOn("name"),
 			),
+		field.String("display_name").
+			Comment("display name for the submitted assessment response").
+			Optional().
+			Annotations(
+				entx.FieldSearchable(),
+				entgql.OrderField("display_name"),
+			),
 
 		field.String("email").
 			Comment("the email address of the recipient").
+			Optional().
+			Validate(func(email string) error {
+				_, err := mail.ParseAddress(email)
+				return err
+			}).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
 			).
-			Immutable().
-			Validate(func(email string) error {
-				_, err := mail.ParseAddress(email)
-				return err
-			}),
+			Immutable(),
 
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send to the recipient about this assessment, maximum of 5").
