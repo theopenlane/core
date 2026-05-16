@@ -129,10 +129,22 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
+			requestID, err := m.Client().TrustCenterNDARequest.Query().Where(
+				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
+				trustcenterndarequest.TrustCenterID(tcID),
+				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
+			).FirstID(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to resolve nda request id for email")
+
+				return nil, err
+			}
+
 			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
 				RecipientInfo:      emaildef.RecipientInfo{Email: caller.SubjectEmail},
 				OrgName:            result.OrgName,
-				TrustCenterURL:     result.TrustCenterURL,
+				RequestID:          requestID,
+				TrustCenterID:      tcID,
 				AttachmentFilename: "signed_nda_file.pdf",
 				AttachmentData:     result.AttestedPDF,
 			}); err != nil {
