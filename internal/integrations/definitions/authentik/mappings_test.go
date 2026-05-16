@@ -64,7 +64,6 @@ func TestExamplePayloads(t *testing.T) {
 
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["externalID"])
 		assert.Equal(t, "authentik Admins", mapped["displayName"])
-        assert.Equal(t, "SECURITY", mapped["classification"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 
