@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -60,11 +61,15 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 }
 
 // CreateUploadInternalPolicy is the resolver for the createUploadInternalPolicy field.
-func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string) (*model.InternalPolicyCreatePayload, error) {
+func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) (*model.InternalPolicyCreatePayload, error) {
 	var internalPolicyInput generated.CreateInternalPolicyInput
 
 	if ownerID != nil && *ownerID != "" {
 		internalPolicyInput.OwnerID = ownerID
+	}
+
+	if managementMode != nil {
+		internalPolicyInput.ManagementMode = managementMode
 	}
 
 	// set the organization in the auth context if its not done for us

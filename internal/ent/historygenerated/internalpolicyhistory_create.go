@@ -244,6 +244,20 @@ func (_c *InternalPolicyHistoryCreate) SetNillableStatus(v *enums.DocumentStatus
 	return _c
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_c *InternalPolicyHistoryCreate) SetManagementMode(v enums.DocumentManagementMode) *InternalPolicyHistoryCreate {
+	_c.mutation.SetManagementMode(v)
+	return _c
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableManagementMode(v *enums.DocumentManagementMode) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetManagementMode(*v)
+	}
+	return _c
+}
+
 // SetDetails sets the "details" field.
 func (_c *InternalPolicyHistoryCreate) SetDetails(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetDetails(v)
@@ -612,6 +626,10 @@ func (_c *InternalPolicyHistoryCreate) defaults() error {
 		v := internalpolicyhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ManagementMode(); !ok {
+		v := internalpolicyhistory.DefaultManagementMode
+		_c.mutation.SetManagementMode(v)
+	}
 	if _, ok := _c.mutation.ApprovalRequired(); !ok {
 		v := internalpolicyhistory.DefaultApprovalRequired
 		_c.mutation.SetApprovalRequired(v)
@@ -684,6 +702,11 @@ func (_c *InternalPolicyHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := internalpolicyhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ManagementMode(); ok {
+		if err := internalpolicyhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.management_mode": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -798,6 +821,10 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ManagementMode(); ok {
+		_spec.SetField(internalpolicyhistory.FieldManagementMode, field.TypeEnum, value)
+		_node.ManagementMode = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)

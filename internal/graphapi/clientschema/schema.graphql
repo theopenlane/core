@@ -442,6 +442,10 @@ type ActionPlan implements Node {
 	"""
 	status: ActionPlanDocumentStatus
 	"""
+	how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ActionPlanDocumentManagementMode
+	"""
 	details of the action_plan
 	"""
 	details: String
@@ -1111,6 +1115,13 @@ type ActionPlanDeletePayload {
 	deletedID: ID!
 }
 """
+ActionPlanDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 ActionPlanDocumentStatus is enum for the field status
 """
 enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -1168,6 +1179,7 @@ enum ActionPlanOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 	title
@@ -1319,6 +1331,15 @@ input ActionPlanWhereInput {
 	statusNotIn: [ActionPlanDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: ActionPlanDocumentManagementMode
+	managementModeNEQ: ActionPlanDocumentManagementMode
+	managementModeIn: [ActionPlanDocumentManagementMode!]
+	managementModeNotIn: [ActionPlanDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
@@ -11581,6 +11602,10 @@ input CreateActionPlanInput {
 	"""
 	status: ActionPlanDocumentStatus
 	"""
+	how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ActionPlanDocumentManagementMode
+	"""
 	details of the action_plan
 	"""
 	details: String
@@ -14257,6 +14282,10 @@ input CreateInternalPolicyInput {
 	"""
 	status: InternalPolicyDocumentStatus
 	"""
+	how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: InternalPolicyDocumentManagementMode
+	"""
 	details of the policy
 	"""
 	details: String
@@ -15426,6 +15455,10 @@ input CreateProcedureInput {
 	status of the procedure, e.g. draft, published, archived, etc.
 	"""
 	status: ProcedureDocumentStatus
+	"""
+	how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ProcedureDocumentManagementMode
 	"""
 	details of the procedure
 	"""
@@ -38435,6 +38468,10 @@ type InternalPolicy implements Node {
 	"""
 	status: InternalPolicyDocumentStatus
 	"""
+	how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: InternalPolicyDocumentManagementMode
+	"""
 	details of the policy
 	"""
 	details: String
@@ -39190,6 +39227,13 @@ type InternalPolicyDeletePayload {
 	deletedID: ID!
 }
 """
+InternalPolicyDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyDocumentStatus is enum for the field status
 """
 enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -39247,6 +39291,7 @@ enum InternalPolicyOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 }
@@ -39462,6 +39507,15 @@ input InternalPolicyWhereInput {
 	statusNotIn: [InternalPolicyDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: InternalPolicyDocumentManagementMode
+	managementModeNEQ: InternalPolicyDocumentManagementMode
+	managementModeIn: [InternalPolicyDocumentManagementMode!]
+	managementModeNotIn: [InternalPolicyDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
@@ -45562,6 +45616,13 @@ type Mutation {
 		ID of the owner organization
 		"""
 		ownerID: ID
+
+		"""
+		How the uploaded policy should be managed: parsed and edited in Openlane
+		(OPENLANE_MANAGED, default) or kept as an external reference file viewed
+		in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+		"""
+		managementMode: InternalPolicyDocumentManagementMode
 	): InternalPolicyCreatePayload!
 	"""
 	Create multiple new internalPolicys
@@ -46879,6 +46940,13 @@ type Mutation {
 		ID of the owner organization
 		"""
 		ownerID: ID
+
+		"""
+		How the uploaded procedure should be managed: parsed and edited in Openlane
+		(OPENLANE_MANAGED, default) or kept as an external reference file viewed
+		in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+		"""
+		managementMode: ProcedureDocumentManagementMode
 	): ProcedureCreatePayload!
 	"""
 	Create multiple new procedures
@@ -60127,6 +60195,10 @@ type Procedure implements Node {
 	"""
 	status: ProcedureDocumentStatus
 	"""
+	how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ProcedureDocumentManagementMode
+	"""
 	details of the procedure
 	"""
 	details: String
@@ -60704,6 +60776,13 @@ type ProcedureDeletePayload {
 	deletedID: ID!
 }
 """
+ProcedureDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 ProcedureDocumentStatus is enum for the field status
 """
 enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -60761,6 +60840,7 @@ enum ProcedureOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 }
@@ -60933,6 +61013,15 @@ input ProcedureWhereInput {
 	statusNotIn: [ProcedureDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: ProcedureDocumentManagementMode
+	managementModeNEQ: ProcedureDocumentManagementMode
+	managementModeIn: [ProcedureDocumentManagementMode!]
+	managementModeNotIn: [ProcedureDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
@@ -86035,6 +86124,11 @@ input UpdateActionPlanInput {
 	status: ActionPlanDocumentStatus
 	clearStatus: Boolean
 	"""
+	how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ActionPlanDocumentManagementMode
+	clearManagementMode: Boolean
+	"""
 	details of the action_plan
 	"""
 	details: String
@@ -89696,6 +89790,11 @@ input UpdateInternalPolicyInput {
 	status: InternalPolicyDocumentStatus
 	clearStatus: Boolean
 	"""
+	how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: InternalPolicyDocumentManagementMode
+	clearManagementMode: Boolean
+	"""
 	details of the policy
 	"""
 	details: String
@@ -91318,6 +91417,11 @@ input UpdateProcedureInput {
 	"""
 	status: ProcedureDocumentStatus
 	clearStatus: Boolean
+	"""
+	how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ProcedureDocumentManagementMode
+	clearManagementMode: Boolean
 	"""
 	details of the procedure
 	"""

@@ -11,7 +11,8 @@ import (
 
 	"github.com/fumiama/go-docx"
 	"github.com/gabriel-vasile/mimetype"
-	"github.com/microcosm-cc/bluemonday"
+	"golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 	"gopkg.in/yaml.v3"
 )
 
@@ -91,7 +92,12 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 
 		return &ParsedDocument{Frontmatter: fm, Data: body}, nil
 	case strings.Contains(mimeType, "text/html"):
-		return &ParsedDocument{Data: parseHTML(data)}, nil
+		text, err := parseHTML(data)
+		if err != nil {
+			return nil, err
+		}
+
+		return &ParsedDocument{Data: text}, nil
 	default:
 		return &ParsedDocument{Data: data}, nil
 	}
@@ -201,11 +207,98 @@ func parseDocx(content []byte) (string, error) {
 	return strings.Join(paragraphs, "\n"), nil
 }
 
-// parseHTML strips all HTML tags from the input and returns the remaining plain text.
-// The full HTML stays in object storage for FilePreview to render; details only needs
-// a searchable text representation.
-func parseHTML(content []byte) string {
-	return bluemonday.StrictPolicy().Sanitize(string(content))
+// htmlSkipElements lists the tags whose contents should be discarded entirely
+// (script/style and friends) when extracting plain text.
+var htmlSkipElements = map[atom.Atom]struct{}{
+	atom.Script:   {},
+	atom.Style:    {},
+	atom.Noscript: {},
+	atom.Template: {},
+	atom.Head:     {},
+}
+
+// htmlBlockElements lists the tags that should produce a paragraph break in the
+// extracted text. Inline tags (<span>, <b>, <i>, <a>, …) intentionally do not
+// appear here; their text content concatenates inline.
+var htmlBlockElements = map[atom.Atom]struct{}{
+	atom.Address: {}, atom.Article: {}, atom.Aside: {}, atom.Blockquote: {},
+	atom.Br: {}, atom.Caption: {}, atom.Dd: {}, atom.Div: {},
+	atom.Dl: {}, atom.Dt: {}, atom.Figcaption: {}, atom.Figure: {},
+	atom.Footer: {}, atom.Form: {}, atom.H1: {}, atom.H2: {},
+	atom.H3: {}, atom.H4: {}, atom.H5: {}, atom.H6: {},
+	atom.Header: {}, atom.Hr: {}, atom.Li: {}, atom.Main: {},
+	atom.Nav: {}, atom.Ol: {}, atom.P: {}, atom.Pre: {},
+	atom.Section: {}, atom.Table: {}, atom.Tr: {}, atom.Ul: {},
+}
+
+// parseHTML extracts readable plain text from an HTML document. The full HTML
+// stays in object storage for FilePreview to render; this is the text used for
+// search indexing and details summaries, so it must (a) decode HTML entities
+// and (b) emit paragraph breaks between block elements — neither of which a
+// pure tag-stripper does correctly.
+func parseHTML(content []byte) (string, error) {
+	node, err := html.Parse(bytes.NewReader(content))
+	if err != nil {
+		return "", fmt.Errorf("%w: %w", ErrHTMLParseFailed, err)
+	}
+
+	var buf strings.Builder
+
+	walkHTMLText(node, &buf)
+
+	return collapseWhitespace(buf.String()), nil
+}
+
+// walkHTMLText writes the textual content of n (and its descendants) to buf,
+// emitting newlines around block-level elements and skipping non-content tags.
+func walkHTMLText(n *html.Node, buf *strings.Builder) {
+	if n.Type == html.TextNode {
+		buf.WriteString(n.Data)
+
+		return
+	}
+
+	if n.Type == html.ElementNode {
+		if _, skip := htmlSkipElements[n.DataAtom]; skip {
+			return
+		}
+
+		if _, block := htmlBlockElements[n.DataAtom]; block {
+			buf.WriteByte('\n')
+		}
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		walkHTMLText(c, buf)
+	}
+
+	if n.Type == html.ElementNode {
+		if _, block := htmlBlockElements[n.DataAtom]; block {
+			buf.WriteByte('\n')
+		}
+	}
+}
+
+// collapseWhitespace normalizes runs of spaces/tabs within each line, drops
+// empty lines, and joins the remaining lines with a single newline. The result
+// is human-readable plain text suited for indexing and previewing.
+func collapseWhitespace(s string) string {
+	var out strings.Builder
+
+	for _, raw := range strings.Split(s, "\n") {
+		line := strings.Join(strings.Fields(raw), " ")
+		if line == "" {
+			continue
+		}
+
+		if out.Len() > 0 {
+			out.WriteByte('\n')
+		}
+
+		out.WriteString(line)
+	}
+
+	return out.String()
 }
 
 // NewUploadFile creates a new File from a file path

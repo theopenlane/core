@@ -166,6 +166,11 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldStatus)
 				fieldSeen[actionplanhistory.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[actionplanhistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldManagementMode)
+				fieldSeen[actionplanhistory.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[actionplanhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldDetails)
@@ -7180,6 +7185,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldStatus)
 				fieldSeen[internalpolicyhistory.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldManagementMode)
+				fieldSeen[internalpolicyhistory.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDetails)
@@ -9826,6 +9836,11 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldStatus)
 				fieldSeen[procedurehistory.FieldStatus] = struct{}{}
+			}
+		case "managementMode":
+			if _, ok := fieldSeen[procedurehistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldManagementMode)
+				fieldSeen[procedurehistory.FieldManagementMode] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[procedurehistory.FieldDetails]; !ok {

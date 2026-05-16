@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -40,11 +41,15 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 }
 
 // CreateUploadProcedure is the resolver for the createUploadProcedure field.
-func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) (*model.ProcedureCreatePayload, error) {
+func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) (*model.ProcedureCreatePayload, error) {
 	var procedureInput generated.CreateProcedureInput
 
 	if ownerID != nil && *ownerID != "" {
 		procedureInput.OwnerID = ownerID
+	}
+
+	if managementMode != nil {
+		procedureInput.ManagementMode = managementMode
 	}
 
 	// set the organization in the auth context if its not done for us

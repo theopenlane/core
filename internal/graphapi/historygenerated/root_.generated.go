@@ -59,6 +59,7 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Metadata                        func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
@@ -1400,6 +1401,7 @@ type ComplexityRoot struct {
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicyKindID            func(childComplexity int) int
 		InternalPolicyKindName          func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -1913,6 +1915,7 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -3509,6 +3512,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.InternalNotes(childComplexity), true
+
+	case "ActionPlanHistory.managementMode":
+		if e.ComplexityRoot.ActionPlanHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.ManagementMode(childComplexity), true
 
 	case "ActionPlanHistory.metadata":
 		if e.ComplexityRoot.ActionPlanHistory.Metadata == nil {
@@ -10944,6 +10954,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindName(childComplexity), true
 
+	case "InternalPolicyHistory.managementMode":
+		if e.ComplexityRoot.InternalPolicyHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ManagementMode(childComplexity), true
+
 	case "InternalPolicyHistory.name":
 		if e.ComplexityRoot.InternalPolicyHistory.Name == nil {
 			break
@@ -13694,6 +13711,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.InternalNotes(childComplexity), true
+
+	case "ProcedureHistory.managementMode":
+		if e.ComplexityRoot.ProcedureHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.ManagementMode(childComplexity), true
 
 	case "ProcedureHistory.name":
 		if e.ComplexityRoot.ProcedureHistory.Name == nil {
@@ -22238,6 +22262,10 @@ type ActionPlanHistory implements Node {
   """
   status: ActionPlanHistoryDocumentStatus
   """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
+  """
   details of the action_plan
   """
   details: String
@@ -22389,6 +22417,13 @@ type ActionPlanHistoryConnection {
   totalCount: Int!
 }
 """
+ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
 enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -22455,6 +22490,7 @@ enum ActionPlanHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
   title
@@ -22633,6 +22669,15 @@ input ActionPlanHistoryWhereInput {
   statusNotIn: [ActionPlanHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
+  managementModeNEQ: ActionPlanHistoryDocumentManagementMode
+  managementModeIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeNotIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -40075,6 +40120,10 @@ type InternalPolicyHistory implements Node {
   """
   status: InternalPolicyHistoryDocumentStatus
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  """
   details of the policy
   """
   details: String
@@ -40186,6 +40235,13 @@ type InternalPolicyHistoryConnection {
   totalCount: Int!
 }
 """
+InternalPolicyHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
 enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -40252,6 +40308,7 @@ enum InternalPolicyHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -40494,6 +40551,15 @@ input InternalPolicyHistoryWhereInput {
   statusNotIn: [InternalPolicyHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  managementModeNEQ: InternalPolicyHistoryDocumentManagementMode
+  managementModeIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeNotIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -46409,6 +46475,10 @@ type ProcedureHistory implements Node {
   """
   status: ProcedureHistoryDocumentStatus
   """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  """
   details of the procedure
   """
   details: String
@@ -46528,6 +46598,13 @@ type ProcedureHistoryConnection {
   totalCount: Int!
 }
 """
+ProcedureHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ProcedureHistoryDocumentStatus is enum for the field status
 """
 enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -46594,6 +46671,7 @@ enum ProcedureHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -46793,6 +46871,15 @@ input ProcedureHistoryWhereInput {
   statusNotIn: [ProcedureHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  managementModeNEQ: ProcedureHistoryDocumentManagementMode
+  managementModeIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeNotIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -66130,6 +66217,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_ActionPlanHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_ActionPlanHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_ActionPlanHistory_details(ctx, field)
 	case "detailsJSON":
@@ -68824,6 +68913,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_InternalPolicyHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_InternalPolicyHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_InternalPolicyHistory_details(ctx, field)
 	case "detailsJSON":
@@ -69850,6 +69941,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_ProcedureHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_ProcedureHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_ProcedureHistory_details(ctx, field)
 	case "detailsJSON":

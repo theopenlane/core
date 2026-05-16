@@ -19,6 +19,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managementMode
 			name
 			ownerID
 			procedureKindID
@@ -70,6 +71,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			id
 			improvementSuggestions
 			internalNotes
+			managementMode
 			name
 			ownerID
 			procedureKindID
@@ -121,6 +123,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managementMode
 			name
 			ownerID
 			procedureKindID
@@ -167,8 +170,8 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 		}
 	}
 }
-mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID) {
-	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID, $managementMode: ProcedureDocumentManagementMode) {
+	createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID, managementMode: $managementMode) {
 		procedure {
 			approvalRequired
 			createdAt
@@ -291,6 +294,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		id
 		improvementSuggestions
 		internalNotes
+		managementMode
 		name
 		ownerID
 		procedureKindID
@@ -404,6 +408,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managementMode
 			name
 			ownerID
 			procedureKindID
@@ -456,6 +461,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			id
 			improvementSuggestions
 			internalNotes
+			managementMode
 			name
 			ownerID
 			procedureKindID

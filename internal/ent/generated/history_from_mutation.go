@@ -86,6 +86,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetStatus(status)
 	}
 
+	if managementMode, exists := m.ManagementMode(); exists {
+		create = create.SetManagementMode(managementMode)
+	}
+
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -311,6 +315,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(actionplan.Status)
+		}
+
+		if managementMode, exists := m.ManagementMode(); exists {
+			create = create.SetManagementMode(managementMode)
+		} else {
+			create = create.SetManagementMode(actionplan.ManagementMode)
 		}
 
 		if details, exists := m.Details(); exists {
@@ -562,6 +572,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetRevision(actionplan.Revision).
 			SetName(actionplan.Name).
 			SetStatus(actionplan.Status).
+			SetManagementMode(actionplan.ManagementMode).
 			SetDetails(actionplan.Details).
 			SetDetailsJSON(actionplan.DetailsJSON).
 			SetApprovalRequired(actionplan.ApprovalRequired).
@@ -12255,6 +12266,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetStatus(status)
 	}
 
+	if managementMode, exists := m.ManagementMode(); exists {
+		create = create.SetManagementMode(managementMode)
+	}
+
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -12472,6 +12487,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetStatus(internalpolicy.Status)
 		}
 
+		if managementMode, exists := m.ManagementMode(); exists {
+			create = create.SetManagementMode(managementMode)
+		} else {
+			create = create.SetManagementMode(internalpolicy.ManagementMode)
+		}
+
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -12666,6 +12687,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetNillableSystemInternalID(internalpolicy.SystemInternalID).
 			SetName(internalpolicy.Name).
 			SetStatus(internalpolicy.Status).
+			SetManagementMode(internalpolicy.ManagementMode).
 			SetDetails(internalpolicy.Details).
 			SetDetailsJSON(internalpolicy.DetailsJSON).
 			SetApprovalRequired(internalpolicy.ApprovalRequired).
@@ -16737,6 +16759,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
+	if managementMode, exists := m.ManagementMode(); exists {
+		create = create.SetManagementMode(managementMode)
+	}
+
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -16944,6 +16970,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(procedure.Status)
 		}
 
+		if managementMode, exists := m.ManagementMode(); exists {
+			create = create.SetManagementMode(managementMode)
+		} else {
+			create = create.SetManagementMode(procedure.ManagementMode)
+		}
+
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -17147,6 +17179,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetStatus(procedure.Status).
+			SetManagementMode(procedure.ManagementMode).
 			SetDetails(procedure.Details).
 			SetDetailsJSON(procedure.DetailsJSON).
 			SetApprovalRequired(procedure.ApprovalRequired).

@@ -174,6 +174,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldRevision:                        {Type: field.TypeString, Column: actionplan.FieldRevision},
 			actionplan.FieldName:                            {Type: field.TypeString, Column: actionplan.FieldName},
 			actionplan.FieldStatus:                          {Type: field.TypeEnum, Column: actionplan.FieldStatus},
+			actionplan.FieldManagementMode:                  {Type: field.TypeEnum, Column: actionplan.FieldManagementMode},
 			actionplan.FieldDetails:                         {Type: field.TypeString, Column: actionplan.FieldDetails},
 			actionplan.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplan.FieldDetailsJSON},
 			actionplan.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplan.FieldApprovalRequired},
@@ -1694,6 +1695,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldSystemInternalID:                {Type: field.TypeString, Column: internalpolicy.FieldSystemInternalID},
 			internalpolicy.FieldName:                            {Type: field.TypeString, Column: internalpolicy.FieldName},
 			internalpolicy.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicy.FieldStatus},
+			internalpolicy.FieldManagementMode:                  {Type: field.TypeEnum, Column: internalpolicy.FieldManagementMode},
 			internalpolicy.FieldDetails:                         {Type: field.TypeString, Column: internalpolicy.FieldDetails},
 			internalpolicy.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicy.FieldDetailsJSON},
 			internalpolicy.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicy.FieldApprovalRequired},
@@ -2492,6 +2494,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldOwnerID:                         {Type: field.TypeString, Column: procedure.FieldOwnerID},
 			procedure.FieldName:                            {Type: field.TypeString, Column: procedure.FieldName},
 			procedure.FieldStatus:                          {Type: field.TypeEnum, Column: procedure.FieldStatus},
+			procedure.FieldManagementMode:                  {Type: field.TypeEnum, Column: procedure.FieldManagementMode},
 			procedure.FieldDetails:                         {Type: field.TypeString, Column: procedure.FieldDetails},
 			procedure.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedure.FieldDetailsJSON},
 			procedure.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedure.FieldApprovalRequired},
@@ -17783,6 +17786,11 @@ func (f *ActionPlanFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldStatus))
 }
 
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *ActionPlanFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldManagementMode))
+}
+
 // WhereDetails applies the entql string predicate on the details field.
 func (f *ActionPlanFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDetails))
@@ -30991,6 +30999,11 @@ func (f *InternalPolicyFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldStatus))
 }
 
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *InternalPolicyFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldManagementMode))
+}
+
 // WhereDetails applies the entql string predicate on the details field.
 func (f *InternalPolicyFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
@@ -38036,6 +38049,11 @@ func (f *ProcedureFilter) WhereName(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ProcedureFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldStatus))
+}
+
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *ProcedureFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldManagementMode))
 }
 
 // WhereDetails applies the entql string predicate on the details field.

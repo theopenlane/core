@@ -179,6 +179,26 @@ func (_u *ActionPlanHistoryUpdate) ClearStatus() *ActionPlanHistoryUpdate {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *ActionPlanHistoryUpdate) SetManagementMode(v enums.DocumentManagementMode) *ActionPlanHistoryUpdate {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ActionPlanHistoryUpdate) ClearManagementMode() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *ActionPlanHistoryUpdate) SetDetails(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetDetails(v)
@@ -825,6 +845,11 @@ func (_u *ActionPlanHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := actionplanhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplanhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
@@ -914,6 +939,12 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(actionplanhistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(actionplanhistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
@@ -1304,6 +1335,26 @@ func (_u *ActionPlanHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus)
 // ClearStatus clears the value of the "status" field.
 func (_u *ActionPlanHistoryUpdateOne) ClearStatus() *ActionPlanHistoryUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetManagementMode sets the "management_mode" field.
+func (_u *ActionPlanHistoryUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearManagementMode() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearManagementMode()
 	return _u
 }
 
@@ -1966,6 +2017,11 @@ func (_u *ActionPlanHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := actionplanhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := actionplanhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.review_frequency": %w`, err)}
@@ -2072,6 +2128,12 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(actionplanhistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(actionplanhistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)

@@ -58,8 +58,9 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 
 // TestMimeTypeValidatorImportSchemaFields locks down the allowlist for the
 // fields that share importSchemaMimeTypes (internalPolicyFile, procedureFile,
-// actionPlanFile). This is a security boundary — accidentally widening it
-// would let users upload formats the import pipeline cannot safely process.
+// actionPlanFile). The validator is one defense among others — it relies on the
+// caller supplying a sniffed ContentType — but accidentally widening the list
+// here would let upstream code pipe formats the import path cannot safely process.
 func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 	importSchemaFields := []string{
 		"internalPolicyFile",
@@ -67,12 +68,17 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		"actionPlanFile",
 	}
 
+	// allowedTypes mixes bare and parameterized forms because MIME sniffers
+	// (e.g. gabriel-vasile/mimetype) return e.g. "text/html; charset=utf-8";
+	// the validator must accept both.
 	allowedTypes := []string{
 		"text/plain",
 		"text/plain; charset=utf-8",
 		"text/markdown",
+		"text/markdown; charset=utf-8",
 		"text/x-markdown",
 		"text/html",
+		"text/html; charset=utf-8",
 		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 	}
 

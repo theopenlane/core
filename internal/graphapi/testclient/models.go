@@ -316,6 +316,8 @@ type ActionPlan struct {
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
 	// structured details of the action_plan in JSON format
@@ -592,6 +594,13 @@ type ActionPlanWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// management_mode field predicates
+	ManagementMode       *enums.DocumentManagementMode  `json:"managementMode,omitempty"`
+	ManagementModeNeq    *enums.DocumentManagementMode  `json:"managementModeNEQ,omitempty"`
+	ManagementModeIn     []enums.DocumentManagementMode `json:"managementModeIn,omitempty"`
+	ManagementModeNotIn  []enums.DocumentManagementMode `json:"managementModeNotIn,omitempty"`
+	ManagementModeIsNil  *bool                          `json:"managementModeIsNil,omitempty"`
+	ManagementModeNotNil *bool                          `json:"managementModeNotNil,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -6060,6 +6069,8 @@ type CreateActionPlanInput struct {
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
 	// structured details of the action_plan in JSON format
@@ -7693,6 +7704,8 @@ type CreateInternalPolicyInput struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -8440,6 +8453,8 @@ type CreateProcedureInput struct {
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -20613,6 +20628,8 @@ type InternalPolicy struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -20942,6 +20959,13 @@ type InternalPolicyWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// management_mode field predicates
+	ManagementMode       *enums.DocumentManagementMode  `json:"managementMode,omitempty"`
+	ManagementModeNeq    *enums.DocumentManagementMode  `json:"managementModeNEQ,omitempty"`
+	ManagementModeIn     []enums.DocumentManagementMode `json:"managementModeIn,omitempty"`
+	ManagementModeNotIn  []enums.DocumentManagementMode `json:"managementModeNotIn,omitempty"`
+	ManagementModeIsNil  *bool                          `json:"managementModeIsNil,omitempty"`
+	ManagementModeNotNil *bool                          `json:"managementModeNotNil,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -27879,6 +27903,8 @@ type Procedure struct {
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
+	// how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode *enums.DocumentManagementMode `json:"managementMode,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -28169,6 +28195,13 @@ type ProcedureWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
+	// management_mode field predicates
+	ManagementMode       *enums.DocumentManagementMode  `json:"managementMode,omitempty"`
+	ManagementModeNeq    *enums.DocumentManagementMode  `json:"managementModeNEQ,omitempty"`
+	ManagementModeIn     []enums.DocumentManagementMode `json:"managementModeIn,omitempty"`
+	ManagementModeNotIn  []enums.DocumentManagementMode `json:"managementModeNotIn,omitempty"`
+	ManagementModeIsNil  *bool                          `json:"managementModeIsNil,omitempty"`
+	ManagementModeNotNil *bool                          `json:"managementModeNotNil,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -39060,6 +39093,9 @@ type UpdateActionPlanInput struct {
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode      *enums.DocumentManagementMode `json:"managementMode,omitempty"`
+	ClearManagementMode *bool                         `json:"clearManagementMode,omitempty"`
 	// details of the action_plan
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -41729,6 +41765,9 @@ type UpdateInternalPolicyInput struct {
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode      *enums.DocumentManagementMode `json:"managementMode,omitempty"`
+	ClearManagementMode *bool                         `json:"clearManagementMode,omitempty"`
 	// details of the policy
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -42979,6 +43018,9 @@ type UpdateProcedureInput struct {
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
+	// how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode      *enums.DocumentManagementMode `json:"managementMode,omitempty"`
+	ClearManagementMode *bool                         `json:"clearManagementMode,omitempty"`
 	// details of the procedure
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -49983,6 +50025,7 @@ const (
 	ActionPlanOrderFieldRevision        ActionPlanOrderField = "revision"
 	ActionPlanOrderFieldName            ActionPlanOrderField = "name"
 	ActionPlanOrderFieldStatus          ActionPlanOrderField = "STATUS"
+	ActionPlanOrderFieldManagementMode  ActionPlanOrderField = "MANAGEMENT_MODE"
 	ActionPlanOrderFieldReviewDue       ActionPlanOrderField = "review_due"
 	ActionPlanOrderFieldReviewFrequency ActionPlanOrderField = "REVIEW_FREQUENCY"
 	ActionPlanOrderFieldTitle           ActionPlanOrderField = "title"
@@ -49997,6 +50040,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 	ActionPlanOrderFieldRevision,
 	ActionPlanOrderFieldName,
 	ActionPlanOrderFieldStatus,
+	ActionPlanOrderFieldManagementMode,
 	ActionPlanOrderFieldReviewDue,
 	ActionPlanOrderFieldReviewFrequency,
 	ActionPlanOrderFieldTitle,
@@ -50007,7 +50051,7 @@ var AllActionPlanOrderField = []ActionPlanOrderField{
 
 func (e ActionPlanOrderField) IsValid() bool {
 	switch e {
-	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldTitle, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
+	case ActionPlanOrderFieldCreatedAt, ActionPlanOrderFieldUpdatedAt, ActionPlanOrderFieldRevision, ActionPlanOrderFieldName, ActionPlanOrderFieldStatus, ActionPlanOrderFieldManagementMode, ActionPlanOrderFieldReviewDue, ActionPlanOrderFieldReviewFrequency, ActionPlanOrderFieldTitle, ActionPlanOrderFieldDueDate, ActionPlanOrderFieldPriority, ActionPlanOrderFieldSource:
 		return true
 	}
 	return false
@@ -52453,6 +52497,7 @@ const (
 	InternalPolicyOrderFieldRevision        InternalPolicyOrderField = "revision"
 	InternalPolicyOrderFieldName            InternalPolicyOrderField = "name"
 	InternalPolicyOrderFieldStatus          InternalPolicyOrderField = "STATUS"
+	InternalPolicyOrderFieldManagementMode  InternalPolicyOrderField = "MANAGEMENT_MODE"
 	InternalPolicyOrderFieldReviewDue       InternalPolicyOrderField = "review_due"
 	InternalPolicyOrderFieldReviewFrequency InternalPolicyOrderField = "REVIEW_FREQUENCY"
 )
@@ -52463,13 +52508,14 @@ var AllInternalPolicyOrderField = []InternalPolicyOrderField{
 	InternalPolicyOrderFieldRevision,
 	InternalPolicyOrderFieldName,
 	InternalPolicyOrderFieldStatus,
+	InternalPolicyOrderFieldManagementMode,
 	InternalPolicyOrderFieldReviewDue,
 	InternalPolicyOrderFieldReviewFrequency,
 }
 
 func (e InternalPolicyOrderField) IsValid() bool {
 	switch e {
-	case InternalPolicyOrderFieldCreatedAt, InternalPolicyOrderFieldUpdatedAt, InternalPolicyOrderFieldRevision, InternalPolicyOrderFieldName, InternalPolicyOrderFieldStatus, InternalPolicyOrderFieldReviewDue, InternalPolicyOrderFieldReviewFrequency:
+	case InternalPolicyOrderFieldCreatedAt, InternalPolicyOrderFieldUpdatedAt, InternalPolicyOrderFieldRevision, InternalPolicyOrderFieldName, InternalPolicyOrderFieldStatus, InternalPolicyOrderFieldManagementMode, InternalPolicyOrderFieldReviewDue, InternalPolicyOrderFieldReviewFrequency:
 		return true
 	}
 	return false
@@ -53757,6 +53803,7 @@ const (
 	ProcedureOrderFieldRevision        ProcedureOrderField = "revision"
 	ProcedureOrderFieldName            ProcedureOrderField = "name"
 	ProcedureOrderFieldStatus          ProcedureOrderField = "STATUS"
+	ProcedureOrderFieldManagementMode  ProcedureOrderField = "MANAGEMENT_MODE"
 	ProcedureOrderFieldReviewDue       ProcedureOrderField = "review_due"
 	ProcedureOrderFieldReviewFrequency ProcedureOrderField = "REVIEW_FREQUENCY"
 )
@@ -53767,13 +53814,14 @@ var AllProcedureOrderField = []ProcedureOrderField{
 	ProcedureOrderFieldRevision,
 	ProcedureOrderFieldName,
 	ProcedureOrderFieldStatus,
+	ProcedureOrderFieldManagementMode,
 	ProcedureOrderFieldReviewDue,
 	ProcedureOrderFieldReviewFrequency,
 }
 
 func (e ProcedureOrderField) IsValid() bool {
 	switch e {
-	case ProcedureOrderFieldCreatedAt, ProcedureOrderFieldUpdatedAt, ProcedureOrderFieldRevision, ProcedureOrderFieldName, ProcedureOrderFieldStatus, ProcedureOrderFieldReviewDue, ProcedureOrderFieldReviewFrequency:
+	case ProcedureOrderFieldCreatedAt, ProcedureOrderFieldUpdatedAt, ProcedureOrderFieldRevision, ProcedureOrderFieldName, ProcedureOrderFieldStatus, ProcedureOrderFieldManagementMode, ProcedureOrderFieldReviewDue, ProcedureOrderFieldReviewFrequency:
 		return true
 	}
 	return false

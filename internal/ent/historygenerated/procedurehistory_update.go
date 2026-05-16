@@ -199,6 +199,26 @@ func (_u *ProcedureHistoryUpdate) ClearStatus() *ProcedureHistoryUpdate {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *ProcedureHistoryUpdate) SetManagementMode(v enums.DocumentManagementMode) *ProcedureHistoryUpdate {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ProcedureHistoryUpdate) ClearManagementMode() *ProcedureHistoryUpdate {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *ProcedureHistoryUpdate) SetDetails(v string) *ProcedureHistoryUpdate {
 	_u.mutation.SetDetails(v)
@@ -739,6 +759,11 @@ func (_u *ProcedureHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := procedurehistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
@@ -829,6 +854,12 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(procedurehistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(procedurehistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
@@ -1203,6 +1234,26 @@ func (_u *ProcedureHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) 
 // ClearStatus clears the value of the "status" field.
 func (_u *ProcedureHistoryUpdateOne) ClearStatus() *ProcedureHistoryUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetManagementMode sets the "management_mode" field.
+func (_u *ProcedureHistoryUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ProcedureHistoryUpdateOne) ClearManagementMode() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearManagementMode()
 	return _u
 }
 
@@ -1759,6 +1810,11 @@ func (_u *ProcedureHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := procedurehistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
@@ -1866,6 +1922,12 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(procedurehistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(procedurehistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)

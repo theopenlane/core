@@ -91,6 +91,14 @@ func getDocumentFields(documentType string) []ent.Field {
 			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
+		field.Enum("management_mode").
+			GoType(enums.DocumentManagementMode("")).
+			Default(enums.DocumentManagementModeOpenlaneManaged.String()).
+			Annotations(
+				entgql.OrderField("MANAGEMENT_MODE"),
+			).
+			Optional().
+			Comment(fmt.Sprintf("how the %s is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)", documentType)),
 		field.Text("details").
 			Optional().
 			Annotations(

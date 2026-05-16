@@ -183,6 +183,7 @@ type CreateActionPlanInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -242,6 +243,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -397,6 +401,8 @@ type UpdateActionPlanInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -532,6 +538,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -12953,6 +12965,7 @@ type CreateInternalPolicyInput struct {
 	SystemInternalID                *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -13014,6 +13027,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -13163,6 +13179,8 @@ type UpdateInternalPolicyInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -13311,6 +13329,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -19193,6 +19217,7 @@ type CreateProcedureInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -19243,6 +19268,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -19373,6 +19401,8 @@ type UpdateProcedureInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -19493,6 +19523,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()

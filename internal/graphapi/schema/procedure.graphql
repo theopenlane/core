@@ -62,6 +62,12 @@ extend type Mutation{
         ID of the owner organization
         """
         ownerID: ID
+        """
+        How the uploaded procedure should be managed: parsed and edited in Openlane
+        (OPENLANE_MANAGED, default) or kept as an external reference file viewed
+        in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+        """
+        managementMode: ProcedureDocumentManagementMode
     ): ProcedureCreatePayload!
     """
     Create multiple new procedures

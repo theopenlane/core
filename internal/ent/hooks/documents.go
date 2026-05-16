@@ -3,6 +3,7 @@ package hooks
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -93,7 +94,7 @@ func HookImportDocument() ent.Hook {
 			_, exists := mut.URL()
 			switch exists {
 			case true:
-				if err := importURLToSchema(mut); err != nil {
+				if err := importURLToSchema(ctx, mut); err != nil {
 					return nil, err
 				}
 
@@ -105,6 +106,20 @@ func HookImportDocument() ent.Hook {
 				ctx, err = objects.ProcessFilesForMutation(ctx, mut, key)
 				if err != nil {
 					return nil, err
+				}
+
+				// EXTERNAL_REFERENCE documents (e.g. uploaded Word docs the user
+				// edits outside Openlane) treat the file itself as the source of
+				// truth. Attach the uploaded file as the new FileID so the
+				// revision hook bumps the version, but do not parse the file
+				// into details/name/tags — that would silently overwrite the
+				// metadata the user is managing externally.
+				if doc, ok := mut.(documentMutation); ok && managementModeFor(ctx, doc) == enums.DocumentManagementModeExternalReference {
+					if err := attachUploadedFile(ctx, mut); err != nil {
+						return nil, err
+					}
+
+					break
 				}
 
 				// Parse the uploaded file and write values into the mutation
@@ -122,6 +137,34 @@ func HookImportDocument() ent.Hook {
 // mutationToFileKey is a helper that converts a mutation type into the expected upload field name
 func mutationToFileKey(m importSchemaMutation) string {
 	return fmt.Sprintf("%sFile", strcase.LowerCamelCase(m.Type()))
+}
+
+// attachUploadedFile points the mutation's FileID at the freshly uploaded file
+// without parsing it. This is the EXTERNAL_REFERENCE path: Openlane stores and
+// previews the file but does not derive details/name/tags/revision from its
+// contents, leaving the user's externally-managed metadata intact.
+func attachUploadedFile(ctx context.Context, m importSchemaMutation) error {
+	key := mutationToFileKey(m)
+
+	files, err := objects.FilesFromContextWithKey(ctx, key)
+	if err != nil && !errors.Is(err, storage.ErrNoFilesUploaded) {
+		return err
+	}
+	if len(files) == 0 {
+		return nil
+	}
+
+	// Drop the previous file before swapping in the replacement; otherwise repeated
+	// Word-doc replacements orphan storage objects + their File records.
+	if currentFileID, exists := m.FileID(); exists {
+		if err := m.Client().File.DeleteOneID(currentFileID).Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	m.SetFileID(files[0].ID)
+
+	return nil
 }
 
 // importFileToSchema is a helper that reads an uploaded file from context, downloads it from storage, parses it,
@@ -225,20 +268,35 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
+// ErrInvalidImportURL is returned when an import URL is rejected before any network call.
+var ErrInvalidImportURL = errors.New("invalid import URL")
+
+// allowedImportSchemes restricts importURLToSchema to remote HTTP(S) origins. Schemes like
+// file://, gopher://, dict://, etc. are SSRF-adjacent and should never reach our fetcher.
+var allowedImportSchemes = map[string]struct{}{"http": {}, "https": {}}
+
 // importURLToSchema is a helper that fetches content from a URL, detects its MIME type, parses it and writes
 // the sanitized content into the mutation details, recording the URL used
-func importURLToSchema(m importSchemaMutation) error {
+//
+// TODO: This is still SSRF-exposed to private network ranges (10/8, 192.168/16, 172.16/12,
+// 169.254/16 metadata, ::1, fc00::/7). Add host-resolution + IP-range deny list before
+// dialing, and reject redirects that retarget to private space. Pre-existing risk widened
+// by the new text/html parser path; track in a dedicated security PR.
+func importURLToSchema(parentCtx context.Context, m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
 		return nil
 	}
 
-	_, err := url.Parse(downloadURL)
+	u, err := url.Parse(downloadURL)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %s", ErrInvalidImportURL, err.Error())
+	}
+	if _, ok := allowedImportSchemes[strings.ToLower(u.Scheme)]; !ok {
+		return fmt.Errorf("%w: scheme %q not allowed", ErrInvalidImportURL, u.Scheme)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), defaultImportTimeout)
+	ctx, cancel := context.WithTimeout(parentCtx, defaultImportTimeout)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)

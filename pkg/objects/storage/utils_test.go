@@ -200,11 +200,51 @@ func TestParseDocument(t *testing.T) {
 			validate: func(t *testing.T, result any) {
 				str, ok := result.(string)
 				require.True(t, ok)
-				assert.Contains(t, str, "Hello")
-				assert.Contains(t, str, "world")
-				assert.NotContains(t, str, "<p>")
-				assert.NotContains(t, str, "<script>")
-				assert.NotContains(t, str, "alert(1)")
+				assert.Equal(t, "Hello world", str)
+			},
+		},
+		{
+			name:       "HTML decodes entities",
+			data:       `<p>Tom &amp; Jerry &lt;3</p>`,
+			mimeType:   "text/html",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Equal(t, "Tom & Jerry <3", str)
+			},
+		},
+		{
+			name:       "HTML separates block elements with newlines",
+			data:       `<p>First</p><p>Second</p><p>Third</p>`,
+			mimeType:   "text/html",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Equal(t, "First\nSecond\nThird", str)
+			},
+		},
+		{
+			name:       "HTML preserves inline runs without splitting",
+			data:       `<p>Hello <a href="/x">link</a> world</p>`,
+			mimeType:   "text/html",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Equal(t, "Hello link world", str)
+			},
+		},
+		{
+			name:       "HTML drops script and style content",
+			data:       `<style>body{}</style><p>Visible</p><script>steal()</script>`,
+			mimeType:   "text/html",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok)
+				assert.Equal(t, "Visible", str)
 			},
 		},
 	}

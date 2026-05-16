@@ -474,6 +474,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanHistoryOrderFieldManagementMode orders ActionPlanHistory by management_mode.
+	ActionPlanHistoryOrderFieldManagementMode = &ActionPlanHistoryOrderField{
+		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: actionplanhistory.FieldManagementMode,
+		toTerm: actionplanhistory.ByManagementMode,
+		toCursor: func(_m *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// ActionPlanHistoryOrderFieldReviewDue orders ActionPlanHistory by review_due.
 	ActionPlanHistoryOrderFieldReviewDue = &ActionPlanHistoryOrderField{
 		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
@@ -576,6 +590,8 @@ func (f ActionPlanHistoryOrderField) String() string {
 		str = "name"
 	case ActionPlanHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case ActionPlanHistoryOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case ActionPlanHistoryOrderFieldReviewDue.column:
 		str = "review_due"
 	case ActionPlanHistoryOrderFieldReviewFrequency.column:
@@ -616,6 +632,8 @@ func (f *ActionPlanHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanHistoryOrderFieldName
 	case "STATUS":
 		*f = *ActionPlanHistoryOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *ActionPlanHistoryOrderFieldManagementMode
 	case "review_due":
 		*f = *ActionPlanHistoryOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
@@ -14626,6 +14644,20 @@ var (
 			}
 		},
 	}
+	// InternalPolicyHistoryOrderFieldManagementMode orders InternalPolicyHistory by management_mode.
+	InternalPolicyHistoryOrderFieldManagementMode = &InternalPolicyHistoryOrderField{
+		Value: func(_m *InternalPolicyHistory) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: internalpolicyhistory.FieldManagementMode,
+		toTerm: internalpolicyhistory.ByManagementMode,
+		toCursor: func(_m *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// InternalPolicyHistoryOrderFieldReviewDue orders InternalPolicyHistory by review_due.
 	InternalPolicyHistoryOrderFieldReviewDue = &InternalPolicyHistoryOrderField{
 		Value: func(_m *InternalPolicyHistory) (ent.Value, error) {
@@ -14672,6 +14704,8 @@ func (f InternalPolicyHistoryOrderField) String() string {
 		str = "name"
 	case InternalPolicyHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case InternalPolicyHistoryOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case InternalPolicyHistoryOrderFieldReviewDue.column:
 		str = "review_due"
 	case InternalPolicyHistoryOrderFieldReviewFrequency.column:
@@ -14704,6 +14738,8 @@ func (f *InternalPolicyHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyHistoryOrderFieldName
 	case "STATUS":
 		*f = *InternalPolicyHistoryOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *InternalPolicyHistoryOrderFieldManagementMode
 	case "review_due":
 		*f = *InternalPolicyHistoryOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
@@ -19858,6 +19894,20 @@ var (
 			}
 		},
 	}
+	// ProcedureHistoryOrderFieldManagementMode orders ProcedureHistory by management_mode.
+	ProcedureHistoryOrderFieldManagementMode = &ProcedureHistoryOrderField{
+		Value: func(_m *ProcedureHistory) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: procedurehistory.FieldManagementMode,
+		toTerm: procedurehistory.ByManagementMode,
+		toCursor: func(_m *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// ProcedureHistoryOrderFieldReviewDue orders ProcedureHistory by review_due.
 	ProcedureHistoryOrderFieldReviewDue = &ProcedureHistoryOrderField{
 		Value: func(_m *ProcedureHistory) (ent.Value, error) {
@@ -19904,6 +19954,8 @@ func (f ProcedureHistoryOrderField) String() string {
 		str = "name"
 	case ProcedureHistoryOrderFieldStatus.column:
 		str = "STATUS"
+	case ProcedureHistoryOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case ProcedureHistoryOrderFieldReviewDue.column:
 		str = "review_due"
 	case ProcedureHistoryOrderFieldReviewFrequency.column:
@@ -19936,6 +19988,8 @@ func (f *ProcedureHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureHistoryOrderFieldName
 	case "STATUS":
 		*f = *ProcedureHistoryOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *ProcedureHistoryOrderFieldManagementMode
 	case "review_due":
 		*f = *ProcedureHistoryOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
