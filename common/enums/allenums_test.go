@@ -351,9 +351,6 @@ func TestEnumCoverage(t *testing.T) {
 	}
 }
 
-// TestDocumentManagementModeStrictMembership locks in the contract that the unmarshaler
-// rejects values outside the enum (a hook in revision.go branches on the mode and silently
-// defaulting to OPENLANE_MANAGED for unknown strings would mask data-loss bugs).
 func TestDocumentManagementModeStrictMembership(t *testing.T) {
 	t.Run("IsValid", func(t *testing.T) {
 		assert.True(t, enums.DocumentManagementModeOpenlaneManaged.IsValid())

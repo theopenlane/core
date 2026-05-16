@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -64,13 +63,6 @@ func HookRevisionUpdate() ent.Hook {
 // If the revision is set, it does nothing
 // If the revision is not set, it retrieves the current revision from the database and bumps the version based on the revision bump
 // If there is no revision bump set, it bumps the patch version
-//
-// TODO: known read-modify-write race — OldRevision + SetRevision is not serialized against
-// concurrent updaters on the same row, so two parallel writes can compute the same vN+1 and
-// the audit log loses one of them. The proper fix is to either (a) run this hook inside a
-// transaction with SELECT ... FOR UPDATE on the target row before reading OldRevision, or
-// (b) push the bump into SQL via "WHERE revision = $old" with retry on row-count == 0.
-// Both require infrastructure changes beyond this hook. Track in a dedicated PR.
 func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 	revision, ok := mut.Revision()
 
@@ -87,13 +79,7 @@ func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 	revisionBump, ok := models.VersionBumpFromRequestContext(ctx)
 	if !ok {
 		revisionBump = &models.Patch
-		// EXTERNAL_REFERENCE docs (e.g. uploaded Word files) treat the file itself as
-		// the source of truth, so a new upload — not a details edit — drives the bump.
-		if doc, ok := mut.(documentMutation); ok && managementModeFor(ctx, doc) == enums.DocumentManagementModeExternalReference {
-			if fileChanged(ctx, doc) {
-				revisionBump = &models.Minor
-			}
-		} else if detailsUpdated(ctx, mut) {
+		if detailsUpdated(ctx, mut) {
 			revisionBump = &models.Minor
 		}
 	}
@@ -129,62 +115,6 @@ const (
 	detailsJSONFieldName = "details_json"
 	detailsFieldName     = "details"
 )
-
-// documentMutation is the subset of revision-bearing mutations that carry a document file
-// and a management mode. Action plans, internal policies, and procedures satisfy it; other
-// revision-bearing mutations (standards, templates, control objectives) do not.
-type documentMutation interface {
-	ManagementMode() (enums.DocumentManagementMode, bool)
-	OldManagementMode(ctx context.Context) (enums.DocumentManagementMode, error)
-	FileID() (r string, exists bool)
-	OldFileID(ctx context.Context) (v *string, err error)
-	FileIDCleared() bool
-}
-
-// managementModeFor returns the mode that will be in effect after this mutation.
-// Defaults to OPENLANE_MANAGED so pre-existing rows (NULL column) and create-path
-// mutations behave as managed documents.
-func managementModeFor(ctx context.Context, mut documentMutation) enums.DocumentManagementMode {
-	if v, ok := mut.ManagementMode(); ok && v.IsValid() {
-		return v
-	}
-
-	if v, err := mut.OldManagementMode(ctx); err == nil && v.IsValid() {
-		return v
-	} else if err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Msg("could not read old management_mode; defaulting to OPENLANE_MANAGED")
-	}
-
-	return enums.DocumentManagementModeOpenlaneManaged
-}
-
-// fileChanged reports whether this mutation replaces, sets, or clears the document's file.
-// Used to drive a minor revision bump for EXTERNAL_REFERENCE documents where the file is the
-// source of truth.
-func fileChanged(ctx context.Context, mut documentMutation) bool {
-	newID, set := mut.FileID()
-	cleared := mut.FileIDCleared()
-	if !set && !cleared {
-		return false
-	}
-
-	oldID, err := mut.OldFileID(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Msg("could not read old file_id; treating as file change")
-		return true
-	}
-
-	oldStr := ""
-	if oldID != nil {
-		oldStr = *oldID
-	}
-
-	if cleared {
-		return oldStr != ""
-	}
-
-	return oldStr != newID
-}
 
 // detailsUpdated checks if the details were updated on a mutation, if so
 // this will return true, otherwise returns false.

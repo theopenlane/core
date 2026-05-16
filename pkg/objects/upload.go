@@ -182,9 +182,7 @@ func parseMultipartForm(form *multipart.Form, keys ...string) (map[string][]File
 
 				defer file.Close()
 
-				// Trust file content, not client-supplied multipart Content-Type — otherwise an
-				// attacker can label an executable as "text/html" and bypass the MIME validator.
-				// multipart.File implements io.ReadSeeker; DetectContentType rewinds before returning.
+				// Sniff from bytes; client-supplied multipart Content-Type is spoofable.
 				contentType, err := storage.DetectContentType(file)
 				if err != nil {
 					log.Error().Err(err).Str("file", header.Filename).Msg("failed to detect content type")

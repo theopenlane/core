@@ -59,9 +59,7 @@ func ToDocumentManagementModeOrDefault(r string) DocumentManagementMode {
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r DocumentManagementMode) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
-// UnmarshalGQL implements the gqlgen Unmarshaler interface.
-// Rejects values outside the enum so hooks branching on the mode never see a silently
-// defaulted bogus value (e.g. an unknown mode masquerading as OPENLANE_MANAGED).
+// UnmarshalGQL implements the gqlgen Unmarshaler interface; rejects values outside the enum.
 func (r *DocumentManagementMode) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
