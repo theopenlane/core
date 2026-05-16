@@ -5,10 +5,13 @@ mutation CreateAssessment ($input: CreateAssessmentInput!) {
 			createdAt
 			createdBy
 			id
+			internalNotes
 			jsonconfig
 			name
 			ownerID
 			responseDueDuration
+			systemInternalID
+			systemOwned
 			tags
 			templateID
 			uischema
@@ -68,10 +71,13 @@ query GetAssessmentByID ($assessmentId: ID!) {
 		createdAt
 		createdBy
 		id
+		internalNotes
 		jsonconfig
 		name
 		ownerID
 		responseDueDuration
+		systemInternalID
+		systemOwned
 		tags
 		templateID
 		uischema
@@ -131,10 +137,13 @@ mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInp
 			createdAt
 			createdBy
 			id
+			internalNotes
 			jsonconfig
 			name
 			ownerID
 			responseDueDuration
+			systemInternalID
+			systemOwned
 			tags
 			templateID
 			uischema

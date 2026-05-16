@@ -589,6 +589,10 @@
         "notifications": {
           "$ref": "#/$defs/entconfig.Notifications",
           "description": "Notifications contains configuration for notifications sent to users based on events"
+        },
+        "questionnaireproducturl": {
+          "type": "string",
+          "description": "QuestionnaireProductURL is the product URL used to build questionnaire access links"
         }
       },
       "additionalProperties": false,

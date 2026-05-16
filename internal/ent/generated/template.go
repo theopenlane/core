@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -66,6 +67,8 @@ type Template struct {
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// configuration for converting a submitted assesment into records for the organization
+	TransformConfiguration models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TemplateQuery when eager-loading is set.
 	Edges        TemplateEdges `json:"edges"`
@@ -199,7 +202,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema:
+		case template.FieldTags, template.FieldJsonconfig, template.FieldUischema, template.FieldTransformConfiguration:
 			values[i] = new([]byte)
 		case template.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -368,6 +371,14 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
 			}
+		case template.FieldTransformConfiguration:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field transform_configuration", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TransformConfiguration); err != nil {
+					return fmt.Errorf("unmarshal field transform_configuration: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -518,6 +529,9 @@ func (_m *Template) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("transform_configuration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TransformConfiguration))
 	builder.WriteByte(')')
 	return builder.String()
 }

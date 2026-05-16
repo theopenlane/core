@@ -465,6 +465,21 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldOwnerID)
 				fieldSeen[assessmenthistory.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[assessmenthistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldSystemOwned)
+				fieldSeen[assessmenthistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[assessmenthistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldInternalNotes)
+				fieldSeen[assessmenthistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[assessmenthistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldSystemInternalID)
+				fieldSeen[assessmenthistory.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[assessmenthistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldName)
@@ -643,6 +658,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldEntityID)
 				fieldSeen[assessmentresponsehistory.FieldEntityID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldDisplayName)
+				fieldSeen[assessmentresponsehistory.FieldDisplayName] = struct{}{}
 			}
 		case "email":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldEmail]; !ok {
@@ -12967,6 +12987,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldTrustCenterID)
 				fieldSeen[templatehistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "transformConfiguration":
+			if _, ok := fieldSeen[templatehistory.FieldTransformConfiguration]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldTransformConfiguration)
+				fieldSeen[templatehistory.FieldTransformConfiguration] = struct{}{}
 			}
 		case "id":
 		case "__typename":

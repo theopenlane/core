@@ -149,6 +149,46 @@ func (_u *AssessmentUpdate) ClearOwnerID() *AssessmentUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssessmentUpdate) SetInternalNotes(v string) *AssessmentUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableInternalNotes(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssessmentUpdate) ClearInternalNotes() *AssessmentUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssessmentUpdate) SetSystemInternalID(v string) *AssessmentUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableSystemInternalID(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssessmentUpdate) ClearSystemInternalID() *AssessmentUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *AssessmentUpdate) SetName(v string) *AssessmentUpdate {
 	_u.mutation.SetName(v)
@@ -557,11 +597,6 @@ func (_u *AssessmentUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssessmentUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := assessment.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Assessment.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := assessment.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
@@ -628,6 +663,21 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessment.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(assessment.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(assessment.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(assessment.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(assessment.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(assessment.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
@@ -1185,6 +1235,46 @@ func (_u *AssessmentUpdateOne) ClearOwnerID() *AssessmentUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *AssessmentUpdateOne) SetInternalNotes(v string) *AssessmentUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableInternalNotes(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *AssessmentUpdateOne) ClearInternalNotes() *AssessmentUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *AssessmentUpdateOne) SetSystemInternalID(v string) *AssessmentUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableSystemInternalID(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *AssessmentUpdateOne) ClearSystemInternalID() *AssessmentUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *AssessmentUpdateOne) SetName(v string) *AssessmentUpdateOne {
 	_u.mutation.SetName(v)
@@ -1606,11 +1696,6 @@ func (_u *AssessmentUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *AssessmentUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := assessment.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Assessment.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Name(); ok {
 		if err := assessment.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
@@ -1694,6 +1779,21 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessment.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(assessment.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(assessment.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(assessment.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(assessment.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(assessment.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)

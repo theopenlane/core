@@ -18,6 +18,7 @@ mutation CreateBulkCSVTemplate ($input: Upload!) {
 			systemOwned
 			tags
 			templateType
+			transformConfiguration
 			trustCenterID
 			uischema
 			updatedAt
@@ -45,6 +46,7 @@ mutation CreateBulkTemplate ($input: [CreateTemplateInput!]) {
 			systemOwned
 			tags
 			templateType
+			transformConfiguration
 			trustCenterID
 			uischema
 			updatedAt
