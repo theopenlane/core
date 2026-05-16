@@ -2,9 +2,10 @@ package hooks
 
 import (
 	"bytes"
-	"testing"
-
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"testing"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/stretchr/testify/assert"
@@ -247,6 +248,87 @@ func TestValidateTrustCenterNDAJSON(t *testing.T) {
 		err := validateTrustCenterNDAJSON(nil, "tc-123", "jane@example.com", "user-456")
 		assert.Error(t, err)
 	})
+}
+
+func TestAttestationFieldsFrom_IncludesHash(t *testing.T) {
+	data := &signedNDADocumentData{
+		SignatoryInfo: signatoryInformation{
+			FirstName:   "Jane",
+			LastName:    "Doe",
+			Email:       "jane@example.com",
+			CompanyName: "Acme Corp",
+		},
+		SignatureMetadata: signatureMetadata{
+			Timestamp: "2025-06-15T14:30:00Z",
+			IPAddress: "192.168.1.1",
+			UserAgent: "Mozilla/5.0",
+			PDFHash:   "deadbeef1234",
+		},
+	}
+
+	fields := attestationFieldsFrom(data)
+
+	var hashField attestationField
+	for _, f := range fields {
+		if f.Label == "Document Hash" {
+			hashField = f
+			break
+		}
+	}
+
+	assert.Equal(t, "deadbeef1234", hashField.Value)
+}
+
+func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
+	originalPDF := generateMinimalPDF(t)
+
+	data := &signedNDADocumentData{
+		SignatoryInfo: signatoryInformation{
+			FirstName:   "Jane",
+			LastName:    "Doe",
+			Email:       "jane@example.com",
+			CompanyName: "Acme Corp",
+		},
+		SignatureMetadata: signatureMetadata{
+			Timestamp: "2025-06-15T14:30:00Z",
+			IPAddress: "192.168.1.1",
+			UserAgent: "Mozilla/5.0",
+		},
+	}
+
+	// first pass: generate combined document to compute hash
+	combined, err := appendAttestationPage(bytes.NewReader(originalPDF), data)
+	require.NoError(t, err)
+
+	pdfHash := sha256.Sum256(combined)
+	computedHash := hex.EncodeToString(pdfHash[:])
+	require.NotEmpty(t, computedHash)
+
+	// second pass: assign hash and regenerate
+	data.SignatureMetadata.PDFHash = computedHash
+
+	attestedPDF, err := appendAttestationPage(bytes.NewReader(originalPDF), data)
+	require.NoError(t, err)
+	require.NotEmpty(t, attestedPDF)
+
+	pageCount, err := api.PageCount(bytes.NewReader(attestedPDF), nil)
+	require.NoError(t, err)
+	assert.Equal(t, 2, pageCount)
+
+	err = api.Validate(bytes.NewReader(attestedPDF), nil)
+	assert.NoError(t, err)
+
+	// attestation fields should reflect the computed hash
+	fields := attestationFieldsFrom(data)
+	var hashField attestationField
+	for _, f := range fields {
+		if f.Label == "Document Hash" {
+			hashField = f
+			break
+		}
+	}
+
+	assert.Equal(t, computedHash, hashField.Value)
 }
 
 // generateMinimalPDF creates a valid single-page PDF for use as the original NDA document in merge tests

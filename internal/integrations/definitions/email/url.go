@@ -47,7 +47,6 @@ func trustCenterBaseURL(tc *generated.TrustCenter, defaultDomain string) url.URL
 	}
 
 	u.Host = host
-	u.Path = "/" + tc.Slug
 
 	return u
 }

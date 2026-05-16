@@ -17,7 +17,6 @@ func TestTrustCenterBaseURL_DefaultDomain(t *testing.T) {
 
 	assert.Equal(t, "https", u.Scheme)
 	assert.Equal(t, "trustcenter.example.com", u.Host)
-	assert.Equal(t, "/acme", u.Path)
 }
 
 func TestTrustCenterBaseURL_CustomDomain(t *testing.T) {
