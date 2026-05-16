@@ -12,6 +12,7 @@ import (
 
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 )
 
 func TestCreateAttestationCertificate(t *testing.T) {
@@ -155,7 +156,7 @@ func TestStorageFileFromEnt(t *testing.T) {
 		URI:                 "s3://documents/org/files/nda_template.pdf",
 	}
 
-	result := storageFileFromEnt(entFile)
+	result := interceptors.StorageFileFromEnt(entFile)
 
 	assert.Equal(t, entFile.ID, result.ID)
 	assert.Equal(t, entFile.ProvidedFileName, result.OriginalName)

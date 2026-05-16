@@ -8,18 +8,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/font"
 
 	"github.com/theopenlane/core/common/models"
-	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/upload"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
@@ -65,38 +68,17 @@ type ndaAttestationResult struct {
 func attestNDADocument(ctx context.Context, client *generated.Client, docData *generated.DocumentData, templateID, trustCenterID string) (*ndaAttestationResult, error) {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(allowCtx)
+	templateFile, err := fetchNDATemplateFile(allowCtx, client, templateID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template")
-		return nil, ErrFailedToFetchNDATemplate
-	}
-
-	fileCtx := proxy.WithPresignInterceptorBypass(allowCtx)
-
-	files, err := docTemplate.QueryFiles().All(fileCtx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template files")
-		return nil, ErrFailedToFetchNDATemplateFiles
-	}
-
-	if len(files) == 0 {
-		return nil, ErrMissingNDATemplateFile
-	}
-
-	templateFile := files[0]
-
-	dataBytes, err := json.Marshal(docData.Data)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal document data")
-		return nil, ErrFailedToMarshalDocumentData
+		return nil, err
 	}
 
 	var ndaMetadata signedNDADocumentData
-	if err := json.Unmarshal(dataBytes, &ndaMetadata); err != nil {
+	if err := jsonx.RoundTrip(docData.Data, &ndaMetadata); err != nil {
 		return nil, ErrFailedToUnmarshalNDAMetadata
 	}
 
-	storageFile := storageFileFromEnt(templateFile)
+	storageFile := interceptors.StorageFileFromEnt(templateFile)
 
 	getFileCtx := objects.WithModuleHint(ctx, models.CatalogTrustCenterModule)
 
@@ -199,6 +181,29 @@ func resolveOrgName(tc *generated.TrustCenter) string {
 	return ""
 }
 
+// fetchNDATemplateFile loads the NDA template and returns its first associated file
+func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templateID string) (*generated.File, error) {
+	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template")
+		return nil, ErrFailedToFetchNDATemplate
+	}
+
+	fileCtx := proxy.WithPresignInterceptorBypass(ctx)
+
+	files, err := docTemplate.QueryFiles().All(fileCtx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template files")
+		return nil, ErrFailedToFetchNDATemplateFiles
+	}
+
+	if len(files) == 0 {
+		return nil, ErrMissingNDATemplateFile
+	}
+
+	return files[0], nil
+}
+
 // appendAttestationPage merges the original PDF with a generated attestation certificate page
 func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
 	certPage, err := createAttestationCertificate(data)
@@ -218,16 +223,41 @@ func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentDat
 }
 
 const (
-	attestFontSize   = 18
-	attestFieldSize  = 11
-	attestFieldYStep = 14
-	attestStartY     = 50
+	attestTitleSize      = 16
+	attestDescSize       = 9
+	attestFieldSize      = 10
+	attestMargin         = 60.0
+	attestContentWidth   = 475.0
+	attestLabelColWidth  = 115.0
+	attestCellPadX       = 8.0
+	attestCellPadY       = 6.0
+	attestTextLineHeight = 14.0
+	attestGridLineWidth  = 1.0
+	attestTitleY         = 70.0
+	attestTopDividerY    = 98.0
+	attestDescY          = 118.0
+	attestFieldStartY    = 170.0
+
+	attestFontRegular  = "Helvetica"
+	attestFontBold     = "Helvetica-Bold"
+	attestGridColor    = "#aaaaaa"
+	attestLabelBgColor = "#f5f5f5"
+	attestTitleColor   = "#1a1a1a"
+	attestDescColor    = "#666666"
+	attestLabelColor   = "#333333"
+)
+
+var (
+	fontRefTitle = attestationFontRef{Name: "$title"}
+	fontRefDesc  = attestationFontRef{Name: "$desc"}
+	fontRefLabel = attestationFontRef{Name: "$label"}
+	fontRefValue = attestationFontRef{Name: "$value"}
 )
 
 // attestationField represents a label-value pair rendered on the attestation certificate
 type attestationField struct {
-	Label string `json:"label"`
-	Value string `json:"value"`
+	Label string
+	Value string
 }
 
 // attestationPage is the JSON structure fed to pdfcpu's Create API
@@ -242,16 +272,18 @@ type attestationPage struct {
 type attestationFont struct {
 	Name string `json:"name"`
 	Size int    `json:"size"`
+	Col  string `json:"col,omitempty"`
 }
 
 // attestationContent wraps the content block within a page
 type attestationContent struct {
-	Content attestationTextContent `json:"content"`
+	Content attestationPageContent `json:"content"`
 }
 
-// attestationTextContent holds the text boxes rendered on a page
-type attestationTextContent struct {
-	Text []attestationTextBox `json:"text"`
+// attestationPageContent holds the elements rendered on a page
+type attestationPageContent struct {
+	Text []attestationTextBox   `json:"text,omitempty"`
+	Box  []attestationSimpleBox `json:"box,omitempty"`
 }
 
 // attestationTextBox describes a positioned text element
@@ -259,6 +291,7 @@ type attestationTextBox struct {
 	Value string             `json:"value"`
 	Pos   [2]float64         `json:"pos"`
 	Font  attestationFontRef `json:"font"`
+	Width float64            `json:"width,omitempty"`
 }
 
 // attestationFontRef references a named font
@@ -266,54 +299,166 @@ type attestationFontRef struct {
 	Name string `json:"name"`
 }
 
+// attestationSimpleBox describes a positioned filled rectangle
+type attestationSimpleBox struct {
+	Pos     [2]float64 `json:"pos"`
+	Width   float64    `json:"width"`
+	Height  float64    `json:"height"`
+	FillCol string     `json:"fillCol"`
+}
+
+// attestationRowLayout captures the computed position and wrapped text for a single table row
+type attestationRowLayout struct {
+	field   attestationField
+	wrapped string
+	height  float64
+	y       float64
+}
+
 // createAttestationCertificate generates a single-page PDF with the signature certification details
+// rendered as a visible table with labeled rows, cell backgrounds, and grid lines
 func createAttestationCertificate(data *signedNDADocumentData) ([]byte, error) {
-	fields := []attestationField{
-		{"Name:", data.SignatoryInfo.FirstName + " " + data.SignatoryInfo.LastName},
-		{"Email:", data.SignatoryInfo.Email},
-		{"Company:", data.SignatoryInfo.CompanyName},
-		{"Timestamp:", formatAttestTimestamp(data.SignatureMetadata.Timestamp)},
-		{"IP Address:", data.SignatureMetadata.IPAddress},
-		{"Browser:", data.SignatureMetadata.UserAgent},
+	rows, tableHeight := layoutAttestationRows(attestationFieldsFrom(data))
+	textBoxes := buildAttestationText(rows)
+	boxes := buildAttestationBoxes(rows, tableHeight)
+
+	return renderAttestationPage(textBoxes, boxes)
+}
+
+// attestationFieldsFrom extracts the label-value pairs from signed NDA metadata
+func attestationFieldsFrom(data *signedNDADocumentData) []attestationField {
+	return []attestationField{
+		{"Name", data.SignatoryInfo.FirstName + " " + data.SignatoryInfo.LastName},
+		{"Email", data.SignatoryInfo.Email},
+		{"Company", data.SignatoryInfo.CompanyName},
+		{"Date Signed", formatAttestTimestamp(data.SignatureMetadata.Timestamp)},
+		{"IP Address", data.SignatureMetadata.IPAddress},
+		{"User Agent", data.SignatureMetadata.UserAgent},
+		{"Document Hash", data.SignatureMetadata.PDFHash},
 	}
+}
 
-	textBoxes := make([]attestationTextBox, 0, 1+len(fields)*2) //nolint:mnd
+// layoutAttestationRows wraps field values and computes row heights and y positions
+func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, float64) {
+	valueTextWidth := attestContentWidth - attestLabelColWidth - 2*attestCellPadX
 
-	textBoxes = append(textBoxes, attestationTextBox{
-		Value: "Signature Certification",
-		Pos:   [2]float64{20, 20},
-		Font:  attestationFontRef{Name: "$title"},
-	})
+	var rows []attestationRowLayout
 
-	y := float64(attestStartY)
+	y := attestFieldStartY
 
 	for _, f := range fields {
-		textBoxes = append(textBoxes,
-			attestationTextBox{
-				Value: f.Label,
-				Pos:   [2]float64{20, y},
-				Font:  attestationFontRef{Name: "$labelBold"},
-			},
-			attestationTextBox{
-				Value: f.Value,
-				Pos:   [2]float64{80, y},
-				Font:  attestationFontRef{Name: "$field"},
-			},
-		)
-
-		y += attestFieldYStep
+		wrapped := wrapText(f.Value, attestFontRegular, attestFieldSize, valueTextWidth)
+		lineCount := strings.Count(wrapped, "\n") + 1
+		height := float64(lineCount)*attestTextLineHeight + 2*attestCellPadY
+		rows = append(rows, attestationRowLayout{field: f, wrapped: wrapped, height: height, y: y})
+		y += height
 	}
 
+	return rows, y - attestFieldStartY
+}
+
+// buildAttestationText creates the header and per-row text elements for the attestation table
+func buildAttestationText(rows []attestationRowLayout) []attestationTextBox {
+	baselinePad := attestCellPadY + font.Ascent(attestFontRegular, attestFieldSize)
+
+	textBoxes := []attestationTextBox{
+		{
+			Value: "SIGNATURE CERTIFICATION",
+			Pos:   [2]float64{attestMargin, attestTitleY},
+			Font:  fontRefTitle,
+		},
+		{
+			Value: "This document certifies that the individual identified below has electronically signed the attached Non-Disclosure Agreement.",
+			Pos:   [2]float64{attestMargin, attestDescY},
+			Font:  fontRefDesc,
+			Width: attestContentWidth,
+		},
+	}
+
+	for _, r := range rows {
+		textBoxes = append(textBoxes, attestationTextBox{
+			Value: r.field.Label,
+			Pos:   [2]float64{attestMargin + attestCellPadX, r.y + baselinePad},
+			Font:  fontRefLabel,
+		})
+
+		for i, line := range strings.Split(r.wrapped, "\n") {
+			textBoxes = append(textBoxes, attestationTextBox{
+				Value: line,
+				Pos:   [2]float64{attestMargin + attestLabelColWidth + attestCellPadX, r.y + baselinePad + float64(i)*attestTextLineHeight},
+				Font:  fontRefValue,
+			})
+		}
+	}
+
+	return textBoxes
+}
+
+// buildAttestationBoxes creates the label backgrounds, grid lines, and borders for the attestation table.
+// pdfcpu SimpleBox in UpperLeft origin extends height upward from pos,
+// so every box y is offset by +height to align with text positions
+func buildAttestationBoxes(rows []attestationRowLayout, tableHeight float64) []attestationSimpleBox {
+	boxes := []attestationSimpleBox{
+		{
+			Pos:     [2]float64{attestMargin, attestTopDividerY + attestGridLineWidth},
+			Width:   attestContentWidth,
+			Height:  attestGridLineWidth,
+			FillCol: attestGridColor,
+		},
+	}
+
+	for _, r := range rows {
+		boxes = append(boxes, attestationSimpleBox{
+			Pos:     [2]float64{attestMargin, r.y + r.height},
+			Width:   attestLabelColWidth,
+			Height:  r.height,
+			FillCol: attestLabelBgColor,
+		})
+	}
+
+	lineY := attestFieldStartY
+	for i := 0; i <= len(rows); i++ {
+		boxes = append(boxes, attestationSimpleBox{
+			Pos:     [2]float64{attestMargin, lineY + attestGridLineWidth},
+			Width:   attestContentWidth,
+			Height:  attestGridLineWidth,
+			FillCol: attestGridColor,
+		})
+
+		if i < len(rows) {
+			lineY += rows[i].height
+		}
+	}
+
+	tableBottom := attestFieldStartY + tableHeight
+	for _, x := range []float64{attestMargin, attestMargin + attestLabelColWidth, attestMargin + attestContentWidth} {
+		boxes = append(boxes, attestationSimpleBox{
+			Pos:     [2]float64{x, tableBottom},
+			Width:   attestGridLineWidth,
+			Height:  tableHeight,
+			FillCol: attestGridColor,
+		})
+	}
+
+	return boxes
+}
+
+// renderAttestationPage assembles the page JSON structure and calls pdfcpu's Create API
+func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSimpleBox) ([]byte, error) {
 	page := attestationPage{
 		Paper:  "A4P",
 		Origin: "UpperLeft",
 		Fonts: map[string]attestationFont{
-			"title":     {Name: "Helvetica-Bold", Size: attestFontSize},
-			"labelBold": {Name: "Helvetica-Bold", Size: attestFieldSize},
-			"field":     {Name: "Helvetica", Size: attestFieldSize},
+			"title": {Name: attestFontBold, Size: attestTitleSize, Col: attestTitleColor},
+			"desc":  {Name: attestFontRegular, Size: attestDescSize, Col: attestDescColor},
+			"label": {Name: attestFontBold, Size: attestFieldSize, Col: attestLabelColor},
+			"value": {Name: attestFontRegular, Size: attestFieldSize},
 		},
 		Pages: map[string]attestationContent{
-			"1": {Content: attestationTextContent{Text: textBoxes}},
+			"1": {Content: attestationPageContent{
+				Text: textBoxes,
+				Box:  boxes,
+			}},
 		},
 	}
 
@@ -330,6 +475,71 @@ func createAttestationCertificate(data *signedNDADocumentData) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// wrapText breaks s into lines that fit within maxWidth points for the given core font and size.
+// pdfcpu's WriteColumn scales fonts down instead of wrapping, so we pre-insert newlines.
+// Words that exceed maxWidth on their own (e.g. hex hashes) are broken at character boundaries
+func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
+	if font.TextWidth(s, fontName, fontSize) <= maxWidth {
+		return s
+	}
+
+	var lines []string
+
+	var line strings.Builder
+
+	for word := range strings.FieldsSeq(s) {
+		if line.Len() > 0 {
+			if font.TextWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
+				line.WriteString(" " + word)
+
+				continue
+			}
+
+			lines = append(lines, line.String())
+			line.Reset()
+		}
+
+		if font.TextWidth(word, fontName, fontSize) <= maxWidth {
+			line.WriteString(word)
+
+			continue
+		}
+
+		broken := breakWord(word, fontName, fontSize, maxWidth)
+		lines = append(lines, broken[:len(broken)-1]...)
+		line.WriteString(broken[len(broken)-1])
+	}
+
+	if line.Len() > 0 {
+		lines = append(lines, line.String())
+	}
+
+	return strings.Join(lines, "\n")
+}
+
+// breakWord splits a single word into lines at character boundaries when it exceeds maxWidth
+func breakWord(word, fontName string, fontSize int, maxWidth float64) []string {
+	var lines []string
+
+	var chunk strings.Builder
+
+	for _, r := range word {
+		test := chunk.String() + string(r)
+		if font.TextWidth(test, fontName, fontSize) > maxWidth && chunk.Len() > 0 {
+			lines = append(lines, chunk.String())
+			chunk.Reset()
+		}
+
+		chunk.WriteRune(r)
+	}
+
+	if chunk.Len() > 0 {
+		lines = append(lines, chunk.String())
+	}
+
+	return lines
+}
+
 // formatAttestTimestamp formats an RFC3339 timestamp into a human-readable form
 func formatAttestTimestamp(ts string) string {
 	t, err := time.Parse(time.RFC3339, ts)
@@ -340,19 +550,3 @@ func formatAttestTimestamp(ts string) string {
 	return t.Format("January 2, 2006 3:04 PM UTC")
 }
 
-// storageFileFromEnt converts an ent File entity to a storage types File
-func storageFileFromEnt(file *generated.File) *storagetypes.File {
-	return &storagetypes.File{
-		ID:           file.ID,
-		OriginalName: file.ProvidedFileName,
-		FileMetadata: storagetypes.FileMetadata{
-			Key:          file.StoragePath,
-			Bucket:       file.StorageVolume,
-			Region:       file.StorageRegion,
-			ContentType:  file.DetectedContentType,
-			Size:         file.PersistedFileSize,
-			ProviderType: storagetypes.ProviderType(file.StorageProvider),
-			FullURI:      file.URI,
-		},
-	}
-}

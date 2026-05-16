@@ -167,31 +167,24 @@ func TestFixture(name, toEmail string) json.RawMessage {
 	return data
 }
 
-// testAttestedNDAPDF generates a realistic two-page attested NDA PDF using the
-// same pdfcpu pipeline as the production attestation code
+const testPDFFontSize = 14
+
+// testAttestedNDAPDF generates a valid two-page PDF simulating an NDA with attestation page
 func testAttestedNDAPDF() []byte {
-	original := testMinimalPDF("Non-Disclosure Agreement — SecureCorp")
-	attestation := testAttestationCertPDF()
+	page1 := testMinimalPDF("Non-Disclosure Agreement — SecureCorp")
+	page2 := testMinimalPDF("Signature Certification — Test Fixture")
 
 	var buf bytes.Buffer
 
 	if err := api.MergeRaw([]io.ReadSeeker{
-		bytes.NewReader(original),
-		bytes.NewReader(attestation),
+		bytes.NewReader(page1),
+		bytes.NewReader(page2),
 	}, &buf, false, nil); err != nil {
-		return original
+		return page1
 	}
 
 	return buf.Bytes()
 }
-
-const (
-	testPDFFontSize   = 14
-	testFieldFontSize = 11
-	testTitleFontSize = 18
-	testFieldYStep    = 14
-	testFieldStartY   = 50
-)
 
 // testMinimalPDF creates a valid single-page PDF with the given title text
 func testMinimalPDF(title string) []byte {
@@ -207,58 +200,6 @@ func testMinimalPDF(title string) []byte {
 					"text": []map[string]any{
 						{"value": title, "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$f"}},
 					},
-				},
-			},
-		},
-	}
-
-	jsonData, _ := json.Marshal(page)
-
-	var buf bytes.Buffer
-
-	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
-
-	return buf.Bytes()
-}
-
-// testAttestationCertPDF creates a single-page attestation certificate with sample data
-func testAttestationCertPDF() []byte {
-	fields := []struct{ label, value string }{
-		{"Name:", "Wilfred Netherton"},
-		{"Email:", "wilfred@example.com"},
-		{"Company:", "SecureCorp"},
-		{"Timestamp:", "June 15, 2025 2:30 PM UTC"},
-		{"IP Address:", "192.168.1.42"},
-		{"Browser:", "Mozilla/5.0 (test fixture)"},
-	}
-
-	textBoxes := []map[string]any{
-		{"value": "Signature Certification", "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$title"}},
-	}
-
-	y := float64(testFieldStartY)
-
-	for _, f := range fields {
-		textBoxes = append(textBoxes,
-			map[string]any{"value": f.label, "pos": [2]float64{20, y}, "font": map[string]any{"name": "$labelBold"}},
-			map[string]any{"value": f.value, "pos": [2]float64{80, y}, "font": map[string]any{"name": "$field"}},
-		)
-
-		y += testFieldYStep
-	}
-
-	page := map[string]any{
-		"paper":  "A4P",
-		"origin": "UpperLeft",
-		"fonts": map[string]any{
-			"title":     map[string]any{"name": "Helvetica-Bold", "size": testTitleFontSize},
-			"labelBold": map[string]any{"name": "Helvetica-Bold", "size": testFieldFontSize},
-			"field":     map[string]any{"name": "Helvetica", "size": testFieldFontSize},
-		},
-		"pages": map[string]any{
-			"1": map[string]any{
-				"content": map[string]any{
-					"text": textBoxes,
 				},
 			},
 		},
