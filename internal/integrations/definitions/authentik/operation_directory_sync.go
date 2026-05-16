@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // directoryDefaultPageSize is the number of records requested per Authentik API page
@@ -133,8 +134,8 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunA
 		}
 
 		if err != nil {
-		    logx.FromContext(ctx).Error().Err(err).Msg("error listing users")
-		    
+			logx.FromContext(ctx).Error().Err(err).Msg("error listing users")
+
 			return nil, ErrDirectoryUsersFetchFailed
 		}
 
@@ -170,8 +171,8 @@ func listDirectoryGroups(ctx context.Context, c *authentikSDK.APIClient) ([]auth
 		}
 
 		if err != nil {
-		    logx.FromContext(ctx).Error().Err(err).Msg("error listing groups")
-		    
+			logx.FromContext(ctx).Error().Err(err).Msg("error listing groups")
+
 			return nil, ErrDirectoryGroupsFetchFailed
 		}
 
