@@ -231,6 +231,8 @@ const (
 	attestLabelColWidth  = 115.0
 	attestCellPadX       = 8.0
 	attestCellPadY       = 6.0
+	attestCellPadSides   = 2 * attestCellPadX
+	attestCellPadEnds    = 2 * attestCellPadY
 	attestTextLineHeight = 14.0
 	attestGridLineWidth  = 1.0
 	attestTitleY         = 70.0
@@ -340,7 +342,7 @@ func attestationFieldsFrom(data *signedNDADocumentData) []attestationField {
 
 // layoutAttestationRows wraps field values and computes row heights and y positions
 func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, float64) {
-	valueTextWidth := attestContentWidth - attestLabelColWidth - 2*attestCellPadX
+	valueTextWidth := attestContentWidth - attestLabelColWidth - attestCellPadSides
 
 	var rows []attestationRowLayout
 
@@ -349,7 +351,7 @@ func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, f
 	for _, f := range fields {
 		wrapped := wrapText(f.Value, attestFontRegular, attestFieldSize, valueTextWidth)
 		lineCount := strings.Count(wrapped, "\n") + 1
-		height := float64(lineCount)*attestTextLineHeight + 2*attestCellPadY
+		height := float64(lineCount)*attestTextLineHeight + attestCellPadEnds
 		rows = append(rows, attestationRowLayout{field: f, wrapped: wrapped, height: height, y: y})
 		y += height
 	}
@@ -549,4 +551,3 @@ func formatAttestTimestamp(ts string) string {
 
 	return t.Format("January 2, 2006 3:04 PM UTC")
 }
-
