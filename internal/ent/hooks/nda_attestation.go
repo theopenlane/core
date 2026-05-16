@@ -88,13 +88,20 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 		return nil, ErrFailedToDownloadNDAPDF
 	}
 
-	attestedPDF, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
+	combined, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
 	if err != nil {
 		return nil, ErrFailedToCreateAttestedPDF
 	}
 
-	pdfHash := sha256.Sum256(attestedPDF)
+	pdfHash := sha256.Sum256(combined)
 	attestedPDFHash := hex.EncodeToString(pdfHash[:])
+
+	ndaMetadata.SignatureMetadata.PDFHash = attestedPDFHash
+
+	attestedPDF, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
+	if err != nil {
+		return nil, ErrFailedToCreateAttestedPDF
+	}
 
 	if err := uploadAttestedPDF(allowCtx, client, attestedPDF, docData, attestedPDFHash, templateFile.ID); err != nil {
 		return nil, err

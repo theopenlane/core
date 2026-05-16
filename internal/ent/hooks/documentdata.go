@@ -142,6 +142,8 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 
 			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
 				RecipientInfo:      emaildef.RecipientInfo{Email: caller.SubjectEmail},
+				OrgName:            result.OrgName,
+				TrustCenterURL:     result.TrustCenterURL,
 				RequestID:          requestID,
 				TrustCenterID:      tcID,
 				AttachmentFilename: "signed_nda_file.pdf",
