@@ -9,8 +9,6 @@ var (
 	ErrYAMLParseFailed = errors.New("failed to parse YAML")
 	// ErrDOCXParseFailed is returned when DOCX parsing fails
 	ErrDOCXParseFailed = errors.New("failed to parse DOCX")
-	// ErrHTMLParseFailed is returned when HTML parsing fails
-	ErrHTMLParseFailed = errors.New("failed to parse HTML")
 	// ErrProviderResolutionRequired is returned when provider resolution is required but not available
 	ErrProviderResolutionRequired = errors.New("provider resolution required - use external orchestration layer")
 )

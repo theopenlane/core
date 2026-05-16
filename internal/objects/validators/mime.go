@@ -12,7 +12,6 @@ var importSchemaMimeTypes = []string{
 	"text/plain",
 	"text/markdown",
 	"text/x-markdown",
-	"text/html",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 
