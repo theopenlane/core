@@ -23,6 +23,8 @@ type Config struct {
 	Billing Billing `json:"billing" koanf:"billing"`
 	// Notifications contains configuration for notifications sent to users based on events
 	Notifications Notifications `json:"notifications" koanf:"notifications"`
+	// QuestionnaireProductURL is the product URL used to build questionnaire access links
+	QuestionnaireProductURL string `json:"questionnaireproducturl" koanf:"questionnaireproducturl" default:"https://console.theopenlane.io"`
 }
 
 // Modules settings for features access

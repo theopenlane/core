@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -334,6 +335,20 @@ func (_c *TemplateHistoryCreate) SetNillableTrustCenterID(v *string) *TemplateHi
 	return _c
 }
 
+// SetTransformConfiguration sets the "transform_configuration" field.
+func (_c *TemplateHistoryCreate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryCreate {
+	_c.mutation.SetTransformConfiguration(v)
+	return _c
+}
+
+// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetTransformConfiguration(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TemplateHistoryCreate) SetID(v string) *TemplateHistoryCreate {
 	_c.mutation.SetID(v)
@@ -599,6 +614,10 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.TransformConfiguration(); ok {
+		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
+		_node.TransformConfiguration = value
 	}
 	return _node, _spec
 }

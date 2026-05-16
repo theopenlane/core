@@ -15,11 +15,22 @@ func persistEntityInput(ctx context.Context, db *ent.Client, integration *ent.In
 		return ErrIngestUpsertKeyMissing
 	}
 
-	if createInput.EntitySourceTypeName == nil && integration.Name != "" {
+	ownerID := ""
+	if createInput.OwnerID != nil {
+		ownerID = *createInput.OwnerID
+	}
+	if ownerID == "" && integration != nil {
+		ownerID = integration.OwnerID
+	}
+	if ownerID == "" {
+		return ErrIngestUpsertKeyMissing
+	}
+
+	if integration != nil && createInput.EntitySourceTypeName == nil && integration.Name != "" {
 		createInput.EntitySourceTypeName = &integration.Name
 	}
 
-	if !slices.Contains(createInput.IntegrationIDs, integration.ID) {
+	if integration != nil && integration.ID != "" && !slices.Contains(createInput.IntegrationIDs, integration.ID) {
 		createInput.IntegrationIDs = append(createInput.IntegrationIDs, integration.ID)
 	}
 
@@ -28,7 +39,7 @@ func persistEntityInput(ctx context.Context, db *ent.Client, integration *ent.In
 		createInput,
 		func(ctx context.Context) (*ent.Entity, error) {
 			return db.Entity.Query().
-				Where(entity.OwnerID(integration.OwnerID)).
+				Where(entity.OwnerID(ownerID)).
 				Where(entity.ExternalID(*createInput.ExternalID)).
 				Only(ctx)
 		},

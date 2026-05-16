@@ -203,6 +203,8 @@ coreConfiguration:
     notifications:
       # -- ConsoleURL for ui links used in notifications
       consoleurl: "http://localhost:3001"  # @schema type:string; default:http://localhost:3001
+    # -- QuestionnaireProductURL is the product URL used to build questionnaire access links
+    questionnaireproducturl: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable

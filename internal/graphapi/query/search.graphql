@@ -45,6 +45,7 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          displayName
           email
           id
         }
