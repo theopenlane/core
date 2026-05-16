@@ -1,17 +1,15 @@
 services:
-  server:
+  authentik-server:
     command: server
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_started
+    env_file:
+      - ${PWD}/docker/configs/authentik/.env-example
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
-      AUTHENTIK_POSTGRESQL__PASSWORD: password
       AUTHENTIK_POSTGRESQL__USER: postgres
-      AUTHENTIK_SECRET_KEY: authentik-dev-secret-key-do-not-use-in-production
       AUTHENTIK_REDIS__HOST: redis
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.2.2}
     ports:
@@ -25,19 +23,17 @@ services:
     networks:
       - default
 
-  worker:
+  authentik-worker:
     command: worker
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_started
+    env_file:
+      - ${PWD}/docker/configs/authentik/.env-example
     environment:
       AUTHENTIK_POSTGRESQL__HOST: postgres
       AUTHENTIK_POSTGRESQL__NAME: authentik
-      AUTHENTIK_POSTGRESQL__PASSWORD: password
       AUTHENTIK_POSTGRESQL__USER: postgres
-      AUTHENTIK_SECRET_KEY: authentik-dev-secret-key-do-not-use-in-production
       AUTHENTIK_REDIS__HOST: redis
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.2.2}
     restart: unless-stopped
@@ -64,8 +60,3 @@ volumes:
     driver: local
   authentik-custom-templates:
     driver: local
-
-networks:
-  default:
-    external: true
-    name: docker_default
