@@ -410,15 +410,15 @@
     },
     "email.RuntimeEmailConfig": {
       "properties": {
-        "testDir": {
+        "testdir": {
           "type": "string",
           "description": "Directory for dev-mode email output"
         },
-        "resendSecret": {
+        "resendsecret": {
           "type": "string",
           "description": "Resend webhook signing secret"
         },
-        "apiKey": {
+        "apikey": {
           "type": "string",
           "description": "Email provider API key"
         },
@@ -429,27 +429,27 @@
           ],
           "description": "Email service provider"
         },
-        "fromEmail": {
+        "fromemail": {
           "type": "string",
           "description": "Sender email address"
         },
-        "supportEmail": {
+        "supportemail": {
           "type": "string",
           "description": "Support contact email address"
         },
-        "questionnaireEmail": {
+        "questionnaireemail": {
           "type": "string",
           "description": "Sender override for questionnaire auth emails"
         },
-        "rootURL": {
+        "rooturl": {
           "type": "string",
           "description": "Root application URL used to construct email action links"
         },
-        "productURL": {
+        "producturl": {
           "type": "string",
           "description": "Product home URL"
         },
-        "docsURL": {
+        "docsurl": {
           "type": "string",
           "description": "Documentation URL"
         },
@@ -545,9 +545,9 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "apiKey",
+        "apikey",
         "provider",
-        "fromEmail"
+        "fromemail"
       ]
     },
     "entconfig.Billing": {
@@ -1051,6 +1051,10 @@
         "enabled": {
           "type": "boolean",
           "description": "Whether the payment reminder listener is enabled"
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log organization IDs that would be processed"
         }
       },
       "additionalProperties": false,

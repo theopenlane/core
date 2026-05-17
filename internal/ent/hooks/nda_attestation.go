@@ -14,6 +14,8 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/font"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -70,11 +72,15 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	templateFile, err := fetchNDATemplateFile(allowCtx, client, templateID)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template file")
+
 		return nil, err
 	}
 
 	var ndaMetadata signedNDADocumentData
 	if err := jsonx.RoundTrip(docData.Data, &ndaMetadata); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal nda metadata")
+
 		return nil, ErrFailedToUnmarshalNDAMetadata
 	}
 
@@ -85,11 +91,14 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 	downloaded, err := client.ObjectManager.Download(getFileCtx, nil, storageFile, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("file", storageFile.ID).Str("provider", templateFile.StorageProvider).Err(err).Msg("failed to download original PDF")
+
 		return nil, ErrFailedToDownloadNDAPDF
 	}
 
 	combined, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attested PDF")
+
 		return nil, ErrFailedToCreateAttestedPDF
 	}
 
@@ -100,10 +109,14 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	attestedPDF, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attested PDF with hash")
+
 		return nil, ErrFailedToCreateAttestedPDF
 	}
 
 	if err := uploadAttestedPDF(allowCtx, client, attestedPDF, docData, attestedPDFHash, templateFile.ID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upload attested PDF")
+
 		return nil, err
 	}
 
@@ -157,11 +170,13 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 	_, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to upload pdf")
+
 		return ErrFailedToUploadAttestedPDF
 	}
 
 	if len(uploadedFiles) == 0 {
 		logx.FromContext(ctx).Error().Msg("no files were uploaded")
+
 		return ErrNoUploadedFiles
 	}
 
@@ -173,6 +188,7 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		SetData(data).
 		Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to associate files")
+
 		return ErrFailedToAssociateFile
 	}
 
@@ -193,6 +209,7 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template")
+
 		return nil, ErrFailedToFetchNDATemplate
 	}
 
@@ -201,6 +218,7 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 	files, err := docTemplate.QueryFiles().All(fileCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch nda template files")
+
 		return nil, ErrFailedToFetchNDATemplateFiles
 	}
 
@@ -215,6 +233,8 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
 	certPage, err := createAttestationCertificate(data)
 	if err != nil {
+		logx.FromContext(context.Background()).Error().Err(err).Msg("failed to create attestation certificate page")
+
 		return nil, ErrFailedToCreateAttestationCert
 	}
 
@@ -223,6 +243,8 @@ func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentDat
 	readers := []io.ReadSeeker{originalPDF, bytes.NewReader(certPage)}
 
 	if err = api.MergeRaw(readers, &buf, false, nil); err != nil {
+		logx.FromContext(context.Background()).Error().Err(err).Msg("pdfcpu merge failed")
+
 		return nil, ErrFailedToMergeAttestationPage
 	}
 
@@ -473,11 +495,15 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 
 	jsonData, err := json.Marshal(page)
 	if err != nil {
+		log.Error().Err(err).Msg("failed to marshal attestation page JSON")
+
 		return nil, ErrFailedToGenerateAttestationPDF
 	}
 
 	var buf bytes.Buffer
 	if err := api.Create(nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
+		log.Error().Err(err).Msg("pdfcpu create failed")
+
 		return nil, ErrFailedToGenerateAttestationPDF
 	}
 
@@ -553,6 +579,7 @@ func breakWord(word, fontName string, fontSize int, maxWidth float64) []string {
 func formatAttestTimestamp(ts string) string {
 	t, err := time.Parse(time.RFC3339, ts)
 	if err != nil {
+		log.Error().Err(err).Str("timestamp", ts).Msg("failed to parse timestamp")
 		return ts
 	}
 

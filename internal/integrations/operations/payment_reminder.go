@@ -25,12 +25,14 @@ const (
 type PaymentReminderConfig struct {
 	// PaymentMethodInterval is the number of days after org creation before
 	// an org without a payment method is marked for deletion
-	PaymentMethodInterval uint8 `json:"payment_method_interval" koanf:"paymentmethodinterval" jsonschema:"default=30,description=Days after org creation before marking for deletion"`
+	PaymentMethodInterval uint8 `json:"paymentmethodinterval" koanf:"paymentmethodinterval" jsonschema:"default=30,description=Days after org creation before marking for deletion"`
 	// DeletionDays is the number of days between marking an org for deletion
 	// and the actual deletion date set on pending_deletion_at
 	DeletionDays uint8 `json:"deletion_days" koanf:"deletiondays" jsonschema:"default=7,description=Days between marking and actual deletion"`
 	// Enabled controls whether the payment reminder polling loop is seeded at startup
 	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"description=Whether the payment reminder listener is enabled"`
+	// DryRun logs matching organization IDs without mutating state or dispatching emails
+	DryRun bool `json:"dryrun" koanf:"dryrun" jsonschema:"description=If true only log organization IDs that would be processed"`
 }
 
 // PaymentReminderEnvelope is the durable payload for a payment reminder polling cycle

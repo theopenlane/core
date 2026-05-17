@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
@@ -74,15 +73,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			// get the id of the created document data
 			createdDocData, ok := v.(*generated.DocumentData)
 			if !ok {
 				logx.FromContext(ctx).Error().Msgf("unexpected type %T for created document data", v)
-
 				return nil, fmt.Errorf("unexpected type %T: %w", v, ErrInternalServerError)
 			}
 
-			// update nda requests that it has been signed
 			if err := m.Client().TrustCenterNDARequest.Update().Where(
 				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 				trustcenterndarequest.TrustCenterID(tcID),
@@ -90,15 +86,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Exec(ctx); err != nil {
 				if !generated.IsNotFound(err) {
 					logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to mark nda request signed status")
-
 					return nil, err
 				}
 
-				// this shouldn't happen, unless it was already marked as signed
 				logx.FromContext(ctx).Error().Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("no existing nda request to mark signed status")
 			}
 
-			// add the nda_signed tuple to the anonymous user to allow file access
 			tuple := fgax.GetTupleKey(fgax.TupleRequest{
 				SubjectID:   caller.SubjectID,
 				SubjectType: "user",
@@ -109,48 +102,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to create nda_signed relationship tuple")
-
 				return nil, ErrInternalServerError
-			}
-
-			result, err := attestNDADocument(ctx, m.Client(), createdDocData, templateID, tcID)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to attest NDA document")
-
-				return nil, err
-			}
-
-			if err := m.Client().TrustCenterNDARequest.Update().Where(
-				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
-			).SetFileID(result.TemplateFileID).Exec(ctx); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to set file ID on nda request")
-
-				return nil, err
-			}
-
-			requestID, err := m.Client().TrustCenterNDARequest.Query().Where(
-				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
-				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
-			).FirstID(ctx)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to resolve nda request id for email")
-
-				return nil, err
-			}
-
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
-				RecipientInfo:      emaildef.RecipientInfo{Email: caller.SubjectEmail},
-				OrgName:            result.OrgName,
-				RequestID:          requestID,
-				TrustCenterID:      tcID,
-				AttachmentFilename: "signed_nda_file.pdf",
-				AttachmentData:     result.AttestedPDF,
-			}); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to send NDA signed email")
-
-				return nil, err
 			}
 
 			return v, nil

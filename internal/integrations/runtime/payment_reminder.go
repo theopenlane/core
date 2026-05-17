@@ -96,6 +96,13 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
+		if cfg.DryRun {
+			logger.Info().Str("organization_id", org.ID).Str("organization_name", org.Name).Msg("dry run: would schedule for deletion")
+			dispatched++
+
+			continue
+		}
+
 		pendingDeletionAt := time.Now().AddDate(0, 0, int(cfg.DeletionDays))
 
 		if err := db.OrganizationSetting.UpdateOneID(setting.ID).

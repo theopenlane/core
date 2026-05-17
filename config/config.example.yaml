@@ -147,16 +147,16 @@ integrations:
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
     email:
-        apiKey: ""
-        docsURL: https://docs.theopenlane.io
-        fromEmail: support@mail.theopenlane.io
-        productURL: https://console.theopenlane.io
+        apikey: ""
+        docsurl: https://docs.theopenlane.io
+        fromemail: support@mail.theopenlane.io
+        producturl: https://console.theopenlane.io
         provider: resend
-        questionnaireEmail: support@mail.theopenlane.io
-        resendSecret: ""
-        rootURL: https://www.theopenlane.io
-        supportEmail: support@theopenlane.io
-        testDir: fixtures/email
+        questionnaireemail: support@mail.theopenlane.io
+        resendsecret: ""
+        rooturl: https://www.theopenlane.io
+        supportemail: support@theopenlane.io
+        testdir: fixtures/email
     githubapp:
         appid: ""
         appslug: ""
@@ -178,6 +178,7 @@ integrations:
         redirecturl: http://localhost:17608/v1/integrations/auth/callback
     paymentreminder:
         deletiondays: 0
+        dryrun: false
         enabled: false
         paymentmethodinterval: 0
     slack:

@@ -1666,16 +1666,16 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**testDir**|`string`|Directory for dev-mode email output<br/>|no|
-|**resendSecret**|`string`|Resend webhook signing secret<br/>|no|
-|**apiKey**|`string`|Email provider API key<br/>|yes|
+|**testdir**|`string`|Directory for dev-mode email output<br/>|no|
+|**resendsecret**|`string`|Resend webhook signing secret<br/>|no|
+|**apikey**|`string`|Email provider API key<br/>|yes|
 |**provider**|`string`|Email service provider<br/>Enum: `"resend"`<br/>|yes|
-|**fromEmail**|`string`|Sender email address<br/>|yes|
-|**supportEmail**|`string`|Support contact email address<br/>|no|
-|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
-|**rootURL**|`string`|Root application URL used to construct email action links<br/>|no|
-|**productURL**|`string`|Product home URL<br/>|no|
-|**docsURL**|`string`|Documentation URL<br/>|no|
+|**fromemail**|`string`|Sender email address<br/>|yes|
+|**supportemail**|`string`|Support contact email address<br/>|no|
+|**questionnaireemail**|`string`|Sender override for questionnaire auth emails<br/>|no|
+|**rooturl**|`string`|Root application URL used to construct email action links<br/>|no|
+|**producturl**|`string`|Product home URL<br/>|no|
+|**docsurl**|`string`|Documentation URL<br/>|no|
 |**CompanyName**|`string`|Company display name<br/>|no|
 |**CompanyAddress**|`string`|Company mailing address<br/>|no|
 |**Corporation**|`string`|Legal corporation name<br/>|no|
@@ -1709,6 +1709,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**paymentmethodinterval**|`integer`|Days after org creation before marking for deletion<br/>Default: `30`<br/>||
 |**deletiondays**|`integer`|Days between marking and actual deletion<br/>Default: `7`<br/>||
 |**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>||
+|**dryrun**|`boolean`|If true only log organization IDs that would be processed<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
