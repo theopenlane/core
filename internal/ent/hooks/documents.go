@@ -3,11 +3,9 @@ package hooks
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -226,29 +224,13 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
-// ErrInvalidImportURL is returned when an import URL is rejected before any network call.
-var ErrInvalidImportURL = errors.New("invalid import URL")
-
-var allowedImportSchemes = map[string]struct{}{"http": {}, "https": {}}
-
-// importURLToSchema fetches content from a URL, parses it by MIME type, and writes the
-// sanitized result into the mutation details. The scheme allowlist blocks file://, etc.;
-// it does not block private IPs — callers must trust the URL source.
-func importURLToSchema(parentCtx context.Context, m importSchemaMutation) error {
+func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
 		return nil
 	}
 
-	u, err := url.Parse(downloadURL)
-	if err != nil {
-		return fmt.Errorf("%w: %s", ErrInvalidImportURL, err.Error())
-	}
-	if _, ok := allowedImportSchemes[strings.ToLower(u.Scheme)]; !ok {
-		return fmt.Errorf("%w: scheme %q not allowed", ErrInvalidImportURL, u.Scheme)
-	}
-
-	ctx, cancel := context.WithTimeout(parentCtx, defaultImportTimeout)
+	ctx, cancel := context.WithTimeout(ctx, defaultImportTimeout)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)

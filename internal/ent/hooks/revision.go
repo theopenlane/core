@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -79,7 +80,13 @@ func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 	revisionBump, ok := models.VersionBumpFromRequestContext(ctx)
 	if !ok {
 		revisionBump = &models.Patch
-		if detailsUpdated(ctx, mut) {
+		// EXTERNAL_REFERENCE docs (e.g. uploaded Word files) treat the file itself as
+		// the source of truth, so a new upload — not a details edit — drives the bump.
+		if doc, ok := mut.(documentMutation); ok && managementModeFor(ctx, doc) == enums.DocumentManagementModeExternalReference {
+			if fileChanged(ctx, doc) {
+				revisionBump = &models.Minor
+			}
+		} else if detailsUpdated(ctx, mut) {
 			revisionBump = &models.Minor
 		}
 	}
@@ -115,6 +122,58 @@ const (
 	detailsJSONFieldName = "details_json"
 	detailsFieldName     = "details"
 )
+
+// documentMutation is the subset of revision-bearing mutations that carry a document file
+// and a management mode (action plans, internal policies, procedures — not standards/templates).
+type documentMutation interface {
+	ManagementMode() (enums.DocumentManagementMode, bool)
+	OldManagementMode(ctx context.Context) (enums.DocumentManagementMode, error)
+	FileID() (r string, exists bool)
+	OldFileID(ctx context.Context) (v *string, err error)
+	FileIDCleared() bool
+}
+
+// managementModeFor returns the mode that will be in effect after this mutation,
+// defaulting to OPENLANE_MANAGED for pre-existing rows (NULL column) and create-path mutations.
+func managementModeFor(ctx context.Context, mut documentMutation) enums.DocumentManagementMode {
+	if v, ok := mut.ManagementMode(); ok && v.IsValid() {
+		return v
+	}
+
+	if v, err := mut.OldManagementMode(ctx); err == nil && v.IsValid() {
+		return v
+	} else if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("could not read old management_mode; defaulting to OPENLANE_MANAGED")
+	}
+
+	return enums.DocumentManagementModeOpenlaneManaged
+}
+
+// fileChanged reports whether this mutation replaces, sets, or clears the document's file.
+func fileChanged(ctx context.Context, mut documentMutation) bool {
+	newID, set := mut.FileID()
+	cleared := mut.FileIDCleared()
+	if !set && !cleared {
+		return false
+	}
+
+	oldID, err := mut.OldFileID(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Msg("could not read old file_id; treating as file change")
+		return true
+	}
+
+	oldStr := ""
+	if oldID != nil {
+		oldStr = *oldID
+	}
+
+	if cleared {
+		return oldStr != ""
+	}
+
+	return oldStr != newID
+}
 
 // detailsUpdated checks if the details were updated on a mutation, if so
 // this will return true, otherwise returns false.

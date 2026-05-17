@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // DocumentMixin implements the document pattern with approver for schemas.
@@ -178,6 +179,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Comment(fmt.Sprintf("improvement suggestions dismissed by the user for the %s", documentType)),
 		field.String("url").
 			Comment(fmt.Sprintf("This will contain the url used to create or update the %s", documentType)).
+			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
 		field.String("file_id").
