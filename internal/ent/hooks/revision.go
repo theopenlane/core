@@ -133,7 +133,6 @@ type documentMutation interface {
 	FileIDCleared() bool
 }
 
-```suggestion
 // managementModeFor returns the mode that will be in effect after this OpUpdateOne mutation,
 // defaulting to OPENLANE_MANAGED for pre-existing rows (NULL column) and create-path mutations.
 func managementModeFor(ctx context.Context, mut documentMutation) enums.DocumentManagementMode {
@@ -142,11 +141,11 @@ func managementModeFor(ctx context.Context, mut documentMutation) enums.Document
 	}
 
 	if v, err := mut.OldManagementMode(ctx); err == nil {
-			return v
-	} 
-			
-	logx.FromContext(ctx).Info().Msg("could not determine management mod; defaulting to OPENLANE_MANAGED")
-	
+		return v
+	}
+
+	logx.FromContext(ctx).Info().Msg("could not determine management mode; defaulting to OPENLANE_MANAGED")
+
 	return enums.DocumentManagementModeOpenlaneManaged
 }
 
@@ -165,15 +164,10 @@ func fileChanged(ctx context.Context, mut documentMutation) bool {
 	}
 
 	if oldID == nil {
-		if set {
-			return true
-		}
-		
-		return false
+		return set
 	}
 
-
-	return *oldStr != newID
+	return *oldID != newID
 }
 
 // detailsUpdated checks if the details were updated on a mutation, if so
