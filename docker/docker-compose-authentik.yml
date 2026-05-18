@@ -1,0 +1,62 @@
+services:
+  authentik-server:
+    command: server
+    depends_on:
+      redis:
+        condition: service_started
+    env_file:
+      - ${PWD}/docker/configs/authentik/.env-example
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: postgres
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__USER: postgres
+      AUTHENTIK_REDIS__HOST: redis
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.2.2}
+    ports:
+      - ${COMPOSE_PORT_HTTP:-9000}:9000
+      - ${COMPOSE_PORT_HTTPS:-9443}:9443
+    restart: unless-stopped
+    shm_size: 512mb
+    volumes:
+      - authentik-data:/data
+      - authentik-custom-templates:/templates
+    networks:
+      - default
+
+  authentik-worker:
+    command: worker
+    depends_on:
+      redis:
+        condition: service_started
+    env_file:
+      - ${PWD}/docker/configs/authentik/.env-example
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: postgres
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__USER: postgres
+      AUTHENTIK_REDIS__HOST: redis
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2026.2.2}
+    restart: unless-stopped
+    shm_size: 512mb
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - authentik-data:/data
+      - authentik-certs:/certs
+      - authentik-custom-templates:/templates
+    networks:
+      - default
+
+  redis:
+    image: redis:7.4.9-alpine
+    restart: unless-stopped
+    networks:
+      - default
+
+volumes:
+  authentik-data:
+    driver: local
+  authentik-certs:
+    driver: local
+  authentik-custom-templates:
+    driver: local

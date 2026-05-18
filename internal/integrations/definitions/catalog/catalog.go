@@ -1,6 +1,7 @@
 package catalog
 
 import (
+	"github.com/theopenlane/core/internal/integrations/definitions/authentik"
 	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/internal/integrations/definitions/azuresecuritycenter"
@@ -22,6 +23,7 @@ import (
 // email) use local file-based senders instead of calling provider APIs
 func Builders(cfg Config, devMode bool) []registry.Builder {
 	return []registry.Builder{
+		authentik.Builder(),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
