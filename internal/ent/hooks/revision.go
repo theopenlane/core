@@ -126,7 +126,7 @@ const (
 // documentMutation is the subset of revision-bearing mutations that carry a document file
 // and a management mode (action plans, internal policies, procedures — not standards/templates).
 type documentMutation interface {
-	Op() ent.Op
+	utils.GenericMutation
 	ManagementMode() (enums.DocumentManagementMode, bool)
 	OldManagementMode(ctx context.Context) (enums.DocumentManagementMode, error)
 	FileID() (r string, exists bool)
