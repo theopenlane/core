@@ -32,7 +32,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.62.3
 	github.com/aws/aws-sdk-go-v2/service/iam v1.53.10
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.101.0
-	github.com/brianvoe/gofakeit/v7 v7.14.1
+	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.10.0
 	github.com/didasy/tldr v0.7.0
