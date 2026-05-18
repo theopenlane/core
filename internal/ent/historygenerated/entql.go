@@ -118,6 +118,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldRevision:                        {Type: field.TypeString, Column: actionplanhistory.FieldRevision},
 			actionplanhistory.FieldName:                            {Type: field.TypeString, Column: actionplanhistory.FieldName},
 			actionplanhistory.FieldStatus:                          {Type: field.TypeEnum, Column: actionplanhistory.FieldStatus},
+			actionplanhistory.FieldManagementMode:                  {Type: field.TypeEnum, Column: actionplanhistory.FieldManagementMode},
 			actionplanhistory.FieldDetails:                         {Type: field.TypeString, Column: actionplanhistory.FieldDetails},
 			actionplanhistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplanhistory.FieldDetailsJSON},
 			actionplanhistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplanhistory.FieldApprovalRequired},
@@ -1467,6 +1468,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldSystemInternalID:                {Type: field.TypeString, Column: internalpolicyhistory.FieldSystemInternalID},
 			internalpolicyhistory.FieldName:                            {Type: field.TypeString, Column: internalpolicyhistory.FieldName},
 			internalpolicyhistory.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicyhistory.FieldStatus},
+			internalpolicyhistory.FieldManagementMode:                  {Type: field.TypeEnum, Column: internalpolicyhistory.FieldManagementMode},
 			internalpolicyhistory.FieldDetails:                         {Type: field.TypeString, Column: internalpolicyhistory.FieldDetails},
 			internalpolicyhistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDetailsJSON},
 			internalpolicyhistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicyhistory.FieldApprovalRequired},
@@ -1973,6 +1975,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldOwnerID:                         {Type: field.TypeString, Column: procedurehistory.FieldOwnerID},
 			procedurehistory.FieldName:                            {Type: field.TypeString, Column: procedurehistory.FieldName},
 			procedurehistory.FieldStatus:                          {Type: field.TypeEnum, Column: procedurehistory.FieldStatus},
+			procedurehistory.FieldManagementMode:                  {Type: field.TypeEnum, Column: procedurehistory.FieldManagementMode},
 			procedurehistory.FieldDetails:                         {Type: field.TypeString, Column: procedurehistory.FieldDetails},
 			procedurehistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedurehistory.FieldDetailsJSON},
 			procedurehistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedurehistory.FieldApprovalRequired},
@@ -3419,6 +3422,11 @@ func (f *ActionPlanHistoryFilter) WhereName(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ActionPlanHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldStatus))
+}
+
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *ActionPlanHistoryFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldManagementMode))
 }
 
 // WhereDetails applies the entql string predicate on the details field.
@@ -9391,6 +9399,11 @@ func (f *InternalPolicyHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldStatus))
 }
 
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *InternalPolicyHistoryFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(internalpolicyhistory.FieldManagementMode))
+}
+
 // WhereDetails applies the entql string predicate on the details field.
 func (f *InternalPolicyHistoryFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldDetails))
@@ -11594,6 +11607,11 @@ func (f *ProcedureHistoryFilter) WhereName(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ProcedureHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldStatus))
+}
+
+// WhereManagementMode applies the entql string predicate on the management_mode field.
+func (f *ProcedureHistoryFilter) WhereManagementMode(p entql.StringP) {
+	f.Where(p.Field(procedurehistory.FieldManagementMode))
 }
 
 // WhereDetails applies the entql string predicate on the details field.

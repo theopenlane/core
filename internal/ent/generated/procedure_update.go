@@ -211,6 +211,26 @@ func (_u *ProcedureUpdate) ClearStatus() *ProcedureUpdate {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *ProcedureUpdate) SetManagementMode(v enums.DocumentManagementMode) *ProcedureUpdate {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureUpdate {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ProcedureUpdate) ClearManagementMode() *ProcedureUpdate {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *ProcedureUpdate) SetDetails(v string) *ProcedureUpdate {
 	_u.mutation.SetDetails(v)
@@ -1270,6 +1290,11 @@ func (_u *ProcedureUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Procedure.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := procedure.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`generated: validator failed for field "Procedure.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
@@ -1351,6 +1376,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(procedure.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(procedure.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
@@ -2485,6 +2516,26 @@ func (_u *ProcedureUpdateOne) ClearStatus() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *ProcedureUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *ProcedureUpdateOne {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *ProcedureUpdateOne) ClearManagementMode() *ProcedureUpdateOne {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *ProcedureUpdateOne) SetDetails(v string) *ProcedureUpdateOne {
 	_u.mutation.SetDetails(v)
@@ -3557,6 +3608,11 @@ func (_u *ProcedureUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Procedure.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := procedure.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`generated: validator failed for field "Procedure.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
@@ -3655,6 +3711,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(procedure.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(procedure.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/validator"
 )
 
 // DocumentMixin implements the document pattern with approver for schemas.
@@ -91,6 +92,14 @@ func getDocumentFields(documentType string) []ent.Field {
 			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
+		field.Enum("management_mode").
+			GoType(enums.DocumentManagementMode("")).
+			Default(enums.DocumentManagementModeOpenlaneManaged.String()).
+			Annotations(
+				entgql.OrderField("MANAGEMENT_MODE"),
+			).
+			Optional().
+			Comment(fmt.Sprintf("how the %s is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)", documentType)),
 		field.Text("details").
 			Optional().
 			Annotations(
@@ -170,6 +179,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Comment(fmt.Sprintf("improvement suggestions dismissed by the user for the %s", documentType)),
 		field.String("url").
 			Comment(fmt.Sprintf("This will contain the url used to create or update the %s", documentType)).
+			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
 		field.String("file_id").

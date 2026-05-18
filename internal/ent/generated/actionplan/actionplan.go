@@ -38,6 +38,8 @@ const (
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldManagementMode holds the string denoting the management_mode field in the database.
+	FieldManagementMode = "management_mode"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// FieldDetailsJSON holds the string denoting the details_json field in the database.
@@ -268,6 +270,7 @@ var Columns = []string{
 	FieldRevision,
 	FieldName,
 	FieldStatus,
+	FieldManagementMode,
 	FieldDetails,
 	FieldDetailsJSON,
 	FieldApprovalRequired,
@@ -436,6 +439,18 @@ func StatusValidator(s enums.DocumentStatus) error {
 	}
 }
 
+const DefaultManagementMode enums.DocumentManagementMode = "OPENLANE_MANAGED"
+
+// ManagementModeValidator is a validator for the "management_mode" field enum values. It is called by the builders before save.
+func ManagementModeValidator(mm enums.DocumentManagementMode) error {
+	switch mm.String() {
+	case "OPENLANE_MANAGED", "EXTERNAL_REFERENCE":
+		return nil
+	default:
+		return fmt.Errorf("actionplan: invalid enum value for management_mode field: %q", mm)
+	}
+}
+
 const DefaultReviewFrequency enums.Frequency = "YEARLY"
 
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
@@ -509,6 +524,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByManagementMode orders the results by the management_mode field.
+func ByManagementMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagementMode, opts...).ToFunc()
 }
 
 // ByDetails orders the results by the details field.
@@ -1005,6 +1025,13 @@ var (
 	_ graphql.Marshaler = (*enums.DocumentStatus)(nil)
 	// enums.DocumentStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.DocumentStatus)(nil)
+)
+
+var (
+	// enums.DocumentManagementMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DocumentManagementMode)(nil)
+	// enums.DocumentManagementMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DocumentManagementMode)(nil)
 )
 
 var (

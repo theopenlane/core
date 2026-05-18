@@ -97,6 +97,9 @@ func TestEnumCoverage(t *testing.T) {
 		{name: "DirectorySyncRunStatus", value: enums.DirectorySyncRunStatusPending,
 			unmarshal: func(v any) error { var e enums.DirectorySyncRunStatus; return e.UnmarshalGQL(v) },
 			parse:     func() { enums.ToDirectorySyncRunStatus("PENDING") }},
+		{name: "DocumentManagementMode", value: enums.DocumentManagementModeOpenlaneManaged,
+			unmarshal: func(v any) error { var e enums.DocumentManagementMode; return e.UnmarshalGQL(v) },
+			parse:     func() { enums.ToDocumentManagementMode("OPENLANE_MANAGED") }},
 		{name: "DocumentStatus", value: enums.DocumentPublished,
 			unmarshal: func(v any) error { var e enums.DocumentStatus; return e.UnmarshalGQL(v) },
 			parse:     func() { enums.ToDocumentStatus("PUBLISHED") }},
@@ -346,6 +349,36 @@ func TestEnumCoverage(t *testing.T) {
 			tc.parse()
 		})
 	}
+}
+
+func TestDocumentManagementModeStrictMembership(t *testing.T) {
+	t.Run("IsValid", func(t *testing.T) {
+		assert.True(t, enums.DocumentManagementModeOpenlaneManaged.IsValid())
+		assert.True(t, enums.DocumentManagementModeExternalReference.IsValid())
+		assert.False(t, enums.DocumentManagementMode("DELETE_EVERYTHING").IsValid())
+		assert.False(t, enums.DocumentManagementMode("").IsValid())
+	})
+
+	t.Run("UnmarshalGQL rejects unknown string", func(t *testing.T) {
+		var e enums.DocumentManagementMode
+		require.ErrorIs(t, e.UnmarshalGQL("DELETE_EVERYTHING"), enums.ErrInvalidType)
+		assert.Empty(t, string(e))
+	})
+
+	t.Run("UnmarshalGQL accepts canonical values", func(t *testing.T) {
+		var e enums.DocumentManagementMode
+		require.NoError(t, e.UnmarshalGQL("OPENLANE_MANAGED"))
+		assert.Equal(t, enums.DocumentManagementModeOpenlaneManaged, e)
+	})
+
+	t.Run("ToDocumentManagementMode returns nil on bad input", func(t *testing.T) {
+		assert.Nil(t, enums.ToDocumentManagementMode("DELETE_EVERYTHING"))
+	})
+
+	t.Run("ToDocumentManagementModeOrDefault falls back to OPENLANE_MANAGED", func(t *testing.T) {
+		assert.Equal(t, enums.DocumentManagementModeOpenlaneManaged, enums.ToDocumentManagementModeOrDefault("DELETE_EVERYTHING"))
+		assert.Equal(t, enums.DocumentManagementModeExternalReference, enums.ToDocumentManagementModeOrDefault("EXTERNAL_REFERENCE"))
+	})
 }
 
 // TestToTimeWeekday covers the JobWeekday to time.Weekday conversion

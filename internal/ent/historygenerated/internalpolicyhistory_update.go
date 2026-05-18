@@ -239,6 +239,26 @@ func (_u *InternalPolicyHistoryUpdate) ClearStatus() *InternalPolicyHistoryUpdat
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *InternalPolicyHistoryUpdate) SetManagementMode(v enums.DocumentManagementMode) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *InternalPolicyHistoryUpdate) ClearManagementMode() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyHistoryUpdate) SetDetails(v string) *InternalPolicyHistoryUpdate {
 	_u.mutation.SetDetails(v)
@@ -759,6 +779,11 @@ func (_u *InternalPolicyHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := internalpolicyhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
@@ -864,6 +889,12 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(internalpolicyhistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
@@ -1269,6 +1300,26 @@ func (_u *InternalPolicyHistoryUpdateOne) SetNillableStatus(v *enums.DocumentSta
 // ClearStatus clears the value of the "status" field.
 func (_u *InternalPolicyHistoryUpdateOne) ClearStatus() *InternalPolicyHistoryUpdateOne {
 	_u.mutation.ClearStatus()
+	return _u
+}
+
+// SetManagementMode sets the "management_mode" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearManagementMode() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearManagementMode()
 	return _u
 }
 
@@ -1805,6 +1856,11 @@ func (_u *InternalPolicyHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := internalpolicyhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicyhistory.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "InternalPolicyHistory.review_frequency": %w`, err)}
@@ -1927,6 +1983,12 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(internalpolicyhistory.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)

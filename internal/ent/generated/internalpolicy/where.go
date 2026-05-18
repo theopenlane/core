@@ -1088,6 +1088,46 @@ func StatusNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldStatus))
 }
 
+// ManagementModeEQ applies the EQ predicate on the "management_mode" field.
+func ManagementModeEQ(v enums.DocumentManagementMode) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldEQ(FieldManagementMode, vc))
+}
+
+// ManagementModeNEQ applies the NEQ predicate on the "management_mode" field.
+func ManagementModeNEQ(v enums.DocumentManagementMode) predicate.InternalPolicy {
+	vc := v
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldManagementMode, vc))
+}
+
+// ManagementModeIn applies the In predicate on the "management_mode" field.
+func ManagementModeIn(vs ...enums.DocumentManagementMode) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldIn(FieldManagementMode, v...))
+}
+
+// ManagementModeNotIn applies the NotIn predicate on the "management_mode" field.
+func ManagementModeNotIn(vs ...enums.DocumentManagementMode) predicate.InternalPolicy {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldManagementMode, v...))
+}
+
+// ManagementModeIsNil applies the IsNil predicate on the "management_mode" field.
+func ManagementModeIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldManagementMode))
+}
+
+// ManagementModeNotNil applies the NotNil predicate on the "management_mode" field.
+func ManagementModeNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldManagementMode))
+}
+
 // DetailsEQ applies the EQ predicate on the "details" field.
 func DetailsEQ(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldDetails, v))

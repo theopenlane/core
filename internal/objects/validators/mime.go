@@ -6,8 +6,10 @@ import (
 )
 
 // importSchemaMimeTypes is a list of mime-types that are accepted for files uploaded as part of the import schema process (e.g. procedure, internal policy, action plan).
+// Parameter suffixes (e.g. "; charset=utf-8") are normalized away by MimeTypeValidator, so each
+// media type only needs to be listed once here.
 var importSchemaMimeTypes = []string{
-	"text/plain; charset=utf-8", "text/plain",
+	"text/plain",
 	"text/markdown",
 	"text/x-markdown",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -19,7 +21,6 @@ var sharedMimeTypes = []string{
 	"image/jpeg", "image/png",
 	"application/pdf",
 	"text/plain",
-	"text/plain; charset=utf-8",
 	"application/zip",
 	"application/rtf",
 	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -28,8 +29,8 @@ var sharedMimeTypes = []string{
 	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 	"application/x-vnd.oasis.opendocument.spreadsheet",
 	"text/csv",
-	"application/x-yaml", "application/x-yaml; charset=utf-8", "text/yaml",
-	"application/json", "application/json; charset=utf-8",
+	"application/x-yaml", "text/yaml",
+	"application/json",
 }
 
 // evidenceMimeTypes is a list of mime-types that are accepted for files uploaded as evidence attachments.
@@ -44,7 +45,7 @@ var validMimeTypes = map[string][]string{
 	"logoFile":           {"image/jpeg", "image/png", "image/svg+xml", "image/webp"},
 	"faviconFile":        {"image/jpeg", "image/png", "image/x-icon"},
 	"evidenceFiles":      append(sharedMimeTypes, evidenceMimeTypes...),
-	"exportFiles":        {"text/csv", "text/plain; charset=utf-8", "text/plain", "application/json", "application/json; charset=utf-8", "application/zip", "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/markdown", "text/x-markdown"},
+	"exportFiles":        {"text/csv", "text/plain", "application/json", "application/zip", "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/markdown", "text/x-markdown"},
 	"procedureFile":      importSchemaMimeTypes,
 	"internalPolicyFile": importSchemaMimeTypes,
 	"actionPlanFile":     importSchemaMimeTypes,

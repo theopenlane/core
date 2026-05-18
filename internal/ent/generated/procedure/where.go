@@ -913,6 +913,46 @@ func StatusNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldStatus))
 }
 
+// ManagementModeEQ applies the EQ predicate on the "management_mode" field.
+func ManagementModeEQ(v enums.DocumentManagementMode) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldEQ(FieldManagementMode, vc))
+}
+
+// ManagementModeNEQ applies the NEQ predicate on the "management_mode" field.
+func ManagementModeNEQ(v enums.DocumentManagementMode) predicate.Procedure {
+	vc := v
+	return predicate.Procedure(sql.FieldNEQ(FieldManagementMode, vc))
+}
+
+// ManagementModeIn applies the In predicate on the "management_mode" field.
+func ManagementModeIn(vs ...enums.DocumentManagementMode) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldIn(FieldManagementMode, v...))
+}
+
+// ManagementModeNotIn applies the NotIn predicate on the "management_mode" field.
+func ManagementModeNotIn(vs ...enums.DocumentManagementMode) predicate.Procedure {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Procedure(sql.FieldNotIn(FieldManagementMode, v...))
+}
+
+// ManagementModeIsNil applies the IsNil predicate on the "management_mode" field.
+func ManagementModeIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldManagementMode))
+}
+
+// ManagementModeNotNil applies the NotNil predicate on the "management_mode" field.
+func ManagementModeNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldManagementMode))
+}
+
 // DetailsEQ applies the EQ predicate on the "details" field.
 func DetailsEQ(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDetails, v))

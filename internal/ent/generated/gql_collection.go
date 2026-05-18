@@ -1734,6 +1734,11 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldStatus)
 				fieldSeen[actionplan.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[actionplan.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldManagementMode)
+				fieldSeen[actionplan.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[actionplan.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldDetails)
@@ -39188,6 +39193,11 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldStatus)
 				fieldSeen[internalpolicy.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[internalpolicy.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldManagementMode)
+				fieldSeen[internalpolicy.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[internalpolicy.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldDetails)
@@ -58838,6 +58848,11 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldStatus)
 				fieldSeen[procedure.FieldStatus] = struct{}{}
+			}
+		case "managementMode":
+			if _, ok := fieldSeen[procedure.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldManagementMode)
+				fieldSeen[procedure.FieldManagementMode] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[procedure.FieldDetails]; !ok {

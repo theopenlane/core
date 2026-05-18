@@ -58,6 +58,8 @@ type InternalPolicyHistory struct {
 	Name string `json:"name,omitempty"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
+	// how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	// details of the policy
 	Details string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -120,7 +122,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired, internalpolicyhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldManagementMode, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -256,6 +258,12 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.DocumentStatus(value.String)
+			}
+		case internalpolicyhistory.FieldManagementMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field management_mode", values[i])
+			} else if value.Valid {
+				_m.ManagementMode = enums.DocumentManagementMode(value.String)
 			}
 		case internalpolicyhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -511,6 +519,9 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("management_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ManagementMode))
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)

@@ -52,6 +52,10 @@ type ActionPlanHistory implements Node {
 	"""
 	status: ActionPlanHistoryDocumentStatus
 	"""
+	how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ActionPlanHistoryDocumentManagementMode
+	"""
 	details of the action_plan
 	"""
 	details: String
@@ -203,6 +207,13 @@ type ActionPlanHistoryConnection {
 	totalCount: Int!
 }
 """
+ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
 enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -269,6 +280,7 @@ enum ActionPlanHistoryOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 	title
@@ -447,6 +459,15 @@ input ActionPlanHistoryWhereInput {
 	statusNotIn: [ActionPlanHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: ActionPlanHistoryDocumentManagementMode
+	managementModeNEQ: ActionPlanHistoryDocumentManagementMode
+	managementModeIn: [ActionPlanHistoryDocumentManagementMode!]
+	managementModeNotIn: [ActionPlanHistoryDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
@@ -17949,6 +17970,10 @@ type InternalPolicyHistory implements Node {
 	"""
 	status: InternalPolicyHistoryDocumentStatus
 	"""
+	how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: InternalPolicyHistoryDocumentManagementMode
+	"""
 	details of the policy
 	"""
 	details: String
@@ -18060,6 +18085,13 @@ type InternalPolicyHistoryConnection {
 	totalCount: Int!
 }
 """
+InternalPolicyHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
 enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -18126,6 +18158,7 @@ enum InternalPolicyHistoryOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 }
@@ -18368,6 +18401,15 @@ input InternalPolicyHistoryWhereInput {
 	statusNotIn: [InternalPolicyHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: InternalPolicyHistoryDocumentManagementMode
+	managementModeNEQ: InternalPolicyHistoryDocumentManagementMode
+	managementModeIn: [InternalPolicyHistoryDocumentManagementMode!]
+	managementModeNotIn: [InternalPolicyHistoryDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
@@ -24295,6 +24337,10 @@ type ProcedureHistory implements Node {
 	"""
 	status: ProcedureHistoryDocumentStatus
 	"""
+	how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	"""
+	managementMode: ProcedureHistoryDocumentManagementMode
+	"""
 	details of the procedure
 	"""
 	details: String
@@ -24414,6 +24460,13 @@ type ProcedureHistoryConnection {
 	totalCount: Int!
 }
 """
+ProcedureHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+	OPENLANE_MANAGED
+	EXTERNAL_REFERENCE
+}
+"""
 ProcedureHistoryDocumentStatus is enum for the field status
 """
 enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -24480,6 +24533,7 @@ enum ProcedureHistoryOrderField {
 	revision
 	name
 	STATUS
+	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
 }
@@ -24679,6 +24733,15 @@ input ProcedureHistoryWhereInput {
 	statusNotIn: [ProcedureHistoryDocumentStatus!]
 	statusIsNil: Boolean
 	statusNotNil: Boolean
+	"""
+	management_mode field predicates
+	"""
+	managementMode: ProcedureHistoryDocumentManagementMode
+	managementModeNEQ: ProcedureHistoryDocumentManagementMode
+	managementModeIn: [ProcedureHistoryDocumentManagementMode!]
+	managementModeNotIn: [ProcedureHistoryDocumentManagementMode!]
+	managementModeIsNil: Boolean
+	managementModeNotNil: Boolean
 	"""
 	details field predicates
 	"""
