@@ -150,16 +150,12 @@ func managementModeFor(ctx context.Context, mut documentMutation) enums.Document
 	return enums.DocumentManagementModeOpenlaneManaged
 }
 
-// fileChanged reports whether this mutation replaces, sets, or clears the document's file.
+// fileChanged reports whether an OpUpdateOne mutation replaces, sets, or clears the document's file.
 func fileChanged(ctx context.Context, mut documentMutation) bool {
 	newID, set := mut.FileID()
 	cleared := mut.FileIDCleared()
 	if !set && !cleared {
 		return false
-	}
-
-	if !mut.Op().Is(ent.OpUpdateOne) {
-		return true
 	}
 
 	oldID, err := mut.OldFileID(ctx)
@@ -168,16 +164,16 @@ func fileChanged(ctx context.Context, mut documentMutation) bool {
 		return true
 	}
 
-	oldStr := ""
-	if oldID != nil {
-		oldStr = *oldID
+	if oldID == nil {
+		if set {
+			return true
+		}
+		
+		return false
 	}
 
-	if cleared {
-		return oldStr != ""
-	}
 
-	return oldStr != newID
+	return *oldStr != newID
 }
 
 // detailsUpdated checks if the details were updated on a mutation, if so
