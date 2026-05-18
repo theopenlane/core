@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // RecurringCampaignEnvelope is the durable payload for a recurring campaign polling cycle
@@ -16,7 +16,7 @@ type RecurringCampaignEnvelope struct {
 }
 
 // recurringCampaignSchemaName is the type name derived from the JSON schema reflector
-var recurringCampaignSchemaName = providerkit.SchemaID(providerkit.SchemaFrom[RecurringCampaignEnvelope]())
+var recurringCampaignSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[RecurringCampaignEnvelope]())
 
 var (
 	// RecurringCampaignTopic is the Gala topic name for recurring campaign polling

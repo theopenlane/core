@@ -210,10 +210,6 @@ func serve(ctx context.Context) error {
 		}
 	}
 
-	if so.Config.Settings.CampaignWebhook.Enabled {
-		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
-	}
-
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
 
 	// closeDB ensures the database client is closed exactly once; both the shutdown
@@ -309,6 +305,10 @@ func serve(ctx context.Context) error {
 	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
 		if err := rt.SeedRecurringCampaigns(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
+		}
+
+		if err := rt.SeedPaymentReminders(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed payment reminder listener")
 		}
 	}
 

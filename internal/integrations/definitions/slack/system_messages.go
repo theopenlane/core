@@ -36,18 +36,14 @@ type NewUserMessage struct {
 	Email string `json:"email" jsonschema:"required,description=New user email address"`
 }
 
-// GitHubAppInstalledMessage is the input for the GitHub App installation Slack notification
-type GitHubAppInstalledMessage struct {
-	// GitHubOrganization is the GitHub organization name where the app was installed
-	GitHubOrganization string `json:"githubOrganization" jsonschema:"required,description=GitHub organization name"`
-	// GitHubAccountType is the GitHub account type (User, Organization)
-	GitHubAccountType string `json:"githubAccountType,omitempty" jsonschema:"description=GitHub account type"`
-	// OpenlaneOrganization is the Openlane organization display name
-	OpenlaneOrganization string `json:"openlaneOrganization" jsonschema:"required,description=Openlane organization display name"`
-	// OpenlaneOrganizationID is the Openlane organization identifier
-	OpenlaneOrganizationID string `json:"openlaneOrganizationId,omitempty" jsonschema:"description=Openlane organization id"`
-	// ShowOpenlaneOrganizationID reports whether the id should be rendered alongside the display name
-	ShowOpenlaneOrganizationID bool `json:"showOpenlaneOrganizationId,omitempty" jsonschema:"description=Render the Openlane organization id alongside the display name"`
+// IntegrationInstalledMessage is the input for the integration installed Slack notification
+type IntegrationInstalledMessage struct {
+	// IntegrationName is the display name of the installed integration definition
+	IntegrationName string `json:"integrationName" jsonschema:"required,description=Display name of the installed integration"`
+	// OrganizationName is the Openlane organization display name
+	OrganizationName string `json:"organizationName" jsonschema:"required,description=Openlane organization display name"`
+	// OrganizationID is the Openlane organization identifier
+	OrganizationID string `json:"organizationId" jsonschema:"required,description=Openlane organization id"`
 }
 
 // DemoRequestMessage is the input for the demo request Slack notification
@@ -70,10 +66,10 @@ type DemoRequestMessage struct {
 
 // System message operation schemas and refs
 var (
-	newSubscriberSchema, NewSubscriberOp         = providerkit.OperationSchema[NewSubscriberMessage]()      //nolint:revive
-	newUserSchema, NewUserOp                     = providerkit.OperationSchema[NewUserMessage]()            //nolint:revive
-	githubAppInstalledSchema, GitHubAppInstallOp = providerkit.OperationSchema[GitHubAppInstalledMessage]() //nolint:revive
-	demoRequestSchema, DemoRequestOp             = providerkit.OperationSchema[DemoRequestMessage]()        //nolint:revive
+	newSubscriberSchema, NewSubscriberOp               = providerkit.OperationSchema[NewSubscriberMessage]()        //nolint:revive
+	newUserSchema, NewUserOp                           = providerkit.OperationSchema[NewUserMessage]()              //nolint:revive
+	integrationInstalledSchema, IntegrationInstalledOp = providerkit.OperationSchema[IntegrationInstalledMessage]() //nolint:revive
+	demoRequestSchema, DemoRequestOp                   = providerkit.OperationSchema[DemoRequestMessage]()          //nolint:revive
 )
 
 // Inline system message templates
@@ -82,17 +78,11 @@ var (
 		`New waitlist subscriber: {{ .Email }}`)
 
 	newUserTemplate = newSystemTemplate("new_user",
-		`New user registered: {{ .Email }}
+		`New user registered: {{ .Email }}`)
 
-This message was sent using the integrations runtime framework.`)
-
-	githubAppInstalledTemplate = newSystemTemplate("github_app_installed",
-		`Openlane GitHub App installation completed
-GitHub organization: {{ .GitHubOrganization }}
-{{- if .GitHubAccountType }}
-GitHub account type: {{ .GitHubAccountType }}
-{{- end }}
-Openlane organization: {{ .OpenlaneOrganization }}{{ if .ShowOpenlaneOrganizationID }} ({{ .OpenlaneOrganizationID }}){{ end }}`)
+	integrationInstalledTemplate = newSystemTemplate("integration_installed",
+		`Integration installed: {{ .IntegrationName }}
+Organization: {{ .OrganizationName }} ({{ .OrganizationID }})`)
 
 	demoRequestTemplate = newSystemTemplate("demo_request",
 		`New Company: {{ .CompanyName }}
@@ -155,7 +145,7 @@ func AllSlackSystemMessages() []types.OperationRegistration {
 	return []types.OperationRegistration{
 		systemMessageRegistration(NewSubscriberOp, newSubscriberSchema, "Notify the platform Slack workspace that a new waitlist subscriber signed up", newSubscriberTemplate),
 		systemMessageRegistration(NewUserOp, newUserSchema, "Notify the platform Slack workspace that a new user registered", newUserTemplate),
-		systemMessageRegistration(GitHubAppInstallOp, githubAppInstalledSchema, "Notify the platform Slack workspace that the Openlane GitHub App was installed", githubAppInstalledTemplate),
+		systemMessageRegistration(IntegrationInstalledOp, integrationInstalledSchema, "Notify the platform Slack workspace that an integration was installed", integrationInstalledTemplate),
 		systemMessageRegistration(DemoRequestOp, demoRequestSchema, "Notify the platform Slack workspace of an inbound demo request", demoRequestTemplate),
 	}
 }

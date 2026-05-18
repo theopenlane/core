@@ -10,13 +10,13 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-func TestDispatchWebhookEventNilInstallation(t *testing.T) {
+func TestDispatchWebhookEventNilIntegrationNoDefinition(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
-	err := rt.DispatchWebhookEvent(context.Background(), nil, "hook", types.WebhookReceivedEvent{})
-	if !errors.Is(err, ErrInstallationRequired) {
-		t.Fatalf("expected ErrInstallationRequired, got %v", err)
+	err := rt.DispatchWebhookEvent(context.Background(), nil, "", "hook", types.WebhookReceivedEvent{Name: "push"})
+	if err == nil {
+		t.Fatal("expected error for empty definition ID")
 	}
 }
 
@@ -27,7 +27,7 @@ func TestDispatchWebhookEventUnknownDefinition(t *testing.T) {
 	err := rt.DispatchWebhookEvent(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "nonexistent",
-	}, "hook", types.WebhookReceivedEvent{Name: "push"})
+	}, "", "hook", types.WebhookReceivedEvent{Name: "push"})
 	if err == nil {
 		t.Fatal("expected error for unknown definition")
 	}
@@ -67,7 +67,7 @@ func TestDispatchWebhookEventUnknownWebhookName(t *testing.T) {
 	err := rt.DispatchWebhookEvent(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
-	}, "nonexistent-hook", types.WebhookReceivedEvent{Name: "push"})
+	}, "", "nonexistent-hook", types.WebhookReceivedEvent{Name: "push"})
 	if err == nil {
 		t.Fatal("expected error for unknown webhook name")
 	}

@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"entgo.io/ent"
@@ -10,7 +9,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -18,16 +16,6 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-)
-
-var (
-	errMissingTemplate           = errors.New("missing template")
-	errDocInfoDoesNotMatchCaller = errors.New("NDA submission does not match authenticated user")
-	errUserHasAlreadySignedNDA   = errors.New("user has already signed the NDA")
-	errValidationFailed          = errors.New("validation failed")
-	errMustBeAnonymousUser       = errors.New("must be an anonymous user")
-	errMissingResponse           = errors.New("missing response")
-	errOnlyOneDocumentData       = errors.New("you can only upload one document data file for an nda")
 )
 
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
@@ -76,7 +64,7 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, errUserHasAlreadySignedNDA
 			}
 
-			if err = validateTrustCenterNDAJSON(docTemplate.Jsonconfig, response, tcID, caller.SubjectEmail, caller.SubjectID); err != nil {
+			if err = validateTrustCenterNDAJSON(response, tcID, caller.SubjectEmail, caller.SubjectID); err != nil {
 				return nil, err
 			}
 
@@ -85,15 +73,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				return nil, err
 			}
 
-			// get the id of the created document data
 			createdDocData, ok := v.(*generated.DocumentData)
 			if !ok {
 				logx.FromContext(ctx).Error().Msgf("unexpected type %T for created document data", v)
-
 				return nil, fmt.Errorf("unexpected type %T: %w", v, ErrInternalServerError)
 			}
 
-			// update nda requests that it has been signed
 			if err := m.Client().TrustCenterNDARequest.Update().Where(
 				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 				trustcenterndarequest.TrustCenterID(tcID),
@@ -101,15 +86,12 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 			).SetStatus(enums.TrustCenterNDARequestStatusSigned).SetDocumentDataID(createdDocData.ID).Exec(ctx); err != nil {
 				if !generated.IsNotFound(err) {
 					logx.FromContext(ctx).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to mark nda request signed status")
-
 					return nil, err
 				}
 
-				// this shouldn't happen, unless it was already marked as signed
 				logx.FromContext(ctx).Error().Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("no existing nda request to mark signed status")
 			}
 
-			// add the nda_signed tuple to the anonymous user to allow file access
 			tuple := fgax.GetTupleKey(fgax.TupleRequest{
 				SubjectID:   caller.SubjectID,
 				SubjectType: "user",
@@ -120,29 +102,10 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 
 			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to create nda_signed relationship tuple")
-
 				return nil, ErrInternalServerError
 			}
 
-			ndaRequestID, err := m.Client().TrustCenterNDARequest.Query().Where(
-				trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
-				trustcenterndarequest.TrustCenterID(tcID),
-				trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
-			).FirstID(ctx)
-			if err != nil {
-				return nil, err
-			}
-
-			if err := enqueueJob(ctx, m.Job, jobspec.AttestNDARequestArgs{
-				NDARequestID:  ndaRequestID,
-				TrustCenterID: tcID,
-			}, nil); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("nda_request_id", ndaRequestID).Msg("failed to enqueue attest nda request job")
-
-				return nil, err
-			}
-
-			return v, err
+			return v, nil
 		})
 	}, ent.OpCreate)
 }
@@ -198,41 +161,11 @@ func HookDocumentDataFile() ent.Hook {
 	}, ent.OpUpdateOne)
 }
 
-// validateTrustCenterNDAJSON validates the JSON against the schema and checks the trust center id, email, and user id match the authenticated user
-func validateTrustCenterNDAJSON(schema interface{}, document map[string]interface{}, trustCenterID, subjectEmail, subjectID string) (err error) {
-	if err = validateJSON(schema, document); err != nil {
-		return err
-	}
+// validateTrustCenterNDAJSON validates the document against the struct-derived schema
+// and checks the trust center id, email, and user id match the authenticated user
+func validateTrustCenterNDAJSON(document map[string]any, trustCenterID, subjectEmail, subjectID string) error {
+	schema := jsonx.SchemaFrom[signedNDADocumentData]()
 
-	signatoryInfo, ok := document["signatory_info"].(map[string]any)
-	if !ok {
-		return fmt.Errorf("%w: signatory_info must be an object", errValidationFailed)
-	}
-
-	signatureMetadata, ok := document["signature_metadata"].(map[string]any)
-	if !ok {
-		return fmt.Errorf("%w: signature_metadata must be an object", errValidationFailed)
-	}
-
-	if document["trust_center_id"] != trustCenterID ||
-		signatoryInfo["email"] != subjectEmail ||
-		signatureMetadata["user_id"] != subjectID {
-		return errDocInfoDoesNotMatchCaller
-	}
-
-	firstName, _ := signatoryInfo["first_name"].(string)
-	lastName, _ := signatoryInfo["last_name"].(string)
-	companyName, _ := signatoryInfo["company_name"].(string)
-
-	if firstName == "" || lastName == "" || companyName == "" {
-		return fmt.Errorf("%w: first_name, last_name, and company_name are all required", errValidationFailed)
-	}
-
-	return nil
-}
-
-// validateJSON validates a document against a schema
-func validateJSON(schema interface{}, document interface{}) error {
 	result, err := jsonx.ValidateSchema(schema, document)
 	if err != nil {
 		return err
@@ -240,6 +173,18 @@ func validateJSON(schema interface{}, document interface{}) error {
 
 	if !result.Valid() {
 		return fmt.Errorf("%w: %v", errValidationFailed, jsonx.ValidationErrorStrings(result))
+	}
+
+	var doc signedNDADocumentData
+	if err := jsonx.RoundTrip(document, &doc); err != nil {
+		return fmt.Errorf("%w: %v", errValidationFailed, err)
+	}
+
+	if doc.TrustCenterID != trustCenterID ||
+		doc.SignatoryInfo.Email != subjectEmail ||
+		doc.SignatureMetadata.UserID != subjectID {
+
+		return errDocInfoDoesNotMatchCaller
 	}
 
 	return nil

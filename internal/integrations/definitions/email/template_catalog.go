@@ -4,7 +4,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // nonTemplateConfigFields are RuntimeEmailConfig keys excluded from template variables
@@ -18,8 +18,8 @@ var nonTemplateConfigFields = map[string]struct{}{
 // payloadVariables are per-send fields from RecipientInfo and CampaignContext
 // injected into the template variable map at render time
 var payloadVariables = lo.Map(
-	append(providerkit.PropertyDescriptors[RecipientInfo](), providerkit.PropertyDescriptors[CampaignContext]()...),
-	func(p providerkit.PropertyDescriptor, _ int) models.TemplateVariable {
+	append(jsonx.PropertyDescriptors[RecipientInfo](), jsonx.PropertyDescriptors[CampaignContext]()...),
+	func(p jsonx.PropertyDescriptor, _ int) models.TemplateVariable {
 		return models.TemplateVariable{Name: p.Name, Description: p.Description}
 	},
 )
@@ -28,8 +28,8 @@ var payloadVariables = lo.Map(
 // email template authors: config-backed fields, payload fields, and computed values
 func TemplateVariables() []models.TemplateVariable {
 	configVars := lo.FilterMap(
-		providerkit.PropertyDescriptors[RuntimeEmailConfig](),
-		func(p providerkit.PropertyDescriptor, _ int) (models.TemplateVariable, bool) {
+		jsonx.PropertyDescriptors[RuntimeEmailConfig](),
+		func(p jsonx.PropertyDescriptor, _ int) (models.TemplateVariable, bool) {
 			if _, skip := nonTemplateConfigFields[p.Name]; skip {
 				return models.TemplateVariable{}, false
 			}

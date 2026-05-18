@@ -60,6 +60,8 @@ type SlackClient struct { //nolint:revive
 	WebhookURL string
 	// DefaultChannel is the channel id used for system messages when no explicit channel is specified
 	DefaultChannel string
+	// devMode silently drops messages when no transport is configured
+	devMode bool
 }
 
 // slackCred holds the provider-owned credential material for an OAuth-based Slack installation

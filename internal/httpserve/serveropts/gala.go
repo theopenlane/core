@@ -93,6 +93,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaDocumentAssociationListeners},
 		{galaApp, hooks.RegisterGalaQuestionnaireTransformListeners},
 		{galaApp, hooks.RegisterGalaCampaignRecurringListeners},
+		{galaApp, hooks.RegisterGalaNDAAttestationListeners},
 		{notificationGala, hooks.RegisterGalaNotificationListeners},
 	}
 

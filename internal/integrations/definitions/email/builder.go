@@ -3,15 +3,19 @@ package email
 import (
 	"fmt"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/resend/resend-go/v3"
+
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Builder returns the email definition builder with the supplied runtime config applied.
-// When cfg.Provisioned() is true, a RuntimeIntegration is included for system-send.
+// When devMode is true or cfg.Provisioned() returns true, a RuntimeIntegration is
+// included for system-send. In dev mode the sender writes MIME files to cfg.TestDir
+// instead of calling the provider API.
 // Customer registrations (credentials, connections, clients, user input) are always present
-func Builder(cfg *RuntimeEmailConfig) registry.Builder {
+func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -51,7 +55,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				},
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			Operations: append(AllEmailOperations(),
 				types.OperationRegistration{
@@ -93,11 +97,33 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 			),
 		}
 
+		if cfg.ResendSecret != "" {
+			deliveryHandler := ResendDeliveryEvent{}.Handle
+
+			def.Webhooks = []types.WebhookRegistration{
+				{
+					Name:         resendWebhookRef.Name(),
+					StaticRoute:  "/email/webhook",
+					SecretSource: func() string { return cfg.ResendSecret },
+					Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
+					Event:        ResendWebhook{}.Event,
+					Events: []types.WebhookEventRegistration{
+						{Name: resend.EventEmailSent, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailSent), Handle: deliveryHandler},
+						{Name: resend.EventEmailDelivered, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailDelivered), Handle: deliveryHandler},
+						{Name: resend.EventEmailOpened, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailOpened), Handle: deliveryHandler},
+						{Name: resend.EventEmailClicked, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailClicked), Handle: deliveryHandler},
+						{Name: resend.EventEmailBounced, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailBounced), Handle: deliveryHandler},
+						{Name: resend.EventEmailFailed, Topic: DefinitionID.WebhookEventTopic(resend.EventEmailFailed), Handle: deliveryHandler},
+					},
+				},
+			}
+		}
+
 		if len(cfg.Social) == 0 {
 			cfg.Social = DefaultSocial
 		}
 
-		if cfg.Provisioned() {
+		if devMode || cfg.Provisioned() {
 			runtimeEmailRef.SetConfig(cfg)
 
 			marshaledConfig, err := runtimeEmailRef.MarshalConfig()
@@ -109,7 +135,7 @@ func Builder(cfg *RuntimeEmailConfig) registry.Builder {
 				Ref:    runtimeEmailRef.ID(),
 				Schema: runtimeEmailSchema,
 				Config: marshaledConfig,
-				Build:  buildRuntimeClient,
+				Build:  runtimeClientBuilder(devMode && !cfg.Provisioned()),
 			}
 		}
 

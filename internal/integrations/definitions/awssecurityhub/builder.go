@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // Builder returns the AWS Security Hub definition builder with the supplied operator config applied
@@ -24,7 +25,7 @@ func Builder(cfg Config) registry.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{

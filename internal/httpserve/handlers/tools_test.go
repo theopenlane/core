@@ -260,8 +260,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		Gala:     suite.galaRuntime,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig()),
-			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: suite.sharedSlackRecorder.URL()}),
+			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: suite.sharedSlackRecorder.URL()}, false),
 			registry.Builder(buildTestOAuthDefinition),
 			githubapp.Builder(defaultGitHubAppSpec()),
 			configTestDefinitionBuilder(configTestProviderID, false),

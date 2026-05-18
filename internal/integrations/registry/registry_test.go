@@ -1405,3 +1405,99 @@ func TestEmptyRegistryLookups(t *testing.T) {
 		t.Fatalf("WebhookListeners() len = %d, want 0", got)
 	}
 }
+
+func TestStaticWebhooks_ReturnsStaticRouteEntries(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def, _ := minimalDefinition("static-def")
+	def.Webhooks = []integrationtypes.WebhookRegistration{
+		{
+			Name:        "delivery",
+			StaticRoute: "/email/webhook",
+			Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+				return integrationtypes.WebhookReceivedEvent{}, nil
+			},
+			Events: []integrationtypes.WebhookEventRegistration{
+				{
+					Name:  "email.delivered",
+					Topic: gala.TopicName("test.email.delivered"),
+					Handle: func(context.Context, integrationtypes.WebhookHandleRequest) error {
+						return nil
+					},
+				},
+			},
+		},
+		{
+			Name: "dynamic",
+			Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+				return integrationtypes.WebhookReceivedEvent{}, nil
+			},
+			Events: []integrationtypes.WebhookEventRegistration{
+				{
+					Name:  "push",
+					Topic: gala.TopicName("test.push"),
+					Handle: func(context.Context, integrationtypes.WebhookHandleRequest) error {
+						return nil
+					},
+				},
+			},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error: %v", err)
+	}
+
+	entries := reg.StaticWebhooks()
+	if len(entries) != 1 {
+		t.Fatalf("StaticWebhooks() len = %d, want 1", len(entries))
+	}
+
+	if entries[0].DefinitionID != "static-def" {
+		t.Fatalf("DefinitionID = %q, want %q", entries[0].DefinitionID, "static-def")
+	}
+
+	if entries[0].WebhookName != "delivery" {
+		t.Fatalf("WebhookName = %q, want %q", entries[0].WebhookName, "delivery")
+	}
+
+	if entries[0].StaticRoute != "/email/webhook" {
+		t.Fatalf("StaticRoute = %q, want %q", entries[0].StaticRoute, "/email/webhook")
+	}
+}
+
+func TestStaticWebhooks_EmptyWhenNoStaticRoutes(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+
+	def, _ := minimalDefinition("no-static")
+	def.Webhooks = []integrationtypes.WebhookRegistration{
+		{
+			Name: "dynamic-only",
+			Event: func(integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
+				return integrationtypes.WebhookReceivedEvent{}, nil
+			},
+			Events: []integrationtypes.WebhookEventRegistration{
+				{
+					Name:  "push",
+					Topic: gala.TopicName("test.push"),
+					Handle: func(context.Context, integrationtypes.WebhookHandleRequest) error {
+						return nil
+					},
+				},
+			},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error: %v", err)
+	}
+
+	entries := reg.StaticWebhooks()
+	if len(entries) != 0 {
+		t.Fatalf("StaticWebhooks() len = %d, want 0", len(entries))
+	}
+}
