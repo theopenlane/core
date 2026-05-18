@@ -109,7 +109,7 @@ require (
 	github.com/theopenlane/riverboat v0.8.8
 	github.com/theopenlane/utils v0.7.0
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.8.0
+	github.com/urfave/cli/v3 v3.9.0
 	github.com/vektah/gqlparser/v2 v2.5.33
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yuin/goldmark v1.8.2
@@ -122,7 +122,7 @@ require (
 	golang.org/x/sync v0.20.0
 	golang.org/x/text v0.37.0
 	golang.org/x/tools v0.45.0
-	google.golang.org/api v0.278.0
+	google.golang.org/api v0.279.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
