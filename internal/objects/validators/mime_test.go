@@ -69,7 +69,7 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 	}
 
 	// allowedTypes mixes bare and parameterized forms because MIME sniffers
-	// (e.g. gabriel-vasile/mimetype) return e.g. "text/html; charset=utf-8";
+	// (e.g. gabriel-vasile/mimetype) return e.g. "text/plain; charset=utf-8";
 	// the validator must accept both.
 	allowedTypes := []string{
 		"text/plain",
@@ -77,8 +77,6 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		"text/markdown",
 		"text/markdown; charset=utf-8",
 		"text/x-markdown",
-		"text/html",
-		"text/html; charset=utf-8",
 		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 	}
 
