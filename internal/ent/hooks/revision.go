@@ -133,21 +133,20 @@ type documentMutation interface {
 	FileIDCleared() bool
 }
 
-// managementModeFor returns the mode that will be in effect after this mutation,
+```suggestion
+// managementModeFor returns the mode that will be in effect after this OpUpdateOne mutation,
 // defaulting to OPENLANE_MANAGED for pre-existing rows (NULL column) and create-path mutations.
 func managementModeFor(ctx context.Context, mut documentMutation) enums.DocumentManagementMode {
-	if v, ok := mut.ManagementMode(); ok && v.IsValid() {
+	if v, ok := mut.ManagementMode(); ok {
 		return v
 	}
 
-	if mut.Op().Is(ent.OpUpdateOne) {
-		if v, err := mut.OldManagementMode(ctx); err == nil && v.IsValid() {
+	if v, err := mut.OldManagementMode(ctx); err == nil {
 			return v
-		} else if err != nil {
-			logx.FromContext(ctx).Debug().Err(err).Msg("could not read old management_mode; defaulting to OPENLANE_MANAGED")
-		}
-	}
-
+	} 
+			
+	logx.FromContext(ctx).Info().Msg("could not determine management mod; defaulting to OPENLANE_MANAGED")
+	
 	return enums.DocumentManagementModeOpenlaneManaged
 }
 
