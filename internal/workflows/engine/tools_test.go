@@ -224,7 +224,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		Gala:     runtime,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig()),
+			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			s.slackMock.Builder(),
 		},
 	})

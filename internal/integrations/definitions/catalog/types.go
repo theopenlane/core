@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/operations"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
@@ -32,4 +33,6 @@ type Config struct {
 	OIDCLocal oidclocal.Config `json:"oidclocal" koanf:"oidclocal"`
 	// Email holds operator-level email integration configuration
 	Email email.RuntimeEmailConfig `json:"email" koanf:"email"`
+	// PaymentReminder configures the scheduled payment reminder listener
+	PaymentReminder operations.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
 }

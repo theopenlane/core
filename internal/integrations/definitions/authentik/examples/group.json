@@ -1,0 +1,23 @@
+{
+  "pk": "488f8a0c-c0b6-4dce-bf79-82db3af7cdac",
+  "num_pk": 96449,
+  "name": "authentik Admins",
+  "is_superuser": true,
+  "parents": [],
+  "users": [4, 5],
+  "users_obj": [
+    {
+      "pk": 4,
+      "username": "akadmin",
+      "name": "authentik Default Admin",
+      "is_active": true,
+      "last_login": "2026-05-09T08:11:37.941933Z",
+      "email": "manab@gmail.com",
+      "attributes": {},
+      "uid": "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5"
+    }
+  ],
+  "attributes": {},
+  "roles": [],
+  "children": []
+}

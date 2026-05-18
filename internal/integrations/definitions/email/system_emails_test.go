@@ -39,6 +39,7 @@ func TestSystemEmailSubjects(t *testing.T) {
 	tcAuth := testDispatcher[TrustCenterAuthEmail](t, "TrustCenterAuthEmail")
 	questionnaireAuth := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
 	billingChanged := testDispatcher[BillingEmailChangedEmail](t, "BillingEmailChangedEmail")
+	orgDeletion := testDispatcher[OrgDeletionNoticeEmail](t, "OrgDeletionNoticeEmail")
 
 	tests := []struct {
 		name     string
@@ -134,6 +135,14 @@ func TestSystemEmailSubjects(t *testing.T) {
 				OrgName: "BillOrg",
 			}),
 			contains: []string{"Billing", "BillOrg"},
+		},
+		{
+			name: "org deletion notice",
+			subject: orgDeletion.Subject(cfg, OrgDeletionNoticeEmail{
+				OrgName:      "DeadOrg",
+				DeletionDate: time.Date(2025, 7, 1, 0, 0, 0, 0, time.UTC),
+			}),
+			contains: []string{"Deletion", "DeadOrg"},
 		},
 	}
 
@@ -427,6 +436,32 @@ func TestBillingChangedContent(t *testing.T) {
 	require.NotEmpty(t, body.Dictionary.Cells)
 	assert.Equal(t, "old@billing.com", body.Dictionary.Cells[0].Value)
 	assert.Equal(t, "new@billing.com", body.Dictionary.Cells[1].Value)
+}
+
+// TestOrgDeletionNoticeContent verifies org deletion notice content
+func TestOrgDeletionNoticeContent(t *testing.T) {
+	cfg := RuntimeEmailConfig{
+		CompanyName:  "TestCo",
+		ProductURL:   "https://app.testco.com",
+		SupportEmail: "support@testco.com",
+	}
+
+	req := OrgDeletionNoticeEmail{
+		OrgName:      "DeadOrg",
+		DeletionDate: time.Date(2025, 7, 1, 0, 0, 0, 0, time.UTC),
+	}
+
+	body := testDispatcher[OrgDeletionNoticeEmail](t, "OrgDeletionNoticeEmail").Build(cfg, req)
+
+	assert.Equal(t, "Organization Deletion Notice", body.Title)
+	assert.Contains(t, body.Intros.Paragraphs[0], "DeadOrg")
+
+	require.NotEmpty(t, body.Dictionary.Cells)
+	assert.Equal(t, "July 1, 2025", body.Dictionary.Cells[0].Value)
+
+	require.Len(t, body.Actions, 1)
+	assert.Equal(t, "https://app.testco.com/billing", body.Actions[0].Button.Link)
+	assert.Equal(t, "Add Payment Method", body.Actions[0].Button.Text)
 }
 
 // TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration

@@ -24,23 +24,20 @@ func TestNewSubscriberTemplateRender(t *testing.T) {
 	require.Contains(t, buf.String(), "alice@example.com")
 }
 
-func TestGitHubAppInstalledTemplateRender(t *testing.T) {
+func TestIntegrationInstalledTemplateRender(t *testing.T) {
 	t.Parallel()
 
-	input := GitHubAppInstalledMessage{
-		GitHubOrganization:         "acme",
-		GitHubAccountType:          "Organization",
-		OpenlaneOrganization:       "Acme Inc",
-		OpenlaneOrganizationID:     "01HABCD",
-		ShowOpenlaneOrganizationID: true,
+	input := IntegrationInstalledMessage{
+		IntegrationName:  "Slack",
+		OrganizationName: "Acme Inc",
+		OrganizationID:   "01HABCD",
 	}
 
 	var buf bytes.Buffer
-	require.NoError(t, githubAppInstalledTemplate.Execute(&buf, input))
+	require.NoError(t, integrationInstalledTemplate.Execute(&buf, input))
 
 	out := buf.String()
-	require.Contains(t, out, "acme")
-	require.Contains(t, out, "Organization")
+	require.Contains(t, out, "Slack")
 	require.Contains(t, out, "Acme Inc")
 	require.Contains(t, out, "01HABCD")
 }
@@ -173,7 +170,7 @@ func TestBuildRuntimeMessageClientWebhookOnly(t *testing.T) {
 	raw, err := json.Marshal(cfg)
 	require.NoError(t, err)
 
-	built, err := buildRuntimeSlackClient(context.Background(), raw)
+	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
 	client, ok := built.(*SlackClient)
@@ -192,7 +189,7 @@ func TestBuildRuntimeMessageClientBotToken(t *testing.T) {
 	raw, err := json.Marshal(cfg)
 	require.NoError(t, err)
 
-	built, err := buildRuntimeSlackClient(context.Background(), raw)
+	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
 	client, ok := built.(*SlackClient)
@@ -213,7 +210,7 @@ func TestBuildRuntimeMessageClientBotTokenWithWebhookFallback(t *testing.T) {
 	raw, err := json.Marshal(cfg)
 	require.NoError(t, err)
 
-	built, err := buildRuntimeSlackClient(context.Background(), raw)
+	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
 	client, ok := built.(*SlackClient)
@@ -229,8 +226,46 @@ func TestBuildRuntimeMessageClientUnprovisioned(t *testing.T) {
 	raw, err := json.Marshal(RuntimeSlackConfig{})
 	require.NoError(t, err)
 
-	_, err = buildRuntimeSlackClient(context.Background(), raw)
+	_, err = runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.True(t, errors.Is(err, ErrRuntimeConfigInvalid))
+}
+
+func TestDevModeNoCredentials_SystemMessageNoOps(t *testing.T) {
+	t.Parallel()
+
+	raw, err := json.Marshal(RuntimeSlackConfig{})
+	require.NoError(t, err)
+
+	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
+	require.NoError(t, err)
+
+	client := built.(*SlackClient)
+	require.NoError(t, client.sendText(context.Background(), "this message should be silently dropped", ""))
+}
+
+func TestDevModeWithCredentials_SystemMessageDelivers(t *testing.T) {
+	t.Parallel()
+
+	recorder := newSystemMessageRecorder(t)
+	server := httptest.NewServer(recorder.handler())
+	defer server.Close()
+
+	cfg := RuntimeSlackConfig{
+		BotToken:       "xoxb-real-token",
+		DefaultChannel: "C_REAL",
+	}
+	raw, err := json.Marshal(cfg)
+	require.NoError(t, err)
+
+	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
+	require.NoError(t, err)
+
+	client := built.(*SlackClient)
+	client.API = slackgo.New("xoxb-real-token", slackgo.OptionAPIURL(server.URL+"/"))
+
+	require.NoError(t, client.sendText(context.Background(), "should deliver normally", ""))
+	require.Equal(t, []string{"C_REAL"}, recorder.channels())
+	require.Equal(t, []string{"should deliver normally"}, recorder.texts())
 }
 
 func TestSlackClientSendTextAPIPreferredOverWebhook(t *testing.T) {

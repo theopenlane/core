@@ -111,6 +111,8 @@ type ServiceAccountCredentialSchema struct {
 	SecretAccessKey string `json:"secretAccessKey" jsonschema:"required,title=Secret Access Key"`
 	// SessionToken is the AWS session token for static credentials
 	SessionToken string `json:"sessionToken,omitempty"    jsonschema:"title=Session Token"`
+	// Region is the AWS region for API calls (e.g. us-east-1)
+	Region string `json:"region" jsonschema:"required,title=Region,description=AWS region used for Security Hub and other service API calls (e.g. us-east-1)."`
 }
 
 // InstallationMetadata holds the non-secret AWS connection attributes persisted for one installation

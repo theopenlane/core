@@ -256,7 +256,7 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 		Bucket:                     aws.String(p.options.Bucket),
 		Key:                        aws.String(file.Key),
 		ResponseContentType:        aws.String(file.ContentType),
-		ResponseContentDisposition: aws.String("attachment"),
+		ResponseContentDisposition: aws.String(storage.DispositionFor(file.ContentType)),
 	}, func(s3opts *s3.PresignOptions) {
 		s3opts.Expires = expires
 		s3opts.ClientOptions = []func(*s3.Options){

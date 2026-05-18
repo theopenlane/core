@@ -11,7 +11,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -85,7 +84,7 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		return nil, nil
 	}
 
-	out, err := providerkit.InjectDefaults(credentialType.Schema, currentCreds)
+	out, err := jsonx.InjectDefaults(credentialType.Schema, currentCreds)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.FromIntegration(obj)).Msg("error injecting credential defaults, returning full schema")
 
@@ -117,5 +116,5 @@ func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integra
 		return def.UserInput.Schema, nil
 	}
 
-	return providerkit.InjectDefaults(def.UserInput.Schema, currentConfig)
+	return jsonx.InjectDefaults(def.UserInput.Schema, currentConfig)
 }

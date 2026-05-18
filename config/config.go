@@ -81,8 +81,6 @@ type Config struct {
 	Integrations catalog.Config `json:"integrations" koanf:"integrations"`
 	// Workflows contains the configuration for the workflows engine
 	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
-	// CampaignWebhook contains webhook configuration for campaign-related email providers
-	CampaignWebhook handlers.CampaignWebhookConfig `json:"campaignwebhook" koanf:"campaignwebhook"`
 	// Cloudflare contains configuration for Cloudflare integration
 	Cloudflare handlers.CloudflareConfig `json:"cloudflare" koanf:"cloudflare"`
 	// Shortlinks contains configuration for the URL shortening service

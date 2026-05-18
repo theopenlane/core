@@ -38,7 +38,7 @@ func defaultGitHubAppSpec() githubapp.Config {
 
 func (suite *HandlerTestSuite) registerGitHubAppWebhookRoute() {
 	op := suite.createImpersonationOperation("GitHubAppWebhook", "Handle GitHub App security alert webhooks")
-	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, op, suite.h.GitHubAppWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, op, suite.h.IntegrationStaticWebhookHandler(githubAppDefinitionID, githubapp.InstallationEventsWebhook.Name()))
 }
 
 func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
@@ -153,58 +153,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 
 	_, hasMetadata := updated.Metadata["githubWebhookVerifiedAt"]
 	assert.False(t, hasMetadata)
-}
-
-func (suite *HandlerTestSuite) TestGitHubWebhookInstallationCreatedSendsTemplatedSlackNotification() {
-	t := suite.T()
-
-	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
-	defer restore()
-
-	suite.registerGitHubAppWebhookRoute()
-
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
-
-	err := suite.db.Organization.UpdateOneID(user.OrganizationID).
-		SetDisplayName("Acme Security").
-		Exec(user.UserCtx)
-	assert.NoError(t, err)
-
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1002"})
-	_, err = suite.db.Integration.Create().
-		SetOwnerID(user.OrganizationID).
-		SetName("GitHub App").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
-		SetDefinitionID(githubAppDefinitionID).
-		Save(user.UserCtx)
-	assert.NoError(t, err)
-
-	suite.sharedSlackRecorder.Reset()
-
-	payload := []byte(`{"action":"created","installation":{"id":1002,"account":{"login":"acme-github-org","type":"Organization"}}}`)
-	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
-	req.Header.Set("X-GitHub-Event", "installation")
-	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(user.UserCtx)
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
-
-	assert.Equal(t, http.StatusOK, rec.Code)
-
-	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
-
-	bodies := suite.sharedSlackRecorder.Bodies()
-	assert.Len(t, bodies, 1)
-
-	text := slackMessageText(t, bodies[0])
-	expected := "Openlane GitHub App installation completed\n" +
-		"GitHub organization: acme-github-org\n" +
-		"GitHub account type: Organization\n" +
-		"Openlane organization: Acme Security (" + user.OrganizationID + ")"
-	assert.Equal(t, expected, strings.TrimSpace(text))
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
@@ -327,18 +275,6 @@ func (r *slackWebhookRecorder) Close() {
 	}
 
 	r.server.Close()
-}
-
-func slackMessageText(t *testing.T, requestBody string) string {
-	t.Helper()
-
-	var payload struct {
-		Text string `json:"text"`
-	}
-	assert.NoError(t, json.Unmarshal([]byte(requestBody), &payload))
-	assert.NotEmpty(t, payload.Text)
-
-	return payload.Text
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration() {

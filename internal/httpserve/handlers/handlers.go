@@ -106,22 +106,10 @@ type Handler struct {
 	Gala *gala.Gala
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
-	// CampaignWebhook contains the configuration for campaign-related email webhooks
-	CampaignWebhook CampaignWebhookConfig
 	// CloudflareConfig contains the configuration for Cloudflare integration
 	CloudflareConfig CloudflareConfig
 	// ShortlinksClient provides URL shortening functionality
 	ShortlinksClient *shortlinks.Client
-}
-
-// CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
-type CampaignWebhookConfig struct {
-	// Enabled toggles the campaign webhook handler
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-	// ResendAPIKey is the API key used for Resend client initialization
-	ResendAPIKey string `json:"resendapikey" koanf:"resendapikey" default:"" sensitive:"true"`
-	// ResendSecret is the signing secret used to verify Resend webhook payloads
-	ResendSecret string `json:"resendsecret" koanf:"resendsecret" default:"" sensitive:"true"`
 }
 
 // CloudflareConfig contains configuration for Cloudflare integration.

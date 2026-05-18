@@ -1,9 +1,12 @@
 package email
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"time"
 
+	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/theopenlane/newman/providers/mock"
 )
 
@@ -109,9 +112,9 @@ func TestFixture(name, toEmail string) json.RawMessage {
 		"TrustCenterNDASignedEmail": TrustCenterNDASignedEmail{
 			RecipientInfo:      r,
 			OrgName:            "SecureCorp",
-			TrustCenterURL:     "https://trustcenter.example.com/securecorp",
+			TrustCenterURL:     "https://trustcenter.example.com/securecorp?token=test",
 			AttachmentFilename: "SecureCorp-NDA-Signed.pdf",
-			AttachmentData:     []byte("%PDF-1.4 test NDA document content"),
+			AttachmentData:     testAttestedNDAPDF(),
 		},
 		"TrustCenterAuthEmail": TrustCenterAuthEmail{
 			RecipientInfo: r,
@@ -129,6 +132,11 @@ func TestFixture(name, toEmail string) json.RawMessage {
 			OldBillingEmail: "old-billing@acme.com",
 			NewBillingEmail: "new-billing@acme.com",
 			ChangedAt:       time.Now().UTC(),
+		},
+		"OrgDeletionNoticeEmail": OrgDeletionNoticeEmail{
+			RecipientInfo: r,
+			OrgName:       "Acme Corp",
+			DeletionDate:  time.Now().UTC().AddDate(0, 0, 7), //nolint:mnd
 		},
 		"BrandedMessageRequest": BrandedMessageRequest{
 			RecipientInfo: r,
@@ -157,4 +165,51 @@ func TestFixture(name, toEmail string) json.RawMessage {
 	}
 
 	return data
+}
+
+const testPDFFontSize = 14
+
+// testAttestedNDAPDF generates a valid two-page PDF simulating an NDA with attestation page
+func testAttestedNDAPDF() []byte {
+	page1 := testMinimalPDF("Non-Disclosure Agreement — SecureCorp")
+	page2 := testMinimalPDF("Signature Certification — Test Fixture")
+
+	var buf bytes.Buffer
+
+	if err := api.MergeRaw([]io.ReadSeeker{
+		bytes.NewReader(page1),
+		bytes.NewReader(page2),
+	}, &buf, false, nil); err != nil {
+		return page1
+	}
+
+	return buf.Bytes()
+}
+
+// testMinimalPDF creates a valid single-page PDF with the given title text
+func testMinimalPDF(title string) []byte {
+	page := map[string]any{
+		"paper":  "A4P",
+		"origin": "UpperLeft",
+		"fonts": map[string]any{
+			"f": map[string]any{"name": "Helvetica-Bold", "size": testPDFFontSize},
+		},
+		"pages": map[string]any{
+			"1": map[string]any{
+				"content": map[string]any{
+					"text": []map[string]any{
+						{"value": title, "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$f"}},
+					},
+				},
+			},
+		},
+	}
+
+	jsonData, _ := json.Marshal(page)
+
+	var buf bytes.Buffer
+
+	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
+
+	return buf.Bytes()
 }

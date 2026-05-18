@@ -1,0 +1,17 @@
+{
+  "pk": 4,
+  "username": "akadmin",
+  "name": "authentik Default Admin",
+  "is_active": true,
+  "last_login": "2026-05-09T08:11:37.941933Z",
+  "date_joined": "2026-05-08T01:54:15.179825Z",
+  "is_superuser": true,
+  "email": "manab@gmail.com",
+  "attributes": {},
+  "uid": "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5",
+  "path": "users",
+  "type": "internal",
+  "uuid": "8413c0cc-69a7-4726-a922-63e892264adc",
+  "password_change_date": "2026-05-08T01:55:21.236970Z",
+  "last_updated": "2026-05-08T01:55:21.345631Z"
+}

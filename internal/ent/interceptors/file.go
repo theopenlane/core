@@ -135,7 +135,8 @@ func InterceptorPresignedURL() ent.Interceptor {
 // presignedURLDuration is the duration for the presigned URL to be valid
 const presignedURLDuration = 60 * time.Minute * 24 // 24 hours
 
-func storageFileFromEnt(file *generated.File) *storagetypes.File {
+// StorageFileFromEnt converts an ent File entity to a storage types File
+func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 	if file == nil {
 		return nil
 	}
@@ -176,7 +177,7 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 		return nil
 	}
 
-	storageFile := storageFileFromEnt(file)
+	storageFile := StorageFileFromEnt(file)
 	if storageFile == nil {
 		return nil
 	}
@@ -207,7 +208,7 @@ func setBase64(ctx context.Context, file *generated.File, q *generated.FileQuery
 		return nil
 	}
 
-	storageFile := storageFileFromEnt(file)
+	storageFile := StorageFileFromEnt(file)
 	if storageFile == nil {
 		return nil
 	}

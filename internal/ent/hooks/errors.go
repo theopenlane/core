@@ -203,6 +203,48 @@ var (
 	ErrFailedToGetIDsForProgramUpdate = errors.New("could not get ids for mutation program update")
 	// ErrInvalidTemplateDefaults is returned when template defaults do not satisfy the template's jsonconfig schema
 	ErrInvalidTemplateDefaults = errors.New("template defaults do not satisfy the template schema")
+	// ErrMissingNDATemplateFile is returned when the NDA template has no attached file for attestation
+	ErrMissingNDATemplateFile = errors.New("NDA template must have at least one attached file")
+	// errMissingTemplate is returned when an nda request is made but there is no template for the user to sign
+	errMissingTemplate = errors.New("missing template")
+	// errDocInfoDoesNotMatchCaller is returned when the document data submitted for an NDA does not match the authenticated user's information, such as email
+	errDocInfoDoesNotMatchCaller = errors.New("NDA submission does not match authenticated user")
+	// errUserHasAlreadySignedNDA is returned when a user attempts to submit an NDA document but has already signed the NDA
+	errUserHasAlreadySignedNDA = errors.New("user has already signed the NDA")
+	// errValidationFailed is returned when validation of an NDA submission fails for any reason not covered by the other specific errors
+	errValidationFailed = errors.New("validation failed")
+	// errMustBeAnonymousUser is returned when an NDA submission is attempted by an authenticated user, as only anonymous users should be submitting ANDAs for signing
+	errMustBeAnonymousUser = errors.New("must be an anonymous user")
+	// errMissingResponse is returned when the document data mutation does not include the response field, which is required for NDA submissions
+	errMissingResponse = errors.New("missing response")
+	// errOnlyOneDocumentData is returned when a user attempts to submit more than one document data file for the same NDA, as only one submission should be allowed per NDA
+	errOnlyOneDocumentData = errors.New("you can only upload one document data file for an nda")
+	// ErrFailedToUploadAttestedPDF is returned when the attested NDA PDF upload fails
+	ErrFailedToUploadAttestedPDF = errors.New("failed to upload attested PDF")
+	// ErrNoUploadedFiles is returned when the upload pipeline returns zero files
+	ErrNoUploadedFiles = errors.New("no files returned from upload")
+	// ErrFailedToAssociateFile is returned when linking an uploaded file to its document data record fails
+	ErrFailedToAssociateFile = errors.New("failed to associate file with document data")
+	// ErrFailedToFetchNDATemplate is returned when the NDA template cannot be queried
+	ErrFailedToFetchNDATemplate = errors.New("failed to fetch NDA template")
+	// ErrFailedToFetchNDATemplateFiles is returned when the template's file edges cannot be loaded
+	ErrFailedToFetchNDATemplateFiles = errors.New("failed to fetch NDA template files")
+	// ErrFailedToMarshalDocumentData is returned when document data cannot be serialized to JSON
+	ErrFailedToMarshalDocumentData = errors.New("failed to marshal document data")
+	// ErrFailedToUnmarshalNDAMetadata is returned when document data JSON cannot be deserialized into the NDA struct
+	ErrFailedToUnmarshalNDAMetadata = errors.New("failed to unmarshal NDA metadata")
+	// ErrFailedToDownloadNDAPDF is returned when the original NDA PDF cannot be downloaded from storage
+	ErrFailedToDownloadNDAPDF = errors.New("failed to download original NDA PDF")
+	// ErrFailedToCreateAttestedPDF is returned when appending the attestation page to the PDF fails
+	ErrFailedToCreateAttestedPDF = errors.New("failed to create attested PDF")
+	// ErrFailedToFetchTrustCenter is returned when the trust center record cannot be queried
+	ErrFailedToFetchTrustCenter = errors.New("failed to fetch trust center")
+	// ErrFailedToCreateAttestationCert is returned when generating the attestation certificate PDF page fails
+	ErrFailedToCreateAttestationCert = errors.New("failed to create attestation certificate")
+	// ErrFailedToMergeAttestationPage is returned when merging the attestation page into the original PDF fails
+	ErrFailedToMergeAttestationPage = errors.New("failed to merge attestation page")
+	// ErrFailedToGenerateAttestationPDF is returned when the attestation PDF output fails
+	ErrFailedToGenerateAttestationPDF = errors.New("failed to generate attestation PDF")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

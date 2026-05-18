@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
-	"fmt"
+	"mime"
 	"net/http"
 	"time"
 
@@ -137,9 +137,18 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
+	// FormatMediaType quotes/escapes the user-supplied filename so it can't
+	// break the header; it returns "" for unrepresentable names.
+	dispBase := storage.DispositionFor(downloadFile.DetectedContentType)
+	disposition := mime.FormatMediaType(dispBase, map[string]string{"filename": downloadFile.ProvidedFileName})
+	if disposition == "" {
+		disposition = dispBase
+	}
+
 	headers := ctx.Response().Header()
 	headers.Set(echo.HeaderContentType, downloadFile.DetectedContentType)
-	headers.Set(echo.HeaderContentDisposition, fmt.Sprintf("attachment; filename=\"%s\"", downloadFile.ProvidedFileName))
+	headers.Set(echo.HeaderContentDisposition, disposition)
+	headers.Set(echo.HeaderXContentTypeOptions, "nosniff")
 
 	return ctx.Blob(http.StatusOK, downloadFile.DetectedContentType, download.File)
 }

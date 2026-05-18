@@ -1026,29 +1026,44 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.email }}
       email:
-        {{- if .Values.openlane.coreConfiguration.integrations.email.apiKey }}
-        apiKey: {{ .Values.openlane.coreConfiguration.integrations.email.apiKey | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.testdir }}
+        testdir: {{ .Values.openlane.coreConfiguration.integrations.email.testdir | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.provider }}
         provider: {{ .Values.openlane.coreConfiguration.integrations.email.provider | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.fromEmail }}
-        fromEmail: {{ .Values.openlane.coreConfiguration.integrations.email.fromEmail | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.fromemail }}
+        fromemail: {{ .Values.openlane.coreConfiguration.integrations.email.fromemail | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.supportEmail }}
-        supportEmail: {{ .Values.openlane.coreConfiguration.integrations.email.supportEmail | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.supportemail }}
+        supportemail: {{ .Values.openlane.coreConfiguration.integrations.email.supportemail | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail }}
-        questionnaireEmail: {{ .Values.openlane.coreConfiguration.integrations.email.questionnaireEmail | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.questionnaireemail }}
+        questionnaireemail: {{ .Values.openlane.coreConfiguration.integrations.email.questionnaireemail | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.rootURL }}
-        rootURL: {{ .Values.openlane.coreConfiguration.integrations.email.rootURL | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.rooturl }}
+        rooturl: {{ .Values.openlane.coreConfiguration.integrations.email.rooturl | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.productURL }}
-        productURL: {{ .Values.openlane.coreConfiguration.integrations.email.productURL | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.producturl }}
+        producturl: {{ .Values.openlane.coreConfiguration.integrations.email.producturl | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.email.docsURL }}
-        docsURL: {{ .Values.openlane.coreConfiguration.integrations.email.docsURL | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.docsurl }}
+        docsurl: {{ .Values.openlane.coreConfiguration.integrations.email.docsurl | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder }}
+      paymentreminder:
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.paymentmethodinterval }}
+        paymentmethodinterval: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.paymentmethodinterval }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
+        deletiondays: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.deletiondays }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.enabled }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
+        dryrun: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
         {{- end }}
       {{- end }}
     {{- end }}
@@ -1116,12 +1131,6 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
         {{- end }}
-      {{- end }}
-    {{- end }}
-    {{- if .Values.openlane.coreConfiguration.campaignwebhook }}
-    campaignwebhook:
-      {{- if .Values.openlane.coreConfiguration.campaignwebhook.enabled }}
-      enabled: {{ .Values.openlane.coreConfiguration.campaignwebhook.enabled }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.cloudflare }}

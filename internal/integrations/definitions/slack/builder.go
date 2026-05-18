@@ -12,9 +12,11 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Builder returns the Slack definition builder with the supplied operator and runtime config applied
-// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send
-func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
+// Builder returns the Slack definition builder with the supplied operator and runtime config applied.
+// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send.
+// When devMode is true and the runtime config is not provisioned, a no-op runtime client
+// is registered so system message dispatches succeed silently without credentials
+func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -29,10 +31,10 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
+				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
@@ -164,7 +166,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 			Mappings: slackMappings(),
 		}
 
-		if runtime != nil && runtime.Provisioned() {
+		if runtime != nil && (devMode || runtime.Provisioned()) {
 			runtimeSlackRef.SetConfig(runtime)
 
 			marshaledConfig, err := runtimeSlackRef.MarshalConfig()
@@ -176,7 +178,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig) registry.Builder {
 				Ref:    runtimeSlackRef.ID(),
 				Schema: runtimeSlackSchema,
 				Config: marshaledConfig,
-				Build:  buildRuntimeSlackClient,
+				Build:  runtimeSlackClientBuilder(devMode && !runtime.Provisioned()),
 			}
 		}
 
