@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
@@ -56,38 +57,45 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 	caller, hasCaller := auth.CallerFromContext(ctx.Context)
 	if !hasCaller || caller == nil || caller.SubjectEmail == "" {
 		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: caller not available in restored context")
+
 		return nil
 	}
 
 	docData, err := client.DocumentData.Get(ctx.Context, docDataID)
 	if err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Str("document_data_id", docDataID).Msg("failed to get document data for nda attestation")
+
 		return nil
 	}
 
 	var ndaMetadata signedNDADocumentData
 	if err := jsonx.RoundTrip(docData.Data, &ndaMetadata); err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to unmarshal nda metadata from document data")
+
 		return nil
 	}
 
 	tcID := ndaMetadata.TrustCenterID
 	if tcID == "" {
 		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: trust center id not found in document data")
+
 		return nil
 	}
 
 	result, err := attestNDADocument(ctx.Context, client, docData, templateID, tcID)
 	if err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to attest NDA document")
+
 		return err
 	}
 
+	allowctx := privacy.DecisionContext(ctx.Context, privacy.Allow)
 	if err := client.TrustCenterNDARequest.Update().Where(
 		trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 		trustcenterndarequest.TrustCenterID(tcID),
-	).SetFileID(result.TemplateFileID).Exec(ctx.Context); err != nil {
+	).SetFileID(result.TemplateFileID).Exec(allowctx); err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to set file ID on nda request")
+
 		return err
 	}
 
@@ -98,6 +106,7 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 	).FirstID(ctx.Context)
 	if err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("failed to resolve nda request id for email")
+
 		return err
 	}
 
@@ -110,6 +119,7 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 		AttachmentData:     result.AttestedPDF,
 	}); err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to send NDA signed email")
+
 		return err
 	}
 
