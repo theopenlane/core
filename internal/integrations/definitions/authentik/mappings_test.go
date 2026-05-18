@@ -125,7 +125,7 @@ func TestExamplePayloads(t *testing.T) {
 		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-        assert.Equal(t, "SERVICE", mapped["accountType"])
+		assert.Equal(t, "SERVICE", mapped["accountType"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 }
