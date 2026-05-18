@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/objects"
@@ -31,17 +32,17 @@ func HookTemplate() ent.Hook {
 
 			}
 
-			kind, ok := m.Kind()
+			kind, ok, err := getTemplateKind(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
 			if !ok || kind != enums.TemplateKindExternalIntake {
 				return next.Mutate(ctx, m)
 			}
 
 			if !auth.IsSystemAdminFromContext(ctx) {
 				return nil, fmt.Errorf("%w: only system admins can create or update a vendor intake template", ErrInvalidInput)
-			}
-
-			if !m.Op().Is(ent.OpCreate) {
-				return next.Mutate(ctx, m)
 			}
 
 			value, err := next.Mutate(ctx, m)
@@ -54,11 +55,27 @@ func HookTemplate() ent.Hook {
 				return value, nil
 			}
 
-			if _, err = m.Client().Assessment.Create().
+			if m.Op().Is(ent.OpCreate) {
+				if _, err = m.Client().Assessment.Create().
+					SetName(tmpl.Name).
+					SetTemplateID(tmpl.ID).
+					SetAssessmentType(enums.AssessmentTypeExternal).
+					SetSystemOwned(true).
+					Save(ctx); err != nil {
+					return nil, err
+				}
+
+				return value, nil
+			}
+
+			if _, err = m.Client().Assessment.Update().
+				Where(
+					assessment.TemplateIDEQ(tmpl.ID),
+					assessment.SystemOwnedEQ(true),
+					assessment.AssessmentTypeEQ(enums.AssessmentTypeExternal),
+				).
 				SetName(tmpl.Name).
 				SetTemplateID(tmpl.ID).
-				SetAssessmentType(enums.AssessmentTypeExternal).
-				SetSystemOwned(true).
 				Save(ctx); err != nil {
 				return nil, err
 			}
@@ -68,10 +85,33 @@ func HookTemplate() ent.Hook {
 		})
 	},
 		hook.And(
-			hook.HasFields(template.FieldTemplateType, template.FieldKind),
+			hook.Or(
+				hook.HasFields(template.FieldTemplateType),
+				hook.HasFields(template.FieldKind),
+				hook.HasFields(template.FieldName),
+				hook.HasFields(template.FieldJsonconfig),
+				hook.HasFields(template.FieldUischema),
+			),
 			hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
 		),
 	)
+}
+
+func getTemplateKind(ctx context.Context, m *generated.TemplateMutation) (enums.TemplateKind, bool, error) {
+	if kind, ok := m.Kind(); ok {
+		return kind, true, nil
+	}
+
+	if !m.Op().Is(ent.OpUpdateOne) {
+		return "", false, nil
+	}
+
+	kind, err := m.OldKind(ctx)
+	if err != nil {
+		return "", false, err
+	}
+
+	return kind, true, nil
 }
 
 func HookTemplateFiles() ent.Hook {
