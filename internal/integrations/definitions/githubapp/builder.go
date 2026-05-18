@@ -146,7 +146,7 @@ func Builder(cfg Config) registry.Builder {
 				},
 				{
 					Name:           directorySyncOperation.Name(),
-					Description:    "Collect organization members as directory accounts",
+					Description:    "Collect organization members, teams, and team memberships",
 					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      gitHubClient.ID(),
 					ConfigSchema:   directorySyncSchema,
@@ -156,6 +156,12 @@ func Builder(cfg Config) registry.Builder {
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
