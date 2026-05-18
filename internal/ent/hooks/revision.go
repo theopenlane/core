@@ -126,6 +126,7 @@ const (
 // documentMutation is the subset of revision-bearing mutations that carry a document file
 // and a management mode (action plans, internal policies, procedures — not standards/templates).
 type documentMutation interface {
+	Op() ent.Op
 	ManagementMode() (enums.DocumentManagementMode, bool)
 	OldManagementMode(ctx context.Context) (enums.DocumentManagementMode, error)
 	FileID() (r string, exists bool)
@@ -140,10 +141,12 @@ func managementModeFor(ctx context.Context, mut documentMutation) enums.Document
 		return v
 	}
 
-	if v, err := mut.OldManagementMode(ctx); err == nil && v.IsValid() {
-		return v
-	} else if err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Msg("could not read old management_mode; defaulting to OPENLANE_MANAGED")
+	if mut.Op().Is(ent.OpUpdateOne) {
+		if v, err := mut.OldManagementMode(ctx); err == nil && v.IsValid() {
+			return v
+		} else if err != nil {
+			logx.FromContext(ctx).Debug().Err(err).Msg("could not read old management_mode; defaulting to OPENLANE_MANAGED")
+		}
 	}
 
 	return enums.DocumentManagementModeOpenlaneManaged
@@ -155,6 +158,10 @@ func fileChanged(ctx context.Context, mut documentMutation) bool {
 	cleared := mut.FileIDCleared()
 	if !set && !cleared {
 		return false
+	}
+
+	if !mut.Op().Is(ent.OpUpdateOne) {
+		return true
 	}
 
 	oldID, err := mut.OldFileID(ctx)
