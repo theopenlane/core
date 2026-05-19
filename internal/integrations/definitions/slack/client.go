@@ -39,34 +39,41 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 	}, nil
 }
 
-// buildRuntimeSlackClient constructs a SlackClient for the runtime (system) path.
-// When a bot token is configured the client gets full Web API access (channel targeting,
-// Block Kit); otherwise it falls back to the incoming webhook for fire-and-forget delivery
-func buildRuntimeSlackClient(_ context.Context, config json.RawMessage) (any, error) {
-	var cfg RuntimeSlackConfig
-	if err := json.Unmarshal(config, &cfg); err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
-	}
+// runtimeSlackClientBuilder returns a build function that constructs a SlackClient
+// for the runtime (system) path. When devMode is true and credentials are absent
+// a no-op client is returned so dispatches succeed silently
+func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessage) (any, error) {
+	return func(_ context.Context, config json.RawMessage) (any, error) {
+		var cfg RuntimeSlackConfig
+		if err := json.Unmarshal(config, &cfg); err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
+		}
 
-	if !cfg.Provisioned() {
-		return nil, ErrRuntimeConfigInvalid
-	}
+		if !cfg.Provisioned() {
+			if devMode {
+				return &SlackClient{devMode: true}, nil
+			}
 
-	client := &SlackClient{
-		WebhookURL:     cfg.WebhookURL,
-		DefaultChannel: cfg.DefaultChannel,
-	}
+			return nil, ErrRuntimeConfigInvalid
+		}
 
-	if cfg.BotToken != "" {
-		client.API = slackgo.New(cfg.BotToken)
-	}
+		client := &SlackClient{
+			WebhookURL:     cfg.WebhookURL,
+			DefaultChannel: cfg.DefaultChannel,
+		}
 
-	return client, nil
+		if cfg.BotToken != "" {
+			client.API = slackgo.New(cfg.BotToken)
+		}
+
+		return client, nil
+	}
 }
 
 // sendText delivers a plain-text system message through the client's active transport.
 // When an API client is available it posts via chat.postMessage (supports channel targeting
-// and richer formatting); otherwise it falls back to the incoming webhook
+// and richer formatting); otherwise it falls back to the incoming webhook. In dev mode
+// with no transport configured the call is a silent no-op
 func (c *SlackClient) sendText(ctx context.Context, text, channel string) error {
 	if text == "" {
 		return ErrMessageEmpty
@@ -93,6 +100,10 @@ func (c *SlackClient) sendText(ctx context.Context, text, channel string) error 
 			return fmt.Errorf("%w: %w", ErrMessageSendFailed, err)
 		}
 
+		return nil
+	}
+
+	if c.devMode {
 		return nil
 	}
 

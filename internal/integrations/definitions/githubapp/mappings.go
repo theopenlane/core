@@ -146,6 +146,25 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: integrationgenerated.IntegrationMappingDirectoryAccountProfile, Expr: "payload"},
 })
 
+// mapExprDirectoryGroup is the CEL mapping expression for GitHub teams mapped to DirectoryGroup
+var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupExternalID, Expr: `payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Slug`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Slug`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupDirectoryInstanceID, Expr: `payload.Org`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupClassification, Expr: `dyn("TEAM")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupStatus, Expr: `dyn("ACTIVE")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryGroupProfile, Expr: "payload"},
+})
+
+// mapExprDirectoryMembership is the CEL mapping expression for GitHub team memberships mapped to DirectoryMembership
+var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntry{
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryAccountID, Expr: `payload.Member.DatabaseID != 0 ? string(payload.Member.DatabaseID) : payload.Member.Login`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryGroupID, Expr: `payload.Team.DatabaseID != 0 ? string(payload.Team.DatabaseID) : payload.Team.Slug`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipDirectoryInstanceID, Expr: `payload.Org`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipRole, Expr: `dyn(payload.Role != "" ? payload.Role : "MEMBER")`},
+	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipMetadata, Expr: "payload"},
+})
+
 // githubAppMappings returns all built-in ingest mappings for the GitHub App definition
 func githubAppMappings() []types.MappingRegistration {
 	overrides := map[string]types.MappingOverride{
@@ -189,6 +208,20 @@ func githubAppMappings() []types.MappingRegistration {
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryAccount,
+			},
+		},
+		types.MappingRegistration{
+			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprDirectoryGroup,
+			},
+		},
+		types.MappingRegistration{
+			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprDirectoryMembership,
 			},
 		},
 	)

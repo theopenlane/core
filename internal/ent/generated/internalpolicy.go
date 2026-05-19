@@ -53,6 +53,8 @@ type InternalPolicy struct {
 	Name string `json:"name,omitempty"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
+	// how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	// details of the policy
 	Details string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -434,7 +436,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired, internalpolicy.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldEnvironmentName, internalpolicy.FieldEnvironmentID, internalpolicy.FieldScopeName, internalpolicy.FieldScopeID, internalpolicy.FieldExternalUUID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldManagementMode, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldEnvironmentName, internalpolicy.FieldEnvironmentID, internalpolicy.FieldScopeName, internalpolicy.FieldScopeID, internalpolicy.FieldExternalUUID:
 			values[i] = new(sql.NullString)
 		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -554,6 +556,12 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.DocumentStatus(value.String)
+			}
+		case internalpolicy.FieldManagementMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field management_mode", values[i])
+			} else if value.Valid {
+				_m.ManagementMode = enums.DocumentManagementMode(value.String)
 			}
 		case internalpolicy.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -932,6 +940,9 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("management_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ManagementMode))
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)

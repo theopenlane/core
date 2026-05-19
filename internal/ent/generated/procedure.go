@@ -47,6 +47,8 @@ type Procedure struct {
 	Name string `json:"name,omitempty"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
+	// how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+	ManagementMode enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	// details of the procedure
 	Details string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -361,7 +363,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned, procedure.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldManagementMode, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -463,6 +465,12 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.DocumentStatus(value.String)
+			}
+		case procedure.FieldManagementMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field management_mode", values[i])
+			} else if value.Valid {
+				_m.ManagementMode = enums.DocumentManagementMode(value.String)
 			}
 		case procedure.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -818,6 +826,9 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	builder.WriteString("management_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ManagementMode))
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)

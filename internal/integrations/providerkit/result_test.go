@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"testing"
+
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 var errEncodeTest = errors.New("encode failed")
@@ -176,7 +178,7 @@ func TestSchemaFrom(t *testing.T) {
 			Count int    `json:"count"`
 		}
 
-		raw := SchemaFrom[sample]()
+		raw := jsonx.SchemaFrom[sample]()
 		if raw == nil {
 			t.Fatal("expected non-nil schema")
 		}

@@ -50,7 +50,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 				return nil, err
 			}
 
-			if template.Kind != enums.TemplateKindQuestionnaire {
+			if template.Kind == enums.TemplateKindTrustCenterNda {
 				logx.FromContext(ctx).
 					Err(errors.New("template is not of type questionnaire")). //nolint:err113
 					Str("template_id", id).Str("kind", template.Kind.String()).
@@ -64,5 +64,5 @@ func HookQuestionnaireAssessment() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpCreate|ent.OpUpdateOne)
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }

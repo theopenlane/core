@@ -257,6 +257,26 @@ func (_u *InternalPolicyUpdate) ClearStatus() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *InternalPolicyUpdate) SetManagementMode(v enums.DocumentManagementMode) *InternalPolicyUpdate {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *InternalPolicyUpdate) ClearManagementMode() *InternalPolicyUpdate {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyUpdate) SetDetails(v string) *InternalPolicyUpdate {
 	_u.mutation.SetDetails(v)
@@ -1512,6 +1532,11 @@ func (_u *InternalPolicyUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := internalpolicy.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
@@ -1608,6 +1633,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(internalpolicy.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(internalpolicy.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
@@ -3061,6 +3092,26 @@ func (_u *InternalPolicyUpdateOne) ClearStatus() *InternalPolicyUpdateOne {
 	return _u
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_u *InternalPolicyUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *InternalPolicyUpdateOne {
+	_u.mutation.SetManagementMode(v)
+	return _u
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetManagementMode(*v)
+	}
+	return _u
+}
+
+// ClearManagementMode clears the value of the "management_mode" field.
+func (_u *InternalPolicyUpdateOne) ClearManagementMode() *InternalPolicyUpdateOne {
+	_u.mutation.ClearManagementMode()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyUpdateOne) SetDetails(v string) *InternalPolicyUpdateOne {
 	_u.mutation.SetDetails(v)
@@ -4329,6 +4380,11 @@ func (_u *InternalPolicyUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ManagementMode(); ok {
+		if err := internalpolicy.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.management_mode": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
@@ -4442,6 +4498,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.ManagementMode(); ok {
+		_spec.SetField(internalpolicy.FieldManagementMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ManagementModeCleared() {
+		_spec.ClearField(internalpolicy.FieldManagementMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)

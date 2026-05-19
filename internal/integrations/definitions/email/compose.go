@@ -33,19 +33,21 @@ type CampaignDispatchResult struct {
 // loadEmailTemplate resolves an active email template by ID for the given owner, eager-loading
 // the Files edge so static attachments can be included in the dispatched message
 func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, emailTemplateID string) (*generated.EmailTemplate, error) {
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	record, err := client.EmailTemplate.Query().
 		Where(
 			emailtemplate.IDEQ(emailTemplateID),
 			emailtemplate.ActiveEQ(true),
 			emailtemplate.OwnerIDEQ(ownerID),
-		). // file attachment support is limited but adding it here for future support
+		).
 		WithFiles(func(q *generated.FileQuery) {
 			q.Select(
 				file.FieldProvidedFileName,
 				file.FieldProvidedFileExtension,
 				file.FieldDetectedMimeType,
 				file.FieldFileContents)
-		}).Only(ctx)
+		}).Only(systemCtx)
 	if generated.IsNotFound(err) {
 		return nil, ErrEmailTemplateNotFound
 	}
@@ -75,6 +77,10 @@ func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID 
 
 // createAssessmentResponseForRecipient creates a new assessment response record for the campaign and recipient email
 func createAssessmentResponseForRecipient(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, email string, isTest bool) (*generated.AssessmentResponse, error) {
+	if strings.TrimSpace(email) == "" {
+		return nil, nil
+	}
+
 	create := db.AssessmentResponse.Create().
 		SetAssessmentID(assessmentID).
 		SetCampaignID(camp.ID).

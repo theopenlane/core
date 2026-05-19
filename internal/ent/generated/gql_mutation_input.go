@@ -183,6 +183,7 @@ type CreateActionPlanInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -242,6 +243,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -397,6 +401,8 @@ type UpdateActionPlanInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -532,6 +538,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -874,6 +886,8 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 // CreateAssessmentInput represents a mutation input for creating assessments.
 type CreateAssessmentInput struct {
 	Tags                  []string
+	InternalNotes         *string
+	SystemInternalID      *string
 	Name                  string
 	AssessmentType        *enums.AssessmentType
 	Jsonconfig            map[string]interface{}
@@ -894,6 +908,12 @@ type CreateAssessmentInput struct {
 func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.AssessmentType; v != nil {
@@ -948,6 +968,10 @@ type UpdateAssessmentInput struct {
 	ClearTags                   bool
 	Tags                        []string
 	AppendTags                  []string
+	ClearInternalNotes          bool
+	InternalNotes               *string
+	ClearSystemInternalID       bool
+	SystemInternalID            *string
 	Name                        *string
 	ClearJsonconfig             bool
 	Jsonconfig                  map[string]interface{}
@@ -992,6 +1016,18 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -1105,7 +1141,8 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
-	Email              string
+	DisplayName        *string
+	Email              *string
 	EmailDeliveredAt   *time.Time
 	EmailOpenedAt      *time.Time
 	EmailClickedAt     *time.Time
@@ -1125,7 +1162,12 @@ type CreateAssessmentResponseInput struct {
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	m.SetEmail(i.Email)
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
 	if v := i.EmailDeliveredAt; v != nil {
 		m.SetEmailDeliveredAt(*v)
 	}
@@ -12923,6 +12965,7 @@ type CreateInternalPolicyInput struct {
 	SystemInternalID                *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -12984,6 +13027,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -13133,6 +13179,8 @@ type UpdateInternalPolicyInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -13281,6 +13329,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -19163,6 +19217,7 @@ type CreateProcedureInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
+	ManagementMode                  *enums.DocumentManagementMode
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -19213,6 +19268,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -19343,6 +19401,8 @@ type UpdateProcedureInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
+	ClearManagementMode                   bool
+	ManagementMode                        *enums.DocumentManagementMode
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -19463,6 +19523,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearManagementMode {
+		m.ClearManagementMode()
+	}
+	if v := i.ManagementMode; v != nil {
+		m.SetManagementMode(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -25473,26 +25539,27 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
-	Tags              []string
-	InternalNotes     *string
-	SystemInternalID  *string
-	EnvironmentName   *string
-	ScopeName         *string
-	Name              string
-	TemplateType      *enums.DocumentType
-	Description       *string
-	Kind              *enums.TemplateKind
-	Jsonconfig        map[string]interface{}
-	Uischema          map[string]interface{}
-	OwnerID           *string
-	EnvironmentID     *string
-	ScopeID           *string
-	DocumentIDs       []string
-	FileIDs           []string
-	TrustCenterID     *string
-	AssessmentIDs     []string
-	CampaignIDs       []string
-	IdentityHolderIDs []string
+	Tags                   []string
+	InternalNotes          *string
+	SystemInternalID       *string
+	EnvironmentName        *string
+	ScopeName              *string
+	Name                   string
+	TemplateType           *enums.DocumentType
+	Description            *string
+	Kind                   *enums.TemplateKind
+	Jsonconfig             map[string]interface{}
+	Uischema               map[string]interface{}
+	TransformConfiguration *models.TemplateProjectionConfig
+	OwnerID                *string
+	EnvironmentID          *string
+	ScopeID                *string
+	DocumentIDs            []string
+	FileIDs                []string
+	TrustCenterID          *string
+	AssessmentIDs          []string
+	CampaignIDs            []string
+	IdentityHolderIDs      []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -25527,6 +25594,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if v := i.TransformConfiguration; v != nil {
+		m.SetTransformConfiguration(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25565,47 +25635,49 @@ func (c *TemplateCreate) SetInput(i CreateTemplateInput) *TemplateCreate {
 
 // UpdateTemplateInput represents a mutation input for updating templates.
 type UpdateTemplateInput struct {
-	ClearTags               bool
-	Tags                    []string
-	AppendTags              []string
-	ClearInternalNotes      bool
-	InternalNotes           *string
-	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	ClearEnvironmentName    bool
-	EnvironmentName         *string
-	ClearScopeName          bool
-	ScopeName               *string
-	Name                    *string
-	TemplateType            *enums.DocumentType
-	ClearDescription        bool
-	Description             *string
-	ClearKind               bool
-	Kind                    *enums.TemplateKind
-	Jsonconfig              map[string]interface{}
-	ClearUischema           bool
-	Uischema                map[string]interface{}
-	ClearEnvironment        bool
-	EnvironmentID           *string
-	ClearScope              bool
-	ScopeID                 *string
-	ClearDocuments          bool
-	AddDocumentIDs          []string
-	RemoveDocumentIDs       []string
-	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
-	ClearTrustCenter        bool
-	TrustCenterID           *string
-	ClearAssessments        bool
-	AddAssessmentIDs        []string
-	RemoveAssessmentIDs     []string
-	ClearCampaigns          bool
-	AddCampaignIDs          []string
-	RemoveCampaignIDs       []string
-	ClearIdentityHolders    bool
-	AddIdentityHolderIDs    []string
-	RemoveIdentityHolderIDs []string
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	ClearInternalNotes          bool
+	InternalNotes               *string
+	ClearSystemInternalID       bool
+	SystemInternalID            *string
+	ClearEnvironmentName        bool
+	EnvironmentName             *string
+	ClearScopeName              bool
+	ScopeName                   *string
+	Name                        *string
+	TemplateType                *enums.DocumentType
+	ClearDescription            bool
+	Description                 *string
+	ClearKind                   bool
+	Kind                        *enums.TemplateKind
+	Jsonconfig                  map[string]interface{}
+	ClearUischema               bool
+	Uischema                    map[string]interface{}
+	ClearTransformConfiguration bool
+	TransformConfiguration      *models.TemplateProjectionConfig
+	ClearEnvironment            bool
+	EnvironmentID               *string
+	ClearScope                  bool
+	ScopeID                     *string
+	ClearDocuments              bool
+	AddDocumentIDs              []string
+	RemoveDocumentIDs           []string
+	ClearFiles                  bool
+	AddFileIDs                  []string
+	RemoveFileIDs               []string
+	ClearTrustCenter            bool
+	TrustCenterID               *string
+	ClearAssessments            bool
+	AddAssessmentIDs            []string
+	RemoveAssessmentIDs         []string
+	ClearCampaigns              bool
+	AddCampaignIDs              []string
+	RemoveCampaignIDs           []string
+	ClearIdentityHolders        bool
+	AddIdentityHolderIDs        []string
+	RemoveIdentityHolderIDs     []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -25669,6 +25741,12 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if i.ClearTransformConfiguration {
+		m.ClearTransformConfiguration()
+	}
+	if v := i.TransformConfiguration; v != nil {
+		m.SetTransformConfiguration(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

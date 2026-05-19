@@ -181,9 +181,11 @@ func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				assessment.OwnerIDContainsFold(query),    // search by OwnerID
-				assessment.NameContainsFold(query),       // search by Name
-				assessment.TemplateIDContainsFold(query), // search by TemplateID
+				assessment.OwnerIDContainsFold(query),          // search by OwnerID
+				assessment.InternalNotesContainsFold(query),    // search by InternalNotes
+				assessment.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				assessment.NameContainsFold(query),             // search by Name
+				assessment.TemplateIDContainsFold(query),       // search by TemplateID
 				func(s *sql.Selector) {
 					s.Where(
 						sqljson.StringContains(assessment.FieldJsonconfig, query, sqljson.Path("$id")), // search by Jsonconfig at $id
@@ -191,7 +193,7 @@ func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cur
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
+					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
 				},
 			),
 		)
@@ -204,8 +206,9 @@ func searchAssessmentResponses(ctx context.Context, query string, after *entgql.
 	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
 		Where(
 			assessmentresponse.Or(
-				assessmentresponse.EmailContainsFold(query), // search by Email
-				assessmentresponse.ID(query),                // search equal to ID
+				assessmentresponse.DisplayNameContainsFold(query), // search by DisplayName
+				assessmentresponse.EmailContainsFold(query),       // search by Email
+				assessmentresponse.ID(query),                      // search equal to ID
 			),
 		)
 
@@ -223,10 +226,11 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 				assessmentresponse.CampaignIDContainsFold(query),       // search by CampaignID
 				assessmentresponse.IdentityHolderIDContainsFold(query), // search by IdentityHolderID
 				assessmentresponse.EntityIDContainsFold(query),         // search by EntityID
+				assessmentresponse.DisplayNameContainsFold(query),      // search by DisplayName
 				assessmentresponse.EmailContainsFold(query),            // search by Email
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(email_metadata)::text LIKE $8", likeQuery)) // search by EmailMetadata
+					s.Where(sql.ExprP("(email_metadata)::text LIKE $9", likeQuery)) // search by EmailMetadata
 				},
 			),
 		)
@@ -2282,6 +2286,10 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					s.Where(sql.ExprP("(uischema)::text LIKE $13", likeQuery)) // search by Uischema
 				},
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(transform_configuration)::text LIKE $15", likeQuery)) // search by TransformConfiguration
+				},
 			),
 		)
 

@@ -2,7 +2,6 @@ package registry
 
 import (
 	"context"
-	"sync"
 
 	"github.com/samber/lo"
 
@@ -14,10 +13,9 @@ import (
 // Builder builds one manifest-backed definition
 type Builder func() (types.Definition, error)
 
-// Registry is the in-memory index of registered definitions
+// Registry is the in-memory index of registered definitions.
+// Built once at startup via RegisterAll; all state is read-only after construction
 type Registry struct {
-	// mu guards all mutable state in the registry
-	mu sync.RWMutex
 	// definitions maps definition ID to its compiled entry
 	definitions map[string]definitionEntry
 	// operationsByTopic maps a topic name to its operation registration
@@ -58,9 +56,6 @@ func New() *Registry {
 
 // Register adds one definition to the registry
 func (r *Registry) Register(def types.Definition) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
 	if err := r.validateDefinition(def); err != nil {
 		return err
 	}
@@ -117,9 +112,6 @@ func (r *Registry) RegisterAll(builders ...Builder) error {
 
 // Definition returns one definition by canonical identifier
 func (r *Registry) Definition(id string) (types.Definition, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	entry, ok := r.definitions[id]
 	if !ok {
 		return types.Definition{}, false
@@ -130,17 +122,11 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 
 // Definitions returns all registered definitions in stable id order
 func (r *Registry) Definitions() []types.Definition {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.Definition { return e.definition }, func(d types.Definition) string { return d.ID })
 }
 
 // Client returns one client registration for a definition
 func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return lookupInEntry(r, id, clientID, func(e definitionEntry) map[types.ClientID]types.ClientRegistration {
 		return e.clients
 	}, ErrClientNotFound)
@@ -148,9 +134,6 @@ func (r *Registry) Client(id string, clientID types.ClientID) (types.ClientRegis
 
 // Operation returns one operation registration for a definition
 func (r *Registry) Operation(id string, name string) (types.OperationRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.OperationRegistration {
 		return e.operations
 	}, ErrOperationNotFound)
@@ -158,9 +141,6 @@ func (r *Registry) Operation(id string, name string) (types.OperationRegistratio
 
 // Webhook returns one webhook registration for a definition
 func (r *Registry) Webhook(id string, name string) (types.WebhookRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return lookupInEntry(r, id, name, func(e definitionEntry) map[string]types.WebhookRegistration {
 		return e.webhooks
 	}, ErrWebhookNotFound)
@@ -168,9 +148,6 @@ func (r *Registry) Webhook(id string, name string) (types.WebhookRegistration, e
 
 // Catalog returns all definition specs in stable id order
 func (r *Registry) Catalog() []types.DefinitionSpec {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.DefinitionSpec { return e.definition.DefinitionSpec }, func(s types.DefinitionSpec) string { return s.ID })
 }
 
@@ -395,17 +372,11 @@ func indexWebhooks(webhooks []types.WebhookRegistration) (map[string]types.Webho
 
 // Listeners returns all operation registrations in stable topic order
 func (r *Registry) Listeners() []types.OperationRegistration {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return mapx.SortedValues(r.operationsByTopic, func(o types.OperationRegistration) gala.TopicName { return o.Topic })
 }
 
 // WebhookEvent returns one webhook event registration for a definition
 func (r *Registry) WebhookEvent(id string, webhookName string, eventName string) (types.WebhookEventRegistration, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	entry, ok := r.definitions[id]
 	if !ok {
 		return types.WebhookEventRegistration{}, ErrDefinitionNotFound
@@ -426,17 +397,11 @@ func (r *Registry) WebhookEvent(id string, webhookName string, eventName string)
 
 // WebhookListeners returns all webhook event registrations in stable topic order
 func (r *Registry) WebhookListeners() []types.WebhookEventRegistration {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return mapx.SortedValues(r.webhookEventsByTopic, func(e types.WebhookEventRegistration) gala.TopicName { return e.Topic })
 }
 
 // GalaListeners returns all registered standalone gala listener registrations
 func (r *Registry) GalaListeners() []types.GalaListenerRegistration {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	return append([]types.GalaListenerRegistration(nil), r.galaListeners...)
 }
 
@@ -444,9 +409,6 @@ func (r *Registry) GalaListeners() []types.GalaListenerRegistration {
 // Returns the client and true if a runtime integration was provisioned,
 // or nil and false otherwise
 func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	entry, ok := r.definitions[definitionID]
 	if !ok || entry.runtimeClient == nil {
 		return nil, false
@@ -455,18 +417,34 @@ func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
 	return entry.runtimeClient, true
 }
 
+// StaticWebhooks returns all webhook registrations that declare a fixed static route
+func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
+	var entries []types.StaticWebhookEntry
+
+	for defID, entry := range r.definitions {
+		for _, webhook := range entry.definition.Webhooks {
+			if webhook.StaticRoute != "" {
+				entries = append(entries, types.StaticWebhookEntry{
+					DefinitionID: defID,
+					WebhookName:  webhook.Name,
+					StaticRoute:  webhook.StaticRoute,
+				})
+			}
+		}
+	}
+
+	return entries
+}
+
 // IsRuntimeIntegration reports whether the given definition was provisioned
 // as a runtime integration (no DB record, no keystore)
 func (r *Registry) IsRuntimeIntegration(definitionID string) bool {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
 	entry, ok := r.definitions[definitionID]
 
 	return ok && entry.definition.RuntimeIntegration != nil
 }
 
-// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap; callers must hold r.mu.RLock
+// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap
 func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
 	entry, ok := r.definitions[id]
 	if !ok {

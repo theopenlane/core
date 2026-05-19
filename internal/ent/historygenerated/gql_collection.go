@@ -166,6 +166,11 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldStatus)
 				fieldSeen[actionplanhistory.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[actionplanhistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldManagementMode)
+				fieldSeen[actionplanhistory.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[actionplanhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldDetails)
@@ -465,6 +470,21 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldOwnerID)
 				fieldSeen[assessmenthistory.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[assessmenthistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldSystemOwned)
+				fieldSeen[assessmenthistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[assessmenthistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldInternalNotes)
+				fieldSeen[assessmenthistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[assessmenthistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldSystemInternalID)
+				fieldSeen[assessmenthistory.FieldSystemInternalID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[assessmenthistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldName)
@@ -643,6 +663,11 @@ func (_q *AssessmentResponseHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldEntityID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponsehistory.FieldEntityID)
 				fieldSeen[assessmentresponsehistory.FieldEntityID] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[assessmentresponsehistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, assessmentresponsehistory.FieldDisplayName)
+				fieldSeen[assessmentresponsehistory.FieldDisplayName] = struct{}{}
 			}
 		case "email":
 			if _, ok := fieldSeen[assessmentresponsehistory.FieldEmail]; !ok {
@@ -7160,6 +7185,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldStatus)
 				fieldSeen[internalpolicyhistory.FieldStatus] = struct{}{}
 			}
+		case "managementMode":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldManagementMode)
+				fieldSeen[internalpolicyhistory.FieldManagementMode] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDetails)
@@ -9806,6 +9836,11 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[procedurehistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldStatus)
 				fieldSeen[procedurehistory.FieldStatus] = struct{}{}
+			}
+		case "managementMode":
+			if _, ok := fieldSeen[procedurehistory.FieldManagementMode]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldManagementMode)
+				fieldSeen[procedurehistory.FieldManagementMode] = struct{}{}
 			}
 		case "details":
 			if _, ok := fieldSeen[procedurehistory.FieldDetails]; !ok {
@@ -12967,6 +13002,11 @@ func (_q *TemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[templatehistory.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, templatehistory.FieldTrustCenterID)
 				fieldSeen[templatehistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "transformConfiguration":
+			if _, ok := fieldSeen[templatehistory.FieldTransformConfiguration]; !ok {
+				selectedFields = append(selectedFields, templatehistory.FieldTransformConfiguration)
+				fieldSeen[templatehistory.FieldTransformConfiguration] = struct{}{}
 			}
 		case "id":
 		case "__typename":

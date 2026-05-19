@@ -160,6 +160,20 @@ func (_c *ActionPlanCreate) SetNillableStatus(v *enums.DocumentStatus) *ActionPl
 	return _c
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_c *ActionPlanCreate) SetManagementMode(v enums.DocumentManagementMode) *ActionPlanCreate {
+	_c.mutation.SetManagementMode(v)
+	return _c
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ActionPlanCreate {
+	if v != nil {
+		_c.SetManagementMode(*v)
+	}
+	return _c
+}
+
 // SetDetails sets the "details" field.
 func (_c *ActionPlanCreate) SetDetails(v string) *ActionPlanCreate {
 	_c.mutation.SetDetails(v)
@@ -868,6 +882,10 @@ func (_c *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ManagementMode(); !ok {
+		v := actionplan.DefaultManagementMode
+		_c.mutation.SetManagementMode(v)
+	}
 	if _, ok := _c.mutation.ApprovalRequired(); !ok {
 		v := actionplan.DefaultApprovalRequired
 		_c.mutation.SetApprovalRequired(v)
@@ -948,6 +966,11 @@ func (_c *ActionPlanCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := actionplan.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ManagementMode(); ok {
+		if err := actionplan.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.management_mode": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -1054,6 +1077,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ManagementMode(); ok {
+		_spec.SetField(actionplan.FieldManagementMode, field.TypeEnum, value)
+		_node.ManagementMode = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)

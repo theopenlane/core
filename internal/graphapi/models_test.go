@@ -401,6 +401,7 @@ type TemplateBuilder struct {
 	JSONConfig    map[string]any
 	UISchema      map[string]any
 	TrustCenterID string
+	FileIDs       []string
 }
 
 type AssessmentBuilder struct {
@@ -2352,6 +2353,10 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 
 	if tb.TrustCenterID != "" {
 		mutation.SetTrustCenterID(tb.TrustCenterID)
+	}
+
+	if len(tb.FileIDs) > 0 {
+		mutation.AddFileIDs(tb.FileIDs...)
 	}
 
 	template, err := mutation.Save(ctx)

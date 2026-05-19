@@ -1,6 +1,7 @@
 package graphapi_test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
@@ -16,6 +17,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/mcuadros/go-defaults"
+	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/do/v2"
@@ -243,6 +245,15 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	entitlements, err := suite.mockStripeClient()
 	requireNoError(t, err)
 
+	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
+	requireNoError(t, err)
+
+	c.mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("file:///tmp/test-presigned", nil).Maybe()
+	c.mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+		File: testPDFBytes(),
+		Size: 1024,
+	}, nil).Maybe()
+
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
 		ent.TOTP(&totp.Client{
@@ -256,6 +267,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
 		ent.HistoryClient(hc),
+		ent.ObjectManager(c.objectStore),
 	}
 
 	// create database connection
@@ -267,9 +279,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
 		return suite.galaRuntime
 	}))
-
-	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
-	requireNoError(t, err)
 
 	// assign values
 	c.db = db
@@ -306,8 +315,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		Gala:     galaInstance,
 		Keystore: credStore,
 		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig()),
-			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}),
+			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
 		},
 	})
 	requireNoError(t, err)
@@ -438,10 +447,30 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: []byte("test content"),
+			File: testPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
+}
+
+// expectAttestedUpload sets up mock expectations for the attested PDF upload triggered by attestNDADocument
+func expectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) {
+	assert.Assert(t, mockProvider != nil)
+
+	mockScheme := "file://"
+
+	mockProvider.On("GetScheme").Return(&mockScheme).Once()
+	mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
+	mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
+		FileMetadata: pkgobjects.FileMetadata{
+			Key:          "test-key-attested",
+			Folder:       "test-folder",
+			Bucket:       "test-bucket",
+			ContentType:  "application/pdf",
+			ProviderType: storage.DiskProvider,
+			FullURI:      "file:///tmp/test-file-attested",
+		},
+	}, nil).Once()
 }
 
 func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload, kind enums.TemplateKind) {
@@ -473,7 +502,7 @@ func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockPr
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: []byte("test content"),
+			File: testPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
@@ -578,6 +607,32 @@ func requireNoError(t *testing.T, err error) {
 
 		os.Exit(1)
 	}
+}
+
+func testPDFBytes() []byte {
+	page := map[string]any{
+		"paper":  "A4P",
+		"origin": "UpperLeft",
+		"fonts": map[string]any{
+			"f": map[string]any{"name": "Helvetica", "size": 12},
+		},
+		"pages": map[string]any{
+			"1": map[string]any{
+				"content": map[string]any{
+					"text": []map[string]any{
+						{"value": "test", "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$f"}},
+					},
+				},
+			},
+		},
+	}
+
+	jsonData, _ := json.Marshal(page)
+
+	var buf bytes.Buffer
+	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
+
+	return buf.Bytes()
 }
 
 // mockStripeClient creates a new stripe client with mock backend

@@ -146,6 +146,7 @@ func serve(ctx context.Context) error {
 	})
 
 	email.SetDefaultTrustCenterDomain(so.Config.Settings.Server.DefaultTrustCenterDomain)
+	so.Config.Settings.EntConfig.QuestionnaireProductURL = so.Config.Settings.Integrations.Email.ProductURL
 
 	// create history client
 	histOpts := []historygenerated.Option{
@@ -207,10 +208,6 @@ func serve(ctx context.Context) error {
 			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
 			log.Info().Msg("workflow engine initialized")
 		}
-	}
-
-	if so.Config.Settings.CampaignWebhook.Enabled {
-		so.AddServerOptions(serveropts.WithCampaignWebhookConfig())
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())
@@ -308,6 +305,10 @@ func serve(ctx context.Context) error {
 	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
 		if err := rt.SeedRecurringCampaigns(ctx); err != nil {
 			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
+		}
+
+		if err := rt.SeedPaymentReminders(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed payment reminder listener")
 		}
 	}
 

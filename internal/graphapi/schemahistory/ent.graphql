@@ -26,6 +26,10 @@ type ActionPlanHistory implements Node {
   """
   status: ActionPlanHistoryDocumentStatus
   """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
+  """
   details of the action_plan
   """
   details: String
@@ -177,6 +181,13 @@ type ActionPlanHistoryConnection {
   totalCount: Int!
 }
 """
+ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
 enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -243,6 +254,7 @@ enum ActionPlanHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
   title
@@ -421,6 +433,15 @@ input ActionPlanHistoryWhereInput {
   statusNotIn: [ActionPlanHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
+  managementModeNEQ: ActionPlanHistoryDocumentManagementMode
+  managementModeIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeNotIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -778,6 +799,18 @@ type AssessmentHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -1006,6 +1039,49 @@ input AssessmentHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -1094,9 +1170,13 @@ type AssessmentResponseHistory implements Node {
   """
   entityID: String
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
@@ -1226,6 +1306,7 @@ enum AssessmentResponseHistoryOrderField {
   history_time
   created_at
   updated_at
+  display_name
   email
   send_attempts
   email_delivered_at
@@ -1454,6 +1535,24 @@ input AssessmentResponseHistoryWhereInput {
   entityIDEqualFold: String
   entityIDContainsFold: String
   """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
   email field predicates
   """
   email: String
@@ -1467,6 +1566,8 @@ input AssessmentResponseHistoryWhereInput {
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
   emailEqualFold: String
   emailContainsFold: String
   """
@@ -11659,6 +11760,24 @@ input EntityHistoryWhereInput {
   displayNameEqualFold: String
   displayNameContainsFold: String
   """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
   entity_type_id field predicates
   """
   entityTypeID: String
@@ -17765,6 +17884,10 @@ type InternalPolicyHistory implements Node {
   """
   status: InternalPolicyHistoryDocumentStatus
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  """
   details of the policy
   """
   details: String
@@ -17876,6 +17999,13 @@ type InternalPolicyHistoryConnection {
   totalCount: Int!
 }
 """
+InternalPolicyHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
 enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -17942,6 +18072,7 @@ enum InternalPolicyHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -18184,6 +18315,15 @@ input InternalPolicyHistoryWhereInput {
   statusNotIn: [InternalPolicyHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  managementModeNEQ: InternalPolicyHistoryDocumentManagementMode
+  managementModeIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeNotIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -24099,6 +24239,10 @@ type ProcedureHistory implements Node {
   """
   status: ProcedureHistoryDocumentStatus
   """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  """
   details of the procedure
   """
   details: String
@@ -24218,6 +24362,13 @@ type ProcedureHistoryConnection {
   totalCount: Int!
 }
 """
+ProcedureHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ProcedureHistoryDocumentStatus is enum for the field status
 """
 enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -24284,6 +24435,7 @@ enum ProcedureHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -24483,6 +24635,15 @@ input ProcedureHistoryWhereInput {
   statusNotIn: [ProcedureHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  managementModeNEQ: ProcedureHistoryDocumentManagementMode
+  managementModeIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeNotIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -34454,6 +34615,10 @@ type TemplateHistory implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: String
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -34530,6 +34695,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
+  EXTERNAL_INTAKE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.

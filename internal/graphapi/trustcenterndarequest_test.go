@@ -580,10 +580,13 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	otherTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	ndaFile := (&FileBuilder{client: suite.client, Name: "nda.pdf"}).MustNew(testUser1.UserCtx, t)
+
 	ndaTemplate := (&TemplateBuilder{
 		client:        suite.client,
 		Kind:          enums.TemplateKindTrustCenterNda,
 		TrustCenterID: trustCenter.ID,
+		FileIDs:       []string{ndaFile.ID},
 	}).MustNew(testUser1.UserCtx, t)
 
 	otherNdaTemplate := (&TemplateBuilder{
@@ -687,6 +690,8 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			}
 
 			if tc.testResponse {
+				expectAttestedUpload(t, suite.client.mockProvider)
+
 				// now sign the nda to ensure status is set correctly
 				_, err = suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, testclient.SubmitTrustCenterNDAResponseInput{
 					TemplateID: ndaTemplate.ID,

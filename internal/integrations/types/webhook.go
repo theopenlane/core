@@ -9,6 +9,16 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
+// StaticWebhookEntry pairs a definition ID with a webhook registration that declares a static route
+type StaticWebhookEntry struct {
+	// DefinitionID is the definition that owns the webhook
+	DefinitionID string
+	// WebhookName is the webhook name within the definition
+	WebhookName string
+	// StaticRoute is the fixed URL path for the webhook
+	StaticRoute string
+}
+
 // WebhookInboundRequest captures the inputs for verifying and resolving an inbound webhook request
 type WebhookInboundRequest struct {
 	// Integration is the installed integration receiving the webhook
@@ -39,8 +49,6 @@ type WebhookHandleRequest struct {
 	Integration *generated.Integration
 	// Webhook is the persisted webhook configuration for the installation
 	Webhook *generated.IntegrationWebhook
-	// DB is the Ent client used for persistence during webhook processing
-	DB *generated.Client
 	// Event is the normalized webhook event envelope
 	Event WebhookReceivedEvent
 	// Ingest processes mapped provider payloads directly through the shared ingest pipeline
@@ -80,6 +88,15 @@ type WebhookRegistration struct {
 	// EndpointURLTemplate overrides the persisted endpoint URL path
 	// Use "{endpointID}" as the placeholder for the generated endpoint identifier
 	EndpointURLTemplate string `json:"endpointUrlTemplate,omitempty"`
+	// StaticRoute is a fixed URL path registered at startup instead of using a per-installation endpoint ID.
+	// When set, the definition's Verify function is solely responsible for authentication
+	StaticRoute string `json:"staticRoute,omitempty"`
+	// SecretSource returns an operator/user-supplied webhook secret instead of auto-generating one.
+	// When nil the framework generates a secret at webhook creation time via the schema DefaultFunc
+	SecretSource func() string `json:"-"`
+	// ResolveIntegration locates the integration record from the inbound request.
+	// Required for StaticRoute webhooks where no endpoint ID maps to an installation
+	ResolveIntegration func(ctx context.Context, db *generated.Client, req WebhookInboundRequest) (*generated.Integration, error) `json:"-"`
 	// Verify authenticates the inbound webhook request
 	Verify WebhookVerifyFunc `json:"-"`
 	// Event resolves the inbound request into a supported event

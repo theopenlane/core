@@ -10,6 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -262,7 +263,7 @@ type MutationResolver interface {
 	UpdateBulkCSVIdentityHolder(ctx context.Context, input graphql.Upload) (*model.IdentityHolderBulkUpdatePayload, error)
 	DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error)
 	CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error)
-	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string) (*model.InternalPolicyCreatePayload, error)
+	CreateUploadInternalPolicy(ctx context.Context, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) (*model.InternalPolicyCreatePayload, error)
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
@@ -380,7 +381,7 @@ type MutationResolver interface {
 	UpdatePlatform(ctx context.Context, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) (*model.PlatformUpdatePayload, error)
 	DeletePlatform(ctx context.Context, id string) (*model.PlatformDeletePayload, error)
 	CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error)
-	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string) (*model.ProcedureCreatePayload, error)
+	CreateUploadProcedure(ctx context.Context, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) (*model.ProcedureCreatePayload, error)
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
@@ -4489,6 +4490,14 @@ func (ec *executionContext) field_Mutation_createUploadInternalPolicy_args(ctx c
 		return nil, err
 	}
 	args["ownerID"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "managementMode",
+		func(ctx context.Context, v any) (*enums.DocumentManagementMode, error) {
+			return ec.unmarshalOInternalPolicyDocumentManagementMode2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDocumentManagementMode(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["managementMode"] = arg3
 	return args, nil
 }
 
@@ -4519,6 +4528,14 @@ func (ec *executionContext) field_Mutation_createUploadProcedure_args(ctx contex
 		return nil, err
 	}
 	args["ownerID"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "managementMode",
+		func(ctx context.Context, v any) (*enums.DocumentManagementMode, error) {
+			return ec.unmarshalOProcedureDocumentManagementMode2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDocumentManagementMode(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["managementMode"] = arg3
 	return args, nil
 }
 
@@ -22549,7 +22566,7 @@ func (ec *executionContext) _Mutation_createUploadInternalPolicy(ctx context.Con
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["internalPolicyFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadInternalPolicy(ctx, fc.Args["internalPolicyFile"].(graphql.Upload), fc.Args["internalPolicyFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string), fc.Args["managementMode"].(*enums.DocumentManagementMode))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.InternalPolicyCreatePayload) graphql.Marshaler {
@@ -27741,7 +27758,7 @@ func (ec *executionContext) _Mutation_createUploadProcedure(ctx context.Context,
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["procedureFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string))
+			return ec.Resolvers.Mutation().CreateUploadProcedure(ctx, fc.Args["procedureFile"].(graphql.Upload), fc.Args["procedureFileMetadata"].(*model.FileMetadataInput), fc.Args["ownerID"].(*string), fc.Args["managementMode"].(*enums.DocumentManagementMode))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ProcedureCreatePayload) graphql.Marshaler {

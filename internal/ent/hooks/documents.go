@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -93,7 +92,7 @@ func HookImportDocument() ent.Hook {
 			_, exists := mut.URL()
 			switch exists {
 			case true:
-				if err := importURLToSchema(mut); err != nil {
+				if err := importURLToSchema(ctx, mut); err != nil {
 					return nil, err
 				}
 
@@ -225,20 +224,13 @@ var client = &http.Client{
 	Timeout: defaultImportTimeout,
 }
 
-// importURLToSchema is a helper that fetches content from a URL, detects its MIME type, parses it and writes
-// the sanitized content into the mutation details, recording the URL used
-func importURLToSchema(m importSchemaMutation) error {
+func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
 		return nil
 	}
 
-	_, err := url.Parse(downloadURL)
-	if err != nil {
-		return err
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), defaultImportTimeout)
+	ctx, cancel := context.WithTimeout(ctx, defaultImportTimeout)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)

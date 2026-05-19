@@ -971,6 +971,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanOrderFieldManagementMode orders ActionPlan by management_mode.
+	ActionPlanOrderFieldManagementMode = &ActionPlanOrderField{
+		Value: func(_m *ActionPlan) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: actionplan.FieldManagementMode,
+		toTerm: actionplan.ByManagementMode,
+		toCursor: func(_m *ActionPlan) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// ActionPlanOrderFieldReviewDue orders ActionPlan by review_due.
 	ActionPlanOrderFieldReviewDue = &ActionPlanOrderField{
 		Value: func(_m *ActionPlan) (ent.Value, error) {
@@ -1071,6 +1085,8 @@ func (f ActionPlanOrderField) String() string {
 		str = "name"
 	case ActionPlanOrderFieldStatus.column:
 		str = "STATUS"
+	case ActionPlanOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case ActionPlanOrderFieldReviewDue.column:
 		str = "review_due"
 	case ActionPlanOrderFieldReviewFrequency.column:
@@ -1109,6 +1125,8 @@ func (f *ActionPlanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanOrderFieldName
 	case "STATUS":
 		*f = *ActionPlanOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *ActionPlanOrderFieldManagementMode
 	case "review_due":
 		*f = *ActionPlanOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
@@ -1855,6 +1873,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseOrderFieldDisplayName orders AssessmentResponse by display_name.
+	AssessmentResponseOrderFieldDisplayName = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: assessmentresponse.FieldDisplayName,
+		toTerm: assessmentresponse.ByDisplayName,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
 	// AssessmentResponseOrderFieldEmail orders AssessmentResponse by email.
 	AssessmentResponseOrderFieldEmail = &AssessmentResponseOrderField{
 		Value: func(_m *AssessmentResponse) (ent.Value, error) {
@@ -2061,6 +2093,8 @@ func (f AssessmentResponseOrderField) String() string {
 		str = "created_at"
 	case AssessmentResponseOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentResponseOrderFieldDisplayName.column:
+		str = "display_name"
 	case AssessmentResponseOrderFieldEmail.column:
 		str = "email"
 	case AssessmentResponseOrderFieldSendAttempts.column:
@@ -2109,6 +2143,8 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentResponseOrderFieldUpdatedAt
+	case "display_name":
+		*f = *AssessmentResponseOrderFieldDisplayName
 	case "email":
 		*f = *AssessmentResponseOrderFieldEmail
 	case "send_attempts":
@@ -17467,6 +17503,20 @@ var (
 			}
 		},
 	}
+	// InternalPolicyOrderFieldManagementMode orders InternalPolicy by management_mode.
+	InternalPolicyOrderFieldManagementMode = &InternalPolicyOrderField{
+		Value: func(_m *InternalPolicy) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: internalpolicy.FieldManagementMode,
+		toTerm: internalpolicy.ByManagementMode,
+		toCursor: func(_m *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// InternalPolicyOrderFieldReviewDue orders InternalPolicy by review_due.
 	InternalPolicyOrderFieldReviewDue = &InternalPolicyOrderField{
 		Value: func(_m *InternalPolicy) (ent.Value, error) {
@@ -17511,6 +17561,8 @@ func (f InternalPolicyOrderField) String() string {
 		str = "name"
 	case InternalPolicyOrderFieldStatus.column:
 		str = "STATUS"
+	case InternalPolicyOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case InternalPolicyOrderFieldReviewDue.column:
 		str = "review_due"
 	case InternalPolicyOrderFieldReviewFrequency.column:
@@ -17541,6 +17593,8 @@ func (f *InternalPolicyOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyOrderFieldName
 	case "STATUS":
 		*f = *InternalPolicyOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *InternalPolicyOrderFieldManagementMode
 	case "review_due":
 		*f = *InternalPolicyOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":
@@ -25998,6 +26052,20 @@ var (
 			}
 		},
 	}
+	// ProcedureOrderFieldManagementMode orders Procedure by management_mode.
+	ProcedureOrderFieldManagementMode = &ProcedureOrderField{
+		Value: func(_m *Procedure) (ent.Value, error) {
+			return _m.ManagementMode, nil
+		},
+		column: procedure.FieldManagementMode,
+		toTerm: procedure.ByManagementMode,
+		toCursor: func(_m *Procedure) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ManagementMode,
+			}
+		},
+	}
 	// ProcedureOrderFieldReviewDue orders Procedure by review_due.
 	ProcedureOrderFieldReviewDue = &ProcedureOrderField{
 		Value: func(_m *Procedure) (ent.Value, error) {
@@ -26042,6 +26110,8 @@ func (f ProcedureOrderField) String() string {
 		str = "name"
 	case ProcedureOrderFieldStatus.column:
 		str = "STATUS"
+	case ProcedureOrderFieldManagementMode.column:
+		str = "MANAGEMENT_MODE"
 	case ProcedureOrderFieldReviewDue.column:
 		str = "review_due"
 	case ProcedureOrderFieldReviewFrequency.column:
@@ -26072,6 +26142,8 @@ func (f *ProcedureOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureOrderFieldName
 	case "STATUS":
 		*f = *ProcedureOrderFieldStatus
+	case "MANAGEMENT_MODE":
+		*f = *ProcedureOrderFieldManagementMode
 	case "review_due":
 		*f = *ProcedureOrderFieldReviewDue
 	case "REVIEW_FREQUENCY":

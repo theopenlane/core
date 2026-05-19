@@ -5,10 +5,10 @@ import (
 	"errors"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -20,7 +20,7 @@ type ReconcileEnvelope struct {
 }
 
 // reconcileSchemaName is the type name derived from the JSON schema reflector
-var reconcileSchemaName = providerkit.SchemaID(providerkit.SchemaFrom[ReconcileEnvelope]())
+var reconcileSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[ReconcileEnvelope]())
 
 var (
 	// ReconcileTopic is the Gala topic name for reconciliation envelopes

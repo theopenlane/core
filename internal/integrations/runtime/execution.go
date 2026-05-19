@@ -7,11 +7,9 @@ import (
 	"time"
 
 	"github.com/riverqueue/river"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -20,41 +18,6 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// bootstrapHandlerContext resolves the integration and returns a fully prepared
-// system-level context. When metadata.Runtime is true, no DB lookup is performed
-// and the client is resolved from the registry at execution time
-func (r *Runtime) bootstrapHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) (context.Context, *ent.Integration, types.ExecutionMetadata, error) {
-	if metadata.Runtime {
-		systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-		return r.withHandlerContext(systemCtx, metadata), nil, metadata, nil
-	}
-
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	integration, err := r.DB().Integration.Get(systemCtx, metadata.IntegrationID)
-	if err != nil {
-		return ctx, nil, metadata, err
-	}
-
-	metadata.OwnerID = integration.OwnerID
-	metadata.IntegrationID = integration.ID
-	metadata.DefinitionID = integration.DefinitionID
-
-	systemCtx = auth.WithCaller(systemCtx, auth.NewWebhookCaller(integration.OwnerID))
-	systemCtx = r.withHandlerContext(systemCtx, metadata)
-
-	return systemCtx, integration, metadata, nil
-}
-
-// withHandlerContext reattaches process-local dependencies after Gala restores
-// durable context values such as caller and integration execution metadata.
-func (r *Runtime) withHandlerContext(ctx context.Context, metadata types.ExecutionMetadata) context.Context {
-	ctx = ent.NewContext(ctx, r.DB())
-
-	return intobvs.WithContext(ctx, metadata)
-}
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,
 // starting an independent adaptive scheduling cycle for each
@@ -129,9 +92,12 @@ type reconcileOutput struct {
 // HandleReconcile executes one reconcilable operation inline and returns the
 // number of records processed as the delta for adaptive scheduling
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
-	ctx, installation, metadata, err := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
+	metadata := envelope.ExecutionMetadata
+	ctx = intobvs.WithContext(ctx, metadata)
+
+	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: envelope.IntegrationID})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).EmbedObject(intobvs.IntegrationRef{IntegrationID: envelope.IntegrationID, DefinitionID: envelope.DefinitionID}).Str("operation", envelope.Operation).Msg("reconcile bootstrap failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("reconcile bootstrap failed")
 
 		return 0, err
 	}
@@ -250,11 +216,21 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
-	ctx, integration, metadata, bootstrapErr := r.bootstrapHandlerContext(ctx, envelope.ExecutionMetadata)
+	metadata := envelope.ExecutionMetadata
+	ctx = intobvs.WithContext(ctx, metadata)
 
 	startedAt := time.Now()
 	db := r.DB()
 	tracked := envelope.RunID != ""
+
+	var (
+		integration  *ent.Integration
+		bootstrapErr error
+	)
+
+	if !metadata.Runtime {
+		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: metadata.IntegrationID})
+	}
 
 	failRun := func(execErr error, response json.RawMessage) error {
 		if tracked {
@@ -278,14 +254,14 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	logx.FromContext(ctx).Debug().Msg("operation started")
 
-	if tracked {
-		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
-			return err
-		}
-	}
-
 	if bootstrapErr != nil {
 		return failRun(bootstrapErr, nil)
+	}
+
+	if tracked {
+		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
+			return failRun(err, nil)
+		}
 	}
 
 	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)

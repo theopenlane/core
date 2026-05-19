@@ -341,6 +341,10 @@ type ActionPlan implements Node {
   """
   status: ActionPlanDocumentStatus
   """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanDocumentManagementMode
+  """
   details of the action_plan
   """
   details: String
@@ -937,6 +941,13 @@ type ActionPlanConnection {
   totalCount: Int!
 }
 """
+ActionPlanDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ActionPlanDocumentStatus is enum for the field status
 """
 enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -994,6 +1005,7 @@ enum ActionPlanOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
   title
@@ -1136,6 +1148,15 @@ input ActionPlanWhereInput {
   statusNotIn: [ActionPlanDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ActionPlanDocumentManagementMode
+  managementModeNEQ: ActionPlanDocumentManagementMode
+  managementModeIn: [ActionPlanDocumentManagementMode!]
+  managementModeNotIn: [ActionPlanDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -1613,6 +1634,18 @@ type Assessment implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -1944,9 +1977,13 @@ type AssessmentResponse implements Node {
   """
   entityID: ID
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
@@ -2104,6 +2141,7 @@ Properties by which AssessmentResponse connections can be ordered.
 enum AssessmentResponseOrderField {
   created_at
   updated_at
+  display_name
   email
   send_attempts
   email_delivered_at
@@ -2296,6 +2334,24 @@ input AssessmentResponseWhereInput {
   entityIDEqualFold: ID
   entityIDContainsFold: ID
   """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
   email field predicates
   """
   email: String
@@ -2309,6 +2365,8 @@ input AssessmentResponseWhereInput {
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
   emailEqualFold: String
   emailContainsFold: String
   """
@@ -2597,6 +2655,49 @@ input AssessmentWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   name field predicates
   """
@@ -10419,6 +10520,10 @@ input CreateActionPlanInput {
   """
   status: ActionPlanDocumentStatus
   """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanDocumentManagementMode
+  """
   details of the action_plan
   """
   details: String
@@ -10556,6 +10661,14 @@ input CreateAssessmentInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -10588,9 +10701,13 @@ Input was generated by ent.
 """
 input CreateAssessmentResponseInput {
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   when the assessment email was delivered to the recipient
   """
@@ -13054,6 +13171,10 @@ input CreateInternalPolicyInput {
   """
   status: InternalPolicyDocumentStatus
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyDocumentManagementMode
+  """
   details of the policy
   """
   details: String
@@ -14202,6 +14323,10 @@ input CreateProcedureInput {
   status of the procedure, e.g. draft, published, archived, etc.
   """
   status: ProcedureDocumentStatus
+  """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureDocumentManagementMode
   """
   details of the procedure
   """
@@ -15441,6 +15566,10 @@ input CreateTemplateInput {
   the uischema for the template to render in the UI
   """
   uischema: Map
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -24184,6 +24313,24 @@ input EntityWhereInput {
   displayNameNotNil: Boolean
   displayNameEqualFold: String
   displayNameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
   """
   entity_type_id field predicates
   """
@@ -35546,6 +35693,10 @@ type InternalPolicy implements Node {
   """
   status: InternalPolicyDocumentStatus
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyDocumentManagementMode
+  """
   details of the policy
   """
   details: String
@@ -36228,6 +36379,13 @@ type InternalPolicyConnection {
   totalCount: Int!
 }
 """
+InternalPolicyDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyDocumentStatus is enum for the field status
 """
 enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -36285,6 +36443,7 @@ enum InternalPolicyOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -36491,6 +36650,15 @@ input InternalPolicyWhereInput {
   statusNotIn: [InternalPolicyDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: InternalPolicyDocumentManagementMode
+  managementModeNEQ: InternalPolicyDocumentManagementMode
+  managementModeIn: [InternalPolicyDocumentManagementMode!]
+  managementModeNotIn: [InternalPolicyDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -49800,6 +49968,10 @@ type Procedure implements Node {
   """
   status: ProcedureDocumentStatus
   """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureDocumentManagementMode
+  """
   details of the procedure
   """
   details: String
@@ -50304,6 +50476,13 @@ type ProcedureConnection {
   totalCount: Int!
 }
 """
+ProcedureDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ProcedureDocumentStatus is enum for the field status
 """
 enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -50361,6 +50540,7 @@ enum ProcedureOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -50524,6 +50704,15 @@ input ProcedureWhereInput {
   statusNotIn: [ProcedureDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ProcedureDocumentManagementMode
+  managementModeNEQ: ProcedureDocumentManagementMode
+  managementModeIn: [ProcedureDocumentManagementMode!]
+  managementModeNotIn: [ProcedureDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -66731,6 +66920,10 @@ type Template implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: ID
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -66957,6 +67150,7 @@ TemplateTemplateKind is enum for the field kind
 enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
+  EXTERNAL_INTAKE
 }
 """
 TemplateWhereInput is used for filtering Template objects.
@@ -71582,6 +71776,11 @@ input UpdateActionPlanInput {
   status: ActionPlanDocumentStatus
   clearStatus: Boolean
   """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanDocumentManagementMode
+  clearManagementMode: Boolean
+  """
   details of the action_plan
   """
   details: String
@@ -71782,6 +71981,16 @@ input UpdateAssessmentInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
   """
   the name of the assessment, e.g. cloud providers, marketing team
   """
@@ -75203,6 +75412,11 @@ input UpdateInternalPolicyInput {
   status: InternalPolicyDocumentStatus
   clearStatus: Boolean
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyDocumentManagementMode
+  clearManagementMode: Boolean
+  """
   details of the policy
   """
   details: String
@@ -76816,6 +77030,11 @@ input UpdateProcedureInput {
   """
   status: ProcedureDocumentStatus
   clearStatus: Boolean
+  """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureDocumentManagementMode
+  clearManagementMode: Boolean
   """
   details of the procedure
   """
@@ -78619,6 +78838,11 @@ input UpdateTemplateInput {
   """
   uischema: Map
   clearUischema: Boolean
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
+  clearTransformConfiguration: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID

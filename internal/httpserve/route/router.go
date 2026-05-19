@@ -624,7 +624,7 @@ func RegisterRoutes(router *Router) error {
 		registerOAuthRegisterHandler,
 		registerIntegrationAuthStartHandler,
 		registerIntegrationAuthCallbackHandler,
-		registerGitHubAppWebhookHandler,
+		registerStaticWebhookRoutes,
 		registerIntegrationProvidersHandler,
 		registerIntegrationConfigHandler,
 		registerIntegrationDisconnectHandler,
@@ -660,7 +660,6 @@ func RegisterRoutes(router *Router) error {
 		registerFileDownloadHandler,
 		registerIntegrationWebhookHandler,
 		registerSCIMRoutes,
-		registerResendWebhookHandler,
 		registerEmailTestSendHandler,
 
 		// JOB Runners

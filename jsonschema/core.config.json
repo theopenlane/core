@@ -157,6 +157,9 @@
         },
         "email": {
           "$ref": "#/$defs/email.RuntimeEmailConfig"
+        },
+        "paymentreminder": {
+          "$ref": "#/$defs/operations.PaymentReminderConfig"
         }
       },
       "additionalProperties": false,
@@ -407,40 +410,46 @@
     },
     "email.RuntimeEmailConfig": {
       "properties": {
-        "apiKey": {
+        "testdir": {
+          "type": "string",
+          "description": "Directory for dev-mode email output"
+        },
+        "resendsecret": {
+          "type": "string",
+          "description": "Resend webhook signing secret"
+        },
+        "apikey": {
           "type": "string",
           "description": "Email provider API key"
         },
         "provider": {
           "type": "string",
           "enum": [
-            "resend",
-            "sendgrid",
-            "postmark"
+            "resend"
           ],
           "description": "Email service provider"
         },
-        "fromEmail": {
+        "fromemail": {
           "type": "string",
           "description": "Sender email address"
         },
-        "supportEmail": {
+        "supportemail": {
           "type": "string",
           "description": "Support contact email address"
         },
-        "questionnaireEmail": {
+        "questionnaireemail": {
           "type": "string",
           "description": "Sender override for questionnaire auth emails"
         },
-        "rootURL": {
+        "rooturl": {
           "type": "string",
           "description": "Root application URL used to construct email action links"
         },
-        "productURL": {
+        "producturl": {
           "type": "string",
           "description": "Product home URL"
         },
-        "docsURL": {
+        "docsurl": {
           "type": "string",
           "description": "Documentation URL"
         },
@@ -536,9 +545,9 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "apiKey",
+        "apikey",
         "provider",
-        "fromEmail"
+        "fromemail"
       ]
     },
     "entconfig.Billing": {
@@ -589,6 +598,10 @@
         "notifications": {
           "$ref": "#/$defs/entconfig.Notifications",
           "description": "Notifications contains configuration for notifications sent to users based on events"
+        },
+        "questionnaireproducturl": {
+          "type": "string",
+          "description": "QuestionnaireProductURL is the product URL used to build questionnaire access links"
         }
       },
       "additionalProperties": false,
@@ -894,25 +907,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "handlers.CampaignWebhookConfig": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled toggles the campaign webhook handler"
-        },
-        "resendapikey": {
-          "type": "string",
-          "description": "ResendAPIKey is the API key used for Resend client initialization"
-        },
-        "resendsecret": {
-          "type": "string",
-          "description": "ResendSecret is the signing secret used to verify Resend webhook payloads"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "CampaignWebhookConfig contains webhook configuration for campaign-related email providers."
-    },
     "handlers.CloudflareConfig": {
       "properties": {
         "enabled": {
@@ -1037,6 +1031,30 @@
         },
         "redirecturl": {
           "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "operations.PaymentReminderConfig": {
+      "properties": {
+        "paymentmethodinterval": {
+          "type": "integer",
+          "description": "Days after org creation before marking for deletion",
+          "default": 30
+        },
+        "deletiondays": {
+          "type": "integer",
+          "description": "Days between marking and actual deletion",
+          "default": 7
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the payment reminder listener is enabled"
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log organization IDs that would be processed"
         }
       },
       "additionalProperties": false,
@@ -1999,10 +2017,6 @@
     "workflows": {
       "$ref": "#/$defs/workflows.Config",
       "description": "Workflows contains the configuration for the workflows engine"
-    },
-    "campaignwebhook": {
-      "$ref": "#/$defs/handlers.CampaignWebhookConfig",
-      "description": "CampaignWebhook contains webhook configuration for campaign-related email providers"
     },
     "cloudflare": {
       "$ref": "#/$defs/handlers.CloudflareConfig",

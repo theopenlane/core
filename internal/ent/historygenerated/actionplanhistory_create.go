@@ -182,6 +182,20 @@ func (_c *ActionPlanHistoryCreate) SetNillableStatus(v *enums.DocumentStatus) *A
 	return _c
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_c *ActionPlanHistoryCreate) SetManagementMode(v enums.DocumentManagementMode) *ActionPlanHistoryCreate {
+	_c.mutation.SetManagementMode(v)
+	return _c
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetManagementMode(*v)
+	}
+	return _c
+}
+
 // SetDetails sets the "details" field.
 func (_c *ActionPlanHistoryCreate) SetDetails(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetDetails(v)
@@ -662,6 +676,10 @@ func (_c *ActionPlanHistoryCreate) defaults() error {
 		v := actionplanhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ManagementMode(); !ok {
+		v := actionplanhistory.DefaultManagementMode
+		_c.mutation.SetManagementMode(v)
+	}
 	if _, ok := _c.mutation.ApprovalRequired(); !ok {
 		v := actionplanhistory.DefaultApprovalRequired
 		_c.mutation.SetApprovalRequired(v)
@@ -743,6 +761,11 @@ func (_c *ActionPlanHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := actionplanhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ManagementMode(); ok {
+		if err := actionplanhistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ActionPlanHistory.management_mode": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -851,6 +874,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(actionplanhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ManagementMode(); ok {
+		_spec.SetField(actionplanhistory.FieldManagementMode, field.TypeEnum, value)
+		_node.ManagementMode = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)

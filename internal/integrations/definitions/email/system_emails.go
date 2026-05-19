@@ -1,6 +1,7 @@
 package email
 
 import (
+	"fmt"
 	"html"
 	"html/template"
 	"net/url"
@@ -151,13 +152,20 @@ type TrustCenterNDARequestEmail struct {
 	NDAURL string `json:"ndaUrl,omitempty" jsonschema:"description=NDA signing URL"`
 }
 
-// TrustCenterNDASignedEmail is the input for the NDA signed confirmation
+// TrustCenterNDASignedEmail is the input for the NDA signed confirmation.
+// Callers may pass either the pre-built TrustCenterURL or the RequestID + TrustCenterID pair;
+// when TrustCenterURL is empty the operation resolves it (with an auth token) from RequestID and TrustCenterID.
+// OrgName is resolved from TrustCenterID when empty
 type TrustCenterNDASignedEmail struct {
 	RecipientInfo
-	// OrgName is the organization whose NDA was signed
-	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
-	// TrustCenterURL is the URL to the trust center
-	TrustCenterURL string `json:"trust_center_url" jsonschema:"required,description=Trust center URL"`
+	// OrgName is the organization whose NDA was signed; resolved from TrustCenterID when empty
+	OrgName string `json:"org_name,omitempty" jsonschema:"description=Organization name"`
+	// TrustCenterURL is the URL to the trust center; when empty the operation constructs it with an auth token from RequestID and TrustCenterID
+	TrustCenterURL string `json:"trust_center_url,omitempty" jsonschema:"description=Trust center URL"`
+	// RequestID is the NDA request identifier used for JWT subject construction
+	RequestID string `json:"request_id,omitempty" jsonschema:"description=NDA request ID for token generation"`
+	// TrustCenterID is the trust center identifier used for URL construction
+	TrustCenterID string `json:"trust_center_id,omitempty" jsonschema:"description=Trust center ID for URL construction"`
 	// AttachmentFilename is the filename for the signed NDA attachment
 	AttachmentFilename string `json:"attachment_filename,omitempty" jsonschema:"description=Signed NDA attachment filename"`
 	// AttachmentData is the raw content of the signed NDA attachment
@@ -202,6 +210,15 @@ type BillingEmailChangedEmail struct {
 	ChangedAt time.Time `json:"changed_at" jsonschema:"required,description=Timestamp of the change"`
 }
 
+// OrgDeletionNoticeEmail is the input for the organization deletion notice operation
+type OrgDeletionNoticeEmail struct {
+	RecipientInfo
+	// OrgName is the name of the organization scheduled for deletion
+	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
+	// DeletionDate is the date the organization will be deleted
+	DeletionDate time.Time `json:"deletion_date" jsonschema:"required,description=Scheduled deletion date"`
+}
+
 // --- Schema + operation ref vars ---
 
 var (
@@ -218,6 +235,7 @@ var (
 	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()        //nolint:revive
 	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()      //nolint:revive
 	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()    //nolint:revive
+	orgDeletionNoticeSchema, OrgDeletionNoticeOp     = providerkit.OperationSchema[OrgDeletionNoticeEmail]()      //nolint:revive
 )
 
 // --- Email operation definitions ---
@@ -544,6 +562,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
 var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: baseTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
+	PreHook:     resolveTrustCenterNDASignedFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
 		return req.OrgName + " Trust Center NDA Signed"
 	},
@@ -671,6 +690,43 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 		}
 	},
 	Config: func(cfg RuntimeEmailConfig, _ BillingEmailChangedEmail) RuntimeEmailConfig {
+		return applySystemBranding(cfg)
+	},
+})
+
+var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
+	Op: OrgDeletionNoticeOp, Schema: orgDeletionNoticeSchema, Theme: baseTheme,
+	Description: "System notification that an organization has been scheduled for deletion due to missing payment method",
+	Subject: func(_ RuntimeEmailConfig, req OrgDeletionNoticeEmail) string {
+		return fmt.Sprintf("Organization Deletion Notice for %s", req.OrgName)
+	},
+	Build: func(cfg RuntimeEmailConfig, req OrgDeletionNoticeEmail) render.ContentBody {
+		return render.ContentBody{
+			Preheader: "Your organization " + req.OrgName + " has been scheduled for deletion",
+			Header:    defaultHeader(cfg),
+			Title:     "Organization Deletion Notice",
+			Intros: render.IntrosBlock{
+				Paragraphs: []string{
+					"This email is to notify you that your organization " + req.OrgName + " has been scheduled for deletion.",
+				},
+			},
+			Dictionary: render.Dictionary{
+				Cells: []render.Cell{
+					{Key: "Scheduled deletion date", Value: req.DeletionDate.Format("January 2, 2006")},
+				},
+			},
+			Actions: []render.Action{{
+				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing"},
+			}},
+			Outros: render.OutrosBlock{
+				Paragraphs: []string{
+					"If you want to keep your account, please add a payment method before the scheduled deletion date.",
+					"If you believe this was done in error, please contact our support team immediately at " + cfg.SupportEmail + ".",
+				},
+			},
+		}
+	},
+	Config: func(cfg RuntimeEmailConfig, _ OrgDeletionNoticeEmail) RuntimeEmailConfig {
 		return applySystemBranding(cfg)
 	},
 })

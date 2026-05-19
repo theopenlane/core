@@ -143,7 +143,7 @@ func parseDocx(content []byte) (string, error) {
 
 	doc, err := docx.Parse(reader, int64(len(content)))
 	if err != nil {
-		return "", fmt.Errorf("failed to read docx file: %w", err) //nolint:err113
+		return "", fmt.Errorf("%w: %w", ErrDOCXParseFailed, err)
 	}
 
 	var paragraphs []string

@@ -59,6 +59,7 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Metadata                        func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
@@ -101,12 +102,15 @@ type ComplexityRoot struct {
 		CreatedBy           func(childComplexity int) int
 		HistoryTime         func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		InternalNotes       func(childComplexity int) int
 		Jsonconfig          func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Operation           func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
 		Ref                 func(childComplexity int) int
 		ResponseDueDuration func(childComplexity int) int
+		SystemInternalID    func(childComplexity int) int
+		SystemOwned         func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
 		Uischema            func(childComplexity int) int
@@ -132,6 +136,7 @@ type ComplexityRoot struct {
 		CompletedAt      func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
+		DisplayName      func(childComplexity int) int
 		DocumentDataID   func(childComplexity int) int
 		DueDate          func(childComplexity int) int
 		Email            func(childComplexity int) int
@@ -1396,6 +1401,7 @@ type ComplexityRoot struct {
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicyKindID            func(childComplexity int) int
 		InternalPolicyKindName          func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -1909,6 +1915,7 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
+		ManagementMode                  func(childComplexity int) int
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
@@ -2571,30 +2578,31 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		EnvironmentID    func(childComplexity int) int
-		EnvironmentName  func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Jsonconfig       func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		ScopeID          func(childComplexity int) int
-		ScopeName        func(childComplexity int) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		TemplateType     func(childComplexity int) int
-		TrustCenterID    func(childComplexity int) int
-		Uischema         func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		EnvironmentID          func(childComplexity int) int
+		EnvironmentName        func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		InternalNotes          func(childComplexity int) int
+		Jsonconfig             func(childComplexity int) int
+		Kind                   func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		ScopeID                func(childComplexity int) int
+		ScopeName              func(childComplexity int) int
+		SystemInternalID       func(childComplexity int) int
+		SystemOwned            func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		TemplateType           func(childComplexity int) int
+		TransformConfiguration func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		Uischema               func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -3505,6 +3513,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ActionPlanHistory.InternalNotes(childComplexity), true
 
+	case "ActionPlanHistory.managementMode":
+		if e.ComplexityRoot.ActionPlanHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.ManagementMode(childComplexity), true
+
 	case "ActionPlanHistory.metadata":
 		if e.ComplexityRoot.ActionPlanHistory.Metadata == nil {
 			break
@@ -3736,6 +3751,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssessmentHistory.ID(childComplexity), true
 
+	case "AssessmentHistory.internalNotes":
+		if e.ComplexityRoot.AssessmentHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.InternalNotes(childComplexity), true
+
 	case "AssessmentHistory.jsonconfig":
 		if e.ComplexityRoot.AssessmentHistory.Jsonconfig == nil {
 			break
@@ -3777,6 +3799,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.ResponseDueDuration(childComplexity), true
+
+	case "AssessmentHistory.systemInternalID":
+		if e.ComplexityRoot.AssessmentHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SystemInternalID(childComplexity), true
+
+	case "AssessmentHistory.systemOwned":
+		if e.ComplexityRoot.AssessmentHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SystemOwned(childComplexity), true
 
 	case "AssessmentHistory.tags":
 		if e.ComplexityRoot.AssessmentHistory.Tags == nil {
@@ -3889,6 +3925,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponseHistory.CreatedBy(childComplexity), true
+
+	case "AssessmentResponseHistory.displayName":
+		if e.ComplexityRoot.AssessmentResponseHistory.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentResponseHistory.DisplayName(childComplexity), true
 
 	case "AssessmentResponseHistory.documentDataID":
 		if e.ComplexityRoot.AssessmentResponseHistory.DocumentDataID == nil {
@@ -10911,6 +10954,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicyHistory.InternalPolicyKindName(childComplexity), true
 
+	case "InternalPolicyHistory.managementMode":
+		if e.ComplexityRoot.InternalPolicyHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ManagementMode(childComplexity), true
+
 	case "InternalPolicyHistory.name":
 		if e.ComplexityRoot.InternalPolicyHistory.Name == nil {
 			break
@@ -13661,6 +13711,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.InternalNotes(childComplexity), true
+
+	case "ProcedureHistory.managementMode":
+		if e.ComplexityRoot.ProcedureHistory.ManagementMode == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.ManagementMode(childComplexity), true
 
 	case "ProcedureHistory.name":
 		if e.ComplexityRoot.ProcedureHistory.Name == nil {
@@ -17938,6 +17995,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TemplateHistory.TemplateType(childComplexity), true
 
+	case "TemplateHistory.transformConfiguration":
+		if e.ComplexityRoot.TemplateHistory.TransformConfiguration == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.TransformConfiguration(childComplexity), true
+
 	case "TemplateHistory.trustCenterID":
 		if e.ComplexityRoot.TemplateHistory.TrustCenterID == nil {
 			break
@@ -22154,6 +22218,10 @@ ExportMetadata contains metadata for an export record
 """
 scalar ExportMetadata
 """
+TemplateProjectionConfig describes how submitted template document data is projected into typed records.
+"""
+scalar TemplateProjectionConfig
+"""
 Any is a generic fallback type
 """
 scalar Any
@@ -22193,6 +22261,10 @@ type ActionPlanHistory implements Node {
   status of the action_plan, e.g. draft, published, archived, etc.
   """
   status: ActionPlanHistoryDocumentStatus
+  """
+  how the action_plan is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
   """
   details of the action_plan
   """
@@ -22345,6 +22417,13 @@ type ActionPlanHistoryConnection {
   totalCount: Int!
 }
 """
+ActionPlanHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ActionPlanHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
 enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -22411,6 +22490,7 @@ enum ActionPlanHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
   title
@@ -22589,6 +22669,15 @@ input ActionPlanHistoryWhereInput {
   statusNotIn: [ActionPlanHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ActionPlanHistoryDocumentManagementMode
+  managementModeNEQ: ActionPlanHistoryDocumentManagementMode
+  managementModeIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeNotIn: [ActionPlanHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -22946,6 +23035,18 @@ type AssessmentHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -23174,6 +23275,49 @@ input AssessmentHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -23262,9 +23406,13 @@ type AssessmentResponseHistory implements Node {
   """
   entityID: String
   """
+  display name for the submitted assessment response
+  """
+  displayName: String
+  """
   the email address of the recipient
   """
-  email: String!
+  email: String
   """
   the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
   """
@@ -23394,6 +23542,7 @@ enum AssessmentResponseHistoryOrderField {
   history_time
   created_at
   updated_at
+  display_name
   email
   send_attempts
   email_delivered_at
@@ -23622,6 +23771,24 @@ input AssessmentResponseHistoryWhereInput {
   entityIDEqualFold: String
   entityIDContainsFold: String
   """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
   email field predicates
   """
   email: String
@@ -23635,6 +23802,8 @@ input AssessmentResponseHistoryWhereInput {
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
   emailEqualFold: String
   emailContainsFold: String
   """
@@ -33827,6 +33996,24 @@ input EntityHistoryWhereInput {
   displayNameEqualFold: String
   displayNameContainsFold: String
   """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
   entity_type_id field predicates
   """
   entityTypeID: String
@@ -39933,6 +40120,10 @@ type InternalPolicyHistory implements Node {
   """
   status: InternalPolicyHistoryDocumentStatus
   """
+  how the policy is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  """
   details of the policy
   """
   details: String
@@ -40044,6 +40235,13 @@ type InternalPolicyHistoryConnection {
   totalCount: Int!
 }
 """
+InternalPolicyHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum InternalPolicyHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
 enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -40110,6 +40308,7 @@ enum InternalPolicyHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -40352,6 +40551,15 @@ input InternalPolicyHistoryWhereInput {
   statusNotIn: [InternalPolicyHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: InternalPolicyHistoryDocumentManagementMode
+  managementModeNEQ: InternalPolicyHistoryDocumentManagementMode
+  managementModeIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeNotIn: [InternalPolicyHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -46267,6 +46475,10 @@ type ProcedureHistory implements Node {
   """
   status: ProcedureHistoryDocumentStatus
   """
+  how the procedure is managed: parsed and edited in Openlane (OPENLANE_MANAGED) or kept as an external reference file viewed in Openlane (EXTERNAL_REFERENCE)
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  """
   details of the procedure
   """
   details: String
@@ -46386,6 +46598,13 @@ type ProcedureHistoryConnection {
   totalCount: Int!
 }
 """
+ProcedureHistoryDocumentManagementMode is enum for the field management_mode
+"""
+enum ProcedureHistoryDocumentManagementMode @goModel(model: "github.com/theopenlane/core/common/enums.DocumentManagementMode") {
+  OPENLANE_MANAGED
+  EXTERNAL_REFERENCE
+}
+"""
 ProcedureHistoryDocumentStatus is enum for the field status
 """
 enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
@@ -46452,6 +46671,7 @@ enum ProcedureHistoryOrderField {
   revision
   name
   STATUS
+  MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
 }
@@ -46651,6 +46871,15 @@ input ProcedureHistoryWhereInput {
   statusNotIn: [ProcedureHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  management_mode field predicates
+  """
+  managementMode: ProcedureHistoryDocumentManagementMode
+  managementModeNEQ: ProcedureHistoryDocumentManagementMode
+  managementModeIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeNotIn: [ProcedureHistoryDocumentManagementMode!]
+  managementModeIsNil: Boolean
+  managementModeNotNil: Boolean
   """
   details field predicates
   """
@@ -56622,6 +56851,10 @@ type TemplateHistory implements Node {
   the id of the trust center this template is associated with
   """
   trustCenterID: String
+  """
+  configuration for converting a submitted assesment into records for the organization
+  """
+  transformConfiguration: TemplateProjectionConfig
 }
 """
 A connection to a list of items.
@@ -56698,6 +56931,7 @@ TemplateHistoryTemplateKind is enum for the field kind
 enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
+  EXTERNAL_INTAKE
 }
 """
 TemplateHistoryWhereInput is used for filtering TemplateHistory objects.
@@ -65983,6 +66217,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_ActionPlanHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_ActionPlanHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_ActionPlanHistory_details(ctx, field)
 	case "detailsJSON":
@@ -66099,6 +66335,12 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_AssessmentHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_AssessmentHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_AssessmentHistory_systemInternalID(ctx, field)
 	case "name":
 		return ec.fieldContext_AssessmentHistory_name(ctx, field)
 	case "assessmentType":
@@ -66167,6 +66409,8 @@ func (ec *executionContext) childFields_AssessmentResponseHistory(ctx context.Co
 		return ec.fieldContext_AssessmentResponseHistory_identityHolderID(ctx, field)
 	case "entityID":
 		return ec.fieldContext_AssessmentResponseHistory_entityID(ctx, field)
+	case "displayName":
+		return ec.fieldContext_AssessmentResponseHistory_displayName(ctx, field)
 	case "email":
 		return ec.fieldContext_AssessmentResponseHistory_email(ctx, field)
 	case "sendAttempts":
@@ -68669,6 +68913,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_InternalPolicyHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_InternalPolicyHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_InternalPolicyHistory_details(ctx, field)
 	case "detailsJSON":
@@ -69695,6 +69941,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_name(ctx, field)
 	case "status":
 		return ec.fieldContext_ProcedureHistory_status(ctx, field)
+	case "managementMode":
+		return ec.fieldContext_ProcedureHistory_managementMode(ctx, field)
 	case "details":
 		return ec.fieldContext_ProcedureHistory_details(ctx, field)
 	case "detailsJSON":
@@ -70909,6 +71157,8 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_uischema(ctx, field)
 	case "trustCenterID":
 		return ec.fieldContext_TemplateHistory_trustCenterID(ctx, field)
+	case "transformConfiguration":
+		return ec.fieldContext_TemplateHistory_transformConfiguration(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TemplateHistory", field.Name)
 }

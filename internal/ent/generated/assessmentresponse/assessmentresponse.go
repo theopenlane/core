@@ -42,6 +42,8 @@ const (
 	FieldIdentityHolderID = "identity_holder_id"
 	// FieldEntityID holds the string denoting the entity_id field in the database.
 	FieldEntityID = "entity_id"
+	// FieldDisplayName holds the string denoting the display_name field in the database.
+	FieldDisplayName = "display_name"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
 	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
@@ -156,6 +158,7 @@ var Columns = []string{
 	FieldCampaignID,
 	FieldIdentityHolderID,
 	FieldEntityID,
+	FieldDisplayName,
 	FieldEmail,
 	FieldSendAttempts,
 	FieldEmailDeliveredAt,
@@ -301,6 +304,11 @@ func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
 // ByEntityID orders the results by the entity_id field.
 func ByEntityID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEntityID, opts...).ToFunc()
+}
+
+// ByDisplayName orders the results by the display_name field.
+func ByDisplayName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisplayName, opts...).ToFunc()
 }
 
 // ByEmail orders the results by the email field.

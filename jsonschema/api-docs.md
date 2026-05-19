@@ -24,7 +24,6 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**integrations**](#integrations)|`object`|||
 |[**workflows**](#workflows)|`object`|||
-|[**campaignwebhook**](#campaignwebhook)|`object`|CampaignWebhookConfig contains webhook configuration for campaign-related email providers.<br/>||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#shortlinks)|`object`|||
 
@@ -130,13 +129,16 @@ Config contains the configuration for the core server
         "azureentraid": {},
         "microsoftteams": {},
         "oidclocal": {},
-        "email": {}
+        "email": {},
+        "paymentreminder": {
+            "paymentmethodinterval": 30,
+            "deletiondays": 7
+        }
     },
     "workflows": {
         "cel": {},
         "gala": {}
     },
-    "campaignwebhook": {},
     "cloudflare": {},
     "shortlinks": {}
 }
@@ -382,6 +384,7 @@ Config holds the configuration for the ent server
 |[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
 |[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
 |[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
+|**questionnaireproducturl**|`string`|QuestionnaireProductURL is the product URL used to build questionnaire access links<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1533,6 +1536,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
 |[**oidclocal**](#integrationsoidclocal)|`object`|||
 |[**email**](#integrationsemail)|`object`||yes|
+|[**paymentreminder**](#integrationspaymentreminder)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1547,7 +1551,11 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "azureentraid": {},
     "microsoftteams": {},
     "oidclocal": {},
-    "email": {}
+    "email": {},
+    "paymentreminder": {
+        "paymentmethodinterval": 30,
+        "deletiondays": 7
+    }
 }
 ```
 
@@ -1658,14 +1666,16 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**apiKey**|`string`|Email provider API key<br/>|yes|
-|**provider**|`string`|Email service provider<br/>Enum: `"resend"`, `"sendgrid"`, `"postmark"`<br/>|yes|
-|**fromEmail**|`string`|Sender email address<br/>|yes|
-|**supportEmail**|`string`|Support contact email address<br/>|no|
-|**questionnaireEmail**|`string`|Sender override for questionnaire auth emails<br/>|no|
-|**rootURL**|`string`|Root application URL used to construct email action links<br/>|no|
-|**productURL**|`string`|Product home URL<br/>|no|
-|**docsURL**|`string`|Documentation URL<br/>|no|
+|**testdir**|`string`|Directory for dev-mode email output<br/>|no|
+|**resendsecret**|`string`|Resend webhook signing secret<br/>|no|
+|**apikey**|`string`|Email provider API key<br/>|yes|
+|**provider**|`string`|Email service provider<br/>Enum: `"resend"`<br/>|yes|
+|**fromemail**|`string`|Sender email address<br/>|yes|
+|**supportemail**|`string`|Support contact email address<br/>|no|
+|**questionnaireemail**|`string`|Sender override for questionnaire auth emails<br/>|no|
+|**rooturl**|`string`|Root application URL used to construct email action links<br/>|no|
+|**producturl**|`string`|Product home URL<br/>|no|
+|**docsurl**|`string`|Documentation URL<br/>|no|
 |**CompanyName**|`string`|Company display name<br/>|no|
 |**CompanyAddress**|`string`|Company mailing address<br/>|no|
 |**Corporation**|`string`|Legal corporation name<br/>|no|
@@ -1689,6 +1699,28 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
 **Additional Properties:** not allowed  
+<a name="integrationspaymentreminder"></a>
+### integrations\.paymentreminder: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**paymentmethodinterval**|`integer`|Days after org creation before marking for deletion<br/>Default: `30`<br/>||
+|**deletiondays**|`integer`|Days between marking and actual deletion<br/>Default: `7`<br/>||
+|**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>||
+|**dryrun**|`boolean`|If true only log organization IDs that would be processed<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "paymentmethodinterval": 30,
+    "deletiondays": 7
+}
+```
+
 <a name="workflows"></a>
 ## workflows: object
 
@@ -1744,21 +1776,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**maxretries**|`integer`|||
 |**failonenqueueerror**|`boolean`|||
 |**queuename**|`string`|||
-
-**Additional Properties:** not allowed  
-<a name="campaignwebhook"></a>
-## campaignwebhook: object
-
-CampaignWebhookConfig contains webhook configuration for campaign-related email providers.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled toggles the campaign webhook handler<br/>||
-|**resendapikey**|`string`|ResendAPIKey is the API key used for Resend client initialization<br/>||
-|**resendsecret**|`string`|ResendSecret is the signing secret used to verify Resend webhook payloads<br/>||
 
 **Additional Properties:** not allowed  
 <a name="cloudflare"></a>

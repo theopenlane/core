@@ -32,10 +32,10 @@ func Builder(cfg Config) registry.Builder {
 				Visible:     true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
+				Schema: jsonx.SchemaFrom[Config](),
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: providerkit.SchemaFrom[UserInput](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
@@ -146,7 +146,7 @@ func Builder(cfg Config) registry.Builder {
 				},
 				{
 					Name:           directorySyncOperation.Name(),
-					Description:    "Collect organization members as directory accounts",
+					Description:    "Collect organization members, teams, and team memberships",
 					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      gitHubClient.ID(),
 					ConfigSchema:   directorySyncSchema,
@@ -157,6 +157,12 @@ func Builder(cfg Config) registry.Builder {
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
 						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+						},
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
@@ -166,9 +172,12 @@ func Builder(cfg Config) registry.Builder {
 			Mappings: githubAppMappings(),
 			Webhooks: []types.WebhookRegistration{
 				{
-					Name:   InstallationEventsWebhook.Name(),
-					Verify: app.Verify,
-					Event:  app.Event,
+					Name:               InstallationEventsWebhook.Name(),
+					StaticRoute:        "/github/app/webhook",
+					SecretSource:       func() string { return cfg.WebhookSecret },
+					ResolveIntegration: ResolveWebhookIntegration,
+					Verify:             app.Verify,
+					Event:              app.Event,
 					Events: []types.WebhookEventRegistration{
 						{
 							Name:   pingWebhookEvent.Name(),

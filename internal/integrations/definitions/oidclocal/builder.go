@@ -6,7 +6,6 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -33,7 +32,7 @@ func Builder(cfg Config) registry.Builder {
 				Visible:     active,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
-				Schema: providerkit.SchemaFrom[Config](),
+				Schema: jsonx.SchemaFrom[Config](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{

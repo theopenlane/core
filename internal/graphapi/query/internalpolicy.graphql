@@ -22,6 +22,7 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managementMode
 			name
 			ownerID
 			reviewDue
@@ -74,6 +75,7 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managementMode
 			name
 			ownerID
 			reviewDue
@@ -126,6 +128,7 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managementMode
 			name
 			ownerID
 			reviewDue
@@ -178,8 +181,8 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 		}
 	}
 }
-mutation CreateUploadInternalPolicy ($internalPolicyFile: Upload!, $ownerID: ID) {
-	createUploadInternalPolicy(internalPolicyFile: $internalPolicyFile, ownerID: $ownerID) {
+mutation CreateUploadInternalPolicy ($internalPolicyFile: Upload!, $ownerID: ID, $managementMode: InternalPolicyDocumentManagementMode) {
+	createUploadInternalPolicy(internalPolicyFile: $internalPolicyFile, ownerID: $ownerID, managementMode: $managementMode) {
 		internalPolicy {
 			approvalRequired
 			createdAt
@@ -269,6 +272,7 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
+				managementMode
 				name
 				ownerID
 				reviewDue
@@ -346,6 +350,7 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
+				managementMode
 				name
 				ownerID
 				reviewDue
@@ -414,6 +419,7 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		internalNotes
 		internalPolicyKindID
 		internalPolicyKindName
+		managementMode
 		name
 		ownerID
 		reviewDue
@@ -481,6 +487,7 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managementMode
 			name
 			ownerID
 			reviewDue
@@ -534,6 +541,7 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managementMode
 			name
 			ownerID
 			reviewDue

@@ -202,6 +202,20 @@ func (_c *ProcedureHistoryCreate) SetNillableStatus(v *enums.DocumentStatus) *Pr
 	return _c
 }
 
+// SetManagementMode sets the "management_mode" field.
+func (_c *ProcedureHistoryCreate) SetManagementMode(v enums.DocumentManagementMode) *ProcedureHistoryCreate {
+	_c.mutation.SetManagementMode(v)
+	return _c
+}
+
+// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetManagementMode(*v)
+	}
+	return _c
+}
+
 // SetDetails sets the "details" field.
 func (_c *ProcedureHistoryCreate) SetDetails(v string) *ProcedureHistoryCreate {
 	_c.mutation.SetDetails(v)
@@ -594,6 +608,10 @@ func (_c *ProcedureHistoryCreate) defaults() error {
 		v := procedurehistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.ManagementMode(); !ok {
+		v := procedurehistory.DefaultManagementMode
+		_c.mutation.SetManagementMode(v)
+	}
 	if _, ok := _c.mutation.ApprovalRequired(); !ok {
 		v := procedurehistory.DefaultApprovalRequired
 		_c.mutation.SetApprovalRequired(v)
@@ -670,6 +688,11 @@ func (_c *ProcedureHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := procedurehistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.status": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.ManagementMode(); ok {
+		if err := procedurehistory.ManagementModeValidator(v); err != nil {
+			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.management_mode": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.ReviewFrequency(); ok {
@@ -772,6 +795,10 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ManagementMode(); ok {
+		_spec.SetField(procedurehistory.FieldManagementMode, field.TypeEnum, value)
+		_node.ManagementMode = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)

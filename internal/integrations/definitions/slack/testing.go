@@ -113,7 +113,7 @@ func (m *MockSlackRuntime) Builder() registry.Builder {
 	mockAPIURL := m.Server.URL + "/"
 
 	return registry.Builder(func() (types.Definition, error) {
-		def, err := Builder(Config{}, nil)()
+		def, err := Builder(Config{}, nil, false)()
 		if err != nil {
 			return types.Definition{}, err
 		}
