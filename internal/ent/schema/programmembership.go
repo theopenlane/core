@@ -124,7 +124,7 @@ func (ProgramMembership) Interceptors() []ent.Interceptor {
 	}
 }
 
-// // Policy of the ProgramMembership
+// Policy of the ProgramMembership
 func (ProgramMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(

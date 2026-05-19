@@ -338,6 +338,10 @@ func init() {
 	actionplanDescDismissedImprovementSuggestions := actionplanMixinFields6[16].Descriptor()
 	// actionplan.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplan.DefaultDismissedImprovementSuggestions = actionplanDescDismissedImprovementSuggestions.Default.([]string)
+	// actionplanDescURL is the schema descriptor for url field.
+	actionplanDescURL := actionplanMixinFields6[17].Descriptor()
+	// actionplan.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	actionplan.URLValidator = actionplanDescURL.Validators[0].(func(string) error)
 	// actionplanDescOwnerID is the schema descriptor for owner_id field.
 	actionplanDescOwnerID := actionplanMixinFields7[0].Descriptor()
 	// actionplan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
@@ -3876,6 +3880,10 @@ func init() {
 	internalpolicyDescDismissedImprovementSuggestions := internalpolicyMixinFields9[16].Descriptor()
 	// internalpolicy.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicy.DefaultDismissedImprovementSuggestions = internalpolicyDescDismissedImprovementSuggestions.Default.([]string)
+	// internalpolicyDescURL is the schema descriptor for url field.
+	internalpolicyDescURL := internalpolicyMixinFields9[17].Descriptor()
+	// internalpolicy.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	internalpolicy.URLValidator = internalpolicyDescURL.Validators[0].(func(string) error)
 	// internalpolicyDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
 	internalpolicyDescWorkflowEligibleMarker := internalpolicyMixinFields13[0].Descriptor()
 	// internalpolicy.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
@@ -5867,6 +5875,10 @@ func init() {
 	procedureDescDismissedImprovementSuggestions := procedureMixinFields8[16].Descriptor()
 	// procedure.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	procedure.DefaultDismissedImprovementSuggestions = procedureDescDismissedImprovementSuggestions.Default.([]string)
+	// procedureDescURL is the schema descriptor for url field.
+	procedureDescURL := procedureMixinFields8[17].Descriptor()
+	// procedure.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	procedure.URLValidator = procedureDescURL.Validators[0].(func(string) error)
 	// procedureDescSystemOwned is the schema descriptor for system_owned field.
 	procedureDescSystemOwned := procedureMixinFields9[0].Descriptor()
 	// procedure.DefaultSystemOwned holds the default value on creation for the system_owned field.
