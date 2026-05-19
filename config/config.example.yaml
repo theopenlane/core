@@ -78,8 +78,8 @@ authz:
     modelfile: fga/model/model.fga
     modelid: ""
     modulefile: ""
-    parentcontextconditions: null
-    parentcontextskipkinds: null
+    parentcontextconditions: []
+    parentcontextskipkinds: []
     storeid: ""
     storename: openlane
 cloudflare:
