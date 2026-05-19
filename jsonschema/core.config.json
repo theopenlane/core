@@ -8,6 +8,12 @@
       },
       "type": "array"
     },
+    "[]fgax.ParentContextConditionConfig": {
+      "items": {
+        "$ref": "#/$defs/fgax.ParentContextConditionConfig"
+      },
+      "type": "array"
+    },
     "[]ratelimit.RateOption": {
       "items": {
         "$ref": "#/$defs/ratelimit.RateOption"
@@ -782,6 +788,18 @@
         "maxbatchwritesize": {
           "type": "integer",
           "description": "maximum number of writes per batch in a transaction"
+        },
+        "disableparentcontext": {
+          "type": "boolean",
+          "description": "disables the automatic addition of parent context tuples"
+        },
+        "parentcontextskipkinds": {
+          "$ref": "#/$defs/[]string",
+          "description": "entity kind names that should not have parent context tuples added"
+        },
+        "parentcontextconditions": {
+          "$ref": "#/$defs/[]fgax.ParentContextConditionConfig",
+          "description": "relationship conditions to apply on parent context tuples per entity kind"
         }
       },
       "additionalProperties": false,
@@ -815,6 +833,24 @@
         "scopes": {
           "type": "string",
           "description": "scopes for the openFGA client"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "fgax.ParentContextConditionConfig": {
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "entity kind name the condition applies to"
+        },
+        "name": {
+          "type": "string",
+          "description": "condition name defined in the authorization model"
+        },
+        "context": {
+          "$ref": "#/$defs/map[string]interface {}",
+          "description": "condition context parameters"
         }
       },
       "additionalProperties": false,
@@ -961,6 +997,9 @@
       "additionalProperties": {
         "$ref": "#/$defs/[]string"
       },
+      "type": "object"
+    },
+    "map[string]interface {}": {
       "type": "object"
     },
     "map[string]river.QueueConfig": {

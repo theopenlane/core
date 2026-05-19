@@ -21,8 +21,11 @@ import (
 )
 
 func TestQueryTask(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(testUser, t)
+	t.Parallel()
+
+	localTestOrg := suite.seedOrgOwner(t)
+	testUser := localTestOrg.owner
+	patClient := localTestOrg.patClient
 
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	anonymousContext := createAnonymousTrustCenterContext("abc123", testUser.OrganizationID)
@@ -83,18 +86,19 @@ func TestQueryTask(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(testUser.UserCtx, t)
 }
 
 func TestQueryTasks(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(testUser, t)
+	t.Parallel()
 
-	viewUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
-
-	adminUser1 := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser1, enums.RoleAdmin, testUser.OrganizationID)
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	testUser := localTestOrg.owner
+	adminPatClient := localTestOrg.adminPatClient
+	apiClient := localTestOrg.adminApiClient
+	viewUser := localTestOrg.member
+	adminUser := localTestOrg.admin
+	superAdmin := localTestOrg.superAdmin
 
 	anotherUser := suite.userBuilder(context.Background(), t)
 
@@ -106,7 +110,7 @@ func TestQueryTasks(t *testing.T) {
 	for range numTasks {
 		t1 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(testUser.UserCtx, t)
 		t2 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(viewUser.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(adminUser1.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(adminUser.UserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
 
 		t4 := (&TaskBuilder{client: suite.client, Due: gofakeit.Date()}).MustNew(anotherUser.UserCtx, t)
@@ -119,7 +123,7 @@ func TestQueryTasks(t *testing.T) {
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
 	taskPersonal := (&TaskBuilder{client: suite.client, AssigneeID: testUser.ID}).MustNew(userCtxPersonalOrg, t)
 
-	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser1.UserCtx, t)
+	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	taskWithRisk := (&TaskBuilder{client: suite.client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
 
 	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
@@ -144,6 +148,20 @@ func TestQueryTasks(t *testing.T) {
 			name:            "happy path",
 			client:          suite.client.api,
 			ctx:             testUser.UserCtx,
+			expectedResults: first,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, super admin",
+			client:          suite.client.api,
+			ctx:             superAdmin.UserCtx,
+			expectedResults: first,
+			totalCount:      31,
+		},
+		{
+			name:            "happy path, api client",
+			client:          apiClient,
+			ctx:             context.Background(),
 			expectedResults: first,
 			totalCount:      31,
 		},
@@ -233,16 +251,16 @@ func TestQueryTasks(t *testing.T) {
 		{
 			name:            "happy path, admin user",
 			client:          suite.client.api,
-			ctx:             adminUser1.UserCtx,
+			ctx:             adminUser.UserCtx,
 			expectedResults: first,
 			totalCount:      11,
 		},
 		{
-			name:            "happy path, using pat - which should have access to all tasks because its authorized to the personal org",
-			client:          patClient,
+			name:            "happy path, using admin user pat pat, should only have access to same as admin user",
+			client:          adminPatClient,
 			ctx:             context.Background(),
 			expectedResults: first,
-			totalCount:      32,
+			totalCount:      11,
 		},
 		{
 			name:            "another user, no entities should be returned",
@@ -300,10 +318,11 @@ func TestQueryTasks(t *testing.T) {
 	// internal context because personal orgs do not have access to tasks and the creation earlier
 	// with TaskBuilder used the bypass too. SO use the system admin to remove
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskPersonal.ID}).
-		MustDelete(systemAdminUser.UserCtx, t)
+		MustDelete(sharedSystemAdminUser.UserCtx, t)
 
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(anotherUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
+
 }
 
 func getFutureDate() time.Time {
@@ -317,12 +336,12 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	org1TaskIDs := []string{}
 	org2TaskIDs := []string{}
 	for range numTasks {
-		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser1.UserCtx, t)
-		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUser2.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(adminUser.UserCtx, t)
+		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser1.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedViewOnlyUser2.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedAdminUser.UserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
 
-		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser2.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
@@ -343,7 +362,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			name:            "happy path, with order by due date, page 1",
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -353,7 +372,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -363,7 +382,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -373,7 +392,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -383,7 +402,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -393,7 +412,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -403,7 +422,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -413,7 +432,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -423,7 +442,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -433,7 +452,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: 5,
 			totalCount:      95,
 		},
@@ -489,17 +508,16 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
-	testUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleMember.String()}).MustNew(testUser.UserCtx, t)
-
-	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
+	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+	testUser := localTestOrg.owner
+	viewOnlyUserCtx := localTestOrg.member.UserCtx
 
 	numTasks := 93
 	org1TaskIDs := []string{}
@@ -509,7 +527,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
 
-		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(testUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser2.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
@@ -676,26 +694,23 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(sharedTestUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateTask(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(testUser, t)
-	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
+	localTestOrg := suite.seedFreshMinimalOrgUsers(t, true)
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	om2 := (&OrgMemberBuilder{client: suite.client, Role: enums.RoleAdmin.String()}).MustNew(testUser.UserCtx, t)
+	testUser := localTestOrg.owner
 
-	userCtx := auth.NewTestContextWithOrgID(om.UserID, om.OrganizationID)
-	adminCtx := auth.NewTestContextWithOrgID(om2.UserID, om2.OrganizationID)
+	userCtx := localTestOrg.member.UserCtx
+	adminCtx := localTestOrg.admin.UserCtx
 
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
-	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: systemOwnedControl.ID}).MustNew(systemAdminUser.UserCtx, t)
+	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: systemOwnedControl.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -721,7 +736,7 @@ func TestMutationCreateTask(t *testing.T) {
 				Due:               lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
 				ControlIDs:        []string{control.ID},
 				InternalPolicyIDs: []string{internalPolicy.ID},
-				AssigneeID:        &om.UserID, // assign the task to self
+				AssigneeID:        &localTestOrg.member.ID, // assign the task to self
 			},
 			client: suite.client.api,
 			ctx:    userCtx,
@@ -733,7 +748,7 @@ func TestMutationCreateTask(t *testing.T) {
 				Details:    lo.ToPtr("test details of the task"),
 				Status:     &enums.TaskStatusInProgress,
 				Due:        lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
-				AssigneeID: &om.UserID, // assign the task to another user
+				AssigneeID: &localTestOrg.member.ID, // assign the task to another user
 			},
 			client: suite.client.api,
 			ctx:    testUser.UserCtx,
@@ -742,7 +757,7 @@ func TestMutationCreateTask(t *testing.T) {
 			name: "create with assignee not in org should fail",
 			request: testclient.CreateTaskInput{
 				Title:      "test-task",
-				AssigneeID: &testUser2.ID,
+				AssigneeID: &sharedTestUser2.ID,
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
@@ -754,7 +769,7 @@ func TestMutationCreateTask(t *testing.T) {
 				Title:   "test-task",
 				OwnerID: &testUser.OrganizationID,
 			},
-			client: patClient,
+			client: localTestOrg.adminPatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -762,7 +777,7 @@ func TestMutationCreateTask(t *testing.T) {
 			request: testclient.CreateTaskInput{
 				Title: "test-task",
 			},
-			client: apiClient,
+			client: localTestOrg.apiClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -842,7 +857,7 @@ func TestMutationCreateTask(t *testing.T) {
 			}
 
 			// when using an API token, the assigner is not set
-			if tc.client == apiClient {
+			if tc.client == localTestOrg.apiClient {
 				assert.Check(t, is.Nil(resp.CreateTask.Task.Assigner))
 			} else {
 				// otherwise it defaults to the authorized user
@@ -851,7 +866,7 @@ func TestMutationCreateTask(t *testing.T) {
 				case testUser.UserCtx:
 					assert.Check(t, is.Equal(testUser.ID, resp.CreateTask.Task.Assigner.ID))
 				case userCtx:
-					assert.Check(t, is.Equal(om.UserID, resp.CreateTask.Task.Assigner.ID))
+					assert.Check(t, is.Equal(localTestOrg.member.ID, resp.CreateTask.Task.Assigner.ID))
 				}
 			}
 
@@ -878,19 +893,16 @@ func TestMutationCreateTask(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser.UserCtx, t)
-	// cleanup controls and policies
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 	// cleanup system owned controls
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: systemOwnedControl.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: systemOwnedControl.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 
 }
 
 func TestMutationUpdateTask(t *testing.T) {
-	task := (&TaskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	group := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(adminUser.UserCtx, t)
+	task := (&TaskBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	group := (&GroupMemberBuilder{client: suite.client, UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedAdminUser.UserCtx, t)
 
 	pngFile := uploadFile(t, logoFilePath)
 	pdfFile := uploadFile(t, pdfFilePath)
@@ -898,14 +910,14 @@ func TestMutationUpdateTask(t *testing.T) {
 	taskCommentID := ""
 
 	assignee := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &assignee, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &assignee, enums.RoleMember, sharedTestUser1.OrganizationID)
 
 	// add parents to ensure permissions are inherited
-	risk := (&RiskBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
-	taskRisk := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	risk := (&RiskBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	taskRisk := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// make sure the user cannot can see the task before they are the assigner
-	_, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, task.ID)
+	_, err := suite.client.api.GetTaskByID(sharedViewOnlyUser2.UserCtx, task.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// make sure the user cannot can see the task before they are the assignee
@@ -913,7 +925,7 @@ func TestMutationUpdateTask(t *testing.T) {
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// make sure the user cannot see the task before the risk is added
-	_, err = suite.client.api.GetTaskByID(adminUser.UserCtx, taskRisk.ID)
+	_, err = suite.client.api.GetTaskByID(sharedAdminUser.UserCtx, taskRisk.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// NOTE: the tests and checks are ordered due to dependencies between updates
@@ -933,10 +945,10 @@ func TestMutationUpdateTask(t *testing.T) {
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
 				Details:    lo.ToPtr(("making a list, checking it twice")),
-				AssigneeID: &adminUser.ID,
+				AssigneeID: &sharedAdminUser.ID,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path, add comment",
@@ -947,7 +959,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path, update comment with files",
@@ -959,7 +971,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				pngFile,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path, update comment with file using PAT",
@@ -980,7 +992,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				DeleteComment: &taskCommentID,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path, add risk",
@@ -989,7 +1001,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				AddRiskIDs: []string{risk.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "update category using pat of owner",
@@ -1002,10 +1014,10 @@ func TestMutationUpdateTask(t *testing.T) {
 			name:   "update assignee to user not in org should fail",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssigneeID: lo.ToPtr(testUser2.ID),
+				AssigneeID: lo.ToPtr(sharedTestUser2.ID),
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: "user not in organization",
 		},
 		{
@@ -1015,7 +1027,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "update assignee to same user, should not error",
@@ -1024,7 +1036,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				AssigneeID: lo.ToPtr(assignee.ID),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "update status and details",
@@ -1034,7 +1046,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				Details: lo.ToPtr("do all the things for the thing"),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "add to group",
@@ -1043,16 +1055,16 @@ func TestMutationUpdateTask(t *testing.T) {
 				AddGroupIDs: []string{group.GroupID},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
-			name:   "update assigner to another org member, this user should still be able to see it because they originally created it",
+			name:   "update assigner to another org member, no longer see it because no parent linked",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
-				AssignerID: lo.ToPtr(viewOnlyUser2.ID),
+				AssignerID: lo.ToPtr(sharedViewOnlyUser2.ID),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "clear assignee",
@@ -1061,16 +1073,7 @@ func TestMutationUpdateTask(t *testing.T) {
 				ClearAssignee: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
-		},
-		{
-			name:   "clear assigner",
-			taskID: task.ID,
-			request: &testclient.UpdateTaskInput{
-				ClearAssigner: lo.ToPtr(true),
-			},
-			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedViewOnlyUser2.UserCtx,
 		},
 	}
 
@@ -1089,7 +1092,7 @@ func TestMutationUpdateTask(t *testing.T) {
 					expectUploadNillable(t, suite.client.mockProvider, tc.files)
 				}
 
-				commentResp, err = suite.client.api.UpdateTaskComment(testUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)
+				commentResp, err = suite.client.api.UpdateTaskComment(sharedTestUser1.UserCtx, taskCommentID, *tc.updateCommentRequest, tc.files)
 			}
 
 			if tc.expectedErr != "" {
@@ -1127,12 +1130,12 @@ func TestMutationUpdateTask(t *testing.T) {
 					assert.Check(t, is.Nil(resp.UpdateTask.Task.Assignee))
 
 					// the previous assigner should no longer be able to see the task
-					_, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
+					_, err := suite.client.api.GetTaskByID(sharedViewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 				}
 
 				if tc.request.AddRiskIDs != nil {
-					taskResp, err := suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
+					taskResp, err := suite.client.api.GetTaskByID(sharedAdminUser.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, is.Nil(err))
 					assert.Check(t, is.Equal(taskResp.Task.ID, tc.taskID))
 				}
@@ -1142,13 +1145,8 @@ func TestMutationUpdateTask(t *testing.T) {
 					assert.Check(t, is.Equal(*tc.request.AssignerID, resp.UpdateTask.Task.Assigner.ID))
 
 					// make sure the assigner can see the task
-					taskResp, err := suite.client.api.GetTaskByID(viewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
+					taskResp, err := suite.client.api.GetTaskByID(sharedViewOnlyUser2.UserCtx, resp.UpdateTask.Task.ID)
 					assert.Check(t, err)
-					assert.Check(t, taskResp != nil)
-
-					// make sure the original creator can still see the task
-					taskResp, err = suite.client.api.GetTaskByID(adminUser.UserCtx, resp.UpdateTask.Task.ID)
-					assert.NilError(t, err)
 					assert.Check(t, taskResp != nil)
 				}
 
@@ -1165,11 +1163,11 @@ func TestMutationUpdateTask(t *testing.T) {
 					assert.Check(t, is.ErrorContains(err, notFoundErrorMsg))
 
 					// user should be able to see the comment since they created the task
-					checkResp, err = suite.client.api.GetNoteByID(adminUser.UserCtx, taskCommentID)
+					checkResp, err = suite.client.api.GetNoteByID(sharedAdminUser.UserCtx, taskCommentID)
 					assert.Check(t, err)
 
 					// org owner should be able to see the comment
-					checkResp, err = suite.client.api.GetNoteByID(testUser1.UserCtx, taskCommentID)
+					checkResp, err = suite.client.api.GetNoteByID(sharedTestUser1.UserCtx, taskCommentID)
 					assert.Check(t, err)
 					assert.Check(t, checkResp != nil)
 				} else if tc.request.DeleteComment != nil {
@@ -1187,15 +1185,16 @@ func TestMutationUpdateTask(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.GroupID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: group.GroupID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTask(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(testUser, t)
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	t.Parallel()
+
+	testUser := suite.seedOrgOwner(t)
+	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
+	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1208,33 +1207,33 @@ func TestMutationDeleteTask(t *testing.T) {
 			name:        "not authorized, delete task",
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete task",
 			idToDelete: task1.ID,
 			client:     suite.client.api,
-			ctx:        testUser.UserCtx,
+			ctx:        testUser.owner.UserCtx,
 		},
 		{
 			name:        "task already deleted, not found",
 			idToDelete:  task1.ID,
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         testUser.owner.UserCtx,
 			expectedErr: "task not found",
 		},
 		{
 			name:       "happy path, delete task using personal access token",
 			idToDelete: task2.ID,
-			client:     patClient,
+			client:     testUser.patClient,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown task, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         testUser.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -1253,18 +1252,20 @@ func TestMutationDeleteTask(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTask.DeletedID))
 		})
 	}
+
+	cleanupOrganizationDataWithContext(testUser.owner.UserCtx, t)
 }
 
 func TestMutationUpdateBulkTask(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	testUser := suite.seedOrgOwner(t)
 
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	task3 := (&TaskBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	task1 := (&TaskBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
+	task2 := (&TaskBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
+	task3 := (&TaskBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
 
-	taskAnotherUser := (&TaskBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	taskAnotherUser := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
 
 	testCases := []struct {
 		name                 string
@@ -1283,7 +1284,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				Details:   lo.ToPtr("Cleared all tags"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser.UserCtx,
+			ctx:                  testUser.owner.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -1291,7 +1292,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			ids:         []string{},
 			input:       testclient.UpdateTaskInput{Title: lo.ToPtr("test")},
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         testUser.owner.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -1301,7 +1302,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				Title: lo.ToPtr("Updated by authorized user"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser.UserCtx,
+			ctx:                  testUser.owner.UserCtx,
 			expectedUpdatedCount: 1, // only task1 should be updated
 		},
 		{
@@ -1311,7 +1312,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				Title: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser2.UserCtx,
+			ctx:                  sharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any tasks to update
 		},
 		{
@@ -1321,7 +1322,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				Status: &enums.TaskStatusInProgress,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser.UserCtx,
+			ctx:                  testUser.owner.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -1331,7 +1332,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				AssigneeID: &om.UserID,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser.UserCtx,
+			ctx:                  testUser.owner.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 	}
@@ -1393,7 +1394,7 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				}
 
 				// ensure the org owner has access to the task that was updated
-				res, err := suite.client.api.GetTaskByID(testUser.UserCtx, task.ID)
+				res, err := suite.client.api.GetTaskByID(testUser.owner.UserCtx, task.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(task.ID, res.Task.ID))
 			}
@@ -1413,7 +1414,6 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 	}
 
 	// Cleanup created tasks
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task1.ID, task2.ID, task3.ID}}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(testUser.owner.UserCtx, t)
 }

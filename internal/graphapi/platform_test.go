@@ -18,7 +18,7 @@ import (
 
 func TestQueryPlatform(t *testing.T) {
 	// create an platform to be queried using testUser1
-	platform := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	platform := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Platform
 	testCases := []struct {
@@ -32,13 +32,13 @@ func TestQueryPlatform(t *testing.T) {
 			name:    "happy path, same org user",
 			queryID: platform.ID,
 			client:  suite.client.api,
-			ctx:     adminUser.UserCtx,
+			ctx:     sharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: platform.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -50,14 +50,14 @@ func TestQueryPlatform(t *testing.T) {
 			name:     "Platform not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "Platform not found, using not authorized user",
 			queryID:  platform.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -80,13 +80,13 @@ func TestQueryPlatform(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryPlatforms(t *testing.T) {
 	// create multiple objects to be queried using testUser1
-	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -97,13 +97,13 @@ func TestQueryPlatforms(t *testing.T) {
 		{
 			name:            "happy path, admin user of the same org",
 			client:          suite.client.api,
-			ctx:             adminUser.UserCtx,
+			ctx:             sharedAdminUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -121,7 +121,7 @@ func TestQueryPlatforms(t *testing.T) {
 		{
 			name:            "another user, no Platforms should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -136,13 +136,13 @@ func TestQueryPlatforms(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, IDs: []string{platform1.ID, platform2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, IDs: []string{platform1.ID, platform2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreatePlatform(t *testing.T) {
-	asset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	vendor := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	asset2 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	vendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	asset2 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	pdfFile := uploadFile(t, pdfFilePath)
 	pngFile := uploadFile(t, logoFilePath)
 
@@ -162,7 +162,7 @@ func TestMutationCreatePlatform(t *testing.T) {
 				Name: gofakeit.AppName() + ulids.New().String(),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, admin user edges and files",
@@ -182,7 +182,7 @@ func TestMutationCreatePlatform(t *testing.T) {
 			dataFlowDiagrams:      []*graphql.Upload{pdfFile},
 			trustBoundaryDiagrams: []*graphql.Upload{pdfFile},
 			client:                suite.client.api,
-			ctx:                   adminUser.UserCtx,
+			ctx:                   sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -216,14 +216,14 @@ func TestMutationCreatePlatform(t *testing.T) {
 				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required name field",
 			request:     testclient.CreatePlatformInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -311,32 +311,32 @@ func TestMutationCreatePlatform(t *testing.T) {
 			}
 
 			// cleanup each object created
-			(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: resp.CreatePlatform.Platform.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: resp.CreatePlatform.Platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 			// cleanup files created for the platform
 			if len(tc.archDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 			}
 			if len(tc.dataFlowDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.DataFlowDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.DataFlowDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 			}
 			if len(tc.trustBoundaryDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.TrustBoundaryDiagrams.Edges[0].Node.ID}).MustDelete(testUser1.UserCtx, t)
+				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.TrustBoundaryDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 			}
 
 		})
 	}
 
 	// cleanup assets and entities created for the tests
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, asset2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, asset2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 
 }
 
 func TestMutationUpdatePlatform(t *testing.T) {
-	platform := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	asset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	vendor := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	outOfScopeAsset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	outOfScopeVendor := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	platform := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	vendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	outOfScopeAsset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	outOfScopeVendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	pngFile := uploadFile(t, logoFilePath)
 
 	diagramFileId := ""
@@ -361,7 +361,7 @@ func TestMutationUpdatePlatform(t *testing.T) {
 				ContainsPii:            lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields with personal access token",
@@ -381,14 +381,14 @@ func TestMutationUpdatePlatform(t *testing.T) {
 			request:      testclient.UpdatePlatformInput{},
 			archDiagrams: []*graphql.Upload{pngFile},
 			client:       suite.client.api,
-			ctx:          adminUser.UserCtx,
+			ctx:          sharedAdminUser.UserCtx,
 		},
 		{
 			name:          "happy path, remove diagram",
 			request:       testclient.UpdatePlatformInput{},
 			removeDiagram: true,
 			client:        suite.client.api,
-			ctx:           adminUser.UserCtx,
+			ctx:           sharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
@@ -396,7 +396,7 @@ func TestMutationUpdatePlatform(t *testing.T) {
 				Name: lo.ToPtr("New Name"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -405,7 +405,7 @@ func TestMutationUpdatePlatform(t *testing.T) {
 				Name: lo.ToPtr("New Name"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -481,19 +481,19 @@ func TestMutationUpdatePlatform(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	// cleanup assets and entities created for the tests
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, outOfScopeAsset.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{vendor.ID, outOfScopeVendor.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, outOfScopeAsset.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{vendor.ID, outOfScopeVendor.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	// cleanup files created for the platform
-	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: diagramFileId}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: diagramFileId}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeletePlatform(t *testing.T) {
 	// create objects to be deleted
-	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	platform3 := (&PlatformBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	platform3 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -506,27 +506,27 @@ func TestMutationDeletePlatform(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  platform1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  platform1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: platform1.ID,
 			client:     suite.client.api,
-			ctx:        adminUser.UserCtx,
+			ctx:        sharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  platform1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -545,7 +545,7 @@ func TestMutationDeletePlatform(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

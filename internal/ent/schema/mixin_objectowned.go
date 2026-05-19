@@ -212,19 +212,6 @@ func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
 	}
 }
 
-// withListObjectsFilter allows to use the list objects filter for the object owned mixin instead of batch checks
-func withListObjectsFilter() objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.UseListObjectsFilter = true
-	}
-}
-
-func withOverrideOwnerFieldName(fieldName string) objectOwnedOption { //nolint:unused
-	return func(o *ObjectOwnedMixin) {
-		o.OwnerFieldName = fieldName
-	}
-}
-
 // withSkipFilterInterceptor allows to skip the filter interceptor for the object owned mixin
 // WARNING: this will bypass all batch or list objects checks from FGA; results will only be filtered
 // based on other interceptors on the schema. For example, if a schema is object owned and has
@@ -373,19 +360,6 @@ func (o ObjectOwnedMixin) P(w interface{ WhereP(...func(*sql.Selector)) }, objec
 	o.PWithField(w, "id", objectIDs)
 }
 
-// defaultSkipCreateUserPermissionsFunc is the default function to skip creating user permissions
-var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutation) bool {
-	if m.Op() != ent.OpCreate {
-		return true
-	}
-
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassFGA) {
-		return true
-	}
-
-	return false
-}
-
 // defaultTupleUpdateFunc is the default hook function for the object owned mixin
 // to add tuples to the database when creating or updating an object based on the edges
 // that can own the object
@@ -396,7 +370,7 @@ var defaultTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, defaultSkipCreateUserPermissionsFunc),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }
@@ -410,7 +384,7 @@ var serviceOnlyTupleUpdateFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 	}
 
 	return hook.On(
-		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation, skipUserParentTupleFunc),
+		hooks.HookObjectOwnedTuples(o.FieldNames, ownerRelation),
 		ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 	)
 }

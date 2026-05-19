@@ -153,7 +153,6 @@ func (w WorkflowDefinition) Mixin() []ent.Mixin {
 		prefix: "WFD",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowDefinition](w,
-				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

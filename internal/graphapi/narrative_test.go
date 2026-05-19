@@ -15,13 +15,13 @@ import (
 )
 
 func TestQueryNarrative(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a Narrative
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
+		MustNew(sharedTestUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
 	narratives := []string{}
 
@@ -36,18 +36,18 @@ func TestQueryNarrative(t *testing.T) {
 		{
 			name:   "happy path",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:     "read only user, same org, no access to the program",
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      sharedViewOnlyUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:   "admin user, access to the program",
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path using personal access token",
@@ -58,13 +58,13 @@ func TestQueryNarrative(t *testing.T) {
 			name:     "narrative not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "narrative not found, using not authorized user",
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
@@ -79,7 +79,7 @@ func TestQueryNarrative(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			// setup the narrative if it is not already created
 			if tc.queryID == "" {
-				resp, err := suite.client.api.CreateNarrative(testUser1.UserCtx,
+				resp, err := suite.client.api.CreateNarrative(sharedTestUser1.UserCtx,
 					testclient.CreateNarrativeInput{
 						Name:       "Narrative",
 						ProgramIDs: []string{program.ID},
@@ -114,21 +114,21 @@ func TestQueryNarrative(t *testing.T) {
 	}
 
 	// delete created narratives
-	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete created program
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryNarratives(t *testing.T) {
 	// create multiple objects to be queried using testUser1
-	nrt1 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	nrt2 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	nrt1 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	nrt2 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	userAnotherOrg := suite.userBuilder(context.Background(), t)
 
 	// add narrative for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	nrt3 := (&NarrativeBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
+	(&NarrativeBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -139,20 +139,20 @@ func TestQueryNarratives(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org, no programs or groups associated",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, scope access to all narratives in org",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
@@ -163,7 +163,7 @@ func TestQueryNarratives(t *testing.T) {
 		{
 			name:            "another user, no narratives should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -179,25 +179,25 @@ func TestQueryNarratives(t *testing.T) {
 	}
 
 	// delete created narrative
-	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: []string{nrt1.ID, nrt2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, ID: nrt3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: []string{nrt1.ID, nrt2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(userAnotherOrg.UserCtx, t)
 }
 func TestMutationCreateNarrative(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	// group for the view only user
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a narrative associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(testUser1.UserCtx, t)
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	// create groups to be associated with the narrative
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	narratives := []string{}
 
@@ -215,7 +215,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 				Name: "Narrative",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -226,24 +226,24 @@ func TestMutationCreateNarrative(t *testing.T) {
 				ProgramIDs:  []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "add groups",
 			request: testclient.CreateNarrativeInput{
 				Name:            "Test Procedure",
-				EditorIDs:       []string{testUser1.GroupID},
+				EditorIDs:       []string{sharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateNarrativeInput{
 				Name:    "Narrative",
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -262,7 +262,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 				Name: "Narrative",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -272,7 +272,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 			},
 			addGroupToOrg: true,
 			client:        suite.client.api,
-			ctx:           viewOnlyUser.UserCtx,
+			ctx:           sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "user authorized, they were added to the program",
@@ -281,7 +281,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 				ProgramIDs: []string{program1.ID},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "user authorized, user not authorized to one of the programs",
@@ -290,14 +290,14 @@ func TestMutationCreateNarrative(t *testing.T) {
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required name",
 			request:     testclient.CreateNarrativeInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -307,7 +307,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -315,7 +315,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddNarrativeCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -362,7 +362,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateNarrative.Narrative.Editors.Edges, 1))
 				for _, edge := range resp.CreateNarrative.Narrative.Editors.Edges {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
+					assert.Check(t, is.Equal(sharedTestUser1.GroupID, edge.Node.ID))
 				}
 			}
 
@@ -382,7 +382,7 @@ func TestMutationCreateNarrative(t *testing.T) {
 
 			// ensure the org owner has access to the narrative that was created by an api token
 			if tc.client == suite.client.apiWithToken {
-				res, err := suite.client.api.GetNarrativeByID(testUser1.UserCtx, resp.CreateNarrative.Narrative.ID)
+				res, err := suite.client.api.GetNarrativeByID(sharedTestUser1.UserCtx, resp.CreateNarrative.Narrative.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(resp.CreateNarrative.Narrative.ID, res.Narrative.ID))
@@ -393,24 +393,24 @@ func TestMutationCreateNarrative(t *testing.T) {
 	}
 
 	// delete created narratives
-	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, IDs: narratives}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete created programs
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 	// delete created groups
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateNarrative(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	narrative := (&NarrativeBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	narrative := (&NarrativeBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the narrative
 	_, err := suite.client.api.GetNarrativeByID(anotherAdminUser.UserCtx, narrative.ID)
@@ -431,7 +431,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 				AddViewerIDs: []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -450,7 +450,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 				AppendTags: []string{"tag3"},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -459,7 +459,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 				AppendTags: []string{"tag3"},
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -521,17 +521,17 @@ func TestMutationUpdateNarrative(t *testing.T) {
 	}
 
 	// delete created narrative
-	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, ID: narrative.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.NarrativeDeleteOne]{client: suite.client.db.Narrative, ID: narrative.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete created program
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete created group
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteNarrative(t *testing.T) {
 	// create objects to be deleted
-	narrative1 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	narrative2 := (&NarrativeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	narrative1 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	narrative2 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -544,20 +544,20 @@ func TestMutationDeleteNarrative(t *testing.T) {
 			name:        "not authorized, delete",
 			idToDelete:  narrative1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: narrative1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  narrative1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -570,7 +570,7 @@ func TestMutationDeleteNarrative(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

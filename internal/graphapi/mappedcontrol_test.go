@@ -17,19 +17,19 @@ import (
 
 func TestQueryMappedControl(t *testing.T) {
 	// create an mappedControl to be queried using testUser1
-	toControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	fromControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	mappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{toControl.ID}, FromControlIDs: []string{fromControl.ID}}).MustNew(testUser1.UserCtx, t)
+	toControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	fromControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	mappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{toControl.ID}, FromControlIDs: []string{fromControl.ID}}).MustNew(sharedTestUser1.UserCtx, t)
 
 	toControls := mappedControl.Edges.ToControls
 	fromControls := mappedControl.Edges.FromControls
 
 	// create a system owned mappedControl to ensure we can still query it
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
-	systemToControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
-	systemFromControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemToControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemFromControl := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
-	systemMappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{systemToControl.ID}, FromControlIDs: []string{systemFromControl.ID}, Source: enums.MappingSourceSuggested}).MustNew(systemAdminUser.UserCtx, t)
+	systemMappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{systemToControl.ID}, FromControlIDs: []string{systemFromControl.ID}, Source: enums.MappingSourceSuggested}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// add test cases for querying the mappedControl
 	testCases := []struct {
@@ -43,25 +43,25 @@ func TestQueryMappedControl(t *testing.T) {
 			name:    "happy path",
 			queryID: mappedControl.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path system admin",
 			queryID: systemMappedControl.ID,
 			client:  suite.client.api,
-			ctx:     systemAdminUser.UserCtx,
+			ctx:     sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, read only user, should have read access",
 			queryID: mappedControl.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path, read only user, should have read access to system owned mappedControl",
 			queryID: systemMappedControl.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -73,14 +73,14 @@ func TestQueryMappedControl(t *testing.T) {
 			name:     "mappedControl not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "mappedControl not found, using not authorized user",
 			queryID:  mappedControl.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -106,7 +106,7 @@ func TestQueryMappedControl(t *testing.T) {
 			assert.Check(t, is.Len(toControls, 1), "expected exactly one to control")
 
 			// ensure internal only fields are not returned for non system admin users
-			if tc.ctx == systemAdminUser.UserCtx {
+			if tc.ctx == sharedSystemAdminUser.UserCtx {
 				assert.Check(t, resp.MappedControl.SystemInternalID != nil)
 				assert.Check(t, resp.MappedControl.InternalNotes != nil)
 			} else {
@@ -116,21 +116,21 @@ func TestQueryMappedControl(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControl.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControls[0].ID, fromControls[0].ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: systemMappedControl.ID}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControls[0].ID, fromControls[0].ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: systemMappedControl.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestQueryMappedControls(t *testing.T) {
 	// create multiple objects to be queried using testUser1
 	controlsToDelete := []*generated.Control{}
 
-	mappedControl1 := (&MappedControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	mappedControl1 := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	controlsToDelete = mappedControl1.Edges.ToControls
 	controlsToDelete = append(controlsToDelete, mappedControl1.Edges.FromControls...)
 
-	mappedControl2 := (&MappedControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	mappedControl2 := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	controlsToDelete = append(controlsToDelete, mappedControl2.Edges.ToControls...)
 	controlsToDelete = append(controlsToDelete, mappedControl2.Edges.FromControls...)
 
@@ -143,13 +143,13 @@ func TestQueryMappedControls(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -167,7 +167,7 @@ func TestQueryMappedControls(t *testing.T) {
 		{
 			name:            "another user, no mappedControls should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -182,26 +182,26 @@ func TestQueryMappedControls(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, IDs: []string{mappedControl1.ID, mappedControl2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, IDs: []string{mappedControl1.ID, mappedControl2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	for _, control := range controlsToDelete {
-		(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID}}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	}
 }
 
 func TestMutationCreateMappedControl(t *testing.T) {
-	toControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	fromControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	toSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	fromSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	toControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	fromControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	toSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	fromSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create system owned controls
-	systemToControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
-	systemFromControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	systemToControl := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemFromControl := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// create standard for controls with a standard name
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlWithStandard := (&ControlBuilder{client: suite.client, StandardID: standard.ID}).MustNew(testUser1.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlWithStandard := (&ControlBuilder{client: suite.client, StandardID: standard.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -216,7 +216,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				MappingType: &enums.MappingTypeEqual,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -232,7 +232,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Source:            lo.ToPtr(enums.MappingSourceManual),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using ref codes instead of IDs",
@@ -244,7 +244,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				ToSubcontrolRefCodes:   []string{"CUSTOM::" + toSubcontrol.RefCode},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using ref codes instead of IDs with multiple different standard controls",
@@ -254,12 +254,12 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				ToControlRefCodes:   []string{*controlWithStandard.ReferenceFramework + "::" + controlWithStandard.RefCode, "CUSTOM::" + toControl.RefCode},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateMappedControlInput{
-				OwnerID:           &testUser1.OrganizationID,
+				OwnerID:           &sharedTestUser1.OrganizationID,
 				MappingType:       &enums.MappingTypeSubset,
 				ToControlIDs:      []string{toControl.ID},
 				FromSubcontrolIDs: []string{fromSubcontrol.ID},
@@ -294,7 +294,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Source:         lo.ToPtr(enums.MappingSourceSuggested),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -307,7 +307,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				InternalNotes:  lo.ToPtr("these are internal notes"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -320,7 +320,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				SystemInternalID: lo.ToPtr(ulids.New().String()),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -334,7 +334,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				InternalNotes:    lo.ToPtr("these are internal notes"),
 			},
 			client: suite.client.api,
-			ctx:    systemAdminUser.UserCtx,
+			ctx:    sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "user not authorized, not enough permissions",
@@ -344,7 +344,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				FromControlIDs: []string{fromControl.ID},
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -356,7 +356,7 @@ func TestMutationCreateMappedControl(t *testing.T) {
 				Confidence:     lo.ToPtr(int64(101)),
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: "value out of range",
 		},
 	}
@@ -474,36 +474,36 @@ func TestMutationCreateMappedControl(t *testing.T) {
 			assert.Check(t, is.Len(resp.CreateMappedControl.MappedControl.Tags, len(tc.request.Tags)), "expected %d tags in the response", len(tc.request.Tags))
 
 			// cleanup each object created
-			deleteCtx := testUser1.UserCtx
-			if tc.ctx == systemAdminUser.UserCtx {
-				deleteCtx = systemAdminUser.UserCtx
+			deleteCtx := sharedTestUser1.UserCtx
+			if tc.ctx == sharedSystemAdminUser.UserCtx {
+				deleteCtx = sharedSystemAdminUser.UserCtx
 			}
 			(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: resp.CreateMappedControl.MappedControl.ID}).MustDelete(deleteCtx, t)
 		})
 	}
 
 	// cleanup the controls created for the mappedControl
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID, controlWithStandard.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{toSubcontrol.ID, fromSubcontrol.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{toControl.ID, fromControl.ID, controlWithStandard.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{toSubcontrol.ID, fromSubcontrol.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	// cleanup system owned controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemToControl.ID, systemFromControl.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	// clean up standard
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateMappedControl(t *testing.T) {
-	mappedControl := (&MappedControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	mappedControlAnotherOrg := (&MappedControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	mappedControl := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	mappedControlAnotherOrg := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	controlA := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlB := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlA := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlB := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	subcontrolA := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subcontrolB := (&SubcontrolBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	subcontrolA := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subcontrolB := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	_, err := suite.client.api.GetMappedControlByID(testUser1.UserCtx, mappedControlAnotherOrg.ID)
+	_, err := suite.client.api.GetMappedControlByID(sharedTestUser1.UserCtx, mappedControlAnotherOrg.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	testCases := []struct {
@@ -522,7 +522,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				MappingType: lo.ToPtr(enums.MappingTypeSubset),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, update multiple fields",
@@ -547,7 +547,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				AddToSubcontrolIDs:      []string{subcontrolB.ID},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:      "add controls from another org, not allowed",
@@ -556,7 +556,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				AddFromControlIDs: []string{controlAnotherOrg.ID},
 			},
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			controlNotAdded: true, // this control should not be added
 			expectedErr:     notAuthorizedErrorMsg,
 		},
@@ -567,7 +567,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -577,7 +577,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				Source: lo.ToPtr(enums.MappingSourceSuggested),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -587,7 +587,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -597,7 +597,7 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 				Relation: lo.ToPtr("Trying to update relation"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -706,17 +706,17 @@ func TestMutationUpdateMappedControl(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControl.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControlAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{controlA.ID, controlB.ID, mappedControl.Edges.FromControls[0].ID, mappedControl.Edges.ToControls[0].ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{mappedControlAnotherOrg.Edges.FromControls[0].ID, mappedControlAnotherOrg.Edges.ToControls[0].ID}}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrolA.ID, subcontrolB.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.MappedControlDeleteOne]{client: suite.client.db.MappedControl, ID: mappedControlAnotherOrg.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{controlA.ID, controlB.ID, mappedControl.Edges.FromControls[0].ID, mappedControl.Edges.ToControls[0].ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{mappedControlAnotherOrg.Edges.FromControls[0].ID, mappedControlAnotherOrg.Edges.ToControls[0].ID}}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrolA.ID, subcontrolB.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteMappedControl(t *testing.T) {
 	// create objects to be deleted
-	mappedControl1 := (&MappedControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	mappedControl2 := (&MappedControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	mappedControl1 := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	mappedControl2 := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -729,20 +729,20 @@ func TestMutationDeleteMappedControl(t *testing.T) {
 			name:        "not authorized, delete",
 			idToDelete:  mappedControl1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: mappedControl1.ID,
 			client:     suite.client.api,
-			ctx:        adminUser.UserCtx,
+			ctx:        sharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  mappedControl1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -755,7 +755,7 @@ func TestMutationDeleteMappedControl(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

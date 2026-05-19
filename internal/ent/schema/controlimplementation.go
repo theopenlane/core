@@ -98,7 +98,6 @@ func (ControlImplementation) Fields() []ent.Field {
 func (c ControlImplementation) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			// subcontrols can inherit permissions from the parent control
 			newObjectOwnedMixin[generated.ControlImplementation](c,
 				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(true),

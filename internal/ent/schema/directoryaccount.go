@@ -277,7 +277,7 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.DirectoryAccount](d,
-				withParents(IdentityHolder{}, Organization{}, Platform{}, Integration{}, DirectorySyncRun{}),
+				withParents(IdentityHolder{}, Platform{}, Integration{}, DirectorySyncRun{}),
 				withOrganizationOwner(true),
 			),
 			newCustomEnumMixin(d, withEnumFieldName("environment"), withGlobalEnum()),

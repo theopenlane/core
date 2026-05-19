@@ -95,6 +95,7 @@ func HookOrgMembers() ent.Hook {
 			}
 
 			if err := checkAllowedEmailDomain(user.Email, org.Edges.Setting); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("email", user.Email).Msg("error adding user to organization")
 				return nil, err
 			}
 

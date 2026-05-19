@@ -16,7 +16,7 @@ import (
 
 func TestQueryJobTemplate(t *testing.T) {
 	// create an jobTemplate to be queried using testUser1
-	jobTemplate := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	jobTemplate := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the JobTemplate
 	testCases := []struct {
@@ -30,13 +30,13 @@ func TestQueryJobTemplate(t *testing.T) {
 			name:    "happy path",
 			queryID: jobTemplate.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: jobTemplate.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -48,14 +48,14 @@ func TestQueryJobTemplate(t *testing.T) {
 			name:     "JobTemplate not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "JobTemplate not found, using not authorized user",
 			queryID:  jobTemplate.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -77,14 +77,14 @@ func TestQueryJobTemplate(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryJobTemplates(t *testing.T) {
 	// create multiple JobTemplates to be queried using testUser1
-	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -95,13 +95,13 @@ func TestQueryJobTemplates(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 3,
 		},
 		{
@@ -119,7 +119,7 @@ func TestQueryJobTemplates(t *testing.T) {
 		{
 			name:            "another user, only system owned JobTemplates should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 1,
 		},
 	}
@@ -134,8 +134,8 @@ func TestQueryJobTemplates(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, IDs: []string{jobTemplate1.ID, jobTemplate2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplateSystem.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, IDs: []string{jobTemplate1.ID, jobTemplate2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplateSystem.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateJobTemplate(t *testing.T) {
@@ -154,7 +154,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				DownloadURL: testScriptURL,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -166,7 +166,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				DownloadURL: testScriptURL,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -174,7 +174,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: testScriptURL,
-				OwnerID:     lo.ToPtr(testUser1.OrganizationID),
+				OwnerID:     lo.ToPtr(sharedTestUser1.OrganizationID),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -197,7 +197,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				DownloadURL: testScriptURL,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -207,7 +207,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				DownloadURL: testScriptURL,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -217,7 +217,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				DownloadURL: testScriptURL,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not a valid JobTemplateJobPlatformType",
 		},
 		{
@@ -227,7 +227,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Platform: enums.JobPlatformTypeGo,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "invalid cron",
@@ -238,7 +238,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Cron:        lo.ToPtr("0 0 * * * a"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "invalid cron syntax",
 		},
 	}
@@ -270,13 +270,13 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			}
 
 			// cleanup each JobTemplate created
-			(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: resp.CreateJobTemplate.JobTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: resp.CreateJobTemplate.JobTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateJobTemplate(t *testing.T) {
-	jobTemplate := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	jobTemplate := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -291,7 +291,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 				Description: lo.ToPtr("Test Description Updated"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -308,7 +308,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 				Description: lo.ToPtr("Test Description Updated not allowed"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -317,7 +317,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 				Description: lo.ToPtr("Test Description Updated not allowed"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -348,16 +348,16 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteJobTemplate(t *testing.T) {
 	// create JobTemplates to be deleted
-	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	jobTemplate3 := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	jobTemplate3 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -370,40 +370,40 @@ func TestMutationDeleteJobTemplate(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  jobTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  jobTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not authorized, delete system owned JobTemplate",
 			idToDelete:  jobTemplateSystem.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: jobTemplate1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned JobTemplate",
 			idToDelete: jobTemplateSystem.ID,
 			client:     suite.client.api,
-			ctx:        systemAdminUser.UserCtx,
+			ctx:        sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  jobTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -422,7 +422,7 @@ func TestMutationDeleteJobTemplate(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

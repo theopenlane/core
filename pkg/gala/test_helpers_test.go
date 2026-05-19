@@ -124,6 +124,7 @@ func NewTestGala(t *testing.T, opts ...TestGalaOption) *TestGalaFixture {
 	dbFixture := testutils.GetTestURI(
 		testutils.WithImage(cfg.image),
 		testutils.WithExpiryMinutes(cfg.expiryMins),
+		testutils.WithMaxConn(100), //nolint:mnd
 	)
 
 	galaApp, err := NewGala(ctx, Config{

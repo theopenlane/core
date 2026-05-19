@@ -77,7 +77,12 @@ Config contains the configuration for the core server
         }
     },
     "authz": {
-        "credentials": {}
+        "credentials": {},
+        "parentcontextconditions": [
+            {
+                "context": {}
+            }
+        ]
     },
     "db": {},
     "jobqueue": {
@@ -884,13 +889,21 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**modulefile**|`string`|path to the fga module file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
 |**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
+|**disableparentcontext**|`boolean`|disables the automatic addition of parent context tuples<br/>|no|
+|[**parentcontextskipkinds**](#authzparentcontextskipkinds)|`string[]`||no|
+|[**parentcontextconditions**](#authzparentcontextconditions)|`array`||no|
 
 **Additional Properties:** not allowed  
 **Example**
 
 ```json
 {
-    "credentials": {}
+    "credentials": {},
+    "parentcontextconditions": [
+        {
+            "context": {}
+        }
+    ]
 }
 ```
 
@@ -909,6 +922,27 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**scopes**|`string`|scopes for the openFGA client<br/>||
 
 **Additional Properties:** not allowed  
+<a name="authzparentcontextskipkinds"></a>
+### authz\.parentcontextskipkinds: array
+
+**Items**
+
+**Item Type:** `string`  
+<a name="authzparentcontextconditions"></a>
+### authz\.parentcontextconditions: array
+
+**Items**
+
+**Example**
+
+```json
+[
+    {
+        "context": {}
+    }
+]
+```
+
 <a name="db"></a>
 ## db: object
 

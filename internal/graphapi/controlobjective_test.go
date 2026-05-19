@@ -16,13 +16,13 @@ import (
 )
 
 func TestQueryControlObjective(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a ControlObjective
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
+		MustNew(sharedTestUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
 	controlObjectiveIDs := []string{}
 	// add test cases for querying the ControlObjective
@@ -36,18 +36,18 @@ func TestQueryControlObjective(t *testing.T) {
 		{
 			name:   "happy path",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:     "read only user, same org, no access to the program",
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      sharedViewOnlyUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:   "admin user, access to the program",
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name:   "happy path using personal access token",
@@ -58,13 +58,13 @@ func TestQueryControlObjective(t *testing.T) {
 			name:     "control objective not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "control objective not found, using not authorized user",
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
@@ -79,7 +79,7 @@ func TestQueryControlObjective(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			// setup the control objective if it is not already created
 			if tc.queryID == "" {
-				resp, err := suite.client.api.CreateControlObjective(testUser1.UserCtx,
+				resp, err := suite.client.api.CreateControlObjective(sharedTestUser1.UserCtx,
 					testclient.CreateControlObjectiveInput{
 						Name:       "ControlObjective",
 						ProgramIDs: []string{program.ID},
@@ -108,14 +108,14 @@ func TestQueryControlObjective(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: controlObjectiveIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: controlObjectiveIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryControlObjectives(t *testing.T) {
 	// create multiple objects to be queried using testUser1
-	co1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	co2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	co1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	co2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	userAnotherOrg := suite.userBuilder(context.Background(), t)
 
@@ -132,20 +132,20 @@ func TestQueryControlObjectives(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org, no programs or groups associated",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, api token with scopes",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
@@ -156,7 +156,7 @@ func TestQueryControlObjectives(t *testing.T) {
 		{
 			name:            "another user, no control objectives should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -171,25 +171,26 @@ func TestQueryControlObjectives(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: []string{co1.ID, co2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: []string{co1.ID, co2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(userAnotherOrg.UserCtx, t)
 }
 
 func TestMutationCreateControlObjective(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	// group for the view only user
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control objective associated with the program1
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(testUser1.UserCtx, t)
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	// create groups to be associated with the control objective
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -205,7 +206,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				Name: "ControlObjective",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -220,24 +221,24 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				ProgramIDs:           []string{program1.ID, program2.ID}, // multiple programs
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "add groups",
 			request: testclient.CreateControlObjectiveInput{
 				Name:            "Test Procedure",
-				EditorIDs:       []string{testUser1.GroupID},
+				EditorIDs:       []string{sharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateControlObjectiveInput{
 				Name:    "ControlObjective",
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -256,7 +257,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				Name: "ControlObjective",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -266,7 +267,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 			},
 			addGroupToOrg: true,
 			client:        suite.client.api,
-			ctx:           viewOnlyUser.UserCtx,
+			ctx:           sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "user authorized, they were added to the program",
@@ -275,7 +276,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				ProgramIDs: []string{program1.ID},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "user not authorized, user not authorized to one of the programs",
@@ -284,14 +285,14 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required name",
 			request:     testclient.CreateControlObjectiveInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -301,7 +302,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -309,7 +310,7 @@ func TestMutationCreateControlObjective(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(testUser1.UserCtx, testUser1.OrganizationID,
+				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddControlObjectiveCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -375,34 +376,34 @@ func TestMutationCreateControlObjective(t *testing.T) {
 
 			// ensure the org owner has access to the control objective that was created by an api token
 			if tc.client == suite.client.apiWithToken {
-				res, err := suite.client.api.GetControlObjectiveByID(testUser1.UserCtx, resp.CreateControlObjective.ControlObjective.ID)
+				res, err := suite.client.api.GetControlObjectiveByID(sharedTestUser1.UserCtx, resp.CreateControlObjective.ControlObjective.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(resp.CreateControlObjective.ControlObjective.ID, res.ControlObjective.ID))
 			}
 
-			(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, ID: resp.CreateControlObjective.ControlObjective.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, ID: resp.CreateControlObjective.ControlObjective.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateControlObjective(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	controlObjective := (&ControlObjectiveBuilder{client: suite.client, ProgramID: program.ID}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	controlObjective := (&ControlObjectiveBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create another admin user and add them to the same organization and group as testUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, testUser1.OrganizationID)
+	anotherViewUser := suite.userBuilder(context.Background(), t)
+	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, sharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the control objective
-	_, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+	_, err := suite.client.api.GetControlObjectiveByID(anotherViewUser.UserCtx, controlObjective.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	testCases := []struct {
@@ -419,7 +420,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				AddViewerIDs:   []string{groupMember.GroupID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -443,7 +444,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				RevisionBump: &models.Major,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "invalid revision",
@@ -451,7 +452,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				Revision: lo.ToPtr("1.1"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "revision, invalid semver value",
 		},
 		{
@@ -460,7 +461,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				Status: &enums.ObjectiveActiveStatus,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -469,7 +470,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				DesiredOutcome: lo.ToPtr("update this"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -534,22 +535,22 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the control objective now
-				res, err := suite.client.api.GetControlObjectiveByID(anotherAdminUser.UserCtx, controlObjective.ID)
+				res, err := suite.client.api.GetControlObjectiveByID(anotherViewUser.UserCtx, controlObjective.ID)
 				assert.NilError(t, err)
 				assert.Check(t, res != nil)
 				assert.Check(t, is.Equal(controlObjective.ID, res.ControlObjective.ID))
 			}
 		})
 	}
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, ID: controlObjective.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, ID: controlObjective.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteControlObjective(t *testing.T) {
 	// create objects to be deleted
-	controlObjective1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlObjective2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlObjective1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlObjective2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -562,20 +563,20 @@ func TestMutationDeleteControlObjective(t *testing.T) {
 			name:        "not authorized, delete",
 			idToDelete:  controlObjective1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: controlObjective1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  controlObjective1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -588,7 +589,7 @@ func TestMutationDeleteControlObjective(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

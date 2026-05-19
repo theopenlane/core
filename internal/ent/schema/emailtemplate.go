@@ -213,7 +213,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.EmailTemplate](e,
-				withParents(Organization{}, Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
+				withParents(Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),

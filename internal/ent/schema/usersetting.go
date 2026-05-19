@@ -143,8 +143,10 @@ func (UserSetting) Interceptors() []ent.Interceptor {
 
 func (UserSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(
+			ent.OpCreate,
 			policy.AllowCreate(),
+			policy.CheckServiceCreateAccess(),
 		),
 		policy.WithOnMutationRules(
 			ent.OpUpdateOne|ent.OpUpdate,

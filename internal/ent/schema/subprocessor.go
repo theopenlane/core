@@ -85,7 +85,7 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Subprocessor](
 				t,
-				withParents(Organization{}, TrustCenterSubprocessor{}),
+				withParents(TrustCenterSubprocessor{}),
 				withOrganizationOwner(true),
 				withAllowAnonymousTrustCenterAccess(true),
 				withSkipForSystemAdmin(true),
@@ -117,7 +117,7 @@ func (t Subprocessor) Edges() []ent.Edge {
 func (Subprocessor) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.OrgOwnedTuplesHookWithAdmin(),
+			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
 		hooks.HookSubprocessor(),

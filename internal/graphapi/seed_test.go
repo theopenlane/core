@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	fgamodel "github.com/theopenlane/core/fga/model"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	coreutils "github.com/theopenlane/core/internal/testutils"
@@ -18,20 +19,22 @@ import (
 )
 
 var (
-	// testUser1 is a test user with a personal org and an organization
-	testUser1 testUserDetails
-	// testUser2 is a test user with a personal org and an organization
-	testUser2 testUserDetails
-	// viewOnlyUser is a test user that is a member of the first user's organization
-	viewOnlyUser testUserDetails
-	// viewOnlyUser2 is a test user that is a member of the first user's organization
-	viewOnlyUser2 testUserDetails
-	// adminUser is a test user that is an admin of the first user's organization
-	adminUser testUserDetails
-	// systemAdminUser is a test user that is a system admin
-	systemAdminUser testUserDetails
-	// testUserCreator is used to create other organizations later to not conflict the test user
-	testUserCreator testUserDetails
+	// sharedTestUser1 is a test user with a personal org and an organization
+	sharedTestUser1 testUserDetails
+	// sharedTestUser2 is a test user with a personal org and an organization
+	sharedTestUser2 testUserDetails
+	// sharedViewOnlyUser is a test user that is a member of the first user's organization
+	sharedViewOnlyUser testUserDetails
+	// sharedViewOnlyUser2 is a test user that is a member of the first user's organization
+	sharedViewOnlyUser2 testUserDetails
+	// sharedSuperAdminUser is a test user that is a super admin of the first user's organization
+	sharedSuperAdminUser testUserDetails
+	// sharedAdminUser is a test user that is an admin of the first user's organization
+	sharedAdminUser testUserDetails
+	// sharedSystemAdminUser is a test user that is a system admin
+	sharedSystemAdminUser testUserDetails
+	// sharedAuditorUser is a test user that has auditor access to an organization
+	sharedAuditorUser testUserDetails
 )
 
 // testUserDetails is a struct that holds the details of a test user
@@ -96,28 +99,33 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 		(&OrganizationBuilder{client: suite.client, SystemOrg: true}).MustNew(ctx, t)
 
 		// create system admin user
-		systemAdminUser = suite.systemAdminBuilder(ctx, t)
+		sharedSystemAdminUser = suite.systemAdminBuilder(ctx, t)
 
-		// create test users
-		testUserCreator = suite.userBuilder(ctx, t)
-
-		testUser1 = suite.userBuilder(ctx, t)
-		testUser2 = suite.userBuilder(ctx, t)
+		sharedTestUser1 = suite.userBuilder(ctx, t)
+		sharedTestUser2 = suite.userBuilder(ctx, t)
 
 		// setup two test users that are members of the organization
-		viewOnlyUser = suite.userBuilder(ctx, t)
-		viewOnlyUser2 = suite.userBuilder(ctx, t)
+		sharedViewOnlyUser = suite.userBuilder(ctx, t)
+		sharedViewOnlyUser2 = suite.userBuilder(ctx, t)
 
 		// add the user to the organization
-		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser1.OrganizationID)
-		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
+		suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &sharedViewOnlyUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+		suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &sharedViewOnlyUser2, enums.RoleMember, sharedTestUser1.OrganizationID)
+
+		// setup a test user that is a super admin of an organization
+		sharedSuperAdminUser = suite.userBuilder(ctx, t)
+		suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &sharedSuperAdminUser, enums.RoleSuperAdmin, sharedTestUser1.OrganizationID)
 
 		// setup a test user that is an admin of an organization
-		adminUser = suite.userBuilder(ctx, t)
-		suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
+		sharedAdminUser = suite.userBuilder(ctx, t)
+		suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &sharedAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)
 
-		suite.client.apiWithPAT = suite.setupPatClient(testUser1, t)
-		suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
+		// setup a test user that is an auditor for an organization
+		sharedAuditorUser = suite.userBuilder(ctx, t)
+		suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &sharedAuditorUser, enums.RoleAuditor, sharedTestUser1.OrganizationID)
+
+		suite.client.apiWithPAT = suite.setupPatClient(sharedTestUser1, t)
+		suite.client.apiWithToken = suite.setupAPITokenClient(sharedTestUser1.UserCtx, t)
 	})
 
 	requireNoError(t, seedErr)
@@ -142,8 +150,19 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 }
 
 func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
-	// setup client with an API token
-	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
+	// setup client with an API token with comprehensive scopes for testing
+	// Get all available scopes from the FGA model
+	scopeOpts, err := fgamodel.ScopeOptions()
+	requireNoError(t, err)
+
+	var scopes []string
+	for obj, verbs := range scopeOpts {
+		for _, verb := range verbs {
+			scopes = append(scopes, verb+":"+obj)
+		}
+	}
+
+	apiToken := (&APITokenBuilder{client: suite.client, Scopes: scopes}).MustNew(ctx, t)
 
 	authHeaderAPIToken := testclient.Authorization{
 		BearerToken: apiToken.Token,
@@ -207,4 +226,97 @@ func resetContext(ctx context.Context, t *testing.T) context.Context {
 	}
 
 	return auth.NewTestContextWithOrgID(caller.SubjectID, caller.OrganizationID, auth.WithOrganizationRole(caller.OrganizationRole))
+}
+
+// testOrgUsers is all available roles with api and pat clients to used with tests
+type testOrgUsers struct {
+	owner          *testUserDetails
+	superAdmin     *testUserDetails
+	admin          *testUserDetails
+	member         *testUserDetails
+	auditor        *testUserDetails
+	adminApiClient *testclient.TestClient
+	adminPatClient *testclient.TestClient
+}
+
+// testMinimalOrgUsers is a subset of org users created when all roles do not need to be tested
+type testMinimalOrgUsers struct {
+	owner          *testUserDetails
+	admin          *testUserDetails
+	member         *testUserDetails
+	apiClient      *testclient.TestClient
+	adminPatClient *testclient.TestClient
+}
+
+// testOwner only creates a org with a single user (owner) and api clients
+type testOwner struct {
+	owner     *testUserDetails
+	apiClient *testclient.TestClient
+	patClient *testclient.TestClient
+}
+
+// seedOrgOwner will seed the owner and api clients
+func (suite *GraphTestSuite) seedOrgOwner(t *testing.T) *testOwner {
+	t.Helper()
+	localOwner := suite.userBuilder(context.Background(), t)
+
+	return &testOwner{
+		owner:     &localOwner,
+		apiClient: suite.setupAPITokenClient(localOwner.UserCtx, t),
+		patClient: suite.setupPatClient(localOwner, t),
+	}
+}
+
+// seedFreshMinimalOrgUsers will seed the owner, admin, and member but leave out the super admin, auditor, and api clients
+func (suite *GraphTestSuite) seedFreshMinimalOrgUsers(t *testing.T, includeClients bool) *testMinimalOrgUsers {
+	t.Helper()
+	localOwner := suite.userBuilder(context.Background(), t)
+	localAdmin := suite.userBuilder(context.Background(), t)
+	localMember := suite.userBuilder(context.Background(), t)
+
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localAdmin, enums.RoleAdmin, localOwner.OrganizationID)
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localMember, enums.RoleMember, localOwner.OrganizationID)
+
+	out := &testMinimalOrgUsers{
+		owner:  &localOwner,
+		admin:  &localAdmin,
+		member: &localMember,
+	}
+
+	if includeClients {
+		out.apiClient = suite.setupAPITokenClient(localAdmin.UserCtx, t)
+		out.adminPatClient = suite.setupPatClient(localAdmin, t)
+	}
+
+	return out
+}
+
+// seedFreshOrgUsers is a helper function to setup an entire new set of users that can be used when you do not want organization conflicts between tests
+func (suite *GraphTestSuite) seedFreshOrgUsers(t *testing.T) *testOrgUsers {
+	t.Helper()
+	localOwner := suite.userBuilder(context.Background(), t)
+	localSuperAdmin := suite.userBuilder(context.Background(), t)
+	localAdmin := suite.userBuilder(context.Background(), t)
+	localMember := suite.userBuilder(context.Background(), t)
+
+	// TODO: look into auditor setup, causing user not found on some queries
+	// localAuditor := suite.userBuilder(context.Background(), t)
+
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localSuperAdmin, enums.RoleSuperAdmin, localOwner.OrganizationID)
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localAdmin, enums.RoleAdmin, localOwner.OrganizationID)
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localMember, enums.RoleMember, localOwner.OrganizationID)
+	// suite.addUserToOrganization(localOwner.UserCtx, t, &localAuditor, enums.RoleAuditor, localOwner.OrganizationID)
+
+	apiTokenClient := suite.setupAPITokenClient(localAdmin.UserCtx, t)
+	adminPersonalAccessTokenClient := suite.setupPatClient(localAdmin, t)
+
+	return &testOrgUsers{
+		owner:      &localOwner,
+		superAdmin: &localSuperAdmin,
+		admin:      &localAdmin,
+		member:     &localMember,
+		// auditor:        &localAuditor,
+		adminApiClient: apiTokenClient,
+		adminPatClient: adminPersonalAccessTokenClient,
+	}
 }

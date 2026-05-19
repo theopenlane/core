@@ -189,7 +189,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 func (InternalPolicy) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.OrgOwnedTuplesHookWithAdmin(),
+			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
 	}

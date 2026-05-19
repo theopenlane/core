@@ -97,7 +97,7 @@ var (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 )
 
@@ -151,9 +151,11 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithSkipParentContextKinds("organization", "user", "system"),
+		fgatest.WithParentSkipConditions(fgax.ParentContextConditionConfig{Kind: "group", Name: "public_group", Context: map[string]any{"public": false}}),
 	)
 
 	// shared token manager to avoid RSA key generation

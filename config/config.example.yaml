@@ -71,12 +71,15 @@ authz:
         clientsecret: ""
         issuer: ""
         scopes: ""
+    disableparentcontext: false
     enabled: true
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
     modulefile: ""
+    parentcontextconditions: null
+    parentcontextskipkinds: null
     storeid: ""
     storename: openlane
 cloudflare:

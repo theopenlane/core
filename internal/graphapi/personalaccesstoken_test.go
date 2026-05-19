@@ -18,7 +18,7 @@ import (
 )
 
 func TestQueryPersonalAccessToken(t *testing.T) {
-	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -29,18 +29,18 @@ func TestQueryPersonalAccessToken(t *testing.T) {
 		{
 			name:    "happy path pat",
 			queryID: token.ID,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:     notFoundErrorMsg,
 			queryID:  "notfound",
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     notFoundErrorMsg,
 			queryID:  "notfound",
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -65,15 +65,15 @@ func TestQueryPersonalAccessToken(t *testing.T) {
 	(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 		client: suite.client.db.PersonalAccessToken,
 		ID:     token.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryPersonalAccessTokens(t *testing.T) {
-	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create a token for another user
-	(&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).MustNew(testUser2.UserCtx, t)
+	(&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{sharedTestUser2.OrganizationID}}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -86,7 +86,7 @@ func TestQueryPersonalAccessTokens(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetAllPersonalAccessTokens(testUser1.UserCtx)
+			resp, err := suite.client.api.GetAllPersonalAccessTokens(sharedTestUser1.UserCtx)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -141,7 +141,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 				Name:            "forthethingz",
 				Description:     &tokenDescription,
 				ExpiresAt:       &expiration30Days,
-				OrganizationIDs: []string{testUser1.OrganizationID, testUser1.PersonalOrgID},
+				OrganizationIDs: []string{sharedTestUser1.OrganizationID, sharedTestUser1.PersonalOrgID},
 			},
 		},
 		{
@@ -168,7 +168,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.CreatePersonalAccessToken(testUser1.UserCtx, tc.input)
+			resp, err := suite.client.api.CreatePersonalAccessToken(sharedTestUser1.UserCtx, tc.input)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -200,7 +200,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 			}
 
 			// ensure the owner is the user that made the request
-			assert.Check(t, is.Equal(testUser1.ID, resp.CreatePersonalAccessToken.PersonalAccessToken.Owner.ID))
+			assert.Check(t, is.Equal(sharedTestUser1.ID, resp.CreatePersonalAccessToken.PersonalAccessToken.Owner.ID))
 
 			// token should not be redacted on create
 			assert.Check(t, redacted != resp.CreatePersonalAccessToken.PersonalAccessToken.Token)
@@ -212,7 +212,7 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 			(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 				client: suite.client.db.PersonalAccessToken,
 				ID:     resp.CreatePersonalAccessToken.PersonalAccessToken.ID,
-			}).MustDelete(testUser1.UserCtx, t)
+			}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
@@ -220,13 +220,13 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	token := (&PersonalAccessTokenBuilder{
 		client:          suite.client,
-		OrganizationIDs: []string{testUser1.PersonalOrgID},
+		OrganizationIDs: []string{sharedTestUser1.PersonalOrgID},
 		ExpiresAt:       lo.ToPtr(time.Now().Add(time.Hour * 24 * 30))}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	tokenOther := (&PersonalAccessTokenBuilder{
-		client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).
-		MustNew(testUser2.UserCtx, t)
+		client: suite.client, OrganizationIDs: []string{sharedTestUser2.OrganizationID}}).
+		MustNew(sharedTestUser2.UserCtx, t)
 
 	tokenDescription := gofakeit.Sentence()
 	tokenName := gofakeit.Word()
@@ -255,14 +255,14 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 			name:    "happy path, add org",
 			tokenID: token.ID,
 			input: testclient.UpdatePersonalAccessTokenInput{
-				AddOrganizationIDs: []string{testUser1.OrganizationID},
+				AddOrganizationIDs: []string{sharedTestUser1.OrganizationID},
 			},
 		},
 		{
 			name:    "happy path, remove org",
 			tokenID: token.ID,
 			input: testclient.UpdatePersonalAccessTokenInput{
-				RemoveOrganizationIDs: []string{testUser1.OrganizationID},
+				RemoveOrganizationIDs: []string{sharedTestUser1.OrganizationID},
 			},
 		},
 		{
@@ -285,7 +285,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.UpdatePersonalAccessToken(testUser1.UserCtx, tc.tokenID, tc.input)
+			resp, err := suite.client.api.UpdatePersonalAccessToken(sharedTestUser1.UserCtx, tc.tokenID, tc.input)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -320,7 +320,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 				assert.Check(t, is.Len(resp.UpdatePersonalAccessToken.PersonalAccessToken.Organizations.Edges, 1))
 			}
 
-			assert.Check(t, is.Equal(testUser1.ID, resp.UpdatePersonalAccessToken.PersonalAccessToken.Owner.ID))
+			assert.Check(t, is.Equal(sharedTestUser1.ID, resp.UpdatePersonalAccessToken.PersonalAccessToken.Owner.ID))
 
 			// token should be redacted on update
 			assert.Check(t, is.Equal(redacted, resp.UpdatePersonalAccessToken.PersonalAccessToken.Token))
@@ -328,7 +328,7 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	}
 
 	// update expiration date
-	_, err := suite.client.api.UpdatePersonalAccessToken(testUser1.UserCtx, token.ID, testclient.UpdatePersonalAccessTokenInput{
+	_, err := suite.client.api.UpdatePersonalAccessToken(sharedTestUser1.UserCtx, token.ID, testclient.UpdatePersonalAccessTokenInput{
 		ExpiresAt: lo.ToPtr(time.Now().Add(time.Hour)),
 	})
 	assert.NilError(t, err)
@@ -337,18 +337,18 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 	(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 		client: suite.client.db.PersonalAccessToken,
 		ID:     token.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 		client: suite.client.db.PersonalAccessToken,
 		ID:     tokenOther.ID,
-	}).MustDelete(testUser2.UserCtx, t)
+	}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestMutationDeletePersonalAccessToken(t *testing.T) {
-	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// token for another user
-	tokenOther := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{testUser2.OrganizationID}}).MustNew(testUser2.UserCtx, t)
+	tokenOther := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{sharedTestUser2.OrganizationID}}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -368,7 +368,7 @@ func TestMutationDeletePersonalAccessToken(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.DeletePersonalAccessToken(testUser1.UserCtx, tc.tokenID)
+			resp, err := suite.client.api.DeletePersonalAccessToken(sharedTestUser1.UserCtx, tc.tokenID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -386,15 +386,15 @@ func TestMutationDeletePersonalAccessToken(t *testing.T) {
 	(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 		client: suite.client.db.PersonalAccessToken,
 		ID:     tokenOther.ID,
-	}).MustDelete(testUser2.UserCtx, t)
+	}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestLastUsedPersonalAccessToken(t *testing.T) {
 	// create new personal access token
-	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	token := (&PersonalAccessTokenBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// check that the last used is empty
-	res, err := suite.client.api.GetPersonalAccessTokenByID(testUser1.UserCtx, token.ID)
+	res, err := suite.client.api.GetPersonalAccessTokenByID(sharedTestUser1.UserCtx, token.ID)
 	assert.NilError(t, err)
 	assert.Check(t, res.PersonalAccessToken.LastUsedAt == nil)
 
@@ -415,5 +415,5 @@ func TestLastUsedPersonalAccessToken(t *testing.T) {
 	(&Cleanup[*generated.PersonalAccessTokenDeleteOne]{
 		client: suite.client.db.PersonalAccessToken,
 		ID:     token.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 }

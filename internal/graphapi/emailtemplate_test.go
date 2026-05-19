@@ -26,7 +26,7 @@ func validEmailTemplateDefaults() map[string]any {
 
 func TestQueryEmailTemplate(t *testing.T) {
 	// create an email template to be queried using testUser1
-	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the email template
 	testCases := []struct {
@@ -40,13 +40,13 @@ func TestQueryEmailTemplate(t *testing.T) {
 			name:    "happy path",
 			queryID: emailTemplate.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: emailTemplate.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -58,14 +58,14 @@ func TestQueryEmailTemplate(t *testing.T) {
 			name:     "email template not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "email template not found, using not authorized user from another org",
 			queryID:  emailTemplate.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -88,13 +88,13 @@ func TestQueryEmailTemplate(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryEmailTemplates(t *testing.T) {
 	// create multiple email templates to be queried using testUser1
-	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -105,13 +105,13 @@ func TestQueryEmailTemplates(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -129,7 +129,7 @@ func TestQueryEmailTemplates(t *testing.T) {
 		{
 			name:            "another user, no email templates should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -144,7 +144,7 @@ func TestQueryEmailTemplates(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, IDs: []string{emailTemplate1.ID, emailTemplate2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, IDs: []string{emailTemplate1.ID, emailTemplate2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateEmailTemplate(t *testing.T) {
@@ -164,7 +164,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				Defaults:        validEmailTemplateDefaults(),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -184,7 +184,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -217,7 +217,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				Defaults:        validEmailTemplateDefaults(),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -227,7 +227,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				TemplateContext: &enums.TemplateContextCampaignRecipient,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -238,7 +238,7 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 				Defaults:        validEmailTemplateDefaults(),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -278,13 +278,13 @@ func TestMutationCreateEmailTemplate(t *testing.T) {
 			}
 
 			// cleanup each email template created
-			(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: resp.CreateEmailTemplate.EmailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: resp.CreateEmailTemplate.EmailTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateEmailTemplate(t *testing.T) {
-	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -299,7 +299,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -317,7 +317,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -326,7 +326,7 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 				Name: lo.ToPtr("Updated Email Template Name " + ulids.New().String()),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -355,14 +355,14 @@ func TestMutationUpdateEmailTemplate(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEmailTemplate(t *testing.T) {
 	// create email templates to be deleted
-	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	emailTemplate3 := (&EmailTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	emailTemplate3 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -375,27 +375,27 @@ func TestMutationDeleteEmailTemplate(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  emailTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  emailTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: emailTemplate1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  emailTemplate1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -414,7 +414,7 @@ func TestMutationDeleteEmailTemplate(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

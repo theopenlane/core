@@ -240,11 +240,15 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 // Policy of the TrustCenterSetting
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(ent.OpCreate,
 			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
+			policy.CheckOrgWriteAccess(),
+		),
+		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,
+			rule.AllowIfTrustCenterEditor(),
 			entfga.CheckEditAccess[*generated.TrustCenterSettingMutation](),
 		),
 	)

@@ -241,7 +241,6 @@ func (r Review) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Review](r,
 				withParents(
-					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},

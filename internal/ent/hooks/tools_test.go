@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	fgaModelFile = "../../../fga/model/model.fga"
+	fgaModuleFile = "../../../fga/model/fga.mod"
 )
 
 // TestHookSuite runs all the tests in the TestHookSuite
@@ -79,10 +79,13 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	require.NoError(suite.T(), err)
 
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithSkipParentContextKinds("organization", "user", "system"),
+		fgatest.WithParentSkipConditions(fgax.ParentContextConditionConfig{Kind: "group", Name: "public_group", Context: map[string]any{"public": false}}),
 	)
+
 	ctx := context.Background()
 
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)

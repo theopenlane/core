@@ -13,32 +13,32 @@ import (
 )
 
 func TestQueryScheduledJob(t *testing.T) {
-	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	firstScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         job.ID,
 		Configuration: models.JobConfiguration{},
 		JobRunnerID:   runner.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(sharedTestUser1.UserCtx, t)
 
 	secondScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         job.ID,
 		Configuration: models.JobConfiguration{},
 		JobRunnerID:   runner.ID,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(sharedTestUser1.UserCtx, t)
 
-	secondJob := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	runner2 := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	secondJob := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	runner2 := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	thirdScheduledJob := (&ScheduledJobBuilder{
 		client:        suite.client,
 		JobID:         secondJob.ID,
 		Configuration: models.JobConfiguration{},
 		JobRunnerID:   runner2.ID,
-	}).MustNew(testUser2.UserCtx, t)
+	}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -51,19 +51,19 @@ func TestQueryScheduledJob(t *testing.T) {
 		{
 			name:          "happy path user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedCount: 2,
 		},
 		{
 			name:          "happy path admin user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedCount: 2,
 		},
 		{
 			name:          "happy path view only user",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedCount: 2,
 		},
 		{
@@ -75,7 +75,7 @@ func TestQueryScheduledJob(t *testing.T) {
 		{
 			name:          "happy path second user",
 			client:        suite.client.api,
-			ctx:           testUser2.UserCtx,
+			ctx:           sharedTestUser2.UserCtx,
 			expectedCount: 1,
 		},
 	}
@@ -99,40 +99,40 @@ func TestQueryScheduledJob(t *testing.T) {
 	(&Cleanup[*generated.JobRunnerDeleteOne]{
 		client: suite.client.db.JobRunner,
 		IDs:    []string{runner.ID},
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.ScheduledJobDeleteOne]{
 		client: suite.client.db.ScheduledJob,
 		IDs:    []string{firstScheduledJob.ID, secondScheduledJob.ID},
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.ScheduledJobDeleteOne]{
 		client: suite.client.db.ScheduledJob,
 		IDs:    []string{thirdScheduledJob.ID},
-	}).MustDelete(testUser2.UserCtx, t)
+	}).MustDelete(sharedTestUser2.UserCtx, t)
 
 	(&Cleanup[*generated.JobRunnerDeleteOne]{
 		client: suite.client.db.JobRunner,
 		IDs:    []string{runner2.ID},
-	}).MustDelete(testUser2.UserCtx, t)
+	}).MustDelete(sharedTestUser2.UserCtx, t)
 
 	(&Cleanup[*generated.JobTemplateDeleteOne]{
 		client: suite.client.db.JobTemplate,
 		IDs:    []string{job.ID},
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.JobTemplateDeleteOne]{
 		client: suite.client.db.JobTemplate,
 		IDs:    []string{secondJob.ID},
-	}).MustDelete(testUser2.UserCtx, t)
+	}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestScheduledJobs(t *testing.T) {
-	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(testUser1.UserCtx, t)
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(sharedTestUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name       string
@@ -143,7 +143,7 @@ func TestScheduledJobs(t *testing.T) {
 	}{
 		{
 			name:   "happy path - create scheduled job with runner",
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 			client: suite.client.api,
 			jobBuilder: ScheduledJobBuilder{
 				client:        suite.client,
@@ -155,7 +155,7 @@ func TestScheduledJobs(t *testing.T) {
 		},
 		{
 			name:   "happy path - create scheduled job with runner by admin",
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 			client: suite.client.api,
 			jobBuilder: ScheduledJobBuilder{
 				client:        suite.client,
@@ -167,7 +167,7 @@ func TestScheduledJobs(t *testing.T) {
 		},
 		{
 			name:   "create scheduled job with runner by view only user should fail",
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 			client: suite.client.api,
 			jobBuilder: ScheduledJobBuilder{
 				client:        suite.client,
@@ -209,34 +209,34 @@ func TestScheduledJobs(t *testing.T) {
 	(&Cleanup[*generated.JobRunnerDeleteOne]{
 		client: suite.client.db.JobRunner,
 		ID:     runner.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.JobTemplateDeleteOne]{
 		client: suite.client.db.JobTemplate,
 		ID:     job.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.SubcontrolDeleteOne]{
 		client: suite.client.db.Subcontrol,
 		ID:     subControl.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	(&Cleanup[*generated.ControlDeleteOne]{
 		client: suite.client.db.Control,
 		ID:     control.ID,
-	}).MustDelete(testUser1.UserCtx, t)
+	}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateScheduledJob(t *testing.T) {
-	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
-	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(testUser1.UserCtx, t)
+	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(sharedTestUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID, Name: "Test Control"}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
-	job2 := (&JobTemplateBuilder{client: suite.client, Cron: "0 0 0 * * *"}).MustNew(testUser2.UserCtx, t)
+	job2 := (&JobTemplateBuilder{client: suite.client, Cron: "0 0 0 * * *"}).MustNew(sharedTestUser2.UserCtx, t)
 
 	cron := "0 0 0 * * *"
 	invalidCron := "0 0 * * *" // invalid cron syntax (requires 5 parts), should fail validation
@@ -254,17 +254,17 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				JobTemplateID: job.ID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		// TODO: see comment on schema, public tuples need to be implemented for this to work
-		{
-			name: "happy path, minimal input, cron inherited from job template, system owned job",
-			request: testclient.CreateScheduledJobInput{
-				JobTemplateID: jobSystemOwned.ID,
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
-		},
+		// {
+		// 	name: "happy path, minimal input, cron inherited from job template, system owned job",
+		// 	request: testclient.CreateScheduledJobInput{
+		// 		JobTemplateID: jobSystemOwned.ID,
+		// 	},
+		// 	client: suite.client.api,
+		// 	ctx:    testUser1.UserCtx,
+		// },
 		{
 			name: "happy path, all input",
 			request: testclient.CreateScheduledJobInput{
@@ -275,14 +275,14 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				SubcontrolIDs: []string{subControl.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateScheduledJobInput{
 				JobTemplateID: job.ID,
 				Cron:          &cron,
-				OwnerID:       &testUser1.OrganizationID,
+				OwnerID:       &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -303,7 +303,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				Cron:          &cron,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -313,7 +313,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				Cron:          &cron,
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -324,7 +324,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				JobRunnerID:   &runner.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -333,7 +333,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				Cron: &cron,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -343,7 +343,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 				Cron:          &invalidCron,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "invalid cron syntax",
 		},
 	}
@@ -392,38 +392,38 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			}
 
 			// cleanup each ScheduledJob created
-			(&Cleanup[*generated.ScheduledJobDeleteOne]{client: suite.client.db.ScheduledJob, ID: resp.CreateScheduledJob.ScheduledJob.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.ScheduledJobDeleteOne]{client: suite.client.db.ScheduledJob, ID: resp.CreateScheduledJob.ScheduledJob.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 
 	// cleanup each JobTemplate created
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 	// (&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: jobSystemOwned.ID}).MustDelete(systemAdminUser.UserCtx, t)
 
 	// cleanup each JobRunner created
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: runner.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: runner.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each Control created
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each Subcontrol created
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateScheduledJob(t *testing.T) {
-	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control1 := (&ControlBuilder{client: suite.client, RefCode: "TC-1"}).MustNew(testUser1.UserCtx, t)
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, RefCode: "TC-1"}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure we can create two scheduled jobs with the same job template id
-	scheduledJob := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID, ControlIDs: []string{control1.ID}}).MustNew(testUser1.UserCtx, t)
-	scheduledJob2 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(testUser1.UserCtx, t)
+	scheduledJob := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID, ControlIDs: []string{control1.ID}}).MustNew(sharedTestUser1.UserCtx, t)
+	scheduledJob2 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	anotherRunner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, RefCode: "TC-2"}).MustNew(testUser1.UserCtx, t)
+	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	anotherRunner := (&JobRunnerBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, RefCode: "TC-2"}).MustNew(sharedTestUser1.UserCtx, t)
 	subControl := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID, Name: "SCT-1"}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	newCron := "1 1 0 * * *"
 	anotherCron := "0 0 1 * * *"
@@ -443,7 +443,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 			},
 			scheduledJobID: scheduledJob.ID,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -482,7 +482,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 			},
 			scheduledJobID: scheduledJob.ID,
 			client:         suite.client.api,
-			ctx:            viewOnlyUser.UserCtx,
+			ctx:            sharedViewOnlyUser.UserCtx,
 			expectedErr:    notAuthorizedErrorMsg,
 		},
 		{
@@ -492,7 +492,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 			},
 			scheduledJobID: scheduledJob.ID,
 			client:         suite.client.api,
-			ctx:            testUser2.UserCtx,
+			ctx:            sharedTestUser2.UserCtx,
 			expectedErr:    notFoundErrorMsg,
 		},
 		{
@@ -502,7 +502,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 			},
 			scheduledJobID: scheduledJob.ID,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedErr:    "invalid cron syntax",
 		},
 	}
@@ -543,27 +543,27 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ScheduledJobDeleteOne]{client: suite.client.db.ScheduledJob, ID: scheduledJob.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ScheduledJobDeleteOne]{client: suite.client.db.ScheduledJob, ID: scheduledJob.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each JobTemplate created
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each JobRunner created
-	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: runner.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobRunnerDeleteOne]{client: suite.client.db.JobRunner, ID: runner.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each Control created
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// cleanup each Subcontrol created
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subControl.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteScheduledJob(t *testing.T) {
 	// create scheduled jobs to be deleted
-	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	scheduledJob1 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(testUser1.UserCtx, t)
-	scheduledJob2 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(testUser1.UserCtx, t)
-	scheduledJob3 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(testUser1.UserCtx, t)
+	job := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	scheduledJob1 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	scheduledJob2 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	scheduledJob3 := (&ScheduledJobBuilder{client: suite.client, JobID: job.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -576,27 +576,27 @@ func TestMutationDeleteScheduledJob(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  scheduledJob1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  scheduledJob1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: scheduledJob1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  scheduledJob1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -615,7 +615,7 @@ func TestMutationDeleteScheduledJob(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -636,5 +636,5 @@ func TestMutationDeleteScheduledJob(t *testing.T) {
 	}
 
 	// cleanup each JobTemplate created
-	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.JobTemplateDeleteOne]{client: suite.client.db.JobTemplate, ID: job.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }

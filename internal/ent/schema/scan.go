@@ -128,7 +128,6 @@ func (s Scan) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Scan](s,
 				withParents(
-					Organization{},
 					Control{},
 					Subcontrol{},
 					Risk{},

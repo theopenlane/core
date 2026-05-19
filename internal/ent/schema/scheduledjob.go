@@ -89,7 +89,7 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.ScheduledJob](c,
-				withParents(Organization{}, Control{}, Subcontrol{}),
+				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(true),
 				withSkipForSystemAdmin(true),
 			),

@@ -318,7 +318,6 @@ func (f Finding) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
-					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},

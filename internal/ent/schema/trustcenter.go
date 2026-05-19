@@ -117,7 +117,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			required:   false,
 			immutable:  false,
 			annotations: []schema.Annotation{
-				accessmap.EdgeAuthCheck(Organization{}.Name()),
+				accessmap.EdgeAuthCheck(CustomDomain{}.Name()),
 			},
 			cascadeDelete: "TrustCenterID",
 		}),
@@ -127,7 +127,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			name:       "preview_domain",
 			field:      "preview_domain_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeAuthCheck(Organization{}.Name()),
+				accessmap.EdgeAuthCheck(CustomDomain{}.Name()),
 			},
 			cascadeDelete: "TrustCenterID",
 		}),

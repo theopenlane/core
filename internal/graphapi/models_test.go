@@ -15,7 +15,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -858,7 +857,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 	if pat.OrganizationIDs == nil {
 		// default to adding the test users organization ID
-		pat.OrganizationIDs = []string{testUser1.OrganizationID}
+		pat.OrganizationIDs = []string{sharedTestUser1.OrganizationID}
 	}
 
 	request := pat.client.db.PersonalAccessToken.Create().
@@ -888,14 +887,13 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 		at.Description = gofakeit.HipsterSentence()
 	}
 
-	if at.Scopes == nil {
-		at.Scopes = []string{"read", "write", "group_manager"}
-	}
-
 	request := at.client.db.APIToken.Create().
 		SetName(at.Name).
-		SetDescription(at.Description).
-		SetScopes(at.Scopes)
+		SetDescription(at.Description)
+
+	if at.Scopes != nil {
+		request.SetScopes(at.Scopes)
+	}
 
 	if at.ExpiresAt != nil {
 		request.SetExpiresAt(*at.ExpiresAt)
@@ -1637,7 +1635,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappedControl {
-	if ctx == systemAdminUser.UserCtx {
+	if ctx == sharedSystemAdminUser.UserCtx {
 		if e.InternalID == "" {
 			e.InternalID = ulids.New().String()
 		}
@@ -2020,29 +2018,14 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 		mutation.SetCustomDomainID(tc.CustomDomainID)
 	}
 
+	// set the org owner_id, this is done via hooks when using the api
+	caller, _ := auth.CallerFromContext(ctx)
+	if caller != nil && caller.OrganizationID != "" {
+		mutation.SetOwnerID(caller.OrganizationID)
+	}
+
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(t, err)
-
-	// Create the organization parent tuple for the trust center
-	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
-	orgCaller, orgCallerOk := auth.CallerFromContext(ctx)
-	if !orgCallerOk || orgCaller == nil {
-		requireNoError(t, auth.ErrNoAuthUser)
-	}
-	orgID := orgCaller.OrganizationID
-
-	parentReq := fgax.TupleRequest{
-		SubjectID:   orgID,
-		SubjectType: "organization",
-		ObjectID:    trustCenter.ID,
-		ObjectType:  "trust_center",
-		Relation:    "parent",
-	}
-
-	tuple := fgax.GetTupleKey(parentReq)
-	if _, err := tc.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(t, err)
-	}
 
 	return trustCenter
 }

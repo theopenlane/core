@@ -16,6 +16,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -62,7 +63,7 @@ import (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 )
@@ -108,9 +109,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
+		fgatest.WithSkipParentContextKinds("organization", "user", "system"),
+		fgatest.WithParentSkipConditions(fgax.ParentContextConditionConfig{Kind: "group", Name: "public_group", Context: map[string]any{"public": false}}),
 	)
 
 	fgaClient, err := s.ofgaTF.NewFgaClient(s.ctx)

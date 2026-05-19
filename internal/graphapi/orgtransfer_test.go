@@ -16,16 +16,16 @@ import (
 
 func TestMutationTransferOrganizationOwnership(t *testing.T) {
 	// Create an existing member user to transfer ownership to
-	existingMember := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	existingMember := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	memberRole := enums.RoleMember.String()
 	membershipID := (&OrgMemberBuilder{
 		client: suite.client,
 		UserID: existingMember.ID,
 		Role:   memberRole,
-	}).MustNew(testUser1.UserCtx, t)
+	}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// Create a non-member user (exists but not in the org)
-	nonMemberUser := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	nonMemberUser := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// Create a different organization owner for negative test cases
 	otherOwner := suite.userBuilder(context.Background(), t)
@@ -43,7 +43,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 			name:           "happy path, transfer to existing member",
 			newOwnerEmail:  existingMember.Email,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedInvite: false,
 			checkTransfer:  true,
 		},
@@ -51,35 +51,35 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 			name:           "happy path, transfer to non-member (sends invitation)",
 			newOwnerEmail:  nonMemberUser.Email,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedInvite: true,
 		},
 		{
 			name:           "happy path, transfer to new user (sends invitation)",
 			newOwnerEmail:  "new-owner@theopenlane.io",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedInvite: true,
 		},
 		{
 			name:          "not owner, permission denied",
 			newOwnerEmail: "someone@theopenlane.io",
 			client:        suite.client.api,
-			ctx:           viewOnlyUser.UserCtx,
+			ctx:           sharedViewOnlyUser.UserCtx,
 			expectedErr:   notAuthorizedErrorMsg,
 		},
 		{
 			name:          "different org owner, no access",
 			newOwnerEmail: "someone@theopenlane.io",
 			client:        suite.client.api,
-			ctx:           auth.NewTestContextWithOrgID(otherOwner.ID, testUser1.OrganizationID),
+			ctx:           auth.NewTestContextWithOrgID(otherOwner.ID, sharedTestUser1.OrganizationID),
 			expectedErr:   notFoundErrorMsg,
 		},
 		{
 			name:          "invalid email",
 			newOwnerEmail: "invalid-email",
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 			expectedErr:   "email domain not allowed in organization",
 		},
 	}
@@ -95,7 +95,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Check(t, is.Equal(testUser1.OrganizationID, resp.TransferOrganizationOwnership.Organization.ID))
+			assert.Check(t, is.Equal(sharedTestUser1.OrganizationID, resp.TransferOrganizationOwnership.Organization.ID))
 			assert.Check(t, is.Equal(tc.expectedInvite, resp.TransferOrganizationOwnership.InvitationSent))
 
 			// If checkTransfer is true, verify the ownership was actually transferred
@@ -105,7 +105,7 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 				// Verify new owner has OWNER role
 				newOwnerMembership, err := suite.client.db.OrgMembership.Query().
 					Where(
-						orgmembership.OrganizationID(testUser1.OrganizationID),
+						orgmembership.OrganizationID(sharedTestUser1.OrganizationID),
 						orgmembership.UserID(existingMember.ID),
 					).
 					Only(allowCtx)
@@ -115,8 +115,8 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 				// Verify old owner has ADMIN role
 				oldOwnerMembership, err := suite.client.db.OrgMembership.Query().
 					Where(
-						orgmembership.OrganizationID(testUser1.OrganizationID),
-						orgmembership.UserID(testUser1.ID),
+						orgmembership.OrganizationID(sharedTestUser1.OrganizationID),
+						orgmembership.UserID(sharedTestUser1.ID),
 					).
 					Only(allowCtx)
 				assert.NilError(t, err)
@@ -124,13 +124,13 @@ func TestMutationTransferOrganizationOwnership(t *testing.T) {
 
 				// Transfer back to original owner for other tests
 				// Use auth context with proper org ID
-				transferBackCtx := auth.NewTestContextWithOrgID(existingMember.ID, testUser1.OrganizationID)
-				_, err = suite.client.api.TransferOrganizationOwnership(transferBackCtx, testUser1.UserInfo.Email)
+				transferBackCtx := auth.NewTestContextWithOrgID(existingMember.ID, sharedTestUser1.OrganizationID)
+				_, err = suite.client.api.TransferOrganizationOwnership(transferBackCtx, sharedTestUser1.UserInfo.Email)
 				assert.NilError(t, err)
 			}
 		})
 	}
 
 	// Cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: membershipID.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: membershipID.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }

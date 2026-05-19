@@ -185,7 +185,7 @@ func (p Procedure) Annotations() []schema.Annotation {
 func (Procedure) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hook.On(
-			hooks.OrgOwnedTuplesHookWithAdmin(),
+			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
 	}

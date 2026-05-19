@@ -1,0 +1,29 @@
+module example
+
+# This is an example template for objects that are:
+# - object owned with parents - no organization inheritance - a good example of this is the trust_center objects, where the top level trust_center gives org admins+ edit access to trust center, and users/groups can be given specific trust center manage access, but that gives access to all children of the trust center
+# To Use:
+# 1. Update all occurrences of `object_name` with the object name
+# 2. Update `parent` with the parent objects defined in the `ObjectOwned` `withParents` definition.
+# Notes:
+# This gives:
+# - ability to assign specific object instance access by group, user, service
+# - ability to assign access to all instances of objects via scopes `can_edit_object_name` and `can_view_object_name`
+# - inherited access from the parent objects defined in parent based on can_view and can_edit relations
+type object_name
+  relations
+    # base permissions - these should all be derived permissions
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: (editor but not blocked)
+
+    # tuple based permissions for edit, view, blocked, and audit log viewing
+    define editor: [user, service, group#member] or parent_editor
+    define viewer: [user, service, group#member] or editor or parent_viewer
+    define blocked: [user, service, group#member]
+    define audit_log_viewer: ([user, service, group#member] or audit_log_viewer from parent) and can_view
+
+    # parent permissions derived based on `crud` permissions or parents
+    define parent_editor: can_edit from parent
+    define parent_viewer: can_view from parent
+    define parent: [parent1, parent2]

@@ -96,6 +96,16 @@ authz:
   createnewmodel: true
   credentials:
     apitoken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
+  parentcontextconditions:
+    - kind: group
+      name: public_group
+      context:
+        public: false
+
+  parentcontextskipkinds:
+    - organization
+    - user
+    - system
 
 # session settings
 sessions:

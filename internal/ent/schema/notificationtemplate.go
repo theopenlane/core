@@ -219,6 +219,7 @@ func (n NotificationTemplate) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.NotificationTemplate](n,
+				withParents(Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),

@@ -19,11 +19,11 @@ import (
 // TestCreateCampaignWithTargets tests the createCampaignWithTargets mutation through the API.
 func TestCreateCampaignWithTargets(t *testing.T) {
 	// Create template via builder (no FGA edge checks on template from campaign)
-	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// Create assessment via API with same user so EdgeViewCheck passes
 	uid := ulids.New().String()
-	assessmentResp, err := suite.client.api.CreateAssessment(testUser1.UserCtx, testclient.CreateAssessmentInput{
+	assessmentResp, err := suite.client.api.CreateAssessment(sharedTestUser1.UserCtx, testclient.CreateAssessmentInput{
 		Name:       fmt.Sprintf("assessment-%s", uid),
 		TemplateID: lo.ToPtr(template.ID),
 		Jsonconfig: map[string]any{
@@ -53,7 +53,7 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			},
 		}
 
-		resp, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
+		resp, err := suite.client.api.CreateCampaignWithTargets(sharedTestUser1.UserCtx, input)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.CreateCampaignWithTargets.Campaign.ID != "")
@@ -79,7 +79,7 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			},
 		}
 
-		resp, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
+		resp, err := suite.client.api.CreateCampaignWithTargets(sharedTestUser1.UserCtx, input)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal(int(explicitCount), int(lo.FromPtr(resp.CreateCampaignWithTargets.Campaign.RecipientCount))))
@@ -99,13 +99,13 @@ func TestCreateCampaignWithTargets(t *testing.T) {
 			Targets: []*testclient.CreateCampaignTargetInput{},
 		}
 
-		_, err := suite.client.api.CreateCampaignWithTargets(testUser1.UserCtx, input)
+		_, err := suite.client.api.CreateCampaignWithTargets(sharedTestUser1.UserCtx, input)
 		assert.Assert(t, err != nil)
 	})
 
 	// cleanup assessment and template
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessmentID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessmentID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 // cleanupCampaignWithTargets deletes campaign targets and the campaign.
@@ -117,6 +117,6 @@ func cleanupCampaignWithTargets(t *testing.T, campaignID string, targets []*test
 		targetIDs = append(targetIDs, target.ID)
 	}
 
-	(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: targetIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: targetIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignID}).MustDelete(sharedTestUser1.UserCtx, t)
 }

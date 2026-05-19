@@ -337,6 +337,7 @@ func (User) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OauthTooToken](),
+			policy.CheckServiceCreateAccess(),
 			rule.AllowIfSelf(),
 		),
 		policy.WithOnMutationRules(

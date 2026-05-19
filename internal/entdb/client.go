@@ -421,7 +421,7 @@ func NewTestFixture() *testutils.TestFixture {
 	}
 
 	if testDBContainerExpiry == "" {
-		testDBContainerExpiry = "10" // default expiry of 10 minutes
+		testDBContainerExpiry = "20" // default expiry of 20 minutes
 	}
 
 	expiry, err := strconv.Atoi(testDBContainerExpiry)
@@ -431,7 +431,7 @@ func NewTestFixture() *testutils.TestFixture {
 
 	return testutils.GetTestURI(testutils.WithImage(testDBURI),
 		testutils.WithExpiryMinutes(expiry),
-		testutils.WithMaxConn(200)) //nolint:mnd
+		testutils.WithMaxConn(500)) //nolint:mnd
 }
 
 // NewTestClient creates an entdb client that can be used for TEST purposes ONLY.

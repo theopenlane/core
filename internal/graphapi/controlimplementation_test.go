@@ -18,21 +18,21 @@ import (
 
 func TestQueryControlImplementation(t *testing.T) {
 	// create an controlImplementation1 to be queried using testUser1
-	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create another with associated controls in another org
-	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser2.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(sharedTestUser2.UserCtx, t)
 
 	// create a controlImplementation with controls and subcontrols
-	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	subcontrol1 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
-	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
-	controlImplementation3 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control2.ID}, SubcontrolIDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subcontrol1 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	controlImplementation3 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control2.ID}, SubcontrolIDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure view only user can access controlImplementation with associated controls
-	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlImplementation4 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control3.ID}}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlImplementation4 := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control3.ID}}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the controlImplementation
 	testCases := []struct {
@@ -48,27 +48,27 @@ func TestQueryControlImplementation(t *testing.T) {
 			name:    "happy path",
 			queryID: controlImplementation1.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:               "happy path, controlImplementation with associated controls",
 			queryID:            controlImplementation2.ID,
 			client:             suite.client.api,
-			ctx:                testUser2.UserCtx,
+			ctx:                sharedTestUser2.UserCtx,
 			shouldHaveControls: true,
 		},
 		{
 			name:     "controlImplementation with associated controls, but no access",
 			queryID:  controlImplementation2.ID,
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:                  "happy path, controlImplementation with associated controls and subcontrols",
 			queryID:               controlImplementation3.ID,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   sharedTestUser1.UserCtx,
 			shouldHaveControls:    true,
 			shouldHaveSubcontrols: true,
 		},
@@ -76,28 +76,28 @@ func TestQueryControlImplementation(t *testing.T) {
 			name:     "controlImplementation with associated controls, but no access",
 			queryID:  controlImplementation3.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "happy path, read only user, no access to control or controlImplementation",
 			queryID:  controlImplementation1.ID,
 			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
+			ctx:      sharedViewOnlyUser.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:               "happy path, controlImplementation with associated controls and group viewer by org owner",
 			queryID:            controlImplementation4.ID,
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
+			ctx:                sharedTestUser1.UserCtx,
 			shouldHaveControls: true,
 		},
 		{
 			name:               "happy path, controlImplementation with associated controls and group viewer by view only user",
 			queryID:            controlImplementation4.ID,
 			client:             suite.client.api,
-			ctx:                viewOnlyUser.UserCtx,
+			ctx:                sharedViewOnlyUser.UserCtx,
 			shouldHaveControls: true,
 		},
 		{
@@ -110,14 +110,14 @@ func TestQueryControlImplementation(t *testing.T) {
 			name:     "controlImplementation not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "controlImplementation not found, using not authorized user",
 			queryID:  controlImplementation1.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -156,20 +156,17 @@ func TestQueryControlImplementation(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation3.ID, controlImplementation4.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation2.ID}}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation3.ID, controlImplementation4.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation2.ID}}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 
 }
 
 func TestQueryControlImplementations(t *testing.T) {
 	// create a new user cause its a count test and we don't want to interfere with other tests
-	testUser := suite.userBuilder(context.Background(), t)
-	apiClient := suite.setupAPITokenClient(testUser.UserCtx, t)
-	patClient := suite.setupPatClient(testUser, t)
-	viewUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewUser, enums.RoleMember, testUser.OrganizationID)
+	t.Parallel()
+	testOrg := suite.seedFreshMinimalOrgUsers(t, true)
 
 	anotherUser := suite.userBuilder(context.Background(), t)
 
@@ -177,7 +174,7 @@ func TestQueryControlImplementations(t *testing.T) {
 	numCIs := 5
 	ciIDs := []string{}
 	for range numCIs {
-		ci := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client}).MustNew(testOrg.owner.UserCtx, t)
 		ciIDs = append(ciIDs, ci.ID)
 	}
 
@@ -185,8 +182,8 @@ func TestQueryControlImplementations(t *testing.T) {
 	numCIsWithAssociatedControls := 2
 	controlIDs := []string{}
 	for range numCIsWithAssociatedControls {
-		control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-		ci := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testUser.UserCtx, t)
+		control1 := (&ControlBuilder{client: suite.client}).MustNew(testOrg.owner.UserCtx, t)
+		ci := (&ControlImplementationBuilder{client: suite.client, ControlIDs: []string{control1.ID}}).MustNew(testOrg.owner.UserCtx, t)
 		ciIDs = append(ciIDs, ci.ID)
 
 		controlIDs = append(controlIDs, control1.ID)
@@ -201,24 +198,24 @@ func TestQueryControlImplementations(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser.UserCtx,
+			ctx:             testOrg.owner.UserCtx,
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewUser.UserCtx,
+			ctx:             testOrg.member.UserCtx,
 			expectedResults: numCIsWithAssociatedControls,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          apiClient,
+			client:          testOrg.apiClient,
 			ctx:             context.Background(),
-			expectedResults: numCIsWithAssociatedControls, // only the ones with linked controls will be returned
+			expectedResults: numCIsWithAssociatedControls + numCIs, // api token has org level access to view all controls
 		},
 		{
 			name:            "happy path, using pat",
-			client:          patClient,
+			client:          testOrg.adminPatClient,
 			ctx:             context.Background(),
 			expectedResults: numCIs + numCIsWithAssociatedControls,
 		},
@@ -246,34 +243,34 @@ func TestQueryControlImplementations(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: ciIDs}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(testOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
 }
 
 func TestMutationCreateControlImplementation(t *testing.T) {
 	yesterday := time.Now().Add(-time.Hour * 24)
 
-	groupEditor := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	groupEditor := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add viewOnlyUser to the group with editor permissions
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupEditor.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupEditor.ID, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	numControls := 2
 	controlIDs := []string{}
 	for range numControls {
 		// create controls where the groupEditor has editor permissions
-		control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: groupEditor.ID}).MustNew(testUser1.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: groupEditor.ID}).MustNew(sharedTestUser1.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
 	// create one control without group permissions
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	allControlIDs := append(controlIDs, control.ID)
 
 	numSubcontrols := 2
 	subcontrolIDs := []string{}
 	for range numSubcontrols {
-		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: controlIDs[0]}).MustNew(testUser1.UserCtx, t)
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: controlIDs[0]}).MustNew(sharedTestUser1.UserCtx, t)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 	}
 
@@ -290,7 +287,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				// there are no required fields in the model, you can create a blank implementation
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -305,13 +302,13 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				SubcontrolIDs:      subcontrolIDs,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateControlImplementationInput{
 				Details: lo.ToPtr(gofakeit.Paragraph()),
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -330,7 +327,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				Details: lo.ToPtr(gofakeit.Paragraph()),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -340,7 +337,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				ControlIDs: controlIDs,
 			},
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "user not authorized, not enough permissions to one of the parent controls",
@@ -349,7 +346,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				ControlIDs: allControlIDs,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -359,7 +356,7 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				ControlIDs: controlIDs,
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -434,42 +431,42 @@ func TestMutationCreateControlImplementation(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateControlImplementation.ControlImplementation.Subcontrols.Edges, 0))
 			}
 
-			(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: resp.CreateControlImplementation.ControlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: resp.CreateControlImplementation.ControlImplementation.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: allControlIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: allControlIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateControlImplementation(t *testing.T) {
-	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	yesterday := time.Now().Add(-time.Hour * 24)
 
-	groupEditor := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	groupEditor := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add viewOnlyUser to the group with editor permissions
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupEditor.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	(&GroupMemberBuilder{client: suite.client, GroupID: groupEditor.ID, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	numControls := 2
 	controlIDs := []string{}
 	for range numControls {
 		// create controls where the groupEditor has editor permissions
-		control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: groupEditor.ID}).MustNew(testUser1.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, ControlEditorGroupID: groupEditor.ID}).MustNew(sharedTestUser1.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
 	// create one control without group permissions
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	numSubcontrols := 3
 	subcontrolIDs := []string{}
 	for range numSubcontrols {
-		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: controlIDs[0]}).MustNew(testUser1.UserCtx, t)
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: controlIDs[0]}).MustNew(sharedTestUser1.UserCtx, t)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 	}
 
@@ -488,7 +485,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -521,7 +518,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "happy path remove control IDs",
@@ -530,7 +527,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "no longer allowed because previous request removed control IDs the user has access to ",
@@ -539,7 +536,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:     controlImplementation1.ID,
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions, not found",
@@ -548,7 +545,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:          controlImplementation2.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -561,7 +558,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:     controlImplementation2.ID,
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "update still not allowed, not enough permissions, no edit permissions to control either",
@@ -570,7 +567,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:          controlImplementation2.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -580,7 +577,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			},
 			id:          controlImplementation1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -641,16 +638,16 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: []string{controlImplementation1.ID, controlImplementation2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupEditor.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteControlImplementation(t *testing.T) {
 	// create controlImplementations to be deleted
-	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	controlImplementation2 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -663,20 +660,20 @@ func TestMutationDeleteControlImplementation(t *testing.T) {
 			name:        "not authorized, delete",
 			idToDelete:  controlImplementation1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: controlImplementation1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  controlImplementation1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -689,7 +686,7 @@ func TestMutationDeleteControlImplementation(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
