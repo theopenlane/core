@@ -10915,18 +10915,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
-		"email_branding_creators",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
-			Bidi:    false,
-		},
-		"Organization",
-		"Group",
-	)
-	graph.MustAddE(
 		"email_template_creators",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -35755,20 +35743,6 @@ func (f *OrganizationFilter) WhereHasDiscussionCreators() {
 // WhereHasDiscussionCreatorsWith applies a predicate to check if query has an edge discussion_creators with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasDiscussionCreatorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("discussion_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasEmailBrandingCreators applies a predicate to check if query has an edge email_branding_creators.
-func (f *OrganizationFilter) WhereHasEmailBrandingCreators() {
-	f.Where(entql.HasEdge("email_branding_creators"))
-}
-
-// WhereHasEmailBrandingCreatorsWith applies a predicate to check if query has an edge email_branding_creators with a given conditions (other predicates).
-func (f *OrganizationFilter) WhereHasEmailBrandingCreatorsWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("email_branding_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

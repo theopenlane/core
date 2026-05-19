@@ -2412,10 +2412,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
-}, "email_branding_creators": {
-	ObjectType:      "group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
 }, "email_template_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,

@@ -20775,25 +20775,6 @@ func (c *OrganizationClient) QueryDiscussionCreators(_m *Organization) *GroupQue
 	return query
 }
 
-// QueryEmailBrandingCreators queries the email_branding_creators edge of a Organization.
-func (c *OrganizationClient) QueryEmailBrandingCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailBrandingCreatorsTable, organization.EmailBrandingCreatorsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryEmailTemplateCreators queries the email_template_creators edge of a Organization.
 func (c *OrganizationClient) QueryEmailTemplateCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()

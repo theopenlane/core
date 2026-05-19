@@ -105,12 +105,6 @@ extend type organization
     define discussion_creator: [group#member]
     define can_create_discussion: can_edit or can_edit_discussion or discussion_creator or auditor
 
-    define can_view_email_branding: [service, user, group#member] or can_edit_email_branding or can_manage_campaigns or full_access
-    define can_edit_email_branding: [service, user, group#member] or can_delete_email_branding or can_manage_campaigns or full_access
-    define can_delete_email_branding: [service, user, group#member] or can_manage_campaigns or full_access
-    define email_branding_creator: [group#member]
-    define can_create_email_branding: can_edit or can_edit_email_branding or email_branding_creator or can_manage_campaigns
-
     define can_view_email_template: [service, user, group#member] or can_edit_email_template or can_manage_campaigns or full_access
     define can_edit_email_template: [service, user, group#member] or can_delete_email_template or can_manage_campaigns or full_access
     define can_delete_email_template: [service, user, group#member] or can_manage_campaigns or full_access

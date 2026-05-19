@@ -537,21 +537,6 @@ func (_c *OrganizationCreate) AddDiscussionCreators(v ...*Group) *OrganizationCr
 	return _c.AddDiscussionCreatorIDs(ids...)
 }
 
-// AddEmailBrandingCreatorIDs adds the "email_branding_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddEmailBrandingCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddEmailBrandingCreatorIDs(ids...)
-	return _c
-}
-
-// AddEmailBrandingCreators adds the "email_branding_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddEmailBrandingCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddEmailBrandingCreatorIDs(ids...)
-}
-
 // AddEmailTemplateCreatorIDs adds the "email_template_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddEmailTemplateCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddEmailTemplateCreatorIDs(ids...)
@@ -3290,23 +3275,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.DiscussionCreatorsTable,
 			Columns: []string{organization.DiscussionCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.EmailBrandingCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

@@ -531,21 +531,6 @@ func (_u *OrganizationUpdate) AddDiscussionCreators(v ...*Group) *OrganizationUp
 	return _u.AddDiscussionCreatorIDs(ids...)
 }
 
-// AddEmailBrandingCreatorIDs adds the "email_branding_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddEmailBrandingCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddEmailBrandingCreatorIDs(ids...)
-	return _u
-}
-
-// AddEmailBrandingCreators adds the "email_branding_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddEmailBrandingCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingCreatorIDs(ids...)
-}
-
 // AddEmailTemplateCreatorIDs adds the "email_template_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddEmailTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddEmailTemplateCreatorIDs(ids...)
@@ -3125,27 +3110,6 @@ func (_u *OrganizationUpdate) RemoveDiscussionCreators(v ...*Group) *Organizatio
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDiscussionCreatorIDs(ids...)
-}
-
-// ClearEmailBrandingCreators clears all "email_branding_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearEmailBrandingCreators() *OrganizationUpdate {
-	_u.mutation.ClearEmailBrandingCreators()
-	return _u
-}
-
-// RemoveEmailBrandingCreatorIDs removes the "email_branding_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveEmailBrandingCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveEmailBrandingCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBrandingCreators removes "email_branding_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveEmailBrandingCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingCreatorIDs(ids...)
 }
 
 // ClearEmailTemplateCreators clears all "email_template_creators" edges to the Group entity.
@@ -7093,54 +7057,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.DiscussionCreatorsTable,
 			Columns: []string{organization.DiscussionCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -14920,21 +14836,6 @@ func (_u *OrganizationUpdateOne) AddDiscussionCreators(v ...*Group) *Organizatio
 	return _u.AddDiscussionCreatorIDs(ids...)
 }
 
-// AddEmailBrandingCreatorIDs adds the "email_branding_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddEmailBrandingCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddEmailBrandingCreatorIDs(ids...)
-	return _u
-}
-
-// AddEmailBrandingCreators adds the "email_branding_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddEmailBrandingCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddEmailBrandingCreatorIDs(ids...)
-}
-
 // AddEmailTemplateCreatorIDs adds the "email_template_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddEmailTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddEmailTemplateCreatorIDs(ids...)
@@ -17514,27 +17415,6 @@ func (_u *OrganizationUpdateOne) RemoveDiscussionCreators(v ...*Group) *Organiza
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDiscussionCreatorIDs(ids...)
-}
-
-// ClearEmailBrandingCreators clears all "email_branding_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearEmailBrandingCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearEmailBrandingCreators()
-	return _u
-}
-
-// RemoveEmailBrandingCreatorIDs removes the "email_branding_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveEmailBrandingCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveEmailBrandingCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveEmailBrandingCreators removes "email_branding_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveEmailBrandingCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveEmailBrandingCreatorIDs(ids...)
 }
 
 // ClearEmailTemplateCreators clears all "email_template_creators" edges to the Group entity.
@@ -21512,54 +21392,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.DiscussionCreatorsTable,
 			Columns: []string{organization.DiscussionCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.EmailBrandingCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedEmailBrandingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EmailBrandingCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.EmailBrandingCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.EmailBrandingCreatorsTable,
-			Columns: []string{organization.EmailBrandingCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

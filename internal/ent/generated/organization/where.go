@@ -1494,35 +1494,6 @@ func HasDiscussionCreatorsWith(preds ...predicate.Group) predicate.Organization 
 	})
 }
 
-// HasEmailBrandingCreators applies the HasEdge predicate on the "email_branding_creators" edge.
-func HasEmailBrandingCreators() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EmailBrandingCreatorsTable, EmailBrandingCreatorsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasEmailBrandingCreatorsWith applies the HasEdge predicate on the "email_branding_creators" edge with a given conditions (other predicates).
-func HasEmailBrandingCreatorsWith(preds ...predicate.Group) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newEmailBrandingCreatorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasEmailTemplateCreators applies the HasEdge predicate on the "email_template_creators" edge.
 func HasEmailTemplateCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

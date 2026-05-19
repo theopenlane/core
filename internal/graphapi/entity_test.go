@@ -316,7 +316,7 @@ func TestMutationCreateEntity(t *testing.T) {
 }
 
 func TestMutationCreateEntityEnrichment(t *testing.T) {
-	systemCtx := setContext(systemAdminUser.UserCtx, suite.client.db)
+	systemCtx := setContext(sharedSystemAdminUser.UserCtx, suite.client.db)
 
 	name := "Enriched Vendor " + ulids.New().String()
 	description := "Seeded subprocessor description"
@@ -327,9 +327,9 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 		Name:          name,
 		Description:   description,
 		LogoRemoteURL: logoRemoteURL,
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
-	resp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+	resp, err := suite.client.api.CreateEntity(sharedTestUser1.UserCtx, testclient.CreateEntityInput{
 		Name: lo.ToPtr(strings.ToUpper(name)),
 		Tier: lo.ToPtr(enums.VendorTierStandard),
 	}, nil, nil, nil, nil, nil)
@@ -343,7 +343,7 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	userDescription := "User provided description"
 	userLogoURL := "https://example.com/requested-logo.png"
 
-	entityResp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+	entityResp, err := suite.client.api.CreateEntity(sharedTestUser1.UserCtx, testclient.CreateEntityInput{
 		Name:          lo.ToPtr(name + " entity"),
 		DisplayName:   lo.ToPtr(name),
 		Description:   lo.ToPtr(userDescription),
@@ -356,7 +356,7 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	assert.Check(t, is.Equal(userDescription, *entityResp.CreateEntity.Entity.Description))
 	assert.Check(t, is.Equal(userLogoURL, *entityResp.CreateEntity.Entity.LogoRemoteURL))
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(systemCtx, t)
 }
 
@@ -413,7 +413,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				ApprovedForUse: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "conflicting status and approved for use, approved should take precedence",

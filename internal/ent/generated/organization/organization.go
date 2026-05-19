@@ -75,8 +75,6 @@ const (
 	EdgeCustomTypeEnumCreators = "custom_type_enum_creators"
 	// EdgeDiscussionCreators holds the string denoting the discussion_creators edge name in mutations.
 	EdgeDiscussionCreators = "discussion_creators"
-	// EdgeEmailBrandingCreators holds the string denoting the email_branding_creators edge name in mutations.
-	EdgeEmailBrandingCreators = "email_branding_creators"
 	// EdgeEmailTemplateCreators holds the string denoting the email_template_creators edge name in mutations.
 	EdgeEmailTemplateCreators = "email_template_creators"
 	// EdgeEntityCreators holds the string denoting the entity_creators edge name in mutations.
@@ -478,13 +476,6 @@ const (
 	DiscussionCreatorsInverseTable = "groups"
 	// DiscussionCreatorsColumn is the table column denoting the discussion_creators relation/edge.
 	DiscussionCreatorsColumn = "organization_discussion_creators"
-	// EmailBrandingCreatorsTable is the table that holds the email_branding_creators relation/edge.
-	EmailBrandingCreatorsTable = "groups"
-	// EmailBrandingCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	EmailBrandingCreatorsInverseTable = "groups"
-	// EmailBrandingCreatorsColumn is the table column denoting the email_branding_creators relation/edge.
-	EmailBrandingCreatorsColumn = "organization_email_branding_creators"
 	// EmailTemplateCreatorsTable is the table that holds the email_template_creators relation/edge.
 	EmailTemplateCreatorsTable = "groups"
 	// EmailTemplateCreatorsInverseTable is the table name for the Group entity.
@@ -1604,7 +1595,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [86]ent.Hook
+	Hooks        [85]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1900,20 +1891,6 @@ func ByDiscussionCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByDiscussionCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDiscussionCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByEmailBrandingCreatorsCount orders the results by email_branding_creators count.
-func ByEmailBrandingCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newEmailBrandingCreatorsStep(), opts...)
-	}
-}
-
-// ByEmailBrandingCreators orders the results by email_branding_creators terms.
-func ByEmailBrandingCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEmailBrandingCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4140,13 +4117,6 @@ func newDiscussionCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DiscussionCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionCreatorsTable, DiscussionCreatorsColumn),
-	)
-}
-func newEmailBrandingCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EmailBrandingCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EmailBrandingCreatorsTable, EmailBrandingCreatorsColumn),
 	)
 }
 func newEmailTemplateCreatorsStep() *sqlgraph.Step {

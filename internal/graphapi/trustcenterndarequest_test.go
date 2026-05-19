@@ -530,21 +530,6 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	tcOrg2 := createFreshOrgWithTrustCenter(t, withNDATemplate())
 	otherTrustCenter := tcOrg2.trustCenter
 
-	ndaFile := (&FileBuilder{client: suite.client, Name: "nda.pdf"}).MustNew(tcOrg.owner.UserCtx, t)
-
-	ndaTemplate := (&TemplateBuilder{
-		client:        suite.client,
-		Kind:          enums.TemplateKindTrustCenterNda,
-		TrustCenterID: trustCenter.ID,
-		FileIDs:       []string{ndaFile.ID},
-	}).MustNew(tcOrg.owner.UserCtx, t)
-
-	otherNdaTemplate := (&TemplateBuilder{
-		client:        suite.client,
-		Kind:          enums.TemplateKindTrustCenterNda,
-		TrustCenterID: otherTrustCenter.ID,
-	}).MustNew(tcOrg2.owner.UserCtx, t)
-
 	anonEmail := gofakeit.Email()
 	anonCtx, anonUser := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
 	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)

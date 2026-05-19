@@ -489,7 +489,6 @@ var ForeignKeys = []string{
 	"organization_control_objective_creators",
 	"organization_custom_type_enum_creators",
 	"organization_discussion_creators",
-	"organization_email_branding_creators",
 	"organization_email_template_creators",
 	"organization_entity_creators",
 	"organization_entity_type_creators",

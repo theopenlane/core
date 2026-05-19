@@ -7803,6 +7803,7 @@ func (m *TrustCenterSettingMutation) CheckAccessForEdit(ctx context.Context) err
 	input, ok := gInput.(CreateTrustCenterSettingInput)
 	if ok {
 		objectID = *input.TrustCenterID
+
 	}
 
 	// check the id from the args

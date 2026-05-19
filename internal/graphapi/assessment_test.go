@@ -307,7 +307,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update tags",
