@@ -71,8 +71,8 @@ authz:
         clientsecret: ""
         issuer: ""
         scopes: ""
-    disableparentcontext: false
     enabled: true
+    enableparentcontext: false
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
     modelfile: fga/model/model.fga

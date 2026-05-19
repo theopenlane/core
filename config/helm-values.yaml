@@ -307,7 +307,7 @@ coreConfiguration:
     # -- maximum number of writes per batch in a transaction
     maxbatchwritesize: 100  # @schema type:integer; default:100
     # -- disables the automatic addition of parent context tuples
-    disableparentcontext: false  # @schema type:boolean; default:false
+    enableparentcontext: false  # @schema type:boolean
     # -- entity kind names that should not have parent context tuples added
     parentcontextskipkinds: []
     # -- relationship conditions to apply on parent context tuples per entity kind

@@ -597,8 +597,8 @@ data:
       {{- if .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       maxbatchwritesize: {{ .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.authz.disableparentcontext }}
-      disableparentcontext: {{ .Values.openlane.coreConfiguration.authz.disableparentcontext }}
+      {{- if .Values.openlane.coreConfiguration.authz.enableparentcontext }}
+      enableparentcontext: {{ .Values.openlane.coreConfiguration.authz.enableparentcontext }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.authz.parentcontextskipkinds | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}

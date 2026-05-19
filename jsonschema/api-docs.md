@@ -889,7 +889,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**modulefile**|`string`|path to the fga module file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
 |**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
-|**disableparentcontext**|`boolean`|disables the automatic addition of parent context tuples<br/>|no|
+|**enableparentcontext**|`boolean`|disables the automatic addition of parent context tuples<br/>|no|
 |[**parentcontextskipkinds**](#authzparentcontextskipkinds)|`string[]`||no|
 |[**parentcontextconditions**](#authzparentcontextconditions)|`array`||no|
 

@@ -789,7 +789,7 @@
           "type": "integer",
           "description": "maximum number of writes per batch in a transaction"
         },
-        "disableparentcontext": {
+        "enableparentcontext": {
           "type": "boolean",
           "description": "disables the automatic addition of parent context tuples"
         },
