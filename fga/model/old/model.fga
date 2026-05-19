@@ -211,9 +211,6 @@ type organization
     define sla_definition_creator: [group#member]
     define can_create_sla_definition: can_edit or sla_definition_creator
 
-    define email_branding_creator: [group#member]
-    define can_create_email_branding: can_edit or email_branding_creator
-
     define email_template_creator: [group#member]
     define can_create_email_template: can_edit or email_template_creator
 

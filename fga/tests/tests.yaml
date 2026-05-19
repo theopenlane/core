@@ -629,7 +629,6 @@ tests:
           can_create_identity_holder: false
           can_create_asset: false
           can_create_email_template: true
-          can_create_email_branding: true
           can_create_notification_template: true
           can_create_assessment: true
       - user: user:ulid-compliance-manager
