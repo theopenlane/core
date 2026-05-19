@@ -120,7 +120,7 @@ func TestQueryNarrative(t *testing.T) {
 }
 
 func TestQueryNarratives(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	nrt1 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	nrt2 := (&NarrativeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -405,7 +405,7 @@ func TestMutationUpdateNarrative(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 	narrative := (&NarrativeBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
+	// create another admin user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor/viewer permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)

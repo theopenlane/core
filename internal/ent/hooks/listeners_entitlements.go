@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/generated"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -308,7 +309,14 @@ func (inv *entitlementInvocation) reconcile() error {
 	}
 
 	if _, err := reconciler.Reconcile(inv.Context(), []string{inv.orgID}); err != nil {
-		inv.Logger().Err(err).Msg("entitlement reconciliation failed")
+		unwrapped := errors.Unwrap(err)
+		// if this is a constraint error, mark it as warn - this is common in tests and we will still have the logs
+		// in production
+		if unwrapped != nil && errors.Is(generated.ConstraintError{}, unwrapped) {
+			inv.Logger().Warn().Err(err).Msgf("entitlement reconciliation failed, organization with stripe customer id already exits")
+		} else {
+			inv.Logger().Err(err).Msg("entitlement reconciliation failed")
+		}
 
 		return err
 	}

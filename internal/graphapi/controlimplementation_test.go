@@ -17,7 +17,7 @@ import (
 )
 
 func TestQueryControlImplementation(t *testing.T) {
-	// create an controlImplementation1 to be queried using testUser1
+	// create an controlImplementation1 to be queried using sharedTestUser1
 	controlImplementation1 := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create another with associated controls in another org

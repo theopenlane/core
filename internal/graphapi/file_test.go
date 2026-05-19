@@ -14,7 +14,7 @@ import (
 )
 
 func TestQueryFile(t *testing.T) {
-	// create an Evidence to be queried using testUser1
+	// create an Evidence to be queried using sharedTestUser1
 	fileUpload := uploadFile(t, "testdata/uploads/orgs.csv")
 
 	// create control to be used in the Evidence

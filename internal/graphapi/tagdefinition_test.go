@@ -17,7 +17,7 @@ import (
 
 func TestQueryTagDefinition(t *testing.T) {
 
-	// create an tagDef to be queried using testUser1
+	// create an tagDef to be queried using sharedTestUser1
 	tagDef := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	systemTagDef := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 

@@ -255,7 +255,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 func TestMutationUpdateGroupMembers(t *testing.T) {
 	gm := (&GroupMemberBuilder{client: suite.client, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 	// add self to group as admin
-	testUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: sharedTestUser1.GroupID, UserID: sharedTestUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
+	sharedTestUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: sharedTestUser1.GroupID, UserID: sharedTestUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
 	gmCtx := auth.NewTestContextWithOrgID(gm.UserID, sharedTestUser1.OrganizationID)
 
@@ -276,7 +276,7 @@ func TestMutationUpdateGroupMembers(t *testing.T) {
 		},
 		{
 			name:          "update self from admin to member ok",
-			groupMemberID: testUser1GroupMember.ID,
+			groupMemberID: sharedTestUser1GroupMember.ID,
 			role:          enums.RoleMember,
 			client:        suite.client.api,
 			ctx:           sharedTestUser1.UserCtx,
@@ -354,7 +354,7 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 	gm3 := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add self to group as admin
-	testUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID, UserID: sharedTestUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
+	sharedTestUser1GroupMember := (&GroupMemberBuilder{client: suite.client, GroupID: group.ID, UserID: sharedTestUser1.UserInfo.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -372,7 +372,7 @@ func TestMutationDeleteGroupMembers(t *testing.T) {
 		},
 		{
 			name:       "allowed to delete self as org admin",
-			idToDelete: testUser1GroupMember.ID,
+			idToDelete: sharedTestUser1GroupMember.ID,
 			client:     suite.client.api,
 			ctx:        sharedTestUser1.UserCtx,
 		},

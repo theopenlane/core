@@ -113,7 +113,7 @@ func TestQueryControlObjective(t *testing.T) {
 }
 
 func TestQueryControlObjectives(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	co1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	co2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -395,7 +395,7 @@ func TestMutationUpdateControlObjective(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 	controlObjective := (&ControlObjectiveBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
+	// create another admin user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor/viewer permissions
 	anotherViewUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, sharedTestUser1.OrganizationID)

@@ -17,7 +17,7 @@ import (
 )
 
 func TestQueryInternalPolicy(t *testing.T) {
-	// create an InternalPolicy to be queried using testUser1
+	// create an InternalPolicy to be queried using sharedTestUser1
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// setup a blocked group with a view only user
@@ -122,7 +122,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 }
 
 func TestQueryInternalPolicies(t *testing.T) {
-	// create multiple policies to be queried using testUser1
+	// create multiple policies to be queried using sharedTestUser1
 	ip1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	ip2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -487,8 +487,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	internalPolicyAdminUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as testUser1
-	// also add them to the same group as testUser1, this should still allow them to edit the policy
+	// create a viewer user and add them to the same organization as sharedTestUser1
+	// also add them to the same group as sharedTestUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
@@ -800,7 +800,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as testUser1
+	// create another user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)

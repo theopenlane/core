@@ -515,7 +515,7 @@ type Cleanup[T DeleteExec] struct {
 //	(&Cleanup[*generated.OrganizationDeleteOne]{
 //		client: suite.client.db.Organization,
 //		ID: resp.CreateOrganization.Organization.ID}).
-//		MustDelete(testUser1.UserCtx, t)
+//		MustDelete(sharedTestUser1.UserCtx, t)
 //
 // Special handling for standards - update them to be private before deletion
 // this is to allow the system admin to delete public standards

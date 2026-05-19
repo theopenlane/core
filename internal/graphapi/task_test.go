@@ -330,18 +330,23 @@ func getFutureDate() time.Time {
 }
 
 func TestQueryTasksPaginationDueDate(t *testing.T) {
+	t.Parallel()
+
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	localTestOrg2 := suite.seedOrgOwner(t)
+
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
 	numTasks := 95
 	org1TaskIDs := []string{}
 	org2TaskIDs := []string{}
 	for range numTasks {
-		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser1.UserCtx, t)
-		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedViewOnlyUser2.UserCtx, t)
-		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedAdminUser.UserCtx, t)
+		t1 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(localTestOrg.owner.UserCtx, t)
+		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(localTestOrg.member.UserCtx, t)
+		t3 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(localTestOrg.admin.UserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
 
-		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(localTestOrg2.owner.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
@@ -362,7 +367,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			name:            "happy path, with order by due date, page 1",
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -372,7 +377,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -382,7 +387,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -392,7 +397,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -402,7 +407,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -412,7 +417,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -422,7 +427,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -432,7 +437,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -442,7 +447,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: first,
 			setCursor:       true,
 			totalCount:      95,
@@ -452,7 +457,7 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			useCursor:       true,
 			orderBy:         []*testclient.TaskOrder{{Field: testclient.TaskOrderFieldDue, Direction: testclient.OrderDirectionAsc}},
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			ctx:             localTestOrg.admin.UserCtx,
 			expectedResults: 5,
 			totalCount:      95,
 		},
@@ -508,14 +513,16 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org1TaskIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(sharedTestUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg2.owner.UserCtx, t)
 }
 
 func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
-	// create a bunch to test the pagination with different users
-	// to ensure we are paginating correctly when viewing as org admin
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+	t.Parallel()
+
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	localTestOrg2 := suite.seedOrgOwner(t)
+
 	testUser := localTestOrg.owner
 	viewOnlyUserCtx := localTestOrg.member.UserCtx
 
@@ -527,7 +534,7 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 		t2 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
 		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
 
-		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(sharedTestUser2.UserCtx, t)
+		t4 := (&TaskBuilder{client: suite.client, Due: getFutureDate()}).MustNew(localTestOrg2.owner.UserCtx, t)
 		org2TaskIDs = append(org2TaskIDs, t4.ID)
 	}
 
@@ -694,8 +701,8 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: org2TaskIDs}).MustDelete(sharedTestUser2.UserCtx, t)
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg2.owner.UserCtx, t)
 }
 
 func TestMutationCreateTask(t *testing.T) {

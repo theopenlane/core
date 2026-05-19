@@ -368,7 +368,7 @@ func TestGetAllDNSVerifications(t *testing.T) {
 			name:            "happy path - regular user sees only their verifications",
 			client:          suite.client.api,
 			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 2, // Should see only verifications owned by testUser1
+			expectedResults: 2, // Should see only verifications owned by sharedTestUser1
 		},
 		{
 			name:            "happy path - admin user sees all verifications",

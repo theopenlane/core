@@ -17,7 +17,7 @@ import (
 )
 
 func TestQueryPlatform(t *testing.T) {
-	// create an platform to be queried using testUser1
+	// create an platform to be queried using sharedTestUser1
 	platform := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Platform
@@ -84,7 +84,7 @@ func TestQueryPlatform(t *testing.T) {
 }
 
 func TestQueryPlatforms(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 

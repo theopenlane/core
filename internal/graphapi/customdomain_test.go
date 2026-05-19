@@ -574,7 +574,7 @@ func TestGetAllCustomDomains(t *testing.T) {
 			name:            "happy path - regular user sees only their domains",
 			client:          suite.client.api,
 			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 2, // Should see only domains owned by testUser1
+			expectedResults: 2, // Should see only domains owned by sharedTestUser1
 		},
 		{
 			name:            "happy path - admin user sees all domains",

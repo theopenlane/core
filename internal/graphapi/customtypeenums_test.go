@@ -16,7 +16,7 @@ import (
 
 func TestQueryCustomTypeEnum(t *testing.T) {
 
-	// create an customTypeEnum to be queried using testUser1
+	// create an customTypeEnum to be queried using sharedTestUser1
 	customTypeEnum := (&CustomTypeEnumBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	systemOwnedEnum := (&CustomTypeEnumBuilder{

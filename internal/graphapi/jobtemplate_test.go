@@ -15,7 +15,7 @@ import (
 )
 
 func TestQueryJobTemplate(t *testing.T) {
-	// create an jobTemplate to be queried using testUser1
+	// create an jobTemplate to be queried using sharedTestUser1
 	jobTemplate := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the JobTemplate
@@ -81,7 +81,7 @@ func TestQueryJobTemplate(t *testing.T) {
 }
 
 func TestQueryJobTemplates(t *testing.T) {
-	// create multiple JobTemplates to be queried using testUser1
+	// create multiple JobTemplates to be queried using sharedTestUser1
 	jobTemplate1 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	jobTemplate2 := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	jobTemplateSystem := (&JobTemplateBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)

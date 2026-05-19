@@ -210,7 +210,7 @@ func TestMutationDeleteIntegration(t *testing.T) {
 }
 
 func TestQueryIntegration(t *testing.T) {
-	// create an integration to be queried using testUser1
+	// create an integration to be queried using sharedTestUser1
 	integration := (&IntegrationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Integration
@@ -282,7 +282,7 @@ func TestQueryIntegration(t *testing.T) {
 }
 
 func TestQueryIntegrationWithSecrets(t *testing.T) {
-	// create an integration to be queried using testUser1
+	// create an integration to be queried using sharedTestUser1
 	integration := (&IntegrationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	// Create multiple secrets for OAuth tokens
 	accessToken := (&SecretBuilder{client: suite.client}).

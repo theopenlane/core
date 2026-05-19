@@ -25,6 +25,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
+var ErrOrganizationConstraintError = errors.New("duplicate key: organization with stripe customer key already exists")
+
 // Reconciler reconciles organization subscriptions with Stripe
 type Reconciler struct {
 	db     *ent.Client
@@ -229,7 +231,8 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 
 			// to anyone looking at this later and wondering why test logs have lots of error logs about
 			// pq: duplicate key value violates unique constraint - this is due to the mocked calls
-			// and can safely be ignored in tests
+			// this are now logged as warning in logs to ensure we see them in production
+			// but do not cloud up test logs
 			return fmt.Errorf("update organization stripe customer id: %w", err)
 		}
 	}

@@ -16,7 +16,7 @@ import (
 )
 
 func TestQueryMappedControl(t *testing.T) {
-	// create an mappedControl to be queried using testUser1
+	// create an mappedControl to be queried using sharedTestUser1
 	toControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	fromControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	mappedControl := (&MappedControlBuilder{client: suite.client, ToControlIDs: []string{toControl.ID}, FromControlIDs: []string{fromControl.ID}}).MustNew(sharedTestUser1.UserCtx, t)
@@ -123,7 +123,7 @@ func TestQueryMappedControl(t *testing.T) {
 }
 
 func TestQueryMappedControls(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	controlsToDelete := []*generated.Control{}
 
 	mappedControl1 := (&MappedControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)

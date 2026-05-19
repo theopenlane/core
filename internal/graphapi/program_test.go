@@ -626,15 +626,15 @@ func TestMutationUpdateProgram(t *testing.T) {
 	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as testUser1
+	// create another admin user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherAdminUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)
 
 	gm1 := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as testUser1
-	// also add them to the same group as testUser1, this should still allow them to edit the policy
+	// create a viewer user and add them to the same organization as sharedTestUser1
+	// also add them to the same group as sharedTestUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
@@ -645,7 +645,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create a view only user and add them to the same organization as testUser1
+	// create a view only user and add them to the same organization as sharedTestUser1
 	meowViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &meowViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
 

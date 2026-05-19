@@ -20,7 +20,7 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	emptyGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// Add testUser1 to both approver and delegate groups (to test both paths)
+	// Add sharedTestUser1 to both approver and delegate groups (to test both paths)
 	(&GroupMemberBuilder{client: suite.client, UserID: sharedTestUser1.ID, GroupID: approverGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: sharedTestUser1.ID, GroupID: delegateGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -57,7 +57,7 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 			name:            "fail: create with APPROVED status but user not in approver group",
 			client:          suite.client.api,
 			userContext:     sharedTestUser1.UserCtx,
-			approverID:      &emptyGroup.ID, // testUser1 is NOT in emptyGroup
+			approverID:      &emptyGroup.ID, // sharedTestUser1 is NOT in emptyGroup
 			status:          enums.DocumentApproved,
 			requireApproval: true,
 			expectError:     true,
@@ -67,7 +67,7 @@ func TestCreateInternalPolicyStatusApproval(t *testing.T) {
 			name:            "happy path: create with APPROVED status but user not in approver group but approval not required",
 			client:          suite.client.api,
 			userContext:     sharedTestUser1.UserCtx,
-			approverID:      &emptyGroup.ID, // testUser1 is NOT in emptyGroup
+			approverID:      &emptyGroup.ID, // sharedTestUser1 is NOT in emptyGroup
 			status:          enums.DocumentApproved,
 			requireApproval: false,
 			expectError:     false,
@@ -141,7 +141,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	emptyGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// Add testUser1 to both approver and delegate groups
+	// Add sharedTestUser1 to both approver and delegate groups
 	(&GroupMemberBuilder{client: suite.client, UserID: sharedTestUser1.ID, GroupID: approverGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 	(&GroupMemberBuilder{client: suite.client, UserID: sharedTestUser1.ID, GroupID: delegateGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -188,7 +188,7 @@ func TestUpdateInternalPolicyStatusApproval(t *testing.T) {
 		{
 			name:          "fail: update to APPROVED status but user not in approver group",
 			client:        suite.client.api,
-			policyID:      policy4.ID, // policy4 has emptyGroup, testUser1 is not a member
+			policyID:      policy4.ID, // policy4 has emptyGroup, sharedTestUser1 is not a member
 			userContext:   sharedTestUser1.UserCtx,
 			newStatus:     lo.ToPtr(enums.DocumentApproved),
 			expectError:   true,

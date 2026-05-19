@@ -25,7 +25,7 @@ func TestQueryEvidence(t *testing.T) {
 	(&ProgramMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
 
 	// create an Evidence to be queried using adminUser
-	// org owner (testUser1) should automatically have access to the Evidence
+	// org owner (sharedTestUser1) should automatically have access to the Evidence
 	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
 
 	// create a control to be queried using adminUser that access is granted via the control

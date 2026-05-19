@@ -263,7 +263,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 		// 		JobTemplateID: jobSystemOwned.ID,
 		// 	},
 		// 	client: suite.client.api,
-		// 	ctx:    testUser1.UserCtx,
+		// 	ctx:    sharedTestUser1.UserCtx,
 		// },
 		{
 			name: "happy path, all input",

@@ -153,7 +153,7 @@ func TestQueryControl(t *testing.T) {
 }
 
 func TestQueryControls(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
 	for range controlsToCreate { // set to 11 to ensure pagination is tested
@@ -1542,7 +1542,7 @@ func TestMutationUpdateControl(t *testing.T) {
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as testUser1
+	// create another user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
@@ -2709,7 +2709,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 	// add adminUser to the program so that they can update the control
 	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as testUser1
+	// create another user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)

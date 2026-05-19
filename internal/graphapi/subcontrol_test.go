@@ -128,7 +128,7 @@ func TestQuerySubcontrol(t *testing.T) {
 }
 
 func TestQuerySubcontrols(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	sc1 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	sc2 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 

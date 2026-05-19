@@ -148,10 +148,10 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	testUser1ProgramMember := ""
+	sharedTestUser1ProgramMember := ""
 	for _, pm := range programMembers.ProgramMemberships.Edges {
 		if pm.Node.UserID == sharedTestUser1.UserInfo.ID {
-			testUser1ProgramMember = pm.Node.ID
+			sharedTestUser1ProgramMember = pm.Node.ID
 			break
 		}
 	}
@@ -176,14 +176,14 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 		},
 		{
 			name:            "update self from admin to member allowed because user is org owner",
-			programMemberID: testUser1ProgramMember,
+			programMemberID: sharedTestUser1ProgramMember,
 			role:            enums.RoleMember,
 			client:          suite.client.api,
 			ctx:             sharedTestUser1.UserCtx,
 		},
 		{
 			name:            "update self from member to admin of self not allowed",
-			programMemberID: testUser1ProgramMember,
+			programMemberID: sharedTestUser1ProgramMember,
 			role:            enums.RoleAdmin,
 			client:          suite.client.api,
 			ctx:             sharedAdminUser.UserCtx,

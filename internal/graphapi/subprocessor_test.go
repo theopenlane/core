@@ -493,13 +493,13 @@ func TestGetAllSubprocessors(t *testing.T) {
 			name:            "happy path - regular user sees only their subprocessors",
 			client:          suite.client.api,
 			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 3, // Should see only subprocessors owned by testUser1
+			expectedResults: 3, // Should see only subprocessors owned by sharedTestUser1
 		},
 		{
 			name:            "happy path - admin user sees all subprocessors",
 			client:          suite.client.api,
 			ctx:             sharedAdminUser.UserCtx,
-			expectedResults: 3, // Should see all owned by testUser1
+			expectedResults: 3, // Should see all owned by sharedTestUser1
 		},
 		{
 			name:            "happy path - view only user",

@@ -226,7 +226,7 @@ func TestQueryGroups(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// check groups available to admin user (private group created by testUser1 should not be returned)
+		// check groups available to admin user (private group created by sharedTestUser1 should not be returned)
 		resp, err = suite.client.api.GetAllGroups(users.admin.UserCtx)
 
 		assert.NilError(t, err)
@@ -236,7 +236,7 @@ func TestQueryGroups(t *testing.T) {
 			assert.Assert(t, v.Node.ID != privateGroup.ID)
 		}
 
-		// check groups available to admin user (private group created by testUser1 should not be returned for org member)
+		// check groups available to admin user (private group created by sharedTestUser1 should not be returned for org member)
 		resp, err = suite.client.api.GetAllGroups(users.member.UserCtx)
 
 		assert.NilError(t, err)

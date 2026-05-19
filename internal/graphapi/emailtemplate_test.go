@@ -25,7 +25,7 @@ func validEmailTemplateDefaults() map[string]any {
 }
 
 func TestQueryEmailTemplate(t *testing.T) {
-	// create an email template to be queried using testUser1
+	// create an email template to be queried using sharedTestUser1
 	emailTemplate := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the email template
@@ -92,7 +92,7 @@ func TestQueryEmailTemplate(t *testing.T) {
 }
 
 func TestQueryEmailTemplates(t *testing.T) {
-	// create multiple email templates to be queried using testUser1
+	// create multiple email templates to be queried using sharedTestUser1
 	emailTemplate1 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	emailTemplate2 := (&EmailTemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 

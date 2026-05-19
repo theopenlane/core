@@ -16,7 +16,7 @@ import (
 )
 
 func TestQueryTemplate(t *testing.T) {
-	// create an template to be queried using testUser1
+	// create an template to be queried using sharedTestUser1
 	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create a system admin root template

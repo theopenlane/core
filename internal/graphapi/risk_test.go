@@ -136,7 +136,7 @@ func TestQueryRisk(t *testing.T) {
 }
 
 func TestQueryRisks(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+	// create multiple objects to be queried using sharedTestUser1
 	risk1 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	risk2 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -499,7 +499,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 	risk := (&RiskBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another viewer user and add them to the same organization and group as testUser1
+	// create another viewer user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor/viewer permissions
 	anotherViewUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, sharedTestUser1.OrganizationID)

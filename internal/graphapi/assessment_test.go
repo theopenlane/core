@@ -105,7 +105,7 @@ func TestQueryAssessments(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// should return at least the 3 assessments created by testUser1's organization
+		// should return at least the 3 assessments created by sharedTestUser1's organization
 		assert.Check(t, resp.Assessments.TotalCount >= 3)
 	})
 

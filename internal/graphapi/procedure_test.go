@@ -19,7 +19,7 @@ import (
 )
 
 func TestQueryProcedure(t *testing.T) {
-	// create an Procedure to be queried using testUser1
+	// create an Procedure to be queried using sharedTestUser1
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
@@ -96,7 +96,7 @@ func TestQueryProcedure(t *testing.T) {
 }
 
 func TestQueryProcedures(t *testing.T) {
-	// create multiple Procedures to be queried using testUser1
+	// create multiple Procedures to be queried using sharedTestUser1
 	p1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	p2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
@@ -356,8 +356,8 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	// create procedure to be updated
 	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as testUser1
-	// also add them to the same group as testUser1, this should still allow them to edit the procedure
+	// create a viewer user and add them to the same organization as sharedTestUser1
+	// also add them to the same group as sharedTestUser1, this should still allow them to edit the procedure
 	// despite not not being an organization admin
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
 	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)

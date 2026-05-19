@@ -23,7 +23,7 @@ func cleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 	requireNoError(t, err)
 }
 
-// cleanupTrustCenterData for the testUser1 context
+// cleanupTrustCenterData for the sharedTestUser1 context
 func cleanupTrustCenterData(t *testing.T) {
 	t.Helper()
 	cleanupTrustCenterDataWithContext(sharedTestUser1.UserCtx, t)
