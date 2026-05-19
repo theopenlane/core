@@ -82,8 +82,6 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
-		fgatest.WithSkipParentContextKinds("organization", "user", "system"),
-		fgatest.WithParentSkipConditions(fgax.ParentContextConditionConfig{Kind: "group", Name: "public_group", Context: map[string]any{"public": false}}),
 	)
 
 	ctx := context.Background()

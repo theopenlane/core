@@ -235,8 +235,8 @@ func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller)
 		return true
 	}
 
-	// skip for org owners, they might not have explicit access to the object, but they can view all objects in the org
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+	// skip for org owners + super admins (full_access), they might not have explicit access to the object, but they can view all objects in the org
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); errors.Is(err, privacy.Allow) {
 		return true
 	}
 

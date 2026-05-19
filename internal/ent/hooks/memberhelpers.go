@@ -50,7 +50,7 @@ func HookMembershipSelf(table string) ent.Hook {
 			}
 
 			// if the user is an org owner, skip the check
-			if caller.OrganizationRole == auth.OwnerRole {
+			if caller.OrganizationRole == auth.OwnerRole || caller.OrganizationRole == auth.SuperAdminRole {
 				// ensure this is not an org membership mutation, owners cannot update their own membership
 				// in the organization, it must be done via a transfer
 				if m.Type() != generated.TypeOrgMembership {
@@ -61,7 +61,7 @@ func HookMembershipSelf(table string) ent.Hook {
 			// fallback to fgax check for owner relation access if org role is not available
 			// in the context
 			if caller.OrganizationRole == "" {
-				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+				if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); errors.Is(err, privacy.Allow) {
 					// ensure this is not an org membership mutation, owners cannot update their own membership
 					// in the organization, it must be done via a transfer
 					if m.Type() != generated.TypeOrgMembership {

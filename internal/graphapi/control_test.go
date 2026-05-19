@@ -21,7 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/testutils"
 )
 
-func TestQueryControl(t *testing.T) {
+func TestQuerySingleControl(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control
@@ -152,7 +152,7 @@ func TestQueryControl(t *testing.T) {
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
-func TestQueryControls(t *testing.T) {
+func TestQueryAllControls(t *testing.T) {
 	// create multiple objects to be queried using sharedTestUser1
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
@@ -281,7 +281,7 @@ func TestQueryControls(t *testing.T) {
 	cleanupOrganizationDataWithContext(userAnotherOrg.UserCtx, t)
 }
 
-func TestQueryControlsMultipleOrgCheck(t *testing.T) {
+func TestMultipleOrgCheckForQueryControls(t *testing.T) {
 	t.Parallel()
 	// test to make sure we don't get cross org results back even if the user technically has access to them
 	localTestUser := suite.seedOrgOwner(t)

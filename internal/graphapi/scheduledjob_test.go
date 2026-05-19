@@ -166,7 +166,7 @@ func TestScheduledJobs(t *testing.T) {
 			},
 		},
 		{
-			name:   "create scheduled job with runner by view only user should fail",
+			name:   "create scheduled job with runner by view only user should not be allowed",
 			ctx:    sharedViewOnlyUser.UserCtx,
 			client: suite.client.api,
 			jobBuilder: ScheduledJobBuilder{

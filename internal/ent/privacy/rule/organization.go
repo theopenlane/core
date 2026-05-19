@@ -160,7 +160,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	// deny if it was a mutation is not allowed
 	// we check owner relation to skip group level checks, but this ends up being a deny for non-owners
 	// and creates noise in the logs; we want to to log at debug level when the check is owners only and info otherwise
-	if relation == fgax.OwnerRelation {
+	if relation == fgax.OwnerRelation || relation == fgax.FullAccessRelation {
 		logx.FromContext(ctx).Debug().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by access for user in organization")
 	} else {
 		logx.FromContext(ctx).Info().Str("relation", relation).Str("subject_id", caller.SubjectID).Str("email", caller.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(caller.AuthenticationType)).Msg("request denied by ownership access for user in organization")

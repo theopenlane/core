@@ -16,7 +16,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v84"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -112,8 +111,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
-		fgatest.WithSkipParentContextKinds("organization", "user", "system"),
-		fgatest.WithParentSkipConditions(fgax.ParentContextConditionConfig{Kind: "group", Name: "public_group", Context: map[string]any{"public": false}}),
 	)
 
 	fgaClient, err := s.ofgaTF.NewFgaClient(s.ctx)

@@ -373,7 +373,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:handlers']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-handlers.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-handlers.out -tags test
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
@@ -382,7 +382,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:no-api', 'testsum:ci:no-graph', 'go:testsum:ci:no-graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers)" --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-api.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers)" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -coverprofile=coverage-no-api.out -tags test
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum

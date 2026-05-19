@@ -120,7 +120,6 @@ type trust_center_doc
     # # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit from parent
     define parent_viewer: can_view from parent
-    define parent_context: [organization] # unused, but things wfail without
     define parent: [trust_center]
 
     # in order to allow anon users to get the doc name, but not the file without the nda signed need a separate definition

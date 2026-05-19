@@ -54,7 +54,7 @@ import (
 // 	return OBJECT
 // }
 
-func TestQueryOBJECT(t *testing.T) {
+func TestQuerySingleOBJECT(t *testing.T) {
 
 	// create an OBJECT to be queried using sharedTestUser1
 	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
@@ -124,7 +124,7 @@ func TestQueryOBJECT(t *testing.T) {
 	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: OBJECT.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
-func TestQueryOBJECTs(t *testing.T) {
+func TestQueryAllOBJECTs(t *testing.T) {
 	// create multiple objects to be queried using sharedTestUser1
 	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)

@@ -960,7 +960,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 	ctx = setContext(ctx, e.client.db)
 
 	if e.Name == "" {
-		e.Name = gofakeit.AppName()
+		e.Name = gofakeit.LoremIpsumWord() + ulids.New().String()
 	}
 
 	if e.DisplayName == "" {

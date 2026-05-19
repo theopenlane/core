@@ -761,7 +761,7 @@ func TestMutationCreateTask(t *testing.T) {
 			ctx:    testUser.UserCtx,
 		},
 		{
-			name: "create with assignee not in org should fail",
+			name: "create with assignee not in org should not allowed",
 			request: testclient.CreateTaskInput{
 				Title:      "test-task",
 				AssigneeID: &sharedTestUser2.ID,
@@ -1018,7 +1018,7 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:     context.Background(),
 		},
 		{
-			name:   "update assignee to user not in org should fail",
+			name:   "update assignee to user not in org should now allowed",
 			taskID: task.ID,
 			request: &testclient.UpdateTaskInput{
 				AssigneeID: lo.ToPtr(sharedTestUser2.ID),

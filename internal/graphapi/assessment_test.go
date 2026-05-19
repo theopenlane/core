@@ -478,7 +478,7 @@ func TestMutationDeleteAssessment(t *testing.T) {
 func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 	assessment1 := (&AssessmentBuilder{client: suite.client, Name: "Duplicate Test"}).MustNew(sharedTestUser1.UserCtx, t)
 
-	t.Run("duplicate name in same org should fail", func(t *testing.T) {
+	t.Run("duplicate name in same org should not be allowed", func(t *testing.T) {
 		template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 		request := testclient.CreateAssessmentInput{
