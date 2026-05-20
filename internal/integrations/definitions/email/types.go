@@ -43,25 +43,25 @@ const (
 // are overridable per-send via UserInput or per-operation Config functions
 type RuntimeEmailConfig struct {
 	// TestDir is the directory where dev-mode email files are written
-	TestDir string `json:"testDir,omitempty" koanf:"testdir" jsonschema:"description=Directory for dev-mode email output" default:"fixtures/email"`
+	TestDir string `json:"testdir,omitempty" koanf:"testdir" jsonschema:"description=Directory for dev-mode email output" default:"fixtures/email"`
 	// ResendSecret is the Resend webhook signing secret for verifying inbound delivery events
-	ResendSecret string `json:"resendSecret,omitempty" koanf:"resendsecret" jsonschema:"description=Resend webhook signing secret" sensitive:"true"`
+	ResendSecret string `json:"resendsecret,omitempty" koanf:"resendsecret" jsonschema:"description=Resend webhook signing secret" sensitive:"true"`
 	// APIKey is the email provider API key
-	APIKey string `json:"apiKey" koanf:"apikey" jsonschema:"required,description=Email provider API key" sensitive:"true"`
+	APIKey string `json:"apikey" koanf:"apikey" jsonschema:"required,description=Email provider API key" sensitive:"true"`
 	// Provider is the email service provider name (resend, sendgrid, postmark)
 	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,description=Email service provider" default:"resend"`
 	// FromEmail is the default sender email address
-	FromEmail string `json:"fromEmail" koanf:"fromemail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
+	FromEmail string `json:"fromemail" koanf:"fromemail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
 	// SupportEmail is the support contact email address
-	SupportEmail string `json:"supportEmail" koanf:"supportemail" jsonschema:"description=Support contact email address" default:"support@theopenlane.io"`
+	SupportEmail string `json:"supportemail" koanf:"supportemail" jsonschema:"description=Support contact email address" default:"support@theopenlane.io"`
 	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
-	QuestionnaireEmail string `json:"questionnaireEmail,omitempty" koanf:"questionnaireemail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
+	QuestionnaireEmail string `json:"questionnaireemail,omitempty" koanf:"questionnaireemail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
 	// RootURL is the root application URL used to construct email action links
-	RootURL string `json:"rootURL" koanf:"rooturl" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
+	RootURL string `json:"rooturl" koanf:"rooturl" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
-	ProductURL string `json:"productURL" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
+	ProductURL string `json:"producturl" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
-	DocsURL string `json:"docsURL" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
+	DocsURL string `json:"docsurl" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
