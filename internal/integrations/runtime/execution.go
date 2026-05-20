@@ -10,6 +10,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -17,6 +19,7 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,
@@ -380,6 +383,161 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	return response, 0, nil
+}
+
+// SeedReconcileJobs ensures every connected integration with reconcilable operations
+// has an active River job. It is intended to be called once at startup to recover
+// reconcile cycles that were lost due to job deletion or a queue flush
+func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
+	definitionIDs := r.reconcilableDefinitionIDs()
+	if len(definitionIDs) == 0 {
+		return nil
+	}
+
+	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
+		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	})
+
+	installations, err := r.DB().Integration.Query().
+		Where(
+			integration.StatusEQ(enums.IntegrationStatusConnected),
+			integration.DefinitionIDIn(definitionIDs...),
+		).
+		All(systemCtx)
+	if err != nil {
+		return err
+	}
+
+	var errs []error
+
+	logx.FromContext(ctx).Debug().Int("count", len(installations)).Msg("installations found to check for reconciliation")
+
+	for _, inst := range installations {
+		if err := r.seedReconcileJobsForInstallation(systemCtx, inst); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
+	return errors.Join(errs...)
+}
+
+// SeedReconcileJobsForInstallation checks every reconcilable operation on the given
+// installation and emits a ReconcileEnvelope for any that do not have an active River job
+func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
+	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
+		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	})
+
+	return r.seedReconcileJobsForInstallation(systemCtx, inst)
+}
+
+// seedReconcileJobsForInstallation is the shared implementation used by both
+// SeedReconcileJobs and SeedReconcileJobsForInstallation
+func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
+	def, ok := r.Registry().Definition(inst.DefinitionID)
+	if !ok {
+		return nil
+	}
+
+	var errs []error
+
+	for _, op := range def.Operations {
+		if !op.Policy.Reconcile {
+			continue
+		}
+
+		if op.Disabled != nil && op.Disabled(inst.Config.ClientConfig) {
+			continue
+		}
+
+		fragment, err := reconcileMetadataFragment(inst.ID, op.Name)
+		if err != nil {
+			errs = append(errs, err)
+			continue
+		}
+
+		active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to check for active reconcile job")
+			errs = append(errs, err)
+			continue
+		}
+
+		if active {
+			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("reconcile job already active, skipping seed")
+			continue
+		}
+
+		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("seeding missing reconcile job")
+
+		metadata := types.ExecutionMetadata{
+			OwnerID:       inst.OwnerID,
+			IntegrationID: inst.ID,
+			DefinitionID:  inst.DefinitionID,
+			Operation:     op.Name,
+			RunType:       enums.IntegrationRunTypeReconcile,
+		}
+
+		receipt := r.Gala().EmitWithHeaders(
+			types.WithExecutionMetadata(ctx, metadata),
+			operations.ReconcileTopic,
+			operations.ReconcileEnvelope{ExecutionMetadata: metadata},
+			gala.Headers{Properties: metadata.Properties()},
+		)
+		if receipt.Err != nil {
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to seed reconcile job")
+			errs = append(errs, receipt.Err)
+		}
+	}
+
+	return errors.Join(errs...)
+}
+
+// reconcilableDefinitionIDs returns the IDs of all registered definitions that
+// have at least one operation with Policy.Reconcile set
+func (r *Runtime) reconcilableDefinitionIDs() []string {
+	var ids []string
+
+	for _, spec := range r.Registry().Catalog() {
+		def, ok := r.Registry().Definition(spec.ID)
+		if !ok {
+			continue
+		}
+
+		if !def.Active {
+			continue
+		}
+
+		for _, op := range def.Operations {
+			if op.Policy.Reconcile {
+				ids = append(ids, spec.ID)
+				break
+			}
+		}
+	}
+
+	return ids
+}
+
+// reconcileMetadataFragment builds the JSONB containment fragment used to query
+// River for an active reconcile job for the given integration and operation
+func reconcileMetadataFragment(integrationID, operationName string) (string, error) {
+	fragment := struct {
+		Properties struct {
+			InstallationID string `json:"installationId"`
+			Operation      string `json:"operation"`
+		} `json:"properties"`
+	}{}
+
+	fragment.Properties.InstallationID = integrationID
+	fragment.Properties.Operation = operationName
+
+	b, err := json.Marshal(fragment)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

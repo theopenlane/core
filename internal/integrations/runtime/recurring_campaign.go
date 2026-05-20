@@ -20,8 +20,19 @@ import (
 )
 
 // SeedRecurringCampaigns starts the durable recurring campaign polling loop
-// after runtime listeners have been registered.
+// after runtime listeners have been registered. It is a no-op when an active job
+// already exists, preventing duplicate loops from accumulating across restarts
 func (r *Runtime) SeedRecurringCampaigns(ctx context.Context) error {
+	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.RecurringCampaignTopic)
+	if err != nil {
+		return err
+	}
+
+	if active {
+		logx.FromContext(ctx).Debug().Msg("recurring campaign poller already active, skipping seed")
+		return nil
+	}
+
 	receipt := r.Gala().EmitWithHeaders(ctx, operations.RecurringCampaignTopic, operations.RecurringCampaignEnvelope{}, gala.Headers{
 		Tags: []string{"campaigns"},
 	})

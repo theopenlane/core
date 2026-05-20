@@ -116,6 +116,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 			// not failing the request at this point since the operation itself succeeded and this is just a best-effort update to the integration record
 		}
 
+		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(queueCtx, integrationRef); err != nil {
+			logx.FromContext(requestCtx).Warn().Err(err).Str("integrationID", integrationRef.ID).Msg("failed to seed missing reconcile jobs during health check")
+		}
+
 		return h.Success(ctx, RunIntegrationOperationResponse{
 			Reply:     rout.Reply{Success: true},
 			Provider:  def.ID,

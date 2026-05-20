@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
@@ -506,6 +507,44 @@ const (
 	durableWaitPollInterval = 50 * time.Millisecond
 	durableIdleThreshold    = 3
 )
+
+// HasActiveJobForTopic reports whether at least one River job for the given topic
+// exists in an active state (available, scheduled, running, or retryable).
+// Returns false without error when Gala is not in durable mode
+func (g *Gala) HasActiveJobForTopic(ctx context.Context, topic TopicName) (bool, error) {
+	fragment, err := json.Marshal(map[string]string{"topic": string(topic)})
+	if err != nil {
+		return false, err
+	}
+
+	return g.HasActiveJobWithMetadata(ctx, string(fragment))
+}
+
+// HasActiveJobWithMetadata reports whether at least one River job whose metadata
+// JSONB contains the given fragment exists in an active state (available, scheduled,
+// running, or retryable). Returns false without error when Gala is not in durable mode
+func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment string) (bool, error) {
+	if g.jobClient == nil {
+		return false, nil
+	}
+
+	params := river.NewJobListParams().
+		Metadata(metadataFragment).
+		States(
+			rivertype.JobStateAvailable,
+			rivertype.JobStateRunning,
+			rivertype.JobStateScheduled,
+			rivertype.JobStateRetryable,
+		).
+		First(1)
+
+	result, err := g.jobClient.GetRiverClient().JobList(ctx, params)
+	if err != nil {
+		return false, err
+	}
+
+	return len(result.Jobs) > 0, nil
+}
 
 // Close closes the dedicated Gala queue client
 func (g *Gala) Close() error {
