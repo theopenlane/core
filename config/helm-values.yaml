@@ -548,11 +548,11 @@ coreConfiguration:
       # -- Sender override for questionnaire auth emails
       questionnaireemail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
       # -- Root application URL used to construct email action links
-      rootURL: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
+      rooturl: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
       # -- Product home URL
-      productURL: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
+      producturl: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
       # -- Documentation URL
-      docsURL: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
+      docsurl: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
     paymentreminder:
       # -- Days after org creation before marking for deletion
       paymentmethodinterval: 0
