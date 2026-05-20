@@ -146,7 +146,7 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 
 // CheckOrgAuditorAccess checks if the requestor has auditor access the organization
 func CheckOrgAuditorAccess() privacy.QueryRule {
-	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
+	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 		logx.FromContext(ctx).Debug().Msg("checking org auditor access")
 		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.AuditorRelation)
 	})
