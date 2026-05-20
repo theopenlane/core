@@ -538,15 +538,15 @@ coreConfiguration:
       redirecturl: "http://localhost:17608/v1/integrations/auth/callback"  # @schema type:string; default:http://localhost:17608/v1/integrations/auth/callback
     email:
       # -- Directory for dev-mode email output
-      testDir: "fixtures/email"  # @schema type:string; default:fixtures/email
+      testdir: "fixtures/email"  # @schema type:string; default:fixtures/email
       # -- Email service provider
       provider: "resend"  # @schema type:string; default:resend
       # -- Sender email address
-      fromEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      fromemail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
       # -- Support contact email address
-      supportEmail: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
+      supportemail: "support@theopenlane.io"  # @schema type:string; default:support@theopenlane.io
       # -- Sender override for questionnaire auth emails
-      questionnaireEmail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
+      questionnaireemail: "support@mail.theopenlane.io"  # @schema type:string; default:support@mail.theopenlane.io
       # -- Root application URL used to construct email action links
       rootURL: "https://www.theopenlane.io"  # @schema type:string; default:https://www.theopenlane.io
       # -- Product home URL
@@ -973,7 +973,7 @@ externalSecrets:
     core-integrations-email-resendsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.email.resendSecret
+      # -- Environment variable key for integrations.email.resendsecret
       secretKey: "CORE_INTEGRATIONS_EMAIL_RESENDSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-email-resendsecret"  # @schema type:string
@@ -981,7 +981,7 @@ externalSecrets:
     core-integrations-email-apikey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.email.apiKey
+      # -- Environment variable key for integrations.email.apikey
       secretKey: "CORE_INTEGRATIONS_EMAIL_APIKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-email-apikey"  # @schema type:string
