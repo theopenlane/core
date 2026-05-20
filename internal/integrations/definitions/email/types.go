@@ -57,11 +57,11 @@ type RuntimeEmailConfig struct {
 	// QuestionnaireEmail is an optional sender override for questionnaire auth emails
 	QuestionnaireEmail string `json:"questionnaireemail,omitempty" koanf:"questionnaireemail" jsonschema:"description=Sender override for questionnaire auth emails" default:"support@mail.theopenlane.io"`
 	// RootURL is the root application URL used to construct email action links
-	RootURL string `json:"rootURL" koanf:"rooturl" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
+	RootURL string `json:"rooturl" koanf:"rooturl" jsonschema:"description=Root application URL used to construct email action links" default:"https://www.theopenlane.io"`
 	// ProductURL is the product home URL
-	ProductURL string `json:"productURL" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
+	ProductURL string `json:"producturl" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
-	DocsURL string `json:"docsURL" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
+	DocsURL string `json:"docsurl" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
