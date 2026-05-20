@@ -1,4 +1,4 @@
-h1:l0WsgewXK0ApoaqwsADXTU1LZWKyuGVnMlTslFW/8Qw=
+h1:TPT0lJF3Uk4XJyfj3j93lEE6MSTzJqcXgKGX43Ty+4A=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -133,3 +133,4 @@ h1:l0WsgewXK0ApoaqwsADXTU1LZWKyuGVnMlTslFW/8Qw=
 20260516001026_add_management_mode.sql h1:LrrrIprXoKLwjEu2cQmp4S6Ho1GjbQwuknz+WHt6NyQ=
 20260516001040_add_management_mode_history.sql h1:ipljVIykHiKYWBc4OD9Ljbq19b5hDNMCLpLLl6rkzVc=
 20260516143000_backfill_management_mode.sql h1:jrRd3QPKqumqeZP1BALxI8bfKXP5RP6/le412BOjd8c=
+20260520184445_permissions_v2.sql h1:oH2f7JRrUClNjJFqpNkd0odoiQNqEpRBexFDm5bmeQI=
