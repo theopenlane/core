@@ -52,6 +52,9 @@ type ObjectOwnedMixin struct {
 	SkipListFilterInterceptor interceptors.SkipMode
 	// SkipListFilterInterceptorSkipperFunc is a custom function to determine if the list filter interceptor should be skipped
 	SkipListFilterInterceptorSkipperFunc func(ctx context.Context) bool
+	// ForceFilterFn when set, prevents the scope check from short-circuiting the filter
+	// use this for schemas where org-wide scope does not imply access to all objects of this type
+	ForceFilterFn func(ctx context.Context) bool
 	// SkipTokenType skips the traverser or hook if the token type is found in the context
 	SkipTokenType []token.PrivacyToken
 	// IncludeOrganizationOwner adds the organization owner_id field and hooks to the schema
@@ -222,6 +225,14 @@ func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
 func withSkipFilterInterceptor(mode interceptors.SkipMode) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.SkipListFilterInterceptor = mode
+	}
+}
+
+// withForceFilter prevents the scope check from short-circuiting the filter for this schema
+// use when org-wide scope does not imply access to all objects of this type (e.g. File)
+func withForceFilter() objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.ForceFilterFn = func(_ context.Context) bool { return true }
 	}
 }
 
@@ -482,7 +493,9 @@ func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
 		}
 	}
 
+	forceFilterFn := o.ForceFilterFn
+
 	o.InterceptorFuncs = append(o.InterceptorFuncs, func(_ ObjectOwnedMixin) ent.Interceptor {
-		return interceptors.FilterQueryResults[V](customSkipperFunc)
+		return interceptors.FilterQueryResults[V](forceFilterFn, customSkipperFunc)
 	})
 }

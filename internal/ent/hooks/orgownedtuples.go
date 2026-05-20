@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -33,14 +32,11 @@ func hookOrgOwnedTuples() ent.Hook {
 				return nil, err
 			}
 
-			var addTuples []fgax.TupleKey
-
-			additionalAddTuples, err := createOrgOwnerParentTuple(ctx, m, objectID)
+			addTuples, err := createOrgOwnerParentTuple(ctx, m, objectID)
 			if err != nil {
 				return nil, err
 			}
 
-			addTuples = append(addTuples, additionalAddTuples...)
 			// write the tuples to the authz service
 			if len(addTuples) != 0 {
 				if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, addTuples, nil); err != nil {
@@ -48,9 +44,9 @@ func hookOrgOwnedTuples() ent.Hook {
 
 					return nil, ErrInternalServerError
 				}
-			}
 
-			logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added organization permissions")
+				logx.FromContext(ctx).Debug().Interface("tuples", addTuples).Msg("added organization permissions")
+			}
 
 			return retVal, err
 		},

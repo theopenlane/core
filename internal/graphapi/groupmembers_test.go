@@ -43,6 +43,13 @@ func TestQueryGroupMembers(t *testing.T) {
 			expected: groupMember,
 		},
 		{
+			name:     "happy path, get group member as auditor",
+			queryID:  group.ID,
+			client:   suite.client.api,
+			ctx:      sharedAuditorUser.UserCtx,
+			expected: groupMember,
+		},
+		{
 			name:     "happy path, get group member by group id using personal access token",
 			queryID:  group.ID,
 			client:   suite.client.apiWithPAT,

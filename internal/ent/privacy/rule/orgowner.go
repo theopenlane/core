@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/iam/fgax"
 )
 
+// skipperType are types that are generally user owned where the owner_id is a user
+// not an organization
 var skipperType = map[string]struct{}{
 	"Onboarding":             {},
 	"User":                   {},
@@ -41,85 +43,37 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 			return auth.ErrNoAuthUser
 		}
 
-		orgID := actor.OrganizationID
-
 		if _, ok := skipperType[m.Type()]; ok {
 			return privacy.Skip
 		}
+
+		orgID := actor.OrganizationID
 
 		// History happens automatically, there are no external mutations to create history records
 		if strings.Contains(m.Type(), "History") {
 			return privacy.Allow
 		}
 
-		orgMut, ok := m.(*generated.OrganizationMutation)
-		if ok {
-			if m.Op().Is(ent.OpCreate) {
-				// check if the parent org is set first
-				parentOrgID, ok := orgMut.ParentOrganizationID()
-				if ok && parentOrgID != "" {
-					if err := checkOrgAccess(ctx, fgax.CanView, parentOrgID); errors.Is(err, privacy.Allow) {
-						return nil
-					}
-
-					return privacy.Denyf("user does not have access to the parent organization")
-				}
-
-				// if there is no parent org, allow
-				return privacy.Skip
-			}
-
-			objID, ok := orgMut.ID()
-			if !ok || orgID == "" {
-				return privacy.Skip
-			}
-
-			if err := EnsureObjectInOrganization(ctx, m, m.Type(), objID, orgID); errors.Is(err, privacy.Deny) {
-				return err
-			}
-
-			return privacy.Skip
-		}
-
-		membershipMutation, ok := m.(*generated.OrgMembershipMutation)
-		if ok {
-			membershipID, ok := membershipMutation.ID()
-			if !ok || membershipID == "" {
-				return privacy.Skip
-			}
-
-			orgMembership, err := membershipMutation.Client().OrgMembership.Get(ctx, membershipID)
-			if err != nil {
-				return privacy.Skipf("unable to get org membership: %v", err)
-			}
-
-			if err := EnsureObjectInOrganization(ctx, m, orgmembership.Label, orgMembership.ID, orgID); errors.Is(err, privacy.Deny) {
-				return err
-			}
-
-			return privacy.Skip
-		}
-
-		groupMemberMutation, ok := m.(*generated.GroupMembershipMutation)
-		if ok {
-			groupMemberID, ok := groupMemberMutation.ID()
-			if !ok || groupMemberID == "" {
-				return privacy.Skip
-			}
-
-			groupMembership, err := groupMemberMutation.Client().GroupMembership.Get(ctx, groupMemberID)
-			if err != nil {
-				return privacy.Skipf("unable to get group membership: %v", err)
-			}
-
-			if err := EnsureObjectInOrganization(ctx, m, "group", groupMembership.GroupID, orgID); errors.Is(err, privacy.Deny) {
-				return err
-			}
-
-			return privacy.Skip
+		// special cases
+		switch m := m.(type) {
+		case *generated.OrganizationMutation:
+			return checkOrganizationMutation(ctx, m, orgID)
+		case *generated.OrgMembershipMutation:
+			return checkOrgMembershipMutation(ctx, m, orgID)
+		case *generated.GroupMembershipMutation:
+			return checkGroupMembershipMutation(ctx, m, orgID)
+		case *generated.ProgramMembershipMutation:
+			return checkProgramMembershipMutation(ctx, m, orgID)
 		}
 
 		if m.Op().Is(ent.OpCreate) {
+			return privacy.Skip
+		}
+
+		_, okOrg := m.(utils.OrgOwnedMutation)
+		_, okTC := m.(utils.TrustCenterMutation)
+
+		if !okOrg && !okTC {
 			return privacy.Skip
 		}
 
@@ -133,7 +87,6 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 			return privacy.Skip
 		}
 
-		_, okOrg := m.(utils.OrgOwnedMutation)
 		if okOrg {
 			// ensure the object being mutated is in the organization specified in the owner_id field
 			if err := EnsureObjectInOrganization(ctx, m, m.Type(), id, orgID); errors.Is(err, privacy.Deny) {
@@ -150,6 +103,97 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 
 		return privacy.Skip
 	})
+}
+
+// checkOrganizationMutation checks to see the user has access to the organization mutation
+// based on mutation type and parent organization
+func checkOrganizationMutation(ctx context.Context, m ent.Mutation, orgID string) error {
+	mut := m.(*generated.OrganizationMutation)
+
+	if m.Op().Is(ent.OpCreate) {
+		parentOrgID, ok := mut.ParentOrganizationID()
+		if !ok || parentOrgID == "" {
+			// if there is no parent org, allow
+			return privacy.Skip
+		}
+
+		if err := checkOrgAccess(ctx, fgax.CanView, parentOrgID); errors.Is(err, privacy.Allow) {
+			return nil
+		}
+
+		return privacy.Denyf("user does not have access to the parent organization")
+	}
+
+	objID, ok := mut.ID()
+	if !ok || orgID == "" {
+		return privacy.Skip
+	}
+
+	if err := EnsureObjectInOrganization(ctx, mut, m.Type(), objID, orgID); errors.Is(err, privacy.Deny) {
+		return err
+	}
+
+	return privacy.Skip
+}
+
+// checkOrgMembershipMutation ensures the membership object belongs to the organization
+func checkOrgMembershipMutation(ctx context.Context, m ent.Mutation, orgID string) error {
+	mut := m.(*generated.OrgMembershipMutation)
+	membershipID, ok := mut.ID()
+	if !ok || membershipID == "" {
+		return privacy.Skip
+	}
+
+	orgMembership, err := mut.Client().OrgMembership.Get(ctx, membershipID)
+	if err != nil {
+		return privacy.Skipf("unable to get org membership: %v", err)
+	}
+
+	if err := EnsureObjectInOrganization(ctx, m, orgmembership.Label, orgMembership.ID, orgID); errors.Is(err, privacy.Deny) {
+		return err
+	}
+
+	return privacy.Skip
+}
+
+// checkGroupMembershipMutation ensures the membership object belongs to the organization
+func checkGroupMembershipMutation(ctx context.Context, m ent.Mutation, orgID string) error {
+	mut := m.(*generated.GroupMembershipMutation)
+	memberID, ok := mut.ID()
+	if !ok || memberID == "" {
+		return privacy.Skip
+	}
+
+	member, err := mut.Client().GroupMembership.Get(ctx, memberID)
+	if err != nil {
+		return privacy.Skipf("unable to get group membership: %v", err)
+	}
+
+	if err := EnsureObjectInOrganization(ctx, m, "group", member.GroupID, orgID); errors.Is(err, privacy.Deny) {
+		return err
+	}
+
+	return privacy.Skip
+}
+
+// checkProgramMembershipMutation ensures the membership object belongs to the organization
+func checkProgramMembershipMutation(ctx context.Context, m ent.Mutation, orgID string) error {
+	mut := m.(*generated.ProgramMembershipMutation)
+	memberID, ok := mut.ID()
+	if !ok || memberID == "" {
+		return privacy.Skip
+	}
+
+	member, err := mut.Client().ProgramMembership.Get(ctx, memberID)
+	if err != nil {
+		return privacy.Skipf("unable to get group membership: %v", err)
+	}
+
+	if err := EnsureObjectInOrganization(ctx, m, "program", member.ProgramID, orgID); errors.Is(err, privacy.Deny) {
+		return err
+	}
+
+	return privacy.Skip
 }
 
 // EnsureObjectInOrganization checks if the object is in the organization

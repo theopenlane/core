@@ -21,6 +21,6 @@ type group
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit_group from parent_context
-    define parent_viewer: can_view from parent_context or can_view_group from parent_context
+    define parent_viewer: can_view from parent_context or can_view_group from parent_context or can_view_org from parent_context
     define parent_admin: full_access from parent_context
     define parent_context: [organization with public_group]

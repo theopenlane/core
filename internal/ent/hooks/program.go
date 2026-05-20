@@ -42,6 +42,7 @@ func HookProgramAuthz() ent.Hook {
 	}
 }
 
+// programCreateHook adds the user as the program member admin if it was not created by an API Token
 func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error {
 	objID, exists := m.ID()
 	if exists {
@@ -56,6 +57,7 @@ func programCreateHook(ctx context.Context, m *generated.ProgramMutation) error 
 	return nil
 }
 
+// createProgramMemberAdmin adds the current authenticated user as a program admin
 func createProgramMemberAdmin(ctx context.Context, pID string, m *generated.ProgramMutation) error {
 	// get userID from context
 	userID, err := auth.GetSubjectIDFromContext(ctx)

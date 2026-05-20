@@ -19,6 +19,9 @@ type organization
     # also allows users to be given time based access to the organization (e.g. support access)
     define can_view: [service, user with time_based_grant] or (member and access) or (admin and access) or can_edit or can_view from parent
 
+    # specific check to allow the view of the org but not all org owned data
+    define can_view_org: can_view or auditor
+
     # additional fine-grained permissions
     # allow owner and assigned users to view audit logs
     define audit_log_viewer: ([user, service] or full_access or audit_log_viewer from parent) and can_view

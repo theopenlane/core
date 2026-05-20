@@ -22,6 +22,11 @@ import (
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
+const (
+	// this allows auditors access to view the top level organization, without having full read access to everything only org owned
+	canViewOrg fgax.Relation = "can_view_org"
+)
+
 // FilterListQuery filters any list query to only include the objects that the user has access to
 // This is automatically added to all schemas using the ObjectOwnedMixin, so should not be added
 // directly if that mixin is used
@@ -54,16 +59,21 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 	// Never skip the filter for organization queries, as we need to ensure the user has access to the organization itself
 	isOrganizationQuery := strings.EqualFold(objectType, "organization")
 
+	var relation fgax.Relation
 	if !isOrganizationQuery {
+		relation = fgax.CanView
 		// skip filter if the subject has full organization view access for the object type
 		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
 			if errors.Is(err, privacy.Allow) {
 				return nil
 			}
 		}
+	} else {
+		// organization queries should allow auditor access
+		relation = canViewOrg
 	}
 
-	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, fgax.CanView)
+	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, relation)
 	if err != nil {
 		return err
 	}
@@ -151,17 +161,17 @@ func logObjectIDs(ctx context.Context, objectType string, objectIDs []string, ms
 // directly if that mixin is used
 // This function is intended to filter results after the query is run using the BatchCheck in FGA
 // which is more performant than the ListObjectsRequest, especially for large lists
-func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
+func FilterQueryResults[V any](forceFilter skipperFunc, skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-			return filterQueryResults[V](ctx, query, next, skipperFunc...)
+			return filterQueryResults[V](ctx, query, next, forceFilter, skipperFunc...)
 		})
 	}
 }
 
 // filterQueryResults filters the results of a query to only include the objects that the user has access to
 // using the BatchCheck in FGA and returns the filtered results as the ent.Value based on the provided type
-func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, skipperFunc ...skipperFunc) (ent.Value, error) {
+func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, forceFilter skipperFunc, skipperFunc ...skipperFunc) (ent.Value, error) {
 	// by pass checks on invite or pre-allowed request
 	// convert the query to an intercept query
 	q, err := intercept.NewQuery(query)
@@ -169,7 +179,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		return nil, err
 	}
 
-	if skipFilter(ctx, q, skipperFunc...) {
+	if skipFilter(ctx, q, forceFilter, skipperFunc...) {
 		return next.Query(ctx, query)
 	}
 
@@ -218,7 +228,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	}
 }
 
-func skipFilter(ctx context.Context, q intercept.Query, customSkipperFunc ...skipperFunc) bool {
+func skipFilter(ctx context.Context, q intercept.Query, forceFilter skipperFunc, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
@@ -232,7 +242,8 @@ func skipFilter(ctx context.Context, q intercept.Query, customSkipperFunc ...ski
 	// skip filter if the subject has full organization view access for the object type
 	objectType := rule.GetFGAObjectType(q)
 
-	if !strings.EqualFold(objectType, "file") {
+	// only check subject scope when the caller has not indicated that filtering must always run
+	if forceFilter == nil || !forceFilter(ctx) {
 		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
 			if errors.Is(err, privacy.Allow) {
 				return true

@@ -298,24 +298,22 @@ func (suite *GraphTestSuite) seedFreshOrgUsers(t *testing.T) *testOrgUsers {
 	localSuperAdmin := suite.userBuilder(context.Background(), t)
 	localAdmin := suite.userBuilder(context.Background(), t)
 	localMember := suite.userBuilder(context.Background(), t)
-
-	// TODO: look into auditor setup, causing user not found on some queries
-	// localAuditor := suite.userBuilder(context.Background(), t)
+	localAuditor := suite.userBuilder(context.Background(), t)
 
 	suite.addUserToOrganization(localOwner.UserCtx, t, &localSuperAdmin, enums.RoleSuperAdmin, localOwner.OrganizationID)
 	suite.addUserToOrganization(localOwner.UserCtx, t, &localAdmin, enums.RoleAdmin, localOwner.OrganizationID)
 	suite.addUserToOrganization(localOwner.UserCtx, t, &localMember, enums.RoleMember, localOwner.OrganizationID)
-	// suite.addUserToOrganization(localOwner.UserCtx, t, &localAuditor, enums.RoleAuditor, localOwner.OrganizationID)
+	suite.addUserToOrganization(localOwner.UserCtx, t, &localAuditor, enums.RoleAuditor, localOwner.OrganizationID)
 
 	apiTokenClient := suite.setupAPITokenClient(localAdmin.UserCtx, t)
 	adminPersonalAccessTokenClient := suite.setupPatClient(localAdmin, t)
 
 	return &testOrgUsers{
-		owner:      &localOwner,
-		superAdmin: &localSuperAdmin,
-		admin:      &localAdmin,
-		member:     &localMember,
-		// auditor:        &localAuditor,
+		owner:          &localOwner,
+		superAdmin:     &localSuperAdmin,
+		admin:          &localAdmin,
+		member:         &localMember,
+		auditor:        &localAuditor,
 		adminApiClient: apiTokenClient,
 		adminPatClient: adminPersonalAccessTokenClient,
 	}

@@ -449,6 +449,8 @@ func TestValidateIntegrationActionParams(t *testing.T) {
 }
 
 func TestValidateNotificationActionParams(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name    string
 		params  json.RawMessage

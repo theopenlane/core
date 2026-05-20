@@ -195,7 +195,7 @@ func (Procedure) Hooks() []ent.Hook {
 func (p Procedure) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		// procedures are org owned, but we need to ensure the groups are filtered as well
-		interceptors.FilterQueryResults[generated.Procedure](),
+		interceptors.FilterQueryResults[generated.Procedure](nil),
 	}
 }
 

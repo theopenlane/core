@@ -25,8 +25,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-var ErrOrganizationConstraintError = errors.New("duplicate key: organization with stripe customer key already exists")
-
 // Reconciler reconciles organization subscriptions with Stripe
 type Reconciler struct {
 	db     *ent.Client

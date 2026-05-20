@@ -45,13 +45,27 @@ func TestQueryOrgMembers(t *testing.T) {
 			queryID:     localTestOrg.owner.OrganizationID,
 			client:      suite.client.api,
 			ctx:         localTestOrg.owner.UserCtx,
-			expectedLen: 5,
+			expectedLen: 6,
+		},
+		{
+			name:        "happy path, get org members by org id, member",
+			queryID:     localTestOrg.owner.OrganizationID,
+			client:      suite.client.api,
+			ctx:         localTestOrg.member.UserCtx,
+			expectedLen: 6,
+		},
+		{
+			name:        "happy path, get org members by org id, auditor",
+			queryID:     localTestOrg.owner.OrganizationID,
+			client:      suite.client.api,
+			ctx:         localTestOrg.auditor.UserCtx,
+			expectedLen: 6,
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			expectedLen: 6, // 2 from child org, 4 from parent org because we dedupe plus the program member
+			expectedLen: 7, // 2 from child org, 5 from parent org because we dedupe plus the program member
 		},
 		{
 			name:    "where input, get members in program",
@@ -89,7 +103,7 @@ func TestQueryOrgMembers(t *testing.T) {
 					},
 				},
 			},
-			expectedLen: 3,
+			expectedLen: 4,
 		},
 		{
 			name:                "where input, get members in program, after deleting a member",

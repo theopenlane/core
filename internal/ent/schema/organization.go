@@ -659,6 +659,7 @@ func (Organization) Policy() ent.Policy {
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](), // Allow invite tokens to query the org ID they are invited to
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.SignUpToken](),    // Allow sign-up tokens to query the org ID they are subscribing to
 			policy.CheckOrgReadAccess(),                                       // access based on query and auth context
+			policy.CheckOrgAuditorAccess(),
 			rule.AllowQueryIfSystemAdmin(),
 		),
 		policy.WithMutationRules(

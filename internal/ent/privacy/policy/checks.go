@@ -94,7 +94,9 @@ func CheckOrgReadAccess() privacy.QueryRule {
 			return privacy.Denyf("anonymous users cannot access organization data")
 		}
 
-		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, fgax.CanView, nil); err != nil {
+		relation := fgax.CanView
+
+		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); err != nil {
 			if !errors.Is(err, privacy.Skip) {
 				return err
 			}
@@ -107,13 +109,13 @@ func CheckOrgReadAccess() privacy.QueryRule {
 			// if we get an error (privacy.Deny or privacy.Allow are both "errors")
 			// return as the result
 			// if its nil, we didn't check anything and should continue to the next check
-			if err := rule.CheckOrgAccessBasedOnRequest(ctx, fgax.CanView, query); err != nil {
+			if err := rule.CheckOrgAccessBasedOnRequest(ctx, relation, query); err != nil {
 				return err
 			}
 		}
 
 		// otherwise check against the current context
-		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView)
+		return rule.CheckCurrentOrgAccess(ctx, nil, relation)
 	})
 }
 
@@ -121,14 +123,16 @@ func CheckOrgReadAccess() privacy.QueryRule {
 // some query operations
 func CheckOrgEditAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, fgax.CanEdit, nil); err != nil {
+		relation := fgax.CanEdit
+
+		if err := rule.CheckSubjectScope(ctx, generated.TypeOrganization, relation, nil); err != nil {
 			if !errors.Is(err, privacy.Skip) {
 				return err
 			}
 		}
 
 		// otherwise check against the current context
-		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanEdit)
+		return rule.CheckCurrentOrgAccess(ctx, nil, relation)
 	})
 }
 
@@ -140,17 +144,28 @@ func CheckOrgWriteAccess() privacy.MutationRule {
 	})
 }
 
+// CheckOrgAuditorAccess checks if the requestor has auditor access the organization
+func CheckOrgAuditorAccess() privacy.QueryRule {
+	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
+		logx.FromContext(ctx).Debug().Msg("checking org auditor access")
+		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.AuditorRelation)
+	})
+}
+
 // CheckOrgAccess checks if the requestor has access to read the organization
 func CheckOrgAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
+		relation := fgax.CanView
+
 		logx.FromContext(ctx).Debug().Msg("checking org read access")
-		if err := rule.CheckSubjectScope(ctx, m.Type(), fgax.CanView, nil); err != nil {
+
+		if err := rule.CheckSubjectScope(ctx, m.Type(), relation, nil); err != nil {
 			if !errors.Is(err, privacy.Skip) {
 				return err
 			}
 		}
 
-		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView)
+		return rule.CheckCurrentOrgAccess(ctx, m, relation)
 	})
 }
 
@@ -266,11 +281,6 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				}
 
 				allowScopeCheck = false
-			}
-
-			// override the id to check if the edge is an organization, as we want to check access to the organization rather than the object
-			if edgeMap.ObjectType == organization.Label {
-				idStr = orgID
 			}
 
 			// check api token scope first, as api tokens will have full access to object types they have scope for

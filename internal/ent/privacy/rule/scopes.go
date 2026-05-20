@@ -134,11 +134,6 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		return privacy.Skip
 	}
 
-	authzClient := utils.AuthzClientFromContext(ctx)
-	if authzClient == nil {
-		return generated.ErrPermissionDenied
-	}
-
 	ac := fgax.AccessCheck{
 		SubjectID:   caller.SubjectID,
 		SubjectType: auth.GetAuthzSubjectType(ctx),
@@ -147,7 +142,7 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		ObjectID:    orgID,
 	}
 
-	hasAccess, err := authzClient.CheckAccess(ctx, ac)
+	hasAccess, err := utils.AuthzClientFromContext(ctx).CheckAccess(ctx, ac)
 	if err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Interface("check", ac).Msg("failed scope check, unable to determine access")
 
