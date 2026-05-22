@@ -43,6 +43,21 @@ func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), eventqueue.SoftDeleteOne))
 }
 
+func TestRegisterGalaTrustCenterWatermarkListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaTrustCenterWatermarkListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterDoc)
+	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+}
+
 func TestRegisterGalaWorkflowMutationListeners(t *testing.T) {
 	t.Parallel()
 
