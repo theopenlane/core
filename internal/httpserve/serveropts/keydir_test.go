@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/x509"
 	"encoding/pem"
+	"math/big"
 	"os"
 	"path/filepath"
 	"testing"
@@ -36,6 +37,47 @@ func writeKey(t *testing.T, dir, kid string) string {
 	return path
 }
 
+// writeCertSlot writes a cert-manager style tls.key and tls.crt pair for a slot
+func writeCertSlot(t *testing.T, dir, slot string, notAfter time.Time) (keyPath, certPath, kid string) {
+	t.Helper()
+
+	slotDir := filepath.Join(dir, slot)
+	require.NoError(t, os.MkdirAll(slotDir, 0o700))
+
+	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
+	require.NoError(t, err)
+
+	privateDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
+	require.NoError(t, err)
+
+	keyPath = filepath.Join(slotDir, "tls.key")
+	privatePEM := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privateDER})
+	require.NoError(t, os.WriteFile(keyPath, privatePEM, 0o600))
+
+	serial, err := rand.Int(rand.Reader, big.NewInt(1<<62))
+	require.NoError(t, err)
+
+	cert := &x509.Certificate{
+		SerialNumber:          serial,
+		NotBefore:             time.Now().Add(-time.Hour),
+		NotAfter:              notAfter,
+		KeyUsage:              x509.KeyUsageDigitalSignature,
+		BasicConstraintsValid: true,
+	}
+
+	certDER, err := x509.CreateCertificate(rand.Reader, cert, cert, publicKey, privateKey)
+	require.NoError(t, err)
+
+	certPath = filepath.Join(slotDir, "tls.crt")
+	certPEM := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certDER})
+	require.NoError(t, os.WriteFile(certPath, certPEM, 0o600))
+
+	kid, err = keyThumbprintID(keyPath)
+	require.NoError(t, err)
+
+	return keyPath, certPath, kid
+}
+
 func newServerOptions() *ServerOptions {
 	return &ServerOptions{
 		Config: serverconfig.Config{
@@ -53,6 +95,13 @@ func newServerOptions() *ServerOptions {
 			},
 		},
 	}
+}
+
+// configureCertSlots applies cert slot settings needed by keydir tests
+func configureCertSlots(so *ServerOptions, slots ...config.KeyWatcherCertSlot) {
+	so.Config.Settings.Keywatcher.MaxSigningTTL = 168 * time.Hour
+	so.Config.Settings.Keywatcher.SafetyWindow = 48 * time.Hour
+	so.Config.Settings.Keywatcher.CertSlots = slots
 }
 
 func TestWithKeyDirLoadsKeys(t *testing.T) {
@@ -115,4 +164,81 @@ func TestWithKeyDirNoKID(t *testing.T) {
 		require.Equal(t, keyFile, path)
 		require.Equal(t, "nokid", loadedKID)
 	}
+}
+
+// TestWithKeyDirLoadsCertSlotWithThumbprintKID verifies cert slots use public key thumbprints as kids
+func TestWithKeyDirLoadsCertSlotWithThumbprintKID(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	legacyKID := ulid.Make().String()
+	writeKey(t, dir, legacyKID)
+
+	slotKeyPath, _, slotKID := writeCertSlot(t, dir, "current", time.Now().Add(90*24*time.Hour))
+
+	so := newServerOptions()
+	configureCertSlots(so, config.KeyWatcherCertSlot{
+		Name:        "current",
+		RenewBefore: 30 * 24 * time.Hour,
+	})
+
+	WithKeyDir(dir).apply(so)
+
+	require.Contains(t, so.Config.Settings.Auth.Token.Keys, legacyKID)
+	require.Contains(t, so.Config.Settings.Auth.Token.Keys, slotKID)
+	require.Equal(t, slotKeyPath, so.Config.Settings.Auth.Token.Keys[slotKID])
+	require.Equal(t, slotKID, so.Config.Settings.Auth.Token.KID)
+}
+
+// TestWithKeyDirSwitchesFromUnsafeCertSlot verifies signing moves away from a slot near renewal
+func TestWithKeyDirSwitchesFromUnsafeCertSlot(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	_, _, unsafeKID := writeCertSlot(t, dir, "current", time.Now().Add((30*24+7*24+48)*time.Hour-time.Hour))
+	_, _, safeKID := writeCertSlot(t, dir, "standby", time.Now().Add(90*24*time.Hour))
+
+	so := newServerOptions()
+	so.Config.Settings.Auth.Token.KID = unsafeKID
+	configureCertSlots(so,
+		config.KeyWatcherCertSlot{
+			Name:        "current",
+			RenewBefore: 30 * 24 * time.Hour,
+		},
+		config.KeyWatcherCertSlot{
+			Name:        "standby",
+			RenewBefore: 15 * 24 * time.Hour,
+		},
+	)
+
+	WithKeyDir(dir).apply(so)
+
+	require.Equal(t, safeKID, so.Config.Settings.Auth.Token.KID)
+}
+
+// TestWithKeyDirReloadDropsRotatedCertSlotKID verifies in-place key rotation does not preserve stale kids
+func TestWithKeyDirReloadDropsRotatedCertSlotKID(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	_, _, oldKID := writeCertSlot(t, dir, "current", time.Now().Add(90*24*time.Hour))
+
+	so := newServerOptions()
+	configureCertSlots(so, config.KeyWatcherCertSlot{
+		Name:        "current",
+		RenewBefore: 30 * 24 * time.Hour,
+	})
+
+	WithKeyDir(dir).apply(so)
+	require.Contains(t, so.Config.Settings.Auth.Token.Keys, oldKID)
+	require.Equal(t, oldKID, so.Config.Settings.Auth.Token.KID)
+
+	_, _, newKID := writeCertSlot(t, dir, "current", time.Now().Add(90*24*time.Hour))
+	require.NotEqual(t, oldKID, newKID)
+
+	WithKeyDir(dir).apply(so)
+
+	require.NotContains(t, so.Config.Settings.Auth.Token.Keys, oldKID)
+	require.Contains(t, so.Config.Settings.Auth.Token.Keys, newKID)
+	require.Equal(t, newKID, so.Config.Settings.Auth.Token.KID)
 }

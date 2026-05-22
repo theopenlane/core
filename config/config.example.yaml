@@ -230,8 +230,12 @@ jobqueue:
         workers: null
     runmigrations: false
 keywatcher:
+    certslots: null
     enabled: false
     keydir: ./keys
+    maxsigningttl: 604800000000000
+    safetywindow: 172800000000000
+    signwithcertslots: false
 objectstorage:
     devmode: false
     enabled: true

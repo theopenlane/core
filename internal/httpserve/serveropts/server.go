@@ -11,6 +11,8 @@ type ServerOptions struct {
 	ConfigProvider serverconfig.Provider
 	// Config is the server configuration settings
 	Config serverconfig.Config
+	// configuredTokenKeys preserves token keys from config before keydir discovery mutates the active key map
+	configuredTokenKeys map[string]string
 }
 
 // NewServerOptions creates a new ServerOptions instance with the provided options and configuration location

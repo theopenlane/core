@@ -8,6 +8,12 @@
       },
       "type": "array"
     },
+    "[]config.KeyWatcherCertSlot": {
+      "items": {
+        "$ref": "#/$defs/config.KeyWatcherCertSlot"
+      },
+      "type": "array"
+    },
     "[]ratelimit.RateOption": {
       "items": {
         "$ref": "#/$defs/ratelimit.RateOption"
@@ -200,11 +206,42 @@
         "keydir": {
           "type": "string",
           "description": "KeyDir is the path to the directory containing PEM keys for JWT signing"
+        },
+        "maxsigningttl": {
+          "type": "integer",
+          "description": "MaxSigningTTL is the longest duration a JWT signed by a key can remain valid"
+        },
+        "safetywindow": {
+          "type": "integer",
+          "description": "SafetyWindow is extra time before cert-manager renewal where a key is no longer used for signing"
+        },
+        "certslots": {
+          "$ref": "#/$defs/[]config.KeyWatcherCertSlot",
+          "description": "CertSlots contains cert-manager mounted key/cert directories used for rotating JWT signing keys"
+        },
+        "signwithcertslots": {
+          "type": "boolean",
+          "description": "SignWithCertSlots enables cert slot selection for JWT signing"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
+    },
+    "config.KeyWatcherCertSlot": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name is the projected key directory name under keydir"
+        },
+        "renewbefore": {
+          "type": "integer",
+          "description": "RenewBefore must match the Certificate spec.renewBefore for this slot"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "KeyWatcherCertSlot describes one cert-manager backed JWT signing key slot"
     },
     "config.PoolConfig": {
       "properties": {

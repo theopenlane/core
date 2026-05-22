@@ -943,6 +943,20 @@ data:
       {{- if .Values.openlane.coreConfiguration.keywatcher.keydir }}
       keydir: {{ .Values.openlane.coreConfiguration.keywatcher.keydir | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.keywatcher.maxsigningttl }}
+      maxsigningttl: {{ .Values.openlane.coreConfiguration.keywatcher.maxsigningttl | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.keywatcher.safetywindow }}
+      safetywindow: {{ .Values.openlane.coreConfiguration.keywatcher.safetywindow | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.keywatcher.signwithcertslots }}
+      signwithcertslots: {{ .Values.openlane.coreConfiguration.keywatcher.signwithcertslots }}
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.keywatcher.certslots | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      certslots:
+      {{- toYaml $sliceValue | nindent 8 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrations }}
     integrations:

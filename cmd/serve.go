@@ -71,7 +71,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
-		serveropts.WithKeyDirOption(),
 		serveropts.WithShortlinks(),
 	)
 
@@ -81,6 +80,8 @@ func serve(ctx context.Context) error {
 	if so.Config.Settings.Auth.Token.GenerateKeys && len(so.Config.Settings.Auth.Token.Keys) == 0 {
 		so.AddServerOptions(serveropts.WithGeneratedKeys())
 	}
+
+	so.AddServerOptions(serveropts.WithKeyDirOption())
 
 	// setup token manager
 	so.AddServerOptions(

@@ -151,6 +151,22 @@ type KeyWatcher struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// KeyDir is the path to the directory containing PEM keys for JWT signing
 	KeyDir string `json:"keydir" koanf:"keydir" default:"./keys"`
+	// MaxSigningTTL is the longest duration a JWT signed by a key can remain valid
+	MaxSigningTTL time.Duration `json:"maxsigningttl" koanf:"maxsigningttl" default:"168h"`
+	// SafetyWindow is extra time before cert-manager renewal where a key is no longer used for signing
+	SafetyWindow time.Duration `json:"safetywindow" koanf:"safetywindow" default:"48h"`
+	// CertSlots contains cert-manager mounted key/cert directories used for rotating JWT signing keys
+	CertSlots []KeyWatcherCertSlot `json:"certslots" koanf:"certslots"`
+	// SignWithCertSlots enables cert slot selection for JWT signing
+	SignWithCertSlots bool `json:"signwithcertslots" koanf:"signwithcertslots" default:"false"`
+}
+
+// KeyWatcherCertSlot describes one cert-manager backed JWT signing key slot
+type KeyWatcherCertSlot struct {
+	// Name is the projected key directory name under keydir
+	Name string `json:"name" koanf:"name"`
+	// RenewBefore must match the Certificate spec.renewBefore for this slot
+	RenewBefore time.Duration `json:"renewbefore" koanf:"renewbefore"`
 }
 
 // Auth settings including oauth2 providers and token configuration

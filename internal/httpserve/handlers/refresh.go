@@ -1,11 +1,19 @@
 package handlers
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
 
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -30,7 +38,8 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	// verify the refresh token
 	claims, err := h.TokenManager.Verify(req.RefreshToken)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
+		diag := refreshTokenDiagnostics(req.RefreshToken, err)
+		logx.FromContext(reqCtx).Error().Err(err).Str("token_error_category", diag.category).Str("token_kid", diag.kid).Str("token_alg", diag.alg).Str("token_parse_error", diag.parseError).Str("token_exp", diag.exp).Str("token_iat", diag.iat).Str("token_nbf", diag.nbf).Msg("error verifying refresh token")
 
 		return h.BadRequest(ctx, ErrUnableToVerifyToken, openapi)
 	}
@@ -91,4 +100,109 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	}
 
 	return h.Success(ctx, out, openapi)
+}
+
+type refreshTokenLogDiagnostics struct {
+	category   string
+	kid        string
+	alg        string
+	parseError string
+	exp        string
+	iat        string
+	nbf        string
+}
+
+// refreshTokenDiagnostics extracts safe refresh token metadata for verification failure logs
+func refreshTokenDiagnostics(refreshToken string, verifyErr error) refreshTokenLogDiagnostics {
+	diag := refreshTokenLogDiagnostics{category: refreshTokenErrorCategory(verifyErr)}
+
+	token, _, err := new(jwt.Parser).ParseUnverified(refreshToken, jwt.MapClaims{})
+	if err != nil {
+		diag.parseError = err.Error()
+
+		return diag
+	}
+
+	if kid, ok := token.Header["kid"].(string); ok {
+		diag.kid = kid
+	}
+
+	if alg, ok := token.Header["alg"].(string); ok {
+		diag.alg = alg
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return diag
+	}
+
+	diag.exp = jwtClaimTime(claims, "exp")
+	diag.iat = jwtClaimTime(claims, "iat")
+	diag.nbf = jwtClaimTime(claims, "nbf")
+
+	return diag
+}
+
+// refreshTokenErrorCategory returns a stable category for refresh token verification failures
+func refreshTokenErrorCategory(err error) string {
+	switch {
+	case tokenErrorIs(err, tokens.ErrUnknownSigningKey):
+		return "unknown_signing_key"
+	case tokenErrorIs(err, tokens.ErrTokenMissingKid):
+		return "missing_kid"
+	case tokenErrorIs(err, tokens.ErrTokenSignatureInvalid):
+		return "signature_invalid"
+	case tokenErrorIs(err, tokens.ErrTokenNotValidYet):
+		return "not_valid_yet"
+	case tokenErrorIs(err, tokens.ErrTokenUsedBeforeIssued):
+		return "used_before_issued"
+	case tokenErrorIs(err, tokens.ErrTokenExpired):
+		return "expired"
+	case tokenErrorIs(err, tokens.ErrTokenInvalidAudience):
+		return "invalid_audience"
+	case tokenErrorIs(err, tokens.ErrTokenInvalidIssuer):
+		return "invalid_issuer"
+	case tokenErrorIs(err, tokens.ErrTokenInvalidClaims):
+		return "invalid_claims"
+	case tokenErrorIs(err, tokens.ErrTokenMalformed):
+		return "malformed"
+	case tokenErrorIs(err, tokens.ErrTokenUnverifiable):
+		return "unverifiable"
+	default:
+		return "verification_failed"
+	}
+}
+
+// tokenErrorIs reports whether err matches target by wrapping or by token error text
+func tokenErrorIs(err, target error) bool {
+	if err == nil || target == nil {
+		return false
+	}
+
+	return errors.Is(err, target) || strings.Contains(err.Error(), target.Error())
+}
+
+// jwtClaimTime returns an RFC3339 timestamp for a numeric JWT time claim
+func jwtClaimTime(claims jwt.MapClaims, name string) string {
+	value, ok := claims[name]
+	if !ok {
+		return ""
+	}
+
+	var unixSeconds float64
+	switch v := value.(type) {
+	case float64:
+		unixSeconds = v
+	case json.Number:
+		parsed, err := v.Float64()
+		if err != nil {
+			return fmt.Sprintf("%v", value)
+		}
+
+		unixSeconds = parsed
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+
+	return time.Unix(int64(unixSeconds), 0).UTC().Format(time.RFC3339)
 }

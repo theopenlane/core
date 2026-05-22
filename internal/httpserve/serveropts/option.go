@@ -2,15 +2,20 @@ package serveropts
 
 import (
 	"context"
+	"crypto"
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/x509"
+	"crypto/x509/pkix"
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"math/big"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 
@@ -28,6 +33,7 @@ import (
 	"github.com/theopenlane/utils/cache"
 	"github.com/theopenlane/utils/ulids"
 
+	coreconfig "github.com/theopenlane/core/config"
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -50,6 +56,13 @@ import (
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/shortlinks"
 	"github.com/theopenlane/core/pkg/summarizer"
+)
+
+const (
+	generatedPrivateKeyFile          = "private_key.pem"
+	generatedCertSlotDuration        = 90 * 24 * time.Hour
+	generatedCurrentSlotRenewBefore  = 30 * 24 * time.Hour
+	generatedRotationSlotRenewBefore = 15 * 24 * time.Hour
 )
 
 type ServerOption interface {
@@ -99,55 +112,10 @@ func WithHTTPS() ServerOption {
 // This should only be used in a development environment
 func WithGeneratedKeys() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		privFileName := "private_key.pem"
-
-		// generate a new private key if one doesn't exist
-		if _, err := os.Stat(privFileName); err != nil {
-			// Generate a new Ed25519 key pair
-			publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error generating Ed25519 key pair")
-			}
-
-			// Marshal private key to PKCS#8 format expected by token loader
-			privateKeyDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error marshaling Ed25519 private key")
-			}
-
-			// Marshal public key to PKIX format so both key blocks are available
-			publicKeyDER, err := x509.MarshalPKIXPublicKey(publicKey)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error marshaling Ed25519 public key")
-			}
-
-			privateKeyPEM := &pem.Block{
-				Type:  "PRIVATE KEY",
-				Bytes: privateKeyDER,
-			}
-
-			publicKeyPEM := &pem.Block{
-				Type:  "PUBLIC KEY",
-				Bytes: publicKeyDER,
-			}
-
-			privateKeyFile, err := os.Create(privFileName)
-			if err != nil {
-				log.Panic().Err(err).Msg("Error creating private key file")
-			}
-
-			if err := pem.Encode(privateKeyFile, privateKeyPEM); err != nil {
-				log.Panic().Err(err).Msg("unable to encode private key pem on startup")
-			}
-
-			if err := pem.Encode(privateKeyFile, publicKeyPEM); err != nil {
-				log.Panic().Err(err).Msg("unable to encode public key pem on startup")
-			}
-
-			privateKeyFile.Close()
+		keyPEM, signer, err := ensureGeneratedPrivateKey(generatedPrivateKeyFile)
+		if err != nil {
+			log.Panic().Err(err).Msg("unable to provision generated private key")
 		}
-
-		keys := map[string]string{}
 
 		// check if kid was passed in
 		kidPriv := s.Config.Settings.Auth.Token.KID
@@ -157,10 +125,226 @@ func WithGeneratedKeys() ServerOption {
 			kidPriv = ulids.New().String()
 		}
 
-		keys[kidPriv] = fmt.Sprintf("%v", privFileName)
+		keyPath := generatedPrivateKeyFile
+		if s.Config.Settings.Server.Dev {
+			keyPath, err = provisionGeneratedDevKeyDir(s, kidPriv, keyPEM, signer)
+			if err != nil {
+				log.Panic().Err(err).Msg("unable to provision generated key directory")
+			}
+		}
 
-		s.Config.Settings.Auth.Token.Keys = keys
+		s.Config.Settings.Auth.Token.KID = kidPriv
+		s.Config.Settings.Auth.Token.Keys = map[string]string{kidPriv: keyPath}
 	})
+}
+
+// ensureGeneratedPrivateKey returns an existing generated key or creates one
+func ensureGeneratedPrivateKey(path string) ([]byte, crypto.Signer, error) {
+	data, err := os.ReadFile(path)
+	if err == nil {
+		signer, err := tokens.NewFileSigner(path)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		return data, signer, nil
+	}
+
+	if !os.IsNotExist(err) {
+		return nil, nil, err
+	}
+
+	data, signer, err := generateEd25519KeyPEM(true)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if err := os.WriteFile(path, data, 0o600); err != nil {
+		return nil, nil, err
+	}
+
+	return data, signer, nil
+}
+
+// provisionGeneratedDevKeyDir writes local dev key files that match the mounted cert slot layout
+func provisionGeneratedDevKeyDir(s *ServerOptions, legacyKID string, legacyKeyPEM []byte, legacySigner crypto.Signer) (string, error) {
+	keyDir := s.Config.Settings.Keywatcher.KeyDir
+	if keyDir == "" {
+		keyDir = "./keys"
+		s.Config.Settings.Keywatcher.KeyDir = keyDir
+	}
+
+	s.Config.Settings.Keywatcher.Enabled = true
+
+	if err := os.MkdirAll(keyDir, 0o700); err != nil {
+		return "", err
+	}
+
+	legacyPath := filepath.Join(keyDir, legacyKID+".pem")
+	if err := os.WriteFile(legacyPath, legacyKeyPEM, 0o600); err != nil {
+		return "", err
+	}
+
+	ensureGeneratedDevCertSlotConfig(s)
+
+	for _, slot := range s.Config.Settings.Keywatcher.CertSlots {
+		if slot.Name == "" {
+			return "", fmt.Errorf("generated cert slot is missing a name") //nolint:err113
+		}
+
+		slotDir := filepath.Join(keyDir, slot.Name)
+		if err := os.MkdirAll(slotDir, 0o700); err != nil {
+			return "", err
+		}
+
+		if strings.EqualFold(slot.Name, "current") {
+			if err := writeGeneratedCertSlot(slotDir, slot.Name, legacyKeyPEM, legacySigner, true); err != nil {
+				return "", err
+			}
+
+			continue
+		}
+
+		if err := ensureGeneratedCertSlot(slotDir, slot.Name); err != nil {
+			return "", err
+		}
+	}
+
+	return legacyPath, nil
+}
+
+// ensureGeneratedDevCertSlotConfig adds local default slots for generated dev keys
+func ensureGeneratedDevCertSlotConfig(s *ServerOptions) {
+	if len(s.Config.Settings.Keywatcher.CertSlots) > 0 {
+		return
+	}
+
+	s.Config.Settings.Keywatcher.CertSlots = []coreconfig.KeyWatcherCertSlot{
+		{
+			Name:        "current",
+			RenewBefore: generatedCurrentSlotRenewBefore,
+		},
+		{
+			Name:        "rotation-a",
+			RenewBefore: generatedRotationSlotRenewBefore,
+		},
+	}
+}
+
+// ensureGeneratedCertSlot creates a generated slot key and certificate when they do not already exist
+func ensureGeneratedCertSlot(slotDir, name string) error {
+	keyPath := filepath.Join(slotDir, "tls.key")
+	certPath := filepath.Join(slotDir, "tls.crt")
+
+	keyPEM, signer, err := ensureGeneratedSlotKey(keyPath)
+	if err != nil {
+		return err
+	}
+
+	if _, err := os.Stat(certPath); err == nil {
+		return nil
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+
+	return writeGeneratedCertSlot(slotDir, name, keyPEM, signer, false)
+}
+
+// ensureGeneratedSlotKey returns an existing generated slot key or creates one
+func ensureGeneratedSlotKey(path string) ([]byte, crypto.Signer, error) {
+	data, err := os.ReadFile(path)
+	if err == nil {
+		signer, err := tokens.NewFileSigner(path)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		return data, signer, nil
+	}
+
+	if !os.IsNotExist(err) {
+		return nil, nil, err
+	}
+
+	data, signer, err := generateEd25519KeyPEM(false)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if err := os.WriteFile(path, data, 0o600); err != nil {
+		return nil, nil, err
+	}
+
+	return data, signer, nil
+}
+
+// writeGeneratedCertSlot writes tls.key and tls.crt for a generated local cert slot
+func writeGeneratedCertSlot(slotDir, name string, keyPEM []byte, signer crypto.Signer, writeKey bool) error {
+	if writeKey {
+		if err := os.WriteFile(filepath.Join(slotDir, "tls.key"), keyPEM, 0o600); err != nil {
+			return err
+		}
+	}
+
+	certPEM, err := generateSelfSignedCertPEM(name, signer)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(filepath.Join(slotDir, "tls.crt"), certPEM, 0o600)
+}
+
+// generateEd25519KeyPEM creates a PKCS8 Ed25519 private key PEM
+func generateEd25519KeyPEM(includePublic bool) ([]byte, crypto.Signer, error) {
+	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	privateKeyDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	data := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privateKeyDER})
+
+	if includePublic {
+		publicKeyDER, err := x509.MarshalPKIXPublicKey(publicKey)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		data = append(data, pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: publicKeyDER})...)
+	}
+
+	return data, privateKey, nil
+}
+
+// generateSelfSignedCertPEM creates a self-signed Ed25519 certificate for a generated local slot
+func generateSelfSignedCertPEM(name string, signer crypto.Signer) ([]byte, error) {
+	serial, err := rand.Int(rand.Reader, new(big.Int).Lsh(big.NewInt(1), 128))
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now()
+	cert := &x509.Certificate{
+		SerialNumber: serial,
+		Subject: pkix.Name{
+			CommonName: fmt.Sprintf("core-token-%s", name),
+		},
+		NotBefore:             now.Add(-time.Minute),
+		NotAfter:              now.Add(generatedCertSlotDuration),
+		KeyUsage:              x509.KeyUsageDigitalSignature,
+		BasicConstraintsValid: true,
+	}
+
+	certDER, err := x509.CreateCertificate(rand.Reader, cert, cert, signer.Public(), signer)
+	if err != nil {
+		return nil, err
+	}
+
+	return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certDER}), nil
 }
 
 // WithTokenManager sets up the token manager for the server

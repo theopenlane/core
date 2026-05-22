@@ -505,6 +505,20 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- KeyDir is the path to the directory containing PEM keys for JWT signing
     keydir: "./keys"  # @schema type:string; default:./keys
+    # -- MaxSigningTTL is the longest duration a JWT signed by a key can remain valid
+    maxsigningttl: "168h0m0s"  # @schema type:integer; default:168h
+    # -- SafetyWindow is extra time before cert-manager renewal where a key is no longer used for signing
+    safetywindow: "48h0m0s"  # @schema type:integer; default:48h
+    # -- CertSlots contains cert-manager mounted key/cert directories used for rotating JWT signing keys
+    certslots: []
+    # -- SignWithCertSlots enables cert slot selection for JWT signing
+    signwithcertslots: false  # @schema type:boolean; default:false
+  # -- Slack contains settings for Slack notifications
+  slack:
+    # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
+    newsubscribermessagefile: ""  # @schema type:string
+    # -- NewUserMessageFile is the path to the template used for new user notifications
+    newusermessagefile: ""  # @schema type:string
   # -- Integrations contains operator-level credentials for all v2 integration definitions
   integrations:
     awssecurityhub:
