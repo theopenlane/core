@@ -15,7 +15,7 @@ INSERT INTO
     )
 VALUES
     -- Vulnerability statuses
-    ('01KS7T8SYXWYQ80F2WQ79K15X4', 'vulnerability', 'status', 'New', 'Newly identified by an external integration.', '#6B7280', true, NOW(), NOW(), 'system', 'system'),
+    ('01KS7T8SYXWYQ80F2WQ79K15X4', 'vulnerability', 'status', 'New', 'Newly identified by an external integration.', '#0B6623', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1A01', 'vulnerability', 'status', 'Open', 'Newly identified and not yet reviewed.', '#6B7280', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1A02', 'vulnerability', 'status', 'Triaged', 'Reviewed and prioritized for action.', '#3B82F6', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1A03', 'vulnerability', 'status', 'In Progress', 'Actively being worked on.', '#F59E0B', true, NOW(), NOW(), 'system', 'system'),
@@ -27,7 +27,7 @@ VALUES
     ('01HVK6Z8YJ7M8X3T3M7W8X1A09', 'vulnerability', 'status', 'Duplicate', 'Duplicate of another tracked issue.', '#8B5CF6', true, NOW(), NOW(), 'system', 'system'),
 
     -- Finding statuses
-    ('01KS7T9XPM6ADVV2RH1V57WW0Q', 'finding', 'status', 'New', 'Newly identified by an external integration.', '#6B7280', true, NOW(), NOW(), 'system', 'system'),
+    ('01KS7T9XPM6ADVV2RH1V57WW0Q', 'finding', 'status', 'New', 'Newly identified by an external integration.', '#0B6623', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1B01', 'finding', 'status', 'Open', 'Newly identified and not yet reviewed.', '#6B7280', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1B02', 'finding', 'status', 'Triaged', 'Reviewed and prioritized for action.', '#3B82F6', true, NOW(), NOW(), 'system', 'system'),
     ('01HVK6Z8YJ7M8X3T3M7W8X1B03', 'finding', 'status', 'In Progress', 'Actively being worked on.', '#F59E0B', true, NOW(), NOW(), 'system', 'system'),
