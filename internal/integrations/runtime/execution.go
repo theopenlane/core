@@ -105,6 +105,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
+	ctx = ensureCallerOrg(ctx, installation.OwnerID)
+
 	db := r.DB()
 	startedAt := time.Now()
 
@@ -261,6 +263,10 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		return failRun(bootstrapErr, nil)
 	}
 
+	if integration != nil {
+		ctx = ensureCallerOrg(ctx, integration.OwnerID)
+	}
+
 	if tracked {
 		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
 			return failRun(err, nil)
@@ -413,7 +419,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	logx.FromContext(ctx).Debug().Int("count", len(installations)).Msg("installations found to check for reconciliation")
 
 	for _, inst := range installations {
-		if err := r.seedReconcileJobsForInstallation(systemCtx, inst); err != nil {
+		if err := r.seedReconcileJobsForInstallation(ensureCallerOrg(systemCtx, inst.OwnerID), inst); err != nil {
 			errs = append(errs, err)
 		}
 	}
@@ -428,7 +434,7 @@ func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *en
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
-	return r.seedReconcileJobsForInstallation(systemCtx, inst)
+	return r.seedReconcileJobsForInstallation(ensureCallerOrg(systemCtx, inst.OwnerID), inst)
 }
 
 // seedReconcileJobsForInstallation is the shared implementation used by both
@@ -491,6 +497,28 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 	}
 
 	return errors.Join(errs...)
+}
+
+// ensureCallerOrg sets the organization on the existing caller if not already present
+func ensureCallerOrg(ctx context.Context, orgID string) context.Context {
+	if orgID == "" {
+		return ctx
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return ctx
+	}
+
+	if _, hasOrg := caller.ActiveOrg(); hasOrg {
+		return ctx
+	}
+
+	scoped := *caller
+	scoped.OrganizationID = orgID
+	scoped.OrganizationIDs = append([]string{orgID}, caller.OrgIDs()...)
+
+	return auth.WithCaller(ctx, &scoped)
 }
 
 // reconcilableDefinitionIDs returns the IDs of all registered definitions that
