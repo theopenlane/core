@@ -23,10 +23,21 @@ import (
 )
 
 // SeedPaymentReminders starts the durable payment reminder polling loop
-// after runtime listeners have been registered
+// after runtime listeners have been registered. It is a no-op when an active job
+// already exists, preventing duplicate loops from accumulating across restarts
 func (r *Runtime) SeedPaymentReminders(ctx context.Context) error {
 	if !r.paymentReminderConfig.Enabled {
 		logx.FromContext(ctx).Info().Msg("payment reminder listener disabled, skipping seed")
+		return nil
+	}
+
+	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.PaymentReminderTopic)
+	if err != nil {
+		return err
+	}
+
+	if active {
+		logx.FromContext(ctx).Debug().Msg("payment reminder poller already active, skipping seed")
 		return nil
 	}
 

@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -122,15 +121,6 @@ func HookCreateTrustCenterDoc() ent.Hook {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple for trust center doc visibility")
 
 					return nil, ErrInternalServerError
-				}
-			}
-
-			if trustCenterDoc.WatermarkingEnabled {
-				logx.FromContext(ctx).Debug().Msg("watermarking enabled, queuing job")
-				if err := enqueueJob(ctx, m.Job, jobspec.WatermarkDocArgs{
-					TrustCenterDocumentID: trustCenterDoc.ID,
-				}, nil); err != nil {
-					return nil, err
 				}
 			}
 
@@ -265,22 +255,14 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 				}
 			}
 
-			if mutationSetsOriginalFileID || len(docFiles) > 0 {
-				if trustCenterDoc.WatermarkingEnabled {
-					if err := enqueueJob(ctx, m.Job, jobspec.WatermarkDocArgs{
-						TrustCenterDocumentID: trustCenterDoc.ID,
-					}, nil); err != nil {
-						return nil, err
-					}
-				} else {
-					// Use privacy allow context for internal update operation to bypass authorization checks
-					// and mark as internal operation to avoid triggering the update hook logic
-					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-					internalCtx := internalTrustCenterDocUpdateContextKey.Set(allowCtx, struct{}{})
-					trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
-					if err != nil {
-						return nil, err
-					}
+			if (mutationSetsOriginalFileID || len(docFiles) > 0) && !trustCenterDoc.WatermarkingEnabled {
+				// Use privacy allow context for internal update operation to bypass authorization checks
+				// and mark as internal operation to avoid triggering the update hook logic
+				allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+				internalCtx := internalTrustCenterDocUpdateContextKey.Set(allowCtx, struct{}{})
+				trustCenterDoc, err = m.Client().TrustCenterDoc.UpdateOne(trustCenterDoc).SetFileID(*trustCenterDoc.OriginalFileID).Save(internalCtx)
+				if err != nil {
+					return nil, err
 				}
 			}
 

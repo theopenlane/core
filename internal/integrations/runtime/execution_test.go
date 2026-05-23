@@ -12,6 +12,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/iam/auth"
 )
 
 func TestExecuteOperationNilInstallation(t *testing.T) {
@@ -283,5 +284,94 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 
 	if string(captured.Config) != `{"key":"value"}` {
 		t.Fatalf("expected config to be passed through, got %s", string(captured.Config))
+	}
+}
+
+func TestEnsureCallerOrg(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		ctx     func() context.Context
+		orgID   string
+		wantOrg string
+		wantCap auth.Capability
+	}{
+		{
+			name:  "sets org on caller without one",
+			orgID: "org-123",
+			ctx: func() context.Context {
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					Capabilities: auth.CapBypassOrgFilter | auth.CapInternalOperation,
+				})
+			},
+			wantOrg: "org-123",
+			wantCap: auth.CapBypassOrgFilter | auth.CapInternalOperation,
+		},
+		{
+			name:  "preserves existing org",
+			orgID: "org-override",
+			ctx: func() context.Context {
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					OrganizationID: "org-original",
+					Capabilities:   auth.CapInternalOperation,
+				})
+			},
+			wantOrg: "org-original",
+			wantCap: auth.CapInternalOperation,
+		},
+		{
+			name:  "preserves org from OrganizationIDs",
+			orgID: "org-override",
+			ctx: func() context.Context {
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					OrganizationIDs: []string{"org-from-ids"},
+				})
+			},
+			wantOrg: "org-from-ids",
+		},
+		{
+			name:  "no-op for empty orgID",
+			orgID: "",
+			ctx: func() context.Context {
+				return auth.WithCaller(context.Background(), &auth.Caller{
+					Capabilities: auth.CapInternalOperation,
+				})
+			},
+		},
+		{
+			name:  "no-op when no caller in context",
+			orgID: "org-123",
+			ctx:   context.Background,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ensureCallerOrg(tc.ctx(), tc.orgID)
+			caller, ok := auth.CallerFromContext(result)
+
+			if tc.wantOrg == "" {
+				if ok && caller != nil {
+					if orgID, has := caller.ActiveOrg(); has && orgID != "" {
+						assert.Assert(t, orgID == "", "expected no org, got %q", orgID)
+					}
+				}
+
+				return
+			}
+
+			assert.Assert(t, ok && caller != nil, "expected caller in context")
+
+			orgID, hasOrg := caller.ActiveOrg()
+			assert.Assert(t, hasOrg, "expected caller to have active org")
+			assert.Equal(t, tc.wantOrg, orgID)
+
+			if tc.wantCap != 0 {
+				assert.Assert(t, caller.Has(tc.wantCap), "expected capabilities to be preserved")
+			}
+		})
 	}
 }

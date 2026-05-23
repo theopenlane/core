@@ -1,6 +1,8 @@
 package serveropts
 
 import (
+	"context"
+
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -49,6 +51,13 @@ func WithIntegrationsRuntime(dbClient *ent.Client) ServerOption {
 
 		// set the runtime on the ent client so hooks/mutations can access it
 		dbClient.IntegrationsRuntime = rt
+
+		// ensure all connected integrations have a corresponding job
+		go func() {
+			if err := rt.SeedReconcileJobs(context.Background()); err != nil {
+				log.Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs at startup")
+			}
+		}()
 
 		if wf == nil {
 			return
