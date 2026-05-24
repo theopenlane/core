@@ -117,6 +117,7 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterWatermarkConfig](t,
 				withParents(TrustCenter{}),
 				withOrganizationOwner(true),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},

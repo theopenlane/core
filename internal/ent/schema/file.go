@@ -163,6 +163,7 @@ func (f File) Mixin() []ent.Mixin {
 					TrustCenterDoc{}, Standard{}, TrustCenterEntity{}, TrustCenterSubprocessor{}, Entity{}, IdentityHolder{}, Contact{}, Review{}),
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 				withAllowAnonymousTrustCenterAccess(true),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),

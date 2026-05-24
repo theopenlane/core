@@ -56,6 +56,13 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			shouldShowFileDetails: true,
 		},
 		{
+			name:                  "happy path, by system admin can see not visible docs",
+			queryID:               trustCenterDocNotVisible.ID,
+			client:                suite.client.api,
+			ctx:                   systemAdminUser.UserCtx,
+			shouldShowFileDetails: true,
+		},
+		{
 			name:                  "happy path, view only user",
 			queryID:               trustCenterDocProtected.ID,
 			client:                suite.client.api,
@@ -153,6 +160,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			assert.Check(t, resp.TrustCenterDoc.OriginalFileID != nil)
 			if tc.shouldShowFileDetails {
 				assert.Check(t, resp.TrustCenterDoc.OriginalFile != nil)
+				assert.Check(t, *resp.TrustCenterDoc.OriginalFile.PresignedURL != "")
 			} else {
 				assert.Check(t, resp.TrustCenterDoc.OriginalFile == nil)
 			}
@@ -700,9 +708,10 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 }
 
 func TestMutationUpdateTrustCenterDoc(t *testing.T) {
-
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
+
+	systemAdminPatClient := suite.setupPatClient(systemAdminUser, t)
 
 	(&CustomTypeEnumBuilder{
 		client:     suite.client,
@@ -733,6 +742,16 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
+		{
+			name:             "happy path, update watermark status by system admin pat",
+			trustCenterDocID: trustCenterDoc.ID,
+			request: testclient.UpdateTrustCenterDocInput{
+				WatermarkStatus: &enums.WatermarkStatusInProgress,
+			},
+			client: systemAdminPatClient,
+			ctx:    context.Background(),
+		},
+
 		{
 			name:             "happy path, update category",
 			trustCenterDocID: trustCenterDoc.ID,
