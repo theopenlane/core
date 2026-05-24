@@ -176,11 +176,16 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:        "happy path",
-			queryID:     watermarkConfig.ID,
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "",
+			name:    "happy path",
+			queryID: watermarkConfig.ID,
+			client:  suite.client.api,
+			ctx:     testUser1.UserCtx,
+		},
+		{
+			name:    "happy path by system admin",
+			queryID: watermarkConfig.ID,
+			client:  suite.client.api,
+			ctx:     systemAdminUser.UserCtx,
 		},
 		{
 			name:        "not found",
@@ -218,6 +223,22 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenterWatermarkConfig.ID))
+
+			// check the list as well
+			resp2, err := tc.client.GetTrustCenterWatermarkConfigs(tc.ctx, nil, nil, &testclient.TrustCenterWatermarkConfigWhereInput{
+				TrustCenterID: &trustCenter.ID,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			if tc.expectedErr != "" {
+				assert.Check(t, is.Len(resp2.TrustCenterWatermarkConfigs.Edges, 0))
+
+				return
+			}
+
+			assert.Check(t, is.Len(resp2.TrustCenterWatermarkConfigs.Edges, 1))
+			assert.Check(t, is.Equal(tc.queryID, resp2.TrustCenterWatermarkConfigs.Edges[0].Node.ID))
 		})
 	}
 	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
