@@ -474,6 +474,20 @@ func skipInterceptorForOrgMembers(ctx context.Context) bool {
 	return false
 }
 
+// skipInterceptorForSystemAdmins skips the filter interceptor for system admins
+func skipInterceptorForSystemAdmins(ctx context.Context) bool {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return false
+	}
+
+	if caller.Has(auth.CapSystemAdmin) {
+		return true
+	}
+
+	return false
+}
+
 // getObjectInterceptor adds the interceptor for the object owned mixin
 // based on the settings configured in the mixin
 func getObjectInterceptor[V any](o *ObjectOwnedMixin) {
