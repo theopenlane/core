@@ -111,7 +111,7 @@ type RuntimeEmailConfig struct {
 // DefaultSocial is the default set of social footer links applied to runtime email configs
 // when no explicit social links are provided
 var DefaultSocial = []SocialLink{
-	{Platform: "Openlane", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/b8653f6d-71ed-4f90-937c-361192079100/w=36", URL: "https://www.theopenlane.io"},
+	{Platform: "Openlane", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/2c681874-6b4a-41de-73ea-58e550a95800/w=36", URL: "https://www.theopenlane.io"},
 	{Platform: "GitHub", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/39a11dc8-8e01-44ed-8557-0b78ae050a00/w=36", URL: "https://github.com/theopenlane"},
 	{Platform: "LinkedIn", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/e9c20fd9-c8a6-4f79-9267-41f491746c00/w=36", URL: "https://linkedin.com/company/theopenlane"},
 	{Platform: "Discord", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/1fba759d-6580-49d8-daee-a82034226b00/w=36", URL: "https://discord.gg/4fq2sxDk7D"},
