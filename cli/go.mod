@@ -18,10 +18,10 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.21.22
-	github.com/theopenlane/core/common v1.0.21
+	github.com/theopenlane/core/common v1.0.23
 	github.com/theopenlane/go-client v0.10.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.31.0
+	github.com/theopenlane/iam v0.31.1
 	github.com/theopenlane/utils v0.7.1
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/term v0.43.0
