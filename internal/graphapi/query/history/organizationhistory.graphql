@@ -14,7 +14,6 @@ query GetAllOrganizationHistories {
 				avatarUpdatedAt
 				createdAt
 				createdBy
-				dedicatedDb
 				description
 				displayName
 				historyTime
@@ -47,7 +46,6 @@ query GetOrganizationHistories ($first: Int, $last: Int, $where: OrganizationHis
 				avatarUpdatedAt
 				createdAt
 				createdBy
-				dedicatedDb
 				description
 				displayName
 				historyTime

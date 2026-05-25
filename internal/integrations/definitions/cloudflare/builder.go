@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -24,7 +25,7 @@ func Builder() registry.Builder {
 				Visible:     true,
 			},
 			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[DirectorySync](),
+				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
@@ -42,6 +43,7 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
 					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
+					SkipFirstReconcile:  true,
 					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
@@ -68,12 +70,14 @@ func Builder() registry.Builder {
 					ConfigSchema: healthCheckSchema,
 				},
 				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect account members as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    cloudflareClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Name:           directorySyncOperation.Name(),
+					Description:    "Collect account members as directory accounts",
+					Topic:          definitionID.OperationTopic(directorySyncOperation.Name()),
+					ClientRef:      cloudflareClient.ID(),
+					ConfigSchema:   directorySyncSchema,
+					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
@@ -89,6 +93,23 @@ func Builder() registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+				},
+				{
+					Name:           findingsSyncOperation.Name(),
+					Description:    "Collect Cloudflare Security Center insights as findings",
+					Topic:          definitionID.OperationTopic(findingsSyncOperation.Name()),
+					ClientRef:      cloudflareClient.ID(),
+					ConfigSchema:   findingsSyncSchema,
+					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingsSync.Disable }),
+					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
+					Ingest: []types.IngestContract{
+						{
+							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+						},
+					},
+					IngestHandle:        FindingsCollect{}.IngestHandle(),
+					RequiredPermissions: []string{"Account Security Center Insights Read"},
 				},
 			},
 			Mappings: cloudflareMappings(),
