@@ -36,6 +36,12 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
 	}
 
+	requestCtx = auth.WithCaller(
+		privacy.DecisionContext(requestCtx, privacy.Allow),
+		caller.WithCapabilities(auth.CapBypassOrgFilter|auth.CapBypassFGA|auth.CapInternalOperation),
+	)
+	ctx.SetRequest(ctx.Request().WithContext(requestCtx))
+
 	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
 	if !ok || !def.Active {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)

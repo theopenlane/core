@@ -296,7 +296,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if wasFirstConnection && !connection.SkipFirstReconcile {
+	if wasFirstConnection {
 		if err := r.reconcileOperations(systemCtx, installation); err != nil {
 			return err
 		}

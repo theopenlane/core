@@ -110,10 +110,6 @@ type ConnectionRegistration struct {
 	ClientRefs []ClientID `json:"-"`
 	// ValidationOperation names the operation used to validate credentials before persistence
 	ValidationOperation string `json:"validationOperation,omitempty"`
-	// SkipFirstReconcile disables firing the reconciliation immediate after an integration gets connected. this is
-	// because the ctx that will be used to insert into the db will be that from the request context and that will
-	// always fail. This avoids that and on next schedule, the correct setup is used
-	SkipFirstReconcile bool `json:"skipFirstReconcile,omitempty"`
 	// Integration describes installation-scoped metadata derived by this connection mode
 	Integration *InstallationRegistration `json:"installation,omitempty"`
 	// Auth describes how this connection mode performs auth when supported

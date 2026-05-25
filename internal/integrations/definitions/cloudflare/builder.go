@@ -43,7 +43,6 @@ func Builder() registry.Builder {
 					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
 					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
-					SkipFirstReconcile:  true,
 					Integration:         installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
