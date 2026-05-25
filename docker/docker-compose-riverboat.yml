@@ -2,8 +2,8 @@ services:
   riverboat:
     # the taskfile will set the tag based on the architecture, if you are running on x86_64 it will use the amd64-latest tag
     # if you run without the taskfile and the env var set it will default to arm64-latest
-    image: riverboat:dev
-    # pull_policy: always
+    image: ghcr.io/theopenlane/riverboat:${RIVERBOAT_TAG:-arm64-latest}
+    pull_policy: always
     volumes:
       - ${PWD}/docker/configs/riverboat/.config.yaml:/config/.config.yaml
     command:
@@ -13,8 +13,6 @@ services:
     networks:
       - default
     restart: unless-stopped # allow it to keep trying if postgres is not up yet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
   river-ui:
     image: ghcr.io/riverqueue/riverui:latest
