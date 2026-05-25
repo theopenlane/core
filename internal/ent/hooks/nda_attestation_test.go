@@ -8,12 +8,17 @@ import (
 	"testing"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
+)
+
+var (
+	conf = model.NewDefaultConfiguration()
 )
 
 func TestCreateAttestationCertificate(t *testing.T) {
@@ -37,7 +42,7 @@ func TestCreateAttestationCertificate(t *testing.T) {
 
 	assert.Equal(t, "%PDF", string(pdfBytes[:4]))
 
-	pageCount, err := api.PageCount(bytes.NewReader(pdfBytes), nil)
+	pageCount, err := api.PageCount(bytes.NewReader(pdfBytes), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 1, pageCount)
 
@@ -52,7 +57,7 @@ func TestCreateAttestationCertificate_EmptyFields(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, pdfBytes)
 
-	err = api.Validate(bytes.NewReader(pdfBytes), nil)
+	err = api.Validate(bytes.NewReader(pdfBytes), conf)
 	assert.NoError(t, err)
 }
 
@@ -79,11 +84,11 @@ func TestAppendAttestationPage(t *testing.T) {
 
 	assert.Equal(t, "%PDF", string(merged[:4]))
 
-	pageCount, err := api.PageCount(bytes.NewReader(merged), nil)
+	pageCount, err := api.PageCount(bytes.NewReader(merged), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 2, pageCount)
 
-	err = api.Validate(bytes.NewReader(merged), nil)
+	err = api.Validate(bytes.NewReader(merged), conf)
 	assert.NoError(t, err)
 }
 
@@ -311,11 +316,11 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, attestedPDF)
 
-	pageCount, err := api.PageCount(bytes.NewReader(attestedPDF), nil)
+	pageCount, err := api.PageCount(bytes.NewReader(attestedPDF), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 2, pageCount)
 
-	err = api.Validate(bytes.NewReader(attestedPDF), nil)
+	err = api.Validate(bytes.NewReader(attestedPDF), conf)
 	assert.NoError(t, err)
 
 	// attestation fields should reflect the computed hash
