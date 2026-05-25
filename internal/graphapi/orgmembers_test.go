@@ -270,7 +270,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			userID: sharedTestUser2.ID,
 			role:   enums.RoleMember,
 			ctx:    sharedTestUser2.UserCtx,
-			errMsg: notAuthorizedErrorMsg,
+			errMsg: notFoundErrorMsg, // organization is not found because user does not have access to it
 		},
 		{
 			name:   "add user to personal org not allowed",

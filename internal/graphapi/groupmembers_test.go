@@ -217,7 +217,7 @@ func TestMutationCreateGroupMembers(t *testing.T) {
 			role:    enums.RoleMember,
 			client:  suite.client.api,
 			ctx:     sharedTestUser1.UserCtx,
-			errMsg:  notAuthorizedErrorMsg,
+			errMsg:  notFoundErrorMsg,
 		},
 		{
 			name:    "invalid role",

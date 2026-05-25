@@ -278,7 +278,8 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.DirectoryAccount](d,
 				withParents(IdentityHolder{}, Platform{}, Integration{}, DirectorySyncRun{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newCustomEnumMixin(d, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(d, withEnumFieldName("scope"), withGlobalEnum()),
@@ -373,6 +374,7 @@ func (d DirectoryAccount) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

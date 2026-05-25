@@ -46,10 +46,6 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
-          can_create_workflow_object_ref: false # system-driven, only services can create
-          can_create_workflow_assignment_target: false # system-driven, only services can create
-          can_create_workflow_event: false # system-driven, only services can create
-          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-super-admin
         object: organization:openlane
         context:
@@ -93,10 +89,6 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -125,7 +117,7 @@ tests:
           can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
-          can_create_evidence: true # group tuple set to allow
+          can_create_entity: true # group tuple set to allow
           can_create_trust_center_doc: true # group tuple set to allow
           can_create_trust_center_subprocessor: false
           can_create_campaign: false
@@ -137,10 +129,6 @@ tests:
           can_create_scan: false
           can_create_platform: false
           can_create_identity_holder: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -178,10 +166,6 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
-          can_create_workflow_object_ref: true
-          can_create_workflow_assignment_target: true
-          can_create_workflow_event: true
-          can_create_workflow_proposal: true
       - user: service:ulid-of-service-viewer
         object: organization:openlane # parent org
         assertions:
@@ -220,10 +204,6 @@ tests:
           can_create_scan: false
           can_create_platform: false
           can_create_identity_holder: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: user:ulid-of-admin
         object: organization:openlane # parent org
         context:
@@ -263,10 +243,6 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
-          can_create_workflow_object_ref: false # system-driven, only services can create
-          can_create_workflow_assignment_target: false # system-driven, only services can create
-          can_create_workflow_event: false # system-driven, only services can create
-          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         context:
@@ -319,10 +295,6 @@ tests:
           can_create_scan: true
           can_create_platform: true
           can_create_identity_holder: true
-          can_create_workflow_object_ref: false # system-driven, only services can create
-          can_create_workflow_assignment_target: false # system-driven, only services can create
-          can_create_workflow_event: false # system-driven, only services can create
-          can_create_workflow_proposal: false # system-driven, only services can create
       - user: user:ulid-of-member
         object: organization:foo # child org
         context:
@@ -436,10 +408,6 @@ tests:
           can_create_contact: false
           can_create_identity_holder: false
           can_create_asset: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: user:ulid-risk-manager
         object: organization:openlane
         context:
@@ -483,10 +451,6 @@ tests:
           can_create_contact: false
           can_create_identity_holder: false
           can_create_asset: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: user:ulid-policy-manager
         object: organization:openlane
         context:
@@ -530,10 +494,6 @@ tests:
           can_create_contact: false
           can_create_identity_holder: false
           can_create_asset: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
       - user: user:ulid-registry-manager
         object: organization:openlane
         context:
@@ -573,10 +533,6 @@ tests:
           can_create_review: false
           can_create_scan: false
           can_create_platform: true
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
           can_create_entity: true
           can_create_contact: true
           can_create_identity_holder: true
@@ -620,10 +576,6 @@ tests:
           can_create_review: false
           can_create_scan: false
           can_create_platform: false
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
           can_create_entity: false
           can_create_contact: false
           can_create_identity_holder: false
@@ -670,10 +622,6 @@ tests:
           can_create_review: true
           can_create_scan: true
           can_create_platform: true
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
           can_create_entity: true
           can_create_contact: true
           can_create_identity_holder: true
@@ -722,10 +670,6 @@ tests:
           can_create_identity_holder: false
           can_create_asset: false
           can_create_workflow_definition: true
-          can_create_workflow_object_ref: false
-          can_create_workflow_assignment_target: false
-          can_create_workflow_event: false
-          can_create_workflow_proposal: false
     list_objects:
       - user: user:ulid-of-owner
         type: organization

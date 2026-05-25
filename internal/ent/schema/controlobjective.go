@@ -122,7 +122,8 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.ControlObjective](c,
 				withParents(Control{}, Subcontrol{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
@@ -142,6 +143,7 @@ func (ControlObjective) Modules() []models.OrgModule {
 func (c ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.FGACrudParent(Control{}.Name()),
 	}
 }
 

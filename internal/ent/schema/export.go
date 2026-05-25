@@ -101,7 +101,7 @@ func (e Export) Mixin() []ent.Mixin {
 		includeRequestor: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e,
-				withSkipForSystemAdmin(true)),
+				withSkipForSystemAdmin()),
 		},
 	}.getMixins(e)
 }

@@ -185,7 +185,8 @@ func (a Asset) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Asset](a,
 				withParents(Platform{}, Entity{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			newResponsibilityMixin(a, withInternalOwner()),

@@ -214,7 +214,8 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.EmailTemplate](e,
 				withParents(Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			mixin.NewSystemOwnedMixin(),
 			newGroupPermissionsMixin(),

@@ -72,7 +72,8 @@ func (WorkflowEvent) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowEvent](WorkflowEvent{},
 				withParents(WorkflowInstance{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowEvent{})

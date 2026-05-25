@@ -114,7 +114,7 @@ func (s Subscriber) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(s,
-				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin(true)),
+				withSkipTokenTypesObjects(&token.VerifyToken{}, &token.SignUpToken{}), withSkipForSystemAdmin()),
 		},
 	}.getMixins(s)
 }

@@ -460,7 +460,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		{
 			name: "happy path, update multiple fields with pat",
 			request: testclient.UpdateScheduledJobInput{
-				Cron: &anotherCron,
+				JobRunnerID: &anotherRunner.ID,
 			},
 			scheduledJobID: scheduledJob2.ID,
 			client:         suite.client.apiWithPAT,
@@ -469,7 +469,7 @@ func TestMutationUpdateScheduledJob(t *testing.T) {
 		{
 			name: "happy path, update multiple fields with api token",
 			request: testclient.UpdateScheduledJobInput{
-				JobRunnerID: &anotherRunner.ID,
+				Cron: &anotherCron,
 			},
 			scheduledJobID: scheduledJob.ID,
 			client:         suite.client.apiWithToken,

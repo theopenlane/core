@@ -324,6 +324,7 @@ func (u User) Annotations() []schema.Annotation {
 			},
 		),
 		entx.FileCategory(SchemaUser),
+		entx.FGACrudSkip(entx.SkipAll),
 	}
 }
 

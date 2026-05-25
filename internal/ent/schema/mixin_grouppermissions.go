@@ -8,11 +8,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -296,6 +298,13 @@ func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	return
 }
 
+// Annotations of the GroupPermissionsMixin
+func (g GroupPermissionsMixin) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.GroupPermissionsEnabled{},
+	}
+}
+
 // groupReadOnlyHooks are the hooks that are used to add the viewer tuples
 // based on a group
 var groupReadOnlyHooks = []ent.Hook{
@@ -377,5 +386,12 @@ func (g GroupPermissionsEdgesMixin) Hooks() []ent.Hook {
 			hooks.HookGroupPermissionsTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+	}
+}
+
+// Annotations of the GroupPermissionsMixin
+func (g GroupPermissionsEdgesMixin) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.GroupPermissionsEnabled{},
 	}
 }

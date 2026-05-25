@@ -186,6 +186,8 @@ func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaOrganizationSetting),
 		entfga.SettingsChecks("organization"),
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
+		entx.FGACrudParent(Organization{}.Name()),
 	}
 }
 

@@ -14,6 +14,6 @@ type custom_domain
     define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
-    define parent_editor: can_edit from parent_context or can_edit_custom_domain from parent_context
-    define parent_viewer: can_view from parent_context or can_view_custom_domain from parent_context
+    define parent_editor: can_edit from parent_context
+    define parent_viewer: can_view from parent_context
     define parent_context: [organization]

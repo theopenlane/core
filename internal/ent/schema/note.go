@@ -79,7 +79,7 @@ func (n Note) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Note](
 				n,
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}, TrustCenterFAQ{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(),
 				withOwnerRelation(fgax.OwnerRelation),
 				withAllowAnonymousTrustCenterAccess(true),
 			),

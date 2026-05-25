@@ -151,7 +151,8 @@ func (WorkflowAssignment) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowAssignment](WorkflowAssignment{},
 				withParents(WorkflowInstance{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowAssignment{})

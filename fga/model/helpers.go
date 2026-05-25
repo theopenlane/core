@@ -3,7 +3,6 @@ package model
 import (
 	_ "embed"
 	"encoding/json"
-	"log"
 	"maps"
 	"sort"
 	"strings"
@@ -222,6 +221,12 @@ func ScopeAliases() map[string]string {
 	return aliases
 }
 
+var skipCreateDeleteTypes = map[string]struct{}{
+	"organization":         {},
+	"onboarding":           {},
+	"organization_setting": {},
+}
+
 // ScopeOptions groups available scopes by object (verb mapped back via alias map)
 func ScopeOptions() (map[string][]string, error) {
 	rels, err := RelationsForService()
@@ -249,6 +254,11 @@ func ScopeOptions() (map[string][]string, error) {
 
 		obj := parts[2]
 		if obj == "" {
+			continue
+		}
+
+		// organization cannot be created or deleted with an api token scope
+		if _, ok := skipCreateDeleteTypes[obj]; ok && (verb != Write && verb != Read) {
 			continue
 		}
 
@@ -298,7 +308,7 @@ func RoleOptions() ([]string, error) {
 	}
 
 	if len(rels) == 0 {
-		log.Fatal("no relations found for role management - ensure the embedded model contains relations shaped like can_manage_<role>")
+		return nil, err
 	}
 
 	return getRelationsOptionsForObject(rels)

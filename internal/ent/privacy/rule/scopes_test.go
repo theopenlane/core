@@ -16,9 +16,9 @@ func TestScopedRelation(t *testing.T) {
 		expected   string
 	}{
 		{name: "view query", objectType: "Control", relation: "can_view", expected: "can_view_control"},
-		{name: "update op", objectType: "Task", relation: "can_view", op: ent.OpUpdate, expected: "can_edit_task"},
+		{name: "update op", objectType: "Task", op: ent.OpUpdate, expected: "can_edit_task"},
 		{name: "edit relation", objectType: "Evidence", relation: "can_edit", expected: "can_edit_evidence"},
-		{name: "delete op", objectType: "File", relation: "can_edit", op: ent.OpDeleteOne, expected: "can_delete_file"},
+		{name: "delete op", objectType: "File", op: ent.OpDeleteOne, expected: "can_delete_file"},
 		{name: "create op", objectType: "Program", op: ent.OpCreate, expected: "can_create_program"},
 	}
 

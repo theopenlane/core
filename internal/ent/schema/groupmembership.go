@@ -9,6 +9,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -103,7 +104,8 @@ func (GroupMembership) Modules() []models.OrgModule {
 // Annotations of the GroupMembership
 func (g GroupMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.MembershipChecks("group"),
+		entfga.MembershipChecks(Group{}.Name()),
+		entx.FGACrudParent(Group{}.Name()),
 	}
 }
 

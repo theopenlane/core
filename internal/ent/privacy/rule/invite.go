@@ -103,16 +103,15 @@ func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (strin
 	}
 
 	switch strings.ToLower(role.String()) {
-	case strings.ToLower(fgax.MemberRelation):
+	case fgax.MemberRelation:
 		return inviteMemberRelation, nil
-	case strings.ToLower(fgax.AdminRelation):
+	case fgax.AdminRelation:
 		return inviteAdminRelation, nil
-	case strings.ToLower(fgax.SuperAdminRelation):
+	case fgax.SuperAdminRelation:
 		return inviteSuperAdminRelation, nil
-	case strings.ToLower(fgax.AuditorRelation):
+	case fgax.AuditorRelation:
 		return inviteAuditors, nil
+	default:
+		return inviteSuperAdminRelation, nil
 	}
-
-	// default to super admin
-	return inviteSuperAdminRelation, nil
 }

@@ -15,8 +15,8 @@ type integration
     define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
-    define parent_editor: can_edit from parent_context or can_edit_integration from parent_context or can_edit from parent
-    define parent_viewer: can_view from parent_context or can_view_integration from parent_context or can_view from parent
+    define parent_editor: can_edit from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view from parent
     define parent_context: [organization]
     define parent: [platform]
 
@@ -36,8 +36,8 @@ type integration_webhook
     define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     # parent permissions derived based on `crud` permissions or parents
-    define parent_editor: can_edit from parent_context or can_edit_integration_webhook from parent_context or can_edit from parent
-    define parent_viewer: can_view from parent_context or can_view_integration_webhook from parent_context or can_view from parent
+    define parent_editor: can_edit from parent_context or can_edit from parent
+    define parent_viewer: can_view from parent_context or can_view from parent
     define parent_context: [organization]
     define parent: [integration]
 

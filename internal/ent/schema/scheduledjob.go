@@ -90,8 +90,8 @@ func (c ScheduledJob) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.ScheduledJob](c,
 				withParents(Control{}, Subcontrol{}),
-				withOrganizationOwner(true),
-				withSkipForSystemAdmin(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(c)

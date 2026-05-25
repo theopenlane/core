@@ -639,6 +639,7 @@ func (o Organization) Annotations() []schema.Annotation {
 		),
 		entx.FileCategory(SchemaOrganization),
 		entfga.SelfAccessChecks(),
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }
 

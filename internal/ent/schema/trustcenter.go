@@ -98,7 +98,7 @@ func (t TrustCenter) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t,
 				withAllowAnonymousTrustCenterAccess(true),
-				withSkipForSystemAdmin(true),
+				withSkipForSystemAdmin(),
 			),
 			// allow for group group permissions to be assigned to trust centers, to give users full edit access
 			// to trust center objects and their children
@@ -260,6 +260,7 @@ func (TrustCenter) Modules() []models.OrgModule {
 func (t TrustCenter) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }
 

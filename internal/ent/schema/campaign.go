@@ -254,7 +254,8 @@ func (c Campaign) Mixin() []ent.Mixin {
 		prefix: "CMP",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Campaign](c,
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			newResponsibilityMixin(c, withInternalOwner()),

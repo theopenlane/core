@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -155,4 +156,12 @@ func (UserSetting) Policy() ent.Policy {
 			rule.AllowIfSelf(),
 		),
 	)
+}
+
+// Annotations of the UserSetting
+func (u UserSetting) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.FGACrudSkip(entx.SkipAll),
+		entx.FGACrudParent(User{}.Name()),
+	}
 }

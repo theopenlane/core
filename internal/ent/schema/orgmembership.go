@@ -102,6 +102,7 @@ func (OrgMembership) Annotations() []schema.Annotation {
 				},
 			},
 		),
+		entx.FGACrudParent(Organization{}.Name()),
 	}
 }
 

@@ -298,7 +298,8 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 					IdentityHolder{},
 					Platform{},
 				),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(w)

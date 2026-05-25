@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
@@ -109,6 +110,7 @@ func (o Onboarding) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 	}
 }
 

@@ -227,6 +227,7 @@ func (m DirectoryMembership) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
 		),
 	)
 }

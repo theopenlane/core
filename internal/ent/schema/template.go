@@ -90,7 +90,7 @@ func (Template) Fields() []ent.Field {
 			Comment("the id of the trust center this template is associated with").
 			Optional(),
 		field.JSON("transform_configuration", models.TemplateProjectionConfig{}).
-			Comment("configuration for converting a submitted assesment into records for the organization").
+			Comment("configuration for converting a submitted assessment into records for the organization").
 			Optional(),
 	}
 }
@@ -101,7 +101,8 @@ func (t Template) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Template](t,
 				withParents(TrustCenter{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 				withSkipperFunc(skipInterceptorForOrgMembers),
 				withAllowAnonymousTrustCenterAccess(true),
 			),

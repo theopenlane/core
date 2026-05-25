@@ -88,24 +88,6 @@
   object: organization:openlane
 # grant service ability to create system-driven workflow objects
 - user: service:ulid-of-service-editor
-  relation: can_create_workflow_instance
-  object: organization:openlane
-- user: service:ulid-of-service-editor
-  relation: can_create_workflow_assignment
-  object: organization:openlane
-- user: service:ulid-of-service-editor
-  relation: can_create_workflow_object_ref
-  object: organization:openlane
-- user: service:ulid-of-service-editor
-  relation: can_create_workflow_assignment_target
-  object: organization:openlane
-- user: service:ulid-of-service-editor
-  relation: can_create_workflow_event
-  object: organization:openlane
-- user: service:ulid-of-service-editor
-  relation: can_create_workflow_proposal
-  object: organization:openlane
-- user: service:ulid-of-service-editor
   relation: compliance_manager
   object: organization:openlane
 - user: service:ulid-of-service-editor

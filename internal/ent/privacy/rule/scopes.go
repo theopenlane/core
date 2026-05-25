@@ -77,9 +77,6 @@ func GetFGAObjectType(q intercept.Query) string {
 func AllowIfTokenHasMutationScope() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 		objectType := m.Type()
-		if objectType == "" {
-			return privacy.Skip
-		}
 
 		// do not skip scope, force trust center edit permissions checked
 		_, okTC := m.(utils.TrustCenterMutation)
@@ -96,7 +93,7 @@ func AllowIfTokenHasMutationScope() privacy.MutationRuleFunc {
 }
 
 // CheckSubjectScope enforces that the authorized subject has the required scope for the given object type, relation, and operation.
-// Returns nil if the rule should be skipped (no scoped relation), privacy.Allow if access is granted, or an error if denied
+// Returns privacy.Skip if the rule should be skipped (no scoped relation), privacy.Allow if access is granted, or an error if denied
 func CheckSubjectScope(ctx context.Context, objectType string, relation string, op *ent.Op) error {
 	// allow api token access to api tokens
 	if auth.IsAPITokenAuthentication(ctx) && objectType == generated.TypeAPIToken {

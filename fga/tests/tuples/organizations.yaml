@@ -25,16 +25,16 @@
 # setup group for group creator access check
 - user: organization:openlane
   relation: parent_context
-  object: group:evidence-creator
+  object: group:entity-creator
   condition:
     name: public_group
     context:
       public: false
 - user: user:ulid-of-member
   relation: member
-  object: group:evidence-creator
-- user: group:evidence-creator#member
-  relation: evidence_creator
+  object: group:entity-creator
+- user: group:entity-creator#member
+  relation: entity_creator
   object: organization:openlane
 - user: user:ulid-of-member
   relation: member

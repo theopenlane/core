@@ -104,7 +104,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 			// it will also create program parent tuples for the narrative when a program is associated to the narrative
 			newObjectOwnedMixin[generated.Narrative](n,
 				withParents(Program{}, Control{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(),
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),

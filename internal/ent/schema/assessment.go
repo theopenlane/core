@@ -86,7 +86,7 @@ func (a Assessment) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Assessment](a,
 				withParents(Campaign{}),
-				withOrganizationOwner(false),
+				withOrganizationOwner(),
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(),

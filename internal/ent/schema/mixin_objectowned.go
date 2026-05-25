@@ -76,6 +76,9 @@ type ObjectOwnedMixin struct {
 	SkipDeletedAt bool
 	// WorkflowEdgeEligible marks owner edges as workflow-eligible for trigger detection.
 	WorkflowEdgeEligible bool
+	// SkipParentContextTuple skips the parent context tuple creation for schemas that have owner_id but permissions
+	// are not based on the parent organization, and instead based on other parents
+	SkipParentContextTuple bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -133,11 +136,9 @@ func withHookFuncs(hookFuncs ...HookFunc) objectOwnedOption {
 }
 
 // withSkipForSystemAdmin allows the owner id field to be empty for system admins
-// if the mixin config is used and also includes the system owned mixin, this will be
-// automatically set to true
-func withSkipForSystemAdmin(allow bool) objectOwnedOption {
+func withSkipForSystemAdmin() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
-		o.AllowEmptyForSystemAdmin = allow
+		o.AllowEmptyForSystemAdmin = true
 	}
 }
 
@@ -183,13 +184,22 @@ func withParents(schemas ...any) objectOwnedOption {
 
 // withOrganizationOwner adds the organization owner_id field and hooks to the schema
 // and optionally allows system admins to have empty owner_id
-func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
+func withOrganizationOwner() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.IncludeOrganizationOwner = true
 
-		if skipSystemAdmin {
-			o.AllowEmptyForSystemAdmin = skipSystemAdmin
-		}
+		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
+		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
+	}
+}
+
+// withOrganizationOwnerFieldOnly adds the organization owner_id field but
+// does not have a parent_context check for the organization; schemas that use this inherit
+// permissions from parents and not the organization directly
+func withOrganizationOwnerFieldOnly() objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.IncludeOrganizationOwner = true
+		o.SkipParentContextTuple = true
 
 		o.HookFuncs = append(o.HookFuncs, orgHookCreateFunc)
 		o.InterceptorFuncs = append(o.InterceptorFuncs, defaultOrgInterceptorFunc)
@@ -200,13 +210,9 @@ func withOrganizationOwner(skipSystemAdmin bool) objectOwnedOption {
 // but does NOT add the editor relation tuple. This is for system-driven objects where
 // only services should be able to create/edit/delete, but users can view based on org membership.
 // It also replaces the default tuple update hook with one that skips creating user parent tuples.
-func withOrganizationOwnerServiceOnly(skipSystemAdmin bool) objectOwnedOption {
+func withOrganizationOwnerServiceOnly() objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.IncludeOrganizationOwner = true
-
-		if skipSystemAdmin {
-			o.AllowEmptyForSystemAdmin = skipSystemAdmin
-		}
 
 		// Replace the default tuple update hook with a service-only version
 		// that skips creating user parent tuples (since users are not allowed as parent types)

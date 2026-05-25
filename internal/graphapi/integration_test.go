@@ -144,8 +144,7 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 func TestMutationDeleteIntegration(t *testing.T) {
 	// Create integrations with different kinds (unique constraint on owner_id + kind)
 	integration1 := (&IntegrationBuilder{client: suite.client, Kind: "github"}).MustNew(sharedTestUser1.UserCtx, t)
-	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "slack"}).MustNew(sharedTestUser1.UserCtx, t)
-	integration3 := (&IntegrationBuilder{client: suite.client, Kind: "jira"}).MustNew(sharedTestUser1.UserCtx, t)
+	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "jira"}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -160,32 +159,33 @@ func TestMutationDeleteIntegration(t *testing.T) {
 			client:        suite.client.apiWithToken,
 			ctx:           context.Background(),
 			integrationID: integration1.ID,
+			errorMsg:      notAuthorizedErrorMsg,
 		},
 		{
 			name:          "delete integration, happy path using personal access token",
 			client:        suite.client.apiWithPAT,
 			ctx:           context.Background(),
-			integrationID: integration2.ID,
+			integrationID: integration1.ID,
 		},
 		{
 			name:          "delete integration, no access",
 			client:        suite.client.api,
 			ctx:           sharedViewOnlyUser.UserCtx,
-			integrationID: integration3.ID,
+			integrationID: integration2.ID,
 			errorMsg:      notAuthorizedErrorMsg,
 		},
 		{
 			name:          "delete integration, no access another org",
 			client:        suite.client.api,
 			ctx:           sharedTestUser2.UserCtx,
-			integrationID: integration3.ID,
+			integrationID: integration2.ID,
 			errorMsg:      notFoundErrorMsg,
 		},
 		{
 			name:          "delete integration, happy path",
 			client:        suite.client.api,
 			ctx:           sharedTestUser1.UserCtx,
-			integrationID: integration3.ID,
+			integrationID: integration2.ID,
 		},
 	}
 
