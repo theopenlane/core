@@ -9233,7 +9233,7 @@ type CreateTemplateInput struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	OwnerID                *string                          `json:"ownerID,omitempty"`
 	EnvironmentID          *string                          `json:"environmentID,omitempty"`
@@ -35780,7 +35780,7 @@ type Template struct {
 	Uischema map[string]any `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
@@ -44375,7 +44375,7 @@ type UpdateTemplateInput struct {
 	// the uischema for the template to render in the UI
 	Uischema      map[string]any `json:"uischema,omitempty"`
 	ClearUischema *bool          `json:"clearUischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration      *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	ClearTransformConfiguration *bool                            `json:"clearTransformConfiguration,omitempty"`
 	EnvironmentID               *string                          `json:"environmentID,omitempty"`

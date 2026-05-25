@@ -5265,7 +5265,6 @@ var (
 		{Name: "personal_org", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "dedicated_db", Type: field.TypeBool, Default: false},
 		{Name: "stripe_customer_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "parent_organization_id", Type: field.TypeString, Nullable: true},
 		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
@@ -5278,13 +5277,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organizations_organizations_children",
-				Columns:    []*schema.Column{OrganizationsColumns[16]},
+				Columns:    []*schema.Column{OrganizationsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "organizations_files_avatar_file",
-				Columns:    []*schema.Column{OrganizationsColumns[17]},
+				Columns:    []*schema.Column{OrganizationsColumns[16]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

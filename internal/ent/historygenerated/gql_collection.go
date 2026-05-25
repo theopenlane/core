@@ -9050,11 +9050,6 @@ func (_q *OrganizationHistoryQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationhistory.FieldAvatarUpdatedAt)
 				fieldSeen[organizationhistory.FieldAvatarUpdatedAt] = struct{}{}
 			}
-		case "dedicatedDb":
-			if _, ok := fieldSeen[organizationhistory.FieldDedicatedDb]; !ok {
-				selectedFields = append(selectedFields, organizationhistory.FieldDedicatedDb)
-				fieldSeen[organizationhistory.FieldDedicatedDb] = struct{}{}
-			}
 		case "stripeCustomerID":
 			if _, ok := fieldSeen[organizationhistory.FieldStripeCustomerID]; !ok {
 				selectedFields = append(selectedFields, organizationhistory.FieldStripeCustomerID)

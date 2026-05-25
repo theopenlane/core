@@ -15974,7 +15974,6 @@ type CreateOrganizationInput struct {
 	PersonalOrg                       *bool
 	AvatarRemoteURL                   *string
 	AvatarUpdatedAt                   *time.Time
-	DedicatedDb                       *bool
 	ControlCreatorIDs                 []string
 	ControlImplementationCreatorIDs   []string
 	ControlObjectiveCreatorIDs        []string
@@ -16097,9 +16096,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AvatarUpdatedAt; v != nil {
 		m.SetAvatarUpdatedAt(*v)
-	}
-	if v := i.DedicatedDb; v != nil {
-		m.SetDedicatedDb(*v)
 	}
 	if v := i.ControlCreatorIDs; len(v) > 0 {
 		m.AddControlCreatorIDs(v...)

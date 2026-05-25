@@ -14,8 +14,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/gravatar"
 
-	"github.com/theopenlane/riverboat/pkg/jobs"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -102,27 +100,6 @@ func HookOrganization() ent.Hook {
 				// otherwise add the API token for admin access to the newly created organization
 				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
 					return v, err
-				}
-
-				// create the database, if the org has a dedicated db and dbx is available
-				if orgCreated.DedicatedDb {
-					// on create the org will not yet have access to the settings
-					// allow the request to proceed to get the org settings
-					allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-					settings, err := orgCreated.Setting(allowCtx)
-					if err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization settings")
-
-						return nil, err
-					}
-
-					if _, err := m.Job.Insert(ctx, jobs.DatabaseArgs{
-						OrganizationID: orgCreated.ID,
-						Location:       settings.GeoLocation.String(),
-					}, nil); err != nil {
-						return nil, err
-					}
 				}
 
 				// update the session to drop the user into the new organization

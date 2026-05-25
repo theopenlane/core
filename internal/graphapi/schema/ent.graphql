@@ -15567,7 +15567,7 @@ input CreateTemplateInput {
   """
   uischema: Map
   """
-  configuration for converting a submitted assesment into records for the organization
+  configuration for converting a submitted assessment into records for the organization
   """
   transformConfiguration: TemplateProjectionConfig
   ownerID: ID
@@ -66921,7 +66921,7 @@ type Template implements Node {
   """
   trustCenterID: ID
   """
-  configuration for converting a submitted assesment into records for the organization
+  configuration for converting a submitted assessment into records for the organization
   """
   transformConfiguration: TemplateProjectionConfig
   owner: Organization
@@ -78839,7 +78839,7 @@ input UpdateTemplateInput {
   uischema: Map
   clearUischema: Boolean
   """
-  configuration for converting a submitted assesment into records for the organization
+  configuration for converting a submitted assessment into records for the organization
   """
   transformConfiguration: TemplateProjectionConfig
   clearTransformConfiguration: Boolean

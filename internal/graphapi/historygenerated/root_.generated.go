@@ -1740,7 +1740,6 @@ type ComplexityRoot struct {
 		AvatarUpdatedAt   func(childComplexity int) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
-		DedicatedDb       func(childComplexity int) int
 		Description       func(childComplexity int) int
 		DisplayName       func(childComplexity int) int
 		HistoryTime       func(childComplexity int) int
@@ -12696,13 +12695,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationHistory.CreatedBy(childComplexity), true
-
-	case "OrganizationHistory.dedicatedDb":
-		if e.ComplexityRoot.OrganizationHistory.DedicatedDb == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationHistory.DedicatedDb(childComplexity), true
 
 	case "OrganizationHistory.description":
 		if e.ComplexityRoot.OrganizationHistory.Description == nil {
@@ -44309,10 +44301,6 @@ type OrganizationHistory implements Node {
   """
   avatarUpdatedAt: Time
   """
-  Whether the organization has a dedicated database
-  """
-  dedicatedDb: Boolean!
-  """
   the stripe customer ID this organization is associated to
   """
   stripeCustomerID: String
@@ -56852,7 +56840,7 @@ type TemplateHistory implements Node {
   """
   trustCenterID: String
   """
-  configuration for converting a submitted assesment into records for the organization
+  configuration for converting a submitted assessment into records for the organization
   """
   transformConfiguration: TemplateProjectionConfig
 }
@@ -69623,8 +69611,6 @@ func (ec *executionContext) childFields_OrganizationHistory(ctx context.Context,
 		return ec.fieldContext_OrganizationHistory_avatarLocalFileID(ctx, field)
 	case "avatarUpdatedAt":
 		return ec.fieldContext_OrganizationHistory_avatarUpdatedAt(ctx, field)
-	case "dedicatedDb":
-		return ec.fieldContext_OrganizationHistory_dedicatedDb(ctx, field)
 	case "stripeCustomerID":
 		return ec.fieldContext_OrganizationHistory_stripeCustomerID(ctx, field)
 	}

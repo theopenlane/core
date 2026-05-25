@@ -302,20 +302,6 @@ func (_u *OrganizationUpdate) ClearAvatarUpdatedAt() *OrganizationUpdate {
 	return _u
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_u *OrganizationUpdate) SetDedicatedDb(v bool) *OrganizationUpdate {
-	_u.mutation.SetDedicatedDb(v)
-	return _u
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_u *OrganizationUpdate) SetNillableDedicatedDb(v *bool) *OrganizationUpdate {
-	if v != nil {
-		_u.SetDedicatedDb(*v)
-	}
-	return _u
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_u *OrganizationUpdate) SetStripeCustomerID(v string) *OrganizationUpdate {
 	_u.mutation.SetStripeCustomerID(v)
@@ -4418,9 +4404,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DedicatedDb(); ok {
-		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
@@ -9903,20 +9886,6 @@ func (_u *OrganizationUpdateOne) ClearAvatarUpdatedAt() *OrganizationUpdateOne {
 	return _u
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_u *OrganizationUpdateOne) SetDedicatedDb(v bool) *OrganizationUpdateOne {
-	_u.mutation.SetDedicatedDb(v)
-	return _u
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_u *OrganizationUpdateOne) SetNillableDedicatedDb(v *bool) *OrganizationUpdateOne {
-	if v != nil {
-		_u.SetDedicatedDb(*v)
-	}
-	return _u
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_u *OrganizationUpdateOne) SetStripeCustomerID(v string) *OrganizationUpdateOne {
 	_u.mutation.SetStripeCustomerID(v)
@@ -14049,9 +14018,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 	}
 	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organization.FieldAvatarUpdatedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DedicatedDb(); ok {
-		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)

@@ -112,17 +112,6 @@ func (Organization) Fields() []ent.Field {
 			Default(time.Now).
 			Optional().
 			Nillable(),
-		field.Bool("dedicated_db").
-			Comment("Whether the organization has a dedicated database").
-			Default(false). // default to shared db
-			// TODO: https://github.com/theopenlane/core/issues/734
-			// update this once feature functionality is enabled
-			// Annotations(
-			// 	entgql.Skip(),
-			// ),
-			Annotations(
-				entgql.Skip(entgql.SkipWhereInput, entgql.SkipMutationUpdateInput, entgql.SkipOrderField),
-			),
 		field.String("stripe_customer_id").
 			Comment("the stripe customer ID this organization is associated to").
 			Optional().

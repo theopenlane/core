@@ -59,11 +59,6 @@ func createValidation() (input graphclient.CreateOrganizationInput, avatarFile *
 		input.ParentID = &parentOrgID
 	}
 
-	dedicatedDB := cmd.Config.Bool("dedicated-db")
-	if dedicatedDB {
-		input.DedicatedDb = &dedicatedDB
-	}
-
 	tags := cmd.Config.Strings("tags")
 	if len(tags) > 0 {
 		input.Tags = tags

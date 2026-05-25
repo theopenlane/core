@@ -218,20 +218,6 @@ func (_u *OrganizationHistoryUpdate) ClearAvatarUpdatedAt() *OrganizationHistory
 	return _u
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_u *OrganizationHistoryUpdate) SetDedicatedDb(v bool) *OrganizationHistoryUpdate {
-	_u.mutation.SetDedicatedDb(v)
-	return _u
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_u *OrganizationHistoryUpdate) SetNillableDedicatedDb(v *bool) *OrganizationHistoryUpdate {
-	if v != nil {
-		_u.SetDedicatedDb(*v)
-	}
-	return _u
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_u *OrganizationHistoryUpdate) SetStripeCustomerID(v string) *OrganizationHistoryUpdate {
 	_u.mutation.SetStripeCustomerID(v)
@@ -390,9 +376,6 @@ func (_u *OrganizationHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DedicatedDb(); ok {
-		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
@@ -608,20 +591,6 @@ func (_u *OrganizationHistoryUpdateOne) ClearAvatarUpdatedAt() *OrganizationHist
 	return _u
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_u *OrganizationHistoryUpdateOne) SetDedicatedDb(v bool) *OrganizationHistoryUpdateOne {
-	_u.mutation.SetDedicatedDb(v)
-	return _u
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_u *OrganizationHistoryUpdateOne) SetNillableDedicatedDb(v *bool) *OrganizationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDedicatedDb(*v)
-	}
-	return _u
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_u *OrganizationHistoryUpdateOne) SetStripeCustomerID(v string) *OrganizationHistoryUpdateOne {
 	_u.mutation.SetStripeCustomerID(v)
@@ -810,9 +779,6 @@ func (_u *OrganizationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.AvatarUpdatedAtCleared() {
 		_spec.ClearField(organizationhistory.FieldAvatarUpdatedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DedicatedDb(); ok {
-		_spec.SetField(organizationhistory.FieldDedicatedDb, field.TypeBool, value)
 	}
 	if value, ok := _u.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organizationhistory.FieldStripeCustomerID, field.TypeString, value)
