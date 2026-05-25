@@ -14,8 +14,10 @@ import (
 )
 
 const (
-	inviteMemberRelation = "can_invite_members"
-	inviteAdminRelation  = "can_invite_admins"
+	inviteMemberRelation     = "can_invite_members"
+	inviteAdminRelation      = "can_invite_admins"
+	inviteSuperAdminRelation = "can_invite_super_admins"
+	inviteAuditors           = "can_invite_auditors"
 )
 
 // CanInviteUsers is a rule that returns allow decision if user has access to invite members or admins to the organization
@@ -100,11 +102,16 @@ func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (strin
 		}
 	}
 
-	// allow member to invite members
-	if strings.EqualFold(role.String(), fgax.MemberRelation) {
+	switch strings.ToLower(role.String()) {
+	case fgax.MemberRelation:
 		return inviteMemberRelation, nil
+	case fgax.AdminRelation:
+		return inviteAdminRelation, nil
+	case fgax.SuperAdminRelation:
+		return inviteSuperAdminRelation, nil
+	case fgax.AuditorRelation:
+		return inviteAuditors, nil
+	default:
+		return inviteSuperAdminRelation, nil
 	}
-
-	// default to admin
-	return inviteAdminRelation, nil
 }

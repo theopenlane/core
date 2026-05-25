@@ -76,8 +76,6 @@ func TestConfigureIntegrationRequestValidate(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			err := tc.payload.Validate()
 			if tc.wantErr {
 				assert.Error(t, err)
@@ -118,8 +116,6 @@ func TestIntegrationAuthStartRequestValidate(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			err := tc.req.Validate()
 			if tc.wantErr {
 				assert.Error(t, err)
@@ -183,8 +179,6 @@ func TestVerifyWebhookHMACSHA256(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
 			req := &http.Request{Header: http.Header{}}
 			if tc.signature != "" {
 				req.Header.Set(integrationWebhookSignatureHeader, tc.signature)

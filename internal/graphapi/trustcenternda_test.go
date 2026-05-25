@@ -19,15 +19,15 @@ import (
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
-	cleanupTrustCenterData(t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(tcOrg.owner.UserCtx, t)
 
 	up := uploadFile(t, pdfFilePath)
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
-	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{up})
 
@@ -84,7 +84,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
 	// Clear any existing jobs
-	err = suite.client.db.Job.TruncateRiverTables(testUser1.UserCtx)
+	err = suite.client.db.Job.TruncateRiverTables(tcOrg.owner.UserCtx)
 	assert.NilError(t, err)
 
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
@@ -93,7 +93,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, resp != nil)
 
 	// make sure the nda request is marked as signed
-	ndaRequest, err := suite.client.api.GetTrustCenterNDARequests(testUser1.UserCtx, nil, nil, nil, nil, []*testclient.TrustCenterNDARequestOrder{}, &testclient.TrustCenterNDARequestWhereInput{
+	ndaRequest, err := suite.client.api.GetTrustCenterNDARequests(tcOrg.owner.UserCtx, nil, nil, nil, nil, []*testclient.TrustCenterNDARequestOrder{}, &testclient.TrustCenterNDARequestWhereInput{
 		Email: &email,
 	})
 	assert.NilError(t, err)
@@ -106,15 +106,14 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile != nil)
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestCreateTrustCenterNDA(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	testCases := []struct {
 		name     string
 		ctx      context.Context
@@ -124,7 +123,7 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 	}{
 		{
 			name: "happy path",
-			ctx:  adminUser.UserCtx,
+			ctx:  tcOrg.admin.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
@@ -132,7 +131,7 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 		},
 		{
 			name: "missing upload",
-			ctx:  testUser1.UserCtx,
+			ctx:  tcOrg.owner.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
@@ -140,7 +139,7 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 		},
 		{
 			name: "Other user cannot create NDA",
-			ctx:  testUser2.UserCtx,
+			ctx:  sharedTestUser2.UserCtx,
 			input: testclient.CreateTrustCenterNDAInput{
 				TrustCenterID: trustCenter.ID,
 			},
@@ -188,20 +187,25 @@ func TestCreateTrustCenterNDA(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
+
 	input := testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}
+
 	uploadFiles := []string{pdfFilePath}
 	uploads := []*graphql.Upload{}
 	expectUploads := []graphql.Upload{}
+
 	for _, file := range uploadFiles {
 		up := uploadFile(t, file)
 		expectUploads = append(expectUploads, *up)
@@ -212,7 +216,7 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, expectUploads)
 	}
 
-	resp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, input, uploads)
+	resp, err := suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, input, uploads)
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
@@ -221,40 +225,41 @@ func TestAnonymousUserCanQueryTrustCenterNDA(t *testing.T) {
 	// expect an upload and a delete since the upload will be rolled back on error
 	expectUpload(t, suite.client.mockProvider, expectUploads)
 	expectDelete(t, suite.client.mockProvider, expectUploads)
-	_, err = suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, input, uploads)
+	_, err = suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, input, uploads)
 	assert.ErrorContains(t, err, "template already exists")
 
 	// check an anonymous user for this trust center can query the NDA
-	queryResp, err := suite.client.api.GetAllTemplates(createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID))
+	queryResp, err := suite.client.api.GetAllTemplates(createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID))
 	assert.NilError(t, err)
 	assert.Assert(t, queryResp != nil)
 	assert.Check(t, len(queryResp.Templates.Edges) == 1)
 	assert.Check(t, queryResp.Templates.Edges[0].Node.ID == resp.CreateTrustCenterNda.Template.ID)
 
 	// ... and that an anonymous user for a different trust center cannot query the NDA
-	queryResp2, err := suite.client.api.GetAllTemplates(createAnonymousTrustCenterContext(trustCenter2.ID, testUser2.OrganizationID))
+	queryResp2, err := suite.client.api.GetAllTemplates(createAnonymousTrustCenterContext(trustCenter2.ID, tcOrg2.organizationID))
 
 	assert.NilError(t, err)
 	assert.Assert(t, queryResp2 != nil)
 	assert.Check(t, len(queryResp2.Templates.Edges) == 0)
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: resp.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestSubmitTrustCenterNDAResponse(t *testing.T) {
-	cleanupTrustCenterData(t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
+
 	up := uploadFile(t, pdfFilePath)
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up})
 
 	// the happy path triggers attestNDADocument which uploads the attested PDF
 	expectAttestedUpload(t, suite.client.mockProvider)
 
-	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+	trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{up})
 
@@ -424,24 +429,23 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			(&Cleanup[*generated.DocumentDataDeleteOne]{client: suite.client.db.DocumentData, ID: resp.SubmitTrustCenterNDAResponse.DocumentData.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.DocumentDataDeleteOne]{client: suite.client.db.DocumentData, ID: resp.SubmitTrustCenterNDAResponse.DocumentData.ID}).MustDelete(tcOrg.owner.UserCtx, t)
 		})
 	}
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestUpdateTrustCenterNDA(t *testing.T) {
-	cleanupTrustCenterData(t)
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
 	up1 := uploadFile(t, pdfFilePath)
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*up1})
 
-	createResp, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
+	createResp, err := suite.client.api.CreateTrustCenterNda(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDAInput{
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{up1})
 
@@ -454,7 +458,7 @@ func TestUpdateTrustCenterNDA(t *testing.T) {
 	secondUpload := uploadFile(t, logoFilePath)
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*secondUpload})
 
-	updateResp, err := suite.client.api.UpdateTrustCenterNda(testUser1.UserCtx, trustCenter.ID, []*graphql.Upload{secondUpload})
+	updateResp, err := suite.client.api.UpdateTrustCenterNda(tcOrg.owner.UserCtx, trustCenter.ID, []*graphql.Upload{secondUpload})
 
 	assert.NilError(t, err)
 	assert.Assert(t, updateResp != nil)
@@ -464,6 +468,5 @@ func TestUpdateTrustCenterNDA(t *testing.T) {
 	newFileID := updateResp.UpdateTrustCenterNda.Template.Files.Edges[0].Node.ID
 	assert.Check(t, newFileID != fileID)
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: createResp.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }

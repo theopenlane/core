@@ -14,7 +14,7 @@ import (
 )
 
 func TestQueryAsset(t *testing.T) {
-	asset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -27,13 +27,13 @@ func TestQueryAsset(t *testing.T) {
 			name:    "happy path",
 			queryID: asset.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: asset.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
@@ -45,14 +45,14 @@ func TestQueryAsset(t *testing.T) {
 			name:     "asset not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "asset not found, using not authorized user",
 			queryID:  asset.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -76,12 +76,12 @@ func TestQueryAsset(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: asset.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: asset.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryAssets(t *testing.T) {
-	asset1 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	asset2 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	asset1 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	asset2 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -92,13 +92,13 @@ func TestQueryAssets(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -116,7 +116,7 @@ func TestQueryAssets(t *testing.T) {
 		{
 			name:            "another user, no assets should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -131,7 +131,7 @@ func TestQueryAssets(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset1.ID, asset2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset1.ID, asset2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateAsset(t *testing.T) {
@@ -148,24 +148,24 @@ func TestMutationCreateAsset(t *testing.T) {
 				Name: "theopenlane.io",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input as org admin",
 			request: testclient.CreateAssetInput{
 				Name:                "theopenlane.io",
 				Description:         lo.ToPtr("description"),
-				InternalOwnerUserID: &viewOnlyUser.ID,
+				InternalOwnerUserID: &sharedViewOnlyUser.ID,
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateAssetInput{
 				Name:                "theopenlane.io",
 				Description:         lo.ToPtr("description"),
-				InternalOwnerUserID: &viewOnlyUser.ID,
+				InternalOwnerUserID: &sharedViewOnlyUser.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -185,14 +185,14 @@ func TestMutationCreateAsset(t *testing.T) {
 				Name: "comply.fyi",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required field",
 			request:     testclient.CreateAssetInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -230,13 +230,13 @@ func TestMutationCreateAsset(t *testing.T) {
 				assert.Check(t, *resp.CreateAsset.Asset.InternalOwnerGroupID == "", "expected InternalOwnerGroupID to be nil but was %v", resp.CreateAsset.Asset.InternalOwnerGroupID)
 			}
 
-			(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: resp.CreateAsset.Asset.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: resp.CreateAsset.Asset.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateAsset(t *testing.T) {
-	asset := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -251,12 +251,12 @@ func TestMutationUpdateAsset(t *testing.T) {
 				Description: lo.ToPtr("updated description"),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateAssetInput{
-				InternalOwnerUserID: &adminUser.ID,
+				InternalOwnerUserID: &sharedAdminUser.ID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -264,28 +264,28 @@ func TestMutationUpdateAsset(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions as view only user",
 			request: testclient.UpdateAssetInput{
-				InternalOwnerUserID: &viewOnlyUser.ID,
+				InternalOwnerUserID: &sharedViewOnlyUser.ID,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, not allowed to add edge to without access to group",
 			request: testclient.UpdateAssetInput{
-				InternalOwnerGroupID: &viewOnlyUser2.GroupID,
+				InternalOwnerGroupID: &sharedViewOnlyUser2.GroupID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "update allowed to add edge to group if user has access to group",
 			request: testclient.UpdateAssetInput{
-				InternalOwnerGroupID: &testUser1.GroupID,
+				InternalOwnerGroupID: &sharedTestUser1.GroupID,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -293,7 +293,7 @@ func TestMutationUpdateAsset(t *testing.T) {
 				Description: lo.ToPtr("updated description again"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -320,13 +320,13 @@ func TestMutationUpdateAsset(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: asset.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, ID: asset.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteAsset(t *testing.T) {
-	asset1 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	asset2 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	asset3 := (&AssetBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	asset1 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	asset2 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	asset3 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -339,27 +339,27 @@ func TestMutationDeleteAsset(t *testing.T) {
 			name:        "not found, delete",
 			idToDelete:  asset1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  asset1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: asset1.ID,
 			client:     suite.client.api,
-			ctx:        adminUser.UserCtx,
+			ctx:        sharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  asset1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -378,7 +378,7 @@ func TestMutationDeleteAsset(t *testing.T) {
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

@@ -1,0 +1,9 @@
+module base
+
+type export
+  relations
+    define can_view: [user, service] or can_edit
+    define can_edit: [service] or system_admin from system
+    define can_delete: system_admin from system
+    define system: [system]
+

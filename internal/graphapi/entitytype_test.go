@@ -15,7 +15,7 @@ import (
 )
 
 func TestQueryEntityType(t *testing.T) {
-	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -27,7 +27,7 @@ func TestQueryEntityType(t *testing.T) {
 		{
 			name:    "happy path entity type",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			queryID: entityType.ID,
 		},
 		{
@@ -45,7 +45,7 @@ func TestQueryEntityType(t *testing.T) {
 		{
 			name:     "no access",
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			queryID:  entityType.ID,
 			errorMsg: notFoundErrorMsg,
 		},
@@ -68,12 +68,12 @@ func TestQueryEntityType(t *testing.T) {
 	}
 
 	// delete created entityType
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entityType.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entityType.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryEntityTypes(t *testing.T) {
-	e1 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	e2 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	e1 := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	e2 := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name         string
@@ -84,7 +84,7 @@ func TestQueryEntityTypes(t *testing.T) {
 		{
 			name:         "happy path",
 			client:       suite.client.api,
-			ctx:          testUser1.UserCtx,
+			ctx:          sharedTestUser1.UserCtx,
 			shouldSeeNew: true,
 		},
 		{
@@ -102,7 +102,7 @@ func TestQueryEntityTypes(t *testing.T) {
 		{
 			name:         "another user, no new entities should be returned",
 			client:       suite.client.api,
-			ctx:          testUser2.UserCtx,
+			ctx:          sharedTestUser2.UserCtx,
 			shouldSeeNew: false,
 		},
 	}
@@ -137,7 +137,7 @@ func TestQueryEntityTypes(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{e1.ID, e2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{e1.ID, e2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateEntityType(t *testing.T) {
@@ -154,7 +154,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 				Name: "cats",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input, using api token",
@@ -167,7 +167,7 @@ func TestMutationCreateEntityType(t *testing.T) {
 		{
 			name: "happy path, all input, using pat",
 			request: testclient.CreateEntityTypeInput{
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 				Name:    "bunnies",
 			},
 			client: suite.client.apiWithPAT,
@@ -179,14 +179,14 @@ func TestMutationCreateEntityType(t *testing.T) {
 				Name: "dogs",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required field, name",
 			request:     testclient.CreateEntityTypeInput{},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -205,13 +205,13 @@ func TestMutationCreateEntityType(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.request.Name, resp.CreateEntityType.EntityType.Name))
 
-			(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: resp.CreateEntityType.EntityType.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: resp.CreateEntityType.EntityType.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateEntityType(t *testing.T) {
-	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entityType := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -226,7 +226,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 				Name: lo.ToPtr("maine coons"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update name using api token",
@@ -250,7 +250,7 @@ func TestMutationUpdateEntityType(t *testing.T) {
 				Name: lo.ToPtr("dogs"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -270,13 +270,13 @@ func TestMutationUpdateEntityType(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entityType.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entityType.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEntityType(t *testing.T) {
-	entityType1 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	entityType2 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	entityType3 := (&EntityTypeBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entityType1 := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entityType2 := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entityType3 := (&EntityTypeBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -289,27 +289,27 @@ func TestMutationDeleteEntityType(t *testing.T) {
 			name:        "not allowed to delete",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not allowed to delete, no access",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete entity type",
 			idToDelete: entityType1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "entityType already deleted, not found",
 			idToDelete:  entityType1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -328,7 +328,7 @@ func TestMutationDeleteEntityType(t *testing.T) {
 			name:        "unknown entitytype, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

@@ -16,8 +16,8 @@ import (
 )
 
 func TestQueryInvite(t *testing.T) {
-	invite := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	invite := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	invite2 := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name    string
@@ -30,7 +30,7 @@ func TestQueryInvite(t *testing.T) {
 			name:    "happy path",
 			queryID: invite.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path with api token",
@@ -50,14 +50,14 @@ func TestQueryInvite(t *testing.T) {
 			name:    "invalid id",
 			queryID: "allthefooandbar",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			wantErr: true,
 		},
 		{
 			name:    "no access",
 			queryID: invite.ID,
 			client:  suite.client.api,
-			ctx:     testUser2.UserCtx,
+			ctx:     sharedTestUser2.UserCtx,
 			wantErr: true,
 		},
 	}
@@ -79,27 +79,31 @@ func TestQueryInvite(t *testing.T) {
 	}
 
 	// delete created invite
-	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, ID: invite2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestMutationCreateInvite(t *testing.T) {
 	// existing user to invite to org
-	existingUser := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	existingUser := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// existing user already a member of org
-	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	om := (&OrgMemberBuilder{client: suite.client, UserID: existingUser2.ID}).MustNew(testUser1.UserCtx, t)
+	existingUser2 := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	(&OrgMemberBuilder{client: suite.client, UserID: existingUser2.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(testUserCreator.UserCtx, t)
+	// create another organization
+	localTestOrg := suite.userBuilder(context.Background(), t)
 
-	orgWithRestrictionsCtx := auth.NewTestContextWithOrgID(testUserCreator.ID, orgWithRestrictions.ID)
+	// setup one more with restrictions on allowed domains
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"meow.net"}}).MustNew(localTestOrg.UserCtx, t)
 
-	user1Context := auth.NewTestContextWithOrgID(testUserCreator.ID, testUserCreator.OrganizationID)
+	orgWithRestrictionsCtx := auth.NewTestContextWithOrgID(localTestOrg.ID, orgWithRestrictions.ID)
+
+	user1Context := localTestOrg.UserCtx
 
 	// create a group to add to the invite
 	meows := (&GroupBuilder{client: suite.client, Name: "meows"}).MustNew(user1Context, t)
-	anotherMeows := (&GroupBuilder{client: suite.client, Name: "another-meows"}).MustNew(testUser1.UserCtx, t)
+	anotherMeows := (&GroupBuilder{client: suite.client, Name: "another-meows"}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name             string
@@ -117,36 +121,36 @@ func TestMutationCreateInvite(t *testing.T) {
 		{
 			name:             "happy path, new user as member with a group set",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testUserCreator.OrganizationID,
+			orgID:            localTestOrg.OrganizationID,
 			groupID:          &meows.ID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUserCreator.ID,
+			requestorID:      localTestOrg.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:             "happy path, another new user as member with a group set",
 			recipient:        "meowmeow@theopenlane.io",
-			orgID:            testUserCreator.OrganizationID,
+			orgID:            localTestOrg.OrganizationID,
 			groupID:          &meows.ID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUserCreator.ID,
+			requestorID:      localTestOrg.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:        "new user as member, with invalid group",
 			recipient:   "meow-another@theopenlane.io",
-			orgID:       testUserCreator.OrganizationID,
+			orgID:       localTestOrg.OrganizationID,
 			groupID:     &anotherMeows.ID,
 			role:        enums.RoleMember,
 			client:      suite.client.api,
 			ctx:         user1Context,
-			requestorID: testUserCreator.ID,
+			requestorID: localTestOrg.ID,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -156,7 +160,7 @@ func TestMutationCreateInvite(t *testing.T) {
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              orgWithRestrictionsCtx,
-			requestorID:      testUserCreator.ID,
+			requestorID:      localTestOrg.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
@@ -167,67 +171,67 @@ func TestMutationCreateInvite(t *testing.T) {
 			role:        enums.RoleMember,
 			client:      suite.client.api,
 			ctx:         orgWithRestrictionsCtx,
-			requestorID: testUserCreator.ID,
+			requestorID: localTestOrg.ID,
 			expectedErr: "email domain not allowed",
 		},
 		{
 			name:             "invite new user as member using api token",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testUser1.OrganizationID,
+			orgID:            sharedTestUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			requestorID:      testUser1.ID,
+			ctx:              sharedTestUser1.UserCtx,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:             "re-invite new user as member using api token",
 			recipient:        "meow@theopenlane.io",
-			orgID:            testUser1.OrganizationID,
+			orgID:            sharedTestUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.apiWithToken,
 			ctx:              context.Background(),
-			requestorID:      testUser1.ID,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 2,
 		},
 		{
 			name:             "happy path, new user as admin using pat",
 			recipient:        "woof@theopenlane.io",
-			orgID:            testUser1.OrganizationID,
+			orgID:            sharedTestUser1.OrganizationID,
 			role:             enums.RoleAdmin,
 			client:           suite.client.apiWithPAT,
 			ctx:              context.Background(),
-			requestorID:      testUser1.ID,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:             "happy path, new user as member, by member",
 			recipient:        "meow-meow@theopenlane.io",
-			orgID:            testUser1.OrganizationID,
+			orgID:            sharedTestUser1.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
-			ctx:              viewOnlyUser.UserCtx,
-			requestorID:      viewOnlyUser.ID,
+			ctx:              sharedViewOnlyUser.UserCtx,
+			requestorID:      sharedViewOnlyUser.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:        "new user as admin, by member, not allowed",
 			recipient:   "meow-meow@theopenlane.io",
-			orgID:       testUser1.OrganizationID,
+			orgID:       sharedTestUser1.OrganizationID,
 			role:        enums.RoleAdmin,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
-			requestorID: viewOnlyUser.ID,
+			ctx:         sharedViewOnlyUser.UserCtx,
+			requestorID: sharedViewOnlyUser.ID,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "new user with invalid email",
 			recipient:   "woof",
-			orgID:       testUser1.OrganizationID,
+			orgID:       sharedTestUser1.OrganizationID,
 			role:        enums.RoleMember,
 			client:      suite.client.api,
 			ctx:         user1Context,
@@ -236,22 +240,22 @@ func TestMutationCreateInvite(t *testing.T) {
 		{
 			name:             "happy path, existing user as member",
 			recipient:        existingUser.Email,
-			orgID:            testUserCreator.OrganizationID,
+			orgID:            localTestOrg.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUserCreator.ID,
+			requestorID:      localTestOrg.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
 		{
 			name:             "user already a member, will still send an invite",
 			recipient:        existingUser2.Email,
-			orgID:            testUserCreator.OrganizationID,
+			orgID:            localTestOrg.OrganizationID,
 			role:             enums.RoleMember,
 			client:           suite.client.api,
 			ctx:              user1Context,
-			requestorID:      testUserCreator.ID,
+			requestorID:      localTestOrg.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 		},
@@ -301,12 +305,8 @@ func TestMutationCreateInvite(t *testing.T) {
 	}
 
 	// delete organization created
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgWithRestrictions.ID}).MustDelete(orgWithRestrictionsCtx, t)
-	// delete org member created
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser1.UserCtx, t)
-	// delete group created
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: meows.ID}).MustDelete(user1Context, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: anotherMeows.ID}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgWithRestrictionsCtx, t)
 }
 
 func TestMutationCreateBulkInvite(t *testing.T) {
@@ -325,8 +325,8 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 			name:             "happy path, new user with defaults",
 			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			requestorID:      testUser1.ID,
+			ctx:              sharedTestUser1.UserCtx,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 1,
 			wantErr:          false,
@@ -335,8 +335,8 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 			name:             "happy path, resend with defaults",
 			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			requestorID:      testUser1.ID,
+			ctx:              sharedTestUser1.UserCtx,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 2,
 			wantErr:          false,
@@ -345,8 +345,8 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 			name:             "happy path, resend again with defaults",
 			recipients:       []string{"meow-meow-meow@theopenlane.io", "kitty@theopenlane.io"},
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
-			requestorID:      testUser1.ID,
+			ctx:              sharedTestUser1.UserCtx,
+			requestorID:      sharedTestUser1.ID,
 			expectedStatus:   enums.InvitationSent,
 			expectedAttempts: 3,
 			wantErr:          false,
@@ -376,7 +376,7 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 
 			for _, invite := range resp.CreateBulkInvite.Invites {
 				assert.Check(t, is.Equal(enums.RoleMember, invite.Role))
-				assert.Check(t, is.Equal(testUser1.ID, *invite.RequestorID))
+				assert.Check(t, is.Equal(sharedTestUser1.ID, *invite.RequestorID))
 				assert.Check(t, is.Equal(tc.expectedStatus, invite.Status))
 				assert.Check(t, is.Equal(tc.expectedAttempts, invite.SendAttempts))
 			}
@@ -389,15 +389,15 @@ func TestMutationCreateBulkInvite(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, IDs: invites}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.InviteDeleteOne]{client: suite.client.db.Invite, IDs: invites}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteInvite(t *testing.T) {
-	invite1 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	invite2 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	invite3 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	invite4 := (&InviteBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	invite5 := (&InviteBuilder{client: suite.client, Role: fgax.AdminRelation}).MustNew(testUser1.UserCtx, t)
+	invite1 := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	invite2 := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	invite3 := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	invite4 := (&InviteBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	invite5 := (&InviteBuilder{client: suite.client, Role: fgax.AdminRelation}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -410,7 +410,7 @@ func TestMutationDeleteInvite(t *testing.T) {
 			name:    "happy path",
 			queryID: invite1.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, using api token",
@@ -428,26 +428,26 @@ func TestMutationDeleteInvite(t *testing.T) {
 			name:    "happy path, org member deleting member invite",
 			queryID: invite4.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:        "org member deleting admin invite",
 			queryID:     invite5.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:    "org owner deleting admin invite",
 			queryID: invite5.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "invalid id",
 			queryID:     "allthefooandbar",
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}

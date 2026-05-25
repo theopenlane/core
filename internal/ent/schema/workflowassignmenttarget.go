@@ -105,7 +105,8 @@ func (WorkflowAssignmentTarget) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowAssignmentTarget](WorkflowAssignmentTarget{},
 				withParents(WorkflowAssignment{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowAssignmentTarget{})
@@ -119,11 +120,8 @@ func (WorkflowAssignmentTarget) Modules() []models.OrgModule {
 // Policy of the WorkflowAssignmentTarget
 func (WorkflowAssignmentTarget) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckServiceCreateAccess(),
 		),
 	)
 }

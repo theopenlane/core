@@ -141,6 +141,24 @@ func filterUsingFGA(ctx context.Context, q *generated.UserQuery) error {
 		for _, user := range listUserResp.Users {
 			userIDs = append(userIDs, user.Object.Id)
 		}
+
+		// auditors do not have can_view on the org, so they must be listed separately
+		// auditor inherits from parent via "auditor from parent" in the FGA model
+		auditorReq := fgax.ListRequest{
+			ObjectID:         orgID,
+			ObjectType:       generated.TypeOrganization,
+			Relation:         fgax.AuditorRelation,
+			ConditionContext: utils.NewOrganizationContextKey(""),
+		}
+
+		listAuditorResp, err := q.Authz.ListUserRequest(ctx, auditorReq)
+		if err != nil {
+			return err
+		}
+
+		for _, u := range listAuditorResp.Users {
+			userIDs = append(userIDs, u.Object.Id)
+		}
 	}
 
 	q.Where(user.IDIn(userIDs...))

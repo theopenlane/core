@@ -245,6 +245,8 @@ var (
 	ErrFailedToMergeAttestationPage = errors.New("failed to merge attestation page")
 	// ErrFailedToGenerateAttestationPDF is returned when the attestation PDF output fails
 	ErrFailedToGenerateAttestationPDF = errors.New("failed to generate attestation PDF")
+	// ErrInvalidScope is returned when a scope is not assignable to service subjects
+	ErrInvalidScope = errors.New("scope is not assignable to service subjects")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

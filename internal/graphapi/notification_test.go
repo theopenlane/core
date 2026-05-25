@@ -27,10 +27,10 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &testUser1.OrganizationID,
+				OwnerID:          &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.api,
-			ctx:    systemAdminUser.UserCtx,
+			ctx:    sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "not authorized, create notification as member",
@@ -39,10 +39,10 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &viewOnlyUser.OrganizationID,
+				OwnerID:          &sharedViewOnlyUser.OrganizationID,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -52,10 +52,10 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &testUser1.OrganizationID,
+				OwnerID:          &sharedTestUser1.OrganizationID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -76,7 +76,7 @@ func TestMutationCreateNotification(t *testing.T) {
 			assert.Check(t, is.Equal(tc.request.Body, resp.CreateNotification.Notification.Body))
 			assert.Check(t, is.Equal(tc.request.ObjectType, resp.CreateNotification.Notification.ObjectType))
 
-			(&Cleanup[*generated.NotificationDeleteOne]{client: suite.client.db.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(systemAdminUser.UserCtx, t)
+			(&Cleanup[*generated.NotificationDeleteOne]{client: suite.client.db.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(sharedAdminUser.UserCtx, t)
 		})
 	}
 }

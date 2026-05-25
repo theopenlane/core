@@ -318,7 +318,6 @@ func (f Finding) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
-					Organization{},
 					Program{},
 					Control{},
 					Subcontrol{},
@@ -329,7 +328,8 @@ func (f Finding) Mixin() []ent.Mixin {
 					DirectoryAccount{},
 					IdentityHolder{},
 				),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),

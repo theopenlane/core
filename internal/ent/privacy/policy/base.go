@@ -19,7 +19,12 @@ var prePolicy = privacy.Policy{
 	Mutation: privacy.MutationPolicy{
 		// allow internal requests (used in tests) to proceed to mutate tables
 		rule.AllowIfInternalRequest(),
+		// deny mutation if missing all modules
 		rule.DenyIfMissingAllModules(),
+		// deny if the user doesn't have access to the organization
+		rule.DenyIfNotInOrganization(),
+		// allow mutation if the api token has the appropriate mutation scope
+		rule.AllowIfTokenHasMutationScope(),
 	},
 }
 

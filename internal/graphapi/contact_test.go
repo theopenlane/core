@@ -20,7 +20,7 @@ import (
 )
 
 func TestQueryContact(t *testing.T) {
-	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -34,19 +34,19 @@ func TestQueryContact(t *testing.T) {
 			name:    "happy path contact",
 			queryID: contact.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path contact, view only user",
 			queryID: contact.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:     "contact not returned, no access",
 			queryID:  contact.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: "contact not found",
 		},
 		{
@@ -77,12 +77,12 @@ func TestQueryContact(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryContacts(t *testing.T) {
-	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact1 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	contact2 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// other tests like assessment responses may add contacts
 	// so we do not want to check length
@@ -95,12 +95,12 @@ func TestQueryContacts(t *testing.T) {
 		{
 			name:   "happy path",
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name:   "happy path, view only user",
 			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:   "happy path, using api token",
@@ -115,7 +115,7 @@ func TestQueryContacts(t *testing.T) {
 		{
 			name:   "another user, no contacts should be returned",
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    sharedTestUser2.UserCtx,
 		},
 	}
 
@@ -127,8 +127,8 @@ func TestQueryContacts(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact1.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact2.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact2.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateContact(t *testing.T) {
@@ -145,7 +145,7 @@ func TestMutationCreateContact(t *testing.T) {
 				FullName: lo.ToPtr("Aemond Targaryen"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "view only user cannot create",
@@ -153,7 +153,7 @@ func TestMutationCreateContact(t *testing.T) {
 				FullName: lo.ToPtr("Aemond Targaryen"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -168,7 +168,7 @@ func TestMutationCreateContact(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateContactInput{
 				FullName: lo.ToPtr("Aegon Targaryen"),
-				OwnerID:  &testUser1.OrganizationID,
+				OwnerID:  &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -184,7 +184,7 @@ func TestMutationCreateContact(t *testing.T) {
 				Status:      &enums.UserStatusOnboarding,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 	}
 
@@ -240,13 +240,13 @@ func TestMutationCreateContact(t *testing.T) {
 				assert.Equal(t, *tc.request.Status, resp.CreateContact.Contact.Status)
 			}
 
-			(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: resp.CreateContact.Contact.ID}).MustDelete(testUser1.UserCtx, t)
+			(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: resp.CreateContact.Contact.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateContact(t *testing.T) {
-	contact := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -261,7 +261,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				FullName: lo.ToPtr("Alicent Hightower"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "view only user cannot update",
@@ -269,7 +269,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -278,7 +278,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				PhoneNumber: lo.ToPtr(gofakeit.Phone()),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
@@ -303,7 +303,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				Email: lo.ToPtr("a.hightower@dragon.net"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "update phone number, invalid",
@@ -311,7 +311,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				PhoneNumber: lo.ToPtr("not a phone number"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: rout.InvalidField("phone_number").Error(),
 		},
 		{
@@ -320,7 +320,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				Email: lo.ToPtr("a.hightower"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "validator failed for field",
 		},
 		{
@@ -329,7 +329,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				Title: lo.ToPtr("Queen of the Seven Kingdoms"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "update company",
@@ -337,7 +337,7 @@ func TestMutationUpdateContact(t *testing.T) {
 				Company: lo.ToPtr("House Targaryen"),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 	}
 
@@ -378,13 +378,13 @@ func TestMutationUpdateContact(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contact.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteContact(t *testing.T) {
-	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	contact3 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact1 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	contact2 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	contact3 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -397,27 +397,27 @@ func TestMutationDeleteContact(t *testing.T) {
 			name:        "not allowed to delete, not enough permissions",
 			idToDelete:  contact1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not allowed to delete, no access to object",
 			idToDelete:  contact1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete contact",
 			idToDelete: contact1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "contact already deleted, not found",
 			idToDelete:  contact1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "contact not found",
 		},
 		{
@@ -436,7 +436,7 @@ func TestMutationDeleteContact(t *testing.T) {
 			name:        "unknown contact, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "contact not found",
 		},
 	}
@@ -457,11 +457,11 @@ func TestMutationDeleteContact(t *testing.T) {
 }
 
 func TestMutationUpdateBulkContact(t *testing.T) {
-	contact1 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	contact2 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	contact3 := (&ContactBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	contact1 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	contact2 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	contact3 := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	contactAnotherUser := (&ContactBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	contactAnotherUser := (&ContactBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name                 string
@@ -480,7 +480,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				Title:     lo.ToPtr("Cleared Title"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -488,7 +488,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			ids:         []string{},
 			input:       testclient.UpdateContactInput{FullName: lo.ToPtr("test")},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -498,7 +498,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				FullName: lo.ToPtr("Updated by authorized user"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 1, // only contact1 should be updated
 		},
 		{
@@ -508,7 +508,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				FullName: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
-			ctx:                  viewOnlyUser.UserCtx,
+			ctx:                  sharedViewOnlyUser.UserCtx,
 			expectedUpdatedCount: 0, // view only user cannot update
 		},
 		{
@@ -518,7 +518,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				FullName: lo.ToPtr("Should not update"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser2.UserCtx,
+			ctx:                  sharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any contacts to update
 		},
 		{
@@ -528,7 +528,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				Status: &enums.UserStatusInactive,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -538,7 +538,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				Company: lo.ToPtr("Updated Company"),
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 	}
@@ -611,7 +611,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 				}
 
 				// ensure the org owner has access to the contact that was updated
-				res, err := suite.client.api.GetContactByID(testUser1.UserCtx, contact.ID)
+				res, err := suite.client.api.GetContactByID(sharedTestUser1.UserCtx, contact.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(contact.ID, res.Contact.ID))
 			}
@@ -631,6 +631,6 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 	}
 
 	// Cleanup created contacts
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: []string{contact1.ID, contact2.ID, contact3.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contactAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: []string{contact1.ID, contact2.ID, contact3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, ID: contactAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }

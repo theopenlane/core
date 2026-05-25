@@ -298,7 +298,8 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 					IdentityHolder{},
 					Platform{},
 				),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(w)
@@ -322,7 +323,7 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 func (WorkflowObjectRef) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			policy.CheckServiceCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
 			entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),
 		),

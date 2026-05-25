@@ -515,7 +515,7 @@ type Cleanup[T DeleteExec] struct {
 //	(&Cleanup[*generated.OrganizationDeleteOne]{
 //		client: suite.client.db.Organization,
 //		ID: resp.CreateOrganization.Organization.ID}).
-//		MustDelete(testUser1.UserCtx, t)
+//		MustDelete(sharedTestUser1.UserCtx, t)
 //
 // Special handling for standards - update them to be private before deletion
 // this is to allow the system admin to delete public standards
@@ -857,7 +857,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 
 	if pat.OrganizationIDs == nil {
 		// default to adding the test users organization ID
-		pat.OrganizationIDs = []string{testUser1.OrganizationID}
+		pat.OrganizationIDs = []string{sharedTestUser1.OrganizationID}
 	}
 
 	request := pat.client.db.PersonalAccessToken.Create().
@@ -887,14 +887,13 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 		at.Description = gofakeit.HipsterSentence()
 	}
 
-	if at.Scopes == nil {
-		at.Scopes = []string{"read", "write", "group_manager"}
-	}
-
 	request := at.client.db.APIToken.Create().
 		SetName(at.Name).
-		SetDescription(at.Description).
-		SetScopes(at.Scopes)
+		SetDescription(at.Description)
+
+	if at.Scopes != nil {
+		request.SetScopes(at.Scopes)
+	}
 
 	if at.ExpiresAt != nil {
 		request.SetExpiresAt(*at.ExpiresAt)
@@ -961,7 +960,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 	ctx = setContext(ctx, e.client.db)
 
 	if e.Name == "" {
-		e.Name = gofakeit.AppName()
+		e.Name = gofakeit.LoremIpsumWord() + ulids.New().String()
 	}
 
 	if e.DisplayName == "" {
@@ -1636,7 +1635,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 // MustNew controlImplementation builder is used to create, without authz checks, controlImplementations in the database
 func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.MappedControl {
-	if ctx == systemAdminUser.UserCtx {
+	if ctx == sharedSystemAdminUser.UserCtx {
 		if e.InternalID == "" {
 			e.InternalID = ulids.New().String()
 		}
@@ -2017,6 +2016,12 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	if tc.CustomDomainID != "" {
 		mutation.SetCustomDomainID(tc.CustomDomainID)
+	}
+
+	// set the org owner_id, this is done via hooks when using the api
+	caller, _ := auth.CallerFromContext(ctx)
+	if caller != nil && caller.OrganizationID != "" {
+		mutation.SetOwnerID(caller.OrganizationID)
 	}
 
 	trustCenter, err := mutation.Save(ctx)

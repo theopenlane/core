@@ -151,7 +151,8 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 			// subcontrols can inherit permissions from the parent control
 			newObjectOwnedMixin[generated.Subcontrol](s,
 				withParents(Control{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(s, withWorkflowEnumEdges()),
@@ -207,6 +208,7 @@ func (Subcontrol) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("implemented-requirement-statement"),
 		),
+		entx.FGACrudParent(Control{}.Name()),
 	}
 }
 

@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"entgo.io/ent"
@@ -19,6 +20,11 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
+)
+
+const (
+	// this allows auditors access to view the top level organization, without having full read access to everything only org owned
+	canViewOrg fgax.Relation = "can_view_org"
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to
@@ -48,9 +54,26 @@ func AddIDPredicate(ctx context.Context, q Query) error {
 	// History uses `ref`
 	isHistory := strings.Contains(q.Type(), "History")
 
-	objectType := getFGAObjectType(q)
+	objectType := rule.GetFGAObjectType(q)
 
-	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, fgax.CanView)
+	// Never skip the filter for organization queries, as we need to ensure the user has access to the organization itself
+	isOrganizationQuery := strings.EqualFold(objectType, "organization")
+
+	var relation fgax.Relation
+	if !isOrganizationQuery {
+		relation = fgax.CanView
+		// skip filter if the subject has full organization view access for the object type
+		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
+			if errors.Is(err, privacy.Allow) {
+				return nil
+			}
+		}
+	} else {
+		// organization queries should allow auditor access
+		relation = canViewOrg
+	}
+
+	objectIDs, err := GetAuthorizedObjectIDs(ctx, objectType, relation)
 	if err != nil {
 		return err
 	}
@@ -98,13 +121,8 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	if strings.Contains(queryType, "History") {
 		logx.FromContext(ctx).Debug().Msg("adding history relation to list request")
 
-		// this was audit_log_viewer but changed to CanView to be consistent
-		// if you can view an object, you should be able to see the history of it
-		// TODO(sfunk): clean-up this in FGA policies
-		req.Relation = fgax.CanView
+		req.Relation = fgax.CanViewAuditLog
 	}
-
-	logx.FromContext(ctx).Debug().Interface("req", req).Msg("getting authorized object ids")
 
 	resp, err := utils.AuthzClientFromContext(ctx).ListObjectsRequest(ctx, req)
 	if err != nil {
@@ -143,17 +161,17 @@ func logObjectIDs(ctx context.Context, objectType string, objectIDs []string, ms
 // directly if that mixin is used
 // This function is intended to filter results after the query is run using the BatchCheck in FGA
 // which is more performant than the ListObjectsRequest, especially for large lists
-func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
+func FilterQueryResults[V any](forceFilter skipperFunc, skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-			return filterQueryResults[V](ctx, query, next, skipperFunc...)
+			return filterQueryResults[V](ctx, query, next, forceFilter, skipperFunc...)
 		})
 	}
 }
 
 // filterQueryResults filters the results of a query to only include the objects that the user has access to
 // using the BatchCheck in FGA and returns the filtered results as the ent.Value based on the provided type
-func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, skipperFunc ...skipperFunc) (ent.Value, error) {
+func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Querier, forceFilter skipperFunc, skipperFunc ...skipperFunc) (ent.Value, error) {
 	// by pass checks on invite or pre-allowed request
 	// convert the query to an intercept query
 	q, err := intercept.NewQuery(query)
@@ -161,7 +179,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 		return nil, err
 	}
 
-	if skipFilter(ctx, skipperFunc...) {
+	if skipFilter(ctx, q, forceFilter, skipperFunc...) {
 		return next.Query(ctx, query)
 	}
 
@@ -184,9 +202,9 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 			return nil, ErrRetrievingObjects
 		}
 
-		return filterIDList(ctx, ids, getFGAObjectType(q))
+		return filterIDList(ctx, ids, rule.GetFGAObjectType(q))
 	case ent.OpQueryOnlyID:
-		allow, err := singleIDCheck(ctx, v, getFGAObjectType(q))
+		allow, err := singleIDCheck(ctx, v, rule.GetFGAObjectType(q))
 		if err != nil {
 			return nil, err
 		}
@@ -210,7 +228,7 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	}
 }
 
-func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
+func skipFilter(ctx context.Context, q intercept.Query, forceFilter skipperFunc, customSkipperFunc ...skipperFunc) bool {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return true
@@ -219,6 +237,18 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 	if ok := history.IsHistoryRequest(ctx); ok {
 		// skip filtering for history requests
 		return true
+	}
+
+	// skip filter if the subject has full organization view access for the object type
+	objectType := rule.GetFGAObjectType(q)
+
+	// only check subject scope when the caller has not indicated that filtering must always run
+	if forceFilter == nil || !forceFilter(ctx) {
+		if err := rule.CheckSubjectScope(ctx, objectType, fgax.CanView, nil); err != nil {
+			if errors.Is(err, privacy.Allow) {
+				return true
+			}
+		}
 	}
 
 	// if the custom skipper function is set and returns true, skip the filter
@@ -275,7 +305,7 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 		return nil, err
 	}
 
-	allowedIDs, err := filterAuthorizedObjectIDs(ctx, getFGAObjectType(q), objectIDs)
+	allowedIDs, err := filterAuthorizedObjectIDs(ctx, rule.GetFGAObjectType(q), objectIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -319,7 +349,7 @@ func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Quer
 		return nil, err
 	}
 
-	allowedIDs, err := filterAuthorizedObjectIDs(ctx, getFGAObjectType(q), objectIDs)
+	allowedIDs, err := filterAuthorizedObjectIDs(ctx, rule.GetFGAObjectType(q), objectIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -331,22 +361,6 @@ func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Quer
 	}
 
 	return v, nil
-}
-
-// getFGAObjectType returns the object type for the query
-// for membership tables, it will return the type with the membership suffix removed
-// e.g. GroupMembership -> Group
-func getFGAObjectType(q intercept.Query) string {
-	// Membership tables should use the object_id field,
-	// e.g. GroupMembership should use group_id
-	isMembership := strings.Contains(q.Type(), "Membership")
-
-	objectType := q.Type()
-	if isMembership {
-		objectType = strings.ReplaceAll(q.Type(), "Membership", "")
-	}
-
-	return objectType
 }
 
 // getObjectIDFromEntValues extracts the object id from a generic ent value (used for list queries)

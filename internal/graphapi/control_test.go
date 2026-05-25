@@ -11,7 +11,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -22,17 +21,17 @@ import (
 	"github.com/theopenlane/core/internal/testutils"
 )
 
-func TestQueryControl(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+func TestQuerySingleControl(t *testing.T) {
+	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control
 	(&ProgramMemberBuilder{
 		client: suite.client, ProgramID: program.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String(),
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String(),
 	}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
 	controlIDs := []string{}
 	// add test cases for querying the control
@@ -48,19 +47,19 @@ func TestQueryControl(t *testing.T) {
 			name:          "happy path",
 			programAccess: true,
 			client:        suite.client.api,
-			ctx:           testUser1.UserCtx,
+			ctx:           sharedTestUser1.UserCtx,
 		},
 		{
 			name:          "read only user, inherits access from the organization",
 			programAccess: false,
 			client:        suite.client.api,
-			ctx:           viewOnlyUser.UserCtx,
+			ctx:           sharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:          "admin user, access to the program",
 			programAccess: true,
 			client:        suite.client.api,
-			ctx:           adminUser.UserCtx,
+			ctx:           sharedAdminUser.UserCtx,
 		},
 		{
 			name:          "happy path using personal access token",
@@ -72,13 +71,13 @@ func TestQueryControl(t *testing.T) {
 			name:     "control not found, invalid ID",
 			queryID:  "invalid",
 			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			ctx:      sharedTestUser1.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "control not found, using not authorized user",
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
@@ -93,7 +92,7 @@ func TestQueryControl(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			// setup the control if it is not already created
 			if tc.queryID == "" {
-				resp, err := suite.client.api.CreateControl(testUser1.UserCtx,
+				resp, err := suite.client.api.CreateControl(sharedTestUser1.UserCtx,
 					testclient.CreateControlInput{
 						RefCode:    "CTL-" + ulids.New().String(), // ensure unique ref code
 						ProgramIDs: []string{program.ID},
@@ -149,16 +148,16 @@ func TestQueryControl(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
-func TestQueryControls(t *testing.T) {
-	// create multiple objects to be queried using testUser1
+func TestQueryAllControls(t *testing.T) {
+	// create multiple objects to be queried using sharedTestUser1
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
 	for range controlsToCreate { // set to 11 to ensure pagination is tested
-		control := (&ControlBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
@@ -166,7 +165,7 @@ func TestQueryControls(t *testing.T) {
 
 	// add a control for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
+	(&ControlBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -179,47 +178,47 @@ func TestQueryControls(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, admin user",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, with first set",
 			client:          suite.client.api,
 			first:           lo.ToPtr(int64(5)),
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 5,
 		},
 		{
 			name:            "happy path, with last set",
 			client:          suite.client.api,
 			first:           lo.ToPtr(int64(3)),
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "first set over max (10 in test)",
 			client:          suite.client.api,
 			first:           &controlsToCreate,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "last set over max (10 in test)",
 			client:          suite.client.api,
 			last:            &controlsToCreate,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, using read only user of the same org should inherit access from the org",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             sharedViewOnlyUser.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
@@ -237,7 +236,7 @@ func TestQueryControls(t *testing.T) {
 		{
 			name:            "another user, no controls should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -278,23 +277,21 @@ func TestQueryControls(t *testing.T) {
 			}
 		})
 	}
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(userAnotherOrg.UserCtx, t)
 }
 
-func TestQueryControlsMultipleOrgCheck(t *testing.T) {
+func TestMultipleOrgCheckForQueryControls(t *testing.T) {
+	t.Parallel()
 	// test to make sure we don't get cross org results back even if the user technically has access to them
-	testUser := suite.userBuilder(context.Background(), t)
+	localTestUser := suite.seedOrgOwner(t)
 
 	// create controls for the test user in their org
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	testUserOriginalCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID)
+	(&ControlBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
 
 	// create another org and a control in that org
-	anotherOrg := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	testUserCtxUpdate := auth.NewTestContextWithOrgID(testUser.ID, anotherOrg.ID)
-
-	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUserCtxUpdate, t)
+	localTestUser2 := suite.seedOrgOwner(t)
+	(&ControlBuilder{client: suite.client}).MustNew(localTestUser2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -307,20 +304,23 @@ func TestQueryControlsMultipleOrgCheck(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUserOriginalCtx,
+			ctx:             localTestUser.owner.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUserCtxUpdate,
+			ctx:             localTestUser2.owner.UserCtx,
 			expectedResults: 1,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.GetAllControls(tc.ctx)
+			// ensure system owned controls are not counted here
+			resp, err := tc.client.GetControls(tc.ctx, nil, nil, nil, nil, nil, &testclient.ControlWhereInput{
+				SystemOwned: lo.ToPtr(false),
+			})
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
@@ -328,32 +328,35 @@ func TestQueryControlsMultipleOrgCheck(t *testing.T) {
 			assert.Check(t, is.Equal(int64(tc.expectedResults), resp.Controls.TotalCount))
 		})
 	}
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUserOriginalCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUserCtxUpdate, t)
+
+	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestUser2.owner.UserCtx, t)
 }
 
 func TestMutationCreateControl(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	anotherOrg := suite.seedOrgOwner(t)
+	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(anotherOrg.owner.UserCtx, t)
+
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can create a control associated with the program1
 	(&ProgramMemberBuilder{
 		client: suite.client, ProgramID: program1.ID,
-		UserID: adminUser.ID, Role: enums.RoleAdmin.String(),
+		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String(),
 	}).
-		MustNew(testUser1.UserCtx, t)
+		MustNew(sharedTestUser1.UserCtx, t)
 
 	// create groups to be associated with the control
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
-	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -368,7 +371,7 @@ func TestMutationCreateControl(t *testing.T) {
 				RefCode: "A-1",
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -432,23 +435,23 @@ func TestMutationCreateControl(t *testing.T) {
 				ControlImplementationIDs: []string{controlImplementation.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "add groups",
 			request: testclient.CreateControlInput{
 				RefCode:         "A-3",
-				EditorIDs:       []string{testUser1.GroupID},
+				EditorIDs:       []string{sharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateControlInput{
 				RefCode: "A-4",
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -467,26 +470,26 @@ func TestMutationCreateControl(t *testing.T) {
 				RefCode: "A-6",
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "user authorized, they were added to the program",
+			name: "admin authorized, they were added to the program",
 			request: testclient.CreateControlInput{
 				RefCode:    "A-7",
 				ProgramIDs: []string{program1.ID},
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
-			name: "user authorized, user not authorized to one of the programs",
+			name: "admin authorized, admin authorized to one of the programs",
 			request: testclient.CreateControlInput{
 				RefCode:    "A-8",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
 			client:      suite.client.api,
-			ctx:         adminUser.UserCtx,
+			ctx:         sharedAdminUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -495,7 +498,7 @@ func TestMutationCreateControl(t *testing.T) {
 				Description: lo.ToPtr("A description of the Control"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -505,7 +508,7 @@ func TestMutationCreateControl(t *testing.T) {
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
@@ -640,7 +643,7 @@ func TestMutationCreateControl(t *testing.T) {
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Check(t, is.Len(resp.CreateControl.Control.Editors.Edges, 1))
 				for _, edge := range resp.CreateControl.Control.Editors.Edges {
-					assert.Check(t, is.Equal(testUser1.GroupID, edge.Node.ID))
+					assert.Check(t, is.Equal(sharedTestUser1.GroupID, edge.Node.ID))
 				}
 			}
 
@@ -664,7 +667,7 @@ func TestMutationCreateControl(t *testing.T) {
 
 			// ensure the org owner has access to the control that was created by an api token
 			if tc.client == suite.client.apiWithToken {
-				res, err := suite.client.api.GetControlByID(testUser1.UserCtx, resp.CreateControl.Control.ID)
+				res, err := suite.client.api.GetControlByID(sharedTestUser1.UserCtx, resp.CreateControl.Control.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(resp.CreateControl.Control.ID, res.Control.ID))
 
@@ -675,29 +678,30 @@ func TestMutationCreateControl(t *testing.T) {
 
 			// delete the created evidence, update for the token user cases
 			if tc.ctx == context.Background() {
-				tc.ctx = testUser1.UserCtx
+				tc.ctx = sharedTestUser1.UserCtx
 			}
 
 			(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: resp.CreateControl.Control.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, blockedGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+
+	cleanupOrganizationDataWithContext(anotherOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateControlsByClone(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID, UserID: viewOnlyUser.ID}).MustNew(testUser1.UserCtx, t)
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	programAnotherOrg := (&ProgramBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	programAnotherOrg := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
-	publicStandard2 := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	publicStandard2 := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// create standard with controls to clone
 	numControls := int64(20)
@@ -710,32 +714,32 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	subcontrols2 := []*generated.Subcontrol{}
 	subcontrolID2s := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		controls = append(controls, control)
 		controlIDs = append(controlIDs, control.ID)
 		// give them all a subcontrol
-		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		subcontrols = append(subcontrols, subcontrol)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 
-		control2 := (&ControlBuilder{client: suite.client, StandardID: publicStandard2.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		control2 := (&ControlBuilder{client: suite.client, StandardID: publicStandard2.ID, AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		controls2 = append(controls2, control2)
 		controlID2s = append(controlID2s, control2.ID)
 		// give them all a subcontrol
-		subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		subcontrols2 = append(subcontrols2, subcontrol2)
 		subcontrolID2s = append(subcontrolID2s, subcontrol2.ID)
 	}
 
 	// ensure the standard exists and has the correct number of controls for the non-system admin user
-	standard, err := suite.client.api.GetStandardByID(testUser2.UserCtx, publicStandard.ID)
+	standard, err := suite.client.api.GetStandardByID(sharedTestUser2.UserCtx, publicStandard.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, standard != nil)
 	assert.Equal(t, standard.Standard.Controls.TotalCount, numControls)
 
 	// create org owned control in custom standard
-	orgStandard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: orgStandard.ID}).MustNew(testUser1.UserCtx, t)
+	orgStandard := (&StandardBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	orgOwnedControl := (&ControlBuilder{client: suite.client, AllFields: true, StandardID: orgStandard.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// sort controls so they are consistent
 	slices.SortFunc(controls, func(a, b *generated.Control) int {
@@ -765,7 +769,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard: lo.ToPtr(publicStandard.ShortName),
 			expectedControls: controls,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all controls under standard using standard id and program set",
@@ -776,7 +780,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard: lo.ToPtr(publicStandard2.ShortName),
 			expectedControls: controls2,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all controls under standard",
@@ -786,7 +790,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard: &publicStandard.ShortName,
 			expectedControls: controls,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone single control, should  be a no-op. because the control already exists",
@@ -796,7 +800,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedControls: []*generated.Control{controls[7]},
 			expectedStandard: &publicStandard.ShortName,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all controls under standard with program",
@@ -808,7 +812,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard:   &publicStandard.ShortName,
 			expectedNumProgram: 1,
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
+			ctx:                sharedTestUser1.UserCtx,
 		},
 		{
 			name: "all controls under standard with program no access",
@@ -819,7 +823,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedControls: controls,
 			expectedStandard: &publicStandard.ShortName,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 			expectedErr:      notAuthorizedErrorMsg,
 		},
 		{
@@ -830,7 +834,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedControls: []*generated.Control{orgOwnedControl},
 			expectedStandard: &orgStandard.Name,
 			client:           suite.client.api,
-			ctx:              testUser1.UserCtx,
+			ctx:              sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone control under org with program",
@@ -842,13 +846,13 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedControls:   []*generated.Control{orgOwnedControl},
 			expectedNumProgram: 1,
 			client:             suite.client.api,
-			ctx:                testUser1.UserCtx,
+			ctx:                sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone single control using personal access token",
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
-				OwnerID:    &testUser1.OrganizationID,
+				OwnerID:    &sharedTestUser1.OrganizationID,
 			},
 			expectedStandard:   &publicStandard.ShortName,
 			expectedControls:   controls[:1],
@@ -863,7 +867,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			},
 			expectedStandard:   &publicStandard.ShortName,
 			expectedControls:   controls[:1],
-			expectedNumProgram: 0, // api token has no program access
+			expectedNumProgram: 1, // api token has scopes for program
 			client:             suite.client.apiWithToken,
 			ctx:                context.Background(),
 		},
@@ -875,7 +879,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard: lo.ToPtr("Custom"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
-			ctx:              testUser2.UserCtx,
+			ctx:              sharedTestUser2.UserCtx,
 			expectedErr:      notAuthorizedErrorMsg,
 		},
 		{
@@ -884,7 +888,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			expectedStandard: lo.ToPtr("Custom"),
 			expectedControls: []*generated.Control{orgOwnedControl},
 			client:           suite.client.api,
-			ctx:              testUser2.UserCtx,
+			ctx:              sharedTestUser2.UserCtx,
 			expectedErr:      notAuthorizedErrorMsg,
 		},
 	}
@@ -974,25 +978,25 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 				// ensure the org owner has access to the control that was created by an api token
 				if tc.client == suite.client.apiWithToken {
-					res, err := suite.client.api.GetControlByID(testUser1.UserCtx, control.ID)
+					res, err := suite.client.api.GetControlByID(sharedTestUser1.UserCtx, control.ID)
 					assert.NilError(t, err)
 					assert.Check(t, res != nil)
 					assert.Check(t, is.Equal(control.ID, res.Control.ID))
 				}
 
 				// ensure view only user can see the control created by the admin user
-				res, err := suite.client.api.GetControlByID(viewOnlyUser.UserCtx, control.ID)
+				res, err := suite.client.api.GetControlByID(sharedViewOnlyUser.UserCtx, control.ID)
 				assert.NilError(t, err)
 				assert.Check(t, res != nil)
 				assert.Check(t, is.Equal(control.ID, res.Control.ID))
 
 				// ensure a user outside my organization cannot get the control
-				res, err = suite.client.api.GetControlByID(testUser2.UserCtx, control.ID)
+				res, err = suite.client.api.GetControlByID(sharedTestUser2.UserCtx, control.ID)
 				assert.ErrorContains(t, err, notFoundErrorMsg)
 
 				// delete the created evidence, update for the token user cases
 				if tc.ctx == context.Background() {
-					tc.ctx = testUser1.UserCtx
+					tc.ctx = sharedTestUser1.UserCtx
 				}
 
 				// keep track of controls to delete, sometimes we clone existing controls that were created
@@ -1008,16 +1012,16 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	}
 
 	// cleanup created controls and standards
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgStandard.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 	// now we can delete it and the controls under it will be deleted
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, publicStandard2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, publicStandard2.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
@@ -1026,9 +1030,9 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 	updateControlsFile := uploadFile(t, "testdata/uploads/update.csv")
 
 	// create the standard and controls to be cloned
-	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(systemAdminUser.UserCtx, t)
-	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "MITB 1987"}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-1", AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, StandardID: standard.ID, RefCode: "AA-2", Aliases: []string{"AA 2", "ALIAS 2"}, AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	controlsToDelete := []string{}
 	implementationsToDelete := []string{}
@@ -1044,21 +1048,21 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 			name:                  "happy path, clone controls from csv",
 			fileInput:             *validFile,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   sharedTestUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
 			name:                  "update existing controls, no new controls cloned",
 			fileInput:             *updateControlsFile,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   sharedTestUser1.UserCtx,
 			expectedCountControls: 2,
 		},
 		{
 			name:                  "controls missing from system, no controls cloned",
 			fileInput:             *missingControlsFile,
 			client:                suite.client.api,
-			ctx:                   testUser1.UserCtx,
+			ctx:                   sharedTestUser1.UserCtx,
 			expectedCountControls: 0,
 		},
 	}
@@ -1115,16 +1119,16 @@ func TestMutationCreateControlsByCloneCSV(t *testing.T) {
 	implementationsToDelete = lo.Uniq(implementationsToDelete)
 
 	// cleanup controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
 	// cleanup control implementation
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: implementationsToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, IDs: implementationsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
 	// cleanup created controls and standards
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// create standard with controls to clone
 	numControls := int64(20)
@@ -1133,11 +1137,11 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 	subcontrols := []*generated.Subcontrol{}
 	subcontrolIDs := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		controls = append(controls, control)
 		controlIDs = append(controlIDs, control.ID)
 		// give them all a subcontrol
-		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		subcontrols = append(subcontrols, subcontrol)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 	}
@@ -1165,7 +1169,7 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 			},
 			expectedControlCount: 3,
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, filter by ref codes and aliases",
@@ -1175,7 +1179,7 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 			},
 			expectedControlCount: 2,
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, filter by aliases",
@@ -1185,7 +1189,7 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 			},
 			expectedControlCount: 2,
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, filter by categories",
@@ -1195,7 +1199,7 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 			},
 			expectedControlCount: 3,
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 		},
 	}
 
@@ -1234,13 +1238,13 @@ func TestMutationCreateControlsByCloneWithFilter(t *testing.T) {
 	}
 
 	// cleanup created controls and standards
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateFrameworkControl(t *testing.T) {
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// create standard with controls to clone
 	numControls := int64(1)
@@ -1249,11 +1253,11 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 	subcontrols := []*generated.Subcontrol{}
 	subcontrolIDs := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(systemAdminUser.UserCtx, t)
+		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID, AllFields: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		controls = append(controls, control)
 		controlIDs = append(controlIDs, control.ID)
 		// give them all a subcontrol
-		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(systemAdminUser.UserCtx, t)
+		subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
 		subcontrols = append(subcontrols, subcontrol)
 		subcontrolIDs = append(subcontrolIDs, subcontrol.ID)
 	}
@@ -1266,7 +1270,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 	controlIDsToDelete := []string{}
 	subcontrolIDsToDelete := []string{}
 
-	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	resp, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1295,7 +1299,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 			},
 			controlID: resp.CreateControlsByClone.Controls[0].ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       sharedTestUser1.UserCtx,
 		},
 		{
 			name: "fail, unable to update ref code",
@@ -1304,7 +1308,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -1314,7 +1318,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -1324,7 +1328,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 		{
@@ -1334,7 +1338,7 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 			},
 			controlID:   resp.CreateControlsByClone.Controls[0].ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: invalidInputErrorMsg,
 		},
 	}
@@ -1354,13 +1358,13 @@ func TestMutationUpdateFrameworkControl(t *testing.T) {
 	}
 
 	// cleanup created controls and standards
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDsToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 	originalRevision := publicStandard.Revision
 
 	sourceControl := (&ControlBuilder{
@@ -1368,15 +1372,15 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 		StandardID: publicStandard.ID,
 		AllFields:  true,
 		Title:      "Original Title",
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	sourceSubcontrol := (&SubcontrolBuilder{
 		client:    suite.client,
 		ControlID: sourceControl.ID,
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// clone the controls first
-	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	resp, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1390,7 +1394,7 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 
 	// then bump up the standard revision to create the drift
 	newRevision := "v0.1.0"
-	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+	_, err = suite.client.api.UpdateStandard(sharedSystemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
 		Revision: &newRevision,
 	}, nil, nil)
 	assert.NilError(t, err)
@@ -1398,9 +1402,9 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 	newSourceSubcontrol := (&SubcontrolBuilder{
 		client:    suite.client,
 		ControlID: sourceControl.ID,
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
-	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	resp2, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1430,7 +1434,7 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 	assert.DeepEqual(t, subcontrolRefCodes, expectedRefCodes)
 
 	// cloning with the same revision should not do anything
-	noopResponse, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	noopResponse, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1444,24 +1448,24 @@ func TestMutationCloneControlsRevisionUpdate(t *testing.T) {
 		clonedSubcontrolIDs = append(clonedSubcontrolIDs, edge.Node.ID)
 	}
 
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: clonedSubcontrolIDs}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{sourceSubcontrol.ID, newSourceSubcontrol.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: clonedSubcontrolIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{sourceSubcontrol.ID, newSourceSubcontrol.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(systemAdminUser.UserCtx, t)
+	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	(&ControlBuilder{
 		client:     suite.client,
 		StandardID: publicStandard.ID,
 		AllFields:  true,
 		Title:      "Control With Comments",
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// clone the controls
-	resp, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	resp, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1487,7 +1491,7 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 		},
 	}
 
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	err = suite.client.db.Control.UpdateOneID(clonedControl.ID).
 		SetDescriptionJSON(comment).
@@ -1496,13 +1500,13 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 
 	// bump the standard revision to trigger a revision update on the next clone
 	newRevision := "v0.2.0"
-	_, err = suite.client.api.UpdateStandard(systemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
+	_, err = suite.client.api.UpdateStandard(sharedSystemAdminUser.UserCtx, publicStandard.ID, testclient.UpdateStandardInput{
 		Revision: &newRevision,
 	}, nil, nil)
 	assert.NilError(t, err)
 
 	// clone again — this should succeed even though the existing control has comments on description_json
-	resp2, err := suite.client.api.CreateControlsByClone(testUser1.UserCtx, testclient.CloneControlInput{
+	resp2, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
 		StandardID: &publicStandard.ID,
 	})
 	assert.NilError(t, err)
@@ -1512,38 +1516,38 @@ func TestMutationCloneControlsRevisionUpdateWithComments(t *testing.T) {
 	assert.Equal(t, newControl.ID, clonedControl.ID)
 	assert.Equal(t, *newControl.ReferenceFrameworkRevision, newRevision)
 
-	queryResp, err := suite.client.api.GetControlByID(testUser1.UserCtx, clonedControl.ID)
+	queryResp, err := suite.client.api.GetControlByID(sharedTestUser1.UserCtx, clonedControl.ID)
 	assert.NilError(t, err)
 	assert.Check(t, queryResp.Control.DescriptionJSON == nil)
 
 	// cleanup
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControl.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateControl(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
-	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(testUser1.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	controlAnotherOrg := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
-	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
-	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can update the control
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as testUser1
+	// create another user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
 	_, err := suite.client.api.UpdateControl(anotherViewerUser.UserCtx, control.ID, testclient.UpdateControlInput{
@@ -1552,8 +1556,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
 	// create system owned control kind
-	kind := (&CustomTypeEnumBuilder{client: suite.client, Name: "Detective", ObjectType: "control"}).MustNew(systemAdminUser.UserCtx, t)
-	kindCustom := (&CustomTypeEnumBuilder{client: suite.client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(testUser1.UserCtx, t)
+	kind := (&CustomTypeEnumBuilder{client: suite.client, Name: "Detective", ObjectType: "control"}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	kindCustom := (&CustomTypeEnumBuilder{client: suite.client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1576,7 +1580,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID: control.ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -1657,7 +1661,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID:   control.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -1667,7 +1671,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID:   control.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -1677,7 +1681,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID: controlAnotherOrg.ID,
 			client:    suite.client.api,
-			ctx:       testUser2.UserCtx,
+			ctx:       sharedTestUser2.UserCtx,
 		},
 		{
 			name: "update allowed, user added to one of the programs",
@@ -1686,7 +1690,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID: control.ID,
 			client:    suite.client.api,
-			ctx:       adminUser.UserCtx,
+			ctx:       sharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -1695,7 +1699,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			},
 			controlID:   control.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -1828,18 +1832,18 @@ func TestMutationUpdateControl(t *testing.T) {
 			}
 		})
 	}
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(systemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateControlDescription(t *testing.T) {
-	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	descriptionRichText := "<div class=\"slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold\" data-slate-editor=\"true\" data-slate-node=\"value\"><div data-slate-node=\"element\" data-block-id=\"kK9tZ5Tllq\" data-slate-type=\"p\" data-slate-id=\"kK9tZ5Tllq\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\">lets just have text here and see</span></span></span></div></div>"
 	descriptionSlateJSON := []any{`
@@ -1910,7 +1914,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 			},
 			controlID:    control.ID,
 			client:       suite.client.api,
-			ctx:          testUser1.UserCtx,
+			ctx:          sharedTestUser1.UserCtx,
 			expectedJSON: descriptionSlateJSON,
 		},
 		{
@@ -1920,7 +1924,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 			},
 			controlID: control.ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       sharedTestUser1.UserCtx,
 		},
 		{
 			name: "complex slate JSON with comments and multiple blocks",
@@ -1929,7 +1933,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 			},
 			controlID: control.ID,
 			client:    suite.client.api,
-			ctx:       testUser1.UserCtx,
+			ctx:       sharedTestUser1.UserCtx,
 		},
 		{
 			name: "complex with comments, provide JSON",
@@ -1939,7 +1943,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 			},
 			controlID:    control.ID,
 			client:       suite.client.api,
-			ctx:          testUser1.UserCtx,
+			ctx:          sharedTestUser1.UserCtx,
 			expectedJSON: jsonWithComments,
 		},
 		{
@@ -1949,7 +1953,7 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 			},
 			controlID:   control.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "text contains comments",
 		},
 	}
@@ -1976,16 +1980,16 @@ func TestMutationUpdateControlDescription(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 
 }
 
 func TestMutationDeleteControl(t *testing.T) {
 	// create objects to be deleted
-	control1 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	controlSystem := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	controlSystem := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1998,27 +2002,27 @@ func TestMutationDeleteControl(t *testing.T) {
 			name:        "not authorized, delete",
 			idToDelete:  control1.ID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete system owned control",
 			idToDelete:  controlSystem.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: control1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  control1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
@@ -2031,13 +2035,13 @@ func TestMutationDeleteControl(t *testing.T) {
 			name:       "happy path, delete system owned control",
 			idToDelete: controlSystem.ID,
 			client:     suite.client.api,
-			ctx:        systemAdminUser.UserCtx,
+			ctx:        sharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -2209,17 +2213,17 @@ func TestQueryControlCategories(t *testing.T) {
 // or standards, or that have controls linked to them
 func TestQueryControlSubcategories(t *testing.T) {
 	// create controls with categories and subcategories
-	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, AllFields: true}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create one without a subcategory
-	control3 := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create one with a duplicate subcategory
-	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(testUser1.UserCtx, t)
+	control4 := (&ControlBuilder{client: suite.client, Subcategory: control1.Subcategory}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create a subcontrol with a different category
-	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Subcategory: "New Subcategory"}).MustNew(testUser1.UserCtx, t)
+	subcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID, Subcategory: "New Subcategory"}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -2231,13 +2235,13 @@ func TestQueryControlSubcategories(t *testing.T) {
 		{
 			name:           "happy path, get control subcategories",
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedResult: []string{control1.Subcategory, control2.Subcategory, subcontrol.Subcategory},
 		},
 		{
 			name:           "no controls, no results",
 			client:         suite.client.api,
-			ctx:            testUser2.UserCtx,
+			ctx:            sharedTestUser2.UserCtx,
 			expectedResult: []string{},
 		},
 	}
@@ -2275,8 +2279,8 @@ func TestQueryControlSubcategories(t *testing.T) {
 	}
 
 	// cleanup created controls
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 // TestQueryControlCategoriesByFramework tests the query for control subcategories by framework
@@ -2646,7 +2650,7 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			name:   "no controls, no results",
 			where:  defaultWhere,
 			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
+			ctx:    sharedTestUser2.UserCtx,
 		},
 	}
 
@@ -2686,36 +2690,36 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 }
 
 func TestMutationUpdateBulkControl(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: testUser1.GroupID}).MustNew(testUser1.UserCtx, t)
+	program1 := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	control1 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
-	control3 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(testUser1.UserCtx, t)
+	control1 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	control3 := (&ControlBuilder{client: suite.client, ProgramID: program1.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	subcontrol1 := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(testUser1.UserCtx, t)
-	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(testUser1.UserCtx, t)
+	subcontrol1 := (&SubcontrolBuilder{client: suite.client, ControlID: control1.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	subcontrol2 := (&SubcontrolBuilder{client: suite.client, ControlID: control2.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// create control implementation to be associated with the control
-	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	controlImplementation := (&ControlImplementationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// add adminUser to the program so that they can update the control
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: adminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(testUser1.UserCtx, t)
+	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID, UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as testUser1
+	// create another user and add them to the same organization and group as sharedTestUser1
 	// this will allow us to test the group editor permissions
 	anotherViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, testUser1.OrganizationID)
+	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(testUser1.UserCtx, t)
+	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
 
-	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	controlAnotherUser := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the control
-	res, err := suite.client.api.UpdateBulkControl(testUser2.UserCtx, []string{control1.ID}, testclient.UpdateControlInput{
+	res, err := suite.client.api.UpdateBulkControl(sharedTestUser2.UserCtx, []string{control1.ID}, testclient.UpdateControlInput{
 		Status: lo.ToPtr(enums.ControlStatusPreparing),
 	})
 
@@ -2739,7 +2743,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -2751,7 +2755,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				AddEditorIDs:          []string{groupMember.GroupID},
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -2759,7 +2763,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			ids:         []string{},
 			input:       testclient.UpdateControlInput{Description: lo.ToPtr("test")},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -2769,7 +2773,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 1, // only control1 should be updated
 		},
 		{
@@ -2779,7 +2783,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				Status: &enums.ControlStatusApproved,
 			},
 			client:               suite.client.api,
-			ctx:                  adminUser.UserCtx,
+			ctx:                  sharedAdminUser.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
@@ -2789,7 +2793,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				Status: &enums.ControlStatusPreparing,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser2.UserCtx,
+			ctx:                  sharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any controls to update
 		},
 		{
@@ -2800,7 +2804,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				ControlOwnerID: &ownerGroup.ID,
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -2812,7 +2816,7 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 				Tags:                        []string{"bulk", "update"},
 			},
 			client:               suite.client.api,
-			ctx:                  testUser1.UserCtx,
+			ctx:                  sharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 	}
@@ -2938,19 +2942,19 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherUser.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlImplementationDeleteOne]{client: suite.client.db.ControlImplementation, ID: controlImplementation.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	// create a trust center for the anonymous context
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	// create a trust center control with default (not visible) visibility
 	publicControl, err := suite.client.db.Control.Create().
@@ -2958,13 +2962,13 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetTitle("Trust Center Public Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
 	// use the API client to set visibility to publicly visible, which triggers the hook
 	// to create wildcard viewer tuples for anonymous access
-	_, err = suite.client.api.UpdateControl(testUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
+	_, err = suite.client.api.UpdateControl(sharedTestUser1.UserCtx, publicControl.ID, testclient.UpdateControlInput{
 		TrustCenterVisibility: &enums.TrustCenterControlVisibilityPubliclyVisible,
 	})
 	assert.NilError(t, err)
@@ -2975,14 +2979,14 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		SetTitle("Trust Center Hidden Control").
 		SetSource(enums.ControlSourceUserDefined).
 		SetIsTrustCenterControl(true).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(sharedTestUser1.OrganizationID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
 	// create a regular control (not a trust center control)
-	regularControl := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	regularControl := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
-	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, sharedTestUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -3014,13 +3018,13 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		{
 			name:    "authenticated user can view all their controls",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			queryID: publicControl.ID,
 		},
 		{
 			name:    "authenticated user can view hidden trust center control",
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 			queryID: hiddenControl.ID,
 		},
 	}
@@ -3050,6 +3054,6 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 	})
 
 	// cleanup
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }

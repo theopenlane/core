@@ -119,7 +119,7 @@ func roleToRelation(r enums.Role) (string, error) {
 	switch r {
 	case enums.RoleOwner, enums.RoleAdmin, enums.RoleMember:
 		return strings.ToLower(r.String()), nil
-	case fgax.ParentRelation:
+	case fgax.ParentRelation, fgax.ParentContextRelation:
 		return r.String(), nil
 	default:
 		return "", ErrUnsupportedFGARole

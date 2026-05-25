@@ -2,25 +2,19 @@
 # Tuples for testing the FGA implementation
 # This file is specific to scans
 ############################################
-
-# scan-1 is owned by openlane organization
 - user: organization:openlane
-  relation: parent
-  object: scan:scan-1
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
-  object: scan:scan-1
-# blocked user
-- user: user:ulid-blocked
-  relation: blocked
+  relation: parent_context
   object: scan:scan-1
 
-# scan-2 is associated with a platform
-- user: platform:platform-1
+# scan-2 is associated with a asset
+- user: asset:asset-1
   relation: parent
   object: scan:scan-2
-# org owner has editor access via organization
-- user: organization:openlane#owner
-  relation: editor
+
+- user: organization:openlane
+  relation: parent_context
   object: scan:scan-2
+
+- user: user:ulid-of-admin
+  relation: editor
+  object: asset:asset-1

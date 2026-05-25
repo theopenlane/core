@@ -75,7 +75,7 @@ import (
 )
 
 const (
-	fgaModelFile = "../../fga/model/model.fga"
+	fgaModuleFile = "../../fga/model/fga.mod"
 
 	redacted = "*****************************"
 
@@ -167,7 +167,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)
@@ -607,6 +607,19 @@ func requireNoError(t *testing.T, err error) {
 
 		os.Exit(1)
 	}
+}
+
+func failNow(t *testing.T, msgs ...string) {
+	t.Helper()
+	logMsg := log.Error()
+
+	for _, m := range msgs {
+		logMsg.Str("msg", m)
+	}
+
+	logMsg.Msg("fatal error during test setup or teardown")
+
+	os.Exit(1)
 }
 
 func testPDFBytes() []byte {
