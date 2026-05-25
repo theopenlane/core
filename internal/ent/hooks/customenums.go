@@ -168,7 +168,7 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 			}
 
 			// look up the enum by name, object type, and field
-			// and ensure it exists; prefer org-owned over system-owned
+			// and ensure it exists; prefer system owned
 			basePredicates := []predicate.CustomTypeEnum{
 				customtypeenum.NameEqualFold(enumValue),
 				customtypeenum.Field(in.Field),
