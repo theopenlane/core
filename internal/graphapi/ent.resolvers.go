@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/common/enums"
@@ -25,11 +24,6 @@ func (r *notificationResolver) Channels(ctx context.Context, obj *generated.Noti
 	}
 
 	return channels, nil
-}
-
-// DedicatedDb is the resolver for the dedicatedDb field.
-func (r *organizationResolver) DedicatedDb(ctx context.Context, obj *generated.Organization) (bool, error) {
-	panic(fmt.Errorf("not implemented: DedicatedDb - dedicatedDb"))
 }
 
 // Node is the resolver for the node field.
@@ -3293,11 +3287,6 @@ func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *gen
 	return nil
 }
 
-// DedicatedDb is the resolver for the dedicatedDb field.
-func (r *createOrganizationInputResolver) DedicatedDb(ctx context.Context, obj *generated.CreateOrganizationInput, data *bool) error {
-	return nil
-}
-
 // VulnerabilityIds is the resolver for the vulnerabilityIds field.
 func (r *createScanInputResolver) VulnerabilityIds(ctx context.Context, obj *generated.CreateScanInput, data []string) error {
 	obj.VulnerabilityIds = data
@@ -3347,9 +3336,6 @@ func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
 
 // Notification returns gqlgenerated.NotificationResolver implementation.
 func (r *Resolver) Notification() gqlgenerated.NotificationResolver { return &notificationResolver{r} }
-
-// Organization returns gqlgenerated.OrganizationResolver implementation.
-func (r *Resolver) Organization() gqlgenerated.OrganizationResolver { return &organizationResolver{r} }
 
 // Platform returns gqlgenerated.PlatformResolver implementation.
 func (r *Resolver) Platform() gqlgenerated.PlatformResolver { return &platformResolver{r} }
@@ -3518,7 +3504,6 @@ type identityHolderResolver struct{ *Resolver }
 type integrationResolver struct{ *Resolver }
 type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
-type organizationResolver struct{ *Resolver }
 type platformResolver struct{ *Resolver }
 type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
@@ -3552,3 +3537,20 @@ type updateTFASettingInputResolver struct{ *Resolver }
 type updateTaskInputResolver struct{ *Resolver }
 type updateTrustCenterFAQInputResolver struct{ *Resolver }
 type updateTrustCenterInputResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *organizationResolver) DedicatedDb(ctx context.Context, obj *generated.Organization) (bool, error) {
+	panic(fmt.Errorf("not implemented: DedicatedDb - dedicatedDb"))
+}
+func (r *createOrganizationInputResolver) DedicatedDb(ctx context.Context, obj *generated.CreateOrganizationInput, data *bool) error {
+	return nil
+}
+func (r *Resolver) Organization() gqlgenerated.OrganizationResolver { return &organizationResolver{r} }
+type organizationResolver struct{ *Resolver }
+*/

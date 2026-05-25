@@ -15018,10 +15018,6 @@ input CreateOrganizationInput {
 	The time the user's (local) avatar was last updated
 	"""
 	avatarUpdatedAt: Time
-	"""
-	Whether the organization has a dedicated database
-	"""
-	dedicatedDb: Boolean
 	controlCreatorIDs: [ID!]
 	controlImplementationCreatorIDs: [ID!]
 	controlObjectiveCreatorIDs: [ID!]
@@ -52816,10 +52812,6 @@ type Organization implements Node {
 	The time the user's (local) avatar was last updated
 	"""
 	avatarUpdatedAt: Time
-	"""
-	Whether the organization has a dedicated database
-	"""
-	dedicatedDb: Boolean!
 	"""
 	the stripe customer ID this organization is associated to
 	"""

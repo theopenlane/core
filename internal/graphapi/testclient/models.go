@@ -8149,9 +8149,7 @@ type CreateOrganizationInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
-	// Whether the organization has a dedicated database
-	DedicatedDb                       *bool                           `json:"dedicatedDb,omitempty"`
+	AvatarUpdatedAt                   *time.Time                      `json:"avatarUpdatedAt,omitempty"`
 	ControlCreatorIDs                 []string                        `json:"controlCreatorIDs,omitempty"`
 	ControlImplementationCreatorIDs   []string                        `json:"controlImplementationCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs        []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
@@ -25386,8 +25384,6 @@ type Organization struct {
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
-	// Whether the organization has a dedicated database
-	DedicatedDb bool `json:"dedicatedDb"`
 	// the stripe customer ID this organization is associated to
 	StripeCustomerID                *string                               `json:"stripeCustomerID,omitempty"`
 	ControlCreators                 *GroupConnection                      `json:"controlCreators"`
