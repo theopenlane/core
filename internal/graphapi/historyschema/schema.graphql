@@ -22167,10 +22167,6 @@ type OrganizationHistory implements Node {
 	"""
 	avatarUpdatedAt: Time
 	"""
-	Whether the organization has a dedicated database
-	"""
-	dedicatedDb: Boolean!
-	"""
 	the stripe customer ID this organization is associated to
 	"""
 	stripeCustomerID: String
@@ -34727,7 +34723,7 @@ type TemplateHistory implements Node {
 	"""
 	trustCenterID: String
 	"""
-	configuration for converting a submitted assesment into records for the organization
+	configuration for converting a submitted assessment into records for the organization
 	"""
 	transformConfiguration: TemplateProjectionConfig
 }

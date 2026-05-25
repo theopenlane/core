@@ -1300,6 +1300,11 @@ func (_u *ProcedureUpdate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := procedure.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Procedure.url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -3616,6 +3621,11 @@ func (_u *ProcedureUpdateOne) check() error {
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := procedure.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := procedure.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Procedure.url": %w`, err)}
 		}
 	}
 	return nil

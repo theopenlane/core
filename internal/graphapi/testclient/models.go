@@ -8149,9 +8149,7 @@ type CreateOrganizationInput struct {
 	// URL of the user's remote avatar
 	AvatarRemoteURL *string `json:"avatarRemoteURL,omitempty"`
 	// The time the user's (local) avatar was last updated
-	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
-	// Whether the organization has a dedicated database
-	DedicatedDb                       *bool                           `json:"dedicatedDb,omitempty"`
+	AvatarUpdatedAt                   *time.Time                      `json:"avatarUpdatedAt,omitempty"`
 	ControlCreatorIDs                 []string                        `json:"controlCreatorIDs,omitempty"`
 	ControlImplementationCreatorIDs   []string                        `json:"controlImplementationCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs        []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
@@ -9233,7 +9231,7 @@ type CreateTemplateInput struct {
 	Jsonconfig map[string]any `json:"jsonconfig"`
 	// the uischema for the template to render in the UI
 	Uischema map[string]any `json:"uischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	OwnerID                *string                          `json:"ownerID,omitempty"`
 	EnvironmentID          *string                          `json:"environmentID,omitempty"`
@@ -25386,8 +25384,6 @@ type Organization struct {
 	AvatarLocalFileID *string `json:"avatarLocalFileID,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatarUpdatedAt,omitempty"`
-	// Whether the organization has a dedicated database
-	DedicatedDb bool `json:"dedicatedDb"`
 	// the stripe customer ID this organization is associated to
 	StripeCustomerID                *string                               `json:"stripeCustomerID,omitempty"`
 	ControlCreators                 *GroupConnection                      `json:"controlCreators"`
@@ -35780,7 +35776,7 @@ type Template struct {
 	Uischema map[string]any `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
@@ -44375,7 +44371,7 @@ type UpdateTemplateInput struct {
 	// the uischema for the template to render in the UI
 	Uischema      map[string]any `json:"uischema,omitempty"`
 	ClearUischema *bool          `json:"clearUischema,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration      *models.TemplateProjectionConfig `json:"transformConfiguration,omitempty"`
 	ClearTransformConfiguration *bool                            `json:"clearTransformConfiguration,omitempty"`
 	EnvironmentID               *string                          `json:"environmentID,omitempty"`

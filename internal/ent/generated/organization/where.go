@@ -137,11 +137,6 @@ func AvatarUpdatedAt(v time.Time) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldAvatarUpdatedAt, v))
 }
 
-// DedicatedDb applies equality check predicate on the "dedicated_db" field. It's identical to DedicatedDbEQ.
-func DedicatedDb(v bool) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDedicatedDb, v))
-}
-
 // StripeCustomerID applies equality check predicate on the "stripe_customer_id" field. It's identical to StripeCustomerIDEQ.
 func StripeCustomerID(v string) predicate.Organization {
 	return predicate.Organization(sql.FieldEQ(FieldStripeCustomerID, v))
@@ -1030,16 +1025,6 @@ func AvatarUpdatedAtIsNil() predicate.Organization {
 // AvatarUpdatedAtNotNil applies the NotNil predicate on the "avatar_updated_at" field.
 func AvatarUpdatedAtNotNil() predicate.Organization {
 	return predicate.Organization(sql.FieldNotNull(FieldAvatarUpdatedAt))
-}
-
-// DedicatedDbEQ applies the EQ predicate on the "dedicated_db" field.
-func DedicatedDbEQ(v bool) predicate.Organization {
-	return predicate.Organization(sql.FieldEQ(FieldDedicatedDb, v))
-}
-
-// DedicatedDbNEQ applies the NEQ predicate on the "dedicated_db" field.
-func DedicatedDbNEQ(v bool) predicate.Organization {
-	return predicate.Organization(sql.FieldNEQ(FieldDedicatedDb, v))
 }
 
 // StripeCustomerIDEQ applies the EQ predicate on the "stripe_customer_id" field.

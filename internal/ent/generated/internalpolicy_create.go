@@ -999,6 +999,11 @@ func (_c *InternalPolicyCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.URL(); ok {
+		if err := internalpolicy.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.url": %w`, err)}
+		}
+	}
 	return nil
 }
 

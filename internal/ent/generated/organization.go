@@ -50,8 +50,6 @@ type Organization struct {
 	AvatarLocalFileID *string `json:"avatar_local_file_id,omitempty"`
 	// The time the user's (local) avatar was last updated
 	AvatarUpdatedAt *time.Time `json:"avatar_updated_at,omitempty"`
-	// Whether the organization has a dedicated database
-	DedicatedDb bool `json:"dedicated_db,omitempty"`
 	// the stripe customer ID this organization is associated to
 	StripeCustomerID *string `json:"stripe_customer_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -1412,7 +1410,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case organization.FieldTags:
 			values[i] = new([]byte)
-		case organization.FieldPersonalOrg, organization.FieldDedicatedDb:
+		case organization.FieldPersonalOrg:
 			values[i] = new(sql.NullBool)
 		case organization.FieldID, organization.FieldCreatedBy, organization.FieldUpdatedBy, organization.FieldDeletedBy, organization.FieldName, organization.FieldDisplayName, organization.FieldDescription, organization.FieldParentOrganizationID, organization.FieldAvatarRemoteURL, organization.FieldAvatarLocalFileID, organization.FieldStripeCustomerID:
 			values[i] = new(sql.NullString)
@@ -1533,12 +1531,6 @@ func (_m *Organization) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.AvatarUpdatedAt = new(time.Time)
 				*_m.AvatarUpdatedAt = value.Time
-			}
-		case organization.FieldDedicatedDb:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field dedicated_db", values[i])
-			} else if value.Valid {
-				_m.DedicatedDb = value.Bool
 			}
 		case organization.FieldStripeCustomerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -2188,9 +2180,6 @@ func (_m *Organization) String() string {
 		builder.WriteString("avatar_updated_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
-	builder.WriteString(", ")
-	builder.WriteString("dedicated_db=")
-	builder.WriteString(fmt.Sprintf("%v", _m.DedicatedDb))
 	builder.WriteString(", ")
 	if v := _m.StripeCustomerID; v != nil {
 		builder.WriteString("stripe_customer_id=")

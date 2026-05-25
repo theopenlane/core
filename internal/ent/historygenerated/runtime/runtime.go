@@ -1957,10 +1957,6 @@ func init() {
 	organizationhistoryDescAvatarUpdatedAt := organizationhistoryFields[18].Descriptor()
 	// organizationhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	organizationhistory.DefaultAvatarUpdatedAt = organizationhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// organizationhistoryDescDedicatedDb is the schema descriptor for dedicated_db field.
-	organizationhistoryDescDedicatedDb := organizationhistoryFields[19].Descriptor()
-	// organizationhistory.DefaultDedicatedDb holds the default value on creation for the dedicated_db field.
-	organizationhistory.DefaultDedicatedDb = organizationhistoryDescDedicatedDb.Default.(bool)
 	// organizationhistoryDescID is the schema descriptor for id field.
 	organizationhistoryDescID := organizationhistoryFields[9].Descriptor()
 	// organizationhistory.DefaultID holds the default value on creation for the id field.

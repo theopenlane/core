@@ -67,7 +67,7 @@ type Template struct {
 	Uischema map[string]interface{} `json:"uischema,omitempty"`
 	// the id of the trust center this template is associated with
 	TrustCenterID string `json:"trust_center_id,omitempty"`
-	// configuration for converting a submitted assesment into records for the organization
+	// configuration for converting a submitted assessment into records for the organization
 	TransformConfiguration models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TemplateQuery when eager-loading is set.

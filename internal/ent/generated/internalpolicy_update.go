@@ -1542,6 +1542,11 @@ func (_u *InternalPolicyUpdate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := internalpolicy.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -4388,6 +4393,11 @@ func (_u *InternalPolicyUpdateOne) check() error {
 	if v, ok := _u.mutation.ReviewFrequency(); ok {
 		if err := internalpolicy.ReviewFrequencyValidator(v); err != nil {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.review_frequency": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.URL(); ok {
+		if err := internalpolicy.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "InternalPolicy.url": %w`, err)}
 		}
 	}
 	return nil

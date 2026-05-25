@@ -300,20 +300,6 @@ func (_c *OrganizationCreate) SetNillableAvatarUpdatedAt(v *time.Time) *Organiza
 	return _c
 }
 
-// SetDedicatedDb sets the "dedicated_db" field.
-func (_c *OrganizationCreate) SetDedicatedDb(v bool) *OrganizationCreate {
-	_c.mutation.SetDedicatedDb(v)
-	return _c
-}
-
-// SetNillableDedicatedDb sets the "dedicated_db" field if the given value is not nil.
-func (_c *OrganizationCreate) SetNillableDedicatedDb(v *bool) *OrganizationCreate {
-	if v != nil {
-		_c.SetDedicatedDb(*v)
-	}
-	return _c
-}
-
 // SetStripeCustomerID sets the "stripe_customer_id" field.
 func (_c *OrganizationCreate) SetStripeCustomerID(v string) *OrganizationCreate {
 	_c.mutation.SetStripeCustomerID(v)
@@ -2089,10 +2075,6 @@ func (_c *OrganizationCreate) defaults() error {
 		v := organization.DefaultAvatarUpdatedAt()
 		_c.mutation.SetAvatarUpdatedAt(v)
 	}
-	if _, ok := _c.mutation.DedicatedDb(); !ok {
-		v := organization.DefaultDedicatedDb
-		_c.mutation.SetDedicatedDb(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if organization.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized organization.DefaultID (forgotten import generated/runtime?)")
@@ -2125,9 +2107,6 @@ func (_c *OrganizationCreate) check() error {
 		if err := organization.AvatarRemoteURLValidator(v); err != nil {
 			return &ValidationError{Name: "avatar_remote_url", err: fmt.Errorf(`generated: validator failed for field "Organization.avatar_remote_url": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.DedicatedDb(); !ok {
-		return &ValidationError{Name: "dedicated_db", err: errors.New(`generated: missing required field "Organization.dedicated_db"`)}
 	}
 	return nil
 }
@@ -2216,10 +2195,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.AvatarUpdatedAt(); ok {
 		_spec.SetField(organization.FieldAvatarUpdatedAt, field.TypeTime, value)
 		_node.AvatarUpdatedAt = &value
-	}
-	if value, ok := _c.mutation.DedicatedDb(); ok {
-		_spec.SetField(organization.FieldDedicatedDb, field.TypeBool, value)
-		_node.DedicatedDb = value
 	}
 	if value, ok := _c.mutation.StripeCustomerID(); ok {
 		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)

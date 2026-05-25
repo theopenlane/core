@@ -390,6 +390,8 @@ var (
 	DefaultImprovementSuggestions []string
 	// DefaultDismissedImprovementSuggestions holds the default value on creation for the "dismissed_improvement_suggestions" field.
 	DefaultDismissedImprovementSuggestions []string
+	// URLValidator is a validator for the "url" field. It is called by the builders before save.
+	URLValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.

@@ -2685,22 +2685,6 @@ paths:
             tags:
                 - webauthn
                 - authentication
-    /resend/webhook:
-        post:
-            description: Handle incoming webhook events from Resend for email delivery tracking
-            operationId: ResendWebhook
-            responses:
-                "200":
-                    content:
-                        text/plain:
-                            schema:
-                                type: string
-                    description: Webhook acknowledgment
-            security: []
-            summary: ResendWebhook
-            tags:
-                - webhooks
-                - email
     /robots.txt:
         get:
             description: Get robots.txt file for web crawlers
@@ -4317,7 +4301,7 @@ tags:
       name: certificates
     - description: APIDocs
       name: documentation
-    - description: ResendWebhook
+    - description: VerifyEmail
       name: email
     - description: ExampleCSV
       name: examples
@@ -4369,7 +4353,5 @@ tags:
       name: webauthn
     - description: Webfinger
       name: webfinger
-    - description: ResendWebhook
-      name: webhooks
     - description: JWKS
       name: well-known

@@ -889,6 +889,11 @@ func (_c *ProcedureCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "Procedure.review_frequency": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.URL(); ok {
+		if err := procedure.URLValidator(v); err != nil {
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "Procedure.url": %w`, err)}
+		}
+	}
 	return nil
 }
 

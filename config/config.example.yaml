@@ -72,11 +72,14 @@ authz:
         issuer: ""
         scopes: ""
     enabled: true
+    enableparentcontext: false
     hosturl: https://authz.theopenlane.io
     maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
     modulefile: ""
+    parentcontextconditions: []
+    parentcontextskipkinds: []
     storeid: ""
     storename: openlane
 cloudflare:
@@ -215,6 +218,7 @@ jobqueue:
         periodicjobs: []
         pollonly: false
         queues: {}
+        reindexerindexnames: []
         reindexerschedule: null
         reindexertimeout: 0s
         rescuestuckjobsafter: 0s
@@ -222,6 +226,7 @@ jobqueue:
         schema: ""
         skipjobkindvalidation: false
         skipunknownjobcheck: false
+        softstoptimeout: 0s
         test:
             disableuniqueenforcement: false
             time: null

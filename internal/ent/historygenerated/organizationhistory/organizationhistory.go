@@ -55,8 +55,6 @@ const (
 	FieldAvatarLocalFileID = "avatar_local_file_id"
 	// FieldAvatarUpdatedAt holds the string denoting the avatar_updated_at field in the database.
 	FieldAvatarUpdatedAt = "avatar_updated_at"
-	// FieldDedicatedDb holds the string denoting the dedicated_db field in the database.
-	FieldDedicatedDb = "dedicated_db"
 	// FieldStripeCustomerID holds the string denoting the stripe_customer_id field in the database.
 	FieldStripeCustomerID = "stripe_customer_id"
 	// Table holds the table name of the organizationhistory in the database.
@@ -84,7 +82,6 @@ var Columns = []string{
 	FieldAvatarRemoteURL,
 	FieldAvatarLocalFileID,
 	FieldAvatarUpdatedAt,
-	FieldDedicatedDb,
 	FieldStripeCustomerID,
 }
 
@@ -123,8 +120,6 @@ var (
 	DefaultPersonalOrg bool
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
-	// DefaultDedicatedDb holds the default value on creation for the "dedicated_db" field.
-	DefaultDedicatedDb bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -230,11 +225,6 @@ func ByAvatarLocalFileID(opts ...sql.OrderTermOption) OrderOption {
 // ByAvatarUpdatedAt orders the results by the avatar_updated_at field.
 func ByAvatarUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAvatarUpdatedAt, opts...).ToFunc()
-}
-
-// ByDedicatedDb orders the results by the dedicated_db field.
-func ByDedicatedDb(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDedicatedDb, opts...).ToFunc()
 }
 
 // ByStripeCustomerID orders the results by the stripe_customer_id field.

@@ -15018,10 +15018,6 @@ input CreateOrganizationInput {
 	The time the user's (local) avatar was last updated
 	"""
 	avatarUpdatedAt: Time
-	"""
-	Whether the organization has a dedicated database
-	"""
-	dedicatedDb: Boolean
 	controlCreatorIDs: [ID!]
 	controlImplementationCreatorIDs: [ID!]
 	controlObjectiveCreatorIDs: [ID!]
@@ -16725,7 +16721,7 @@ input CreateTemplateInput {
 	"""
 	uischema: Map
 	"""
-	configuration for converting a submitted assesment into records for the organization
+	configuration for converting a submitted assessment into records for the organization
 	"""
 	transformConfiguration: TemplateProjectionConfig
 	ownerID: ID
@@ -52817,10 +52813,6 @@ type Organization implements Node {
 	"""
 	avatarUpdatedAt: Time
 	"""
-	Whether the organization has a dedicated database
-	"""
-	dedicatedDb: Boolean!
-	"""
 	the stripe customer ID this organization is associated to
 	"""
 	stripeCustomerID: String
@@ -80666,7 +80658,7 @@ type Template implements Node {
 	"""
 	trustCenterID: ID
 	"""
-	configuration for converting a submitted assesment into records for the organization
+	configuration for converting a submitted assessment into records for the organization
 	"""
 	transformConfiguration: TemplateProjectionConfig
 	owner: Organization
@@ -93251,7 +93243,7 @@ input UpdateTemplateInput {
 	uischema: Map
 	clearUischema: Boolean
 	"""
-	configuration for converting a submitted assesment into records for the organization
+	configuration for converting a submitted assessment into records for the organization
 	"""
 	transformConfiguration: TemplateProjectionConfig
 	clearTransformConfiguration: Boolean

@@ -1823,7 +1823,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldAvatarRemoteURL:      {Type: field.TypeString, Column: organizationhistory.FieldAvatarRemoteURL},
 			organizationhistory.FieldAvatarLocalFileID:    {Type: field.TypeString, Column: organizationhistory.FieldAvatarLocalFileID},
 			organizationhistory.FieldAvatarUpdatedAt:      {Type: field.TypeTime, Column: organizationhistory.FieldAvatarUpdatedAt},
-			organizationhistory.FieldDedicatedDb:          {Type: field.TypeBool, Column: organizationhistory.FieldDedicatedDb},
 			organizationhistory.FieldStripeCustomerID:     {Type: field.TypeString, Column: organizationhistory.FieldStripeCustomerID},
 		},
 	}
@@ -10922,11 +10921,6 @@ func (f *OrganizationHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
 // WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
 func (f *OrganizationHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
 	f.Where(p.Field(organizationhistory.FieldAvatarUpdatedAt))
-}
-
-// WhereDedicatedDb applies the entql bool predicate on the dedicated_db field.
-func (f *OrganizationHistoryFilter) WhereDedicatedDb(p entql.BoolP) {
-	f.Where(p.Field(organizationhistory.FieldDedicatedDb))
 }
 
 // WhereStripeCustomerID applies the entql string predicate on the stripe_customer_id field.
