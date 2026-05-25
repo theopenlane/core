@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -170,6 +172,38 @@ func resolveTrustCenterAuthFields(ctx context.Context, req types.OperationReques
 	input.AuthURL = result.URL
 	if input.OrgName == "" {
 		input.OrgName = result.OrgName
+	}
+
+	return nil
+}
+
+// resolveQuestionnaireOrgName populates OrgName from the caller's organization when empty
+func resolveQuestionnaireOrgName(ctx context.Context, req types.OperationRequest, input *QuestionnaireAuthEmail) error {
+	if input.OrgName != "" {
+		return nil
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	org, err := req.DB.Organization.Query().
+		Where(organization.IDEQ(orgID)).
+		Select(organization.FieldDisplayName, organization.FieldName).
+		Only(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("org_id", orgID).Msg("failed resolving org name for questionnaire email")
+		return nil
+	}
+
+	switch {
+	case org.DisplayName != "":
+		input.OrgName = org.DisplayName
+	default:
+		input.OrgName = org.Name
 	}
 
 	return nil

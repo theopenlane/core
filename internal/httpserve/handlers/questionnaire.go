@@ -144,13 +144,16 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	if anonAssessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx); ok {
 		assessmentID = anonAssessmentID
-		isAnonymous = true
 
 		anonCaller, callerOk := auth.CallerFromContext(reqCtx)
 		if callerOk && anonCaller != nil {
 			email = anonCaller.SubjectEmail
 			ownerID = anonCaller.OrganizationID
 			allowCtx = auth.WithCaller(allowCtx, anonCaller)
+		}
+
+		if email == "" {
+			isAnonymous = true
 		}
 
 		allowCtx = auth.ActiveAssessmentIDKey.Set(allowCtx, assessmentID)
