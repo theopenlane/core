@@ -172,6 +172,20 @@ type TrustCenterNDASignedEmail struct {
 	AttachmentData []byte `json:"attachment_data,omitempty" jsonschema:"description=Signed NDA attachment content"`
 }
 
+// TrustCenterNDAApprovalRequestEmail is the input for notifying the organization's
+// designated approver that an NDA request is pending approval.
+type TrustCenterNDAApprovalRequestEmail struct {
+	RecipientInfo
+	// OrgName is the organization whose trust center received the NDA request
+	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
+	// RequesterName is the name of the person requesting access
+	RequesterName string `json:"requester_name,omitempty" jsonschema:"description=Name of the requester"`
+	// RequesterEmail is the email address of the person requesting access
+	RequesterEmail string `json:"requester_email" jsonschema:"required,description=Email address of the requester"`
+	// ApprovalURL is the direct URL where the approver can review the NDA request
+	ApprovalURL string `json:"approval_url" jsonschema:"required,description=NDA request approval URL"`
+}
+
 // TrustCenterAuthEmail is the input for trust center access authentication.
 // Callers may pass either the pre-built AuthURL or the RequestID + TrustCenterID pair;
 // when AuthURL is empty the operation resolves it from RequestID and TrustCenterID.
@@ -234,10 +248,12 @@ var (
 	verifyBillingSchema, VerifyBillingOp             = providerkit.OperationSchema[VerifyBillingRequest]()        //nolint:revive
 	tcNDARequestSchema, TCNDARequestOp               = providerkit.OperationSchema[TrustCenterNDARequestEmail]()  //nolint:revive
 	tcNDASignedSchema, TCNDASignedOp                 = providerkit.OperationSchema[TrustCenterNDASignedEmail]()   //nolint:revive
+	tcNDAApprovalRequestSchema, TCNDAApprovalRequestOp = providerkit.OperationSchema[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
 	tcAuthSchema, TCAuthOp                           = providerkit.OperationSchema[TrustCenterAuthEmail]()        //nolint:revive
 	questionnaireAuthSchema, QuestionnaireAuthOp     = providerkit.OperationSchema[QuestionnaireAuthEmail]()      //nolint:revive
 	billingEmailChangedSchema, BillingEmailChangedOp = providerkit.OperationSchema[BillingEmailChangedEmail]()    //nolint:revive
 	orgDeletionNoticeSchema, OrgDeletionNoticeOp     = providerkit.OperationSchema[OrgDeletionNoticeEmail]()      //nolint:revive
+
 )
 
 // --- Email operation definitions ---
@@ -590,6 +606,47 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 
 		return []newman.MessageOption{
 			newman.WithAttachment(newman.NewAttachment(req.AttachmentFilename, req.AttachmentData)),
+		}
+	},
+})
+
+var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
+	Op: TCNDAApprovalRequestOp, Schema: tcNDAApprovalRequestSchema, Theme: baseTheme,
+	Description: "System email notifying a designated approver that a trust center NDA request is pending approval",
+	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) string {
+		return req.OrgName + " Trust Center NDA Request Pending Approval"
+	},
+	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) render.ContentBody {
+		requester := req.RequesterEmail
+		if req.RequesterName != "" {
+			requester = req.RequesterName + " (" + req.RequesterEmail + ")"
+		}
+
+		return render.ContentBody{
+			Preheader: "An NDA request is pending approval for " + req.OrgName + "'s Trust Center",
+			Header:    defaultHeader(cfg),
+			Name:      req.FirstName,
+			Title:     "NDA request pending approval",
+			Intros: render.IntrosBlock{
+				Paragraphs: []string{
+					"A new request to access protected Trust Center materials is pending your approval.",
+					"Please review the NDA request and approve or deny access as appropriate.",
+				},
+			},
+			Dictionary: render.Dictionary{
+				Cells: []render.Cell{
+					{Key: "Organization", Value: req.OrgName},
+					{Key: "Requester", Value: requester},
+				},
+			},
+			Actions: []render.Action{{
+				Button: render.Button{
+					Text:      "Review NDA Request",
+					Link:      req.ApprovalURL,
+					Color:     tcButtonColor,
+					TextColor: tcButtonTextColor,
+				},
+			}},
 		}
 	},
 })
