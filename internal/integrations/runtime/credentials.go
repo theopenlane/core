@@ -300,7 +300,9 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		if err := r.reconcileOperations(systemCtx, installation); err != nil {
 			return err
 		}
+	}
 
+	if wasFirstConnection {
 		r.notifyIntegrationInstalled(systemCtx, installation, def)
 	}
 

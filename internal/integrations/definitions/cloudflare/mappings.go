@@ -33,6 +33,28 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: integrationgenerated.IntegrationMappingDirectoryMembershipMetadata, Expr: "payload"},
 })
 
+// mapExprFinding is the CEL mapping expression for Cloudflare Security Center insight payloads mapped to Finding
+var mapExprFinding = providerkit.CelMapExpr([]providerkit.CelMapEntry{
+	{Key: integrationgenerated.IntegrationMappingFindingExternalID, Expr: `'id' in payload ? payload.id : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingExternalOwnerID, Expr: `resource`},
+	{Key: integrationgenerated.IntegrationMappingFindingDisplayName, Expr: `'issue_class' in payload ? payload.issue_class : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingResourceName, Expr: `'subject' in payload ? payload.subject : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingTargetDetails, Expr: `'subject' in payload && payload.subject != "" ? {"affected_endpoints": [payload.subject]} : {}`},
+	{Key: integrationgenerated.IntegrationMappingFindingTargets, Expr: `'subject' in payload && payload.subject != "" ? [payload.subject] : []`},
+	{Key: integrationgenerated.IntegrationMappingFindingCategory, Expr: `'issue_type' in payload ? payload.issue_type : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingSourceUpdatedAt, Expr: `'since' in payload && payload.since != "" ? payload.since : null`},
+	{Key: integrationgenerated.IntegrationMappingFindingRecommendedActions, Expr: `'resolve_text' in payload ? payload.resolve_text : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingOpen, Expr: `'status' in payload ? payload.status == "active" : false`},
+	{Key: integrationgenerated.IntegrationMappingFindingFindingStatusName, Expr: `'dismissed' in payload && payload.dismissed ? "Dismissed" : ('user_classification' in payload && payload.user_classification == "false_positive" ? "False Positive" : ('status' in payload ? payload.status : ""))`},
+	{Key: integrationgenerated.IntegrationMappingFindingState, Expr: `'status' in payload ? payload.status : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingReferences, Expr: `'resolve_link' in payload && payload.resolve_link != "" ? [payload.resolve_link] : []`},
+	{Key: integrationgenerated.IntegrationMappingFindingDescription, Expr: `'payload' in payload && 'detection_method' in payload.payload ? payload.payload.detection_method : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingEventTime, Expr: `'timestamp' in payload && payload.timestamp != "" ? payload.timestamp : null`},
+	{Key: integrationgenerated.IntegrationMappingFindingSeverity, Expr: `'severity' in payload ? payload.severity : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingExternalURI, Expr: `'resolve_link' in payload ? payload.resolve_link : ""`},
+	{Key: integrationgenerated.IntegrationMappingFindingRawPayload, Expr: "payload"},
+})
+
 // cloudflareMappings returns the built-in Cloudflare ingest mappings
 func cloudflareMappings() []types.MappingRegistration {
 	return []types.MappingRegistration{
@@ -55,6 +77,13 @@ func cloudflareMappings() []types.MappingRegistration {
 			Spec: types.MappingOverride{
 				FilterExpr: "true",
 				MapExpr:    mapExprDirectoryMembership,
+			},
+		},
+		{
+			Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+			Spec: types.MappingOverride{
+				FilterExpr: "true",
+				MapExpr:    mapExprFinding,
 			},
 		},
 	}
