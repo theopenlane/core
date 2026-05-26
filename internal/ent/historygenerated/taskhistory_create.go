@@ -377,6 +377,20 @@ func (_c *TaskHistoryCreate) SetNillableSystemGenerated(v *bool) *TaskHistoryCre
 	return _c
 }
 
+// SetIsTemplate sets the "is_template" field.
+func (_c *TaskHistoryCreate) SetIsTemplate(v bool) *TaskHistoryCreate {
+	_c.mutation.SetIsTemplate(v)
+	return _c
+}
+
+// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableIsTemplate(v *bool) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetIsTemplate(*v)
+	}
+	return _c
+}
+
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (_c *TaskHistoryCreate) SetIdempotencyKey(v string) *TaskHistoryCreate {
 	_c.mutation.SetIdempotencyKey(v)
@@ -495,6 +509,10 @@ func (_c *TaskHistoryCreate) defaults() error {
 		v := taskhistory.DefaultSystemGenerated
 		_c.mutation.SetSystemGenerated(v)
 	}
+	if _, ok := _c.mutation.IsTemplate(); !ok {
+		v := taskhistory.DefaultIsTemplate
+		_c.mutation.SetIsTemplate(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if taskhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized taskhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -534,6 +552,9 @@ func (_c *TaskHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.SystemGenerated(); !ok {
 		return &ValidationError{Name: "system_generated", err: errors.New(`historygenerated: missing required field "TaskHistory.system_generated"`)}
+	}
+	if _, ok := _c.mutation.IsTemplate(); !ok {
+		return &ValidationError{Name: "is_template", err: errors.New(`historygenerated: missing required field "TaskHistory.is_template"`)}
 	}
 	return nil
 }
@@ -682,6 +703,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemGenerated(); ok {
 		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
 		_node.SystemGenerated = value
+	}
+	if value, ok := _c.mutation.IsTemplate(); ok {
+		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
+		_node.IsTemplate = value
 	}
 	if value, ok := _c.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)

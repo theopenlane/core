@@ -2549,6 +2549,7 @@ type ComplexityRoot struct {
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
 		IdempotencyKey       func(childComplexity int) int
+		IsTemplate           func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
 		ParentTaskID         func(childComplexity int) int
@@ -17713,6 +17714,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.IdempotencyKey(childComplexity), true
+
+	case "TaskHistory.isTemplate":
+		if e.ComplexityRoot.TaskHistory.IsTemplate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.IsTemplate(childComplexity), true
 
 	case "TaskHistory.operation":
 		if e.ComplexityRoot.TaskHistory.Operation == nil {
@@ -56257,6 +56265,10 @@ type TaskHistory implements Node {
   """
   systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
   """
+  indicates if the task is intended to be used as a template
+  """
+  isTemplate: Boolean!
+  """
   key to prevent duplicates for auto-generated task based on rules
   """
   idempotencyKey: String
@@ -56331,6 +56343,7 @@ enum TaskHistoryOrderField {
   STATUS
   due
   completed
+  is_template
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -56729,6 +56742,11 @@ input TaskHistoryWhereInput {
   """
   systemGenerated: Boolean
   systemGeneratedNEQ: Boolean
+  """
+  is_template field predicates
+  """
+  isTemplate: Boolean
+  isTemplateNEQ: Boolean
   """
   idempotency_key field predicates
   """
@@ -71061,6 +71079,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_assignerID(ctx, field)
 	case "systemGenerated":
 		return ec.fieldContext_TaskHistory_systemGenerated(ctx, field)
+	case "isTemplate":
+		return ec.fieldContext_TaskHistory_isTemplate(ctx, field)
 	case "idempotencyKey":
 		return ec.fieldContext_TaskHistory_idempotencyKey(ctx, field)
 	case "externalReferenceURL":

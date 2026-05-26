@@ -2657,6 +2657,10 @@ func init() {
 	taskhistoryDescSystemGenerated := taskhistoryFields[28].Descriptor()
 	// taskhistory.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	taskhistory.DefaultSystemGenerated = taskhistoryDescSystemGenerated.Default.(bool)
+	// taskhistoryDescIsTemplate is the schema descriptor for is_template field.
+	taskhistoryDescIsTemplate := taskhistoryFields[29].Descriptor()
+	// taskhistory.DefaultIsTemplate holds the default value on creation for the is_template field.
+	taskhistory.DefaultIsTemplate = taskhistoryDescIsTemplate.Default.(bool)
 	// taskhistoryDescID is the schema descriptor for id field.
 	taskhistoryDescID := taskhistoryFields[9].Descriptor()
 	// taskhistory.DefaultID holds the default value on creation for the id field.

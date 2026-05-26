@@ -133,6 +133,12 @@ func (Task) Fields() []ent.Field {
 				directives.ExternalSourceDirectiveAnnotation,
 			).
 			Default(false),
+		field.Bool("is_template").
+			Comment("indicates if the task is intended to be used as a template").
+			Annotations(
+				entgql.OrderField("is_template"),
+			).
+			Default(false),
 		field.String("idempotency_key").
 			Comment("key to prevent duplicates for auto-generated task based on rules").
 			Annotations(

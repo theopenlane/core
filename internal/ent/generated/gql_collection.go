@@ -75456,6 +75456,11 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, task.FieldSystemGenerated)
 				fieldSeen[task.FieldSystemGenerated] = struct{}{}
 			}
+		case "isTemplate":
+			if _, ok := fieldSeen[task.FieldIsTemplate]; !ok {
+				selectedFields = append(selectedFields, task.FieldIsTemplate)
+				fieldSeen[task.FieldIsTemplate] = struct{}{}
+			}
 		case "idempotencyKey":
 			if _, ok := fieldSeen[task.FieldIdempotencyKey]; !ok {
 				selectedFields = append(selectedFields, task.FieldIdempotencyKey)

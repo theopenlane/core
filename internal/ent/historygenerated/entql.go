@@ -2539,6 +2539,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssigneeID:           {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
 			taskhistory.FieldAssignerID:           {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 			taskhistory.FieldSystemGenerated:      {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
+			taskhistory.FieldIsTemplate:           {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
 			taskhistory.FieldIdempotencyKey:       {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
 			taskhistory.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
 			taskhistory.FieldParentTaskID:         {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
@@ -14101,6 +14102,11 @@ func (f *TaskHistoryFilter) WhereAssignerID(p entql.StringP) {
 // WhereSystemGenerated applies the entql bool predicate on the system_generated field.
 func (f *TaskHistoryFilter) WhereSystemGenerated(p entql.BoolP) {
 	f.Where(p.Field(taskhistory.FieldSystemGenerated))
+}
+
+// WhereIsTemplate applies the entql bool predicate on the is_template field.
+func (f *TaskHistoryFilter) WhereIsTemplate(p entql.BoolP) {
+	f.Where(p.Field(taskhistory.FieldIsTemplate))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.

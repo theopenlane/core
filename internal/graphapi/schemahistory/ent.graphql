@@ -34029,6 +34029,10 @@ type TaskHistory implements Node {
   """
   systemGenerated: Boolean! @externalSource(source: FRAMEWORK)
   """
+  indicates if the task is intended to be used as a template
+  """
+  isTemplate: Boolean!
+  """
   key to prevent duplicates for auto-generated task based on rules
   """
   idempotencyKey: String
@@ -34103,6 +34107,7 @@ enum TaskHistoryOrderField {
   STATUS
   due
   completed
+  is_template
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -34501,6 +34506,11 @@ input TaskHistoryWhereInput {
   """
   systemGenerated: Boolean
   systemGeneratedNEQ: Boolean
+  """
+  is_template field predicates
+  """
+  isTemplate: Boolean
+  isTemplateNEQ: Boolean
   """
   idempotency_key field predicates
   """

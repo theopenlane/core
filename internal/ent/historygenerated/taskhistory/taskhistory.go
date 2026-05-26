@@ -76,6 +76,8 @@ const (
 	FieldAssignerID = "assigner_id"
 	// FieldSystemGenerated holds the string denoting the system_generated field in the database.
 	FieldSystemGenerated = "system_generated"
+	// FieldIsTemplate holds the string denoting the is_template field in the database.
+	FieldIsTemplate = "is_template"
 	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
 	FieldIdempotencyKey = "idempotency_key"
 	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
@@ -117,6 +119,7 @@ var Columns = []string{
 	FieldAssigneeID,
 	FieldAssignerID,
 	FieldSystemGenerated,
+	FieldIsTemplate,
 	FieldIdempotencyKey,
 	FieldExternalReferenceURL,
 	FieldParentTaskID,
@@ -153,6 +156,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemGenerated holds the default value on creation for the "system_generated" field.
 	DefaultSystemGenerated bool
+	// DefaultIsTemplate holds the default value on creation for the "is_template" field.
+	DefaultIsTemplate bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -315,6 +320,11 @@ func ByAssignerID(opts ...sql.OrderTermOption) OrderOption {
 // BySystemGenerated orders the results by the system_generated field.
 func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemGenerated, opts...).ToFunc()
+}
+
+// ByIsTemplate orders the results by the is_template field.
+func ByIsTemplate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsTemplate, opts...).ToFunc()
 }
 
 // ByIdempotencyKey orders the results by the idempotency_key field.
