@@ -26,7 +26,7 @@ import (
 // this is never intended to approve access
 func DenyIfNotInOrganization() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if skip := skipOrgDenyCheck(ctx, m); skip {
+		if skip := skipOrgDenyCheck(ctx); skip {
 			return privacy.Skip
 		}
 
@@ -93,7 +93,7 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 
 // skipOrgDenyCheck are conditions where the deny should not apply on the top level rules and instead
 // should skip to the next check
-func skipOrgDenyCheck(ctx context.Context, m ent.Mutation) bool {
+func skipOrgDenyCheck(ctx context.Context) bool {
 	// skip check for system admins, this will shortcut other checks that allow the admin to access
 	if auth.IsSystemAdminFromContext(ctx) {
 		return true
