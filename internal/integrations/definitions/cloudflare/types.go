@@ -28,8 +28,8 @@ var (
 
 const (
 	assetSyncRegistrarPageSize = 50
-	assetSyncMinIntervalHours = 24
-	assetSyncMaxIntervalDays  = 7
+	assetSyncMinIntervalHours  = 24
+	assetSyncMaxIntervalDays   = 7
 )
 
 // UserInput holds installation-specific configuration collected from the user
