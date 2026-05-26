@@ -72,7 +72,7 @@ func fetchRegistrarRegistrations(ctx context.Context, client *cf.Client, account
 		var response cloudflareRegistrationsResponse
 		params := registrar.RegistrationListParams{
 			AccountID: cf.F(accountID),
-			PerPage:   cf.F(int64(50)),
+			PerPage:   cf.F(int64(assetSyncRegistrarPageSize)),
 		}
 
 		if cursor != "" {

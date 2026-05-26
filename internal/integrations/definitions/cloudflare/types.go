@@ -26,6 +26,12 @@ var (
 	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
 )
 
+const (
+	assetSyncRegistrarPageSize = 50
+	assetSyncMinIntervalHours = 24
+	assetSyncMaxIntervalDays  = 7
+)
+
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// DirectorySync includes the configuration for identity accounts from Cloudflare members

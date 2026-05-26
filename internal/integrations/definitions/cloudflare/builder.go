@@ -130,8 +130,8 @@ func Builder() registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Registrar Domains Read"},
 					ReconcileSchedule: gala.NewFullFetchSchedule(
-						gala.WithMinInterval(24*time.Hour),
-						gala.WithMaxInterval(7*24*time.Hour),
+						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
+						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
 					),
 				},
 			},
