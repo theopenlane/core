@@ -159,7 +159,7 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 	var scopes []string
 	for obj, verbs := range scopeOpts {
 		for _, verb := range verbs {
-			scopes = append(scopes, verb+":"+obj)
+			scopes = append(scopes, obj+":"+verb)
 		}
 	}
 

@@ -116,7 +116,7 @@ func TestMutationCreateAPIToken(t *testing.T) {
 			input: testclient.CreateAPITokenInput{
 				Name:        "forthethingz",
 				Description: &tokenDescription,
-				Scopes:      []string{"read:evidence", "write:evidence"},
+				Scopes:      []string{"evidence:read", "evidence:write"},
 			},
 		},
 		{
@@ -247,7 +247,7 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 			name:    "happy path, add scope",
 			tokenID: token.ID,
 			input: testclient.UpdateAPITokenInput{
-				Scopes: []string{"write:evidence"},
+				Scopes: []string{"evidence:write"},
 			},
 			ctx: sharedTestUser1.UserCtx,
 		},
@@ -347,7 +347,7 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 
 func TestLastUsedAPIToken(t *testing.T) {
 	// create new API token
-	token := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:evidence", "read:api_token"}}).MustNew(sharedTestUser1.UserCtx, t)
+	token := (&APITokenBuilder{client: suite.client, Scopes: []string{"evidence:read", "api_token:read"}}).MustNew(sharedTestUser1.UserCtx, t)
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetAPITokenByID(sharedTestUser1.UserCtx, token.ID)
@@ -376,8 +376,8 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	orgCtx := auth.NewTestContextWithOrgID(localTestUser.owner.ID, localTestUser.owner.OrganizationID)
 
 	// create scoped tokens (read-only vs write)
-	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:organization", "read:group"}}).MustNew(orgCtx, t)
-	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"write:group"}}).MustNew(orgCtx, t)
+	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"organization:read", "group:read"}}).MustNew(orgCtx, t)
+	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"group:write"}}).MustNew(orgCtx, t)
 
 	makeClient := func(token string) *testclient.TestClient {
 		authHeader := testclient.Authorization{
@@ -478,11 +478,11 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		return ids
 	}
 
-	viewRelation := fgamodel.NormalizeScope("read:evidence")
-	editRelation := fgamodel.NormalizeScope("write:evidence")
+	viewRelation := fgamodel.NormalizeScope("evidence:read")
+	editRelation := fgamodel.NormalizeScope("evidence:write")
 
 	t.Run("read-only evidence scope", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control", "read:task", "read:subcontrol"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read"})
 
 		ids := listScopedOrgIDs(token.ID, viewRelation)
 		assert.Check(t, lo.Contains(ids, orgUser.OrganizationID))
@@ -500,13 +500,13 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 	})
 
 	t.Run("scope addition and removal update tuples", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read"})
 
 		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, viewRelation), orgUser.OrganizationID))
 		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
 
 		_, err := suite.client.api.UpdateAPIToken(orgCtx, token.ID, testclient.UpdateAPITokenInput{
-			AppendScopes: []string{"write:evidence"},
+			AppendScopes: []string{"evidence:write"},
 		})
 		assert.NilError(t, err)
 
@@ -519,7 +519,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		assert.NilError(t, err)
 
 		_, err = suite.client.api.UpdateAPIToken(orgCtx, token.ID, testclient.UpdateAPITokenInput{
-			Scopes: []string{"read:evidence"},
+			Scopes: []string{"evidence:read"},
 		})
 		assert.NilError(t, err)
 
