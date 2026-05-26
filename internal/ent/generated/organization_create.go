@@ -328,6 +328,126 @@ func (_c *OrganizationCreate) SetNillableID(v *string) *OrganizationCreate {
 	return _c
 }
 
+// AddActionPlanCreatorIDs adds the "action_plan_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddActionPlanCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddActionPlanCreatorIDs(ids...)
+	return _c
+}
+
+// AddActionPlanCreators adds the "action_plan_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddActionPlanCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanCreatorIDs(ids...)
+}
+
+// AddAPITokenCreatorIDs adds the "api_token_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAPITokenCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAPITokenCreatorIDs(ids...)
+	return _c
+}
+
+// AddAPITokenCreators adds the "api_token_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAPITokenCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAPITokenCreatorIDs(ids...)
+}
+
+// AddAssessmentCreatorIDs adds the "assessment_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentCreatorIDs(ids...)
+	return _c
+}
+
+// AddAssessmentCreators adds the "assessment_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAssessmentCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentCreatorIDs(ids...)
+}
+
+// AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAssetCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssetCreatorIDs(ids...)
+	return _c
+}
+
+// AddAssetCreators adds the "asset_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAssetCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssetCreatorIDs(ids...)
+}
+
+// AddCampaignCreatorIDs adds the "campaign_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCampaignCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignCreatorIDs(ids...)
+	return _c
+}
+
+// AddCampaignCreators adds the "campaign_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddCampaignCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignCreatorIDs(ids...)
+}
+
+// AddCampaignTargetCreatorIDs adds the "campaign_target_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCampaignTargetCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignTargetCreatorIDs(ids...)
+	return _c
+}
+
+// AddCampaignTargetCreators adds the "campaign_target_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddCampaignTargetCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignTargetCreatorIDs(ids...)
+}
+
+// AddCheckResultCreatorIDs adds the "check_result_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCheckResultCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCheckResultCreatorIDs(ids...)
+	return _c
+}
+
+// AddCheckResultCreators adds the "check_result_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddCheckResultCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultCreatorIDs(ids...)
+}
+
+// AddContactCreatorIDs adds the "contact_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddContactCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddContactCreatorIDs(ids...)
+	return _c
+}
+
+// AddContactCreators adds the "contact_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddContactCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddContactCreatorIDs(ids...)
+}
+
 // AddControlCreatorIDs adds the "control_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddControlCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddControlCreatorIDs(ids...)
@@ -373,6 +493,156 @@ func (_c *OrganizationCreate) AddControlObjectiveCreators(v ...*Group) *Organiza
 	return _c.AddControlObjectiveCreatorIDs(ids...)
 }
 
+// AddCustomTypeEnumCreatorIDs adds the "custom_type_enum_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCustomTypeEnumCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCustomTypeEnumCreatorIDs(ids...)
+	return _c
+}
+
+// AddCustomTypeEnumCreators adds the "custom_type_enum_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddCustomTypeEnumCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCustomTypeEnumCreatorIDs(ids...)
+}
+
+// AddDirectoryAccountCreatorIDs adds the "directory_account_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDirectoryAccountCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDirectoryAccountCreatorIDs(ids...)
+	return _c
+}
+
+// AddDirectoryAccountCreators adds the "directory_account_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDirectoryAccountCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryAccountCreatorIDs(ids...)
+}
+
+// AddDirectoryGroupCreatorIDs adds the "directory_group_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDirectoryGroupCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDirectoryGroupCreatorIDs(ids...)
+	return _c
+}
+
+// AddDirectoryGroupCreators adds the "directory_group_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDirectoryGroupCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryGroupCreatorIDs(ids...)
+}
+
+// AddDirectoryMembershipCreatorIDs adds the "directory_membership_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDirectoryMembershipCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDirectoryMembershipCreatorIDs(ids...)
+	return _c
+}
+
+// AddDirectoryMembershipCreators adds the "directory_membership_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDirectoryMembershipCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryMembershipCreatorIDs(ids...)
+}
+
+// AddDirectorySyncRunCreatorIDs adds the "directory_sync_run_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDirectorySyncRunCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDirectorySyncRunCreatorIDs(ids...)
+	return _c
+}
+
+// AddDirectorySyncRunCreators adds the "directory_sync_run_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDirectorySyncRunCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectorySyncRunCreatorIDs(ids...)
+}
+
+// AddDiscussionCreatorIDs adds the "discussion_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDiscussionCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDiscussionCreatorIDs(ids...)
+	return _c
+}
+
+// AddDiscussionCreators adds the "discussion_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDiscussionCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDiscussionCreatorIDs(ids...)
+}
+
+// AddDocumentDataCreatorIDs adds the "document_data_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddDocumentDataCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddDocumentDataCreatorIDs(ids...)
+	return _c
+}
+
+// AddDocumentDataCreators adds the "document_data_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddDocumentDataCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDocumentDataCreatorIDs(ids...)
+}
+
+// AddEmailTemplateCreatorIDs adds the "email_template_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddEmailTemplateCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEmailTemplateCreatorIDs(ids...)
+	return _c
+}
+
+// AddEmailTemplateCreators adds the "email_template_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddEmailTemplateCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEmailTemplateCreatorIDs(ids...)
+}
+
+// AddEntityCreatorIDs adds the "entity_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddEntityCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEntityCreatorIDs(ids...)
+	return _c
+}
+
+// AddEntityCreators adds the "entity_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddEntityCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityCreatorIDs(ids...)
+}
+
+// AddEntityTypeCreatorIDs adds the "entity_type_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddEntityTypeCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddEntityTypeCreatorIDs(ids...)
+	return _c
+}
+
+// AddEntityTypeCreators adds the "entity_type_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddEntityTypeCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityTypeCreatorIDs(ids...)
+}
+
 // AddEvidenceCreatorIDs adds the "evidence_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddEvidenceCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddEvidenceCreatorIDs(ids...)
@@ -388,19 +658,19 @@ func (_c *OrganizationCreate) AddEvidenceCreators(v ...*Group) *OrganizationCrea
 	return _c.AddEvidenceCreatorIDs(ids...)
 }
 
-// AddAssetCreatorIDs adds the "asset_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddAssetCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddAssetCreatorIDs(ids...)
+// AddFileCreatorIDs adds the "file_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddFileCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddFileCreatorIDs(ids...)
 	return _c
 }
 
-// AddAssetCreators adds the "asset_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddAssetCreators(v ...*Group) *OrganizationCreate {
+// AddFileCreators adds the "file_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddFileCreators(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddAssetCreatorIDs(ids...)
+	return _c.AddFileCreatorIDs(ids...)
 }
 
 // AddFindingCreatorIDs adds the "finding_creators" edge to the Group entity by IDs.
@@ -418,21 +688,6 @@ func (_c *OrganizationCreate) AddFindingCreators(v ...*Group) *OrganizationCreat
 	return _c.AddFindingCreatorIDs(ids...)
 }
 
-// AddVulnerabilityCreatorIDs adds the "vulnerability_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddVulnerabilityCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddVulnerabilityCreatorIDs(ids...)
-	return _c
-}
-
-// AddVulnerabilityCreators adds the "vulnerability_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddVulnerabilityCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddVulnerabilityCreatorIDs(ids...)
-}
-
 // AddGroupCreatorIDs adds the "group_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddGroupCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddGroupCreatorIDs(ids...)
@@ -448,6 +703,66 @@ func (_c *OrganizationCreate) AddGroupCreators(v ...*Group) *OrganizationCreate 
 	return _c.AddGroupCreatorIDs(ids...)
 }
 
+// AddGroupMembershipCreatorIDs adds the "group_membership_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddGroupMembershipCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddGroupMembershipCreatorIDs(ids...)
+	return _c
+}
+
+// AddGroupMembershipCreators adds the "group_membership_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddGroupMembershipCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddGroupMembershipCreatorIDs(ids...)
+}
+
+// AddGroupSettingCreatorIDs adds the "group_setting_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddGroupSettingCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddGroupSettingCreatorIDs(ids...)
+	return _c
+}
+
+// AddGroupSettingCreators adds the "group_setting_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddGroupSettingCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddGroupSettingCreatorIDs(ids...)
+}
+
+// AddHushCreatorIDs adds the "hush_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddHushCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddHushCreatorIDs(ids...)
+	return _c
+}
+
+// AddHushCreators adds the "hush_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddHushCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddHushCreatorIDs(ids...)
+}
+
+// AddIdentityHolderCreatorIDs adds the "identity_holder_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddIdentityHolderCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIdentityHolderCreatorIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolderCreators adds the "identity_holder_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddIdentityHolderCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderCreatorIDs(ids...)
+}
+
 // AddInternalPolicyCreatorIDs adds the "internal_policy_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddInternalPolicyCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddInternalPolicyCreatorIDs(ids...)
@@ -461,6 +776,81 @@ func (_c *OrganizationCreate) AddInternalPolicyCreators(v ...*Group) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _c.AddInternalPolicyCreatorIDs(ids...)
+}
+
+// AddInviteCreatorIDs adds the "invite_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddInviteCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddInviteCreatorIDs(ids...)
+	return _c
+}
+
+// AddInviteCreators adds the "invite_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddInviteCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInviteCreatorIDs(ids...)
+}
+
+// AddJobRunnerCreatorIDs adds the "job_runner_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddJobRunnerCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerCreatorIDs(ids...)
+	return _c
+}
+
+// AddJobRunnerCreators adds the "job_runner_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddJobRunnerCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddJobRunnerCreatorIDs(ids...)
+}
+
+// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _c
+}
+
+// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+}
+
+// AddJobRunnerTokenCreatorIDs adds the "job_runner_token_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddJobRunnerTokenCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerTokenCreatorIDs(ids...)
+	return _c
+}
+
+// AddJobRunnerTokenCreators adds the "job_runner_token_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddJobRunnerTokenCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddJobRunnerTokenCreatorIDs(ids...)
+}
+
+// AddJobTemplateCreatorIDs adds the "job_template_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddJobTemplateCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobTemplateCreatorIDs(ids...)
+	return _c
+}
+
+// AddJobTemplateCreators adds the "job_template_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddJobTemplateCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddJobTemplateCreatorIDs(ids...)
 }
 
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
@@ -493,6 +883,66 @@ func (_c *OrganizationCreate) AddNarrativeCreators(v ...*Group) *OrganizationCre
 	return _c.AddNarrativeCreatorIDs(ids...)
 }
 
+// AddNoteCreatorIDs adds the "note_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddNoteCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddNoteCreatorIDs(ids...)
+	return _c
+}
+
+// AddNoteCreators adds the "note_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddNoteCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddNoteCreatorIDs(ids...)
+}
+
+// AddNotificationTemplateCreatorIDs adds the "notification_template_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddNotificationTemplateCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddNotificationTemplateCreatorIDs(ids...)
+	return _c
+}
+
+// AddNotificationTemplateCreators adds the "notification_template_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddNotificationTemplateCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddNotificationTemplateCreatorIDs(ids...)
+}
+
+// AddOrgMembershipCreatorIDs adds the "org_membership_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddOrgMembershipCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddOrgMembershipCreatorIDs(ids...)
+	return _c
+}
+
+// AddOrgMembershipCreators adds the "org_membership_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddOrgMembershipCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOrgMembershipCreatorIDs(ids...)
+}
+
+// AddPlatformCreatorIDs adds the "platform_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddPlatformCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddPlatformCreatorIDs(ids...)
+	return _c
+}
+
+// AddPlatformCreators adds the "platform_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddPlatformCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformCreatorIDs(ids...)
+}
+
 // AddProcedureCreatorIDs adds the "procedure_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddProcedureCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddProcedureCreatorIDs(ids...)
@@ -523,6 +973,51 @@ func (_c *OrganizationCreate) AddProgramCreators(v ...*Group) *OrganizationCreat
 	return _c.AddProgramCreatorIDs(ids...)
 }
 
+// AddProgramMembershipCreatorIDs adds the "program_membership_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddProgramMembershipCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddProgramMembershipCreatorIDs(ids...)
+	return _c
+}
+
+// AddProgramMembershipCreators adds the "program_membership_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddProgramMembershipCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddProgramMembershipCreatorIDs(ids...)
+}
+
+// AddRemediationCreatorIDs adds the "remediation_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddRemediationCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRemediationCreatorIDs(ids...)
+	return _c
+}
+
+// AddRemediationCreators adds the "remediation_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddRemediationCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationCreatorIDs(ids...)
+}
+
+// AddReviewCreatorIDs adds the "review_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddReviewCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddReviewCreatorIDs(ids...)
+	return _c
+}
+
+// AddReviewCreators adds the "review_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddReviewCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewCreatorIDs(ids...)
+}
+
 // AddRiskCreatorIDs adds the "risk_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddRiskCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddRiskCreatorIDs(ids...)
@@ -538,19 +1033,19 @@ func (_c *OrganizationCreate) AddRiskCreators(v ...*Group) *OrganizationCreate {
 	return _c.AddRiskCreatorIDs(ids...)
 }
 
-// AddIdentityHolderCreatorIDs adds the "identity_holder_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddIdentityHolderCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddIdentityHolderCreatorIDs(ids...)
+// AddScanCreatorIDs adds the "scan_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddScanCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScanCreatorIDs(ids...)
 	return _c
 }
 
-// AddIdentityHolderCreators adds the "identity_holder_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddIdentityHolderCreators(v ...*Group) *OrganizationCreate {
+// AddScanCreators adds the "scan_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddScanCreators(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddIdentityHolderCreatorIDs(ids...)
+	return _c.AddScanCreatorIDs(ids...)
 }
 
 // AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
@@ -568,6 +1063,21 @@ func (_c *OrganizationCreate) AddScheduledJobCreators(v ...*Group) *Organization
 	return _c.AddScheduledJobCreatorIDs(ids...)
 }
 
+// AddScheduledJobRunCreatorIDs adds the "scheduled_job_run_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddScheduledJobRunCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddScheduledJobRunCreatorIDs(ids...)
+	return _c
+}
+
+// AddScheduledJobRunCreators adds the "scheduled_job_run_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddScheduledJobRunCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScheduledJobRunCreatorIDs(ids...)
+}
+
 // AddStandardCreatorIDs adds the "standard_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddStandardCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddStandardCreatorIDs(ids...)
@@ -583,19 +1093,19 @@ func (_c *OrganizationCreate) AddStandardCreators(v ...*Group) *OrganizationCrea
 	return _c.AddStandardCreatorIDs(ids...)
 }
 
-// AddTemplateCreatorIDs adds the "template_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddTemplateCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddTemplateCreatorIDs(ids...)
+// AddSubcontrolCreatorIDs adds the "subcontrol_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddSubcontrolCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubcontrolCreatorIDs(ids...)
 	return _c
 }
 
-// AddTemplateCreators adds the "template_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCreate {
+// AddSubcontrolCreators adds the "subcontrol_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddSubcontrolCreators(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddTemplateCreatorIDs(ids...)
+	return _c.AddSubcontrolCreatorIDs(ids...)
 }
 
 // AddSubprocessorCreatorIDs adds the "subprocessor_creators" edge to the Group entity by IDs.
@@ -613,6 +1123,111 @@ func (_c *OrganizationCreate) AddSubprocessorCreators(v ...*Group) *Organization
 	return _c.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddSubscriberCreatorIDs adds the "subscriber_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddSubscriberCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubscriberCreatorIDs(ids...)
+	return _c
+}
+
+// AddSubscriberCreators adds the "subscriber_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddSubscriberCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubscriberCreatorIDs(ids...)
+}
+
+// AddSystemDetailCreatorIDs adds the "system_detail_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddSystemDetailCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSystemDetailCreatorIDs(ids...)
+	return _c
+}
+
+// AddSystemDetailCreators adds the "system_detail_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddSystemDetailCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSystemDetailCreatorIDs(ids...)
+}
+
+// AddTagDefinitionCreatorIDs adds the "tag_definition_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTagDefinitionCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTagDefinitionCreatorIDs(ids...)
+	return _c
+}
+
+// AddTagDefinitionCreators adds the "tag_definition_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTagDefinitionCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTagDefinitionCreatorIDs(ids...)
+}
+
+// AddTaskCreatorIDs adds the "task_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTaskCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTaskCreatorIDs(ids...)
+	return _c
+}
+
+// AddTaskCreators adds the "task_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTaskCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskCreatorIDs(ids...)
+}
+
+// AddTemplateCreatorIDs adds the "template_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTemplateCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTemplateCreatorIDs(ids...)
+	return _c
+}
+
+// AddTemplateCreators adds the "template_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTemplateCreatorIDs(ids...)
+}
+
+// AddTrustCenterCreatorIDs adds the "trust_center_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterCreators adds the "trust_center_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterCreatorIDs(ids...)
+}
+
+// AddTrustCenterComplianceCreatorIDs adds the "trust_center_compliance_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterComplianceCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterComplianceCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterComplianceCreators adds the "trust_center_compliance_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterComplianceCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterComplianceCreatorIDs(ids...)
+}
+
 // AddTrustCenterDocCreatorIDs adds the "trust_center_doc_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddTrustCenterDocCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddTrustCenterDocCreatorIDs(ids...)
@@ -626,6 +1241,51 @@ func (_c *OrganizationCreate) AddTrustCenterDocCreators(v ...*Group) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _c.AddTrustCenterDocCreatorIDs(ids...)
+}
+
+// AddTrustCenterEntityCreatorIDs adds the "trust_center_entity_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterEntityCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterEntityCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterEntityCreators adds the "trust_center_entity_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterEntityCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterEntityCreatorIDs(ids...)
+}
+
+// AddTrustCenterFaqCreatorIDs adds the "trust_center_faq_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterFaqCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterFaqCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterFaqCreators adds the "trust_center_faq_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterFaqCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterFaqCreatorIDs(ids...)
+}
+
+// AddTrustCenterNdaRequestCreatorIDs adds the "trust_center_nda_request_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterNdaRequestCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterNdaRequestCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterNdaRequestCreators adds the "trust_center_nda_request_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterNdaRequestCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterNdaRequestCreatorIDs(ids...)
 }
 
 // AddTrustCenterSubprocessorCreatorIDs adds the "trust_center_subprocessor_creators" edge to the Group entity by IDs.
@@ -643,19 +1303,184 @@ func (_c *OrganizationCreate) AddTrustCenterSubprocessorCreators(v ...*Group) *O
 	return _c.AddTrustCenterSubprocessorCreatorIDs(ids...)
 }
 
-// AddActionPlanCreatorIDs adds the "action_plan_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddActionPlanCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddActionPlanCreatorIDs(ids...)
+// AddTrustCenterWatermarkConfigCreatorIDs adds the "trust_center_watermark_config_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterWatermarkConfigCreatorIDs(ids...)
 	return _c
 }
 
-// AddActionPlanCreators adds the "action_plan_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddActionPlanCreators(v ...*Group) *OrganizationCreate {
+// AddTrustCenterWatermarkConfigCreators adds the "trust_center_watermark_config_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigCreators(v ...*Group) *OrganizationCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddActionPlanCreatorIDs(ids...)
+	return _c.AddTrustCenterWatermarkConfigCreatorIDs(ids...)
+}
+
+// AddVendorRiskScoreCreatorIDs adds the "vendor_risk_score_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddVendorRiskScoreCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddVendorRiskScoreCreatorIDs(ids...)
+	return _c
+}
+
+// AddVendorRiskScoreCreators adds the "vendor_risk_score_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddVendorRiskScoreCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVendorRiskScoreCreatorIDs(ids...)
+}
+
+// AddVulnerabilityCreatorIDs adds the "vulnerability_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddVulnerabilityCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddVulnerabilityCreatorIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilityCreators adds the "vulnerability_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddVulnerabilityCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityCreatorIDs(ids...)
+}
+
+// AddWorkflowDefinitionCreatorIDs adds the "workflow_definition_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddWorkflowDefinitionCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddWorkflowDefinitionCreatorIDs(ids...)
+	return _c
+}
+
+// AddWorkflowDefinitionCreators adds the "workflow_definition_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddWorkflowDefinitionCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowDefinitionCreatorIDs(ids...)
+}
+
+// AddCampaignsManagerIDs adds the "campaigns_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddCampaignsManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCampaignsManagerIDs(ids...)
+	return _c
+}
+
+// AddCampaignsManager adds the "campaigns_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddCampaignsManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignsManagerIDs(ids...)
+}
+
+// AddComplianceManagerIDs adds the "compliance_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddComplianceManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddComplianceManagerIDs(ids...)
+	return _c
+}
+
+// AddComplianceManager adds the "compliance_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddComplianceManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddComplianceManagerIDs(ids...)
+}
+
+// AddGroupManagerIDs adds the "group_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddGroupManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddGroupManagerIDs(ids...)
+	return _c
+}
+
+// AddGroupManager adds the "group_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddGroupManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddGroupManagerIDs(ids...)
+}
+
+// AddPoliciesManagerIDs adds the "policies_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddPoliciesManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddPoliciesManagerIDs(ids...)
+	return _c
+}
+
+// AddPoliciesManager adds the "policies_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddPoliciesManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPoliciesManagerIDs(ids...)
+}
+
+// AddRegistryManagerIDs adds the "registry_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddRegistryManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRegistryManagerIDs(ids...)
+	return _c
+}
+
+// AddRegistryManager adds the "registry_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddRegistryManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRegistryManagerIDs(ids...)
+}
+
+// AddRiskManagerIDs adds the "risk_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddRiskManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddRiskManagerIDs(ids...)
+	return _c
+}
+
+// AddRiskManager adds the "risk_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddRiskManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRiskManagerIDs(ids...)
+}
+
+// AddTrustCenterManagerIDs adds the "trust_center_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterManagerIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterManager adds the "trust_center_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterManagerIDs(ids...)
+}
+
+// AddWorkflowsManagerIDs adds the "workflows_manager" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddWorkflowsManagerIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddWorkflowsManagerIDs(ids...)
+	return _c
+}
+
+// AddWorkflowsManager adds the "workflows_manager" edges to the Group entity.
+func (_c *OrganizationCreate) AddWorkflowsManager(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowsManagerIDs(ids...)
 }
 
 // SetParentID sets the "parent" edge to the Organization entity by ID.
@@ -2200,6 +3025,142 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		_spec.SetField(organization.FieldStripeCustomerID, field.TypeString, value)
 		_node.StripeCustomerID = &value
 	}
+	if nodes := _c.mutation.ActionPlanCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ActionPlanCreatorsTable,
+			Columns: []string{organization.ActionPlanCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.APITokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.APITokenCreatorsTable,
+			Columns: []string{organization.APITokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentCreatorsTable,
+			Columns: []string{organization.AssessmentCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssetCreatorsTable,
+			Columns: []string{organization.AssetCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CampaignCreatorsTable,
+			Columns: []string{organization.CampaignCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignTargetCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CampaignTargetCreatorsTable,
+			Columns: []string{organization.CampaignTargetCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CheckResultCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultCreatorsTable,
+			Columns: []string{organization.CheckResultCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ContactCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ContactCreatorsTable,
+			Columns: []string{organization.ContactCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2251,6 +3212,176 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.CustomTypeEnumCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CustomTypeEnumCreatorsTable,
+			Columns: []string{organization.CustomTypeEnumCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryAccountCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountCreatorsTable,
+			Columns: []string{organization.DirectoryAccountCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryGroupCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupCreatorsTable,
+			Columns: []string{organization.DirectoryGroupCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryMembershipCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipCreatorsTable,
+			Columns: []string{organization.DirectoryMembershipCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectorySyncRunCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunCreatorsTable,
+			Columns: []string{organization.DirectorySyncRunCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DiscussionCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionCreatorsTable,
+			Columns: []string{organization.DiscussionCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DocumentDataCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DocumentDataCreatorsTable,
+			Columns: []string{organization.DocumentDataCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EmailTemplateCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EmailTemplateCreatorsTable,
+			Columns: []string{organization.EmailTemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntityCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EntityCreatorsTable,
+			Columns: []string{organization.EntityCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntityTypeCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.EntityTypeCreatorsTable,
+			Columns: []string{organization.EntityTypeCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.EvidenceCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2268,12 +3399,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.AssetCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.FileCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.AssetCreatorsTable,
-			Columns: []string{organization.AssetCreatorsColumn},
+			Table:   organization.FileCreatorsTable,
+			Columns: []string{organization.FileCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2302,23 +3433,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.VulnerabilityCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.VulnerabilityCreatorsTable,
-			Columns: []string{organization.VulnerabilityCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.GroupCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2336,12 +3450,165 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.GroupMembershipCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupMembershipCreatorsTable,
+			Columns: []string{organization.GroupMembershipCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.GroupSettingCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupSettingCreatorsTable,
+			Columns: []string{organization.GroupSettingCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.HushCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.HushCreatorsTable,
+			Columns: []string{organization.HushCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IdentityHolderCreatorsTable,
+			Columns: []string{organization.IdentityHolderCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.InternalPolicyCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.InternalPolicyCreatorsTable,
 			Columns: []string{organization.InternalPolicyCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InviteCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.InviteCreatorsTable,
+			Columns: []string{organization.InviteCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.JobRunnerCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerCreatorsTable,
+			Columns: []string{organization.JobRunnerCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.JobRunnerTokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.JobTemplateCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobTemplateCreatorsTable,
+			Columns: []string{organization.JobTemplateCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2387,6 +3654,74 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.NoteCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NoteCreatorsTable,
+			Columns: []string{organization.NoteCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NotificationTemplateCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.NotificationTemplateCreatorsTable,
+			Columns: []string{organization.NotificationTemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OrgMembershipCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.OrgMembershipCreatorsTable,
+			Columns: []string{organization.OrgMembershipCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PlatformCreatorsTable,
+			Columns: []string{organization.PlatformCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ProcedureCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2421,6 +3756,57 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ProgramMembershipCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ProgramMembershipCreatorsTable,
+			Columns: []string{organization.ProgramMembershipCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RemediationCreatorsTable,
+			Columns: []string{organization.RemediationCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReviewCreatorsTable,
+			Columns: []string{organization.ReviewCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.RiskCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2438,12 +3824,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.IdentityHolderCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ScanCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.IdentityHolderCreatorsTable,
-			Columns: []string{organization.IdentityHolderCreatorsColumn},
+			Table:   organization.ScanCreatorsTable,
+			Columns: []string{organization.ScanCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2472,6 +3858,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ScheduledJobRunCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ScheduledJobRunCreatorsTable,
+			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.StandardCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2489,12 +3892,12 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SubcontrolCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.TemplateCreatorsTable,
-			Columns: []string{organization.TemplateCreatorsColumn},
+			Table:   organization.SubcontrolCreatorsTable,
+			Columns: []string{organization.SubcontrolCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2523,12 +3926,182 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.SubscriberCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubscriberCreatorsTable,
+			Columns: []string{organization.SubscriberCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SystemDetailCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SystemDetailCreatorsTable,
+			Columns: []string{organization.SystemDetailCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TagDefinitionCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TagDefinitionCreatorsTable,
+			Columns: []string{organization.TagDefinitionCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TaskCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TaskCreatorsTable,
+			Columns: []string{organization.TaskCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TemplateCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TemplateCreatorsTable,
+			Columns: []string{organization.TemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterCreatorsTable,
+			Columns: []string{organization.TrustCenterCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterComplianceCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterComplianceCreatorsTable,
+			Columns: []string{organization.TrustCenterComplianceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.TrustCenterDocCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
 			Table:   organization.TrustCenterDocCreatorsTable,
 			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterEntityCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterEntityCreatorsTable,
+			Columns: []string{organization.TrustCenterEntityCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterFaqCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterFaqCreatorsTable,
+			Columns: []string{organization.TrustCenterFaqCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterNdaRequestCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterNdaRequestCreatorsTable,
+			Columns: []string{organization.TrustCenterNdaRequestCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -2557,12 +4130,199 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ActionPlanCreatorsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterWatermarkConfigCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   organization.ActionPlanCreatorsTable,
-			Columns: []string{organization.ActionPlanCreatorsColumn},
+			Table:   organization.TrustCenterWatermarkConfigCreatorsTable,
+			Columns: []string{organization.TrustCenterWatermarkConfigCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VendorRiskScoreCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VendorRiskScoreCreatorsTable,
+			Columns: []string{organization.VendorRiskScoreCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilityCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.VulnerabilityCreatorsTable,
+			Columns: []string{organization.VulnerabilityCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowDefinitionCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionCreatorsTable,
+			Columns: []string{organization.WorkflowDefinitionCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignsManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CampaignsManagerTable,
+			Columns: []string{organization.CampaignsManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ComplianceManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ComplianceManagerTable,
+			Columns: []string{organization.ComplianceManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.GroupManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.GroupManagerTable,
+			Columns: []string{organization.GroupManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PoliciesManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.PoliciesManagerTable,
+			Columns: []string{organization.PoliciesManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RegistryManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RegistryManagerTable,
+			Columns: []string{organization.RegistryManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RiskManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.RiskManagerTable,
+			Columns: []string{organization.RiskManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterManagerTable,
+			Columns: []string{organization.TrustCenterManagerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowsManagerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowsManagerTable,
+			Columns: []string{organization.WorkflowsManagerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

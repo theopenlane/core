@@ -60,7 +60,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 			name:                  "happy path, by system admin can see not visible docs",
 			queryID:               trustCenterDocNotVisible.ID,
 			client:                suite.client.api,
-			ctx:                   systemAdminUser.UserCtx,
+			ctx:                   sharedSystemAdminUser.UserCtx,
 			shouldShowFileDetails: true,
 		},
 		{
@@ -714,7 +714,7 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 	trustCenter := tcOrg.trustCenter
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(tcOrg.owner.UserCtx, t)
 
-	systemAdminPatClient := suite.setupPatClient(systemAdminUser, t)
+	systemAdminPatClient := suite.setupPatClient(sharedSystemAdminUser, t)
 
 	(&CustomTypeEnumBuilder{
 		client:     suite.client,
