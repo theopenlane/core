@@ -19,7 +19,7 @@ type AssetCollect struct{}
 
 // IngestHandle adapts asset collection to the ingest operation registration boundary
 func (a AssetCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(cloudflareClient, assetSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cf.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(cloudflareClient, assetSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cf.Client) ([]types.IngestPayloadSet, error) {
 		return a.Run(ctx, request.Credentials, client)
 	})
 }
