@@ -125,6 +125,7 @@ func (t TFASetting) Annotations() []schema.Annotation {
 // Policy of the TFASetting
 func (t TFASetting) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithQueryRules(
 			rule.AllowIfSelf(),
 		),

@@ -2,17 +2,18 @@ package schema
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -23,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
@@ -235,8 +237,8 @@ func groupPermissionInterceptorSkipper(ctx context.Context, caller *auth.Caller)
 		return true
 	}
 
-	// skip for org owners, they might not have explicit access to the object, but they can view all objects in the org
-	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.OwnerRelation); errors.Is(err, privacy.Allow) {
+	// skip for org owners + super admins (full_access), they might not have explicit access to the object, but they can view all objects in the org
+	if err := rule.CheckCurrentOrgAccess(ctx, nil, fgax.FullAccessRelation); access.Allow(err) {
 		return true
 	}
 
@@ -294,6 +296,13 @@ func (g GroupPermissionsMixin) Hooks() (hooks []ent.Hook) {
 	}
 
 	return
+}
+
+// Annotations of the GroupPermissionsMixin
+func (g GroupPermissionsMixin) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.GroupPermissionsEnabled{},
+	}
 }
 
 // groupReadOnlyHooks are the hooks that are used to add the viewer tuples
@@ -377,5 +386,12 @@ func (g GroupPermissionsEdgesMixin) Hooks() []ent.Hook {
 			hooks.HookGroupPermissionsTuples(),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+	}
+}
+
+// Annotations of the GroupPermissionsMixin
+func (g GroupPermissionsEdgesMixin) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.GroupPermissionsEnabled{},
 	}
 }

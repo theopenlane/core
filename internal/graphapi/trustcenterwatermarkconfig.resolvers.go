@@ -17,19 +17,17 @@ import (
 
 // CreateTrustCenterWatermarkConfig is the resolver for the createTrustCenterWatermarkConfig field.
 func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) (*model.TrustCenterWatermarkConfigCreatePayload, error) {
-	if input.TrustCenterID == nil {
-		var err error
-		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterwatermarkconfig")
-		if err != nil {
-			return nil, err
-		}
-
-		// set the input in the graphql context
-		// this isn't a required field, but its required by the access checks
-		// so we need to set it early
-		gCtx := graphql.GetFieldContext(ctx)
-		gCtx.Args["input"] = input
+	var err error
+	input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterwatermarkconfig")
+	if err != nil {
+		return nil, err
 	}
+
+	// set the input in the graphql context
+	// this isn't a required field, but its required by the access checks
+	// so we need to set it early
+	gCtx := graphql.GetFieldContext(ctx)
+	gCtx.Args["input"] = input
 
 	res, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Create().SetInput(input).Save(ctx)
 	if err != nil {

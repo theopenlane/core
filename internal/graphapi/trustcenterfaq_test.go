@@ -8,26 +8,19 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestMutationCreateTrustCenterFAQ(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	viewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
 
-	adminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-
-	note1 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note2 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note3 := (&NoteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+	note1 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	note2 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	note3 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -45,7 +38,7 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 				DisplayOrder:  lo.ToPtr(int64(1)),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "not authorized - view only user cannot create",
@@ -54,7 +47,7 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 				TrustCenterID: &trustCenter.ID,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -64,7 +57,7 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 				TrustCenterID: &trustCenter.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         tcOrg2.owner.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -74,18 +67,18 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 				TrustCenterID: lo.ToPtr("non-existent-trust-center-id"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "note not found",
+			name: "note not found, invalid ulid",
 			request: testclient.CreateTrustCenterFAQInput{
 				NoteID:        "non-existent-note-id",
 				TrustCenterID: &trustCenter.ID,
 			},
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			ctx:         tcOrg.owner.UserCtx,
+			expectedErr: invalidInputErrorMsg,
 		},
 	}
 
@@ -109,21 +102,20 @@ func TestMutationCreateTrustCenterFAQ(t *testing.T) {
 			if tc.request.DisplayOrder != nil {
 				assert.Check(t, is.Equal(*tc.request.DisplayOrder, *resp.CreateTrustCenterFaq.TrustCenterFaq.DisplayOrder))
 			}
-
-			(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: resp.CreateTrustCenterFaq.TrustCenterFaq.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 
 	// clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterFAQAsAnonymousUser(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -140,7 +132,7 @@ func TestMutationCreateTrustCenterFAQAsAnonymousUser(t *testing.T) {
 				TrustCenterID: &trustCenter.ID,
 			},
 			trustCenterID:  trustCenter.ID,
-			organizationID: testUser.OrganizationID,
+			organizationID: tcOrg.organizationID,
 			client:         suite.client.api,
 			expectedErr:    "could not identify authenticated user",
 		},
@@ -158,17 +150,18 @@ func TestMutationCreateTrustCenterFAQAsAnonymousUser(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterFAQByID(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
-	viewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	trustCenter := tcOrg.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
 
-	createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		TrustCenterID: &trustCenter.ID,
 		ReferenceLink: lo.ToPtr("https://example.com/faq"),
 		DisplayOrder:  lo.ToPtr(int64(1)),
@@ -179,17 +172,13 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 	assert.NilError(t, err)
 	tcFAQ := createResp.CreateTrustCenterFaq.TrustCenterFaq
 
-	// create faq for a different org
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-
-	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser2.UserCtx, testclient.CreateTrustCenterFAQInput{
+	_, err = suite.client.api.CreateTrustCenterFaq(tcOrg2.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		TrustCenterID: &trustCenter2.ID,
 		CreateNote: &testclient.CreateNoteInput{
 			Text: "faq note for trust center 2",
 		},
 	})
 	assert.NilError(t, err)
-	tcFAQ2 := createResp2.CreateTrustCenterFaq.TrustCenterFaq
 
 	testCases := []struct {
 		name     string
@@ -202,39 +191,39 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 			name:    "happy path - get trust center faq",
 			queryID: tcFAQ.ID,
 			client:  suite.client.api,
-			ctx:     testUser.UserCtx,
+			ctx:     tcOrg.admin.UserCtx,
 		},
 		{
 			name:    "happy path - view only user can get trust center faq",
 			queryID: tcFAQ.ID,
 			client:  suite.client.api,
-			ctx:     viewOnlyUser.UserCtx,
+			ctx:     tcOrg.member.UserCtx,
 		},
 		{
 			name:    "happy path - anon user",
 			queryID: tcFAQ.ID,
 			client:  suite.client.api,
-			ctx:     createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
+			ctx:     createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID),
 		},
 		{
 			name:     "not found - different org user cannot access trust center faq",
 			queryID:  tcFAQ.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      tcOrg2.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not found - different anonymous user cannot access trust center faq",
 			queryID:  tcFAQ.ID,
 			client:   suite.client.api,
-			ctx:      createAnonymousTrustCenterContext(trustCenter2.ID, testUser2.OrganizationID),
+			ctx:      createAnonymousTrustCenterContext(trustCenter2.ID, tcOrg2.organizationID),
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "not found - non-existent ID",
 			queryID:  "non-existent-id",
 			client:   suite.client.api,
-			ctx:      testUser.UserCtx,
+			ctx:      tcOrg.superAdmin.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -255,32 +244,25 @@ func TestQueryTrustCenterFAQByID(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	viewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
 
-	adminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
+	noteOtherOrg := (&NoteBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-	noteOtherOrg := (&NoteBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
-
-	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser2.UserCtx, testclient.CreateTrustCenterFAQInput{
+	_, err := suite.client.api.CreateTrustCenterFaq(tcOrg2.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        noteOtherOrg.ID,
 		TrustCenterID: &trustCenter2.ID,
 	})
 	assert.NilError(t, err)
-	tcFAQ2 := createResp2.CreateTrustCenterFaq.TrustCenterFaq
 
 	testCases := []struct {
 		name        string
@@ -293,8 +275,8 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 		{
 			name: "happy path - update reference link and display order",
 			setupFunc: func() string {
-				note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+				note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
 					ReferenceLink: lo.ToPtr("https://example.com/old"),
@@ -308,13 +290,13 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				DisplayOrder:  lo.ToPtr(int64(5)),
 			},
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "happy path - clear reference link",
 			setupFunc: func() string {
-				note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+				note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
 					ReferenceLink: lo.ToPtr("https://example.com/to-clear"),
@@ -326,13 +308,13 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				ClearReferenceLink: lo.ToPtr(true),
 			},
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "not authorized - view only user cannot update",
 			setupFunc: func() string {
-				note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+				note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
 				})
@@ -343,14 +325,14 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				ReferenceLink: lo.ToPtr("https://example.com/updated"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "not authorized - anon user cannot update",
 			setupFunc: func() string {
-				note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+				note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
 				})
@@ -361,14 +343,14 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				ReferenceLink: lo.ToPtr("https://example.com/updated"),
 			},
 			client:      suite.client.api,
-			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
+			ctx:         createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID),
 			expectedErr: "could not identify authenticated user",
 		},
 		{
 			name: "not authorized - different org user cannot update",
 			setupFunc: func() string {
-				note := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-				createResp, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+				note := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+				createResp, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 					NoteID:        note.ID,
 					TrustCenterID: &trustCenter.ID,
 				})
@@ -379,8 +361,8 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				ReferenceLink: lo.ToPtr("https://example.com/updated"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg2.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:      "not found - non-existent ID",
@@ -389,19 +371,14 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 				ReferenceLink: lo.ToPtr("https://example.com/updated"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
 
-	var createdIDs []string
-
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			id := tc.setupFunc()
-			if tc.expectedErr == "" {
-				createdIDs = append(createdIDs, id)
-			}
 
 			resp, err := tc.client.UpdateTrustCenterFaq(tc.ctx, id, tc.request)
 			if tc.expectedErr != "" {
@@ -427,47 +404,37 @@ func TestMutationUpdateTrustCenterFAQ(t *testing.T) {
 	}
 
 	// clean up
-	if len(createdIDs) > 0 {
-		(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, IDs: createdIDs}).MustDelete(testUser.UserCtx, t)
-	}
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ2.ID}).MustDelete(testUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterFAQ(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	viewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+	note1 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	note2 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
-	adminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &adminUser, enums.RoleAdmin, testUser.OrganizationID)
-
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	note1 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note2 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	createResp1, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	createResp1, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note1.ID,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
 	tcFAQ1 := createResp1.CreateTrustCenterFaq.TrustCenterFaq
 
-	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	createResp2, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note2.ID,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
 	tcFAQ2 := createResp2.CreateTrustCenterFaq.TrustCenterFaq
 
-	testUserAnother := suite.userBuilder(context.Background(), t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
-	note3 := (&NoteBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
+	note3 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
 
-	createResp3, err := suite.client.api.CreateTrustCenterFaq(testUserAnother.UserCtx, testclient.CreateTrustCenterFAQInput{
+	createResp3, err := suite.client.api.CreateTrustCenterFaq(tcOrg2.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note3.ID,
 		TrustCenterID: &trustCenter2.ID,
 	})
@@ -485,27 +452,27 @@ func TestMutationDeleteTrustCenterFAQ(t *testing.T) {
 			name:   "happy path - delete trust center faq",
 			id:     tcFAQ1.ID,
 			client: suite.client.api,
-			ctx:    adminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name:        "not authorized - view only user cannot delete",
 			id:          tcFAQ2.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         tcOrg.member.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "not authorized - different org user cannot delete",
 			id:          tcFAQ3.ID,
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			ctx:         tcOrg.owner.UserCtx,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name:        "not found - non-existent ID",
 			id:          "non-existent-id",
 			client:      suite.client.api,
-			ctx:         testUser.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -528,48 +495,41 @@ func TestMutationDeleteTrustCenterFAQ(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ2.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ3.ID}).MustDelete(testUserAnother.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserAnother.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterFAQs(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.trustCenter
 
-	viewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testUser.UserCtx, t, &viewOnlyUser, enums.RoleMember, testUser.OrganizationID)
+	tcOrg2 := createFreshOrgWithTrustCenter(t)
+	trustCenter2 := tcOrg2.trustCenter
 
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	note1 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	note2 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
-	note1 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	note2 := (&NoteBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-
-	createResp1, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	_, err := suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note1.ID,
 		TrustCenterID: &trustCenter.ID,
 		ReferenceLink: lo.ToPtr("https://example.com/faq1"),
 	})
 	assert.NilError(t, err)
-	tcFAQ1 := createResp1.CreateTrustCenterFaq.TrustCenterFaq
 
-	createResp2, err := suite.client.api.CreateTrustCenterFaq(testUser.UserCtx, testclient.CreateTrustCenterFAQInput{
+	_, err = suite.client.api.CreateTrustCenterFaq(tcOrg.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note2.ID,
 		TrustCenterID: &trustCenter.ID,
 	})
 	assert.NilError(t, err)
-	tcFAQ2 := createResp2.CreateTrustCenterFaq.TrustCenterFaq
 
-	testUserAnother := suite.userBuilder(context.Background(), t)
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
-	note3 := (&NoteBuilder{client: suite.client}).MustNew(testUserAnother.UserCtx, t)
+	note3 := (&NoteBuilder{client: suite.client}).MustNew(tcOrg2.owner.UserCtx, t)
 
-	createResp3, err := suite.client.api.CreateTrustCenterFaq(testUserAnother.UserCtx, testclient.CreateTrustCenterFAQInput{
+	_, err = suite.client.api.CreateTrustCenterFaq(tcOrg2.owner.UserCtx, testclient.CreateTrustCenterFAQInput{
 		NoteID:        note3.ID,
 		TrustCenterID: &trustCenter2.ID,
 	})
 	assert.NilError(t, err)
-	tcFAQ3 := createResp3.CreateTrustCenterFaq.TrustCenterFaq
 
 	testCases := []struct {
 		name            string
@@ -581,31 +541,31 @@ func TestQueryTrustCenterFAQs(t *testing.T) {
 		{
 			name:            "get all trust center faqs for user1",
 			client:          suite.client.api,
-			ctx:             testUser.UserCtx,
+			ctx:             tcOrg.owner.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "get all trust center faqs for another user",
 			client:          suite.client.api,
-			ctx:             testUserAnother.UserCtx,
+			ctx:             tcOrg2.owner.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "view only user can see trust center faqs",
 			client:          suite.client.api,
-			ctx:             viewOnlyUser.UserCtx,
+			ctx:             tcOrg.member.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "anonymous user can see trust center faqs",
 			client:          suite.client.api,
-			ctx:             createAnonymousTrustCenterContext(trustCenter.ID, testUser.OrganizationID),
+			ctx:             createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID),
 			expectedResults: 2,
 		},
 		{
 			name:   "filter by trust center ID",
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterFAQWhereInput{
 				TrustCenterID: &trustCenter.ID,
 			},
@@ -614,7 +574,7 @@ func TestQueryTrustCenterFAQs(t *testing.T) {
 		{
 			name:   "filter by reference link",
 			client: suite.client.api,
-			ctx:    testUser.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 			where: &testclient.TrustCenterFAQWhereInput{
 				ReferenceLinkNotNil: lo.ToPtr(true),
 			},
@@ -640,8 +600,6 @@ func TestQueryTrustCenterFAQs(t *testing.T) {
 	}
 
 	// clean up
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, IDs: []string{tcFAQ1.ID, tcFAQ2.ID}}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterFAQDeleteOne]{client: suite.client.db.TrustCenterFAQ, ID: tcFAQ3.ID}).MustDelete(testUserAnother.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserAnother.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
 }

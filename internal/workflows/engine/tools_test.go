@@ -62,7 +62,7 @@ import (
 )
 
 const (
-	fgaModelFile             = "../../../fga/model/model.fga"
+	fgaModuleFile            = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 )
@@ -108,7 +108,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
-		fgatest.WithModelFile(fgaModelFile),
+		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)

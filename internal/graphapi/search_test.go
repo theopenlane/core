@@ -5,19 +5,17 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGlobalSearch(t *testing.T) {
-	// create a new user for this test
-	testSearchUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	testViewOnlyUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(testSearchUser.UserCtx, t, &testViewOnlyUser, enums.RoleMember, testSearchUser.OrganizationID)
+	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
+	testSearchUser := localTestOrg.owner
+	testViewOnlyUser := localTestOrg.member
 
 	testAnotherUser := suite.userBuilder(context.Background(), t)
 
@@ -141,6 +139,6 @@ func TestGlobalSearch(t *testing.T) {
 	}
 
 	// clean up the created objects
-	(&Cleanup[*generated.ContactDeleteOne]{client: suite.client.db.Contact, IDs: contactIDs}).MustDelete(testSearchUser.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDs}).MustDelete(testSearchUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(testAnotherUser.UserCtx, t)
 }

@@ -101,7 +101,7 @@ func (e Export) Mixin() []ent.Mixin {
 		includeRequestor: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e,
-				withSkipForSystemAdmin(true)),
+				withSkipForSystemAdmin()),
 		},
 	}.getMixins(e)
 }
@@ -128,7 +128,7 @@ func (e Export) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
 		),
-		policy.WithMutationRules(
+		policy.WithOnMutationRules(ent.OpCreate,
 			policy.AllowCreate(),
 		),
 		policy.WithOnMutationRules(ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,

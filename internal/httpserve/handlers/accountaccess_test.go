@@ -12,6 +12,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *HandlerTestSuite) TestAccountAccessHandler() {
@@ -40,7 +41,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 		{
 			name: "access denied",
 			request: models.AccountAccessRequest{
-				ObjectID:   "another-org-id",
+				ObjectID:   ulids.New().String(),
 				ObjectType: "organization",
 				Relation:   "can_delete",
 			},

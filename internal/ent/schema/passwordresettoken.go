@@ -115,6 +115,7 @@ func (PasswordResetToken) Hooks() []ent.Hook {
 // Policy of the PasswordResetToken
 func (p PasswordResetToken) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithSkipDenyOrganizationRule(),
 		policy.WithQueryRules(
 			rule.AllowAfterApplyingPrivacyTokenFilter[*token.ResetToken](),
 		),

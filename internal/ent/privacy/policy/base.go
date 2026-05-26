@@ -8,19 +8,37 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-// prePolicy is executed before privacy policy
-var prePolicy = privacy.Policy{
-	Query: privacy.QueryPolicy{
-		// allow internal requests (used in tests) to proceed to query tables
-		rule.AllowIfInternalRequest(),
-		// allow history requests to proceed to query tables
-		history.AllowIfHistoryRequest(),
-	},
-	Mutation: privacy.MutationPolicy{
-		// allow internal requests (used in tests) to proceed to mutate tables
-		rule.AllowIfInternalRequest(),
-		rule.DenyIfMissingAllModules(),
-	},
+// getPrePolicies returns the pre-policies which are executed before privacy policy
+func getPrePolicies(skipDenyOrgRule bool) privacy.Policy {
+	// prePolicy is executed before privacy policy
+	base := privacy.Policy{
+		Query: privacy.QueryPolicy{
+			// allow internal requests (used in tests) to proceed to query tables
+			rule.AllowIfInternalRequest(),
+			// allow history requests to proceed to query tables
+			history.AllowIfHistoryRequest(),
+		},
+		Mutation: privacy.MutationPolicy{
+			// allow internal requests (used in tests) to proceed to mutate tables
+			rule.AllowIfInternalRequest(),
+			// deny mutation if missing all modules
+			rule.DenyIfMissingAllModules(),
+		},
+	}
+
+	if !skipDenyOrgRule {
+		base.Mutation = append(base.Mutation,
+			// deny if the user doesn't have access to the organization
+			rule.DenyIfNotInOrganization(),
+		)
+	}
+
+	base.Mutation = append(base.Mutation,
+		// allow mutation if the api token has the appropriate mutation scope
+		rule.AllowIfTokenHasMutationScope(),
+	)
+
+	return base
 }
 
 // postPolicy is executed after privacy policy
@@ -38,9 +56,10 @@ type Option func(*policies)
 
 // policies aggregate policy options.
 type policies struct {
-	query     privacy.QueryPolicy
-	mutation  privacy.MutationPolicy
-	pre, post privacy.Policy
+	query        privacy.QueryPolicy
+	mutation     privacy.MutationPolicy
+	pre, post    privacy.Policy
+	skipDenyRule bool
 }
 
 // WithQueryRules adds query rules to policy.
@@ -89,16 +108,24 @@ func WithPostPolicy(policy privacy.Policy) Option {
 	}
 }
 
+// WithSkipDenyOrganizationRule will skip the default Deny organization filter, this should only be set on non-org owned schemas or schemas external users do not have access to
+func WithSkipDenyOrganizationRule() Option {
+	return func(policies *policies) {
+		policies.skipDenyRule = true
+	}
+}
+
 // NewPolicy creates a privacy policy.
 func NewPolicy(opts ...Option) ent.Policy {
 	policies := policies{
-		pre:  prePolicy,
 		post: postPolicy,
 	}
 
 	for _, opt := range opts {
 		opt(&policies)
 	}
+
+	policies.pre = getPrePolicies(policies.skipDenyRule)
 
 	return privacy.Policy{
 		Query:    policies.queryPolicy(),

@@ -10,24 +10,25 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
 func TestQueryOrgMembers(t *testing.T) {
-	testOrgMemberUser := suite.userBuilder(context.Background(), t)
-	org1Member := (&OrgMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
+	t.Parallel()
 
-	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(testOrgMemberUser.UserCtx, t)
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	org1Member := localTestOrg.member
 
-	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: testOrgMemberUser.OrganizationID}).MustNew(testOrgMemberUser.UserCtx, t)
+	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 
-	childReqCtx := auth.NewTestContextWithOrgID(testOrgMemberUser.ID, childOrg.ID)
+	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: localTestOrg.owner.OrganizationID}).MustNew(localTestOrg.owner.UserCtx, t)
+
+	childReqCtx := auth.NewTestContextWithOrgID(localTestOrg.owner.ID, childOrg.ID)
 
 	(&OrgMemberBuilder{client: suite.client}).MustNew(childReqCtx, t)
-	(&OrgMemberBuilder{client: suite.client, UserID: org1Member.UserID}).MustNew(childReqCtx, t)
+	(&OrgMemberBuilder{client: suite.client, UserID: org1Member.ID}).MustNew(childReqCtx, t)
 
 	testCases := []struct {
 		name                string
@@ -41,22 +42,36 @@ func TestQueryOrgMembers(t *testing.T) {
 	}{
 		{
 			name:        "happy path, get org members by org id",
-			queryID:     testOrgMemberUser.OrganizationID,
+			queryID:     localTestOrg.owner.OrganizationID,
 			client:      suite.client.api,
-			ctx:         testOrgMemberUser.UserCtx,
-			expectedLen: 3,
+			ctx:         localTestOrg.owner.UserCtx,
+			expectedLen: 6,
+		},
+		{
+			name:        "happy path, get org members by org id, member",
+			queryID:     localTestOrg.owner.OrganizationID,
+			client:      suite.client.api,
+			ctx:         localTestOrg.member.UserCtx,
+			expectedLen: 6,
+		},
+		{
+			name:        "happy path, get org members by org id, auditor",
+			queryID:     localTestOrg.owner.OrganizationID,
+			client:      suite.client.api,
+			ctx:         localTestOrg.auditor.UserCtx,
+			expectedLen: 6,
 		},
 		{
 			name:        "happy path, get org with parent members based on context",
 			client:      suite.client.api,
 			ctx:         childReqCtx,
-			expectedLen: 4, // 2 from child org, 2 from parent org because we dedupe plus the program member
+			expectedLen: 7, // 2 from child org, 5 from parent org because we dedupe plus the program member
 		},
 		{
 			name:    "where input, get members in program",
-			queryID: testOrgMemberUser.OrganizationID,
+			queryID: localTestOrg.owner.OrganizationID,
 			client:  suite.client.api,
-			ctx:     testOrgMemberUser.UserCtx,
+			ctx:     localTestOrg.owner.UserCtx,
 			whereInput: &testclient.OrgMembershipWhereInput{
 				HasUserWith: []*testclient.UserWhereInput{
 					{
@@ -72,9 +87,9 @@ func TestQueryOrgMembers(t *testing.T) {
 		},
 		{
 			name:    "where input, get members not in program",
-			queryID: testOrgMemberUser.OrganizationID,
+			queryID: localTestOrg.owner.OrganizationID,
 			client:  suite.client.api,
-			ctx:     testOrgMemberUser.UserCtx,
+			ctx:     localTestOrg.owner.UserCtx,
 			whereInput: &testclient.OrgMembershipWhereInput{
 				Not: &testclient.OrgMembershipWhereInput{
 					HasUserWith: []*testclient.UserWhereInput{
@@ -88,14 +103,14 @@ func TestQueryOrgMembers(t *testing.T) {
 					},
 				},
 			},
-			expectedLen: 1, // everyone not the owner and the program member
+			expectedLen: 4,
 		},
 		{
 			name:                "where input, get members in program, after deleting a member",
 			deleteProgramMember: true,
-			queryID:             testOrgMemberUser.OrganizationID,
+			queryID:             localTestOrg.owner.OrganizationID,
 			client:              suite.client.api,
-			ctx:                 testOrgMemberUser.UserCtx,
+			ctx:                 localTestOrg.owner.UserCtx,
 			whereInput: &testclient.OrgMembershipWhereInput{
 				HasUserWith: []*testclient.UserWhereInput{
 					{
@@ -118,9 +133,9 @@ func TestQueryOrgMembers(t *testing.T) {
 		},
 		{
 			name:        "no access",
-			queryID:     testOrgMemberUser.OrganizationID,
+			queryID:     localTestOrg.owner.OrganizationID,
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedLen: 0,
 			expectErr:   false, // no org members returned
 		},
@@ -128,7 +143,7 @@ func TestQueryOrgMembers(t *testing.T) {
 			name:        "invalid-id",
 			queryID:     "tacos-for-dinner",
 			client:      suite.client.api,
-			ctx:         testOrgMemberUser.UserCtx,
+			ctx:         localTestOrg.owner.UserCtx,
 			expectedLen: 0,
 			expectErr:   false, // no org members returned
 		},
@@ -174,26 +189,27 @@ func TestQueryOrgMembers(t *testing.T) {
 	}
 
 	// delete created org
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{childOrg.ID, testOrgMemberUser.OrganizationID}}).MustDelete(testOrgMemberUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateOrgMembers(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	localTestOrg := suite.seedFreshOrgUsers(t)
+	org1ID := localTestOrg.owner.OrganizationID
 
-	userCtx := auth.NewTestContextWithOrgID(testUser.ID, org1.ID)
-	personalOrgCtx := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
+	userCtx := localTestOrg.owner.UserCtx
+	personalOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.owner.ID, localTestOrg.owner.PersonalOrgID)
 
-	user1 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	user2 := (&UserBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	user3 := (&UserBuilder{client: suite.client, Email: "mitb2@anderson.io", FirstName: "FirstName!@"}).MustNew(testUser.UserCtx, t)
+	user1 := (&UserBuilder{client: suite.client}).MustNew(userCtx, t)
+	user2 := (&UserBuilder{client: suite.client}).MustNew(userCtx, t)
+	user3 := (&UserBuilder{client: suite.client, Email: "mitb2@anderson.io", FirstName: "FirstName!@"}).MustNew(userCtx, t)
 
-	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(testUser.UserCtx, t)
-	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(testUser.UserCtx, t)
+	userWithValidDomain := (&UserBuilder{client: suite.client, Email: "matt@anderson.net"}).MustNew(userCtx, t)
+	userWithInvalidDomain := (&UserBuilder{client: suite.client, Email: "mitb@example.com"}).MustNew(userCtx, t)
 
-	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(testUser.UserCtx, t)
-	otherOrgCtx := auth.NewTestContextWithOrgID(testUser.ID, orgWithRestrictions.ID)
+	orgWithRestrictions := (&OrganizationBuilder{client: suite.client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(localTestOrg.owner.UserCtx, t)
+	otherOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.owner.ID, orgWithRestrictions.ID)
 
 	testCases := []struct {
 		name   string
@@ -205,7 +221,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	}{
 		{
 			name:   "happy path, add admin",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: user1.ID,
 			ctx:    userCtx,
 			role:   enums.RoleAdmin,
@@ -227,7 +243,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "happy path, add member in org with allowed domains",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: user2.ID,
 			ctx:    userCtx,
 			role:   enums.RoleMember,
@@ -242,7 +258,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "duplicate user, different role",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
 			ctx:    userCtx,
@@ -250,15 +266,15 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "cannot add self to organization",
-			orgID:  org1.ID,
-			userID: testUser2.ID,
+			orgID:  org1ID,
+			userID: sharedTestUser2.ID,
 			role:   enums.RoleMember,
-			ctx:    testUser2.UserCtx,
-			errMsg: notAuthorizedErrorMsg,
+			ctx:    sharedTestUser2.UserCtx,
+			errMsg: notFoundErrorMsg, // organization is not found because user does not have access to it
 		},
 		{
 			name:   "add user to personal org not allowed",
-			orgID:  testUser.PersonalOrgID,
+			orgID:  localTestOrg.owner.PersonalOrgID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
 			ctx:    personalOrgCtx,
@@ -266,7 +282,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "invalid user",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: ulids.New().String(),
 			role:   enums.RoleMember,
 			ctx:    userCtx,
@@ -274,15 +290,15 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "no access",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
-			ctx:    viewOnlyUser.UserCtx,
+			ctx:    sharedViewOnlyUser.UserCtx,
 			errMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:   "invalid role",
-			orgID:  org1.ID,
+			orgID:  org1ID,
 			userID: user1.ID,
 			role:   enums.RoleInvalid,
 			ctx:    userCtx,
@@ -313,31 +329,32 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			assert.Check(t, is.Equal(tc.role, resp.CreateOrgMembership.OrgMembership.Role))
 
 			// make sure the user default org is set to the new org
-			suite.assertDefaultOrgUpdate(testUser1.UserCtx, t, tc.userID, tc.orgID, true)
+			suite.assertDefaultOrgUpdate(sharedTestUser1.UserCtx, t, tc.userID, tc.orgID, true)
 		})
 	}
 
 	// delete created org and users
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{org1.ID, orgWithRestrictions.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, IDs: []string{user1.ID, user2.ID}}).MustDelete(testUser1.UserCtx, t)
+	cleanupOrganizationDataWithContext(otherOrgCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {
 	// create another user for this test
 	// so it doesn't interfere with the other tests
-	testUserOrg := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUserOrg.UserCtx, t)
+	localTestOrg := suite.seedOrgOwner(t)
 
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUserOrg.UserCtx, &testclient.OrgMembershipWhereInput{
-		OrganizationID: &testUserOrg.OrganizationID,
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(localTestOrg.owner.UserCtx, &testclient.OrgMembershipWhereInput{
+		OrganizationID: &localTestOrg.owner.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	testUserOrgMember := ""
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
-		if edge.Node.UserID == testUserOrg.ID {
+		if edge.Node.UserID == localTestOrg.owner.ID {
 			testUserOrgMember = edge.Node.ID
 			break
 		}
@@ -372,7 +389,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 		},
 		{
 			name:        "invalid role",
-			orgMemberID: om.ID,
+			orgMemberID: testUserOrgMember,
 			role:        enums.RoleInvalid,
 			errMsg:      "not a valid OrgMembershipRole",
 		},
@@ -384,7 +401,7 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 				Role: &tc.role,
 			}
 
-			resp, err := suite.client.api.UpdateUserRoleInOrg(testUserOrg.UserCtx, tc.orgMemberID, input)
+			resp, err := suite.client.api.UpdateUserRoleInOrg(localTestOrg.owner.UserCtx, tc.orgMemberID, input)
 
 			if tc.errMsg != "" {
 				assert.ErrorContains(t, err, tc.errMsg)
@@ -399,58 +416,62 @@ func TestMutationUpdateOrgMembers(t *testing.T) {
 	}
 
 	// delete created org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUserOrg.UserCtx, t)
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteOrgMembers(t *testing.T) {
-	testUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	adminOrgMember := (&OrgMemberBuilder{client: suite.client, Role: string(enums.RoleAdmin)}).MustNew(testUser.UserCtx, t)
+	localTestOrg := suite.seedOrgOwner(t)
+
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	adminOrgMember := (&OrgMemberBuilder{client: suite.client, Role: string(enums.RoleAdmin)}).MustNew(localTestOrg.owner.UserCtx, t)
 
 	// create admin user context
-	adminUserCtx := auth.NewTestContextWithOrgID(adminOrgMember.UserID, testUser.OrganizationID)
+	adminUserCtx := auth.NewTestContextWithOrgID(adminOrgMember.UserID, localTestOrg.owner.OrganizationID)
 
-	resp, err := suite.client.api.RemoveUserFromOrg(testUser.UserCtx, om.ID)
+	resp, err := suite.client.api.RemoveUserFromOrg(localTestOrg.owner.UserCtx, om.ID)
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Check(t, is.Equal(om.ID, resp.DeleteOrgMembership.DeletedID))
 
 	// make sure the user default org is not set to the deleted org
-	suite.assertDefaultOrgUpdate(testUser.UserCtx, t, om.UserID, om.OrganizationID, false)
+	suite.assertDefaultOrgUpdate(localTestOrg.owner.UserCtx, t, om.UserID, om.OrganizationID, false)
 
 	// re-adding the user to the org should succeed since the org membership
 	// is deleted and the managed group is properly cleaned up
-	reAddResp, err := suite.client.api.AddUserToOrgWithRole(testUser.UserCtx, testclient.CreateOrgMembershipInput{
-		OrganizationID: om.OrganizationID,
+	reAddResp, err := suite.client.api.AddUserToOrgWithRole(localTestOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: localTestOrg.owner.OrganizationID,
 		UserID:         om.UserID,
-		Role:           &om.Role,
+		Role:           &enums.RoleAdmin,
 	})
 
 	assert.NilError(t, err)
 	assert.Assert(t, reAddResp != nil)
 
 	// cant remove self from org and owners cannot be removed
-	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(testUser.UserCtx, &testclient.OrgMembershipWhereInput{
-		OrganizationID: &testUser.OrganizationID,
+	orgMembers, err := suite.client.api.GetOrgMembersByOrgID(localTestOrg.owner.UserCtx, &testclient.OrgMembershipWhereInput{
+		OrganizationID: &localTestOrg.owner.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	for _, edge := range orgMembers.OrgMemberships.Edges {
 		// cannot delete self
-		if edge.Node.UserID == adminUser.ID {
+		if edge.Node.UserID == sharedAdminUser.ID {
 			_, err := suite.client.api.RemoveUserFromOrg(adminUserCtx, edge.Node.ID)
 			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 		}
 
 		// organization owner cannot be deleted
-		if edge.Node.UserID == testUser.ID {
+		if edge.Node.UserID == localTestOrg.owner.ID {
 			_, err = suite.client.api.RemoveUserFromOrg(adminUserCtx, edge.Node.ID)
 			assert.ErrorContains(t, err, "organization owner cannot be deleted")
 			break
 		}
 	}
+
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *testing.T, userID, orgID string, isEqual bool) {

@@ -42,20 +42,18 @@ func waitForCondition(t *testing.T, condition func() bool, msg string) {
 }
 
 func TestQueryOrganization(t *testing.T) {
-	// create another user for this test
-	// so it doesn't interfere with the other tests
-	orgUser := suite.userBuilder(context.Background(), t)
-	apiTokenClient := suite.setupAPITokenClient(orgUser.UserCtx, t)
-	patTokenClient := suite.setupPatClient(orgUser, t)
+	t.Parallel()
+
+	localTestOrg := suite.seedOrgOwner(t)
 
 	// create api token for the user
-	(&APITokenBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	(&APITokenBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 	// create personal access token for the user
-	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
 
 	// add org members
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", orgUser.OrganizationID)
+	om := (&OrgMemberBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext("abc123", localTestOrg.owner.OrganizationID)
 
 	testCases := []struct {
 		name               string
@@ -67,22 +65,22 @@ func TestQueryOrganization(t *testing.T) {
 	}{
 		{
 			name:               "happy path, get organization",
-			queryID:            orgUser.OrganizationID,
+			queryID:            localTestOrg.owner.OrganizationID,
 			client:             suite.client.api,
-			ctx:                orgUser.UserCtx,
+			ctx:                localTestOrg.owner.UserCtx,
 			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using api token",
-			queryID:            orgUser.OrganizationID,
-			client:             apiTokenClient,
+			queryID:            localTestOrg.owner.OrganizationID,
+			client:             localTestOrg.apiClient,
 			ctx:                context.Background(),
 			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using personal access token",
-			queryID:            orgUser.OrganizationID,
-			client:             patTokenClient,
+			queryID:            localTestOrg.owner.OrganizationID,
+			client:             localTestOrg.patClient,
 			ctx:                context.Background(),
 			orgMembersExpected: 2, // owner and 1 member
 		},
@@ -90,14 +88,14 @@ func TestQueryOrganization(t *testing.T) {
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
 			client:   suite.client.api,
-			ctx:      orgUser.UserCtx,
+			ctx:      localTestOrg.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
 			client:   suite.client.api,
 			ctx:      anonymousContext,
-			queryID:  orgUser.OrganizationID,
+			queryID:  localTestOrg.owner.OrganizationID,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -129,32 +127,34 @@ func TestQueryOrganization(t *testing.T) {
 			}
 		})
 	}
+
+	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
 func TestQueryOrganizations(t *testing.T) {
-	// create another user for this test
-	// so it doesn't interfere with the other tests
-	orgUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
 
-	org1 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	orgUser := suite.seedOrgOwner(t)
+
+	org1ID := orgUser.owner.OrganizationID
+	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.owner.UserCtx, t)
 
 	t.Run("Get Organizations", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllOrganizations(orgUser.UserCtx)
+		resp, err := suite.client.api.GetAllOrganizations(orgUser.owner.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.Organizations.Edges != nil)
 
-		// make sure two organizations are returned, the two created and
-		// the personal org and test org created at suite setup
-		assert.Check(t, is.Equal(4, len(resp.Organizations.Edges)))
+		// make sure 3 organizations are returned, the two created and
+		// the personal org
+		assert.Check(t, is.Equal(3, len(resp.Organizations.Edges)))
 
 		org1Found := false
 		org2Found := false
 
 		for _, o := range resp.Organizations.Edges {
-			if o.Node.ID == org1.ID {
+			if o.Node.ID == org1ID {
 				org1Found = true
 			} else if o.Node.ID == org2.ID {
 				org2Found = true
@@ -166,24 +166,21 @@ func TestQueryOrganizations(t *testing.T) {
 	})
 
 	// cleanup orgs
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, IDs: []string{org1.ID, org2.ID}}).MustDelete(orgUser.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
 }
 
 func TestMutationCreateOrganization(t *testing.T) {
+	t.Parallel()
 
-	// create another user for this test
-	// so it doesn't interfere with the other tests
-	orgUser := suite.userBuilder(context.Background(), t)
-	patClient := suite.setupPatClient(orgUser, t)
-	tokenClient := suite.setupAPITokenClient(orgUser.UserCtx, t)
+	orgUser := suite.seedOrgOwner(t)
 
-	parentOrg, err := suite.client.api.GetOrganizationByID(orgUser.UserCtx, orgUser.OrganizationID)
+	parentOrg, err := suite.client.api.GetOrganizationByID(orgUser.owner.UserCtx, orgUser.owner.OrganizationID)
 	assert.NilError(t, err)
 
 	// setup deleted org
-	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.owner.UserCtx, t)
 	// delete said org
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.UserCtx, t)
+	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.owner.UserCtx, t)
 
 	avatarFile := uploadFile(t, logoFilePath)
 	invalidAvatarFile := uploadFile(t, txtFilePath)
@@ -209,7 +206,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			expectedDefaultOrgUpdate: true, // only the first org created should update the default org
 			parentOrgID:              "",   // root org
 			client:                   suite.client.api,
-			ctx:                      orgUser.UserCtx,
+			ctx:                      orgUser.owner.UserCtx,
 		},
 		{
 			name:           "happy path organization with settings and avatar",
@@ -231,7 +228,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			},
 			parentOrgID: "", // root org
 			client:      suite.client.api,
-			ctx:         orgUser.UserCtx,
+			ctx:         orgUser.owner.UserCtx,
 		},
 		{
 			name:           "organization settings with free email domain not allowed",
@@ -243,32 +240,32 @@ func TestMutationCreateOrganization(t *testing.T) {
 			},
 			parentOrgID: "", // root org
 			client:      suite.client.api,
-			ctx:         orgUser.UserCtx,
+			ctx:         orgUser.owner.UserCtx,
 			errorMsg:    invalidInputErrorMsg,
 		},
 		{
 			name:           "happy path organization with parent org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.OrganizationID,
+			parentOrgID:    orgUser.owner.OrganizationID,
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "organization with parent org, no access",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    testUser2.OrganizationID,
+			parentOrgID:    sharedTestUser2.OrganizationID,
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
-			errorMsg:       notAuthorizedErrorMsg,
+			ctx:            orgUser.owner.UserCtx,
+			errorMsg:       notFoundErrorMsg,
 		},
 		{
 			name:           "organization with parent org using personal access token, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.OrganizationID,
-			client:         patClient,
+			parentOrgID:    orgUser.owner.OrganizationID,
+			client:         orgUser.patClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -276,8 +273,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization with parent org using personal access token, no access to parent, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    testUser2.OrganizationID,
-			client:         patClient,
+			parentOrgID:    sharedTestUser2.OrganizationID,
+			client:         orgUser.patClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -285,7 +282,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization create with api token not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         tokenClient,
+			client:         orgUser.apiClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -293,10 +290,10 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization with parent personal org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.PersonalOrgID,
+			parentOrgID:    orgUser.owner.PersonalOrgID,
 			errorMsg:       "personal organizations are not allowed to have child organizations",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "empty organization name",
@@ -304,7 +301,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "long organization name",
@@ -312,15 +309,15 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is greater than the required length",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "organization with no description",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: "",
-			parentOrgID:    orgUser.OrganizationID,
+			parentOrgID:    orgUser.owner.OrganizationID,
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name",
@@ -328,7 +325,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, case insensitive",
@@ -336,21 +333,21 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
 			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "organization name with trailing space should work with trailing space removed",
 			orgName:        "orgname ",
 			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "invalid organization name, too short",
@@ -358,7 +355,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 
@@ -367,7 +364,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "invalid or unparsable field: name, field cannot contain special characters",
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "duplicate display name, should be allowed",
@@ -375,7 +372,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			displayName:    parentOrg.Organization.DisplayName,
 			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:           "display name with spaces should pass",
@@ -383,14 +380,14 @@ func TestMutationCreateOrganization(t *testing.T) {
 			displayName:    gofakeit.Sentence(),
 			orgDescription: gofakeit.HipsterSentence(),
 			client:         suite.client.api,
-			ctx:            orgUser.UserCtx,
+			ctx:            orgUser.owner.UserCtx,
 		},
 		{
 			name:       "invalid avatar file",
 			orgName:    ulids.New().String(), // use ulid to ensure uniqueness
 			avatarFile: invalidAvatarFile,
 			client:     suite.client.api,
-			ctx:        orgUser.UserCtx,
+			ctx:        orgUser.owner.UserCtx,
 			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
 		{
@@ -400,7 +397,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				AllowedEmailDomains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
-			ctx:      orgUser.UserCtx,
+			ctx:      orgUser.owner.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 		{
@@ -410,7 +407,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				Domains: []string{"theopenlane"},
 			},
 			client:   suite.client.api,
-			ctx:      orgUser.UserCtx,
+			ctx:      orgUser.owner.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 	}
@@ -479,7 +476,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateOrganization.Organization.Setting.Domains, 1))
 
 				// make sure default org is updated if it's the first org created
-				userResp, err := tc.client.GetUserByID(tc.ctx, orgUser.ID)
+				userResp, err := tc.client.GetUserByID(tc.ctx, orgUser.owner.ID)
 				assert.NilError(t, err)
 
 				if tc.expectedDefaultOrgUpdate {
@@ -502,7 +499,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			}
 
 			// ensure entity types are created
-			newCtx := auth.NewTestContextWithOrgID(orgUser.ID, resp.CreateOrganization.Organization.ID)
+			newCtx := auth.NewTestContextWithOrgID(orgUser.owner.ID, resp.CreateOrganization.Organization.ID)
 
 			et, err := suite.client.api.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
@@ -539,14 +536,13 @@ func TestMutationCreateOrganization(t *testing.T) {
 			assert.Check(t, is.Len(managedGroups.Groups.Edges, num))
 
 			// cleanup org
-			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.UserCtx, t)
+			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.owner.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateOrganization(t *testing.T) {
-	// create another user for this test
-	// so it doesn't interfere with the other tests
+	t.Parallel()
 	orgUser := suite.userBuilder(context.Background(), t)
 
 	nameUpdate := ulids.New().String()
@@ -801,7 +797,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				DisplayName: &nameUpdate,
 			},
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -858,19 +854,18 @@ func TestMutationUpdateOrganization(t *testing.T) {
 }
 
 func TestMutationDeleteOrganization(t *testing.T) {
-	// create another user for this test
-	// so it doesn't interfere with the other tests
-	orgUser := suite.userBuilder(context.Background(), t)
+	t.Parallel()
+	orgUser := suite.seedFreshMinimalOrgUsers(t, false)
 
-	reqCtx := orgUser.UserCtx
+	reqCtx := orgUser.owner.UserCtx
 
-	setting, err := suite.client.api.UpdateUserSetting(reqCtx, orgUser.UserInfo.Edges.Setting.ID,
+	setting, err := suite.client.api.UpdateUserSetting(reqCtx, orgUser.owner.UserInfo.Edges.Setting.ID,
 		testclient.UpdateUserSettingInput{
-			DefaultOrgID: &orgUser.OrganizationID,
+			DefaultOrgID: &orgUser.owner.OrganizationID,
 		},
 	)
 	assert.NilError(t, err)
-	assert.Equal(t, orgUser.OrganizationID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
+	assert.Equal(t, orgUser.owner.OrganizationID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
 
 	testCases := []struct {
 		name     string
@@ -880,31 +875,31 @@ func TestMutationDeleteOrganization(t *testing.T) {
 	}{
 		{
 			name:     "delete org, access denied",
-			orgID:    viewOnlyUser.OrganizationID,
-			ctx:      viewOnlyUser.UserCtx,
+			orgID:    orgUser.owner.OrganizationID,
+			ctx:      orgUser.member.UserCtx,
 			errorMsg: notAuthorizedErrorMsg,
 		},
 		{
 			name:     "delete org, not found",
-			orgID:    orgUser.OrganizationID,
-			ctx:      testUser2.UserCtx,
+			orgID:    orgUser.owner.OrganizationID,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:  "delete org, happy path",
-			orgID: orgUser.OrganizationID,
-			ctx:   orgUser.UserCtx,
+			orgID: orgUser.owner.OrganizationID,
+			ctx:   orgUser.owner.UserCtx,
 		},
 		{
 			name:     "delete org, personal org not allowed",
-			orgID:    orgUser.PersonalOrgID,
-			ctx:      orgUser.UserCtx,
+			orgID:    orgUser.owner.PersonalOrgID,
+			ctx:      orgUser.owner.UserCtx,
 			errorMsg: "cannot delete personal organizations",
 		},
 		{
 			name:     "delete org, not found",
 			orgID:    "tacos-tuesday",
-			ctx:      orgUser.UserCtx,
+			ctx:      orgUser.owner.UserCtx,
 			errorMsg: notFoundErrorMsg,
 		},
 	}
@@ -927,13 +922,13 @@ func TestMutationDeleteOrganization(t *testing.T) {
 			assert.Check(t, is.Equal(tc.orgID, resp.DeleteOrganization.DeletedID))
 
 			// update the context to have the correct org after the org is deleted
-			reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
+			reqCtx := auth.NewTestContextWithOrgID(orgUser.owner.ID, orgUser.owner.OrganizationID)
 
 			// make sure the default org is reset
-			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, orgUser.UserInfo.Edges.Setting.ID)
+			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, orgUser.owner.UserInfo.Edges.Setting.ID)
 			assert.NilError(t, err)
 			assert.Assert(t, settingUpdated.UserSetting.DefaultOrg != nil)
-			assert.Check(t, orgUser.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
+			assert.Check(t, orgUser.owner.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
 
 			// allow ctx to ensure the org no longer exists after deletion
 			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.client.db)
@@ -957,8 +952,6 @@ func TestMutationDeleteOrganization(t *testing.T) {
 func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	suite.enableGalaForTestSuite(t)
 
-	// create another user for this test
-	// so it doesn't interfere with the other tests
 	orgUser := suite.userBuilder(context.Background(), t)
 
 	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)

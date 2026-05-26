@@ -118,7 +118,8 @@ func (v VendorRiskScore) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.VendorRiskScore](v,
 				withParents(VendorScoringConfig{}, Entity{}, AssessmentResponse{}),
-				withOrganizationOwner(true),
+				withOrganizationOwner(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(v)

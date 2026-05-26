@@ -8,7 +8,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
@@ -34,7 +33,7 @@ func isTrustCenterStandard(std *generated.Standard) bool {
 }
 
 // getTrustCenterControls retrieves the trust center controls
-func getTrustCenterControls(ctx context.Context, client *generated.Tx) ([]*generated.Control, error) {
+func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*generated.Control, error) {
 	if client == nil {
 		return nil, nil
 	}
@@ -81,7 +80,7 @@ func getTrustCenterControls(ctx context.Context, client *generated.Tx) ([]*gener
 
 // CloneTrustCenterControl clones the trust center controls and assumes the the user has the trust center module already
 // this is intended to be called from an internal-hook when a trust center is created
-func CloneTrustCenterControls(ctx context.Context) error {
+func CloneTrustCenterControls(ctx context.Context, m *generated.TrustCenterMutation) error {
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil || caller.OrganizationID == "" {
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -89,14 +88,7 @@ func CloneTrustCenterControls(ctx context.Context) error {
 
 	orgID := caller.OrganizationID
 
-	txClient := getClientFromContext(ctx)
-	if txClient == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get transaction client from context")
-
-		return nil
-	}
-
-	controls, err := getTrustCenterControls(ctx, txClient)
+	controls, err := getTrustCenterControls(ctx, m.Client())
 	if err != nil {
 		return err
 	}
@@ -108,7 +100,7 @@ func CloneTrustCenterControls(ctx context.Context) error {
 	}
 
 	// trust center controls do no have subcontrols so we can ignore the returned subcontrols to create
-	_, _, err = CloneControls(ctx, txClient.Client(), controls, WithOrgID(orgID))
+	_, _, err = CloneControls(ctx, m.Client(), controls, WithOrgID(orgID))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error cloning trust center controls")
 
@@ -116,31 +108,4 @@ func CloneTrustCenterControls(ctx context.Context) error {
 	}
 
 	return nil
-}
-
-// getClientFromContext is a helper function to get the generated client from the context and log an error if it is not found
-// it will not prevent the function from executing, but it will return nil and log the error for debugging purposes
-func getClientFromContext(ctx context.Context) *generated.Tx {
-	txClient := transactionFromContext(ctx)
-	if txClient == nil {
-		logx.FromContext(ctx).Error().Msg("unable to get client from context")
-
-		return nil
-	}
-
-	return txClient
-}
-
-// transactionFromContext returns the transaction from the context if it exists
-func transactionFromContext(ctx context.Context) *generated.Tx {
-	// check if the transaction is in the context
-	// this is returned from all graphql requests
-	tx := generated.TxFromContext(ctx)
-	if tx != nil {
-		return tx
-	}
-
-	// check if the transaction is in the context
-	// from the REST middleware
-	return transaction.FromContext(ctx)
 }

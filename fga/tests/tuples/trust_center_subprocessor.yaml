@@ -1,5 +1,5 @@
 - user: organization:tc-org-1
-  relation: parent
+  relation: parent_context
   object: trust_center:tc-1
 - user: user:tc-owner-1
   relation: owner

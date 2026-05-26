@@ -101,7 +101,7 @@ require (
 	github.com/theopenlane/core/common v1.0.23
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.28.0
+	github.com/theopenlane/entx v0.28.1
 	github.com/theopenlane/go-client v0.11.0
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
@@ -357,7 +357,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
-	github.com/openfga/language/pkg/go v0.2.1 // indirect
+	github.com/openfga/language/pkg/go v0.2.1
 	github.com/openfga/openfga v1.16.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect

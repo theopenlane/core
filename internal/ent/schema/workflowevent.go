@@ -72,7 +72,8 @@ func (WorkflowEvent) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowEvent](WorkflowEvent{},
 				withParents(WorkflowInstance{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowEvent{})
@@ -86,11 +87,9 @@ func (WorkflowEvent) Modules() []models.OrgModule {
 // Policy of the WorkflowEvent
 func (WorkflowEvent) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			policy.CheckOrgReadAccess(),
-		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckServiceCreateAccess(),
+			entfga.CheckEditAccess[*generated.WorkflowEventMutation](),
 		),
 	)
 }

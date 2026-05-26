@@ -151,7 +151,8 @@ func (WorkflowAssignment) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowAssignment](WorkflowAssignment{},
 				withParents(WorkflowInstance{}),
-				withOrganizationOwnerServiceOnly(true),
+				withOrganizationOwnerServiceOnly(),
+				withSkipForSystemAdmin(),
 			),
 		},
 	}.getMixins(WorkflowAssignment{})
@@ -174,7 +175,7 @@ func (WorkflowAssignment) Annotations() []schema.Annotation {
 func (WorkflowAssignment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			policy.CheckServiceCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),
 	)

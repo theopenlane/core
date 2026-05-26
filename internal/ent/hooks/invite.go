@@ -347,6 +347,7 @@ func validateCanCreateInvite(ctx context.Context, m *generated.InviteMutation) e
 	email, _ := m.Recipient()
 
 	if err := checkAllowedEmailDomain(email, org.Edges.Setting); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error adding user to organization")
 		return err
 	}
 

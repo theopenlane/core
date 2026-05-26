@@ -18,8 +18,8 @@ import (
 )
 
 func TestQueryEntity(t *testing.T) {
-	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
+	entity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
 	testCases := []struct {
 		name     string
@@ -32,7 +32,7 @@ func TestQueryEntity(t *testing.T) {
 			name:    "happy path entity",
 			queryID: entity.ID,
 			client:  suite.client.api,
-			ctx:     testUser1.UserCtx,
+			ctx:     sharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path entity, using api token",
@@ -50,7 +50,7 @@ func TestQueryEntity(t *testing.T) {
 			name:     "no access",
 			queryID:  entity.ID,
 			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
+			ctx:      sharedTestUser2.UserCtx,
 			errorMsg: "entity not found",
 		},
 		{
@@ -79,14 +79,14 @@ func TestQueryEntity(t *testing.T) {
 	}
 
 	// delete created entity
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete the entityType
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryEntities(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	entity2 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity2 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -97,7 +97,7 @@ func TestQueryEntities(t *testing.T) {
 		{
 			name:            "happy path",
 			client:          suite.client.api,
-			ctx:             testUser1.UserCtx,
+			ctx:             sharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
@@ -115,7 +115,7 @@ func TestQueryEntities(t *testing.T) {
 		{
 			name:            "another user, no entities should be returned",
 			client:          suite.client.api,
-			ctx:             testUser2.UserCtx,
+			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -130,8 +130,8 @@ func TestQueryEntities(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{entity1.ID, entity2.ID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{entity1.ID, entity2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateEntity(t *testing.T) {
@@ -139,8 +139,8 @@ func TestMutationCreateEntity(t *testing.T) {
 	entityTypesToDelete := []string{}
 	defaultTier := lo.ToPtr(enums.VendorTierStandard)
 
-	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(testUser1.UserCtx, t)
-	entityTypeAnotherOrg := (&EntityTypeBuilder{client: suite.client, Name: "villains"}).MustNew(testUser2.UserCtx, t)
+	entityType := (&EntityTypeBuilder{client: suite.client, Name: "superheros"}).MustNew(sharedTestUser1.UserCtx, t)
+	entityTypeAnotherOrg := (&EntityTypeBuilder{client: suite.client, Name: "villains"}).MustNew(sharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -157,7 +157,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Tier: defaultTier,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input with entity type",
@@ -169,13 +169,12 @@ func TestMutationCreateEntity(t *testing.T) {
 				Status:      &enums.EntityStatusUnderReview,
 				Tier:        defaultTier,
 				Note: &testclient.CreateNoteInput{
-					Text:    "matt is the best",
-					OwnerID: &adminUser.OrganizationID,
+					Text: "matt is the best",
 				},
 			},
 			entityTypeName: &entityType.Name,
 			client:         suite.client.api,
-			ctx:            adminUser.UserCtx,
+			ctx:            sharedAdminUser.UserCtx,
 		},
 		{
 			name: "not allowed to use another org's entity type",
@@ -185,7 +184,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			},
 			entityTypeName: &entityTypeAnotherOrg.Name,
 			client:         suite.client.api,
-			ctx:            testUser1.UserCtx,
+			ctx:            sharedTestUser1.UserCtx,
 			expectedErr:    "invalid or unparsable field: entity_type_name",
 		},
 		{
@@ -201,7 +200,7 @@ func TestMutationCreateEntity(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateEntityInput{
 				Name:    lo.ToPtr("blue spruce"),
-				OwnerID: &testUser1.OrganizationID,
+				OwnerID: &sharedTestUser1.OrganizationID,
 				Tier:    defaultTier,
 			},
 			client: suite.client.apiWithPAT,
@@ -214,7 +213,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Tier: defaultTier,
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -224,7 +223,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Tier:        defaultTier,
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "name already exists, different casing",
@@ -233,7 +232,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Tier: defaultTier,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "entity already exists",
 		},
 		{
@@ -244,7 +243,7 @@ func TestMutationCreateEntity(t *testing.T) {
 				Tier:    defaultTier,
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "invalid or unparsable field: domains",
 		},
 	}
@@ -312,12 +311,12 @@ func TestMutationCreateEntity(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToDelete}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToDelete}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToDelete}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateEntityEnrichment(t *testing.T) {
-	systemCtx := setContext(systemAdminUser.UserCtx, suite.client.db)
+	systemCtx := setContext(sharedSystemAdminUser.UserCtx, suite.client.db)
 
 	name := "Enriched Vendor " + ulids.New().String()
 	description := "Seeded subprocessor description"
@@ -328,9 +327,9 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 		Name:          name,
 		Description:   description,
 		LogoRemoteURL: logoRemoteURL,
-	}).MustNew(systemAdminUser.UserCtx, t)
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
-	resp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+	resp, err := suite.client.api.CreateEntity(sharedTestUser1.UserCtx, testclient.CreateEntityInput{
 		Name: lo.ToPtr(strings.ToUpper(name)),
 		Tier: lo.ToPtr(enums.VendorTierStandard),
 	}, nil, nil, nil, nil, nil)
@@ -344,7 +343,7 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	userDescription := "User provided description"
 	userLogoURL := "https://example.com/requested-logo.png"
 
-	entityResp, err := suite.client.api.CreateEntity(testUser1.UserCtx, testclient.CreateEntityInput{
+	entityResp, err := suite.client.api.CreateEntity(sharedTestUser1.UserCtx, testclient.CreateEntityInput{
 		Name:          lo.ToPtr(name + " entity"),
 		DisplayName:   lo.ToPtr(name),
 		Description:   lo.ToPtr(userDescription),
@@ -357,12 +356,12 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 	assert.Check(t, is.Equal(userDescription, *entityResp.CreateEntity.Entity.Description))
 	assert.Check(t, is.Equal(userLogoURL, *entityResp.CreateEntity.Entity.LogoRemoteURL))
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(systemCtx, t)
 }
 
 func TestMutationUpdateEntity(t *testing.T) {
-	entity := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	numNotes := 0
 	numDomains := 0
 
@@ -383,7 +382,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				},
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "update description using api token",
@@ -414,7 +413,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				ApprovedForUse: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "conflicting status and approved for use, approved should take precedence",
@@ -423,7 +422,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				ApprovedForUse: lo.ToPtr(false),
 			},
 			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			ctx:    sharedTestUser1.UserCtx,
 		},
 		{
 			name: "not allowed to update",
@@ -431,7 +430,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				Description: lo.ToPtr("pine trees of the west"),
 			},
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -440,7 +439,7 @@ func TestMutationUpdateEntity(t *testing.T) {
 				Description: lo.ToPtr("pine trees of the west"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser2.UserCtx,
+			ctx:         sharedTestUser2.UserCtx,
 			expectedErr: "entity not found",
 		},
 	}
@@ -506,14 +505,14 @@ func TestMutationUpdateEntity(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entity.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, ID: entity.EntityTypeID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEntity(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	entity2 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	entity3 := (&EntityBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity2 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity3 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -526,20 +525,20 @@ func TestMutationDeleteEntity(t *testing.T) {
 			name:        "not allowed to delete",
 			idToDelete:  entity1.ID,
 			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
+			ctx:         sharedViewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete entity",
 			idToDelete: entity1.ID,
 			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
+			ctx:        sharedTestUser1.UserCtx,
 		},
 		{
 			name:        "entity already deleted, not found",
 			idToDelete:  entity1.ID,
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "entity not found",
 		},
 		{
@@ -558,7 +557,7 @@ func TestMutationDeleteEntity(t *testing.T) {
 			name:        "unknown entity, not found",
 			idToDelete:  ulids.New().String(),
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         sharedTestUser1.UserCtx,
 			expectedErr: "entity not found",
 		},
 	}
@@ -578,5 +577,5 @@ func TestMutationDeleteEntity(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID, entity3.EntityTypeID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: []string{entity1.EntityTypeID, entity2.EntityTypeID, entity3.EntityTypeID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }

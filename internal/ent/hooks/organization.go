@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v84"
 
@@ -477,6 +478,13 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
+			Where(
+				organization.IDNEQ(oldOrgID),
+			).
+			Order(
+				// order by personal orgs last so that if there is another org available it will be set as the default instead of the personal org
+				organization.ByPersonalOrg(sql.OrderAsc()),
+			).
 			FirstID(ctx)
 		if err != nil {
 			return "", err
@@ -593,11 +601,6 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 	parentOrgID, ok := m.ParentID()
 	if ok && parentOrgID != "" {
 		return createParentOrgTuple(ctx, m, parentOrgID, oID)
-	}
-
-	// if this was created with an API token, do not create an owner but add the service tuple to fga
-	if auth.IsAPITokenAuthentication(ctx) {
-		return addTokenEditPermissions(ctx, m, oID, GetObjectTypeFromEntMutation(m))
 	}
 
 	// get userID from context

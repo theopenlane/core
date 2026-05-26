@@ -50,6 +50,14 @@ type OrgOwnedMutation interface {
 	SetOwnerID(string)
 }
 
+// TrustCenterMutation is an interface for interacting with the trust_center_id field in mutations
+type TrustCenterMutation interface {
+	GenericMutation
+
+	TrustCenterID() (r string, exists bool)
+	OldTrustCenterID(ctx context.Context) (v string, err error)
+}
+
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by
 // removing any `nil` values from the input `source` slice. It iterates over each item in the source slice and appends it to the new slice only if it is not `nil` - the new slice is then returned
 func NewMutationPolicyWithoutNil(source privacy.MutationPolicy) privacy.MutationPolicy {
