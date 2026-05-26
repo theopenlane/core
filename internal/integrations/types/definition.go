@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
