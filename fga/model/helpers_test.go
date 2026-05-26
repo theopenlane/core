@@ -26,10 +26,10 @@ func TestNormalizeScope(t *testing.T) {
 	assert.Equal(t, "can_view", NormalizeScope("read"))
 	assert.Equal(t, "can_edit", NormalizeScope("write"))
 	assert.Equal(t, "can_delete", NormalizeScope("delete"))
-	assert.Equal(t, "can_edit_control", NormalizeScope("write:control"))
-	assert.Equal(t, "can_view_evidence", NormalizeScope("read:evidence"))
-	assert.Equal(t, "can_view_api_token", NormalizeScope("read:api_token"))
-	assert.Equal(t, "can_edit_api_token", NormalizeScope("write:api_token"))
+	assert.Equal(t, "can_edit_control", NormalizeScope("control:write"))
+	assert.Equal(t, "can_view_evidence", NormalizeScope("evidence:read"))
+	assert.Equal(t, "can_view_api_token", NormalizeScope("api_token:read"))
+	assert.Equal(t, "can_edit_api_token", NormalizeScope("api_token:write"))
 }
 
 func TestScopeOptions(t *testing.T) {

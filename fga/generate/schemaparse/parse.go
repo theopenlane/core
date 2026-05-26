@@ -18,10 +18,10 @@ type SchemaInfo struct {
 	// ExcludeFromGeneration excludes this type from any crud generation, only allowing default access
 	// and no api token access or additional permissions for users
 	ExcludeFromGeneration bool
-
+	// CanCreateServiceOnly is used for objects that only service (api tokens) are allowed to create and not users/groups
 	CanCreateServiceOnly bool
-	OnlyAllowCreate      bool
-
+	// OnlyAllowCreate checks settings of create and update and delete and determines if only creation is allowed
+	OnlyAllowCreate bool
 	// HasCreate indicates the schema should have crud create operations
 	HasCreate bool
 	// HasUpdate indicates the schema should have crud update operations
@@ -34,6 +34,7 @@ type SchemaInfo struct {
 	Parents []string
 }
 
+// GetSchemas gets all ent schemas and returns settings based on annotations and policies
 func GetSchemas(schemaDir string) ([]SchemaInfo, error) {
 	schemas := []SchemaInfo{}
 
@@ -52,7 +53,7 @@ func GetSchemas(schemaDir string) ([]SchemaInfo, error) {
 			continue
 		}
 
-		si.OnlyAllowCreate = si.HasCreate && !si.HasUpdate
+		si.OnlyAllowCreate = si.HasCreate && !si.HasUpdate && !si.HasDelete
 
 		if body := parsePolicyBody(schema); body != nil {
 			si.functionContainsCheckCreateAccess(body)
@@ -64,6 +65,7 @@ func GetSchemas(schemaDir string) ([]SchemaInfo, error) {
 	return schemas, nil
 }
 
+// sortSchemas sorts schemas alphabetically by name
 func sortSchemas(schemas []*load.Schema) []*load.Schema {
 	sort.SliceStable(schemas, func(i, j int) bool {
 		return schemas[i].Name < schemas[j].Name
@@ -92,6 +94,9 @@ func checkSchemaAnnotations(schema *load.Schema) (SchemaInfo, bool) {
 	return si, true
 }
 
+// checkEntGQLAnnotation checks for the Skip annotation on the schema
+// SkipAll implies that there shouldn't be any additional crud settings
+// It uses the MutationInputs settings to see if the schema allows create and update
 func (si *SchemaInfo) checkEntGQLAnnotation(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return
@@ -119,6 +124,8 @@ func (si *SchemaInfo) checkEntGQLAnnotation(schema *load.Schema) {
 	}
 }
 
+// checkSkipAnnotation checks the optional FGA Crud annotation that is used as precedence
+// over any setting that is determined based on annotations + policies
 func (si *SchemaInfo) checkSkipAnnotation(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return

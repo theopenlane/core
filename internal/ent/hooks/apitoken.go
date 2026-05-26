@@ -181,6 +181,10 @@ func scopeTuples(ctx context.Context, scopes []string, orgID, tokenID string, sc
 		}
 
 		if _, ok := scopeSet[relation]; !ok {
+			opts := fgamodel.ScopeAliases()
+
+			logx.FromContext(ctx).Error().Err(ErrInvalidScope).Str("scope", scope).Str("relation", relation).Interface("set", opts).Msg("invalid scope for service set")
+
 			return nil, fmt.Errorf("%w: %q (%s)", ErrInvalidScope, scope, relation)
 		}
 

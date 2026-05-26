@@ -17,7 +17,7 @@ import (
 const (
 	// relationPartsCount is the expected number of parts when splitting a relation like "can_view_object"
 	relationPartsCount = 3
-	// scopePartsCount is the expected number of parts when splitting a scope like "write:control"
+	// scopePartsCount is the expected number of parts when splitting a scope like "control:write"
 	scopePartsCount = 2
 )
 
@@ -185,7 +185,7 @@ func DefaultServiceScopeSet() (map[string]struct{}, error) {
 }
 
 // NormalizeScope returns the relation name for a provided scope, handling common aliases
-// Accepts verb:object (e.g., write:control) and simple verbs (read/write/delete)
+// Accepts object:verb (e.g., control:write) and simple verbs (read/write/delete)
 func NormalizeScope(scope string) string {
 	raw := strings.TrimSpace(scope)
 	if raw == "" {
@@ -203,7 +203,7 @@ func NormalizeScope(scope string) string {
 	}
 
 	if parts := strings.SplitN(normalized, ":", scopePartsCount); len(parts) == scopePartsCount && parts[1] != "" {
-		return mapVerb(parts[0]) + "_" + parts[1]
+		return mapVerb(parts[1]) + "_" + parts[0]
 	}
 
 	if rel := mapVerb(normalized); rel != "" {
@@ -219,12 +219,6 @@ func ScopeAliases() map[string]string {
 	maps.Copy(aliases, aliasToRelation)
 
 	return aliases
-}
-
-var skipCreateDeleteTypes = map[string]struct{}{
-	"organization":         {},
-	"onboarding":           {},
-	"organization_setting": {},
 }
 
 // ScopeOptions groups available scopes by object (verb mapped back via alias map)
@@ -254,11 +248,6 @@ func ScopeOptions() (map[string][]string, error) {
 
 		obj := parts[2]
 		if obj == "" {
-			continue
-		}
-
-		// organization cannot be created or deleted with an api token scope
-		if _, ok := skipCreateDeleteTypes[obj]; ok && (verb != Write && verb != Read) {
 			continue
 		}
 
