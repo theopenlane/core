@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	// defaultPageSize is the maximum number of insights Cloudflare accepts per page
+	// defaultPageSize is the maximum number of records requested per page
 	defaultPageSize = 1000
 )
 

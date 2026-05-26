@@ -68,3 +68,30 @@ func TestSecurityCenterInsightsMapping(t *testing.T) {
 	assert.DeepEqual(t, map[string]any{"affected_endpoints": []any{"google.com"}}, mapped["targetDetails"])
 	assert.DeepEqual(t, []any{}, mapped["references"])
 }
+
+func TestDomainRegistrationsAssetMapping(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "asset")
+	sampleRegistrations := mappingtest.LoadExample(t, "examples", "registrar_registrations.json")
+
+	var response struct {
+		Result []json.RawMessage `json:"result"`
+	}
+
+	assert.NilError(t, json.Unmarshal(sampleRegistrations, &response))
+	assert.Assert(t, len(response.Result) > 0, "expected example to include at least one registration")
+
+	envelope := types.MappingEnvelope{
+		Resource: "6d3decf3259345241e8984cc27982f77",
+		Payload:  response.Result[0],
+	}
+
+	assert.Assert(t, mappingtest.AssertFiltered(t, spec, envelope), "expected registrar_registrations.json registration to pass the Asset filter")
+
+	mapped := mappingtest.EvalMap(t, spec, envelope)
+
+	assert.Equal(t, "theopenlane.io", mapped["sourceIdentifier"])
+	assert.Equal(t, "theopenlane.io", mapped["displayName"])
+	assert.Equal(t, "theopenlane.io", mapped["name"])
+	assert.Equal(t, "DOMAIN", mapped["assetType"])
+	assert.Equal(t, "2026-01-15T12:30:00Z", mapped["observedAt"])
+}
