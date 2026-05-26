@@ -47,13 +47,20 @@ func TestQueryContact(t *testing.T) {
 			queryID:  contact.ID,
 			client:   suite.client.api,
 			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: "contact not found",
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:    "happy path contact, with api token",
 			queryID: contact.ID,
 			client:  suite.client.apiWithToken,
 			ctx:     context.Background(),
+		},
+		{
+			name:     "not found by api token from another org",
+			queryID:  contact.ID,
+			client:   suite.client.apiWithTokenOrg2,
+			ctx:      context.Background(),
+			errorMsg: notFoundErrorMsg,
 		},
 		{
 			name:    "happy path contact, with pat",

@@ -239,6 +239,12 @@ func TestQueryAllControls(t *testing.T) {
 			ctx:             sharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
+		{
+			name:            "another org api token, no controls should be returned",
+			client:          suite.client.apiWithTokenOrg2,
+			ctx:             context.Background(),
+			expectedResults: 0,
+		},
 	}
 
 	for _, tc := range testCases {

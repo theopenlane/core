@@ -104,13 +104,14 @@ type GraphTestSuite struct {
 
 // client contains all the clients the test need to interact with
 type client struct {
-	db           *ent.Client
-	api          *testclient.TestClient
-	apiWithPAT   *testclient.TestClient
-	apiWithToken *testclient.TestClient
-	fga          *fgax.Client
-	objectStore  *objects.Service
-	mockProvider *mock_shared.MockProvider
+	db               *ent.Client
+	api              *testclient.TestClient
+	apiWithPAT       *testclient.TestClient
+	apiWithToken     *testclient.TestClient
+	apiWithTokenOrg2 *testclient.TestClient
+	fga              *fgax.Client
+	objectStore      *objects.Service
+	mockProvider     *mock_shared.MockProvider
 }
 
 var suite = &GraphTestSuite{}

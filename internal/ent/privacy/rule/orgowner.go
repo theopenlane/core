@@ -234,7 +234,6 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType 
 		}
 
 		return privacy.Denyf("user does not have access to the requested organization")
-
 	}
 
 	// check if the object is in the organization

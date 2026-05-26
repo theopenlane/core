@@ -126,6 +126,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 
 		suite.client.apiWithPAT = suite.setupPatClient(sharedTestUser1, t)
 		suite.client.apiWithToken = suite.setupAPITokenClient(sharedTestUser1.UserCtx, t)
+		suite.client.apiWithTokenOrg2 = suite.setupAPITokenClient(sharedTestUser2.UserCtx, t)
 	})
 
 	requireNoError(t, seedErr)

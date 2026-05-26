@@ -56,6 +56,13 @@ func TestQueryAssessment(t *testing.T) {
 			errorMsg: notFoundErrorMsg,
 		},
 		{
+			name:     "no access, api token of different org",
+			queryID:  assessment1.ID,
+			client:   suite.client.apiWithTokenOrg2,
+			ctx:      context.Background(),
+			errorMsg: notFoundErrorMsg,
+		},
+		{
 			name:     "not found, invalid ID",
 			queryID:  ulids.New().String(),
 			client:   suite.client.api,
